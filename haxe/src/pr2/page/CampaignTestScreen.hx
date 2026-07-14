@@ -11,7 +11,7 @@ import openfl.text.TextFieldAutoSize;
 import openfl.text.TextFormat;
 import pr2.Constants;
 import pr2.runtime.FontResolver;
-import pr2.harness.LocalPlayerDebugState;
+import pr2.gameplay.player.LocalPlayerState;
 import pr2.gameplay.Course;
 import pr2.gameplay.LevelConfig;
 import pr2.lobby.chat.ChatText;
@@ -157,7 +157,7 @@ class CampaignTestScreen extends Sprite {
 				// Safety-net sandbox: a brick floor with a safety net standing on it a
 				// few tiles to the right of the spawn. Walk right into the net to touch
 				// it from the side, the condition that fires `returnToLastSafeSpot`
-				// (TODO bug: touching a safety net freezes the game).
+				// and guards the historical safety-net freeze regression.
 				title = "Local Safety Test";
 				for (col in 6...34) {
 					add(ObjectCodes.BLOCK_BRICK, col, 20);
@@ -171,7 +171,7 @@ class CampaignTestScreen extends Sprite {
 				// the player spawning on the floor a few tiles to the left. Walk right
 				// onto the up arrow to bounce off it (each bounce is a single touch
 				// followed by ~1s airborne), which is the condition that exposes arrow
-				// blocks losing their overlay after being touched (TODO bug).
+				// and guards the historical disappearing-arrow-overlay regression.
 				title = "Local Arrow Test";
 				for (col in 6...34) {
 					add(col == 20 ? ObjectCodes.BLOCK_ARROW_UP : ObjectCodes.BLOCK_BRICK, col, 20);
@@ -366,7 +366,7 @@ class CampaignTestScreen extends Sprite {
 	}
 
 	/** Invoked by the Course each playable frame with the local player's state. */
-	private function onCourseFrame(state:LocalPlayerDebugState):Void {
+	private function onCourseFrame(state:LocalPlayerState):Void {
 		statusText.text = lastStatusText + '\nplayer ${state.serialize()}';
 		#if js
 		Browser.document.body.setAttribute("data-pr2-debug-state", 'phase=playable;${state.serialize()}');

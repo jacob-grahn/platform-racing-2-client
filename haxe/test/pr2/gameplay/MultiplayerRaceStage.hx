@@ -2,7 +2,7 @@ package pr2.gameplay;
 
 import openfl.events.Event;
 import pr2.effects.BlockPiece;
-import pr2.harness.LocalPlayerInput;
+import pr2.gameplay.player.LocalPlayerInput;
 import pr2.level.BlockType;
 import pr2.level.ServerLevelDecoder;
 import pr2.net.CommandHandler;

@@ -1,7 +1,7 @@
 package pr2.gameplay;
 
-import pr2.harness.LocalPlayerController;
-import pr2.harness.LocalPlayerInput;
+import pr2.gameplay.player.LocalPlayerController;
+import pr2.gameplay.player.LocalPlayerInput;
 import pr2.level.BlockType;
 import pr2.level.WorldLevel;
 import pr2.level.WorldLevel.LevelBlock;
@@ -23,13 +23,13 @@ class RoguelikeModeTest {
 	private static function testInitialStateAndHeartCap():Void {
 		var player = new LocalPlayerController(level());
 		player.setGameMode(Modes.roguelike);
-		var state = player.debugState();
+		var state = player.stateSnapshot();
 		assertEquals(0, state.speedStat, "zero starting speed");
 		assertEquals(0, state.accelerationStat, "zero starting acceleration");
 		assertEquals(0, state.jumpStat, "zero starting jump");
 		assertEquals(1, state.lives, "one starting heart");
 		player.setLife(99);
-		assertEquals(10, player.debugState().lives, "ten-heart cap");
+		assertEquals(10, player.stateSnapshot().lives, "ten-heart cap");
 	}
 
 	private static function testConfigurationBansEveryHat():Void {
@@ -49,11 +49,11 @@ class RoguelikeModeTest {
 		var finish = fixture.blocks[4];
 		for (hit in 1...LocalPlayerController.ROGUELIKE_REQUIRED_FINISH_HITS) {
 			@:privateAccess player.finish(finish);
-			assertEquals(hit, player.debugState().roguelikeFinishHits, 'finish hit $hit counted');
-			assertEquals(false, player.debugState().finished, 'finish hit $hit is non-terminal');
+			assertEquals(hit, player.stateSnapshot().roguelikeFinishHits, 'finish hit $hit counted');
+			assertEquals(false, player.stateSnapshot().finished, 'finish hit $hit is non-terminal');
 		}
 		@:privateAccess player.finish(finish);
-		var state = player.debugState();
+		var state = player.stateSnapshot();
 		assertEquals(9, state.roguelikeFinishHits, "ninth finish counted");
 		assertEquals(true, state.finished, "ninth finish is terminal");
 		assertEquals(0, state.lives, "ninth finish consumes last heart without restarting");
@@ -70,7 +70,7 @@ class RoguelikeModeTest {
 		player.setLife(2);
 		@:privateAccess player.finish(fixture.blocks[4]);
 		@:privateAccess player.resetRoguelikeRun();
-		var state = player.debugState();
+		var state = player.stateSnapshot();
 		assertEquals(0, state.roguelikeFinishHits, "death clears finish progress");
 		assertEquals(1, state.lives, "death restores one heart");
 		assertEquals(0, state.speedStat, "death restores zero stats");
@@ -86,11 +86,11 @@ class RoguelikeModeTest {
 		player.setGameMode(Modes.roguelike);
 		player.setLife(2);
 		player.receiveHit();
-		assertEquals(1, player.debugState().lives, "combat consumes one heart");
+		assertEquals(1, player.stateSnapshot().lives, "combat consumes one heart");
 		for (_ in 0...60) player.step(new LocalPlayerInput());
 		player.receiveHit();
-		assertEquals(1, player.debugState().lives, "lethal combat restarts with one heart");
-		assertEquals(false, player.debugState().finished, "lethal combat is not a race finish");
+		assertEquals(1, player.stateSnapshot().lives, "lethal combat restarts with one heart");
+		assertEquals(false, player.stateSnapshot().finished, "lethal combat is not a race finish");
 	}
 
 	private static function level():WorldLevel {

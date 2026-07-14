@@ -5,9 +5,9 @@ import openfl.events.Event;
 import openfl.geom.Point;
 import pr2.character.CharacterState;
 import pr2.gameplay.GameCommandShell.RemoteCharacterInit;
-import pr2.harness.LocalPlayerController;
-import pr2.harness.LocalPlayerInput;
-import pr2.harness.LocalPlayerDebugState;
+import pr2.gameplay.player.LocalPlayerController;
+import pr2.gameplay.player.LocalPlayerInput;
+import pr2.gameplay.player.LocalPlayerState;
 import pr2.lobby.LobbySession;
 import pr2.lobby.dialogs.LevelInfoPopup;
 import pr2.level.BlockType;
@@ -58,7 +58,7 @@ class GameShellMountTest {
 		assertEquals(true, course.localCharacter != null, "local character bridge mounted");
 		assertEquals(course.localCharacter, course.characterLayer.getChildAt(0), "local character owns display-list slot");
 		var start = @:privateAccess course.level.startBlocks()[0];
-		var initialState = course.localCharacter.debugState();
+		var initialState = course.localCharacter.stateSnapshot();
 		assertClose(start.x + 15, initialState.x,
 			"local character spawns at Flash start center x");
 		assertClose(start.y + 15, initialState.y,
@@ -124,11 +124,11 @@ class GameShellMountTest {
 		assertEquals(3, course.hearts.getHeartCount(), "deathmatch course starts with three lives");
 		course.setLife(2);
 		assertEquals(2, course.hearts.getHeartCount(), "setLife updates deathmatch hearts");
-		assertEquals(2, course.localCharacter.debugState().lives, "setLife updates local controller lives");
+		assertEquals(2, course.localCharacter.stateSnapshot().lives, "setLife updates local controller lives");
 		course.dispatchEvent(new Event(Event.ENTER_FRAME));
 		assertEquals(2, course.hearts.getHeartCount(), "setLife value survives the next frame sync");
 		LobbySocket.resetSent();
-		var zeroLives = new LocalPlayerDebugState(0, 0, 0, 0, false, false, CharacterState.Bumped, null, "hurt", null, null, null, 50, 50,
+		var zeroLives = new LocalPlayerState(0, 0, 0, 0, false, false, CharacterState.Bumped, null, "hurt", null, null, null, 50, 50,
 			50, 0, true, null, null, null, 0);
 		@:privateAccess course.maybeHandleLocalFinish(zeroLives);
 		assertEquals("finish_race`-1`0`0|set_var`beginRemove`1", LobbySocket.sentCommands.join("|"),
@@ -138,7 +138,7 @@ class GameShellMountTest {
 
 	private static function testRoguelikeHudAndInitialState():Void {
 		var course = buildCourse("roguelike");
-		var state = course.localCharacter.debugState();
+		var state = course.localCharacter.stateSnapshot();
 		assertEquals(true, course.hearts.visible, "roguelike course shows hearts immediately");
 		assertEquals(1, course.hearts.getHeartCount(), "roguelike course starts with one heart");
 		assertClose(0, state.speedStat, "roguelike live character starts with zero speed");
@@ -161,11 +161,11 @@ class GameShellMountTest {
 		LobbySocket.resetSent();
 		for (_ in 1...LocalPlayerController.ROGUELIKE_REQUIRED_FINISH_HITS) {
 			@:privateAccess course.localCharacter.controller.finish(finishBlock);
-			@:privateAccess course.maybeHandleLocalFinish(course.localCharacter.debugState());
+			@:privateAccess course.maybeHandleLocalFinish(course.localCharacter.stateSnapshot());
 		}
 		assertEquals("", LobbySocket.sentCommands.join("|"), "first eight roguelike hits emit no finish event");
 		@:privateAccess course.localCharacter.controller.finish(finishBlock);
-		@:privateAccess course.maybeHandleLocalFinish(course.localCharacter.debugState());
+		@:privateAccess course.maybeHandleLocalFinish(course.localCharacter.stateSnapshot());
 		assertEquals(true, StringTools.startsWith(LobbySocket.sentCommands.join("|"), "finish_race`"),
 			"ninth roguelike hit emits the existing finish event");
 		course.remove();
@@ -349,7 +349,7 @@ class GameShellMountTest {
 			feetColor2: 8,
 			group: ""
 		});
-		var state = course.localCharacter.debugState();
+		var state = course.localCharacter.stateSnapshot();
 		assertClose(15, state.x, "tournament local temp 1 uses first start x");
 		assertClose(15, state.y, "tournament local temp 1 uses first start y");
 		course.remove();
@@ -398,7 +398,7 @@ class GameShellMountTest {
 		course.beginRace();
 		assertEquals(false, course.timer.debugPaused(), "race timer runs once beginRace arrives");
 		LobbySocket.resetSent();
-		var finish = new LocalPlayerDebugState(0, 0, 0, 0, false, false, CharacterState.Stand, null, "land", null, null, null, 50, 50,
+		var finish = new LocalPlayerState(0, 0, 0, 0, false, false, CharacterState.Stand, null, "land", null, null, null, 50, 50,
 			50, 0, true, 1, 9945, 9945);
 		@:privateAccess course.maybeHandleLocalFinish(finish);
 		assertEquals("finish_race`1`9945`9945|set_var`beginRemove`1", LobbySocket.sentCommands.join("|"),
@@ -406,22 +406,22 @@ class GameShellMountTest {
 		assertEquals(true, course.timer.debugPaused(), "race finish freezes the HUD timer");
 		assertEquals(false, course.localCharacter.removed, "finish starts fade-out instead of immediate removal");
 		assertEquals(true, course.debugKeyScrollActive(), "finish switches camera to free-move mode");
-		var x = course.localCharacter.debugState().x;
-		var y = course.localCharacter.debugState().y;
+		var x = course.localCharacter.stateSnapshot().x;
+		var y = course.localCharacter.stateSnapshot().y;
 		@:privateAccess course.input.right = true;
 		course.dispatchEvent(new Event(Event.ENTER_FRAME));
-		assertClose(x, course.localCharacter.debugState().x, "finished character no longer steps horizontally");
-		assertClose(y, course.localCharacter.debugState().y, "finished character no longer steps vertically");
+		assertClose(x, course.localCharacter.stateSnapshot().x, "finished character no longer steps horizontally");
+		assertClose(y, course.localCharacter.stateSnapshot().y, "finished character no longer steps vertically");
 		course.remove();
 	}
 
 	private static function testTestModeFinishDelegatesWithoutRaceRemoval():Void {
 		var course = buildCourse("race");
-		course.testMode = true;
+		course.offlineMode = true;
 		var callbacks = 0;
 		course.onFinish = function(_):Void callbacks++;
 		LobbySocket.resetSent();
-		var finish = new LocalPlayerDebugState(0, 0, 0, 0, false, false, CharacterState.Stand, null, "land", null, null, null, 50, 50,
+		var finish = new LocalPlayerState(0, 0, 0, 0, false, false, CharacterState.Stand, null, "land", null, null, null, 50, 50,
 			50, 0, true, 1, 45, 15);
 		@:privateAccess course.maybeHandleLocalFinish(finish);
 
@@ -437,9 +437,9 @@ class GameShellMountTest {
 		var course = buildCourse("objective");
 		course.beginRace();
 		LobbySocket.resetSent();
-		var first = new LocalPlayerDebugState(0, 0, 0, 0, false, false, CharacterState.Stand, null, "land", null, null, null, 50, 50,
+		var first = new LocalPlayerState(0, 0, 0, 0, false, false, CharacterState.Stand, null, "land", null, null, null, 50, 50,
 			50, 0, true, 1, 9945, 9945);
-		var second = new LocalPlayerDebugState(0, 0, 0, 0, false, false, CharacterState.Stand, null, "land", null, null, null, 50, 50,
+		var second = new LocalPlayerState(0, 0, 0, 0, false, false, CharacterState.Stand, null, "land", null, null, null, 50, 50,
 			50, 0, true, 2, 9975, 9945);
 		@:privateAccess course.maybeHandleLocalFinish(first);
 		@:privateAccess course.maybeHandleLocalFinish(first);
@@ -455,11 +455,11 @@ class GameShellMountTest {
 		var course = buildRotateCourse();
 		for (_ in 0...40) {
 			course.localCharacter.step(new LocalPlayerInput(false, false, true));
-			if (course.localCharacter.debugState().mode == "jump") {
+			if (course.localCharacter.stateSnapshot().mode == "jump") {
 				break;
 			}
 		}
-		assertEquals("jump", course.localCharacter.debugState().mode, "local character reaches rotate jump state");
+		assertEquals("jump", course.localCharacter.stateSnapshot().mode, "local character reaches rotate jump state");
 
 		course.localCharacter.step(new LocalPlayerInput());
 		course.updatePlayerDisplay();
@@ -479,7 +479,7 @@ class GameShellMountTest {
 			course.updatePlayerDisplay();
 		}
 
-		var state = course.localCharacter.debugState();
+		var state = course.localCharacter.stateSnapshot();
 		assertEquals(90, state.courseRotation, "rotate block commits course rotation");
 		assertEquals(0, course.localCharacter.rotation, "local character rotation resets after tween");
 		assertEquals(true, course.levelRenderer.debugArtCachingEnabled(), "completed rotate restores background art caching");
@@ -495,7 +495,7 @@ class GameShellMountTest {
 	}
 
 	private static function assertLocalCharacterFeetAnchored(course:Course, message:String):Void {
-		var state = course.localCharacter.debugState();
+		var state = course.localCharacter.stateSnapshot();
 		var worldX = state.x;
 		var worldY = state.y;
 		var expected = course.levelRenderer.worldToScreen(worldX, worldY);

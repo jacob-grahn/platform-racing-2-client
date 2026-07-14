@@ -1,7 +1,6 @@
 package pr2.levelEditor;
 
 import haxe.Json;
-import haxe.crypto.Md5;
 import haxe.Timer;
 #if js
 import js.Browser;
@@ -32,15 +31,12 @@ import pr2.level.ServerLevelRenderer;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.dialogs.Popup;
 import pr2.net.ServerLevelData;
-import pr2.net.ServerConfig;
 import pr2.page.BlockGridLines;
 import pr2.page.Page;
 
 /**
-	Initial shell for Flash `levelEditor.LevelEditor`.
-
-	The editor subsystems are ported incrementally; this owns the top-level
-	lifecycle boundary Flash established before sidebars/tools attach.
+	Top-level level editor page. Coordinates authored block/art layers, tools,
+	settings, persistence, camera input, and the extracted popup/background controllers.
 **/
 class LevelEditor extends Page {
 	public static var editor:Null<LevelEditor>;
@@ -117,12 +113,16 @@ class LevelEditor extends Page {
 	private var lastMouseDownXForTests:Float = 0;
 	private var lastMouseDownYForTests:Float = 0;
 	private var initialVariables:Null<Map<String, String>>;
+	private final popupController:LevelEditorPopupController;
+	private final backgroundController:LevelEditorBackgroundController;
 
 	public function new(?variables:Dynamic, mod:Bool = false, report:Bool = false) {
 		super();
 		isMod = mod;
 		reportsMode = report;
 		toolCursor = new EditorToolCursorManager(this);
+		popupController = new LevelEditorPopupController(this);
+		backgroundController = new LevelEditorBackgroundController(this);
 		if (variables != null) {
 			initialVariables = copyVars(cast variables);
 		}
@@ -366,53 +366,20 @@ class LevelEditor extends Page {
 		var blockSave = blockLayer == null ? "" : blockLayer.getSaveString();
 		var objectSave = [for (i in 0...5) objectLayers.length > i ? objectLayers[i].getSaveString() : ""];
 		var drawSave = [for (i in 0...5) drawLayers.length > i ? drawLayers[i].getSaveString() : ""];
-		return [
-			"m4",
-			StringTools.hex(color).toLowerCase(),
-			blockSave,
-			objectSave[0],
-			objectSave[1],
-			objectSave[2],
-			drawSave[0],
-			drawSave[1],
-			drawSave[2],
-			artBackgroundSaveString(),
-			objectSave[3],
-			objectSave[4],
-			drawSave[3],
-			drawSave[4]
-		].join("`");
+		return LevelEditorCodec.encodeLevelData(color, blockSave, objectSave, drawSave, artBackgroundCode);
 	}
 
 	public function getLevelVars():Map<String, String> {
-		var vars = new Map<String, String>();
-		vars.set("title", title);
-		vars.set("note", note);
-		vars.set("data", getSaveString());
-		vars.set("credits", levelConfig.credits.join("`"));
-		vars.set("live", Std.string(live));
-		vars.set("min_level", minRank);
-		vars.set("song", song);
-		vars.set("gravity", gravity);
-		vars.set("max_time", maxTime);
-		vars.set("items", allowedItems.join("`"));
-		vars.set("badHats", badHats.join(","));
-		vars.set("hasPass", Std.string(hasPass));
-		vars.set("gameMode", gameMode == "eggs" ? "egg" : gameMode);
-		vars.set("cowboyChance", cowboyChance);
-		vars.set("passHash", passHash());
-		vars.set("to_newest", toNewest ? "1" : "0");
-		return vars;
+		return LevelEditorCodec.buildVariables({
+			title: title, note: note, data: getSaveString(), credits: levelConfig.credits,
+			live: live, minRank: minRank, song: song, gravity: gravity, maxTime: maxTime,
+			allowedItems: allowedItems, badHats: badHats, hasPass: hasPass, gameMode: gameMode,
+			cowboyChance: cowboyChance, pass: pass, toNewest: toNewest
+		});
 	}
 
 	public static function copyVars(vars:Map<String, String>):Map<String, String> {
-		var copied = new Map<String, String>();
-		if (vars != null) {
-			for (key in vars.keys()) {
-				copied.set(key, vars.get(key));
-			}
-		}
-		return copied;
+		return LevelEditorCodec.copyVariables(vars);
 	}
 
 	public function setZoom(nextZoom:Float):Void {
@@ -596,168 +563,27 @@ class LevelEditor extends Page {
 		}
 	}
 
-	public function openBlockOptions(block:EditorBlockObject):Void {
-		lastBlockOptionsRequest = block;
-		closeBlockOptionsPopup();
-		if (block.type == BlockType.Happy || block.type == BlockType.Sad) {
-			activeBlockOptionsPopup = new EditorStatBlockOptionsPopup(this, block);
-		} else if (block.type == BlockType.Item || block.type == BlockType.InfiniteItem) {
-			activeBlockOptionsPopup = new EditorItemBlockOptionsPopup(this, block);
-		} else if (block.type == BlockType.Teleport) {
-			activeBlockOptionsPopup = new EditorTeleportBlockOptionsPopup(this, block);
-		} else if (block.type == BlockType.CustomStats) {
-			activeBlockOptionsPopup = new EditorCustomStatsBlockOptionsPopup(this, block);
-		}
-	}
-
-	public function closeBlockOptionsPopup():Void {
-		if (activeBlockOptionsPopup != null) {
-			var popup = activeBlockOptionsPopup;
-			activeBlockOptionsPopup = null;
-			popup.remove();
-		}
-	}
-
-	public function blockOptionsPopupRemoved(popup:EditorBlockOptionsPopup):Void {
-		if (activeBlockOptionsPopup == popup) {
-			activeBlockOptionsPopup = null;
-		}
-	}
-
-	public function openItemSettingsMenu(target:DisplayObject):Void {
-		closeHatsSettingsPopup();
-		closeMusicSettingsPopup();
-		closeModeSettingsPopup();
-		closeValueSettingsPopup();
-		closeItemSettingsPopup();
-		activeItemSettingsPopup = new EditorItemSettingsPopup(this, target);
-	}
-
-	public function closeItemSettingsPopup():Void {
-		if (activeItemSettingsPopup != null) {
-			var popup = activeItemSettingsPopup;
-			activeItemSettingsPopup = null;
-			popup.remove();
-		}
-	}
-
-	public function itemSettingsPopupRemoved(popup:EditorItemSettingsPopup):Void {
-		if (activeItemSettingsPopup == popup) {
-			activeItemSettingsPopup = null;
-		}
-	}
-
-	public function openHatsSettingsMenu(target:DisplayObject):Void {
-		closeItemSettingsPopup();
-		closeMusicSettingsPopup();
-		closeModeSettingsPopup();
-		closeValueSettingsPopup();
-		closeHatsSettingsPopup();
-		activeHatsSettingsPopup = new EditorHatsSettingsPopup(this, target);
-	}
-
-	public function closeHatsSettingsPopup():Void {
-		if (activeHatsSettingsPopup != null) {
-			var popup = activeHatsSettingsPopup;
-			activeHatsSettingsPopup = null;
-			popup.remove();
-		}
-	}
-
-	public function hatsSettingsPopupRemoved(popup:EditorHatsSettingsPopup):Void {
-		if (activeHatsSettingsPopup == popup) {
-			activeHatsSettingsPopup = null;
-		}
-	}
-
-	public function openMusicSettingsMenu(target:DisplayObject):Void {
-		closeItemSettingsPopup();
-		closeHatsSettingsPopup();
-		closeModeSettingsPopup();
-		closeValueSettingsPopup();
-		closeMusicSettingsPopup();
-		activeMusicSettingsPopup = new EditorMusicSettingsPopup(this, target);
-	}
-
-	public function closeMusicSettingsPopup():Void {
-		if (activeMusicSettingsPopup != null) {
-			var popup = activeMusicSettingsPopup;
-			activeMusicSettingsPopup = null;
-			popup.remove();
-		}
-	}
-
-	public function musicSettingsPopupRemoved(popup:EditorMusicSettingsPopup):Void {
-		if (activeMusicSettingsPopup == popup) {
-			activeMusicSettingsPopup = null;
-		}
-	}
-
-	public function openModeSettingsMenu(target:DisplayObject):Void {
-		closeItemSettingsPopup();
-		closeHatsSettingsPopup();
-		closeMusicSettingsPopup();
-		closeValueSettingsPopup();
-		closeModeSettingsPopup();
-		activeModeSettingsPopup = new EditorModeSettingsPopup(this, target);
-	}
-
-	public function closeModeSettingsPopup():Void {
-		if (activeModeSettingsPopup != null) {
-			var popup = activeModeSettingsPopup;
-			activeModeSettingsPopup = null;
-			popup.remove();
-		}
-	}
-
-	public function modeSettingsPopupRemoved(popup:EditorModeSettingsPopup):Void {
-		if (activeModeSettingsPopup == popup) {
-			activeModeSettingsPopup = null;
-		}
-	}
-
-	public function openValueSettingsMenu(settingId:String, target:DisplayObject):Void {
-		closeItemSettingsPopup();
-		closeHatsSettingsPopup();
-		closeMusicSettingsPopup();
-		closeModeSettingsPopup();
-		closeValueSettingsPopup();
-		activeValueSettingsPopup = new EditorValueSettingsPopup(this, target, settingId);
-	}
-
-	public function closeValueSettingsPopup():Void {
-		if (activeValueSettingsPopup != null) {
-			var popup = activeValueSettingsPopup;
-			activeValueSettingsPopup = null;
-			popup.remove();
-		}
-	}
-
-	public function valueSettingsPopupRemoved(popup:EditorValueSettingsPopup):Void {
-		if (activeValueSettingsPopup == popup) {
-			activeValueSettingsPopup = null;
-		}
-	}
-
-	public function openBrushSizeMenu(target:EditorBrushSizePickerButton):Void {
-		closeBrushSizeMenu();
-		activeBrushSizeMenu = new EditorBrushSizePickerMenu(this, target);
-		addChild(activeBrushSizeMenu);
-	}
-
-	public function closeBrushSizeMenu():Void {
-		if (activeBrushSizeMenu != null) {
-			var menu = activeBrushSizeMenu;
-			activeBrushSizeMenu = null;
-			menu.remove();
-		}
-	}
-
-	public function brushSizeMenuRemoved(menu:EditorBrushSizePickerMenu):Void {
-		if (activeBrushSizeMenu == menu) {
-			activeBrushSizeMenu = null;
-		}
-	}
+	public function openBlockOptions(block:EditorBlockObject):Void popupController.openBlockOptions(block);
+	public function closeBlockOptionsPopup():Void popupController.closeBlockOptionsPopup();
+	public function blockOptionsPopupRemoved(popup:EditorBlockOptionsPopup):Void popupController.blockOptionsPopupRemoved(popup);
+	public function openItemSettingsMenu(target:DisplayObject):Void popupController.openItemSettingsMenu(target);
+	public function closeItemSettingsPopup():Void popupController.closeItemSettingsPopup();
+	public function itemSettingsPopupRemoved(popup:EditorItemSettingsPopup):Void popupController.itemSettingsPopupRemoved(popup);
+	public function openHatsSettingsMenu(target:DisplayObject):Void popupController.openHatsSettingsMenu(target);
+	public function closeHatsSettingsPopup():Void popupController.closeHatsSettingsPopup();
+	public function hatsSettingsPopupRemoved(popup:EditorHatsSettingsPopup):Void popupController.hatsSettingsPopupRemoved(popup);
+	public function openMusicSettingsMenu(target:DisplayObject):Void popupController.openMusicSettingsMenu(target);
+	public function closeMusicSettingsPopup():Void popupController.closeMusicSettingsPopup();
+	public function musicSettingsPopupRemoved(popup:EditorMusicSettingsPopup):Void popupController.musicSettingsPopupRemoved(popup);
+	public function openModeSettingsMenu(target:DisplayObject):Void popupController.openModeSettingsMenu(target);
+	public function closeModeSettingsPopup():Void popupController.closeModeSettingsPopup();
+	public function modeSettingsPopupRemoved(popup:EditorModeSettingsPopup):Void popupController.modeSettingsPopupRemoved(popup);
+	public function openValueSettingsMenu(settingId:String, target:DisplayObject):Void popupController.openValueSettingsMenu(settingId, target);
+	public function closeValueSettingsPopup():Void popupController.closeValueSettingsPopup();
+	public function valueSettingsPopupRemoved(popup:EditorValueSettingsPopup):Void popupController.valueSettingsPopupRemoved(popup);
+	public function openBrushSizeMenu(target:EditorBrushSizePickerButton):Void popupController.openBrushSizeMenu(target);
+	public function closeBrushSizeMenu():Void popupController.closeBrushSizeMenu();
+	public function brushSizeMenuRemoved(menu:EditorBrushSizePickerMenu):Void popupController.brushSizeMenuRemoved(menu);
 
 	public function beginSelectedBrushAt(stageX:Float, stageY:Float):Bool {
 		if (activeDrawLayer == null || selectedToolSidebar != "tools" || (selectedToolId != "brush" && selectedToolId != "eraser")) {
@@ -1108,92 +934,10 @@ class LevelEditor extends Page {
 		}
 	}
 
-	private function attachEditorBackground():Void {
-		solidBackground = new Shape();
-		solidBackground.name = "editorSolidBackground";
-		addChild(solidBackground);
-		artBackgroundContainer = new Sprite();
-		artBackgroundContainer.name = "editorArtBackground";
-		artBackgroundContainer.mouseEnabled = false;
-		artBackgroundContainer.mouseChildren = false;
-		addChild(artBackgroundContainer);
-		redrawEditorBackground();
-		renderArtBackground();
-	}
-
-	private function redrawEditorBackground():Void {
-		if (solidBackground == null) {
-			return;
-		}
-		solidBackground.graphics.clear();
-		solidBackground.graphics.beginFill(color);
-		solidBackground.graphics.drawRect(0, 0, BASE_HALF_STAGE_WIDTH * 2, BASE_HALF_STAGE_HEIGHT * 2);
-		solidBackground.graphics.endFill();
-	}
-
-	private function renderArtBackground():Void {
-		backgroundLoadGeneration++;
-		var generation = backgroundLoadGeneration;
-		if (artBackgroundContainer == null) {
-			return;
-		}
-		while (artBackgroundContainer.numChildren > 0) {
-			artBackgroundContainer.removeChildAt(0);
-		}
-		var code = artBackgroundCode;
-		if (code == null) {
-			return;
-		}
-		if (code == ObjectCodes.BG5Code) {
-			artBackgroundContainer.addChild(ServerLevelRenderer.createBg5CircleGrid());
-		}
-		var assetPath = ServerLevelRenderer.artBackgroundAssetPath(code);
-		if (assetPath == "") {
-			applyArtBackgroundTransform(code);
-			return;
-		}
-		ArtBackgroundLoader.request(assetPath, function(bitmapData):Void {
-			if (bitmapData == null || artBackgroundContainer == null || generation != backgroundLoadGeneration || artBackgroundCode != code) {
-				return;
-			}
-			var bitmap = new Bitmap(bitmapData);
-			bitmap.smoothing = true;
-			bitmap.width = BASE_HALF_STAGE_WIDTH * 2;
-			bitmap.height = BASE_HALF_STAGE_HEIGHT * 2;
-			artBackgroundContainer.addChildAt(bitmap, 0);
-			applyArtBackgroundTransform(code);
-		});
-		applyArtBackgroundTransform(code);
-	}
-
-	private function applyEditorColorTransforms():Void {
-		if (blockLayer != null) {
-			blockLayer.transform.colorTransform = backgroundColorTransform(1);
-		}
-		for (layer in drawLayers) {
-			layer.transform.colorTransform = backgroundColorTransform(layer.layerScale);
-		}
-		for (layer in objectLayers) {
-			layer.transform.colorTransform = backgroundColorTransform(layer.scaleX);
-		}
-		if (artBackgroundCode != null) {
-			applyArtBackgroundTransform(artBackgroundCode);
-		}
-	}
-
-	private function applyArtBackgroundTransform(code:Int):Void {
-		if (artBackgroundContainer != null) {
-			artBackgroundContainer.transform.colorTransform = backgroundColorTransform(code == ObjectCodes.BG4Code || code == ObjectCodes.BG5Code ? 0 : 1);
-		}
-	}
-
-	private function backgroundColorTransform(layerScale:Float):ColorTransform {
-		var amount = ((1 - layerScale) * 0.4) + 0.1;
-		var red = (color >> 16) & 0xFF;
-		var green = (color >> 8) & 0xFF;
-		var blue = color & 0xFF;
-		return new ColorTransform(1 - amount, 1 - amount, 1 - amount, 1, red * amount, green * amount, blue * amount, 0);
-	}
+	private function attachEditorBackground():Void backgroundController.attachEditorBackground();
+	private function redrawEditorBackground():Void backgroundController.redrawEditorBackground();
+	private function renderArtBackground():Void backgroundController.renderArtBackground();
+	private function applyEditorColorTransforms():Void backgroundController.applyEditorColorTransforms();
 
 	private function firstStartBlock():Null<EditorBlockObject> {
 		if (blockLayer == null) {
@@ -1644,16 +1388,8 @@ class LevelEditor extends Page {
 		}
 	}
 
-	private function passHash():String {
-		if (pass == null || pass == "" || StringTools.replace(pass, "*", "") == "") {
-			return "";
-		}
-		return Md5.encode(pass + ServerConfig.LEVEL_PASS_SALT);
-	}
-
 	private function loadDrawLayersFromData(rawData:String):Void {
-		var sections = rawData.split("`");
-		var drawSections = [section(sections, 6), section(sections, 7), section(sections, 8), section(sections, 12), section(sections, 13)];
+		var drawSections = LevelEditorCodec.drawSections(rawData);
 		for (i in 0...drawSections.length) {
 			if (i < drawLayers.length) {
 				drawLayers[i].loadDrawString(drawSections[i]);
@@ -1691,27 +1427,11 @@ class LevelEditor extends Page {
 		return levelConfig.color;
 	}
 
-	private function artBackgroundSaveString():String {
-		return artBackgroundCode == null ? "" : Std.string(artBackgroundCode);
-	}
-
 	private static function parseFloat(value:Null<String>, fallback:Float):Float {
-		if (value == null || value == "") {
-			return fallback;
-		}
-		var parsed = Std.parseFloat(value);
-		return Math.isNaN(parsed) ? fallback : parsed;
+		return LevelEditorCodec.parseFloatOr(value, fallback);
 	}
 
 	private static function parseInt(value:Null<String>, fallback:Int):Int {
-		if (value == null || value == "") {
-			return fallback;
-		}
-		var parsed = Std.parseInt(value);
-		return parsed == null ? fallback : parsed;
-	}
-
-	private static function section(sections:Array<String>, index:Int):String {
-		return index < sections.length ? sections[index] : "";
+		return LevelEditorCodec.parseIntOr(value, fallback);
 	}
 }

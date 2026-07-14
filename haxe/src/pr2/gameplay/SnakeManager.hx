@@ -6,7 +6,7 @@ import openfl.display.Sprite;
 import openfl.geom.Point;
 import openfl.utils.AssetType;
 import openfl.utils.Assets;
-import pr2.harness.LocalPlayerController;
+import pr2.gameplay.player.LocalPlayerController;
 import pr2.level.ServerLevelRenderer;
 import pr2.level.WorldLevel;
 import pr2.net.LobbySocket;

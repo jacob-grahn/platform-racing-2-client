@@ -1,8 +1,8 @@
 package pr2.character;
 
-import pr2.harness.LocalPlayerController;
-import pr2.harness.LocalPlayerDebugState;
-import pr2.harness.LocalPlayerInput;
+import pr2.gameplay.player.LocalPlayerController;
+import pr2.gameplay.player.LocalPlayerState;
+import pr2.gameplay.player.LocalPlayerInput;
 import pr2.level.WorldLevel;
 import pr2.net.LobbySocket;
 
@@ -113,7 +113,7 @@ class LocalCharacter extends Character {
 			reversed.right = input.left;
 			input = reversed;
 		}
-		var previousMode = controller.debugState().mode;
+		var previousMode = controller.stateSnapshot().mode;
 		controller.propellerHatActive = hasHatFlag(Character.PROP);
 		controller.cowboyHatActive = hasHatFlag(Character.COWBOY);
 		controller.crownHatActive = hasHatFlag(Character.CROWN);
@@ -350,8 +350,8 @@ class LocalCharacter extends Character {
 		forceExactPositionOnNextUpdate();
 	}
 
-	public function debugState():LocalPlayerDebugState {
-		return controller.debugState();
+	public function stateSnapshot():LocalPlayerState {
+		return controller.stateSnapshot();
 	}
 
 	public function blockAlphaAt(tileX:Int, tileY:Int):Float {
@@ -374,7 +374,7 @@ class LocalCharacter extends Character {
 		return controller.blockIceOverlayAlphaAt(tileX, tileY);
 	}
 
-	public function consumeBlockVisualEvents():Array<pr2.harness.BlockVisualEvent> {
+	public function consumeBlockVisualEvents():Array<pr2.gameplay.player.BlockVisualEvent> {
 		return controller.consumeBlockVisualEvents();
 	}
 
@@ -413,25 +413,25 @@ class LocalCharacter extends Character {
 	}
 
 	public function receiveSting():Void {
-		var previousMode = controller.debugState().mode;
+		var previousMode = controller.stateSnapshot().mode;
 		controller.receiveSting();
 		syncFromController(previousMode);
 	}
 
 	public function receiveZap():Void {
-		var previousMode = controller.debugState().mode;
+		var previousMode = controller.stateSnapshot().mode;
 		controller.receiveZap();
 		syncFromController(previousMode);
 	}
 
 	public function receiveHit(impulseX:Float = 0, impulseY:Float = 0):Void {
-		var previousMode = controller.debugState().mode;
+		var previousMode = controller.stateSnapshot().mode;
 		controller.receiveHit(impulseX, impulseY);
 		syncFromController(previousMode);
 	}
 
 	public function receiveSquash():Void {
-		if (controller.debugState().mode == "hurt") {
+		if (controller.stateSnapshot().mode == "hurt") {
 			return;
 		}
 		changeState("crouch");
@@ -441,7 +441,7 @@ class LocalCharacter extends Character {
 	}
 
 	private function syncFromController(?previousMode:Null<String>):Void {
-		var state = controller.debugState();
+		var state = controller.stateSnapshot();
 		x = state.x;
 		y = state.y;
 		velX = state.vx;
@@ -460,7 +460,7 @@ class LocalCharacter extends Character {
 		lastControllerMode = state.mode;
 	}
 
-	private function syncMovementItemSideEffects(state:LocalPlayerDebugState):Void {
+	private function syncMovementItemSideEffects(state:LocalPlayerState):Void {
 		if (state.jetPackActive != lastJetPackActive) {
 			if (state.jetPackActive) {
 				beginJetNetwork();

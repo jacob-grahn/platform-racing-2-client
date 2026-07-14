@@ -1,6 +1,6 @@
 package pr2.level;
 
-import pr2.harness.LocalPlayerController;
+import pr2.gameplay.player.LocalPlayerController;
 import pr2.level.ServerLevel.DecodedBlock;
 
 class ServerLevelWorldAdapterTest {

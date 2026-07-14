@@ -90,7 +90,7 @@ class TestCoursePage extends Page {
 		var config = LevelConfig.fromServerData(data);
 		course = new Course(level, data, config);
 		course.removeRaceChat();
-		course.testMode = true;
+		course.offlineMode = true;
 		course.onFinish = function(_):Void clickRestart();
 		addChildAt(course, 0);
 		course.musicSelection.x = HOLDER_X + TEST_MUSIC_X;

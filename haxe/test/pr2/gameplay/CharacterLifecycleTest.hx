@@ -21,9 +21,9 @@ import pr2.effects.TeleportPop;
 import pr2.gameplay.GameCommandShell.GameCommandDelegate;
 import pr2.gameplay.GameCommandShell.LocalCharacterInit;
 import pr2.gameplay.GameCommandShell.RemoteCharacterInit;
-import pr2.harness.BlockVisualEvent;
-import pr2.harness.BlockVisualEvent.BlockVisualEventKind;
-import pr2.harness.LocalPlayerInput;
+import pr2.gameplay.player.BlockVisualEvent;
+import pr2.gameplay.player.BlockVisualEvent.BlockVisualEventKind;
+import pr2.gameplay.player.LocalPlayerInput;
 import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
 import pr2.net.ServerLevelData;
@@ -81,9 +81,9 @@ class CharacterLifecycleTest {
 		assertEquals(3, course.localCharacter.head, "local head applied");
 		assertEquals(4, course.localCharacter.body, "local body applied");
 		assertEquals(5, course.localCharacter.feet, "local feet applied");
-		assertEquals(80.0, course.localCharacter.debugState().speedStat, "local speed stat applied");
-		assertEquals(70.0, course.localCharacter.debugState().accelerationStat, "local accel stat applied");
-		assertEquals(60.0, course.localCharacter.debugState().jumpStat, "local jump stat applied");
+		assertEquals(80.0, course.localCharacter.stateSnapshot().speedStat, "local speed stat applied");
+		assertEquals(70.0, course.localCharacter.stateSnapshot().accelerationStat, "local accel stat applied");
+		assertEquals(60.0, course.localCharacter.stateSnapshot().jumpStat, "local jump stat applied");
 
 		var startPos = course.localCharacter.getPos();
 		var expectedStartCommand = 'exact_pos`${Math.round(startPos.x)}`${Math.round(startPos.y)}';
@@ -135,15 +135,15 @@ class CharacterLifecycleTest {
 		}
 		LobbySocket.resetSent();
 		course.beginRace();
-		var startX = course.localCharacter.debugState().x;
-		var startY = course.localCharacter.debugState().y;
+		var startX = course.localCharacter.stateSnapshot().x;
+		var startY = course.localCharacter.stateSnapshot().y;
 
 		course.setKey(Keyboard.RIGHT, true);
 		for (_ in 0...5) {
 			course.dispatchEvent(new Event(Event.ENTER_FRAME));
 		}
-		assertEquals(startX, course.localCharacter.debugState().x, "countdown blocks local horizontal movement");
-		assertEquals(startY, course.localCharacter.debugState().y, "countdown blocks local vertical movement");
+		assertEquals(startX, course.localCharacter.stateSnapshot().x, "countdown blocks local horizontal movement");
+		assertEquals(startY, course.localCharacter.stateSnapshot().y, "countdown blocks local vertical movement");
 
 		while (course.countdown != null && course.countdown.parent != null) {
 			course.countdown.advance();
@@ -152,7 +152,7 @@ class CharacterLifecycleTest {
 		for (_ in 0...10) {
 			course.dispatchEvent(new Event(Event.ENTER_FRAME));
 		}
-		assertTrue(course.localCharacter.debugState().x > startX, "local movement resumes after countdown");
+		assertTrue(course.localCharacter.stateSnapshot().x > startX, "local movement resumes after countdown");
 		course.remove();
 	}
 
@@ -339,7 +339,7 @@ class CharacterLifecycleTest {
 		assertTrue(sting != null, "incoming sting command mounts StingEffect");
 		assertEquals(true, sting.hasTimelineChild("leftSting"), "sting from the left keeps left graphic");
 		assertEquals(false, sting.hasTimelineChild("rightSting"), "sting from the left removes right graphic");
-		assertEquals("hurt", course.localCharacter.debugState().mode, "incoming sting command hurts vulnerable local player");
+		assertEquals("hurt", course.localCharacter.stateSnapshot().mode, "incoming sting command hurts vulnerable local player");
 		course.localCharacter.setPos(123, 234);
 		sting.dispatchEvent(new Event(Event.ENTER_FRAME));
 		assertEquals(123.0, sting.x, "sting follows owner x each frame");
@@ -368,9 +368,9 @@ class CharacterLifecycleTest {
 		LobbySocket.resetSent();
 
 		course.localCharacter.gainHeart();
-		@:privateAccess course.syncHearts(course.localCharacter.debugState());
+		@:privateAccess course.syncHearts(course.localCharacter.stateSnapshot());
 
-		assertEquals(4, course.localCharacter.debugState().lives, "local heart gain increments deathmatch lives");
+		assertEquals(4, course.localCharacter.stateSnapshot().lives, "local heart gain increments deathmatch lives");
 		assertEquals(4, course.hearts.getHeartCount(), "local heart gain updates deathmatch HUD hearts");
 		assertEquals("heart`", LobbySocket.lastSent(), "local heart gain emits Flash heart payload");
 		course.remove();
@@ -459,7 +459,7 @@ class CharacterLifecycleTest {
 		assertTrue(course.snakeManager.trailHasEyes(firstHead.x, firstHead.y), "the newest Snake block is the head and has eyes");
 		assertTrue(LobbySocket.sentCommands.join("|").indexOf("add_effect`SnakeStart`") >= 0,
 			"Snake start uses the existing add_effect relay");
-		assertEquals(null, course.localCharacter.debugState().itemId, "starting Snake consumes the held item");
+		assertEquals(null, course.localCharacter.stateSnapshot().itemId, "starting Snake consumes the held item");
 
 		var playerFacing = course.localCharacter.facingScaleX;
 		var cameraTargetBeforeMove = course.snakeManager.localHeadWorld();
@@ -513,10 +513,10 @@ class CharacterLifecycleTest {
 		course.setKey(Keyboard.UP, true);
 		for (_ in 0...40) {
 			course.onEnterFrame(new Event(Event.ENTER_FRAME));
-			if (course.localCharacter.debugState().itemId == 8) break;
+			if (course.localCharacter.stateSnapshot().itemId == 8) break;
 		}
 		course.setKey(Keyboard.UP, false);
-		assertEquals(8, course.localCharacter.debugState().itemId, "local player collects sword");
+		assertEquals(8, course.localCharacter.stateSnapshot().itemId, "local player collects sword");
 
 		LobbySocket.resetSent();
 		course.onEnterFrame(new Event(Event.ENTER_FRAME));
@@ -578,7 +578,7 @@ class CharacterLifecycleTest {
 		var mine = collectAndUseLocalItem(2);
 		var mineEffect = Std.downcast(mine.levelRenderer.blockLayer.getChildAt(mine.levelRenderer.blockLayer.numChildren - 1), MineAppear);
 		assertTrue(mineEffect != null, "local mine mounts its placement animation");
-		var mineParts = mine.localCharacter.debugState().lastItemEffect.split(":");
+		var mineParts = mine.localCharacter.stateSnapshot().lastItemEffect.split(":");
 		var mineWorldCoords = mineParts[1].split(",");
 		assertEquals(Std.parseFloat(mineWorldCoords[0]), mineEffect.x,
 			"local mine uses authored world x");
@@ -1162,12 +1162,12 @@ class CharacterLifecycleTest {
 		course.setKey(Keyboard.UP, true);
 		for (_ in 0...40) {
 			course.onEnterFrame(new Event(Event.ENTER_FRAME));
-			if (course.localCharacter.debugState().itemId == itemId) {
+			if (course.localCharacter.stateSnapshot().itemId == itemId) {
 				break;
 			}
 		}
 		course.setKey(Keyboard.UP, false);
-		assertEquals(itemId, course.localCharacter.debugState().itemId, 'local player collects item $itemId');
+		assertEquals(itemId, course.localCharacter.stateSnapshot().itemId, 'local player collects item $itemId');
 
 		LobbySocket.resetSent();
 		course.onEnterFrame(new Event(Event.ENTER_FRAME));

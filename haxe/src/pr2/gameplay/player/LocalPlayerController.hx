@@ -1,4 +1,4 @@
-package pr2.harness;
+package pr2.gameplay.player;
 
 #if js
 import js.Browser;
@@ -11,7 +11,15 @@ import pr2.gameplay.RotationMath;
 import pr2.gameplay.Items;
 import pr2.gameplay.items.Item;
 import pr2.gameplay.items.ItemRuntimeOwner;
-import pr2.harness.BlockVisualEvent.BlockVisualEventKind;
+import pr2.gameplay.player.BlockVisualEvent.BlockVisualEventKind;
+import pr2.gameplay.player.LocalPlayerBlockStateStore.LocalPlayerBlockState;
+import pr2.gameplay.player.LocalPlayerControllerTypes.BlockRefs;
+import pr2.gameplay.player.LocalPlayerControllerTypes.PendingMinePlacement;
+import pr2.gameplay.player.LocalPlayerControllerTypes.PendingProjectileDamage;
+import pr2.gameplay.player.LocalPlayerControllerTypes.PhysicsBlockTrace;
+import pr2.gameplay.player.LocalPlayerControllerTypes.PixelPoint;
+import pr2.gameplay.player.LocalPlayerControllerTypes.PlayerStats;
+import pr2.gameplay.player.LocalPlayerControllerTypes.TilePoint;
 import pr2.util.FlashRandom;
 
 class LocalPlayerController implements ItemRuntimeOwner {
@@ -126,7 +134,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	// absent entry reads identically to one whose fields are all at their defaults.
 	// Teleport cooldowns are keyed by color (not tile) and move-block directions
 	// are rebuilt wholesale each cycle, so those two stay as their own maps.
-	private final blockStates:Map<String, BlockState> = new Map();
+	private final blockStates:LocalPlayerBlockStateStore = new LocalPlayerBlockStateStore();
 	// Snake trails are runtime-only solids. Keep them separate from authored
 	// blocks so a trail over a freshly dug (removed) block does not inherit that
 	// authored block's coordinate-keyed removed state.
@@ -174,11 +182,17 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	// carries empty options. Defaults to every code so a standalone controller
 	// still hands out items before Course wires the level config.
 	private var allowedItems:Array<Int> = Items.getAllCodes();
+	private final itemController:ItemController;
+	private final blockController:BlockController;
+	private final traceReporter:PhysicsTraceReporter;
 	private var roguelikeStartX:Float;
 	private var roguelikeStartY:Float;
 
 	public function new(level:WorldLevel) {
 		this.level = level;
+		itemController = new ItemController(this);
+		blockController = new BlockController(this);
+		traceReporter = new PhysicsTraceReporter(this);
 		for (i in 0...level.blocks.length) {
 			var block = level.blocks[i];
 			originalBlockPositions.push({x: block.x, y: block.y});
@@ -206,7 +220,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		lastSafeY = y;
 		standingTileX = level.playerStart.x;
 		standingTileY = level.playerStart.y + 1;
-		determineMoveBlockDirections();
+		blockController.determineMoveBlockDirections();
 		processBlocks(new LocalPlayerInput());
 	}
 
@@ -308,7 +322,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		itemRandom = new FlashRandom(1);
 		moveBlockPhase = "shift";
 		moveBlockTimer = MOVE_PREVIEW_FRAMES;
-		determineMoveBlockDirections();
+		blockController.determineMoveBlockDirections();
 		processBlocks(new LocalPlayerInput());
 	}
 
@@ -343,7 +357,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		animationRight = input.right;
 		updatePendingMinePlacements();
 		updatePendingProjectileDamages();
-		updateItemReload();
+		itemController.updateReload();
 		// LocalCharacter.updateKeys applies RIGHT first and LEFT second, so LEFT
 		// determines the facing direction when both keys are held.
 		if (input.right) {
@@ -368,7 +382,8 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		} else {
 			landStep(input);
 		}
-		updateTimedBlocks();
+		itemController.updateTimedEffects();
+		blockController.update();
 		traceCharacterFrame("after");
 	}
 
@@ -651,8 +666,8 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		}
 	}
 
-	public function debugState():LocalPlayerDebugState {
-		return new LocalPlayerDebugState(x, y, vx, vy, grounded, crouching, animationState, touchedBlock == null ? null : touchedBlock.type, mode, itemId, itemUses, lastItemEffect, speedStat, accelerationStat, jumpStat, courseRotation, finished, finishBlockId, finishX, finishY, lives, courseTime, jetPackActive, speedBurstFramesRemaining > 0 && speedBurstFromItem, touchedBlockX, touchedBlockY, lastCollisionEvent, roguelikeFinishHits);
+	public function stateSnapshot():LocalPlayerState {
+		return new LocalPlayerState(x, y, vx, vy, grounded, crouching, animationState, touchedBlock == null ? null : touchedBlock.type, mode, itemId, itemUses, lastItemEffect, speedStat, accelerationStat, jumpStat, courseRotation, finished, finishBlockId, finishX, finishY, lives, courseTime, jetPackActive, speedBurstFramesRemaining > 0 && speedBurstFromItem, touchedBlockX, touchedBlockY, lastCollisionEvent, roguelikeFinishHits);
 	}
 
 	public function blockAlphaAt(tileX:Int, tileY:Int):Float {
@@ -840,13 +855,8 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	}
 
 	/** The runtime state for a tile, creating (and storing) a fresh one on first write. */
-	private function blockState(key:String):BlockState {
-		var state = blockStates.get(key);
-		if (state == null) {
-			state = new BlockState();
-			blockStates.set(key, state);
-		}
-		return state;
+	private function blockState(key:String):LocalPlayerBlockState {
+		return blockStates.getOrCreate(key);
 	}
 
 	private function position(input:LocalPlayerInput):Void {
@@ -1430,7 +1440,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 				return false;
 			}
 		}
-		return !playerOccupiesTile(destX, destY);
+		return !blockController.playerOccupiesTile(destX, destY);
 	}
 
 	private function hitMine(block:LevelBlock):Void {
@@ -1599,337 +1609,37 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		if (candidates.length == 0) {
 			return null;
 		}
-		return candidates[nextItemRandom(candidates.length)];
+		return candidates[itemController.nextRandom(candidates.length)];
 	}
 
-	private function useHeldItem(input:LocalPlayerInput):Void {
-		if (heldItem == null || itemId == null) {
-			jetPackActive = false;
-			return;
-		}
-		if (itemId == ITEM_JET_PACK && !input.item) {
-			jetPackActive = false;
-		}
-		heldItem.setSpace(input.item, this);
-		itemAvailable = !input.item;
-	}
+	private function useHeldItem(input:LocalPlayerInput):Void itemController.useHeldItem(input);
 
-	public function performLaserGunItem():Void useLaserGun();
-	public function performMineItem():Void useMineItem();
-	public function performLightningItem():Void useLightning();
-	public function performTeleportItem():Void useTeleportItem();
-	public function performSuperJumpItem():Void useSuperJump();
-	public function performJetPackItem():Void useJetPack();
-	public function performSpeedBurstItem():Void useSpeedBurst();
-	public function performSwordItem():Void useSword();
-	public function performIceWaveItem():Void useIceWave();
-	public function performSnakeItem():Void useSnake();
+	public function performLaserGunItem():Void itemController.performLaserGunItem();
+	public function performMineItem():Void itemController.performMineItem();
+	public function performLightningItem():Void itemController.performLightningItem();
+	public function performTeleportItem():Void itemController.performTeleportItem();
+	public function performSuperJumpItem():Void itemController.performSuperJumpItem();
+	public function performJetPackItem():Void itemController.performJetPackItem();
+	public function performSpeedBurstItem():Void itemController.performSpeedBurstItem();
+	public function performSwordItem():Void itemController.performSwordItem();
+	public function performIceWaveItem():Void itemController.performIceWaveItem();
+	public function performSnakeItem():Void itemController.performSnakeItem();
 
-	public function grantItemForDebug(itemCode:Int):Void {
-		heldItem = Items.getFromCode(itemCode);
-		itemId = heldItem == null ? null : Items.getCodeFromItem(heldItem);
-		itemUses = heldItem == null ? null : heldItem.initialUses;
-		jetPackFuelRemaining = itemCode == ITEM_JET_PACK ? JET_PACK_TOTAL_FUEL : null;
-		itemAvailable = true;
-	}
+	public function grantItemForDebug(itemCode:Int):Void itemController.grantItemForDebug(itemCode);
+	public function addSnakeTrail(tileX:Int, tileY:Int):Void itemController.addSnakeTrail(tileX, tileY);
+	public function removeSnakeTrail(tileX:Int, tileY:Int):Void itemController.removeSnakeTrail(tileX, tileY);
+	public function clearSnakeTrails():Void itemController.clearSnakeTrails();
+	public function snakeTileAtPixel(pixelX:Float, pixelY:Float):{x:Int, y:Int} return itemController.snakeTileAtPixel(pixelX, pixelY);
+	public function snakeGridDirection(dx:Int, dy:Int):{x:Int, y:Int} return itemController.snakeGridDirection(dx, dy);
+	public function enterSnakeTile(tileX:Int, tileY:Int):String return itemController.enterSnakeTile(tileX, tileY);
 
-	private function useSnake():Void {
-		lastItemEffect = "snake_start";
-		consumeHeldItemUse();
-	}
+	private function updatePendingMinePlacements():Void itemController.updatePendingMinePlacements();
+	private function updatePendingProjectileDamages():Void itemController.updatePendingProjectileDamages();
+	private function applyJetPackThrust(input:LocalPlayerInput):Void itemController.applyJetPackThrust(input);
+	private function activateSpeedBurst(frames:Int):Void itemController.activateSpeedBurst(frames);
+	private function consumeHeldItemCompletely():Void itemController.consumeHeldItemCompletely();
 
-	public function addSnakeTrail(tileX:Int, tileY:Int):Void {
-		var key = blockKey(tileX, tileY);
-		if (!snakeTrailBlocks.exists(key)) {
-			snakeTrailBlocks.set(key, new LevelBlock(tileX, tileY, BlockType.SnakeTrail));
-		}
-	}
-
-	public function removeSnakeTrail(tileX:Int, tileY:Int):Void {
-		snakeTrailBlocks.remove(blockKey(tileX, tileY));
-	}
-
-	public function clearSnakeTrails():Void {
-		snakeTrailBlocks.clear();
-	}
-
-	public function snakeTileAtPixel(pixelX:Float, pixelY:Float):{x:Int, y:Int} {
-		var tile = rotatedTileAtPixel(pixelX, pixelY);
-		return {x: tile.x, y: tile.y};
-	}
-
-	public function snakeGridDirection(dx:Int, dy:Int):{x:Int, y:Int} {
-		var rotated = RotationMath.rotatePoint(dx, dy, courseRotation);
-		return {x: Math.round(rotated.x), y: Math.round(rotated.y)};
-	}
-
-	/**
-		Resolve an owner-authoritative Snake head entering a world tile.
-		Returns "clear" when movement may continue and "hazard" otherwise.
-	**/
-	public function enterSnakeTile(tileX:Int, tileY:Int):String {
-		if (snakeTrailBlocks.exists(blockKey(tileX, tileY))) {
-			return "hazard";
-		}
-		var block = level.blockAt(tileX, tileY);
-		if (block == null || isBlockRemoved(block)) {
-			return "clear";
-		}
-			switch (block.type) {
-			case BlockType.Basic:
-				activateBlock(block, "snake", true);
-				return "clear";
-			case BlockType.Brick:
-				activateBlock(block, "", true);
-				return "clear";
-			case BlockType.Crumble:
-				activateBlock(block, "50", true);
-				return "clear";
-			case BlockType.Mine:
-				activateBlock(block, "", true);
-				return "hazard";
-			case BlockType.Water:
-				return "hazard";
-			default:
-				return block.type.isSolid() ? "hazard" : "clear";
-		}
-	}
-
-	private function useLaserGun():Void {
-		var direction = facingDirection < 0 ? "left" : "right";
-		vx += facingDirection < 0 ? 15 : -15;
-		lastItemEffect = "laser:" + direction;
-		queueProjectileBlockDamage(facingDirection < 0 ? 180 : 0, facingDirection * LASER_SHOT_SPEED, 100);
-		consumeHeldItemUse();
-	}
-
-	private function useMineItem():Void {
-		var tile = rotatedTileAtPixel(x + facingDirection * level.tileSize, y - 15);
-		if (level.blockAt(tile.x, tile.y) != null) {
-			return;
-		}
-		var effectPos = rotatePoint(tile.x * level.tileSize + 15, tile.y * level.tileSize + 15, courseRotation);
-		lastItemEffect = "mine:" + effectPos.x + "," + effectPos.y + ":" + courseRotation;
-		pendingMinePlacements.push({tileX: tile.x, tileY: tile.y, framesRemaining: MINE_APPEAR_FRAMES});
-		consumeHeldItemUse();
-	}
-
-	private function updatePendingMinePlacements():Void {
-		if (pendingMinePlacements.length == 0) {
-			return;
-		}
-		var stillPending:Array<PendingMinePlacement> = [];
-		for (placement in pendingMinePlacements) {
-			placement.framesRemaining--;
-			if (placement.framesRemaining <= 0) {
-				if (level.blockAt(placement.tileX, placement.tileY) == null) {
-					level.blocks.push(new LevelBlock(placement.tileX, placement.tileY, BlockType.Mine));
-				}
-			} else {
-				stillPending.push(placement);
-			}
-		}
-		pendingMinePlacements = stillPending;
-	}
-
-	private function queueProjectileBlockDamage(angleDegrees:Float, damageForce:Float, maxFrames:Int):Void {
-		var radians = angleDegrees * Math.PI / 180;
-		var shotX = x + (angleDegrees == 180 ? -20 : 20);
-		var shotY = y - 25;
-		var immediateBlock = getBlockAtPixel(shotX, shotY);
-		if (immediateBlock != null) {
-			damageBlockFromItem(immediateBlock, Math.cos(radians) * SHOT_EFFECT_DEFAULT_SPEED);
-			return;
-		}
-		pendingProjectileDamages.push({
-			shotX: shotX,
-			shotY: shotY,
-			velX: Math.cos(radians) * LASER_SHOT_SPEED,
-			velY: Math.sin(radians) * LASER_SHOT_SPEED,
-			damageForce: damageForce,
-			framesRemaining: maxFrames
-		});
-	}
-
-	private function updatePendingProjectileDamages():Void {
-		if (pendingProjectileDamages.length == 0) {
-			return;
-		}
-		var stillPending:Array<PendingProjectileDamage> = [];
-		for (projectile in pendingProjectileDamages) {
-			projectile.shotX += projectile.velX;
-			projectile.shotY += projectile.velY;
-			projectile.framesRemaining--;
-			var block = getBlockAtPixel(projectile.shotX, projectile.shotY);
-			if (block != null) {
-				damageBlockFromItem(block, projectile.damageForce);
-			} else if (projectile.framesRemaining > 0) {
-				stillPending.push(projectile);
-			}
-		}
-		pendingProjectileDamages = stillPending;
-	}
-
-	private function useLightning():Void {
-		lastItemEffect = "zap`";
-		consumeHeldItemUse();
-	}
-
-	private function useTeleportItem():Void {
-		var startX = x;
-		var startY = y - 25;
-		var destX = x + TELEPORT_ITEM_DISTANCE * facingDirection;
-		if (getBlockAtPixel(destX, y - 5) != null) {
-			return;
-		}
-		setPlayerX(destX);
-		lastItemEffect = "teleport:" + Std.int(startX) + "," + Std.int(startY) + ":" + Std.int(x) + "," + Std.int(y - 25);
-		consumeHeldItemUse();
-	}
-
-	private function useSuperJump():Void {
-		if (crouching) {
-			return;
-		}
-		blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.SuperJumpSound, 0, 0));
-		vy -= 25;
-		consumeHeldItemUse();
-	}
-
-	private function useSpeedBurst():Void {
-		if (speedBurstFramesRemaining > 0) {
-			return;
-		}
-		speedBurstFromItem = true;
-		activateSpeedBurst(SPEED_BURST_FRAMES);
-	}
-
-	private function activateSpeedBurst(frames:Int):Void {
-		if (frames <= 0) {
-			return;
-		}
-		accel *= 2;
-		maxVelX *= 2;
-		speedBurstFramesRemaining = frames;
-	}
-
-	private static function msToFrames(ms:Int):Int {
-		return Std.int(Math.round(ms * FRAME_RATE / 1000));
-	}
-
-	private function useJetPack():Void {
-		if (jetPackFuelRemaining == null || jetPackFuelRemaining <= 0 || crouching) {
-			return;
-		}
-		vy -= vy > -5 ? 1.25 : 0.5;
-		jetPackActive = true;
-		jetPackFuelRemaining--;
-		itemUses = Std.int(Math.ceil((jetPackFuelRemaining / JET_PACK_TOTAL_FUEL) * 3));
-		if (jetPackFuelRemaining <= 0) {
-			consumeHeldItemCompletely();
-		}
-	}
-
-	private function useSword():Void {
-		var direction = facingDirection < 0 ? "left" : "right";
-		vx += facingDirection < 0 ? -8 : 8;
-		lastItemEffect = "slash:" + direction;
-		animateForwardBlockDamage(facingDirection < 0 ? 180 : 0, facingDirection * 8, 15);
-		consumeHeldItemUse();
-	}
-
-	private function useIceWave():Void {
-		var direction = facingDirection < 0 ? "left" : "right";
-		lastItemEffect = "ice_wave:" + direction;
-		freezeFirstShotBlockHit(facingDirection < 0 ? 180 : 0);
-		consumeHeldItemUse();
-	}
-
-	private function freezeFirstShotBlockHit(angleDegrees:Float):Void {
-		var shotX = x + (angleDegrees == 180 ? -20 : 20);
-		var shotY = y - 25;
-		var radians = angleDegrees * Math.PI / 180;
-		var velX = Math.cos(radians) * 5;
-		var velY = Math.sin(radians) * 5;
-		for (_ in 0...100) {
-			var block = getBlockAtPixel(shotX, shotY);
-			if (block != null) {
-				if (block.type != BlockType.Ice) {
-					var state = blockState(blockKey(block.x, block.y));
-					state.frozenIceAlpha = SANTA_ICE_OVERLAY_START_ALPHA;
-					state.frozenIceFadeRate = SANTA_ICE_OVERLAY_FADE_RATE;
-				}
-				return;
-			}
-			shotX += velX;
-			shotY += velY;
-		}
-	}
-
-	private function animateForwardBlockDamage(angleDegrees:Float, damageForce:Float, maxSteps:Int):Void {
-		var shotX = x + (angleDegrees == 180 ? -20 : 20);
-		var shotY = y - 25;
-		var radians = angleDegrees * Math.PI / 180;
-		var velX = Math.cos(radians) * 5;
-		var velY = Math.sin(radians) * 5;
-		for (_ in 0...maxSteps) {
-			var block = getBlockAtPixel(shotX, shotY);
-			if (block != null) {
-				damageBlockFromItem(block, damageForce);
-				return;
-			}
-			shotX += velX;
-			shotY += velY;
-		}
-	}
-
-	private function damageBlockFromItem(block:LevelBlock, damageForce:Float):Void {
-		var clampedHitX = clamp(damageForce, -20, 20);
-		blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.BlockBumpSound, block.x, block.y, 1, null, null, clampedHitX, 0));
-			switch (block.type) {
-			case BlockType.Brick:
-				activateBlock(block, "", true);
-			case BlockType.Crumble:
-				applyCrumbleForce(block, 5);
-			case BlockType.Mine:
-				activateBlock(block, "", true);
-			case BlockType.Vanish:
-				activateVanish(block);
-			default:
-		}
-	}
-
-	private function consumeHeldItemUse():Void {
-		if (heldItem != null) {
-			if (heldItem.consumeUse()) {
-				consumeHeldItemCompletely();
-			} else {
-				itemUses = heldItem.uses();
-				itemReloadFramesRemaining = heldItem.reloadFramesRemaining;
-			}
-			return;
-		}
-		if (itemUses == null || itemUses <= 1) {
-			consumeHeldItemCompletely();
-			return;
-		}
-		itemUses--;
-		itemReloadFramesRemaining = 0;
-	}
-
-	private function applyJetPackThrust(input:LocalPlayerInput):Void {
-		if (input.item && itemId == ITEM_JET_PACK && !crouching) jumpHeld = false;
-	}
-
-	private function consumeHeldItemCompletely():Void {
-		itemId = null;
-		itemUses = null;
-		heldItem = null;
-		itemReloadFramesRemaining = 0;
-		jetPackFuelRemaining = null;
-		jetPackActive = false;
-		itemAvailable = false;
-	}
+	private static function msToFrames(ms:Int):Int return ItemController.msToFrames(ms);
 
 	private function useCustomStatsBlock(block:LevelBlock):Void {
 		if (isBlockFrozen(block)) {
@@ -2118,211 +1828,6 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		}
 	}
 
-	private function updateTimedBlocks():Void {
-		updateSpeedBurst();
-		updateFrozenBlocks();
-		updateVanishBlocks();
-		updateTeleportBlocks();
-		updateMoveBlocks();
-	}
-
-	private function updateItemReload():Void {
-		if (heldItem != null) {
-			heldItem.tickReload();
-			itemReloadFramesRemaining = heldItem.reloadFramesRemaining;
-			return;
-		}
-		if (itemReloadFramesRemaining > 0) {
-			itemReloadFramesRemaining--;
-		}
-	}
-
-	private function updateSpeedBurst():Void {
-		if (speedBurstFramesRemaining <= 0) {
-			return;
-		}
-		speedBurstFramesRemaining--;
-		if (speedBurstFramesRemaining <= 0) {
-			itemId = null;
-			itemUses = null;
-			heldItem = null;
-			speedBurstFromItem = false;
-			itemAvailable = false;
-			applyMovementStats();
-		}
-	}
-
-	private function updateMoveBlocks():Void {
-		if (moveBlockDirections.keys().hasNext() == false) {
-			return;
-		}
-
-		moveBlockTimer--;
-		if (moveBlockTimer > 0) {
-			return;
-		}
-
-		if (moveBlockPhase == "shift") {
-			shiftMoveBlocks();
-			moveBlockPhase = "reselect";
-			moveBlockTimer = MOVE_RESELECT_FRAMES;
-		} else {
-			determineMoveBlockDirections();
-			moveBlockPhase = "shift";
-			moveBlockTimer = MOVE_PREVIEW_FRAMES;
-		}
-	}
-
-	private function determineMoveBlockDirections():Void {
-		moveBlockDirections.clear();
-		for (block in level.blocks) {
-			if (block.type == BlockType.Move) {
-				moveBlockDirections.set(blockKey(block.x, block.y), moveBlockDirection(block));
-			}
-		}
-	}
-
-	private function shiftMoveBlocks():Void {
-		var moveBlocks = level.blocks.filter(function(block) return block.type == BlockType.Move);
-		for (block in moveBlocks) {
-			var direction = moveBlockDirections.get(blockKey(block.x, block.y));
-			if (direction == null) {
-				continue;
-			}
-			switch (direction) {
-				case 0:
-					pushBlock(block, 0, 1);
-				case 1:
-					pushBlock(block, 0, -1);
-				case 2:
-					pushBlock(block, 1, 0);
-				case 3:
-					pushBlock(block, -1, 0);
-				default:
-			}
-		}
-	}
-
-	private function moveBlockDirection(block:LevelBlock):Int {
-		return switch (block.options) {
-			case "down": 0;
-			case "up": 1;
-			case "right": 2;
-			case "left": 3;
-			default: nextMoveRandom(4);
-		}
-	}
-
-	private function nextMoveRandom(maxValue:Int):Int {
-		return moveRandom.nextMinMax(0, maxValue);
-	}
-
-	private function nextItemRandom(maxValue:Int):Int {
-		return itemRandom.nextMinMax(0, maxValue);
-	}
-
-	private function updateVanishBlocks():Void {
-		// Three separate passes over every tracked tile, matching the original's
-		// three map snapshots. The order matters: a fade that completes in the
-		// first pass starts its reappear timer, which the third pass then ticks
-		// down within the same frame; the fade-in the third pass starts is only
-		// ticked on the following frame (the fade-in pass has already run).
-		for (state in blockStates) {
-			if (state.vanishFadeFrames != null) {
-				var frames = state.vanishFadeFrames - 1;
-				if (frames <= 0) {
-					state.vanishFadeFrames = null;
-					state.removed = true;
-					state.vanishReappearFrames = VANISH_REAPPEAR_FRAMES;
-				} else {
-					state.vanishFadeFrames = frames;
-				}
-			}
-		}
-
-		for (state in blockStates) {
-			if (state.vanishFadeInFrames != null) {
-				var frames = state.vanishFadeInFrames - 1;
-				if (frames <= 0) {
-					state.vanishFadeInFrames = null;
-				} else {
-					state.vanishFadeInFrames = frames;
-				}
-			}
-		}
-
-		for (key => state in blockStates) {
-			if (state.vanishReappearFrames != null) {
-				var frames = state.vanishReappearFrames - 1;
-				if (frames > 0) {
-					state.vanishReappearFrames = frames;
-				} else if (!playerOccupiesBlock(key)) {
-					state.vanishReappearFrames = null;
-					state.removed = false;
-					state.vanishFadeInFrames = VANISH_FADE_FRAMES - 2;
-				} else {
-					state.vanishReappearFrames = VANISH_REAPPEAR_FRAMES;
-				}
-			}
-		}
-	}
-
-	private function updateTeleportBlocks():Void {
-		var colors:Array<String> = [for (color in disabledTeleportFrames.keys()) color];
-		for (color in colors) {
-			var frames = disabledTeleportFrames.get(color) - 1;
-			if (frames <= 0) {
-				disabledTeleportFrames.remove(color);
-				for (block in teleportBlocksOfColor(color)) {
-					var state = blockState(blockKey(block.x, block.y));
-					state.depletedSupply = false;
-					state.depletedVisualSupply = false;
-				}
-			} else {
-				disabledTeleportFrames.set(color, frames);
-			}
-		}
-	}
-
-	private function updateFrozenBlocks():Void {
-		for (state in blockStates) {
-			if (state.frozenIceAlpha != null) {
-				var alpha = state.frozenIceAlpha - state.frozenIceFadeRate;
-				if (alpha <= ICE_OVERLAY_REMOVE_ALPHA) {
-					state.frozenIceAlpha = null;
-					state.frozenIceFadeRate = SANTA_ICE_OVERLAY_FADE_RATE;
-				} else {
-					state.frozenIceAlpha = alpha;
-				}
-			}
-		}
-	}
-
-	private function playerOccupiesBlock(key:String):Bool {
-		var parts = key.split(",");
-		if (parts.length != 2) {
-			return false;
-		}
-		var tileX = Std.parseInt(parts[0]);
-		var tileY = Std.parseInt(parts[1]);
-		return tileX != null && tileY != null && playerOccupiesTile(tileX, tileY);
-	}
-
-	private function playerOccupiesTile(targetTileX:Int, targetTileY:Int):Bool {
-		var left = tileIndex(x - HALF_WIDTH);
-		var right = tileIndex(x + HALF_WIDTH);
-		var top = tileIndex(y - (crouching ? CROUCHING_HEIGHT : STANDING_HEIGHT));
-		var bottom = tileIndex(y);
-		for (tileX in left...right + 1) {
-			for (tileY in top...bottom + 1) {
-				if (tileX == targetTileX && tileY == targetTileY) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
 	private function touch(block:Null<LevelBlock>):Void {
 		if (block != null) {
 			touchedBlock = block;
@@ -2338,99 +1843,12 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		lastCollisionEvent = event + ":" + Std.string(block.type) + "@" + block.x + "," + block.y;
 	}
 
-	private function traceCharacterFrame(phase:String):Void {
-		if (!detailedTraceEnabled) {
-			return;
-		}
-		emitTraceLine("PR2TRACE|client=haxe|frame=" + detailedTraceFrame + "|event=frame|phase=" + phase + "|state=" + characterTraceState());
-	}
-
-	private function traceGravityChange(kind:String, before:Float, after:Float, input:Float):Void {
-		if (!detailedTraceEnabled) {
-			return;
-		}
-		emitTraceLine("PR2TRACE|client=haxe|frame=" + detailedTraceFrame + "|event=gravity|kind=" + kind + "|input=" + traceNum(input)
-			+ "|before=" + traceNum(before) + "|after=" + traceNum(after) + "|state=" + characterTraceState());
-	}
-
-	private function beginBlockTrace(block:LevelBlock, kind:String, source:String):Null<PhysicsBlockTrace> {
-		if (!detailedTraceEnabled) {
-			return null;
-		}
-		return {
-			kind: kind,
-			source: source,
-			beforeState: characterTraceState(),
-			beforeBlock: blockTraceState(block)
-		};
-	}
-
-	private function endBlockTrace(info:Null<PhysicsBlockTrace>):Void {
-		if (info == null) {
-			return;
-		}
-		var block = touchedBlock;
-		var afterBlock = block == null ? "null" : blockTraceState(block);
-		emitTraceLine("PR2TRACE|client=haxe|frame=" + detailedTraceFrame + "|event=block|kind=" + info.kind + "|source=" + info.source
-			+ "|blockBefore=" + info.beforeBlock + "|blockAfter=" + afterBlock + "|before=" + info.beforeState + "|after=" + characterTraceState());
-	}
-
-	private function emitTraceLine(line:String):Void {
-		#if js
-		Browser.console.log(line);
-		#else
-		trace(line);
-		#end
-	}
-
-	private function blockTraceState(block:LevelBlock):String {
-		return "type=" + Std.string(block.type)
-			+ ";code=" + Std.string(block.type)
-			+ ";seg=" + block.x + "," + block.y
-			+ ";pos=" + traceNum(block.x * level.tileSize) + "," + traceNum(block.y * level.tileSize)
-			+ ";active=" + (!isBlockRemoved(block))
-			+ ";removed=" + isBlockRemoved(block)
-			+ ";alpha=" + traceNum(blockAlphaAt(block.x, block.y))
-			+ ";options=" + block.options;
-	}
-
-	private function characterTraceState():String {
-		return "x=" + traceNum(x)
-			+ ";y=" + traceNum(y)
-			+ ";velX=" + traceNum(vx)
-			+ ";velY=" + traceNum(vy)
-			+ ";targetVelX=" + traceNum(targetVelX)
-			+ ";targetVelY=0"
-			+ ";grounded=" + grounded
-			+ ";crouching=" + crouching
-			+ ";mode=" + mode
-			+ ";state=" + Std.string(characterState())
-			+ ";gravity=" + traceNum(gravity)
-			+ ";defaultGravity=" + traceNum(DEFAULT_GRAVITY)
-			+ ";jumpVel=" + traceNum(jumpVelBoost)
-			+ ";superJump=" + traceNum(jumpVelocity)
-			+ ";accel=" + traceNum(accel)
-			+ ";maxVelX=" + traceNum(maxVelX)
-			+ ";accelFactor=" + traceNum(accelFactor)
-			+ ";waterTicks=" + traceNum(waterTicks)
-			+ ";hurtTime=" + hurtFramesRemaining
-			+ ";lastSafe=" + traceNum(lastSafeX) + "," + traceNum(lastSafeY)
-			+ ";standingSeg=" + standingTileX + "," + standingTileY
-			+ ";rotation=" + characterRotation
-			+ ";mapRotation=" + courseRotation
-			+ ";scaleX=" + facingDirection
-			+ ";item=" + (itemId == null ? 0 : itemId);
-	}
-
-	private static function traceNum(value:Float):String {
-		if (Math.isNaN(value)) {
-			return "NaN";
-		}
-		if (!Math.isFinite(value)) {
-			return value > 0 ? "Infinity" : "-Infinity";
-		}
-		return Std.string(Math.round(value * 1000000) / 1000000);
-	}
+	private function traceCharacterFrame(phase:String):Void traceReporter.traceCharacterFrame(phase);
+	private function traceGravityChange(kind:String, before:Float, after:Float, input:Float):Void
+		traceReporter.traceGravityChange(kind, before, after, input);
+	private function beginBlockTrace(block:LevelBlock, kind:String, source:String):Null<PhysicsBlockTrace>
+		return traceReporter.beginBlockTrace(block, kind, source);
+	private function endBlockTrace(info:Null<PhysicsBlockTrace>):Void traceReporter.endBlockTrace(info);
 
 	private function characterState():CharacterState {
 		return animationState;
@@ -2545,92 +1963,4 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	private static function clamp(value:Float, min:Float, max:Float):Float {
 		return Math.max(min, Math.min(max, value));
 	}
-}
-
-private class PixelPoint {
-	public final x:Float;
-	public final y:Float;
-
-	public function new(x:Float, y:Float) {
-		this.x = x;
-		this.y = y;
-	}
-}
-
-private class TilePoint {
-	public final x:Int;
-	public final y:Int;
-
-	public function new(x:Int, y:Int) {
-		this.x = x;
-		this.y = y;
-	}
-}
-
-private typedef BlockRefs = {
-	final floorLeft:Null<LevelBlock>;
-	final floorCenter:Null<LevelBlock>;
-	final floorRight:Null<LevelBlock>;
-	final wallLeft:Null<LevelBlock>;
-	final midBlock:Null<LevelBlock>;
-	final wallRight:Null<LevelBlock>;
-	final ceilLeft:Null<LevelBlock>;
-	final ceiling:Null<LevelBlock>;
-	final ceilRight:Null<LevelBlock>;
-	final headBlock:Null<LevelBlock>;
-	final topBlock:Null<LevelBlock>;
-}
-
-private typedef PendingMinePlacement = {
-	var tileX:Int;
-	var tileY:Int;
-	var framesRemaining:Int;
-}
-
-private typedef PendingProjectileDamage = {
-	var shotX:Float;
-	var shotY:Float;
-	var velX:Float;
-	var velY:Float;
-	var damageForce:Float;
-	var framesRemaining:Int;
-}
-
-private typedef PhysicsBlockTrace = {
-	var kind:String;
-	var source:String;
-	var beforeState:String;
-	var beforeBlock:String;
-}
-
-private class PlayerStats {
-	public final speed:Float;
-	public final acceleration:Float;
-	public final jump:Float;
-
-	public function new(speed:Float, acceleration:Float, jump:Float) {
-		this.speed = speed;
-		this.acceleration = acceleration;
-		this.jump = jump;
-	}
-}
-
-/**
-	Mutable runtime state for a single tile, keyed by "x,y" in `blockStates`. A
-	null Int / false Bool means "no such state", so a tile with a fresh (all
-	default) instance behaves identically to one with no entry at all.
-**/
-private class BlockState {
-	public var crumbleLife:Null<Int> = null;
-	public var removed:Bool = false;
-	public var vanishFadeFrames:Null<Int> = null;
-	public var vanishReappearFrames:Null<Int> = null;
-	public var vanishFadeInFrames:Null<Int> = null;
-	public var depletedItem:Bool = false;
-	public var depletedSupply:Bool = false;
-	public var depletedVisualSupply:Bool = false;
-	public var frozenIceAlpha:Null<Float> = null;
-	public var frozenIceFadeRate:Float = 0.025;
-
-	public function new() {}
 }

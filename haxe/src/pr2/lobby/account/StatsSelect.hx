@@ -78,7 +78,7 @@ class StatsSelect extends Sprite {
 			return;
 		}
 		updateSavedLEStats = false;
-		var stats = localChar.debugState();
+		var stats = localChar.stateSnapshot();
 		setStats(Math.round(stats.speedStat), Math.round(stats.accelerationStat), Math.round(stats.jumpStat));
 	}
 

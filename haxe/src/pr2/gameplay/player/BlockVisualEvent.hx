@@ -1,4 +1,4 @@
-package pr2.harness;
+package pr2.gameplay.player;
 
 enum BlockVisualEventKind {
 	ArrowAnimate;

@@ -1726,7 +1726,7 @@ class LobbyServicesTest {
 			testCourse.dispatchEvent(new Event(Event.ENTER_FRAME));
 			assertEquals(AppStage.stage, AppStage.stage.focus, "test course keeps stage focus every frame");
 		}
-		var initialStats = testCourse.course.localCharacter.debugState();
+		var initialStats = testCourse.course.localCharacter.stateSnapshot();
 		assertEquals(61, Math.round(initialStats.speedStat), "test course applies saved speed stat");
 		assertEquals(72, Math.round(initialStats.accelerationStat), "test course applies saved acceleration stat");
 		assertEquals(83, Math.round(initialStats.jumpStat), "test course applies saved jump stat");
@@ -1737,7 +1737,7 @@ class LobbyServicesTest {
 		var clickPoint = new Point(230, 240);
 		var targetWorld = testCourse.course.levelRenderer.screenToWorld(clickPoint.x, clickPoint.y);
 		testCourse.course.levelRenderer.dispatchEvent(new MouseEvent(MouseEvent.CLICK, true, false, clickPoint.x, clickPoint.y));
-		var teleportedStats = testCourse.course.localCharacter.debugState();
+		var teleportedStats = testCourse.course.localCharacter.stateSnapshot();
 		assertEquals(Math.round(targetWorld.x), Math.round(teleportedStats.x), "test course click teleports local player to clicked x");
 		assertEquals(Math.round(targetWorld.y), Math.round(teleportedStats.y), "test course click teleports local player to clicked y");
 		assertEquals(2, testCourse.course.levelRenderer.teleportPopCountForTests(), "test course click adds source and destination teleport pops");
@@ -1751,7 +1751,7 @@ class LobbyServicesTest {
 		testCourse.statsSelect.setStats(91, 82, 73);
 		testCourse.statsSelect.noteUserStatChange();
 		testCourse.statsSelect.saveLEStats();
-		var changedStats = testCourse.course.localCharacter.debugState();
+		var changedStats = testCourse.course.localCharacter.stateSnapshot();
 		assertEquals(91, Math.round(changedStats.speedStat), "stat picker updates live speed stat");
 		assertEquals(82, Math.round(changedStats.accelerationStat), "stat picker updates live acceleration stat");
 		assertEquals(73, Math.round(changedStats.jumpStat), "stat picker updates live jump stat");
@@ -1780,7 +1780,7 @@ class LobbyServicesTest {
 		assertEquals(testCourse.course, firstStatsSelect.parent, "restart leaves StatsSelect on the Course holder");
 		assertEquals(testCourse.course, firstHatPicker.parent, "restart leaves HatPicker on the Course holder");
 		assertEquals(0, testCourse.course.levelRenderer.teleportPopCountForTests(), "restart clears teleport pop effects");
-		var restartedStats = testCourse.course.localCharacter.debugState();
+		var restartedStats = testCourse.course.localCharacter.stateSnapshot();
 		assertEquals(0, restartedStats.courseRotation, "restart resets course rotation");
 		assertEquals(90, restartedStats.courseTime, "restart resets the course timer to max time");
 		assertEquals(3, restartedStats.lives, "restart resets deathmatch lives");

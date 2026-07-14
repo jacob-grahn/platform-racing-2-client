@@ -1,6 +1,6 @@
 package pr2.character;
 
-import pr2.harness.LocalPlayerInput;
+import pr2.gameplay.player.LocalPlayerInput;
 import pr2.level.BlockType;
 import pr2.level.WorldLevel;
 import pr2.level.WorldLevel.LevelBlock;
@@ -92,7 +92,7 @@ class LocalCharacterEmitTest {
 		character.emitSting(8);
 		character.emitHeart(9);
 		character.gainHeart();
-		assertEquals(4, character.debugState().lives, "local gainHeart increments local lives");
+		assertEquals(4, character.stateSnapshot().lives, "local gainHeart increments local lives");
 		character.emitLooseHat(5, 123, 456);
 		character.emitHatToStart(5);
 		character.emitGrabEgg(3);
@@ -130,12 +130,12 @@ class LocalCharacterEmitTest {
 		LobbySocket.resetSent();
 		for (_ in 0...40) {
 			character.step(new LocalPlayerInput(false, false, true));
-			if (character.debugState().touchedBlockType == "heart") {
+			if (character.stateSnapshot().touchedBlockType == "heart") {
 				break;
 			}
 		}
-		assertEquals("heart", character.debugState().touchedBlockType, "local player bumps the heart block");
-		assertEquals(4, character.debugState().lives, "heart block gain increments local deathmatch lives");
+		assertEquals("heart", character.stateSnapshot().touchedBlockType, "local player bumps the heart block");
+		assertEquals(4, character.stateSnapshot().lives, "heart block gain increments local deathmatch lives");
 		assertCommands(["heart`"], "heart block gain protocol");
 	}
 

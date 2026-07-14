@@ -1,4 +1,4 @@
-package pr2.harness;
+package pr2.gameplay.player;
 
 import com.jiggmin.data.SecureData;
 import pr2.character.LocalCharacter;
@@ -180,22 +180,22 @@ class LocalPlayerControllerTest {
 		}
 
 		player.step(new LocalPlayerInput(false, true));
-		assertEquals("run", player.debugState().animation, "held direction runs like LocalCharacter");
+		assertEquals("run", player.stateSnapshot().animation, "held direction runs like LocalCharacter");
 
 		player.step(new LocalPlayerInput());
-		assertEquals("stand", player.debugState().animation, "coasting without input stands like LocalCharacter");
+		assertEquals("stand", player.stateSnapshot().animation, "coasting without input stands like LocalCharacter");
 
 		player.step(new LocalPlayerInput(false, false, false, true));
 		player.step(new LocalPlayerInput(false, true, false, true));
-		assertEquals("run", player.debugState().animation, "down on flat ground charges, not crouches: held direction still runs");
+		assertEquals("run", player.stateSnapshot().animation, "down on flat ground charges, not crouches: held direction still runs");
 
 		player.step(new LocalPlayerInput(false, false, false, true));
-		assertEquals("stand", player.debugState().animation, "down on flat ground does not crouch: released direction stands while charging");
+		assertEquals("stand", player.stateSnapshot().animation, "down on flat ground does not crouch: released direction stands while charging");
 	}
 
 	private static function testStartBlockHasNoCollision():Void {
 		var player = newPlayer();
-		var state = player.debugState();
+		var state = player.stateSnapshot();
 
 		assertClose(75, state.x, "initial x centers player in start tile");
 		assertClose(270, state.y, "initial feet align with start block top");
@@ -204,7 +204,7 @@ class LocalPlayerControllerTest {
 		for (_ in 0...20) {
 			player.step(new LocalPlayerInput());
 		}
-		state = player.debugState();
+		state = player.stateSnapshot();
 		assertClose(300, state.y, "player falls through start block to solid floor");
 		assertEquals(true, state.grounded, "solid floor grounds player");
 	}
@@ -216,14 +216,14 @@ class LocalPlayerControllerTest {
 
 		for (_ in 0...120) {
 			player.step(input);
-			var state = player.debugState();
+			var state = player.stateSnapshot();
 			if (state.touchedBlockType == "finish") {
 				touchedFinish = true;
 				break;
 			}
 		}
 
-		var state = player.debugState();
+		var state = player.stateSnapshot();
 		assertEquals(true, touchedFinish, "scripted run reaches finish block");
 		assertClose(470, state.x, "finish collision stops at block edge");
 		assertEquals(true, state.grounded, "player is grounded after run");
@@ -236,12 +236,12 @@ class LocalPlayerControllerTest {
 
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput(false, false, true));
-			if (player.debugState().finished) {
+			if (player.stateSnapshot().finished) {
 				break;
 			}
 		}
 
-		var state = player.debugState();
+		var state = player.stateSnapshot();
 		assertEquals(true, state.finished, "bumping finish block completes race");
 		assertEquals(1, state.finishBlockId, "finish reports Flash-style one-based block id");
 		assertEquals(105, state.finishX, "finish reports block center x");
@@ -251,7 +251,7 @@ class LocalPlayerControllerTest {
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput(false, false, true));
 		}
-		assertEquals(1, player.debugState().finishBlockId, "finish supply remains latched after first use");
+		assertEquals(1, player.stateSnapshot().finishBlockId, "finish supply remains latched after first use");
 	}
 
 	private static function testJumpAndLandOnFlatFixture():Void {
@@ -261,18 +261,18 @@ class LocalPlayerControllerTest {
 		}
 
 		player.step(new LocalPlayerInput(false, false, true));
-		var jumpState = player.debugState();
+		var jumpState = player.stateSnapshot();
 		assertEquals(false, jumpState.grounded, "jump leaves ground");
 		assertEquals("stand", jumpState.animation, "jump input keeps previous ground animation until Flash's next land frame");
 		assertBelow(jumpState.y, 300, "jump moves player up");
 		player.step(new LocalPlayerInput());
-		assertEquals("jump", player.debugState().animation, "airborne land frame changes to jump animation");
+		assertEquals("jump", player.stateSnapshot().animation, "airborne land frame changes to jump animation");
 
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput());
 		}
 
-		var landedState = player.debugState();
+		var landedState = player.stateSnapshot();
 		assertEquals(true, landedState.grounded, "scripted jump lands");
 		assertClose(300, landedState.y, "jump lands back on solid floor");
 		assertEquals("stand", landedState.animation, "landed animation");
@@ -281,17 +281,17 @@ class LocalPlayerControllerTest {
 	private static function testGravityUsesFlashMultiplierAndSupportsRuntimeChanges():Void {
 		var player = new LocalCharacter(emptyLevel(2.5));
 		player.step(new LocalPlayerInput());
-		assertClose(1.75, player.debugState().vy, "gravity is Flash's 0.7 times the level multiplier");
+		assertClose(1.75, player.stateSnapshot().vy, "gravity is Flash's 0.7 times the level multiplier");
 
 		player.setGravity(0.5);
 		player.step(new LocalPlayerInput());
-		assertClose(2.1, player.debugState().vy, "runtime gravity changes replace the active multiplier");
+		assertClose(2.1, player.stateSnapshot().vy, "runtime gravity changes replace the active multiplier");
 	}
 
 	private static function testVelocityIntegrationOrderAndTerminalClamp():Void {
 		var player = new LocalCharacter(emptyLevel(1));
 		player.step(new LocalPlayerInput(false, true));
-		var state = player.debugState();
+		var state = player.stateSnapshot();
 		var acceleration = 0.2 + 50 / 60;
 		var expectedVx = acceleration * 0.985 * 0.35;
 		assertClose(expectedVx, state.vx, "horizontal integration applies input, friction, then acceleration factor");
@@ -301,13 +301,13 @@ class LocalPlayerControllerTest {
 
 		player = new LocalCharacter(emptyLevel(100));
 		player.step(new LocalPlayerInput());
-		state = player.debugState();
+		state = player.stateSnapshot();
 		assertClose(28, state.vy, "positive velocity is clamped to Flash's terminal speed");
 		assertClose(118, state.y, "terminal velocity is clamped before position integration");
 
 		player.setGravity(-100);
 		player.step(new LocalPlayerInput());
-		state = player.debugState();
+		state = player.stateSnapshot();
 		assertClose(-28, state.vy, "negative velocity is clamped to Flash's terminal speed");
 		assertClose(90, state.y, "negative terminal velocity is clamped before position integration");
 	}
@@ -320,13 +320,13 @@ class LocalPlayerControllerTest {
 			player.step(new LocalPlayerInput());
 		}
 
-		var crouchState = player.debugState();
+		var crouchState = player.stateSnapshot();
 		assertEquals(true, crouchState.crouching, "a low ceiling forces the character to crouch");
 		assertEquals("crouch", crouchState.animation, "forced crouch shows the crouch animation");
 		assertClose(300, crouchState.y, "crouch preserves feet position on the floor");
 
 		player.step(new LocalPlayerInput(false, false, true, false));
-		var jumpState = player.debugState();
+		var jumpState = player.stateSnapshot();
 		assertEquals(true, jumpState.crouching, "the low ceiling keeps the character crouched");
 		assertEquals(true, jumpState.grounded, "crouching under a ceiling blocks the jump");
 	}
@@ -337,12 +337,12 @@ class LocalPlayerControllerTest {
 			player.step(new LocalPlayerInput());
 		}
 
-		var crouchState = player.debugState();
+		var crouchState = player.stateSnapshot();
 		assertEquals(true, crouchState.crouching, "the low item block forces crouch before input");
 		assertEquals(null, crouchState.itemId, "standing under the item block does not collect it");
 
 		player.step(new LocalPlayerInput(false, false, true));
-		var bumpState = player.debugState();
+		var bumpState = player.stateSnapshot();
 		assertEquals(true, bumpState.grounded, "pressing up under a block stays grounded");
 		assertEquals(true, bumpState.crouching, "the block still forces crouch after the bump");
 		assertEquals(4, bumpState.itemId, "pressing up under the block routes through onBump");
@@ -361,7 +361,7 @@ class LocalPlayerControllerTest {
 		for (_ in 0...15) {
 			player.step(new LocalPlayerInput(false, false, false, true));
 		}
-		var charged = player.debugState();
+		var charged = player.stateSnapshot();
 		assertEquals(false, charged.crouching, "holding down on open ground never crouches");
 		assertEquals(true, charged.grounded, "charging a super jump stays grounded");
 		assertEquals("superJump", charged.animation, "a charged crouch shows the super jump pose");
@@ -369,7 +369,7 @@ class LocalPlayerControllerTest {
 		// Releasing down fires the charge as an upward launch.
 		var beforeY = charged.y;
 		player.step(new LocalPlayerInput());
-		var launched = player.debugState();
+		var launched = player.stateSnapshot();
 		assertEquals(false, launched.grounded, "releasing a charged super jump leaves the ground");
 		assertBelow(launched.vy, -5, "super jump launches with the Flash -crouchCharge*0.24 impulse");
 		assertBelow(launched.y, beforeY, "super jump moves the player upward");
@@ -385,7 +385,7 @@ class LocalPlayerControllerTest {
 		normal.step(new LocalPlayerInput(false, true));
 		icy.step(new LocalPlayerInput(false, true));
 
-		assertBelow(icy.debugState().vx, normal.debugState().vx * 0.2, "ice applies AS3 low accelFactor on next frame");
+		assertBelow(icy.stateSnapshot().vx, normal.stateSnapshot().vx * 0.2, "ice applies AS3 low accelFactor on next frame");
 	}
 
 	private static function testSantaHatFreezesSafeStandBlock():Void {
@@ -400,7 +400,7 @@ class LocalPlayerControllerTest {
 		normal.step(new LocalPlayerInput(false, true));
 		santa.step(new LocalPlayerInput(false, true));
 
-		assertBelow(santa.debugState().vx, normal.debugState().vx * 0.3, "santa-frozen block applies ice acceleration");
+		assertBelow(santa.stateSnapshot().vx, normal.stateSnapshot().vx * 0.3, "santa-frozen block applies ice acceleration");
 
 		santa.setHats([]);
 		for (_ in 0...38) {
@@ -415,13 +415,13 @@ class LocalPlayerControllerTest {
 
 		for (_ in 0...20) {
 			player.step(new LocalPlayerInput());
-			if (player.debugState().touchedBlockType == "mine") {
+			if (player.stateSnapshot().touchedBlockType == "mine") {
 				break;
 			}
 		}
 
-		assertEquals("mine", player.debugState().touchedBlockType, "player touches frozen mine");
-		assertEquals("land", player.debugState().mode, "frozen mine does not hurt player");
+		assertEquals("mine", player.stateSnapshot().touchedBlockType, "player touches frozen mine");
+		assertEquals("land", player.stateSnapshot().mode, "frozen mine does not hurt player");
 		assertClose(1, player.blockAlphaAt(2, 3), "frozen mine is not removed");
 		assertEquals(0, player.consumeBlockVisualEvents().length, "frozen mine emits no activation visuals");
 	}
@@ -447,14 +447,14 @@ class LocalPlayerControllerTest {
 
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput(false, false, true));
-			if (player.debugState().touchedBlockType == "rotate_right") {
+			if (player.stateSnapshot().touchedBlockType == "rotate_right") {
 				break;
 			}
 		}
 
-		assertEquals("rotate_right", player.debugState().touchedBlockType, "player bumps frozen rotate block");
-		assertEquals("land", player.debugState().mode, "frozen rotate block does not freeze player");
-		assertEquals(0, player.debugState().courseRotation, "frozen rotate block does not start course rotation");
+		assertEquals("rotate_right", player.stateSnapshot().touchedBlockType, "player bumps frozen rotate block");
+		assertEquals("land", player.stateSnapshot().mode, "frozen rotate block does not freeze player");
+		assertEquals(0, player.stateSnapshot().courseRotation, "frozen rotate block does not start course rotation");
 	}
 
 	private static function testFrozenSafetyBlockSuppressesReturn():Void {
@@ -467,7 +467,7 @@ class LocalPlayerControllerTest {
 
 		for (_ in 0...120) {
 			player.step(new LocalPlayerInput(false, true));
-			if (player.debugState().touchedBlockType == "safety") {
+			if (player.stateSnapshot().touchedBlockType == "safety") {
 				touchedSafety = true;
 			}
 			for (event in player.consumeBlockVisualEvents()) {
@@ -475,14 +475,14 @@ class LocalPlayerControllerTest {
 					poofEvents++;
 				}
 			}
-			if (touchedSafety && player.debugState().y > 240) {
+			if (touchedSafety && player.stateSnapshot().y > 240) {
 				break;
 			}
 		}
 
 		assertEquals(true, touchedSafety, "player touches frozen safety block");
 		assertEquals(0, poofEvents, "frozen safety block does not emit return poof");
-		assertEquals(true, player.debugState().y > 200, "frozen safety block does not return player to last safe spot");
+		assertEquals(true, player.stateSnapshot().y > 200, "frozen safety block does not return player to last safe spot");
 	}
 
 	private static function testFrozenSupplyBlockSuppressesUse():Void {
@@ -494,7 +494,7 @@ class LocalPlayerControllerTest {
 
 		player.step(new LocalPlayerInput(false, false, true));
 		var events = player.consumeBlockVisualEvents();
-		assertEquals(null, player.debugState().itemId, "frozen item block grants no item");
+		assertEquals(null, player.stateSnapshot().itemId, "frozen item block grants no item");
 		assertClose(1, player.blockColorMultiplierAt(2, 8), "frozen item block does not deplete");
 		assertEquals(1, events.length, "frozen item block only emits the base bump");
 		assertEquals("BlockBumpSound", Std.string(events[0].kind), "frozen item block suppresses item sound");
@@ -503,10 +503,10 @@ class LocalPlayerControllerTest {
 	private static function testRecoveryAllowsStackedHitImpulses():Void {
 		var player = newPlayer();
 		player.controller.receiveHit(10, 0);
-		var first = player.debugState();
+		var first = player.stateSnapshot();
 
 		player.controller.receiveHit(10, 0);
-		var second = player.debugState();
+		var second = player.stateSnapshot();
 
 		assertAbove(second.vx, first.vx, "hurt recovery still accepts stacked horizontal hit impulse");
 		assertEquals("hurt", second.mode, "player remains in hurt recovery");
@@ -514,13 +514,13 @@ class LocalPlayerControllerTest {
 
 	private static function testArrowStandEffectsMatchAs3Deltas():Void {
 		var up = new LocalCharacter(singleBlockLevel(BlockType.ArrowUp));
-		assertClose(-10, up.debugState().vy, "up arrow stand launches upward");
+		assertClose(-10, up.stateSnapshot().vy, "up arrow stand launches upward");
 		var events = up.consumeBlockVisualEvents();
 		assertEquals(1, events.length, "arrow stand emits one visual activation");
 		assertEquals("ArrowAnimate", Type.enumConstructor(events[0].kind), "arrow stand emits authored animation event");
-		assertClose(5, new LocalCharacter(singleBlockLevel(BlockType.ArrowDown)).debugState().vy, "down arrow stand pushes down");
-		assertClose(-3, new LocalCharacter(singleBlockLevel(BlockType.ArrowLeft)).debugState().vx, "left arrow stand pushes left");
-		assertClose(3, new LocalCharacter(singleBlockLevel(BlockType.ArrowRight)).debugState().vx, "right arrow stand pushes right");
+		assertClose(5, new LocalCharacter(singleBlockLevel(BlockType.ArrowDown)).stateSnapshot().vy, "down arrow stand pushes down");
+		assertClose(-3, new LocalCharacter(singleBlockLevel(BlockType.ArrowLeft)).stateSnapshot().vx, "left arrow stand pushes left");
+		assertClose(3, new LocalCharacter(singleBlockLevel(BlockType.ArrowRight)).stateSnapshot().vx, "right arrow stand pushes right");
 	}
 
 	private static function testFallingIntoWaterEntersSwimMode():Void {
@@ -529,13 +529,13 @@ class LocalPlayerControllerTest {
 
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput());
-			if (player.debugState().mode == "water") {
+			if (player.stateSnapshot().mode == "water") {
 				enteredWater = true;
 				break;
 			}
 		}
 
-		var state = player.debugState();
+		var state = player.stateSnapshot();
 		assertEquals(true, enteredWater, "falling into water enters swim mode");
 		assertEquals("water", state.mode, "debug state reports water mode");
 		assertEquals("swim", state.animation, "swim animation while in water");
@@ -569,7 +569,7 @@ class LocalPlayerControllerTest {
 		for (_ in 0...40) {
 			sinking.step(new LocalPlayerInput());
 		}
-		var sinkState = sinking.debugState();
+		var sinkState = sinking.stateSnapshot();
 		assertEquals("water", sinkState.mode, "idle player stays submerged");
 		assertBelow(sinkState.vy, 5, "water damps sinking speed far below free-fall");
 		assertBelow(0, sinkState.vy, "idle player still drifts downward");
@@ -578,7 +578,7 @@ class LocalPlayerControllerTest {
 		var minVy = 1e9;
 		for (_ in 0...40) {
 			paddling.step(new LocalPlayerInput(false, false, true));
-			var vy = paddling.debugState().vy;
+			var vy = paddling.stateSnapshot().vy;
 			if (vy < minVy) {
 				minVy = vy;
 			}
@@ -593,7 +593,7 @@ class LocalPlayerControllerTest {
 
 		for (_ in 0...120) {
 			player.step(new LocalPlayerInput(false, false, true));
-			var mode = player.debugState().mode;
+			var mode = player.stateSnapshot().mode;
 			if (mode == "water") {
 				enteredWater = true;
 			} else if (enteredWater && mode == "land") {
@@ -612,13 +612,13 @@ class LocalPlayerControllerTest {
 
 		for (_ in 0...120) {
 			player.step(new LocalPlayerInput(false, true));
-			if (player.debugState().touchedBlockType == "safety") {
+			if (player.stateSnapshot().touchedBlockType == "safety") {
 				touchedSafety = true;
 				break;
 			}
 		}
 
-		var state = player.debugState();
+		var state = player.stateSnapshot();
 		assertEquals(true, touchedSafety, "falling player touches safety block");
 		assertClose(75, state.x, "safety block restores last safe x");
 		assertClose(90, state.y, "safety block restores last safe y");
@@ -640,7 +640,7 @@ class LocalPlayerControllerTest {
 					assertEquals(3, event.tileY, "safety poof appears at last safe tile y");
 				}
 			}
-			if (player.debugState().touchedBlockType == "safety") {
+			if (player.stateSnapshot().touchedBlockType == "safety") {
 				break;
 			}
 		}
@@ -655,7 +655,7 @@ class LocalPlayerControllerTest {
 		player.setControllerPosition(safeX, 10000);
 		player.step(new LocalPlayerInput());
 
-		var state = player.debugState();
+		var state = player.stateSnapshot();
 		assertClose(safeX, state.x, "falling 500px past the map restores last safe x");
 		assertClose(safeY, state.y, "falling 500px past the map restores last safe y");
 		assertClose(0, state.vy, "map return clears falling velocity");
@@ -675,7 +675,7 @@ class LocalPlayerControllerTest {
 
 		for (_ in 0...120) {
 			player.step(new LocalPlayerInput());
-			var state = player.debugState();
+			var state = player.stateSnapshot();
 			if (state.touchedBlockType == "crumble") {
 				touchedCrumble = true;
 			}
@@ -687,7 +687,7 @@ class LocalPlayerControllerTest {
 			}
 		}
 
-		var state = player.debugState();
+		var state = player.stateSnapshot();
 		assertEquals(true, touchedCrumble, "falling player touches crumble platform");
 		assertEquals(false, state.grounded, "broken crumble block no longer supports the player");
 		var crumbleActivate:Null<BlockVisualEvent> = null;
@@ -753,7 +753,7 @@ class LocalPlayerControllerTest {
 		player.setHats([16, 0xC8B040, -1]);
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput(false, false, true));
-			if (player.debugState().touchedBlockType == "crumble") break;
+			if (player.stateSnapshot().touchedBlockType == "crumble") break;
 		}
 
 		assertEquals("50", crumbleActivationPayload(player.consumeBlockVisualEvents(), 2, 1), "cheese bump crumble force is forced to 50");
@@ -764,7 +764,7 @@ class LocalPlayerControllerTest {
 		player.setHats([16, 0xC8B040, -1]);
 		for (_ in 0...80) {
 			player.step(new LocalPlayerInput(false, true));
-			if (player.debugState().touchedBlockType == "crumble") break;
+			if (player.stateSnapshot().touchedBlockType == "crumble") break;
 		}
 
 		var events = player.consumeBlockVisualEvents();
@@ -805,11 +805,11 @@ class LocalPlayerControllerTest {
 		for (_ in 0...9) {
 			player.step(new LocalPlayerInput());
 		}
-		assertEquals(true, player.debugState().grounded, "vanish block remains solid while fading");
+		assertEquals(true, player.stateSnapshot().grounded, "vanish block remains solid while fading");
 		assertClose(0, player.blockAlphaAt(2, 3), "vanish block is invisible at fade-out");
 
 		player.step(new LocalPlayerInput());
-		var state = player.debugState();
+		var state = player.stateSnapshot();
 		assertEquals(false, state.grounded, "vanish block becomes inactive after fade-out");
 		assertBelow(90, state.y, "player starts falling through inactive vanish block");
 	}
@@ -820,7 +820,7 @@ class LocalPlayerControllerTest {
 		for (_ in 0...12) {
 			player.step(new LocalPlayerInput());
 		}
-		assertEquals(false, player.debugState().grounded, "vanish block is inactive after fade-out");
+		assertEquals(false, player.stateSnapshot().grounded, "vanish block is inactive after fade-out");
 
 		var reappeared = false;
 		for (_ in 0...80) {
@@ -838,7 +838,7 @@ class LocalPlayerControllerTest {
 		for (_ in 0...30) {
 			player.step(new LocalPlayerInput());
 		}
-		assertEquals(true, player.debugState().grounded, "player lands below the inactive vanish block");
+		assertEquals(true, player.stateSnapshot().grounded, "player lands below the inactive vanish block");
 
 		for (_ in 0...54) {
 			player.step(new LocalPlayerInput());
@@ -846,7 +846,7 @@ class LocalPlayerControllerTest {
 		var bumpedVanish = false;
 		for (_ in 0...25) {
 			player.step(new LocalPlayerInput(false, false, true));
-			if (player.debugState().touchedBlockType == "vanish") {
+			if (player.stateSnapshot().touchedBlockType == "vanish") {
 				bumpedVanish = true;
 				break;
 			}
@@ -856,7 +856,7 @@ class LocalPlayerControllerTest {
 
 	private static function testMineBlockLaunchesPlayerAndRemovesItself():Void {
 		var player = new LocalCharacter(mineBlockLevel());
-		var initialState = player.debugState();
+		var initialState = player.stateSnapshot();
 
 		assertEquals("mine", initialState.touchedBlockType, "standing on mine reports touched block");
 		assertClose(0, initialState.vx, "centered mine hit has no horizontal launch");
@@ -875,12 +875,12 @@ class LocalPlayerControllerTest {
 		for (_ in 0...60) {
 			player.step(new LocalPlayerInput());
 		}
-		assertEquals("land", player.debugState().mode, "hurt recovery returns to land mode");
+		assertEquals("land", player.stateSnapshot().mode, "hurt recovery returns to land mode");
 
 		for (_ in 0...160) {
 			player.step(new LocalPlayerInput());
 		}
-		var state = player.debugState();
+		var state = player.stateSnapshot();
 		assertEquals(false, state.grounded, "removed mine no longer supports player");
 		assertBelow(90, state.y, "player falls through removed mine block");
 	}
@@ -893,13 +893,13 @@ class LocalPlayerControllerTest {
 		var hitMine = false;
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput());
-			if (player.debugState().touchedBlockType == "mine") {
+			if (player.stateSnapshot().touchedBlockType == "mine") {
 				hitMine = true;
 				break;
 			}
 		}
 
-		var state = player.debugState();
+		var state = player.stateSnapshot();
 		assertEquals(true, hitMine, "deathmatch player reaches mine");
 		assertEquals(0, state.lives, "deathmatch hurt removes one life");
 		assertEquals(true, state.finished, "deathmatch zero lives finishes the player");
@@ -911,13 +911,13 @@ class LocalPlayerControllerTest {
 
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput(false, false, true));
-			if (player.debugState().itemId == 4) {
+			if (player.stateSnapshot().itemId == 4) {
 				grantedItem = true;
 				break;
 			}
 		}
 
-		var state = player.debugState();
+		var state = player.stateSnapshot();
 		assertEquals(true, grantedItem, "jumping player bumps item block");
 		assertEquals(4, state.itemId, "configured item id is granted");
 		assertEquals("item", state.touchedBlockType, "debug state reports item block touch");
@@ -951,9 +951,9 @@ class LocalPlayerControllerTest {
 			player.step(new LocalPlayerInput());
 		}
 
-		assertEquals(null, player.debugState().itemId, "empty-options block grants nothing before the bump");
+		assertEquals(null, player.stateSnapshot().itemId, "empty-options block grants nothing before the bump");
 		player.step(new LocalPlayerInput(false, false, true));
-		assertEquals(7, player.debugState().itemId, "empty options draws from the level's allowed item pool");
+		assertEquals(7, player.stateSnapshot().itemId, "empty options draws from the level's allowed item pool");
 
 		var noneAllowed = new LocalCharacter(lowItemCeilingLevel(BlockType.Item, ""));
 		noneAllowed.setAllowedItems([]);
@@ -961,7 +961,7 @@ class LocalPlayerControllerTest {
 			noneAllowed.step(new LocalPlayerInput());
 		}
 		noneAllowed.step(new LocalPlayerInput(false, false, true));
-		assertEquals(null, noneAllowed.debugState().itemId, "a level with no allowed items grants nothing");
+		assertEquals(null, noneAllowed.stateSnapshot().itemId, "a level with no allowed items grants nothing");
 	}
 
 	private static function testItemBlockRandomnessDoesNotAffectMoveBlocks():Void {
@@ -973,7 +973,7 @@ class LocalPlayerControllerTest {
 			itemUser.step(new LocalPlayerInput());
 		}
 		itemUser.step(new LocalPlayerInput(false, false, true));
-		assertEquals(true, itemUser.debugState().itemId != null, "multi-candidate item block grants an item");
+		assertEquals(true, itemUser.stateSnapshot().itemId != null, "multi-candidate item block grants an item");
 
 		for (_ in 0...142) {
 			untouched.step(new LocalPlayerInput());
@@ -994,14 +994,14 @@ class LocalPlayerControllerTest {
 		}
 
 		player.step(new LocalPlayerInput(false, false, true));
-		assertEquals(3, player.debugState().itemId, "first regular item bump grants the configured item");
+		assertEquals(3, player.stateSnapshot().itemId, "first regular item bump grants the configured item");
 		assertClose(0.5, player.blockColorMultiplierAt(2, 8), "depleted item block uses SupplyBlock grey transform");
 
 		makeItemAvailable(player);
 		player.step(new LocalPlayerInput(false, false, false, false, true));
-		assertEquals(null, player.debugState().itemId, "lightning item consumes before the second bump");
+		assertEquals(null, player.stateSnapshot().itemId, "lightning item consumes before the second bump");
 		player.step(new LocalPlayerInput(false, false, true));
-		assertEquals(null, player.debugState().itemId, "depleted regular item block does not grant again");
+		assertEquals(null, player.stateSnapshot().itemId, "depleted regular item block does not grant again");
 
 		var infinite = new LocalCharacter(lowItemCeilingLevel(BlockType.InfiniteItem, "3"));
 		for (_ in 0...20) {
@@ -1015,13 +1015,13 @@ class LocalPlayerControllerTest {
 		var player = collectItem(heldItemLevel(3), 3);
 
 		player.step(new LocalPlayerInput(false, false, false, false, true));
-		assertEquals(3, player.debugState().itemId, "newly collected item does not fire before a key-up frame");
-		assertEquals(null, player.debugState().lastItemEffect, "blocked first press emits no item effect");
+		assertEquals(3, player.stateSnapshot().itemId, "newly collected item does not fire before a key-up frame");
+		assertEquals(null, player.stateSnapshot().lastItemEffect, "blocked first press emits no item effect");
 
 		makeItemAvailable(player);
 		player.step(new LocalPlayerInput(false, false, false, false, true));
-		assertEquals(null, player.debugState().itemId, "item fires after the key has been released");
-		assertEquals("zap`", player.debugState().lastItemEffect, "released lightning emits the Flash payload");
+		assertEquals(null, player.stateSnapshot().itemId, "item fires after the key has been released");
+		assertEquals("zap`", player.stateSnapshot().lastItemEffect, "released lightning emits the Flash payload");
 	}
 
 	private static function testSuperJumpItemLaunchesPlayerAndConsumesItem():Void {
@@ -1030,7 +1030,7 @@ class LocalPlayerControllerTest {
 
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput(false, false, true));
-			if (player.debugState().itemId == 5) {
+			if (player.stateSnapshot().itemId == 5) {
 				grantedItem = true;
 				break;
 			}
@@ -1040,16 +1040,16 @@ class LocalPlayerControllerTest {
 		player.consumeBlockVisualEvents();
 		for (_ in 0...70) {
 			player.step(new LocalPlayerInput(false, true));
-			if (player.debugState().x > 105) {
+			if (player.stateSnapshot().x > 105) {
 				break;
 			}
 		}
-		var beforeUse = player.debugState();
+		var beforeUse = player.stateSnapshot();
 
 		makeItemAvailable(player);
-		beforeUse = player.debugState();
+		beforeUse = player.stateSnapshot();
 		player.step(new LocalPlayerInput(false, false, false, false, true));
-		var afterUse = player.debugState();
+		var afterUse = player.stateSnapshot();
 
 		assertEquals(null, afterUse.itemId, "super jump consumes the held item");
 		assertBelow(afterUse.vy, beforeUse.vy - 20, "super jump applies the Flash upward impulse");
@@ -1066,12 +1066,12 @@ class LocalPlayerControllerTest {
 		}
 
 		player.step(new LocalPlayerInput(false, false, true));
-		var beforeUse = player.debugState();
+		var beforeUse = player.stateSnapshot();
 
 		makeItemAvailable(player);
-		beforeUse = player.debugState();
+		beforeUse = player.stateSnapshot();
 		player.step(new LocalPlayerInput(false, false, false, false, true));
-		var afterUse = player.debugState();
+		var afterUse = player.stateSnapshot();
 
 		assertEquals(true, beforeUse.crouching, "low ceiling forces crouch before super jump item use");
 		assertEquals(5, beforeUse.itemId, "bumping low item block grants the super jump item");
@@ -1086,7 +1086,7 @@ class LocalPlayerControllerTest {
 
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput(false, false, true));
-			if (player.debugState().itemId == 4) {
+			if (player.stateSnapshot().itemId == 4) {
 				grantedItem = true;
 				break;
 			}
@@ -1095,16 +1095,16 @@ class LocalPlayerControllerTest {
 		assertEquals(true, grantedItem, "jumping player bumps teleport item block");
 		for (_ in 0...70) {
 			player.step(new LocalPlayerInput(false, true));
-			if (player.debugState().x > 105) {
+			if (player.stateSnapshot().x > 105) {
 				break;
 			}
 		}
-		var beforeUse = player.debugState();
+		var beforeUse = player.stateSnapshot();
 
 		makeItemAvailable(player);
-		beforeUse = player.debugState();
+		beforeUse = player.stateSnapshot();
 		player.step(new LocalPlayerInput(false, false, false, false, true));
-		var afterUse = player.debugState();
+		var afterUse = player.stateSnapshot();
 
 		assertEquals(null, afterUse.itemId, "teleport item consumes after a clear teleport");
 		assertClose(120, afterUse.x - afterUse.vx - Math.round(beforeUse.x), "teleport item moves 120 px in facing direction");
@@ -1121,22 +1121,22 @@ class LocalPlayerControllerTest {
 
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput(false, false, true));
-			if (player.debugState().itemId == 4) {
+			if (player.stateSnapshot().itemId == 4) {
 				break;
 			}
 		}
 		for (_ in 0...70) {
 			player.step(new LocalPlayerInput(false, true));
-			if (player.debugState().x > 105) {
+			if (player.stateSnapshot().x > 105) {
 				break;
 			}
 		}
-		var beforeUse = player.debugState();
+		var beforeUse = player.stateSnapshot();
 
 		makeItemAvailable(player);
-		beforeUse = player.debugState();
+		beforeUse = player.stateSnapshot();
 		player.step(new LocalPlayerInput(false, false, false, false, true));
-		var afterUse = player.debugState();
+		var afterUse = player.stateSnapshot();
 
 		assertEquals(4, afterUse.itemId, "blocked teleport keeps held item");
 		assertClose(0, afterUse.x - afterUse.vx - Math.round(beforeUse.x), "blocked teleport does not apply item movement");
@@ -1149,7 +1149,7 @@ class LocalPlayerControllerTest {
 
 		makeItemAvailable(boosted);
 		boosted.step(new LocalPlayerInput(false, false, false, false, true));
-		var active = boosted.debugState();
+		var active = boosted.stateSnapshot();
 		assertEquals(7, active.itemId, "speed burst stays held while active");
 
 		for (_ in 0...24) {
@@ -1157,16 +1157,16 @@ class LocalPlayerControllerTest {
 			normal.step(new LocalPlayerInput(false, true));
 		}
 
-		assertBelow(normal.debugState().vx * 1.4, boosted.debugState().vx, "speed burst doubles movement acceleration");
+		assertBelow(normal.stateSnapshot().vx * 1.4, boosted.stateSnapshot().vx, "speed burst doubles movement acceleration");
 
 		for (_ in 0...110) {
 			boosted.step(new LocalPlayerInput(false, true));
 		}
 
-		assertEquals(null, boosted.debugState().itemId, "speed burst expires after five seconds");
-		assertClose(50, boosted.debugState().speedStat, "speed burst expiry restores speed stat");
-		assertClose(50, boosted.debugState().accelerationStat, "speed burst expiry restores acceleration stat");
-		assertClose(50, boosted.debugState().jumpStat, "speed burst expiry preserves jump stat");
+		assertEquals(null, boosted.stateSnapshot().itemId, "speed burst expires after five seconds");
+		assertClose(50, boosted.stateSnapshot().speedStat, "speed burst expiry restores speed stat");
+		assertClose(50, boosted.stateSnapshot().accelerationStat, "speed burst expiry restores acceleration stat");
+		assertClose(50, boosted.stateSnapshot().jumpStat, "speed burst expiry preserves jump stat");
 	}
 
 	private static function testJetPackLiftsPlayerThenExpires():Void {
@@ -1176,43 +1176,43 @@ class LocalPlayerControllerTest {
 		for (_ in 0...70) {
 			boosted.step(new LocalPlayerInput(false, true));
 			normal.step(new LocalPlayerInput(false, true));
-			if (boosted.debugState().x > 105) {
+			if (boosted.stateSnapshot().x > 105) {
 				break;
 			}
 		}
 
 		boosted.step(new LocalPlayerInput(false, false, false, false, true));
-		assertEquals(6, boosted.debugState().itemId, "jet pack stays held while active");
-		assertEquals(3, boosted.debugState().itemUses, "jet pack starts with three fuel pips");
+		assertEquals(6, boosted.stateSnapshot().itemId, "jet pack stays held while active");
+		assertEquals(3, boosted.stateSnapshot().itemUses, "jet pack starts with three fuel pips");
 
 		for (_ in 0...24) {
 			boosted.step(new LocalPlayerInput(false, false, false, false, true));
 			normal.step(new LocalPlayerInput());
 		}
 
-		assertBelow(boosted.debugState().y, normal.debugState().y - 20, "jet pack thrust lifts the player");
-		assertBelow(boosted.debugState().vy, normal.debugState().vy, "jet pack counters gravity while active");
+		assertBelow(boosted.stateSnapshot().y, normal.stateSnapshot().y - 20, "jet pack thrust lifts the player");
+		assertBelow(boosted.stateSnapshot().vy, normal.stateSnapshot().vy, "jet pack counters gravity while active");
 
 		for (_ in 0...42) {
 			boosted.step(new LocalPlayerInput(false, false, false, false, true));
 		}
-		assertEquals(2, boosted.debugState().itemUses, "jet pack ammo drops after one third of the fuel is spent");
+		assertEquals(2, boosted.stateSnapshot().itemUses, "jet pack ammo drops after one third of the fuel is spent");
 
 		for (_ in 0...133) {
 			boosted.step(new LocalPlayerInput(false, false, false, false, true));
 		}
 
-		assertEquals(null, boosted.debugState().itemId, "jet pack expires after 200 fuel frames");
+		assertEquals(null, boosted.stateSnapshot().itemId, "jet pack expires after 200 fuel frames");
 	}
 
 	private static function testLaserGunReloadTiming():Void {
 		var player = collectItem(heldItemLevel(1), 1);
-		var beforeUse = player.debugState();
+		var beforeUse = player.stateSnapshot();
 
 		makeItemAvailable(player);
-		beforeUse = player.debugState();
+		beforeUse = player.stateSnapshot();
 		player.step(new LocalPlayerInput(false, false, false, false, true));
-		var firstShot = player.debugState();
+		var firstShot = player.stateSnapshot();
 		assertEquals(1, firstShot.itemId, "laser remains held after first shot");
 		assertEquals(2, firstShot.itemUses, "laser consumes one of three shots");
 		assertEquals("laser:right", firstShot.lastItemEffect, "laser emits a right-facing shot");
@@ -1220,24 +1220,24 @@ class LocalPlayerControllerTest {
 
 		var leftFacing = collectItem(heldItemLevel(1), 1);
 		leftFacing.step(new LocalPlayerInput(true));
-		var beforeLeftUse = leftFacing.debugState();
+		var beforeLeftUse = leftFacing.stateSnapshot();
 		makeItemAvailable(leftFacing);
-		beforeLeftUse = leftFacing.debugState();
+		beforeLeftUse = leftFacing.stateSnapshot();
 		leftFacing.step(new LocalPlayerInput(false, false, false, false, true));
-		var leftShot = leftFacing.debugState();
+		var leftShot = leftFacing.stateSnapshot();
 		assertEquals("laser:left", leftShot.lastItemEffect, "laser emits a left-facing shot");
 		assertBelow(beforeLeftUse.vx, leftShot.vx, "left-facing laser recoils right like Flash");
 
 		for (_ in 0...21) {
 			player.step(new LocalPlayerInput(false, false, false, false, true));
-			assertEquals(2, player.debugState().itemUses, "laser cannot fire during its 800ms reload");
+			assertEquals(2, player.stateSnapshot().itemUses, "laser cannot fire during its 800ms reload");
 		}
 		player.step(new LocalPlayerInput(false, false, false, false, true));
-		assertEquals(1, player.debugState().itemUses, "held laser fires again after 22 frames");
+		assertEquals(1, player.stateSnapshot().itemUses, "held laser fires again after 22 frames");
 		for (_ in 0...22) {
 			player.step(new LocalPlayerInput(false, false, false, false, true));
 		}
-		assertEquals(null, player.debugState().itemId, "laser is consumed after three shots");
+		assertEquals(null, player.stateSnapshot().itemId, "laser is consumed after three shots");
 	}
 
 	private static function testLaserGunShotAnimatesBlockFromSide():Void {
@@ -1283,7 +1283,7 @@ class LocalPlayerControllerTest {
 
 		makeItemAvailable(player);
 		player.step(new LocalPlayerInput(false, false, false, false, true));
-		var state = player.debugState();
+		var state = player.stateSnapshot();
 
 		assertEquals(null, state.itemId, "mine item consumes after placing mine");
 		assertEquals(0, Lambda.count(level.blocks, function(block) return block.type == BlockType.Mine), "mine item waits for appear animation");
@@ -1302,7 +1302,7 @@ class LocalPlayerControllerTest {
 
 		makeItemAvailable(player);
 		player.step(new LocalPlayerInput(false, false, false, false, true));
-		var state = player.debugState();
+		var state = player.stateSnapshot();
 
 		assertEquals(2, state.itemId, "blocked mine placement keeps held item");
 		assertEquals(null, state.lastItemEffect, "blocked mine placement emits no effect");
@@ -1328,7 +1328,7 @@ class LocalPlayerControllerTest {
 
 		makeItemAvailable(player);
 		player.step(new LocalPlayerInput(false, false, false, false, true));
-		var state = player.debugState();
+		var state = player.stateSnapshot();
 
 		assertEquals(null, state.itemId, "lightning consumes on use");
 		assertEquals("zap`", state.lastItemEffect, "lightning emits Flash's zap command payload");
@@ -1340,34 +1340,34 @@ class LocalPlayerControllerTest {
 		assertEquals(800.0, SecureData.getNumber("reloadTime"), "collecting laser writes Flash SecureData reloadTime");
 
 		player.step(new LocalPlayerInput(false, false, false, false, true));
-		assertEquals(3, player.debugState().itemUses, "fresh reloadable item ignores held item key before first release");
+		assertEquals(3, player.stateSnapshot().itemUses, "fresh reloadable item ignores held item key before first release");
 		assertEquals(3.0, SecureData.getNumber("uses"), "blocked first press leaves SecureData uses unchanged");
-		assertEquals(null, player.debugState().lastItemEffect, "fresh reloadable item emits no effect before first release");
+		assertEquals(null, player.stateSnapshot().lastItemEffect, "fresh reloadable item emits no effect before first release");
 
 		makeItemAvailable(player);
 		player.step(new LocalPlayerInput(false, false, false, false, true));
-		assertEquals(2, player.debugState().itemUses, "released reloadable item fires on the next item press");
+		assertEquals(2, player.stateSnapshot().itemUses, "released reloadable item fires on the next item press");
 		assertEquals(2.0, SecureData.getNumber("uses"), "first shot decrements SecureData uses");
 
 		for (_ in 0...21) {
 			player.step(new LocalPlayerInput(false, false, false, false, true));
 		}
-		assertEquals(2, player.debugState().itemUses, "held reloadable item waits through its reload timer");
+		assertEquals(2, player.stateSnapshot().itemUses, "held reloadable item waits through its reload timer");
 		assertEquals(2.0, SecureData.getNumber("uses"), "reload wait leaves SecureData uses unchanged");
 
 		player.step(new LocalPlayerInput(false, false, false, false, true));
-		assertEquals(1, player.debugState().itemUses, "held reloadable item refires when reload completes without another release");
+		assertEquals(1, player.stateSnapshot().itemUses, "held reloadable item refires when reload completes without another release");
 		assertEquals(1.0, SecureData.getNumber("uses"), "held refire decrements SecureData uses again");
 	}
 
 	private static function testSwordReloadTiming():Void {
 		var player = collectItem(heldItemLevel(8), 8);
-		var beforeUse = player.debugState();
+		var beforeUse = player.stateSnapshot();
 
 		makeItemAvailable(player);
-		beforeUse = player.debugState();
+		beforeUse = player.stateSnapshot();
 		player.step(new LocalPlayerInput(false, false, false, false, true));
-		var firstSwing = player.debugState();
+		var firstSwing = player.stateSnapshot();
 		assertEquals(8, firstSwing.itemId, "sword remains held after first swing");
 		assertEquals(2, firstSwing.itemUses, "sword consumes one of three swings");
 		assertEquals("slash:right", firstSwing.lastItemEffect, "sword emits a right-facing slash");
@@ -1375,24 +1375,24 @@ class LocalPlayerControllerTest {
 
 		var leftFacing = collectItem(heldItemLevel(8), 8);
 		leftFacing.step(new LocalPlayerInput(true));
-		var beforeLeftUse = leftFacing.debugState();
+		var beforeLeftUse = leftFacing.stateSnapshot();
 		makeItemAvailable(leftFacing);
-		beforeLeftUse = leftFacing.debugState();
+		beforeLeftUse = leftFacing.stateSnapshot();
 		leftFacing.step(new LocalPlayerInput(false, false, false, false, true));
-		var leftSwing = leftFacing.debugState();
+		var leftSwing = leftFacing.stateSnapshot();
 		assertEquals("slash:left", leftSwing.lastItemEffect, "sword emits a left-facing slash");
 		assertBelow(leftSwing.vx, beforeLeftUse.vx, "left-facing sword lunges left like Flash");
 
 		for (_ in 0...21) {
 			player.step(new LocalPlayerInput(false, false, false, false, true));
-			assertEquals(2, player.debugState().itemUses, "sword cannot swing during its 800ms reload");
+			assertEquals(2, player.stateSnapshot().itemUses, "sword cannot swing during its 800ms reload");
 		}
 		player.step(new LocalPlayerInput(false, false, false, false, true));
-		assertEquals(1, player.debugState().itemUses, "held sword swings again after 22 frames");
+		assertEquals(1, player.stateSnapshot().itemUses, "held sword swings again after 22 frames");
 		for (_ in 0...22) {
 			player.step(new LocalPlayerInput(false, false, false, false, true));
 		}
-		assertEquals(null, player.debugState().itemId, "sword is consumed after three swings");
+		assertEquals(null, player.stateSnapshot().itemId, "sword is consumed after three swings");
 	}
 
 	private static function testSwordDamageActivatesVanishBlock():Void {
@@ -1414,7 +1414,7 @@ class LocalPlayerControllerTest {
 
 		makeItemAvailable(player);
 		player.step(new LocalPlayerInput(false, false, false, false, true));
-		var firstWave = player.debugState();
+		var firstWave = player.stateSnapshot();
 		assertEquals(9, firstWave.itemId, "ice wave remains held after first wave");
 		assertEquals(2, firstWave.itemUses, "ice wave consumes one of three waves");
 		assertEquals("ice_wave:right", firstWave.lastItemEffect, "ice wave emits a right-facing wave");
@@ -1423,19 +1423,19 @@ class LocalPlayerControllerTest {
 		leftFacing.step(new LocalPlayerInput(true));
 		makeItemAvailable(leftFacing);
 		leftFacing.step(new LocalPlayerInput(false, false, false, false, true));
-		var leftWave = leftFacing.debugState();
+		var leftWave = leftFacing.stateSnapshot();
 		assertEquals("ice_wave:left", leftWave.lastItemEffect, "ice wave emits a left-facing wave");
 
 		for (_ in 0...26) {
 			player.step(new LocalPlayerInput(false, false, false, false, true));
-			assertEquals(2, player.debugState().itemUses, "ice wave cannot fire during its 1000ms reload");
+			assertEquals(2, player.stateSnapshot().itemUses, "ice wave cannot fire during its 1000ms reload");
 		}
 		player.step(new LocalPlayerInput(false, false, false, false, true));
-		assertEquals(1, player.debugState().itemUses, "held ice wave fires again after 27 frames");
+		assertEquals(1, player.stateSnapshot().itemUses, "held ice wave fires again after 27 frames");
 		for (_ in 0...27) {
 			player.step(new LocalPlayerInput(false, false, false, false, true));
 		}
-		assertEquals(null, player.debugState().itemId, "ice wave is consumed after three waves");
+		assertEquals(null, player.stateSnapshot().itemId, "ice wave is consumed after three waves");
 	}
 
 	private static function testIceWaveShotAnimatesBlockFromSide():Void {
@@ -1485,22 +1485,22 @@ class LocalPlayerControllerTest {
 
 	private static function testFrozenSolidDisablesMovementAndThaws():Void {
 		var player = newPlayer();
-		var startX = player.debugState().x;
+		var startX = player.stateSnapshot().x;
 		player.freeze();
 
 		assertEquals(true, player.isFrozen(), "freeze marks player frozen");
-		assertEquals("frozenSolid", player.debugState().mode, "freeze enters frozen-solid mode");
-		assertEquals("freeze", player.debugState().animation, "frozen-solid mode uses frozen animation");
+		assertEquals("frozenSolid", player.stateSnapshot().mode, "freeze enters frozen-solid mode");
+		assertEquals("freeze", player.stateSnapshot().animation, "frozen-solid mode uses frozen animation");
 
 		for (_ in 0...53) {
 			player.step(new LocalPlayerInput(false, true));
 		}
 		assertEquals(true, player.isFrozen(), "player remains frozen before two seconds elapse");
-		assertClose(startX, player.debugState().x, "frozen player ignores horizontal input");
+		assertClose(startX, player.stateSnapshot().x, "frozen player ignores horizontal input");
 
 		player.step(new LocalPlayerInput(false, true));
 		assertEquals(false, player.isFrozen(), "player thaws after two seconds");
-		assertEquals("land", player.debugState().mode, "thaw returns player to land mode");
+		assertEquals("land", player.stateSnapshot().mode, "thaw returns player to land mode");
 	}
 
 	private static function testBumpingCustomStatsBlockAppliesConfiguredStats():Void {
@@ -1508,12 +1508,12 @@ class LocalPlayerControllerTest {
 
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput(false, false, true));
-			if (player.debugState().touchedBlockType == "custom_stats") {
+			if (player.stateSnapshot().touchedBlockType == "custom_stats") {
 				break;
 			}
 		}
 
-		var state = player.debugState();
+		var state = player.stateSnapshot();
 		assertEquals("custom_stats", state.touchedBlockType, "debug state reports custom stats block touch");
 		assertClose(100, state.speedStat, "custom stats block applies speed stat");
 		assertClose(0, state.accelerationStat, "custom stats block applies acceleration stat");
@@ -1528,12 +1528,12 @@ class LocalPlayerControllerTest {
 
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput(false, false, true));
-			if (player.debugState().touchedBlockType == "custom_stats") {
+			if (player.stateSnapshot().touchedBlockType == "custom_stats") {
 				break;
 			}
 		}
 
-		var state = player.debugState();
+		var state = player.stateSnapshot();
 		assertEquals("custom_stats", state.touchedBlockType, "debug state reports reset custom stats block touch");
 		assertClose(70, state.speedStat, "reset custom stats block restores starting speed stat");
 		assertClose(40, state.accelerationStat, "reset custom stats block restores starting acceleration stat");
@@ -1553,12 +1553,12 @@ class LocalPlayerControllerTest {
 		assertEquals("BrickPieces", Std.string(visualEvents[2].kind), "broken brick uses brick pieces");
 		assertEquals(6, visualEvents[2].count, "broken brick emits six pieces");
 		player.step(new LocalPlayerInput(false, false, true));
-		assertEquals(false, player.debugState().touchedBlockType == "brick", "broken brick no longer collides");
+		assertEquals(false, player.stateSnapshot().touchedBlockType == "brick", "broken brick no longer collides");
 	}
 
 	private static function testBumpingHappyBlockRaisesStats():Void {
 		var player = bumpSupply(supplyBlockLevel(BlockType.Happy, "20"), BlockType.Happy);
-		var state = player.debugState();
+		var state = player.stateSnapshot();
 		assertClose(70, state.speedStat, "happy block raises speed by configured amount");
 		assertClose(70, state.accelerationStat, "happy block raises acceleration");
 		assertClose(70, state.jumpStat, "happy block raises jumping");
@@ -1574,7 +1574,7 @@ class LocalPlayerControllerTest {
 
 	private static function testBumpingSadBlockLowersStats():Void {
 		var player = bumpSupply(supplyBlockLevel(BlockType.Sad, "-20"), BlockType.Sad);
-		var state = player.debugState();
+		var state = player.stateSnapshot();
 		assertClose(30, state.speedStat, "sad block lowers speed by configured amount");
 		assertClose(30, state.accelerationStat, "sad block lowers acceleration");
 		assertClose(30, state.jumpStat, "sad block lowers jumping");
@@ -1590,13 +1590,13 @@ class LocalPlayerControllerTest {
 
 	private static function testBumpingHeartBlockAddsCappedLife():Void {
 		var player = bumpSupply(supplyBlockLevel(BlockType.Heart), BlockType.Heart);
-		assertEquals(4, player.debugState().lives, "heart block adds one life");
+		assertEquals(4, player.stateSnapshot().lives, "heart block adds one life");
 		assertClose(0.5, player.blockColorMultiplierAt(2, 1), "depleted heart block uses SupplyBlock grey transform");
 	}
 
 	private static function testBumpingTimeBlockAddsTenSeconds():Void {
 		var player = bumpSupply(supplyBlockLevel(BlockType.Time), BlockType.Time);
-		assertEquals(130, player.debugState().courseTime, "time block adds ten seconds");
+		assertEquals(130, player.stateSnapshot().courseTime, "time block adds ten seconds");
 		assertClose(0.5, player.blockColorMultiplierAt(2, 1), "depleted time block uses SupplyBlock grey transform");
 		var events = player.consumeBlockVisualEvents();
 		assertEquals(2, events.length, "time block emits thump and tick-tock sound events");
@@ -1610,15 +1610,15 @@ class LocalPlayerControllerTest {
 		var player = new LocalCharacter(level);
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput(false, false, true));
-			if (player.debugState().touchedBlockType == type) break;
+			if (player.stateSnapshot().touchedBlockType == type) break;
 		}
-		assertEquals(type, player.debugState().touchedBlockType, '$type block is bumped');
+		assertEquals(type, player.stateSnapshot().touchedBlockType, '$type block is bumped');
 		return player;
 	}
 
 	private static function testTeleportBlockMovesPlayerToNextSameColorBlock():Void {
 		var player = new LocalCharacter(teleportPairLevel());
-		var state = player.debugState();
+		var state = player.stateSnapshot();
 
 		assertEquals("teleport", state.touchedBlockType, "standing on teleport reports touched block");
 		assertClose(135, state.x, "teleport moves player by matching block delta");
@@ -1648,12 +1648,12 @@ class LocalPlayerControllerTest {
 		for (_ in 0...20) {
 			player.step(new LocalPlayerInput());
 		}
-		var crouched = player.debugState();
+		var crouched = player.stateSnapshot();
 		assertEquals(true, crouched.crouching, "teleport ceiling block forces crouch before bump");
 		assertClose(300, crouched.y, "crouched player starts with feet on the floor");
 
 		player.step(new LocalPlayerInput(false, false, true));
-		var teleported = player.debugState();
+		var teleported = player.stateSnapshot();
 
 		assertEquals("teleport", teleported.touchedBlockType, "pressing up bumps the teleport ceiling block");
 		assertClose(135, teleported.x, "crouched teleport bump moves to the paired block");
@@ -1666,7 +1666,7 @@ class LocalPlayerControllerTest {
 		for (_ in 0...20) {
 			player.step(new LocalPlayerInput());
 		}
-		var state = player.debugState();
+		var state = player.stateSnapshot();
 
 		assertClose(135, state.x, "teleport color cooldown prevents immediate return teleport");
 		assertClose(90, state.y, "cooldown leaves player standing on destination block");
@@ -1689,7 +1689,7 @@ class LocalPlayerControllerTest {
 
 	private static function testTeleportDefaultColorOptionsMatchEmptyOptions():Void {
 		var player = new LocalCharacter(teleportDefaultColorPairLevel());
-		var state = player.debugState();
+		var state = player.stateSnapshot();
 
 		assertEquals("teleport", state.touchedBlockType, "standing on empty-option teleport reports touched block");
 		assertClose(135, state.x, "empty and explicit default-color teleports are paired");
@@ -1702,7 +1702,7 @@ class LocalPlayerControllerTest {
 		player.resetControllerForRaceStart(75, 90);
 
 		player.step(new LocalPlayerInput());
-		var state = player.debugState();
+		var state = player.stateSnapshot();
 
 		assertEquals("teleport", state.touchedBlockType, "pre-race reset lets the start teleport fire during gameplay");
 		assertClose(135, state.x, "pre-race reset clears constructor-time teleport cooldown");
@@ -1712,7 +1712,7 @@ class LocalPlayerControllerTest {
 	private static function testStandingOnPushBlockMovesItDown():Void {
 		var level = pushBlockLevel();
 		var player = new LocalCharacter(level);
-		var state = player.debugState();
+		var state = player.stateSnapshot();
 
 		assertEquals("push", state.touchedBlockType, "standing on push block reports touched block");
 		assertEquals(null, level.blockAt(2, 3), "push block leaves original tile");
@@ -1732,7 +1732,7 @@ class LocalPlayerControllerTest {
 		var level = pushBlockChainLevel();
 		var player = new LocalCharacter(level);
 
-		assertEquals("push", player.debugState().touchedBlockType, "standing on push-chain source reports touched block");
+		assertEquals("push", player.stateSnapshot().touchedBlockType, "standing on push-chain source reports touched block");
 		assertEquals(null, level.blockAt(2, 3), "source push block leaves original tile");
 		assertEquals(BlockType.Push, level.blockAt(2, 4).type, "source push block moves into destination push tile");
 		assertEquals(BlockType.Push, level.blockAt(2, 5).type, "destination push block recursively moves first");
@@ -1846,12 +1846,12 @@ class LocalPlayerControllerTest {
 
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput(false, false, true));
-			if (player.debugState().mode == "jump") {
+			if (player.stateSnapshot().mode == "jump") {
 				break;
 			}
 		}
 
-		var state = player.debugState();
+		var state = player.stateSnapshot();
 		assertEquals("rotate_right", state.touchedBlockType, "debug state reports rotate block touch");
 		assertEquals("jump", state.mode, "rotate block bump enters jump mode");
 		assertEquals("jump", state.animation, "jump mode exposes jump animation state");
@@ -1861,15 +1861,15 @@ class LocalPlayerControllerTest {
 
 	private static function testRotateRightCompletesCourseRotation():Void {
 		var player = bumpRotateBlock(BlockType.RotateRight);
-		var frozen = player.debugState();
+		var frozen = player.stateSnapshot();
 
 		for (_ in 0...29) {
 			player.step(new LocalPlayerInput());
 		}
-		assertEquals("jump", player.debugState().mode, "right rotation keeps player in jump mode before final frame");
+		assertEquals("jump", player.stateSnapshot().mode, "right rotation keeps player in jump mode before final frame");
 
 		player.step(new LocalPlayerInput());
-		var state = player.debugState();
+		var state = player.stateSnapshot();
 		assertEquals("land", state.mode, "right rotation returns player to land mode");
 		assertEquals(90, state.courseRotation, "right rotation advances course rotation");
 		assertClose(-frozen.y, state.x, "right rotation maps x from frozen y");
@@ -1878,13 +1878,13 @@ class LocalPlayerControllerTest {
 
 	private static function testRotateLeftCompletesCourseRotation():Void {
 		var player = bumpRotateBlock(BlockType.RotateLeft);
-		var frozen = player.debugState();
+		var frozen = player.stateSnapshot();
 
 		for (_ in 0...30) {
 			player.step(new LocalPlayerInput());
 		}
 
-		var state = player.debugState();
+		var state = player.stateSnapshot();
 		assertEquals("land", state.mode, "left rotation returns player to land mode");
 		assertEquals(-90, state.courseRotation, "left rotation decreases course rotation");
 		assertClose(frozen.y, state.x, "left rotation maps x from frozen y");
@@ -1927,13 +1927,13 @@ class LocalPlayerControllerTest {
 
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput(false, false, true));
-			if (player.debugState().mode == "jump") {
+			if (player.stateSnapshot().mode == "jump") {
 				break;
 			}
 		}
 		for (_ in 0...60) {
 			player.step(new LocalPlayerInput());
-			if (player.debugState().grounded) {
+			if (player.stateSnapshot().grounded) {
 				break;
 			}
 		}
@@ -1941,7 +1941,7 @@ class LocalPlayerControllerTest {
 		var bumped = false;
 		for (_ in 0...30) {
 			player.step(new LocalPlayerInput(false, false, true));
-			var state = player.debugState();
+			var state = player.stateSnapshot();
 			if (state.touchedBlockType == "solid" && state.y > 100) {
 				bumped = true;
 				assertClose(115, state.y, "rotated ceiling bump snaps below its displayed edge");
@@ -1960,7 +1960,7 @@ class LocalPlayerControllerTest {
 
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput(false, false, true));
-			if (player.debugState().mode == "jump") {
+			if (player.stateSnapshot().mode == "jump") {
 				break;
 			}
 		}
@@ -1972,7 +1972,7 @@ class LocalPlayerControllerTest {
 			player.step(new LocalPlayerInput(true));
 		}
 
-		var state = player.debugState();
+		var state = player.stateSnapshot();
 		assertBelow(-111, state.x, "rotated wall stops left movement at its displayed edge");
 	}
 
@@ -1983,7 +1983,7 @@ class LocalPlayerControllerTest {
 
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput(false, false, true));
-			if (player.debugState().mode == "jump") {
+			if (player.stateSnapshot().mode == "jump") {
 				break;
 			}
 		}
@@ -1993,12 +1993,12 @@ class LocalPlayerControllerTest {
 
 		for (_ in 0...30) {
 			player.step(new LocalPlayerInput(true));
-			if (player.debugState().touchedBlockType == "arrow_right") {
+			if (player.stateSnapshot().touchedBlockType == "arrow_right") {
 				break;
 			}
 		}
 
-		var state = player.debugState();
+		var state = player.stateSnapshot();
 		assertEquals("arrow_right", state.touchedBlockType, "scripted run reaches rotated arrow block");
 		assertBelow(-state.vy, -5, "right arrow rotated 90 degrees pushes down like Flash");
 		assertBelow(state.vx, 1, "rotated right arrow no longer pushes along unrotated right");
@@ -2011,7 +2011,7 @@ class LocalPlayerControllerTest {
 
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput(false, false, true));
-			if (player.debugState().mode == "jump") {
+			if (player.stateSnapshot().mode == "jump") {
 				break;
 			}
 		}
@@ -2032,7 +2032,7 @@ class LocalPlayerControllerTest {
 			}
 		}
 
-		assertEquals(90, player.debugState().courseRotation, "test course is rotated right");
+		assertEquals(90, player.stateSnapshot().courseRotation, "test course is rotated right");
 		assertEquals("PushBlockMove", Type.enumConstructor(pushEvent.kind), "rotated push block emits movement");
 		assertEquals(3, pushEvent.tileX, "rotated push block source x");
 		assertEquals(4, pushEvent.tileY, "rotated push block source y");
@@ -2044,7 +2044,7 @@ class LocalPlayerControllerTest {
 		var player = new LocalCharacter(rotateBlockLevel(type));
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput(false, false, true));
-			if (player.debugState().mode == "jump") {
+			if (player.stateSnapshot().mode == "jump") {
 				return player;
 			}
 		}
@@ -2059,7 +2059,7 @@ class LocalPlayerControllerTest {
 		var player = new LocalCharacter(level);
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput(false, false, true));
-			if (player.debugState().itemId == itemId) {
+			if (player.stateSnapshot().itemId == itemId) {
 				return player;
 			}
 		}

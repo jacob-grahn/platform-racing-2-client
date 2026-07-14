@@ -4,10 +4,7 @@ package pr2.gameplay;
 import js.Browser;
 #end
 import haxe.crypto.Md5;
-import haxe.ds.ObjectMap;
-import haxe.ds.StringMap;
 import StringTools;
-import openfl.display.DisplayObject;
 import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.display.StageQuality;
@@ -20,15 +17,8 @@ import openfl.text.TextFormat;
 import openfl.ui.Keyboard;
 import pr2.Constants;
 import pr2.character.Character;
-import pr2.character.Character.DjinnEmitterRequest;
-import pr2.character.Character.ParticleEmitterRequest;
-import pr2.character.ArrowSparkleEmitter;
 import pr2.character.CharacterState;
 import pr2.character.LocalCharacter;
-import pr2.character.PhysicsParticle.PhysicsParticleParams;
-import pr2.character.ParticleEmitter;
-import pr2.character.PositionedParticleEmitter;
-import pr2.character.RainbowStarEmitter;
 import pr2.character.RemoteCharacter;
 import pr2.effects.ZapEffect;
 import pr2.effects.Slash;
@@ -37,11 +27,11 @@ import pr2.effects.BlockPiece;
 import pr2.gameplay.GameCommandShell.LocalCharacterInit;
 import pr2.gameplay.GameCommandShell.RemoteCharacterInit;
 import pr2.gameplay.SpecialEvent.PlaceArtifactRequest;
-import pr2.harness.BlockVisualEvent;
-import pr2.harness.BlockVisualEvent.BlockVisualEventKind;
-import pr2.harness.LocalPlayerDebugState;
-import pr2.harness.LocalPlayerInput;
-import pr2.harness.PlayerDisplayPlacement;
+import pr2.gameplay.player.BlockVisualEvent;
+import pr2.gameplay.player.BlockVisualEvent.BlockVisualEventKind;
+import pr2.gameplay.player.LocalPlayerState;
+import pr2.gameplay.player.LocalPlayerInput;
+import pr2.gameplay.player.PlayerDisplayPlacement;
 import pr2.lobby.account.AlternateControls;
 import pr2.lobby.chat.ChatText;
 import pr2.lobby.LobbySession;
@@ -67,9 +57,8 @@ import pr2.runtime.FontResolver;
 	wraps around it). The harness now builds a `Course` too, supplying `onChatLine`
 	to intercept `/debug` and `onFrame` to drive its status overlay.
 
-	The character layer is currently a single `LocalCharacter`; the multiplayer
-	`RemoteCharacter` hierarchy (Section B) will populate `characterLayer`
-	alongside the local player.
+	Local and remote characters share the front/back character layers, while the
+	roster controller owns their command registration and lifecycle.
 **/
 class Course extends Sprite {
 	// Verified Course holder->stage offsets (holder is centred at +275,+200).
@@ -96,7 +85,7 @@ class Course extends Sprite {
 	private final data:ServerLevelData;
 	private final config:LevelConfig;
 	private final onChatLine:Null<String->Bool>;
-	private final onFrame:Null<LocalPlayerDebugState->Void>;
+	private final onFrame:Null<LocalPlayerState->Void>;
 	private final commandHandler:Null<CommandHandler>;
 
 	private final input:LocalPlayerInput = new LocalPlayerInput();
@@ -131,7 +120,8 @@ class Course extends Sprite {
 	public var looseHats(default, null):Map<Int, HatEffect> = new Map();
 	public var raceStarted(default, null):Bool = false;
 	public var framesPlaying(default, null):Int = 0;
-	public var testMode:Bool = false;
+	/** Suppresses live-server finish submission for local/editor-hosted courses. */
+	public var offlineMode:Bool = false;
 	public var debugLastCrumbleForce(default, null):String = "";
 	public var debugCrumbleActivations(default, null):Int = 0;
 	public var debugCrumblePiecesSpawned(default, null):Int = 0;
@@ -139,7 +129,7 @@ class Course extends Sprite {
 	// Invoked once when the local player reaches a finish block. The host page
 	// (GamePage) uses it to mark the player done and show the finished page; the
 	// network notification itself is emitted here, mirroring Flash Game.finish.
-	public var onFinish:Null<LocalPlayerDebugState->Void> = null;
+	public var onFinish:Null<LocalPlayerState->Void> = null;
 	public var onOutOfTime:Null<Void->Void> = null;
 	public var onPlayJumpSound:Null<Float->Float->Void> = null;
 	public var onPlayCharacterSound:Null<pr2.character.Character.CharacterSoundRequest->Void> = null;
@@ -184,10 +174,11 @@ class Course extends Sprite {
 	private var scrollShift:Bool = false;
 	private var scrollVelX:Float = 0;
 	private var scrollVelY:Float = 0;
-	private final activeParticleEmitters:ObjectMap<Character, ParticleEmitter> = new ObjectMap();
-	private final activeDjinnEmitters:ObjectMap<Character, StringMap<ParticleEmitter>> = new ObjectMap();
+	private final particleEffects:CourseParticleEffects;
+	private final roster:CourseRosterController;
+	private final blockVisuals:CourseBlockVisualController;
 
-	public function new(level:ServerLevel, data:ServerLevelData, config:LevelConfig, ?onChatLine:String->Bool, ?onFrame:LocalPlayerDebugState->Void,
+	public function new(level:ServerLevel, data:ServerLevelData, config:LevelConfig, ?onChatLine:String->Bool, ?onFrame:LocalPlayerState->Void,
 			?commandHandler:CommandHandler) {
 		super();
 		this.level = level;
@@ -196,6 +187,11 @@ class Course extends Sprite {
 		this.onChatLine = onChatLine;
 		this.onFrame = onFrame;
 		this.commandHandler = commandHandler;
+		roster = new CourseRosterController(this);
+		blockVisuals = new CourseBlockVisualController(this);
+		particleEffects = new CourseParticleEffects(function() {
+			return levelRenderer == null ? null : levelRenderer.worldEffectLayer();
+		});
 		build();
 		addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
@@ -229,7 +225,7 @@ class Course extends Sprite {
 		player.onArtifactHatActivated = onArtifactHatActivated;
 		player.onStartJetSound = startJetSound;
 		player.onStopJetSound = stopJetSound;
-		installParticleEmitterHooks(player);
+		particleEffects.install(player);
 		player.setGameMode(config.gameMode);
 		player.setHatsAllowed(config.gameMode != Modes.roguelike);
 		player.setAllowedItems(config.allowedItems);
@@ -475,230 +471,15 @@ class Course extends Sprite {
 		return onChatLine != null && onChatLine(message);
 	}
 
-	public function createLocalCharacter(init:LocalCharacterInit):LocalCharacter {
-		if (localCharacter == null) {
-			return null;
-		}
-		unregisterLocalCommands();
-		var previousTempId = localCharacter.tempID;
-		if (playerArray != null && previousTempId >= 0 && previousTempId < playerArray.length && playerArray[previousTempId] == localCharacter
-				&& previousTempId != init.tempId) {
-			playerArray[previousTempId] = null;
-		}
-		localCharacter.tempID = init.tempId;
-		localCharacter.groupStr = init.group;
-		localCharacter.setHatId(Std.int(init.hatId));
-		localCharacter.setHeadId(Std.int(init.headId));
-		localCharacter.setBodyId(Std.int(init.bodyId));
-		localCharacter.setFeetId(Std.int(init.feetId));
-		localCharacter.setColors(Std.int(init.hatColor), Std.int(init.hatColor2), Std.int(init.headColor), Std.int(init.headColor2),
-			Std.int(init.bodyColor), Std.int(init.bodyColor2), Std.int(init.feetColor), Std.int(init.feetColor2));
-		if (config.gameMode == Modes.roguelike) {
-			localCharacter.setStats(0, 0, 0);
-		} else {
-			localCharacter.setStats(init.speed, init.accel, init.jump);
-		}
-		playerArray[init.tempId] = localCharacter;
-		registerLocalCommands(init.tempId);
-		positionLocalAtStartCenter();
-		return localCharacter;
-	}
+	public function createLocalCharacter(init:LocalCharacterInit):LocalCharacter return roster.createLocalCharacter(init);
+	public function createRemoteCharacter(init:RemoteCharacterInit):RemoteCharacter return roster.createRemoteCharacter(init);
+	public function getRemoteCharacter(tempId:Int):Null<RemoteCharacter> return roster.getRemoteCharacter(tempId);
+	public function remoteCharacterCount():Int return roster.remoteCharacterCount();
+	public function removeRemoteCharacter(tempId:Int):Void roster.removeRemoteCharacter(tempId);
+	public function removeAllRemoteCharacters():Void roster.removeAllRemoteCharacters();
 
-	private function registerLocalCommands(tempId:Int):Void {
-		if (commandHandler == null) {
-			return;
-		}
-		localCommandNames = ["zap", "setHats" + tempId, "squash" + tempId, "sting" + tempId];
-		commandHandler.defineCommand("zap", zapCommand);
-		commandHandler.defineCommand("setHats" + tempId, setLocalHatsCommand);
-		commandHandler.defineCommand("squash" + tempId, squashCommand);
-		commandHandler.defineCommand("sting" + tempId, stingCommand);
-	}
-
-	private function unregisterLocalCommands():Void {
-		if (commandHandler != null) {
-			for (name in localCommandNames) {
-				commandHandler.defineCommand(name, null);
-			}
-		}
-		localCommandNames = [];
-	}
-
-	private function setLocalHatsCommand(args:Array<String>):Void {
-		if (localCharacter != null) {
-			localCharacter.setHats(args.length == 1 && args[0] == "" ? [] : [for (arg in args) parseIntArg(arg)]);
-		}
-	}
-
-	private function squashCommand(_:Array<String>):Void {
-		if (localCharacter == null) {
-			return;
-		}
-		localCharacter.receiveSquash();
-	}
-
-	private function stingCommand(args:Array<String>):Void {
-		if (localCharacter == null || characterLayer == null || args.length == 0) {
-			return;
-		}
-		var source = playerByTempId(parseIntArg(args[0]));
-		if (source == null || source == localCharacter) {
-			return;
-		}
-		var direction = source.x < localCharacter.x ? "left" : (source.x > localCharacter.x ? "right" : "");
-		characterLayer.addChild(new StingEffect(localCharacter, direction));
-		localCharacter.receiveSting();
-	}
-
-	private function zapCommand(args:Array<String>):Void {
-		if (localCharacter == null || characterLayer == null || args.length == 0) {
-			return;
-		}
-		var sourceId = parseIntArg(args[0]);
-		for (character in playerArray) {
-			if (character != null && character.tempID != sourceId) {
-				characterLayer.addChild(new ZapEffect(character, true, false, false));
-			}
-		}
-		if (sourceId == localCharacter.tempID) {
-			return;
-		}
-		characterLayer.addChild(new ZapEffect(localCharacter, true, true, true));
-		localCharacter.receiveZap();
-	}
-
-	private function playerByTempId(tempId:Int):Null<Character> {
-		if (playerArray == null || tempId < 0 || tempId >= playerArray.length) {
-			return null;
-		}
-		return playerArray[tempId];
-	}
-
-	private function activateCommand(args:Array<String>):Void {
-		if (remoteBlockActivation == null || localCharacter == null || worldLevel == null || args.length < 2) {
-			return;
-		}
-		var segX = parseIntArg(args[0]);
-		var segY = parseIntArg(args[1]);
-		var payload = args.length > 2 ? args[2] : "";
-		recordCrumbleActivation(segX, segY, payload);
-		if (localCharacter.applyRemoteBlockActivation(segX, segY, payload)) {
-			syncBlockVisuals();
-		} else {
-			remoteBlockActivation.activateSegment(segX, segY, payload);
-		}
-	}
-
-	private function remoteBlockTouch(segX:Int, segY:Int):Void {
-		if (localCharacter != null && worldLevel != null
-			&& localCharacter.applyRemoteBlockTouch(segX, segY)) {
-			syncBlockVisuals();
-		} else if (remoteBlockActivation != null) {
-			remoteBlockActivation.touch(segX, segY);
-		}
-	}
-
-	public function createRemoteCharacter(init:RemoteCharacterInit):RemoteCharacter {
-		removeRemoteCharacter(init.tempId);
-		var dot = miniMap == null ? null : miniMap.getDot();
-		if (dot != null) {
-			dot.setHoverInfo(init.tempId + 1, init.userName, true);
-		}
-		var remote = new RemoteCharacter(init.tempId, dot, init.userName, Std.int(init.hatId), Std.int(init.headId), Std.int(init.bodyId),
-			Std.int(init.feetId), init.group, commandHandler);
-		remote.setHatsAllowed(config.gameMode != Modes.roguelike);
-		remote.setColors(Std.int(init.hatColor), Std.int(init.hatColor2), Std.int(init.headColor), Std.int(init.headColor2),
-			Std.int(init.bodyColor), Std.int(init.bodyColor2), Std.int(init.feetColor), Std.int(init.feetColor2));
-		if (remoteBlockActivation != null) {
-			remote.onBlockTouch = remoteBlockTouch;
-		}
-		remote.onPlayJumpSound = playRemoteJumpSound;
-		remote.onPlayCharacterSound = playCharacterSound;
-		remote.onStartJetSound = startJetSound;
-		remote.onStopJetSound = stopJetSound;
-		installParticleEmitterHooks(remote);
-		remote.onParentChange = function(parentLayer:String):Void {
-			moveCharacterToLayer(remote, parentLayer);
-		};
-		remoteCharacters.set(init.tempId, remote);
-		playerArray[init.tempId] = remote;
-		syncNetworkPlayerCount();
-		if (characterLayer != null) {
-			characterLayer.addChild(remote);
-		}
-		positionRemoteAtStartCenter(remote);
-		return remote;
-	}
-
-	private function positionRemoteAtStartCenter(remote:RemoteCharacter):Void {
-		if (remote == null || worldLevel == null || levelRenderer == null || startPositions.length == 0) {
-			return;
-		}
-		var startIndex = LobbySession.tournamentMode ? 0 : remote.tempID;
-		if (startIndex < 0 || startIndex >= startPositions.length) {
-			startIndex = 0;
-		}
-		var start = startPositions[startIndex];
-		// Flash stores every Character in map/world coordinates and lets
-		// frontBackground/backBackground supply the camera translation.
-		remote.setPos(start.x, start.y);
-	}
-
-	public function getRemoteCharacter(tempId:Int):Null<RemoteCharacter> {
-		return remoteCharacters == null ? null : remoteCharacters.get(tempId);
-	}
-
-	public function remoteCharacterCount():Int {
-		if (remoteCharacters == null) {
-			return 0;
-		}
-		var count = 0;
-		for (_ in remoteCharacters.keys()) {
-			count++;
-		}
-		return count;
-	}
-
-	public function removeRemoteCharacter(tempId:Int):Void {
-		if (remoteCharacters == null) {
-			return;
-		}
-		var remote = remoteCharacters.get(tempId);
-		if (remote == null) {
-			return;
-		}
-		if (snakeManager != null) {
-			snakeManager.stopOwner(tempId);
-		}
-		remote.remove();
-		remoteCharacters.remove(tempId);
-		syncNetworkPlayerCount();
-		if (playerArray != null && tempId >= 0 && tempId < playerArray.length) {
-			playerArray[tempId] = null;
-		}
-		if (playerSpectating == remote) {
-			changeSpectate(-1);
-			if (spectatePicker != null) {
-				spectatePicker.stopSpectating();
-			}
-		}
-	}
-
-	private function syncNetworkPlayerCount():Void {
-		if (localCharacter != null) {
-			localCharacter.networkPlayerCount = remoteCharacterCount() + 1;
-		}
-	}
-
-	public function removeAllRemoteCharacters():Void {
-		if (remoteCharacters == null) {
-			return;
-		}
-		var ids = [for (id in remoteCharacters.keys()) id];
-		for (id in ids) {
-			removeRemoteCharacter(id);
-		}
-	}
+	private function activateCommand(args:Array<String>):Void roster.activateCommand(args);
+	private function unregisterLocalCommands():Void roster.unregisterLocalCommands();
 
 	public function beginRace():Void {
 		if (countdown != null) {
@@ -745,7 +526,7 @@ class Course extends Sprite {
 		}
 		var local = globalToLocal(new Point(stageX, stageY));
 		var world = levelRenderer.screenToWorld(local.x, local.y);
-		var state = localCharacter.debugState();
+		var state = localCharacter.stateSnapshot();
 		levelRenderer.showTeleportPop(state.x, state.y);
 		localCharacter.setControllerPosition(world.x, world.y);
 		levelRenderer.showTeleportPop(world.x, world.y);
@@ -759,8 +540,7 @@ class Course extends Sprite {
 		}
 		input.clear();
 		stopAllJetSounds();
-		clearAllParticleEmitters();
-		clearAllDjinnEmitters();
+		particleEffects.clearAll();
 		resetActiveBlockVisuals();
 		resetMovedBlockDisplays();
 		removeAllRemoteCharacters();
@@ -943,167 +723,14 @@ class Course extends Sprite {
 		}
 	}
 
-	private function installParticleEmitterHooks(character:Character):Void {
-		character.onStartParticleEmitter = startParticleEmitter;
-		character.onClearParticleEmitter = function():Void {
-			clearParticleEmitter(character);
-		};
-		character.onStartDjinnEmitter = startDjinnEmitter;
-		character.onClearDjinnEmitters = function():Void {
-			clearDjinnEmitters(character);
-		};
-	}
-
-	private function startParticleEmitter(request:ParticleEmitterRequest):Void {
-		clearParticleEmitter(request.target);
-		if (levelRenderer == null) {
-			return;
-		}
-		var layer = levelRenderer.worldEffectLayer();
-		var emitter:Null<ParticleEmitter> = switch (request.kind) {
-			case "arrowSparkle":
-				new ArrowSparkleEmitter(request.intervalMs, request.durationMs, request.target, layer);
-			case "rainbowStar":
-				new RainbowStarEmitter(request.intervalMs, request.durationMs, request.target, layer);
-			case "sparkle":
-				new ParticleEmitter(request.intervalMs, request.durationMs, request.target, layer);
-			default:
-				null;
-		};
-		if (emitter != null) {
-			activeParticleEmitters.set(request.target, emitter);
-		}
-	}
-
-	private function clearParticleEmitter(character:Character):Void {
-		var emitter = activeParticleEmitters.get(character);
-		if (emitter == null) {
-			return;
-		}
-		emitter.remove();
-		activeParticleEmitters.remove(character);
-	}
-
-	private function clearAllParticleEmitters():Void {
-		for (character in [for (character in activeParticleEmitters.keys()) character]) {
-			clearParticleEmitter(character);
-		}
-	}
-
-	private static inline var DJINN_EMITTER_INTERVAL_MS:Int = 75;
-	private static inline var DJINN_EMITTER_DURATION_MS:Int = 999999999;
-
-	private function startDjinnEmitter(request:DjinnEmitterRequest):Void {
-		clearDjinnEmitterSlot(request.target, request.slot);
-		if (levelRenderer == null) {
-			return;
-		}
-		var part = djinnTargetPart(request);
-		if (part == null) {
-			return;
-		}
-		var emitter = new PositionedParticleEmitter(
-			DJINN_EMITTER_INTERVAL_MS,
-			DJINN_EMITTER_DURATION_MS,
-			part,
-			levelRenderer.worldEffectLayer(),
-			djinnParams(request),
-			request.offsetX,
-			request.offsetY
-		);
-		var emitters = activeDjinnEmitters.get(request.target);
-		if (emitters == null) {
-			emitters = new StringMap();
-			activeDjinnEmitters.set(request.target, emitters);
-		}
-		emitters.set(request.slot, emitter);
-	}
-
-	private function djinnTargetPart(request:DjinnEmitterRequest):Null<DisplayObject> {
-		var stateName = request.target.state == null ? "standAnim" : request.target.state + "Anim";
-		var stateClip = request.target.display.getStateClip(stateName);
-		return stateClip == null ? null : stateClip.getChildByTimelineName(request.slot);
-	}
-
-	private function djinnParams(request:DjinnEmitterRequest):PhysicsParticleParams {
-		return {
-			graphic: request.graphic,
-			colors: request.colors,
-			life: request.life,
-			startAlpha: request.startAlpha,
-			minVelAlpha: request.minVelAlpha,
-			maxVelAlpha: request.maxVelAlpha,
-			minVelX: request.minVelX,
-			maxVelX: request.maxVelX,
-			minVelY: request.minVelY,
-			maxVelY: request.maxVelY,
-			velScaleX: request.velScaleX,
-			velScaleY: request.velScaleY,
-			fricX: request.fricX,
-			fricY: request.fricY,
-			minOffsetX: request.minOffsetX,
-			maxOffsetX: request.maxOffsetX,
-			minOffsetY: request.minOffsetY,
-			maxOffsetY: request.maxOffsetY,
-			minScale: request.minScale,
-			maxScale: request.maxScale
-		};
-	}
-
-	private function clearDjinnEmitterSlot(character:Character, slot:String):Void {
-		var emitters = activeDjinnEmitters.get(character);
-		if (emitters == null) {
-			return;
-		}
-		var emitter = emitters.get(slot);
-		if (emitter != null) {
-			emitter.remove();
-			emitters.remove(slot);
-		}
-		if (!emitters.keys().hasNext()) {
-			activeDjinnEmitters.remove(character);
-		}
-	}
-
-	private function clearDjinnEmitters(character:Character):Void {
-		var emitters = activeDjinnEmitters.get(character);
-		if (emitters == null) {
-			return;
-		}
-		for (slot in [for (slot in emitters.keys()) slot]) {
-			var emitter = emitters.get(slot);
-			if (emitter != null) {
-				emitter.remove();
-			}
-			emitters.remove(slot);
-		}
-		activeDjinnEmitters.remove(character);
-	}
-
-	private function clearAllDjinnEmitters():Void {
-		for (character in [for (character in activeDjinnEmitters.keys()) character]) {
-			clearDjinnEmitters(character);
-		}
-	}
-
 	@:allow(pr2.gameplay.CharacterLifecycleTest)
 	private function activeParticleEmitterCount():Int {
-		var count = 0;
-		for (_ in activeParticleEmitters.keys()) {
-			count++;
-		}
-		return count;
+		return particleEffects.activeEmitterCount();
 	}
 
 	@:allow(pr2.gameplay.CharacterLifecycleTest)
 	private function activeDjinnEmitterCount():Int {
-		var count = 0;
-		for (emitters in activeDjinnEmitters) {
-			for (_ in emitters.keys()) {
-				count++;
-			}
-		}
-		return count;
+		return particleEffects.activeDjinnEmitterCount();
 	}
 
 	private function playSuperJumpSound():Void {
@@ -1215,7 +842,7 @@ class Course extends Sprite {
 				player.controller.stopDetailedTrace();
 			}
 			var playerInput = input.copy();
-			var beforeStep = player.debugState();
+			var beforeStep = player.stateSnapshot();
 			if ((snakeManager != null && snakeManager.localActive()) || (input.item && beforeStep.itemId == Items.SNAKE)) {
 				playerInput.left = false;
 				playerInput.right = false;
@@ -1229,7 +856,7 @@ class Course extends Sprite {
 		} else {
 			player.controller.stopDetailedTrace();
 		}
-		var state = player.debugState();
+		var state = player.stateSnapshot();
 		if (raceStarted && !localFinishHandled && state.lastItemEffect == "snake_start" && snakeManager != null) {
 			snakeManager.startLocal(localCharacter.tempID, state.x, state.y, localCharacter.facingScaleX);
 		}
@@ -1247,7 +874,7 @@ class Course extends Sprite {
 			stepLooseHats();
 		}
 		syncBlockVisuals();
-		state = player.debugState();
+		state = player.stateSnapshot();
 		if (raceStarted && !localFinishHandled) {
 			player.x = state.x;
 			player.y = state.y;
@@ -1379,7 +1006,7 @@ class Course extends Sprite {
 	// the controller latches `finished`; objective mode reports each objective and
 	// removes its minimap marker, while every other mode emits finish_race once and
 	// lets the host page surface the finished page.
-	private function maybeHandleLocalFinish(state:LocalPlayerDebugState):Void {
+	private function maybeHandleLocalFinish(state:LocalPlayerState):Void {
 		if (!state.finished) {
 			return;
 		}
@@ -1407,7 +1034,7 @@ class Course extends Sprite {
 			}
 			return;
 		}
-		if (testMode) {
+		if (offlineMode) {
 			if (localFinishHandled) {
 				return;
 			}
@@ -1439,7 +1066,7 @@ class Course extends Sprite {
 		}
 	}
 
-	private function emitLocalItemEffect(state:LocalPlayerDebugState):Void {
+	private function emitLocalItemEffect(state:LocalPlayerState):Void {
 		if (state.lastItemEffect == null || localCharacter == null) {
 			return;
 		}
@@ -1530,8 +1157,8 @@ class Course extends Sprite {
 			courseRotation: Std.int(levelRenderer == null ? 0 : levelRenderer.rotation),
 			player: localCharacter == null ? null : {
 				tempId: localCharacter.tempID,
-				x: localCharacter.debugState().x,
-				y: localCharacter.debugState().y,
+				x: localCharacter.stateSnapshot().x,
+				y: localCharacter.stateSnapshot().y,
 				removed: localCharacter.removed,
 				hit: function(impulseX:Float, impulseY:Float):Void localCharacter.receiveHit(impulseX, impulseY)
 			},
@@ -1564,7 +1191,7 @@ class Course extends Sprite {
 			return;
 		}
 		if (itemId == null && player != null) {
-			var state = player.debugState();
+			var state = player.stateSnapshot();
 			itemId = state.itemId;
 			itemUses = state.itemUses;
 		}
@@ -1578,12 +1205,12 @@ class Course extends Sprite {
 		}
 	}
 
-	private function syncStatsDisplay(?state:LocalPlayerDebugState):Void {
+	private function syncStatsDisplay(?state:LocalPlayerState):Void {
 		if (statsDisplay == null) {
 			return;
 		}
 		if (state == null && player != null) {
-			state = player.debugState();
+			state = player.stateSnapshot();
 		}
 		if (state == null) {
 			return;
@@ -1598,12 +1225,12 @@ class Course extends Sprite {
 		}
 	}
 
-	private function syncHearts(?state:LocalPlayerDebugState):Void {
+	private function syncHearts(?state:LocalPlayerState):Void {
 		if (hearts == null) {
 			return;
 		}
 		if (state == null && player != null) {
-			state = player.debugState();
+			state = player.stateSnapshot();
 		}
 		if (state == null) {
 			return;
@@ -1617,280 +1244,20 @@ class Course extends Sprite {
 			displayedLives = state.lives;
 		}
 		if (roguelikeProgressText != null) {
-			roguelikeProgressText.text = 'Finish: ${state.roguelikeFinishHits}/${pr2.harness.LocalPlayerController.ROGUELIKE_REQUIRED_FINISH_HITS}';
+			roguelikeProgressText.text = 'Finish: ${state.roguelikeFinishHits}/${pr2.gameplay.player.LocalPlayerController.ROGUELIKE_REQUIRED_FINISH_HITS}';
 		}
 	}
 
-	private function syncBlockVisuals():Void {
-		syncMoveBlockArrows();
-		syncMoveBlockDisplays();
-		// Only blocks with non-default alpha/tint (fading/removed/depleted) need
-		// restyling; iterating all blocks here was O(blocks) per frame and dropped
-		// large levels to a few fps. Update just the active set, and reset any block
-		// that returned to default since last frame.
-		var current:Map<String, Bool> = new Map();
-		for (key in player.activeVisualBlockKeys()) {
-			current.set(key, true);
-			var tileX = tileKeyX(key);
-			var tileY = tileKeyY(key);
-			applyBlockVisual(tileX, tileY, player.blockAlphaAt(tileX, tileY), player.blockColorMultiplierAt(tileX, tileY),
-				player.blockIceOverlayAlphaAt(tileX, tileY));
-		}
-		for (key in activeVisualBlocks.keys()) {
-			if (!current.exists(key)) {
-				applyBlockVisual(tileKeyX(key), tileKeyY(key), 1, 1, 0);
-			}
-		}
-		activeVisualBlocks = current;
-		for (event in player.consumeBlockVisualEvents()) {
-			switch (event.kind) {
-				case LocalActivate:
-					emitLocalBlockActivation(event);
-				case ArrowAnimate:
-					levelRenderer.animateArrow(worldXOf(event), worldYOf(event));
-				case MineExplode:
-					levelRenderer.showMineExplosion(worldXOf(event), worldYOf(event));
-				case BrickPieces:
-					showBlockPieces(event, "BrickPieceGraphic", 10, 10, 25);
-				case BasicDigPieces:
-					levelRenderer.showBasicBlockPieces(worldXOf(event), worldYOf(event), event.count, 10, 10, 25);
-				case CrumblePieces:
-					showBlockPieces(event, "CrumblePieceGraphic", 5, 5, 15);
-				case MinePieces:
-					showBlockPieces(event, "MinePieceGraphic", 30, 30, 50);
-				case WaterRipple:
-					levelRenderer.triggerWaterRipple(worldXOf(event), worldYOf(event));
-				case SafetyPoof:
-					levelRenderer.showTeleportPop(worldXOf(event), worldYOf(event));
-				case TeleportBlockPop:
-					emitLocalTeleportPop(event);
-				case BlockBumpSound:
-					levelRenderer.animateBlockBump(worldXOf(event), worldYOf(event), event.hitX, event.hitY);
-					playBlockBumpSound(event);
-				case ItemBlockSound:
-					playItemBlockSound();
-				case HappyBlockSound:
-					playStatBlockSound(event, RaceSounds.BUMP_HAPPY_SOUND);
-				case SadBlockSound:
-					playStatBlockSound(event, RaceSounds.BUMP_SAD_SOUND);
-				case TimeBlockSound:
-					playTimeBlockSound();
-				case SuperJumpSound:
-					playSuperJumpSound();
-				case PushBlockMove:
-					if (event.toTileX != null && event.toTileY != null) {
-						levelRenderer.moveBlockDisplay(
-							worldXOf(event),
-							worldYOf(event),
-							worldTileX(event.toTileX),
-							worldTileY(event.toTileY)
-						);
-					}
-			}
-		}
-		publishMultiplayerDiagnostics();
-	}
-
-	private function resetActiveBlockVisuals():Void {
-		for (key in activeVisualBlocks.keys()) {
-			applyBlockVisual(tileKeyX(key), tileKeyY(key), 1, 1, 0);
-		}
-		activeVisualBlocks = new Map();
-	}
-
-	private function resetMovedBlockDisplays():Void {
-		for (i in displayedMoveBlockPositions.keys()) {
-			var displayed = displayedMoveBlockPositions.get(i);
-			if (displayed != null && (displayed.worldX != displayed.originalWorldX || displayed.worldY != displayed.originalWorldY)) {
-				levelRenderer.moveBlockDisplay(displayed.worldX, displayed.worldY, displayed.originalWorldX, displayed.originalWorldY);
-			}
-		}
-		displayedMoveBlockPositions.clear();
-	}
-
-	private function syncMoveBlockDisplays():Void {
-		if (levelRenderer == null || worldLevel == null) {
-			return;
-		}
-		var worldBlocks = worldLevel.blocks;
-		for (i in 0...worldBlocks.length) {
-			var worldBlock = worldBlocks[i];
-			if (worldBlock.type != pr2.level.BlockType.Move || i >= level.blocks.length) {
-				continue;
-			}
-			var currentWorldX = worldBlock.x * ServerLevelWorldAdapter.TILE_SIZE;
-			var currentWorldY = worldBlock.y * ServerLevelWorldAdapter.TILE_SIZE;
-			var displayed = displayedMoveBlockPositions.get(i);
-			if (displayed == null) {
-				// World conversion omits spawn-marker blocks, so its indices do not
-				// correspond to ServerLevel.blocks. Capture this move block's own initial
-				// coordinate rather than moving whichever decoded block shares its index.
-				displayedMoveBlockPositions.set(i, {
-					worldX: currentWorldX,
-					worldY: currentWorldY,
-					originalWorldX: currentWorldX,
-					originalWorldY: currentWorldY
-				});
-				displayed = displayedMoveBlockPositions.get(i);
-			}
-			if (displayed.worldX != currentWorldX || displayed.worldY != currentWorldY) {
-				levelRenderer.moveBlockDisplay(displayed.worldX, displayed.worldY, currentWorldX, currentWorldY);
-				displayedMoveBlockPositions.set(i, {
-					worldX: currentWorldX,
-					worldY: currentWorldY,
-					originalWorldX: displayed.originalWorldX,
-					originalWorldY: displayed.originalWorldY
-				});
-			}
-		}
-	}
-
-	private function syncMoveBlockArrows():Void {
-		if (levelRenderer == null || worldLevel == null || player == null) {
-			return;
-		}
-		var current:Map<String, Bool> = new Map();
-		var directions = player.activeMoveBlockDirections();
-		for (tileKey in directions.keys()) {
-			var tileX = tileKeyX(tileKey);
-			var tileY = tileKeyY(tileKey);
-			var worldX = tileX * ServerLevelWorldAdapter.TILE_SIZE;
-			var worldY = tileY * ServerLevelWorldAdapter.TILE_SIZE;
-			var worldKey = '$worldX,$worldY';
-			current.set(worldKey, true);
-			levelRenderer.showMoveBlockArrow(worldX, worldY, directions.get(tileKey));
-		}
-		for (worldKey in displayedMoveBlockArrows.keys()) {
-			if (!current.exists(worldKey)) {
-				levelRenderer.hideMoveBlockArrow(tileKeyX(worldKey), tileKeyY(worldKey));
-			}
-		}
-		displayedMoveBlockArrows = current;
-	}
-
-	private function playBlockBumpSound(event:BlockVisualEvent):Void {
-		raceSounds.playBlockBumpSound(worldXOf(event), worldYOf(event));
-	}
-
-	private function playItemBlockSound():Void {
-		raceSounds.playItemBlockSound();
-	}
-
-	private function playStatBlockSound(event:BlockVisualEvent, path:String):Void {
-		raceSounds.playStatBlockSound(path);
-	}
-
-	private function playTimeBlockSound():Void {
-		raceSounds.playTimeBlockSound();
-	}
-
-	private function applyBlockVisual(tileX:Int, tileY:Int, alpha:Float, multiplier:Float, iceOverlayAlpha:Float):Void {
-		var worldX = tileX * ServerLevelWorldAdapter.TILE_SIZE;
-		var worldY = tileY * ServerLevelWorldAdapter.TILE_SIZE;
-		levelRenderer.setBlockAlpha(worldX, worldY, alpha);
-		levelRenderer.setBlockColorMultiplier(worldX, worldY, multiplier);
-		levelRenderer.setBlockIceOverlayAlpha(worldX, worldY, iceOverlayAlpha);
-	}
-
-	private static inline function tileKeyX(key:String):Int {
-		return Std.parseInt(key.substring(0, key.indexOf(",")));
-	}
-
-	private static inline function tileKeyY(key:String):Int {
-		return Std.parseInt(key.substring(key.indexOf(",") + 1));
-	}
-
-	private function emitFinishDrawingReady():Void {
-		if (finishDrawingEmitted || localCharacter == null) {
-			return;
-		}
-		finishDrawingEmitted = true;
-		var cowboyChance = Std.parseInt(config.cowboyChance);
-		localCharacter.emitFinishDrawing(
-			Md5.encode(data.saveString + Std.int(config.levelId) + data.version + pr2.net.ServerConfig.LEVEL_HASH_SALT),
-			config.gameMode,
-			finishBlockPositions(),
-			level.finishBlocks().length,
-			cowboyChance == null ? 5 : cowboyChance,
-			config.badHats
-		);
-	}
-
-	private function finishBlockPositions():String {
-		var finishes = level.finishBlocks();
-		if (finishes.length > 5) {
-			return "all";
-		}
-		var parts:Array<String> = [];
-		for (i in 0...finishes.length) {
-			var block = finishes[i];
-			parts.push('{"id":${i + 1},"x":${block.x + 15},"y":${block.y + 15}}');
-		}
-		return "[" + parts.join(",") + "]";
-	}
-
-	private inline function worldXOf(event:BlockVisualEvent):Int {
-		return event.tileX * ServerLevelWorldAdapter.TILE_SIZE;
-	}
-
-	private inline function worldYOf(event:BlockVisualEvent):Int {
-		return event.tileY * ServerLevelWorldAdapter.TILE_SIZE;
-	}
-
-	private inline function worldTileX(tileX:Int):Int {
-		return tileX * ServerLevelWorldAdapter.TILE_SIZE;
-	}
-
-	private inline function worldTileY(tileY:Int):Int {
-		return tileY * ServerLevelWorldAdapter.TILE_SIZE;
-	}
-
-	private function emitLocalBlockActivation(event:BlockVisualEvent):Void {
-		var segX = event.tileX;
-		var segY = event.tileY;
-		var payload = event.activationPayload == null ? "" : event.activationPayload;
-		recordCrumbleActivation(event.tileX, event.tileY, payload);
-		LobbySocket.write('activate`$segX`$segY`$payload');
-	}
-
-	private function emitLocalTeleportPop(event:BlockVisualEvent):Void {
-		var worldX = Std.int(Math.round(event.hitX));
-		var worldY = Std.int(Math.round(event.hitY));
-		levelRenderer.showTeleportPop(worldX, worldY);
-		LobbySocket.write('add_effect`Teleport`$worldX`$worldY');
-	}
-
-	private function showBlockPieces(event:BlockVisualEvent, linkage:String, spreadX:Float, spreadY:Float, spreadRot:Float):Void {
-		if (linkage == "CrumblePieceGraphic") {
-			debugCrumblePiecesSpawned += event.count;
-		}
-		levelRenderer.showBlockPieces(linkage, worldXOf(event), worldYOf(event), event.count, spreadX, spreadY, spreadRot, 0.75, 0.95, 0.05);
-	}
-
-	public function debugActiveBlockPieces():Int {
-		if (levelRenderer == null) {
-			return 0;
-		}
-		var count = 0;
-		var layer = levelRenderer.worldEffectLayer();
-		for (i in 0...layer.numChildren) {
-			if (Std.isOfType(layer.getChildAt(i), BlockPiece)) {
-				count++;
-			}
-		}
-		return count;
-	}
-
-	private function recordCrumbleActivation(tileX:Int, tileY:Int, payload:String):Void {
-		if (worldLevel == null) {
-			return;
-		}
-		var block = worldLevel.blockAt(tileX, tileY);
-		if (block != null && block.type == pr2.level.BlockType.Crumble) {
-			debugLastCrumbleForce = payload;
-			debugCrumbleActivations++;
-		}
-	}
+	private function syncBlockVisuals():Void blockVisuals.syncBlockVisuals();
+	private function resetActiveBlockVisuals():Void blockVisuals.resetActiveBlockVisuals();
+	private function resetMovedBlockDisplays():Void blockVisuals.resetMovedBlockDisplays();
+	private function syncMoveBlockDisplays():Void blockVisuals.syncMoveBlockDisplays();
+	private function emitFinishDrawingReady():Void blockVisuals.emitFinishDrawingReady();
+	private function emitLocalBlockActivation(event:BlockVisualEvent):Void blockVisuals.emitLocalBlockActivation(event);
+	private function emitLocalTeleportPop(event:BlockVisualEvent):Void blockVisuals.emitLocalTeleportPop(event);
+	public function debugActiveBlockPieces():Int return blockVisuals.debugActiveBlockPieces();
+	private function recordCrumbleActivation(tileX:Int, tileY:Int, payload:String):Void
+		blockVisuals.recordCrumbleActivation(tileX, tileY, payload);
 
 	private function publishMultiplayerDiagnostics():Void {
 		#if js
@@ -1909,7 +1276,7 @@ class Course extends Sprite {
 			return;
 		}
 
-		var state = player.debugState();
+		var state = player.stateSnapshot();
 		syncRotationLifecycle(localCharacter.courseTweenRotation);
 		// Spin the world to match the controller's rotate-block state: the committed
 		// 90-degree step is baked into the block layer while the in-progress tween
@@ -2148,8 +1515,7 @@ class Course extends Sprite {
 			looseHats = null;
 		}
 		stopAllJetSounds();
-		clearAllParticleEmitters();
-		clearAllDjinnEmitters();
+		particleEffects.clearAll();
 		removeAllRemoteCharacters();
 		if (snakeManager != null) {
 			snakeManager.clear();

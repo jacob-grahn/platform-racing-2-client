@@ -24,7 +24,7 @@ import pr2.gameplay.PlaceArtifact;
 import pr2.gameplay.PrizePopup;
 import pr2.gameplay.QuitButton;
 import pr2.gameplay.SpecialEvent;
-import pr2.harness.LocalPlayerDebugState;
+import pr2.gameplay.player.LocalPlayerState;
 import pr2.lobby.LobbySession;
 import pr2.net.LobbySocket;
 import pr2.net.LevelDataClient;
@@ -160,7 +160,7 @@ class GamePage extends Page implements GameCommandDelegate {
 		showError('Could not load level $levelId:\n$message');
 	}
 
-	private function onCourseFrame(state:LocalPlayerDebugState):Void {
+	private function onCourseFrame(state:LocalPlayerState):Void {
 		pr2.app.DebugSignal.set("debug-state", 'phase=playable;${state.serialize()}');
 	}
 
@@ -449,7 +449,7 @@ class GamePage extends Page implements GameCommandDelegate {
 	// modes). It emits finish_race itself; here we mark the player done, glow the
 	// quit button, and show the finished page (Flash Game.finish +
 	// maybeShowFinishedPage).
-	private function onLocalFinish(_:pr2.harness.LocalPlayerDebugState):Void {
+	private function onLocalFinish(_:pr2.gameplay.player.LocalPlayerState):Void {
 		if (playerDone) {
 			return;
 		}

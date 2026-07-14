@@ -1,8 +1,8 @@
-package pr2.harness;
+package pr2.gameplay.player;
 
 import pr2.character.CharacterState;
 
-class LocalPlayerDebugState {
+class LocalPlayerState {
 	public final x:Float;
 	public final y:Float;
 	public final vx:Float;

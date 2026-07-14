@@ -656,7 +656,7 @@ class EditorSettingsTest {
 		variables.set("gameMode", "roguelike");
 		var testCourse = new TestCoursePage(variables);
 		testCourse.initialize();
-		var characterStats = testCourse.course.localCharacter.debugState();
+		var characterStats = testCourse.course.localCharacter.stateSnapshot();
 		assertEquals(0, Math.round(characterStats.speedStat), "roguelike test course starts character speed at zero");
 		assertEquals(0, Math.round(characterStats.accelerationStat), "roguelike test course starts character acceleration at zero");
 		assertEquals(0, Math.round(characterStats.jumpStat), "roguelike test course starts character jumping at zero");

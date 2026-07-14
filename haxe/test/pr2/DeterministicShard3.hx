@@ -50,7 +50,7 @@ import pr2.gameplay.SpecialEventTest;
 import pr2.gameplay.SpectatePickerTest;
 import pr2.gameplay.StatsDisplayTest;
 import pr2.graphics.JPEGEncoderCompatTest;
-import pr2.harness.PlayerDisplayPlacementTest;
+import pr2.gameplay.player.PlayerDisplayPlacementTest;
 import pr2.level.WorldLevelParserTest;
 import pr2.level.ServerLevelDecoderTest;
 import pr2.level.ServerLevelWorldAdapterTest;
