@@ -467,7 +467,7 @@ class ServerLevelRendererTest {
 	}
 
 	private static function testArrowOverlay():Void {
-		assertEquals("assets/blocks/arrow_overlay@4x.png", ServerLevelRenderer.arrowOverlayAssetPath(), "arrow overlay art path");
+		assertEquals("assets/svg/blocks/arrow_overlay.svg", ServerLevelRenderer.arrowOverlayAssetPath(), "arrow overlay art path");
 		assertEquals(0.0, ServerLevelRenderer.arrowOverlayRotation(ObjectCodes.BLOCK_ARROW_UP), "up arrow points up");
 		assertEquals(180.0, ServerLevelRenderer.arrowOverlayRotation(ObjectCodes.BLOCK_ARROW_DOWN), "down arrow rotates 180");
 		assertEquals(-90.0, ServerLevelRenderer.arrowOverlayRotation(ObjectCodes.BLOCK_ARROW_LEFT), "left arrow rotates -90");
@@ -541,11 +541,11 @@ class ServerLevelRendererTest {
 	}
 
 	private static function testArtAssetMappings():Void {
-		assertEquals("assets/backgrounds/bg1@4x.webp", ServerLevelRenderer.artBackgroundAssetPath(201), "bg1 asset");
-		assertEquals("assets/backgrounds/bg7@4x.webp", ServerLevelRenderer.artBackgroundAssetPath(207), "bg7 asset");
+		assertEquals("assets/svg/backgrounds/bg1.svg", ServerLevelRenderer.artBackgroundAssetPath(201), "bg1 asset");
+		assertEquals("assets/svg/backgrounds/bg7.svg", ServerLevelRenderer.artBackgroundAssetPath(207), "bg7 asset");
 		assertEquals("", ServerLevelRenderer.artBackgroundAssetPath(999), "unknown background asset");
-		assertEquals("assets/stamps/tree1@4x.png", ServerLevelRenderer.stampAssetPath(0), "tree stamp asset");
-		assertEquals("assets/stamps/spire2@4x.png", ServerLevelRenderer.stampAssetPath(8), "spire stamp asset");
+		assertEquals("assets/svg/stamps/tree1.svg", ServerLevelRenderer.stampAssetPath(0), "tree stamp asset");
+		assertEquals("assets/svg/stamps/spire2.svg", ServerLevelRenderer.stampAssetPath(8), "spire stamp asset");
 		assertEquals("", ServerLevelRenderer.stampAssetPath(4), "unexported cactus stamp skipped");
 	}
 

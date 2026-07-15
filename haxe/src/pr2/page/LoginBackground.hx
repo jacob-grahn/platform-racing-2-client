@@ -1,19 +1,21 @@
 package pr2.page;
 
 import openfl.display.Bitmap;
+import openfl.display.DisplayObject;
 import openfl.display.PixelSnapping;
 import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.utils.Assets;
 import pr2.Constants;
+import pr2.runtime.SvgAsset;
 
 class LoginBackground extends Sprite {
 	private var layers:Array<LoginBackgroundLayer>;
 
 	public function new() {
 		super();
-		// Each scrolling layer's PNG is a single tile of art. In the Flash source
+		// Each scrolling layer is a single tile of art. In the Flash source
 		// (Symbol 376 -> Symbol 364/367/370/375) the looping is built from two
 		// copies of that tile placed one tileWidth apart, both sliding left by one
 		// tileWidth per loop so a copy always covers the seam the other leaves
@@ -21,10 +23,10 @@ class LoginBackground extends Sprite {
 		// (drawingBounds 2545 vs tileWidth ~1250), so a single copy never exposes a
 		// gap. See art/raster-manifest-login.json for trim values.
 		layers = [
-			new LoginBackgroundLayer("assets/login/bg_sky@4x.png", -245, -162, 4, 0, 0, 1.0, 1.00010681152344, 1, 0, 0, 1),
-			new LoginBackgroundLayer("assets/login/bg_far@4x.png", 46, 0, 4, -15.65, 240.25, 1.0, 1.0, 1508, 0, 1276.0, 2),
-			new LoginBackgroundLayer("assets/login/bg_mid@4x.png", 119, -615, 4, -36.75, 263.4, 1.00004577636719, 1.0006103515625, 383, 0, 1235.7, 2),
-			// bg_front is rasterized at 2x (5078px wide) rather than 4x (10158px).
+			new LoginBackgroundLayer("assets/svg/login/bg_sky.svg", 0, 0, 1, 0, 0, 1.0, 1.00010681152344, 1, 0, 0, 1),
+			new LoginBackgroundLayer("assets/svg/login/bg_far.svg", 0, 0, 1, -15.65, 240.25, 1.0, 1.0, 1508, 0, 1276.0, 2),
+			new LoginBackgroundLayer("assets/svg/login/bg_mid.svg", 0, 0, 1, -36.75, 263.4, 1.00004577636719, 1.0006103515625, 383, 0, 1235.7, 2),
+			// bg_front's SVG contains an embedded bitmap, retained at 2x (5078px wide).
 			// At 4x it exceeds the WebGL MAX_TEXTURE_SIZE (8192 on many GPUs), so the
 			// texture upload fails and the layer paints as an opaque black quad over
 			// the sky. As a fast-scrolling foreground silhouette it does not need 4x
@@ -57,9 +59,8 @@ class LoginBackground extends Sprite {
 }
 
 private class LoginBackgroundLayer extends Sprite {
-	private var bitmaps:Array<Bitmap> = [];
-	private var trimX:Int;
-	private var scale:Int;
+	private var artwork:Array<DisplayObject> = [];
+	private var artOffsetX:Float;
 	private var totalFrames:Int;
 	private var baseTx:Float;
 	private var tileWidth:Float;
@@ -80,11 +81,11 @@ private class LoginBackgroundLayer extends Sprite {
 		copies:Int
 	) {
 		super();
-		this.trimX = trimX;
-		this.scale = scale;
 		this.totalFrames = totalFrames;
 		this.baseTx = baseTx;
 		this.tileWidth = tileWidth;
+		var vectorAsset = StringTools.endsWith(assetPath, ".svg");
+		artOffsetX = vectorAsset ? 0 : trimX / scale;
 
 		// The bg-symbol layer placement (Symbol 376 matrix) is static; only the
 		// tile instances scroll, so set it once on the container.
@@ -96,14 +97,19 @@ private class LoginBackgroundLayer extends Sprite {
 		// Lay out `copies` tiles spaced one tileWidth apart so that as the group
 		// slides left by tileWidth over a loop, a trailing copy fills the gap the
 		// leading copy opens up.
-		var bitmapData = Assets.getBitmapData(assetPath);
 		for (i in 0...copies) {
-			var bitmap = new Bitmap(bitmapData, PixelSnapping.AUTO, true);
-			bitmap.y = trimY / scale;
-			bitmap.scaleX = 1 / scale;
-			bitmap.scaleY = 1 / scale;
-			addChild(bitmap);
-			bitmaps.push(bitmap);
+			var display:DisplayObject;
+			if (vectorAsset) {
+				display = SvgAsset.create(assetPath);
+			} else {
+				var bitmap = new Bitmap(Assets.getBitmapData(assetPath), PixelSnapping.AUTO, true);
+				bitmap.y = trimY / scale;
+				bitmap.scaleX = 1 / scale;
+				bitmap.scaleY = 1 / scale;
+				display = bitmap;
+			}
+			addChild(display);
+			artwork.push(display);
 		}
 		updatePosition();
 	}
@@ -121,8 +127,8 @@ private class LoginBackgroundLayer extends Sprite {
 		// loop. Because adjacent copies are identical art exactly tileWidth apart,
 		// the wrap from one frame to the next is seamless.
 		var scroll = totalFrames > 1 ? -tileWidth * (frame / totalFrames) : 0;
-		for (i in 0...bitmaps.length) {
-			bitmaps[i].x = trimX / scale + baseTx + i * tileWidth + scroll;
+		for (i in 0...artwork.length) {
+			artwork[i].x = artOffsetX + baseTx + i * tileWidth + scroll;
 		}
 	}
 }

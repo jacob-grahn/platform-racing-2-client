@@ -43,19 +43,8 @@ class CharacterPartSetLoader {
 				return;
 			}
 			var atlas = CharacterAtlas.parse(json, jsonPath);
-			var bitmapFuture = Assets.loadBitmapData(atlas.assetImagePath);
-			if (bitmapFuture == null) {
-				failed.set(key, true);
-				flush(key);
-				return;
-			}
-			bitmapFuture.onComplete(function(_):Void {
-				loaded.set(key, atlas);
-				flush(key);
-			}).onError(function(_):Void {
-				failed.set(key, true);
-				flush(key);
-			});
+			loaded.set(key, atlas);
+			flush(key);
 		}).onError(function(_):Void {
 			failed.set(key, true);
 			flush(key);

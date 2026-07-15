@@ -3,20 +3,19 @@ package pr2.page;
 #if js
 import js.Browser;
 #end
-import openfl.display.Bitmap;
 import openfl.display.InteractiveObject;
-import openfl.display.PixelSnapping;
+import openfl.display.Shape;
 import openfl.events.TimerEvent;
 import openfl.filters.GlowFilter;
 import openfl.text.TextField;
 import openfl.text.TextFieldAutoSize;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
-import openfl.utils.Assets;
 import openfl.utils.Timer;
 import pr2.Constants;
 import pr2.page.LoginSocketProbe.LoginProbeStatus;
 import pr2.runtime.FontResolver;
+import pr2.runtime.SvgAsset;
 import pr2.net.AccountCreationClient;
 import pr2.net.ForgotPasswordClient;
 import pr2.net.LoginAuthClient;
@@ -43,13 +42,12 @@ private typedef LoginPageArt = {
 /**
 	Login menu ported from the Flash `menu.LoginPage`.
 
-	The page art is baked through the Flash -> SVG -> PNG pipeline. The original
+	The page art is rendered from the Animate SVG export. The original
 	Flash menu buttons are runtime text controls, so only those labels and hit
 	areas are rebuilt in Haxe.
 **/
 class LoginPage extends Page {
-	private static inline var LOGIN_PAGE_NO_LOGO_ASSET = "assets/login/login_page_no_logo@4x.png";
-	private static inline var LOGIN_PAGE_SCALE = 4;
+	private static inline var LOGIN_PAGE_NO_LOGO_ASSET = "assets/svg/login/login_page_no_logo.svg";
 	private static inline var LOGIN_PAGE_NO_LOGO_TRIM_X = 868;
 	private static inline var LOGIN_PAGE_NO_LOGO_TRIM_Y = 846;
 
@@ -58,7 +56,7 @@ class LoginPage extends Page {
 	private static inline var MENU_SPACING:Float = 22;
 
 	private var background:Null<LoginBackground>;
-	private var pageArt:Null<Bitmap>;
+	private var pageArt:Null<Shape>;
 	private var titleText:Null<TextField>;
 	private var buttons:Array<LoginPageMenuButton> = [];
 	private var activePopup:Null<LoginFlashPopup>;
@@ -88,7 +86,7 @@ class LoginPage extends Page {
 		addChild(background);
 
 		var art = loginPageArtFor(siteMode);
-		pageArt = createBitmap(art.assetPath, art.trimX, art.trimY, LOGIN_PAGE_SCALE);
+		pageArt = SvgAsset.create(art.assetPath);
 		addChild(pageArt);
 
 		titleText = createTitle();
@@ -615,15 +613,6 @@ class LoginPage extends Page {
 			socketProbe = null;
 		}
 		loginGate = null;
-	}
-
-	private static function createBitmap(assetPath:String, trimX:Int, trimY:Int, scale:Int):Bitmap {
-		var bitmap = new Bitmap(Assets.getBitmapData(assetPath), PixelSnapping.AUTO, true);
-		bitmap.x = trimX / scale;
-		bitmap.y = trimY / scale;
-		bitmap.scaleX = 1 / scale;
-		bitmap.scaleY = 1 / scale;
-		return bitmap;
 	}
 
 	private static function loginPageArtFor(_siteMode:String):LoginPageArt {

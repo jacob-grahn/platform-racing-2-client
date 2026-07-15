@@ -117,6 +117,7 @@ import pr2.runtime.EpicFlashTest;
 import pr2.runtime.PR2MovieClipRuntimeTest;
 import pr2.runtime.StaticSubtreeAnalyzerTest;
 import pr2.runtime.FlattenSafetyGateTest;
+import pr2.runtime.SvgAssetTest;
 import pr2.ui.EmblemLoaderTest;
 import pr2.ui.GuildNameTest;
 import pr2.ui.GpNotificationTest;
@@ -136,6 +137,7 @@ class DeterministicTestSuite {
 		DeterministicTestMode.runSuite("FlButtonTest", ["runtime"], FlButtonTest.main);
 		DeterministicTestMode.runSuite("FlComponentsTest", ["runtime"], FlComponentsTest.main);
 		DeterministicTestMode.runSuite("EpicFlashTest", ["runtime"], EpicFlashTest.main);
+		DeterministicTestMode.runSuite("SvgAssetTest", ["runtime", "ui", "character", "level-rendering"], SvgAssetTest.main);
 		DeterministicTestMode.runSuite("GpNotificationTest", ["ui"], GpNotificationTest.main);
 		DeterministicTestMode.runSuite("EmblemLoaderTest", ["ui"], EmblemLoaderTest.main);
 		DeterministicTestMode.runSuite("GuildNameTest", ["ui"], GuildNameTest.main);

@@ -9,6 +9,7 @@ import openfl.utils.Assets;
 import pr2.level.ObjectCodes;
 import pr2.level.ServerLevelRenderer;
 import pr2.runtime.PR2MovieClip;
+import pr2.runtime.SvgAsset;
 import pr2.util.DisplayUtil;
 
 class Objects {
@@ -110,14 +111,11 @@ class Objects {
 
 	private static function stampDisplay(code:Int, linkage:String):DisplayObject {
 		var assetPath = ServerLevelRenderer.stampAssetPath(code);
-		if (assetPath != "" && Assets.exists(assetPath, AssetType.IMAGE)) {
-			var bitmap = new Bitmap(Assets.getBitmapData(assetPath));
+		if (assetPath != "" && Assets.exists(assetPath, AssetType.TEXT)) {
 			var size = stampSize(code);
-			bitmap.name = linkage;
-			bitmap.smoothing = true;
-			bitmap.width = size.width;
-			bitmap.height = size.height;
-			return bitmap;
+			var vector = SvgAsset.createFitted(assetPath, size.width, size.height);
+			vector.name = linkage;
+			return vector;
 		}
 		var clip = fromLinkage(linkage);
 		if (code != ObjectCodes.STAMP_CACTUS && code != ObjectCodes.STAMP_BUILDING1) {

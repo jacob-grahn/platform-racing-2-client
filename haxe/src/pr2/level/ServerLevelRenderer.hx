@@ -840,9 +840,9 @@ class ServerLevelRenderer extends Sprite {
 		}
 	}
 
-	/** The committed raster export retained for asset-inventory compatibility. */
+	/** Animate-exported vector used by the editor preview. */
 	public static inline function arrowOverlayAssetPath():String {
-		return "assets/blocks/arrow_overlay@4x.png";
+		return "assets/svg/blocks/arrow_overlay.svg";
 	}
 
 	/**
@@ -861,27 +861,27 @@ class ServerLevelRenderer extends Sprite {
 
 	public static function artBackgroundAssetPath(code:Int):String {
 		return switch (code) {
-			case 201: "assets/backgrounds/bg1@4x.webp";
-			case 202: "assets/backgrounds/bg2@4x.webp";
-			case 203: "assets/backgrounds/bg3@4x.webp";
-			case 204: "assets/backgrounds/bg4@4x.webp";
-			case 205: "assets/backgrounds/bg5@4x.webp";
-			case 206: "assets/backgrounds/bg6@4x.webp";
-			case 207: "assets/backgrounds/bg7@4x.webp";
+			case 201: "assets/svg/backgrounds/bg1.svg";
+			case 202: "assets/svg/backgrounds/bg2.svg";
+			case 203: "assets/svg/backgrounds/bg3.svg";
+			case 204: "assets/svg/backgrounds/bg4.svg";
+			case 205: "assets/svg/backgrounds/bg5.svg";
+			case 206: "assets/svg/backgrounds/bg6.svg";
+			case 207: "assets/svg/backgrounds/bg7.svg";
 			default: "";
 		}
 	}
 
 	public static function stampAssetPath(code:Int):String {
 		return switch (code) {
-			case 0: "assets/stamps/tree1@4x.png";
-			case 1: "assets/stamps/tree2@4x.png";
-			case 2: "assets/stamps/tree3@4x.png";
-			case 3: "assets/stamps/petrified_tree@4x.png";
-			case 5: "assets/stamps/rock1@4x.png";
-			case 6: "assets/stamps/rock2@4x.png";
-			case 7: "assets/stamps/spire1@4x.png";
-			case 8: "assets/stamps/spire2@4x.png";
+			case 0: "assets/svg/stamps/tree1.svg";
+			case 1: "assets/svg/stamps/tree2.svg";
+			case 2: "assets/svg/stamps/tree3.svg";
+			case 3: "assets/svg/stamps/petrified_tree.svg";
+			case 5: "assets/svg/stamps/rock1.svg";
+			case 6: "assets/svg/stamps/rock2.svg";
+			case 7: "assets/svg/stamps/spire1.svg";
+			case 8: "assets/svg/stamps/spire2.svg";
 			default: "";
 		}
 	}
@@ -1290,17 +1290,8 @@ class ServerLevelRenderer extends Sprite {
 		addChild(artBackgroundContainer);
 		artBackgroundTintScale = backgroundCode == 204 || backgroundCode == BG5_CODE ? 0 : 1;
 		var assetPath = artBackgroundAssetPath(level.artBackgroundCode);
-		if (assetPath != "") {
-			ArtBackgroundLoader.request(assetPath, function(bitmapData:Null<BitmapData>):Void {
-				if (bitmapData == null || artBackgroundContainer == null) {
-					return;
-				}
-				var bitmap = new Bitmap(bitmapData);
-				bitmap.smoothing = true;
-				bitmap.width = Constants.STAGE_WIDTH;
-				bitmap.height = Constants.STAGE_HEIGHT;
-				addArtBackgroundChild(bitmap, 0);
-			});
+		if (assetPath != "" && Assets.exists(assetPath, AssetType.TEXT)) {
+			addArtBackgroundChild(pr2.runtime.SvgAsset.createFitted(assetPath, Constants.STAGE_WIDTH, Constants.STAGE_HEIGHT), 0);
 		}
 		if (backgroundCode == BG5_CODE) {
 			var grid = createBg5CircleGrid();

@@ -36,9 +36,8 @@ class BakedSymbolAtlas {
 
 	private static var kongregateAtlas:Null<GenericAtlas>;
 
-	// True when `create` would replace this symbol with a baked Bitmap. Lets the
-	// static-subtree analysis treat a baked symbol as a single static quad without
-	// loading the atlas image or allocating a display object.
+	// True when `create` replaces this symbol with one static exported asset. Lets
+	// static-subtree analysis avoid descending into the original timeline tree.
 	public static function isBaked(symbolName:String):Bool {
 		return KONGREGATE_SYMBOLS.exists(symbolName);
 	}
@@ -48,7 +47,14 @@ class BakedSymbolAtlas {
 		if (frameName == null) {
 			return null;
 		}
+		var svgPath = 'assets/svg/intro/kongregate/$frameName.svg';
+		if (Assets.exists(svgPath, openfl.utils.AssetType.TEXT)) {
+			var vector = new Sprite();
+			vector.addChild(SvgAsset.create(svgPath));
+			return vector;
+		}
 
+		// Retain the atlas fallback for tests and older external asset bundles.
 		var atlas = loadKongregateAtlas();
 		if (atlas == null) {
 			return null;

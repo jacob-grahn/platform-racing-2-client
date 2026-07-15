@@ -1,14 +1,12 @@
 package pr2.ui;
 
-import openfl.display.Bitmap;
-import openfl.display.PixelSnapping;
 import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.MouseEvent;
 import openfl.geom.ColorTransform;
 import openfl.media.SoundMixer;
 import openfl.media.SoundTransform;
-import openfl.utils.Assets;
+import pr2.runtime.SvgAsset;
 
 /**
 	Global mute toggle ported from the Flash `ui.MuteButton`. In the original
@@ -20,23 +18,16 @@ import openfl.utils.Assets;
 	so positioning the sprite at the Flash coordinates places it identically.
 **/
 class MuteButton extends Sprite {
-	private static inline var MUTE_BUTTON_ASSET = "assets/login/mute_button@4x.png";
-	private static inline var MUTE_BUTTON_SCALE = 4;
-	private static inline var MUTE_BUTTON_TRIM_X = -59;
-	private static inline var MUTE_BUTTON_TRIM_Y = -75;
+	private static inline var MUTE_BUTTON_ASSET = "assets/svg/login/mute_button.svg";
 	public static var muted(default, null):Bool = false;
 
-	private var bitmap:Bitmap;
+	private var artwork:Shape;
 	private var waves:Shape;
 
 	public function new() {
 		super();
-		bitmap = new Bitmap(Assets.getBitmapData(MUTE_BUTTON_ASSET), PixelSnapping.AUTO, true);
-		bitmap.x = MUTE_BUTTON_TRIM_X / MUTE_BUTTON_SCALE;
-		bitmap.y = MUTE_BUTTON_TRIM_Y / MUTE_BUTTON_SCALE;
-		bitmap.scaleX = 1 / MUTE_BUTTON_SCALE;
-		bitmap.scaleY = 1 / MUTE_BUTTON_SCALE;
-		addChild(bitmap);
+		artwork = SvgAsset.create(MUTE_BUTTON_ASSET);
+		addChild(artwork);
 
 		waves = createWaves();
 		addChild(waves);

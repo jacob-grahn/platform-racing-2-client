@@ -1,21 +1,15 @@
 package pr2.character;
 
-import openfl.display.Bitmap;
-import openfl.display.BitmapData;
-import openfl.display.PixelSnapping;
+import openfl.display.Shape;
 import openfl.display.Sprite;
-import openfl.geom.Point;
-import openfl.geom.Rectangle;
-import openfl.utils.Assets;
 import pr2.character.CharacterAtlas.CharacterAtlasFrame;
+import pr2.runtime.SvgAsset;
 
 class CharacterAtlasFrameSprite extends Sprite {
-	private static final bitmapDataByFrame:Map<String, BitmapData> = new Map();
-
 	public final atlas:CharacterAtlas;
 	public final frameName:String;
 	public final frame:CharacterAtlasFrame;
-	public final bitmap:Bitmap;
+	public final vector:Shape;
 
 	public var logicalX(get, never):Float;
 	public var logicalY(get, never):Float;
@@ -32,45 +26,17 @@ class CharacterAtlasFrameSprite extends Sprite {
 		}
 		frame = atlasFrame;
 
-		var scale = frame.scale;
-		var bitmapData = bitmapDataForFrame(atlas, frame);
-		bitmap = new Bitmap(bitmapData, PixelSnapping.AUTO, true);
-		bitmap.x = frame.sourceTrim.x / scale;
-		bitmap.y = frame.sourceTrim.y / scale;
-		bitmap.scaleX = 1 / scale;
-		bitmap.scaleY = 1 / scale;
-		addChild(bitmap);
+		vector = SvgAsset.create(svgAssetPath(frame));
+		addChild(vector);
 	}
 
 	public static function load(atlasAssetPath:String, frameName:String):CharacterAtlasFrameSprite {
 		return new CharacterAtlasFrameSprite(CharacterAtlas.load(atlasAssetPath), frameName);
 	}
 
-	private static function bitmapDataForFrame(atlas:CharacterAtlas, frame:CharacterAtlasFrame):BitmapData {
-		var key = bitmapDataCacheKey(atlas, frame);
-		var cached = bitmapDataByFrame.get(key);
-		if (cached != null) {
-			return cached;
-		}
-
-		var bitmapData = frame.sourceTrim.empty ? new BitmapData(1, 1, true, 0) : cropFrame(atlas, frame);
-		bitmapDataByFrame.set(key, bitmapData);
-		return bitmapData;
-	}
-
-	private static function cropFrame(atlas:CharacterAtlas, frame:CharacterAtlasFrame):BitmapData {
-		var source = Assets.getBitmapData(atlas.assetImagePath);
-		var cropped = new BitmapData(frame.frame.width, frame.frame.height, true, 0);
-		cropped.copyPixels(
-			source,
-			new Rectangle(frame.frame.x, frame.frame.y, frame.frame.width, frame.frame.height),
-			new Point()
-		);
-		return cropped;
-	}
-
-	private static function bitmapDataCacheKey(atlas:CharacterAtlas, frame:CharacterAtlasFrame):String {
-		return atlas.assetImagePath + ":" + frame.name + ":" + frame.frame.x + "," + frame.frame.y + "," + frame.frame.width + "," + frame.frame.height;
+	private static function svgAssetPath(frame:CharacterAtlasFrame):String {
+		var path = StringTools.replace(frame.pngPath, "art/png/", "assets/svg/");
+		return StringTools.replace(path, "@4x.png", ".svg");
 	}
 
 	private function get_logicalX():Float {

@@ -11,6 +11,7 @@ import pr2.level.ObjectCodes;
 import pr2.level.ServerLevelRenderer;
 import pr2.page.EditorBlockOptions;
 import pr2.runtime.PR2MovieClip;
+import pr2.runtime.SvgAsset;
 import pr2.util.DisplayUtil;
 
 class EditorBlockObject extends Sprite {
@@ -348,14 +349,11 @@ class EditorBlockObject extends Sprite {
 			holder.graphics.endFill();
 		}
 		var rotation = ServerLevelRenderer.arrowOverlayRotation(code);
-		if (rotation != null && Assets.exists(ServerLevelRenderer.arrowOverlayAssetPath(), AssetType.IMAGE)) {
-			var arrow = new Bitmap(Assets.getBitmapData(ServerLevelRenderer.arrowOverlayAssetPath()));
-			arrow.width = LevelEditor.segSize;
-			arrow.height = LevelEditor.segSize;
+		if (rotation != null && Assets.exists(ServerLevelRenderer.arrowOverlayAssetPath(), AssetType.TEXT)) {
+			var arrow = SvgAsset.createFitted(ServerLevelRenderer.arrowOverlayAssetPath(), LevelEditor.segSize, LevelEditor.segSize);
 			arrow.x = LevelEditor.segSize / 2;
 			arrow.y = LevelEditor.segSize / 2;
 			arrow.rotation = rotation;
-			arrow.smoothing = false;
 			holder.addChild(arrow);
 		}
 		return holder;

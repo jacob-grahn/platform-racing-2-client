@@ -1,5 +1,6 @@
 --library lime
 --library openfl
+--library svg
 -cp haxe/src
 -cp haxe/test
 --main pr2.RealServerTestSuite

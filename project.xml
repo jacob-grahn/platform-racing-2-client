@@ -13,16 +13,19 @@
 	     names per weight so OpenFL's __fontByName variant lookup resolves bold/italic to the
 	     real outlines instead of browser faux-synthesis. -->
 	<assets path="assets/fonts" rename="assets/fonts" include="*.ttf" embed="true" />
-	<assets path="assets/blocks" rename="assets/blocks" />
-	<assets path="assets/character/atlases/hats" rename="assets/character/atlases/hats" embed="false" preload="false" />
-	<assets path="assets/character/atlases/part-sets" rename="assets/character/atlases/part-sets" embed="false" preload="false" />
-	<assets path="assets/intro/atlases" rename="assets/intro/atlases" />
-	<assets path="assets/login" rename="assets/login" />
-	<assets path="assets/backgrounds" rename="assets/backgrounds" include="*.webp" embed="false" preload="false" />
-	<assets path="assets/stamps" rename="assets/stamps" />
+	<assets path="assets/blocks" rename="assets/blocks" exclude="arrow_overlay@4x.png|arrow2_overlay@4x.png|egg_overlay@4x.png|crumble_piece@4x.png|brick_piece@4x.png|start_block_text@4x.png" />
+	<assets path="assets/character/atlases/hats" rename="assets/character/atlases/hats" include="*.json" />
+	<assets path="assets/character/atlases/part-sets" rename="assets/character/atlases/part-sets" include="*.json" />
+	<!-- bg_front contains an embedded source bitmap in Animate's SVG export, so
+	     it remains raster until the original artwork is replaced with vectors. -->
+	<assets path="assets/login" rename="assets/login" include="bg_front@2x.png" />
+	<!-- Animate-exported vectors are rendered directly by openfl/svg. Keeping the
+	     source SVGs here also prevents derived PNG/WebP copies from entering export/. -->
+	<assets path="art/svg" rename="assets/svg" include="*.svg" />
 	<template path="templates/html5/template/index.html" rename="index.html" if="html5" />
 
 	<haxelib name="openfl" />
+	<haxelib name="svg" />
 	<postbuild command="python3 tools/prune_html5_fonts.py" if="html5" />
 	<postbuild command="python3 tools/minify_html5_js.py" if="html5" />
 	<postbuild command="python3 tools/cache_bust_html5_js.py" if="html5" />
