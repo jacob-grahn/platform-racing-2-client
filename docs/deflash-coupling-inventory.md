@@ -17,15 +17,15 @@ migration should make them decrease without changing observable behavior or visu
 
 ## Summary
 
-- 798 coupling occurrences
-- 133 files with coupling
-- 130 migration-adapter files in the dependency allowlist
+- 796 coupling occurrences
+- 131 files with coupling
+- 128 migration-adapter files in the dependency allowlist
 
 | Coupling kind | Occurrences |
 | --- | ---: |
 | Fl control dependency | 49 |
 | Fl control usage | 147 |
-| PR2MovieClip dependency | 124 |
+| PR2MovieClip dependency | 122 |
 | frame-label navigation | 18 |
 | generated timeline dependency | 2 |
 | numeric/dynamic frame navigation | 35 |
@@ -38,7 +38,7 @@ migration should make them decrease without changing observable behavior or visu
 | Audio | 2 |
 | Character | 21 |
 | Gameplay UI and visuals | 113 |
-| Gameplay effects | 10 |
+| Gameplay effects | 8 |
 | Intro page | 4 |
 | Level editor | 196 |
 | Level objects | 2 |
@@ -211,7 +211,6 @@ migration should make them decrease without changing observable behavior or visu
 
 | Kind | API | Source |
 | --- | --- | --- |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/effects/ArrowEffect.hx:5` |
 | PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/effects/BlockPiece.hx:7` |
 | numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/effects/BlockPiece.hx:56` |
 | PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/effects/LaserShotTimeline.hx:4` |
@@ -219,7 +218,6 @@ migration should make them decrease without changing observable behavior or visu
 | frame-label navigation | `gotoAndPlay` | `haxe/src/pr2/effects/LaserShotTimeline.hx:35` |
 | PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/effects/MineExplosion.hx:7` |
 | PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/effects/Slash.hx:8` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/effects/StarEffect.hx:5` |
 | PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/effects/TeleportPop.hx:7` |
 
 ### Intro page

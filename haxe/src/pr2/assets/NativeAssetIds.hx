@@ -8,6 +8,7 @@ final class NativeAssetIds {
 
 enum abstract StaticSvg(String) to String {
 	var ArrowOverlay = "assets/svg/blocks/arrow_overlay.svg";
+	var Arrow2Overlay = "assets/svg/blocks/arrow2_overlay.svg";
 	var EggOverlay = "assets/svg/blocks/egg_overlay.svg";
 	var HeartHighlight = "assets/svg/timeline/graphics_symbol_917_14a7be666e/t00_l001_f0000_r00.svg";
 	var HeartMain = "assets/svg/timeline/graphics_symbol_917_14a7be666e/t00_l002_f0000_r00.svg";
@@ -17,6 +18,7 @@ enum abstract StaticSvg(String) to String {
 	var LoginBackgroundSky = "assets/svg/login/bg_sky.svg";
 	var QuantityPanel = "assets/svg/timeline/ui_shadowbg_95643069a8/t00_l000_f0000_r00.svg";
 	var RockStamp = "assets/svg/stamps/rock1.svg";
+	var SpeedBurstStar = "assets/svg/timeline/ui_pages_levels_in_game_effects_speedburst_speedburststar_64db9149b6/t00_l000_f0000_r00.svg";
 	var TimerPanel = "assets/svg/timeline/ui_popups_outside_levels_bg_d14a954e12/t00_l000_f0000_r00.svg";
 	var TreeStamp = "assets/svg/stamps/tree1.svg";
 }

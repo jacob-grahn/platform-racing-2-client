@@ -1,8 +1,10 @@
 package pr2.effects;
 
+import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.Event;
-import pr2.runtime.PR2MovieClip;
+import pr2.assets.NativeAssetIds.StaticSvg;
+import pr2.assets.NativeAssets;
 
 /**
 	Port of `effects.ArrowEffect`: the small drifting arrow particle emitted by
@@ -13,7 +15,7 @@ class ArrowEffect extends Sprite {
 	public static inline var FADE_RATE:Float = 0.06;
 	public static inline var SCALE:Float = 0.25;
 
-	public var graphic(default, null):PR2MovieClip;
+	public var graphic(default, null):Shape;
 	private var velY:Float = 0;
 	private var framesRemaining:Int = LIFETIME_FRAMES;
 
@@ -23,7 +25,7 @@ class ArrowEffect extends Sprite {
 		y = startY;
 		scaleX = SCALE;
 		scaleY = SCALE;
-		graphic = PR2MovieClip.fromLinkage("Arrow2Graphic", {maxNestedDepth: 2});
+		graphic = NativeAssets.svg(StaticSvg.Arrow2Overlay);
 		addChild(graphic);
 		addEventListener(Event.ENTER_FRAME, tick);
 	}
@@ -41,8 +43,7 @@ class ArrowEffect extends Sprite {
 	public function remove():Void {
 		removeEventListener(Event.ENTER_FRAME, tick);
 		if (graphic != null) {
-			graphic.dispose();
-			removeChild(graphic);
+			if (graphic.parent == this) removeChild(graphic);
 			graphic = null;
 		}
 		if (parent != null) {

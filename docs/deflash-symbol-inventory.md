@@ -19,8 +19,8 @@ and screenshot/parity tests.
 
 ## Summary
 
-- 163 unique production root linkages
-- 184 audited root usages
+- 161 unique production root linkages
+- 182 audited root usages
 - 378 handwritten source files scanned
 - Excluded developer routes: `SymbolPreview` and files under `pr2.harness`
 - Excluded transitive construction: files under `pr2.runtime`
@@ -30,7 +30,7 @@ and screenshot/parity tests.
 | --- | ---: |
 | UI composition | 97 |
 | character rig | 1 |
-| simple frame animation | 11 |
+| simple frame animation | 9 |
 | state art | 25 |
 | static art | 25 |
 | tweened animation | 4 |
@@ -76,12 +76,10 @@ and screenshot/parity tests.
 
 | Linkage | Replacement shape | Source |
 | --- | --- | --- |
-| `Arrow2Graphic` | simple frame animation | `haxe/src/pr2/effects/ArrowEffect.hx:26` |
 | `BrickPieceGraphic` | static art | `haxe/src/pr2/effects/BlockPiece.hx:37`; dynamic |
 | `CrumblePieceGraphic` | static art | `haxe/src/pr2/effects/BlockPiece.hx:37`; dynamic |
 | `MineExplodeAnimation` | simple frame animation | `haxe/src/pr2/effects/MineExplosion.hx:23` |
 | `MinePieceGraphic` | static art | `haxe/src/pr2/effects/BlockPiece.hx:37`; dynamic |
-| `PointyStar` | simple frame animation | `haxe/src/pr2/effects/StarEffect.hx:17` |
 | `SlashAnimation` | simple frame animation | `haxe/src/pr2/effects/Slash.hx:42` |
 | `TeleportAnimation` | simple frame animation | `haxe/src/pr2/effects/TeleportPop.hx:23` |
 
