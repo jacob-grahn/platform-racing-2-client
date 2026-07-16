@@ -121,6 +121,7 @@ import pr2.runtime.SvgAssetTest;
 import pr2.ui.EmblemLoaderTest;
 import pr2.ui.GuildNameTest;
 import pr2.ui.GpNotificationTest;
+import pr2.ui.NativePresentationFoundationTest;
 import pr2.ui.PageNavigationFocusTest;
 import pr2.ui.SelectableButtonTest;
 import pr2.util.AsyncRemovalGuardTest;
@@ -140,6 +141,7 @@ class DeterministicTestSuite {
 		DeterministicTestMode.runSuite("ExplicitBitmapCacheTest", ["runtime", "character"], ExplicitBitmapCacheTest.main);
 		DeterministicTestMode.runSuite("SvgAssetTest", ["runtime", "ui", "character", "level-rendering"], SvgAssetTest.main);
 		DeterministicTestMode.runSuite("GpNotificationTest", ["ui"], GpNotificationTest.main);
+		DeterministicTestMode.runSuite("NativePresentationFoundationTest", ["ui", "runtime"], NativePresentationFoundationTest.main);
 		DeterministicTestMode.runSuite("EmblemLoaderTest", ["ui"], EmblemLoaderTest.main);
 		DeterministicTestMode.runSuite("GuildNameTest", ["ui"], GuildNameTest.main);
 		DeterministicTestMode.runSuite("SelectableButtonTest", ["ui"], SelectableButtonTest.main);

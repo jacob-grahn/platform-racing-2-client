@@ -1,0 +1,27 @@
+{
+  "svg": {
+    "ArrowOverlay": "assets/svg/blocks/arrow_overlay.svg",
+    "EggOverlay": "assets/svg/blocks/egg_overlay.svg",
+    "LoginBackgroundFar": "assets/svg/login/bg_far.svg",
+    "LoginBackgroundMid": "assets/svg/login/bg_mid.svg",
+    "LoginBackgroundSky": "assets/svg/login/bg_sky.svg",
+    "RockStamp": "assets/svg/stamps/rock1.svg",
+    "TreeStamp": "assets/svg/stamps/tree1.svg"
+  },
+  "bitmap": {
+    "BasicBlock": "assets/blocks/basic1.png",
+    "FrontLoginBackground": "assets/login/bg_front@2x.png",
+    "TeleportBlock": "assets/blocks/teleport_block.png"
+  },
+  "font": {
+    "Body": "Arial",
+    "Display": "Gwibble",
+    "Icons": "FontAwesome"
+  },
+  "sound": {
+    "ButtonClick": "assets/audio/sfx/menu_noodle_town_2.mp3",
+    "CountdownGo": "assets/audio/sfx/countdown_go.mp3",
+    "CountdownReady": "assets/audio/sfx/countdown_ready.mp3",
+    "Jump": "assets/audio/sfx/jump.mp3"
+  }
+}

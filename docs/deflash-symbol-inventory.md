@@ -21,7 +21,7 @@ and screenshot/parity tests.
 
 - 173 unique production root linkages
 - 194 audited root usages
-- 356 handwritten source files scanned
+- 375 handwritten source files scanned
 - Excluded developer routes: `SymbolPreview` and files under `pr2.harness`
 - Excluded transitive construction: files under `pr2.runtime`
 - Explicitly excluded as uncalled: `FollowFadeEffect` and `ScaffoldTab`

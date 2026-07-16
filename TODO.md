@@ -73,27 +73,6 @@ Campaign payload reference:
   `validateSaveString`; `data` is backtick-delimited with read mode in
   `data[0]` and the relative-coordinate block string in `data[1]`.
 
-##### Native Presentation Foundation
-
-- Define a small typed asset API for static SVGs, bitmaps, fonts, and sounds.
-  Production code should request named PR2 assets or view factories rather than
-  raw XFL library paths or linkage-class strings. Keep asset paths as generated
-  data where useful, but make missing or renamed production assets fail during
-  generation or compilation instead of at runtime.
-- Add a lightweight native animation API with explicit playback state,
-  simulation/frame-clock advancement, looping, completion callbacks, and
-  teardown. Support the few shapes actually needed by PR2—frame sequences,
-  property tweens, and composed clips—without recreating a general Flash
-  timeline or frame-script interpreter.
-- Add PR2-native controls for buttons, check boxes, sliders, text inputs,
-  selects/lists, and scroll bars. Give them typed state and callbacks, explicit
-  focus/keyboard behavior, reusable skins, deterministic teardown, and parity
-  tests against the existing `Fl*` implementations.
-- Establish a typed view pattern in which a screen or dialog owns concrete
-  fields such as `confirmButton`, `nameInput`, and `contentHolder`. Permit a
-  generator or compact layout data to build these views, but do not expose
-  recursive instance-name lookup as their public API.
-
 ##### Prove The Migration Path
 
 - Port one representative, modest dialog end to end. It should include static

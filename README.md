@@ -131,6 +131,38 @@ Current foundation:
   without login/lobby/server flow and exposes deterministic debug state for
   movement checks.
 
+### De-Flash Architecture Goal
+
+The migration replaces runtime linkage lookup and recursive instance-name
+discovery with explicitly constructed, typed views:
+
+Current:
+
+```haxe
+art = PR2MovieClip.fromLinkage("SomePopupGraphic");
+nameBox = LobbyArt.text(art, "nameBox");
+button = DisplayUtil.findByName(art, "ok_bt");
+```
+
+Target:
+
+```haxe
+class ConfirmDialogView extends Sprite {
+    public final message:TextField;
+    public final confirmButton:GameButton;
+    public final cancelButton:GameButton;
+
+    public function new() {
+        super();
+        // Explicit construction and layout.
+    }
+}
+```
+
+This is a code-structure and asset-pipeline change only; visuals and behavior
+must remain unchanged. The native conventions are documented in
+[`docs/native-presentation-foundation.md`](docs/native-presentation-foundation.md).
+
 ## Haxe/OpenFL Commands
 
 ### Pinned Native Toolchain
