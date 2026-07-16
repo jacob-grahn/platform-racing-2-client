@@ -42,7 +42,7 @@ and screenshot/parity tests.
 | Linkage | Replacement shape | Source |
 | --- | --- | --- |
 | `CharacterGraphic` | character rig | `haxe/src/pr2/character/CharacterDisplay.hx:89` |
-| `DjinnIceGraphic` | static art | `haxe/src/pr2/character/PhysicsParticle.hx:101`; dynamic |
+| `DjinnIceGraphic` | static art | `haxe/src/pr2/character/PhysicsParticle.hx:108`; dynamic |
 
 ### Gameplay UI and visuals
 

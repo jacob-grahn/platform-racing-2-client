@@ -14,6 +14,7 @@ enum abstract StaticSvg(String) to String {
 	var ArrowButtonOver = "assets/svg/timeline/graphics_symbol_1180_178f938050/t00_l000_f0000_r00.svg";
 	var ArrowButtonUp = "assets/svg/timeline/graphics_symbol_1179_688a9ff27c/t00_l000_f0000_r00.svg";
 	var EggOverlay = "assets/svg/blocks/egg_overlay.svg";
+	var DjinnIce = "assets/svg/timeline/graphics_symbol_26_97e4207de0/t00_l000_f0000_r00.svg";
 	var HeartHighlight = "assets/svg/timeline/graphics_symbol_917_14a7be666e/t00_l001_f0000_r00.svg";
 	var HeartMain = "assets/svg/timeline/graphics_symbol_917_14a7be666e/t00_l002_f0000_r00.svg";
 	var HeartShadow = "assets/svg/timeline/graphics_symbol_917_14a7be666e/t00_l000_f0000_r00.svg";

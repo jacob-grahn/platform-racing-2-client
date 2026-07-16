@@ -4,6 +4,8 @@ import openfl.display.DisplayObject;
 import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.geom.ColorTransform;
+import pr2.assets.NativeAssetIds.StaticSvg;
+import pr2.assets.NativeAssets;
 import pr2.runtime.PR2MovieClip;
 
 typedef PhysicsParticleParams = {
@@ -98,6 +100,11 @@ class PhysicsParticle extends Sprite {
 	}
 
 	private function makeGraphic(name:String):DisplayObject {
+		if (name == "DjinnIceGraphic") {
+			var ice = NativeAssets.svg(StaticSvg.DjinnIce);
+			ice.scaleX = ice.scaleY = 0.100006103515625;
+			return ice;
+		}
 		return PR2MovieClip.fromLinkage(name, {maxNestedDepth: 2});
 	}
 

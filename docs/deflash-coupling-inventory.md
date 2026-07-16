@@ -87,13 +87,13 @@ migration should make them decrease without changing observable behavior or visu
 | numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/character/CharacterDisplay.hx:344` |
 | numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/character/CharacterDisplay.hx:372` |
 | timeline child lookup | `getChildByTimelineName` | `haxe/src/pr2/character/CharacterDisplay.hx:609` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/character/PhysicsParticle.hx:7` |
+| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/character/PhysicsParticle.hx:9` |
 
 ### Gameplay UI and visuals
 
 | Kind | API | Source |
 | --- | --- | --- |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/gameplay/CatCaptcha.hx:14` |
+| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/gameplay/CatCaptcha.hx:15` |
 | PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/gameplay/Countdown.hx:7` |
 | timeline child lookup | `getChildByTimelineName` | `haxe/src/pr2/gameplay/CourseParticleEffects.hx:80` |
 | PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/gameplay/CowboyMode.hx:4` |

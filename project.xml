@@ -43,6 +43,7 @@
 	<asset path="art/svg/timeline/movieclips_pr2_graphics_1_apr_2014_fla_symbol_1224_f93a5fd6a6/t00_l002_f0000_r00.svg" rename="assets/svg/timeline/movieclips_pr2_graphics_1_apr_2014_fla_symbol_1224_f93a5fd6a6/t00_l002_f0000_r00.svg" />
 	<asset path="art/svg/timeline/movieclips_pr2_graphics_1_apr_2014_fla_symbol_1224_f93a5fd6a6/t00_l002_f0005_r00.svg" rename="assets/svg/timeline/movieclips_pr2_graphics_1_apr_2014_fla_symbol_1224_f93a5fd6a6/t00_l002_f0005_r00.svg" />
 	<asset path="art/svg/timeline/graphics_symbol_1223_06a8b36222/t00_l000_f0000_r00.svg" rename="assets/svg/timeline/graphics_symbol_1223_06a8b36222/t00_l000_f0000_r00.svg" />
+	<asset path="art/svg/timeline/graphics_symbol_26_97e4207de0/t00_l000_f0000_r00.svg" rename="assets/svg/timeline/graphics_symbol_26_97e4207de0/t00_l000_f0000_r00.svg" />
 	<asset path="assets/bitmaps/mine.jpg" />
 	<template path="templates/html5/template/index.html" rename="index.html" if="html5" />
 
