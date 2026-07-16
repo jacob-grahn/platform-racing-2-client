@@ -31,6 +31,10 @@
 	<asset path="art/svg/timeline/ui_popups_outside_levels_bg_d14a954e12/t00_l000_f0000_r00.svg" rename="assets/svg/timeline/ui_popups_outside_levels_bg_d14a954e12/t00_l000_f0000_r00.svg" />
 	<asset path="art/svg/timeline/ui_pages_levels_in_game_effects_speedburst_speedburststar_64db9149b6/t00_l000_f0000_r00.svg" rename="assets/svg/timeline/ui_pages_levels_in_game_effects_speedburst_speedburststar_64db9149b6/t00_l000_f0000_r00.svg" />
 	<asset path="art/svg/timeline/movieclips_symbol_1064_2f2dcafe56/t00_l001_f0005_r00.svg" rename="assets/svg/timeline/movieclips_symbol_1064_2f2dcafe56/t00_l001_f0005_r00.svg" />
+	<asset path="art/svg/timeline/graphics_symbol_1179_688a9ff27c/t00_l000_f0000_r00.svg" rename="assets/svg/timeline/graphics_symbol_1179_688a9ff27c/t00_l000_f0000_r00.svg" />
+	<asset path="art/svg/timeline/graphics_symbol_1180_178f938050/t00_l000_f0000_r00.svg" rename="assets/svg/timeline/graphics_symbol_1180_178f938050/t00_l000_f0000_r00.svg" />
+	<asset path="art/svg/timeline/graphics_symbol_1181_8da2d701eb/t00_l000_f0000_r00.svg" rename="assets/svg/timeline/graphics_symbol_1181_8da2d701eb/t00_l000_f0000_r00.svg" />
+	<asset path="art/svg/timeline/graphics_symbol_1182_fe505e771a/t00_l000_f0000_r00.svg" rename="assets/svg/timeline/graphics_symbol_1182_fe505e771a/t00_l000_f0000_r00.svg" />
 	<asset path="assets/bitmaps/mine.jpg" />
 	<template path="templates/html5/template/index.html" rename="index.html" if="html5" />
 

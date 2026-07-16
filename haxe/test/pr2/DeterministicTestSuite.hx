@@ -121,6 +121,7 @@ import pr2.runtime.StaticSubtreeAnalyzerTest;
 import pr2.runtime.FlattenSafetyGateTest;
 import pr2.runtime.SvgAssetTest;
 import pr2.ui.EmblemLoaderTest;
+import pr2.ui.ArrowButtonsTest;
 import pr2.ui.GuildNameTest;
 import pr2.ui.GpNotificationTest;
 import pr2.ui.NativePresentationFoundationTest;
@@ -145,6 +146,7 @@ class DeterministicTestSuite {
 		DeterministicTestMode.runSuite("GpNotificationTest", ["ui"], GpNotificationTest.main);
 		DeterministicTestMode.runSuite("NativePresentationFoundationTest", ["ui", "runtime"], NativePresentationFoundationTest.main);
 		DeterministicTestMode.runSuite("EmblemLoaderTest", ["ui"], EmblemLoaderTest.main);
+		DeterministicTestMode.runSuite("ArrowButtonsTest", ["ui"], ArrowButtonsTest.main);
 		DeterministicTestMode.runSuite("GuildNameTest", ["ui"], GuildNameTest.main);
 		DeterministicTestMode.runSuite("SelectableButtonTest", ["ui"], SelectableButtonTest.main);
 		DeterministicTestMode.runSuite("PageNavigationFocusTest", ["ui"], PageNavigationFocusTest.main);

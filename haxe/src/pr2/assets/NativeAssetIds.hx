@@ -9,6 +9,10 @@ final class NativeAssetIds {
 enum abstract StaticSvg(String) to String {
 	var ArrowOverlay = "assets/svg/blocks/arrow_overlay.svg";
 	var Arrow2Overlay = "assets/svg/blocks/arrow2_overlay.svg";
+	var ArrowButtonDisabled = "assets/svg/timeline/graphics_symbol_1182_fe505e771a/t00_l000_f0000_r00.svg";
+	var ArrowButtonDown = "assets/svg/timeline/graphics_symbol_1181_8da2d701eb/t00_l000_f0000_r00.svg";
+	var ArrowButtonOver = "assets/svg/timeline/graphics_symbol_1180_178f938050/t00_l000_f0000_r00.svg";
+	var ArrowButtonUp = "assets/svg/timeline/graphics_symbol_1179_688a9ff27c/t00_l000_f0000_r00.svg";
 	var EggOverlay = "assets/svg/blocks/egg_overlay.svg";
 	var HeartHighlight = "assets/svg/timeline/graphics_symbol_917_14a7be666e/t00_l001_f0000_r00.svg";
 	var HeartMain = "assets/svg/timeline/graphics_symbol_917_14a7be666e/t00_l002_f0000_r00.svg";
