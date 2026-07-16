@@ -111,7 +111,7 @@ class PR2MovieClip extends Sprite {
 		timeline = symbol.timelines.length > 0 ? symbol.timelines[0] : null;
 		currentLabels = [];
 
-		var rootBaked = symbol.name == null ? null : BakedSymbolAtlas.create(symbol.name);
+		var rootBaked = symbol.name == null ? null : BakedSymbolSvg.create(symbol.name);
 		if (rootBaked != null) {
 			addChild(rootBaked);
 			return;
@@ -560,7 +560,7 @@ class PR2MovieClip extends Sprite {
 	private function isCacheableElement(element:DisplayElementDef):Bool {
 		return switch (element.type) {
 			case "DOMShape" | "DOMRectangleObject" | "DOMOvalObject" | "DOMStaticText"
-				| "DOMComponentInstance": true;
+				| "DOMComponentInstance" | "DOMSvgInstance": true;
 			default: false;
 		}
 	}
@@ -782,6 +782,19 @@ class PR2MovieClip extends Sprite {
 	}
 
 	private function createDisplayObject(element:DisplayElementDef, reusableClip:Null<PR2MovieClip>):DisplayObject {
+		if (element.type == "DOMSvgInstance") {
+			if (element.bitmapAssetPath != null) {
+				var bitmapData = Assets.getBitmapData(element.bitmapAssetPath);
+				var bitmap = new Bitmap(bitmapData);
+				bitmap.smoothing = true;
+				var scale = element.bitmapScale == null ? 1.0 : element.bitmapScale;
+				bitmap.scaleX = scale;
+				bitmap.scaleY = scale;
+				return bitmap;
+			}
+			return SvgAsset.create(element.svgAssetPath);
+		}
+
 		if (element.type == "DOMStaticText" || element.type == "DOMDynamicText" || element.type == "DOMInputText") {
 			return createStaticText(element);
 		}
@@ -796,7 +809,7 @@ class PR2MovieClip extends Sprite {
 				return bitmap;
 			}
 
-			var baked = BakedSymbolAtlas.create(element.libraryItemName);
+			var baked = BakedSymbolSvg.create(element.libraryItemName);
 			if (baked != null) {
 				return baked;
 			}
@@ -835,13 +848,6 @@ class PR2MovieClip extends Sprite {
 
 			if (element.type != "DOMBitmapInstance") {
 				throw 'Unknown nested PR2 symbol ${element.libraryItemName} in ${symbol.name}';
-			}
-		}
-
-		if (element.type == "DOMShape" || element.type == "DOMRectangleObject" || element.type == "DOMOvalObject") {
-			var vectorShape = VectorShapeRenderer.render(element);
-			if (vectorShape != null) {
-				return vectorShape;
 			}
 		}
 

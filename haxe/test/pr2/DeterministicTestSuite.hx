@@ -4,7 +4,6 @@ import pr2.audio.AudioUnlockGateTest;
 import pr2.audio.AudioRuntimeTest;
 import pr2.app.FatalErrorReporterTest;
 import pr2.app.ScreenTest;
-import pr2.character.CharacterAtlasTest;
 import pr2.character.CharacterBaseTest;
 import pr2.character.CharacterDisplayTest;
 import pr2.character.CharacterStateTest;
@@ -114,6 +113,7 @@ import pr2.page.CampaignTestScreenTest;
 import pr2.runtime.FlButtonTest;
 import pr2.runtime.FlComponentsTest;
 import pr2.runtime.EpicFlashTest;
+import pr2.runtime.ExplicitBitmapCacheTest;
 import pr2.runtime.PR2MovieClipRuntimeTest;
 import pr2.runtime.StaticSubtreeAnalyzerTest;
 import pr2.runtime.FlattenSafetyGateTest;
@@ -137,6 +137,7 @@ class DeterministicTestSuite {
 		DeterministicTestMode.runSuite("FlButtonTest", ["runtime"], FlButtonTest.main);
 		DeterministicTestMode.runSuite("FlComponentsTest", ["runtime"], FlComponentsTest.main);
 		DeterministicTestMode.runSuite("EpicFlashTest", ["runtime"], EpicFlashTest.main);
+		DeterministicTestMode.runSuite("ExplicitBitmapCacheTest", ["runtime", "character"], ExplicitBitmapCacheTest.main);
 		DeterministicTestMode.runSuite("SvgAssetTest", ["runtime", "ui", "character", "level-rendering"], SvgAssetTest.main);
 		DeterministicTestMode.runSuite("GpNotificationTest", ["ui"], GpNotificationTest.main);
 		DeterministicTestMode.runSuite("EmblemLoaderTest", ["ui"], EmblemLoaderTest.main);
@@ -150,7 +151,6 @@ class DeterministicTestSuite {
 		DeterministicTestMode.runSuite("ShotEffectTest", ["effects"], ShotEffectTest.main);
 		DeterministicTestMode.runSuite("SlashTest", ["effects"], SlashTest.main);
 		DeterministicTestMode.runSuite("TeleportPopTest", ["effects"], TeleportPopTest.main);
-		DeterministicTestMode.runSuite("CharacterAtlasTest", ["character"], CharacterAtlasTest.main);
 		DeterministicTestMode.runSuite("CharacterBaseTest", ["character"], CharacterBaseTest.main);
 		DeterministicTestMode.runSuite("CharacterDisplayTest", ["character", "items"], CharacterDisplayTest.main);
 		DeterministicTestMode.runSuite("CharacterStateTest", ["character", "physics"], CharacterStateTest.main);
@@ -254,7 +254,7 @@ class DeterministicTestSuite {
 		if (DeterministicTestMode.hasGroupSelection()) {
 			trace('DeterministicTestSuite selected run passed (${DeterministicTestMode.selectionSummary()})');
 		} else if (DeterministicTestMode.isSmoke()) {
-			trace("DeterministicTestSuite smoke run passed (123 suites)");
+			trace("DeterministicTestSuite smoke run passed (124 suites)");
 		} else {
 			trace("DeterministicTestSuite passed");
 		}

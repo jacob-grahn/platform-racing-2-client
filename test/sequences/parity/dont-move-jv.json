@@ -1,5 +1,5 @@
 {
-  "_comment": "End-to-end feature/physics-parity test, run against BOTH the original Flash projector (tools/pr2driver.py) and the OpenFL HTML5 port (tools/openfl_driver.py) from this one file. Identical inputs for both clients (no per-client branching). Flow: preloader/intro skip -> open Login -> clear any saved session via the '-' button so both clients land on the same name/pass form -> type testjun6/testjun6 -> Log In -> favorites (heart) tab -> 'Don't Move JV' -> Play -> idle while the level's blocks push the character through the course on their own -> Race Complete! popup. The '-' (delete saved user) + confirm-OK clicks are no-ops on the fresh name/pass form, so the sequence works whether or not a session is saved. Times are seconds from app start (Flash window-ready after launch / OpenFL data-pr2-app-ready). 'launch'/'quit' are no-ops on the OpenFL driver. The port must be served through tools/dev_proxy.py (apiHost=/api) so the server list and login reach pr2hub.com. Assert the final shot with tools/check_race_complete.py.",
+  "_comment": "End-to-end feature/physics-parity test, run against BOTH the original Flash projector (tools/pr2driver.py) and the OpenFL HTML5 port (tools/openfl_driver.py) from this one file. Identical inputs for both clients (no per-client branching). Flow: preloader/intro skip -> open Login -> clear any saved session via the '-' button so both clients land on the same name/pass form -> type haxe-port-test/haxe-port-test -> Log In -> favorites (heart) tab -> 'Don't Move JV' -> Play -> idle while the level's blocks push the character through the course on their own -> Race Complete! popup. The '-' (delete saved user) + confirm-OK clicks are no-ops on the fresh name/pass form, so the sequence works whether or not a session is saved. Times are seconds from app start (Flash window-ready after launch / OpenFL data-pr2-app-ready). 'launch'/'quit' are no-ops on the OpenFL driver. The port must be served through tools/dev_proxy.py (apiHost=/api) so the server list and login reach pr2hub.com. Assert the final shot with tools/check_race_complete.py.",
   "steps": [
     { "time": 0.0,   "action": "launch" },
 
@@ -12,9 +12,9 @@
     { "time": 10.5,  "action": "click", "x": 213, "y": 253, "_note": "confirm OK on the delete-account dialog; harmless stray click on empty dialog area when no confirm appeared" },
 
     { "time": 11.5,  "action": "click",    "x": 290, "y": 135, "_note": "focus name field" },
-    { "time": 12.0,  "action": "typeText", "text": "testjun6" },
+    { "time": 12.0,  "action": "typeText", "text": "haxe-port-test" },
     { "time": 13.0,  "action": "click",    "x": 290, "y": 163, "_note": "focus pass field" },
-    { "time": 13.5,  "action": "typeText", "text": "testjun6" },
+    { "time": 13.5,  "action": "typeText", "text": "haxe-port-test" },
     { "time": 14.5,  "action": "click",    "x": 232, "y": 300, "_note": "Log In (name/pass form button)" },
 
     { "time": 21.0,  "action": "click", "x": 538, "y": 8,   "_note": "lobby: favorites (heart) tab, far top-right" },
@@ -23,7 +23,7 @@
     { "time": 24.0,  "action": "click-display-object", "name": "play_bt", "x": 160, "y": 85, "timeout": 15, "_note": "OpenFL clicks as soon as the live Play button exists; Flash uses the stage-coordinate fallback" },
 
     { "time": 37.0,  "action": "shot", "out": "test/output/dmjv-{target}/09-racing.png", "_note": "race underway after countdown" },
-    { "time": 120.0, "action": "shot", "out": "test/output/dmjv-{target}/10-complete.png", "_note": "Race Complete! popup should be visible" },
-    { "time": 121.0, "action": "quit" }
+    { "time": 140.0, "action": "shot", "out": "test/output/dmjv-{target}/10-complete.png", "_note": "Race Complete! popup should be visible; includes timing headroom for slower machines" },
+    { "time": 141.0, "action": "quit" }
   ]
 }

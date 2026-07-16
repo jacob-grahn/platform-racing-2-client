@@ -1,0 +1,32 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="none" x="0px" y="0px" width="550px" height="400px" viewBox="0 0 550 400">
+<defs>
+<linearGradient id="Gradient_1" gradientUnits="userSpaceOnUse" x1="0" y1="13" x2="0" y2="0" spreadMethod="pad">
+<stop  offset="0%" stop-color="#5B5D5E" stop-opacity="0.2980392156862745"/>
+
+<stop  offset="100%" stop-color="#B7BABC" stop-opacity="0.2980392156862745"/>
+</linearGradient>
+
+<linearGradient id="Gradient_2" gradientUnits="userSpaceOnUse" x1="0" y1="12" x2="0" y2="1" spreadMethod="pad">
+<stop  offset="0%" stop-color="#CCCCCC" stop-opacity="0.2"/>
+
+<stop  offset="100%" stop-color="#FFFFFF" stop-opacity="0.2980392156862745"/>
+</linearGradient>
+
+<g id="Layer0_0_FILL">
+<path fill="url(#Gradient_1)" stroke="none" d="
+M 4.5 13
+L 6.5 10 1.1 0 -1.1 0 -6.5 10 -4.5 13 4.5 13
+M 5.5 10
+L 3.5 12 -3.5 12 -5.5 10 -1.05 1 1.05 1 5.5 10 Z"/>
+
+<path fill="url(#Gradient_2)" stroke="none" d="
+M 3.5 12
+L 5.5 10 1.05 1 -1.05 1 -5.5 10 -3.5 12 3.5 12 Z"/>
+</g>
+</defs>
+
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<use xlink:href="#Layer0_0_FILL"/>
+</g>
+</svg>

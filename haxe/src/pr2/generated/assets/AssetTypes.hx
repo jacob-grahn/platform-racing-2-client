@@ -64,6 +64,9 @@ typedef FilterDef = {
 
 typedef DisplayElementDef = {
 	var type:String;
+	@:optional var svgAssetPath:String;
+	@:optional var bitmapAssetPath:String;
+	@:optional var bitmapScale:Float;
 	@:optional var name:String;
 	@:optional var libraryItemName:String;
 	@:optional var symbolType:String;

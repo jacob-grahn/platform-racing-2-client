@@ -7,10 +7,15 @@ class ScreenTest {
 
 	public static function main():Void {
 		testCampaignHarnessRequiresDebugFlag();
+		testCharacterPartCacheVisualRoute();
 		if (pr2.DeterministicTestMode.finishSmokeSuite("ScreenTest")) return;
 		testSiteModeMatchesFlashDomainRules();
 		testLoginPageAssetMatchesSiteMode();
 		trace('ScreenTest passed $assertions assertions');
+	}
+
+	private static function testCharacterPartCacheVisualRoute():Void {
+		assertEquals(Screen.CharacterPartCache, Screen.fromQuery("?screen=character_part_cache"), "character part-cache visual test route");
 	}
 
 	private static function testCampaignHarnessRequiresDebugFlag():Void {

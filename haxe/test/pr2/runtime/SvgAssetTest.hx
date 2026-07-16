@@ -10,6 +10,12 @@ class SvgAssetTest {
 		assertFalse(prepared.indexOf("<use") >= 0, "SVG use references are expanded");
 		var shape = SvgAsset.createFromText(source);
 		assertTrue(shape.graphics != null, "expanded SVG renders into OpenFL graphics");
+		@:privateAccess assertEquals("graphics", SvgAsset.timelinePackGroup("assets/svg/timeline/graphics_symbol_1/t00.svg"),
+			"graphics timeline assets select the graphics pack");
+		@:privateAccess assertEquals("movieclips", SvgAsset.timelinePackGroup("assets/svg/timeline/movieclips_symbol_1/t00.svg"),
+			"movie clip timeline assets select the movieclips pack");
+		@:privateAccess assertEquals("misc", SvgAsset.timelinePackGroup("assets/svg/timeline/trophyicon_1/t00.svg"),
+			"root symbols select the miscellaneous pack");
 		trace('SvgAssetTest passed $assertions assertions');
 	}
 
@@ -20,5 +26,10 @@ class SvgAssetTest {
 
 	private static function assertFalse(value:Bool, message:String):Void {
 		assertTrue(!value, message);
+	}
+
+	private static function assertEquals(expected:String, actual:String, message:String):Void {
+		assertions++;
+		if (expected != actual) throw '$message: expected $expected, got $actual';
 	}
 }

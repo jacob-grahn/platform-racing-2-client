@@ -8,11 +8,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 #### Build Size And HTML5 Payload
 
-- Further reduce HTML5 payload size by splitting, lazy-loading, or lowering the
-  default scale of character atlases. After the first payload pass,
-  `export/html5/bin` is about `33.86 MB` raw and `23.71 MB` with gzip; character
-  atlas PNGs remain the largest binary bucket and gzip does not reduce them
-  meaningfully.
 - Investigate removing unused generated asset metadata from the final JS.
   `AssetCatalog.media()` and `AssetCatalog.linkageClasses()` do not appear to
   have runtime callers, but their bitmap/sound/linkage literals still survive
@@ -23,6 +18,21 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 - Investigate making audio assets non-preloaded. The audio files are needed at
   runtime, but the broad `assets/` include appears to preload about 1.5 MB raw /
   1.28 MB gzipped of sounds up front.
+
+#### HTML5 Canvas Versus WebGL
+
+- Investigate OpenFL's WebGL renderer as an alternative to the current Canvas
+  renderer. Build an opt-in A/B target before changing the default, and compare:
+  - SVG edge quality and subpixel registration, especially the independently
+    colored and outlined layers in character animations;
+  - masks, filters, blend modes, bitmap fills, text, and `cacheAsBitmap` output
+    against both Canvas and the Flash/XFL reference;
+  - startup time, steady-state frame rate, frame-time spikes, heap/GPU memory,
+    texture uploads, and performance with multiple animated characters; and
+  - browser/device compatibility, software rendering, WebGL-disabled systems,
+    context loss/restoration, and whether a tested Canvas fallback is required.
+  Do not switch the production renderer until the visual parity and performance
+  results are recorded for representative lobby, level, editor, and race flows.
 
 #### HTML5 Multiplayer Transport
 

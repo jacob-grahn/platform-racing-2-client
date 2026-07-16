@@ -137,7 +137,7 @@ class FlattenSafetyGate {
 			return;
 		}
 
-		if (element.libraryItemName == null || BakedSymbolAtlas.isBaked(element.libraryItemName)) {
+		if (element.libraryItemName == null || BakedSymbolSvg.isBaked(element.libraryItemName)) {
 			return; // leaf, or a baked single-bitmap symbol that is not descended into
 		}
 

@@ -1,0 +1,19 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="none" x="0px" y="0px" width="550px" height="400px" viewBox="0 0 550 400">
+<defs>
+<g id="Layer0_0_FILL">
+<path fill="#FFFFFF" fill-opacity="0.5019607843137255" stroke="none" d="
+M 41.95 17
+L 42.3 16.15 41.95 15.3
+Q 41.55 14.95 41.05 14.95
+L 41 14.95
+Q 40.5 15 40.2 15.3
+L 40.05 15.45
+Q 39.8 15.75 39.8 16.15 39.8 16.65 40.2 17 40.55 17.35 41.05 17.35 41.55 17.35 41.95 17 Z"/>
+</g>
+</defs>
+
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<use xlink:href="#Layer0_0_FILL"/>
+</g>
+</svg>

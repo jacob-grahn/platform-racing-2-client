@@ -29,6 +29,7 @@ import pr2.lobby.tabs.ListingTab;
 import pr2.lobby.tabs.SearchTab;
 import pr2.page.CampaignTestScreen;
 import pr2.page.CustomizeCharacterScreen;
+import pr2.page.CharacterPartCachePreview;
 import pr2.page.IntroPage;
 import pr2.page.LoginPage;
 import pr2.page.MobileLobbyPage;
@@ -226,6 +227,7 @@ class Main extends Sprite {
 				parseColor(QueryParams.get(query, "bg"))
 			);
 			case CustomizeCharacter: new CustomizeCharacterScreen();
+			case CharacterPartCache: new CharacterPartCachePreview();
 			case PopupPreview: new PopupPreview(QueryParams.get(query, "popup"));
 		};
 	}

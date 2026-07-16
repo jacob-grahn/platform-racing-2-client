@@ -1,0 +1,102 @@
+{
+  "fallbackCount": 12,
+  "fallbacks": {
+    "graphics_symbol_98_a25cf63281/t00_l016_f0000_r00.svg": {
+      "assetPath": "assets/timeline-bitmap/graphics_symbol_98_a25cf63281/t00_l016_f0000_r00.png",
+      "empty": false,
+      "height": 800,
+      "scale": 0.5,
+      "sourceSvg": "graphics_symbol_98_a25cf63281/t00_l016_f0000_r00.svg",
+      "width": 1100
+    },
+    "graphics_symbol_98_a25cf63281/t00_l017_f0000_r00.svg": {
+      "assetPath": "assets/timeline-bitmap/graphics_symbol_98_a25cf63281/t00_l017_f0000_r00.png",
+      "empty": false,
+      "height": 800,
+      "scale": 0.5,
+      "sourceSvg": "graphics_symbol_98_a25cf63281/t00_l017_f0000_r00.svg",
+      "width": 1100
+    },
+    "graphics_symbol_99_4b7abfc0d5/t00_l003_f0000_r00.svg": {
+      "assetPath": "assets/timeline-bitmap/graphics_symbol_99_4b7abfc0d5/t00_l003_f0000_r00.png",
+      "empty": false,
+      "height": 800,
+      "scale": 0.5,
+      "sourceSvg": "graphics_symbol_99_4b7abfc0d5/t00_l003_f0000_r00.svg",
+      "width": 1100
+    },
+    "graphics_symbol_99_4b7abfc0d5/t00_l004_f0000_r00.svg": {
+      "assetPath": "assets/timeline-bitmap/graphics_symbol_99_4b7abfc0d5/t00_l004_f0000_r00.png",
+      "empty": false,
+      "height": 800,
+      "scale": 0.5,
+      "sourceSvg": "graphics_symbol_99_4b7abfc0d5/t00_l004_f0000_r00.svg",
+      "width": 1100
+    },
+    "movieclips_symbol_374_fb64c576eb/t00_l000_f0000_r00.svg": {
+      "assetPath": "assets/timeline-bitmap/movieclips_symbol_374_fb64c576eb/t00_l000_f0000_r00.png",
+      "empty": false,
+      "height": 800,
+      "scale": 0.5,
+      "sourceSvg": "movieclips_symbol_374_fb64c576eb/t00_l000_f0000_r00.svg",
+      "width": 1100
+    },
+    "movieclips_symbol_388_94514e240f/t00_l000_f0000_r00.svg": {
+      "assetPath": "assets/timeline-bitmap/movieclips_symbol_388_94514e240f/t00_l000_f0000_r00.png",
+      "empty": false,
+      "height": 800,
+      "scale": 0.5,
+      "sourceSvg": "movieclips_symbol_388_94514e240f/t00_l000_f0000_r00.svg",
+      "width": 1100
+    },
+    "parts_heads_headsmc_9bbce05507/t00_l008_f0048_r00.svg": {
+      "assetPath": "assets/timeline-bitmap/parts_heads_headsmc_9bbce05507/t00_l008_f0048_r00.png",
+      "empty": false,
+      "height": 800,
+      "scale": 0.5,
+      "sourceSvg": "parts_heads_headsmc_9bbce05507/t00_l008_f0048_r00.svg",
+      "width": 1100
+    },
+    "parts_sets_dog_dogbody_6d3fcca1c5/t00_l000_f0000_r00.svg": {
+      "assetPath": "assets/timeline-bitmap/parts_sets_dog_dogbody_6d3fcca1c5/t00_l000_f0000_r00.png",
+      "empty": false,
+      "height": 800,
+      "scale": 0.5,
+      "sourceSvg": "parts_sets_dog_dogbody_6d3fcca1c5/t00_l000_f0000_r00.svg",
+      "width": 1100
+    },
+    "parts_sets_dog_dogfeet_b3df0419a6/t00_l000_f0000_r00.svg": {
+      "assetPath": "assets/timeline-bitmap/parts_sets_dog_dogfeet_b3df0419a6/t00_l000_f0000_r00.png",
+      "empty": false,
+      "height": 800,
+      "scale": 0.5,
+      "sourceSvg": "parts_sets_dog_dogfeet_b3df0419a6/t00_l000_f0000_r00.svg",
+      "width": 1100
+    },
+    "parts_sets_dog_doghead_b68ebdd121/t00_l000_f0000_r00.svg": {
+      "assetPath": "assets/timeline-bitmap/parts_sets_dog_doghead_b68ebdd121/t00_l000_f0000_r00.png",
+      "empty": false,
+      "height": 800,
+      "scale": 0.5,
+      "sourceSvg": "parts_sets_dog_doghead_b68ebdd121/t00_l000_f0000_r00.svg",
+      "width": 1100
+    },
+    "parts_sets_gladiator_gladiatorhead_86b5eb8e7b/t00_l000_f0000_r00.svg": {
+      "assetPath": "assets/timeline-bitmap/parts_sets_gladiator_gladiatorhead_86b5eb8e7b/t00_l000_f0000_r00.png",
+      "empty": false,
+      "height": 800,
+      "scale": 0.5,
+      "sourceSvg": "parts_sets_gladiator_gladiatorhead_86b5eb8e7b/t00_l000_f0000_r00.svg",
+      "width": 1100
+    },
+    "parts_sets_turkey_turkeyhead_0c60a220ab/t00_l000_f0000_r00.svg": {
+      "assetPath": "assets/timeline-bitmap/parts_sets_turkey_turkeyhead_0c60a220ab/t00_l000_f0000_r00.png",
+      "empty": false,
+      "height": 800,
+      "scale": 0.5,
+      "sourceSvg": "parts_sets_turkey_turkeyhead_0c60a220ab/t00_l000_f0000_r00.svg",
+      "width": 1100
+    }
+  },
+  "schema": "pr2-timeline-bitmap-report-v1"
+}

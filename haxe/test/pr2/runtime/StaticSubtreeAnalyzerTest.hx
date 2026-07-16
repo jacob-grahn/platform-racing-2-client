@@ -117,14 +117,14 @@ class StaticSubtreeAnalyzerTest {
 	}
 
 	private static function testBakedSymbolIsStatic():Void {
-		// A symbol the BakedSymbolAtlas replaces with a single Bitmap, referenced
+		// A symbol BakedSymbolSvg replaces with one static SVG, referenced
 		// here with a loop mode that would otherwise auto-play.
 		var parent = symbolWithFrames("IntroHolder", [
 			heldFrame(0, 1, [instance("logo", "MovieClips/Symbol 27", "loop", 0)])
 		]);
 		// No resolver entry: the baked check must short-circuit before resolution.
 		assertStaticWith(parent, new Map(), true,
-			"a baked-atlas symbol counts as a single static quad regardless of loop mode");
+			"a baked SVG symbol counts as static regardless of loop mode");
 	}
 
 	// --- fixtures -----------------------------------------------------------

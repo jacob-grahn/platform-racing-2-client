@@ -20,17 +20,7 @@ final class AssetCatalogSymbolsMisc {
 								frames: [
 									{
 										elements: [
-											{
-												bounds: {bottom: 2533.0, left: 53.0, right: 2991.0, top: 71.0},
-												edges: [
-													{
-														edges: "!2355 544S2|2632 758!2632 758[2826 907 2922 1126!2922 1126[2957 1204 2991 1337!2991 1337[2382 1668 1709 1874!1709 1874[1579 1915 1466 1982!1466 1982[1006 2257 513 2467!513 2467[360 2533 199 2502!199 2502[124 2490 93 2418!93 2418[78 2385  77 2347!77 2347|53 2327!53 2327|53 2254!53 2254|736 1873!736 1873[787 1753 792 1622!792 1622[802 1336 785 1048!785 1048[778 917 782 788!782 788[786 659 834 606!834 606[882 553 859 551!859 551[923 391 1062 297!1062 297|1321 131!1321 131 [1423 71 1626 147!1626 147[1828 222 2022 325!2022 325[2216 428 2355 544",
-														fillStyle1: 1
-													}
-												],
-												fills: [{index: 1, value: {color: "#AF831D", type: "SolidColor"}}],
-												type: "DOMShape"
-											},
+											{svgAssetPath: "assets/svg/timeline/expmc_c1dc465d41/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"},
 											{libraryItemName: "Graphics/Symbol 685", loop: "loop", matrix: {tx: 91.9, ty: 93.2}, symbolType: "graphic", type: "DOMSymbolInstance"}
 										],
 										index: 0,
@@ -225,139 +215,10 @@ final class AssetCatalogSymbolsMisc {
 						frameCount: 1,
 						labels: [],
 						layers: [
-							{
-								color: "#9933CC",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 220.0, left: -20.0, right: 220.0, top: -20.0},
-												edges: [{edges: "!-20 -20|220 -20!220 -20|220 220!220 220|-20 220!-20 220|-20 -20", fillStyle1: 1}],
-												fills: [{index: 1, value: {alpha: 0.0, color: "#151515", type: "SolidColor"}}],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
-								index: 0,
-								name: "cover"
-							},
+							{color: "#9933CC", frames: [{elements: [{svgAssetPath: "assets/svg/timeline/trophyicon_206786d689/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}], index: 0, name: "cover"},
 							{
 								color: "#00FFFF",
-								frames: [
-									{
-										elements: [
-											{
-												children: [
-													{
-														bounds: {bottom: 611.0, left: 192.0, right: 626.0, top: 40.0},
-														edges: [
-															{
-																edges: "!608 40|192 40!192 40|270 416!270 416|287 467!287 467|302 497!302 497|302 498!302 498|332 540!332 540|352 560!352 560[416 611 497 608!497 608[528 608 556 602!556 602[626 327 608 40",
-																fillStyle0: 1
-															}
-														],
-														fills: [{index: 1, value: {color: "#FCEA2B", type: "SolidColor"}}],
-														matrix: {a: 0.209686279296875, d: 0.209686279296875, tx: -0.2, ty: -0.2},
-														type: "DOMShape"
-													},
-													{
-														bounds: {bottom: 602.0, left: 556.0, right: 802.0, top: 40.0},
-														edges: [{edges: "!608 40[626 327 556 602!556 602[694 571 734 372!734 372|802 40!802 40|608 40", fillStyle0: 1}],
-														fills: [{index: 1, value: {color: "#F1B31C", type: "SolidColor"}}],
-														matrix: {a: 0.209686279296875, d: 0.209686279296875, tx: -0.2, ty: -0.2},
-														type: "DOMShape"
-													},
-													{
-														bounds: {bottom: 953.0, left: 328.0, right: 547.0, top: 810.0},
-														edges: [{edges: "!547 810|328 810!328 810|328 953!328 953|547 953!547 953|547 810", fillStyle0: 1}],
-														fills: [{index: 1, value: {color: "#FCEA2B", type: "SolidColor"}}],
-														matrix: {a: 0.209686279296875, d: 0.209686279296875, tx: -0.2, ty: -0.2},
-														type: "DOMShape"
-													},
-													{
-														bounds: {bottom: 953.0, left: 547.0, right: 654.0, top: 810.0},
-														edges: [{edges: "!654 810|547 810!547 810|547 953!547 953|654 953!654 953|654 810", fillStyle0: 1}],
-														fills: [{index: 1, value: {color: "#F1B31C", type: "SolidColor"}}],
-														matrix: {a: 0.209686279296875, d: 0.209686279296875, tx: -0.2, ty: -0.2},
-														type: "DOMShape"
-													},
-													{
-														bounds: {bottom: 355.0, left: 417.0, right: 577.0, top: 195.0},
-														edges: [
-															{
-																edges: "!497 195[530 195 554 219!554 219[577 242 577 275!577 275[577 308 554 332!554 332[530 355 497 355!497 355[464 355 441 332!441 332[417 308 417 275!417 275[417 242 441 219!441 219[464 195 497 195",
-																fillStyle1: 1
-															}
-														],
-														fills: [{index: 1, value: {color: "#F1B31C", type: "SolidColor"}}],
-														matrix: {a: 0.209686279296875, d: 0.209686279296875, tx: -0.2, ty: -0.2},
-														type: "DOMShape"
-													}
-												],
-												matrix: {a: 0.209762573242188, d: 0.209762573242188, tx: -0.2, ty: -0.2},
-												type: "DOMGroup"
-											},
-											{
-												children: [
-													{
-														bounds: {bottom: 628.0, left: 167.0, right: 827.0, top: 10.0},
-														edges: [{edges: "!827 20[827 10 754 376!754 376[703 628 497 628!497 628[290 628 241 379!241 379[167 12 167 20!167 20|827 20", strokeStyle: 1}],
-														matrix: {a: 0.209686279296875, d: 0.209686279296875, tx: -0.2, ty: -0.2},
-														strokes: [{index: 1, value: {fill: {type: "SolidColor"}, scaleMode: "normal", type: "SolidStroke"}}],
-														type: "DOMShape"
-													},
-													{
-														bounds: {bottom: 413.0, left: 20.0, right: 239.0, top: 93.0},
-														edges: [{edges: "!237 413[239 408 129 335!129 335[79 302 55 276!55 276[20 237 20 196!20 196[20 151 53 122!53 122[84 93 131 93!131 93|161 93", strokeStyle: 1}],
-														matrix: {a: 0.209686279296875, d: 0.209686279296875, tx: -0.2, ty: -0.2},
-														strokes: [{index: 1, value: {fill: {type: "SolidColor"}, scaleMode: "normal", type: "SolidStroke"}}],
-														type: "DOMShape"
-													},
-													{
-														bounds: {bottom: 419.0, left: 751.0, right: 973.0, top: 99.0},
-														edges: [{edges: "!751 419[752 414 862 340!862 340[912 308 937 281!937 281[973 242 973 201!973 201[973 159 943 129!943 129[913 99 870 99!870 99|821 99", strokeStyle: 1}],
-														matrix: {a: 0.209686279296875, d: 0.209686279296875, tx: -0.2, ty: -0.2},
-														strokes: [{index: 1, value: {fill: {type: "SolidColor"}, scaleMode: "normal", type: "SolidStroke"}}],
-														type: "DOMShape"
-													},
-													{
-														bounds: {bottom: 973.0, left: 308.0, right: 674.0, top: 790.0},
-														edges: [{edges: "!308 790|674 790!674 790|674 973!674 973|308 973!308 973|308 790", strokeStyle: 1}],
-														matrix: {a: 0.209686279296875, d: 0.209686279296875, tx: -0.2, ty: -0.2},
-														strokes: [{index: 1, value: {fill: {type: "SolidColor"}, scaleMode: "normal", type: "SolidStroke"}}],
-														type: "DOMShape"
-													},
-													{
-														bounds: {bottom: 375.0, left: 397.0, right: 597.0, top: 175.0},
-														edges: [
-															{
-																edges: "!497 175[538 175 568 204!568 204[597 234 597 275!597 275[597 316 568 346!568 346[538 375 497 375!497 375[456 375 426 346!426 346[397 316 397 275!397 275[397 234 426 204!426 204[456 175 497 175",
-																strokeStyle: 1
-															}
-														],
-														matrix: {a: 0.209686279296875, d: 0.209686279296875, tx: -0.2, ty: -0.2},
-														strokes: [{index: 1, value: {fill: {type: "SolidColor"}, scaleMode: "normal", type: "SolidStroke"}}],
-														type: "DOMShape"
-													},
-													{
-														bounds: {bottom: 790.0, left: 497.0, right: 497.0, top: 628.0},
-														edges: [{edges: "!497 790|497 628", strokeStyle: 1}],
-														matrix: {a: 0.209686279296875, d: 0.209686279296875, tx: -0.2, ty: -0.2},
-														strokes: [{index: 1, value: {fill: {type: "SolidColor"}, scaleMode: "normal", type: "SolidStroke"}}],
-														type: "DOMShape"
-													}
-												],
-												matrix: {a: 0.666671752929688, d: 0.666671752929688, tx: -96.55, ty: -12.4},
-												type: "DOMGroup"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/trophyicon_206786d689/t00_l001_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 1,
 								locked: true,
 								name: "Layer_1"
@@ -379,49 +240,13 @@ final class AssetCatalogSymbolsMisc {
 						layers: [
 							{
 								color: "#9933CC",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 440.0, left: -20.0, right: 440.0, top: -20.0},
-												edges: [{edges: "!-20 -20|440 -20!440 -20|440 440!440 440|-20 440!-20 440|-20 -20", fillStyle1: 1}],
-												fills: [{index: 1, value: {alpha: 0.0, color: "#151515", type: "SolidColor"}}],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/verifiedicon_0f893a1165/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "cover"
 							},
 							{
 								color: "#00FFFF",
-								frames: [
-									{
-										elements: [
-											{
-												children: [
-													{
-														bounds: {bottom: 410.0, left: 0.0, right: 410.0, top: 0.0},
-														edges: [
-															{
-																edges: "!410 205[410 161 366 139!366 139[381 93 350 60!350 60[318 29 271 44!271 44[261 24 244 12!244 12[226 0 205 0!205 0[160 0 138 44!138 44[117 37 96 41!96 41[75 45 60 60!60 60[27 93 44 139!44 139[0 160 0 205!0 205[0 251 44 272!44 272[27 319  60 350!60 350[91 382 138 367!138 367[160 410 205 410!205 410[250 410 271 367!271 367[318 382 350 350!350 350[381 319 366 272!366 272[410 250 410 205!175 290|101 215!101 215|129 186!129 186|174 232!174 232|270 127!270 127|299 154!299  154|175 290",
-																fillStyle0: 1
-															}
-														],
-														fills: [{index: 1, value: {color: "#1D9BF0", type: "SolidColor"}}],
-														type: "DOMShape"
-													}
-												],
-												type: "DOMGroup"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/verifiedicon_0f893a1165/t00_l001_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 1,
 								name: "Layer_1"
 							}

@@ -1,0 +1,37 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="none" x="0px" y="0px" width="550px" height="400px" viewBox="0 0 550 400">
+<defs>
+<image id="Images_bitmap386_png" x="0" y="0" width="40" height="47" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAvCAYAAACR+4jVAAADhElEQVRYhe2Z208TQRSHv9pC
+pUVrQPBGND4Rg4lvJj755t9MTDRifEBiTDQYJCEmJdQbUsWAZdtu14dzhg7LdC/dLdTEk2ym
+lOnuN79z5sycWcjXinrlZoWc7lNCwCb07w7gA92sN8462hIwCVSBa8BdYF6/71n9eqd/msyG
+ATRuNGDXgXvAQ+AxcB+4ov8PECWHBnW5eBB0gb5iZYW4DSwCD7S9pX0bwCbwTts6sAe0ELcH
+EUz2gE4AFi2AkgO+BFwGbgBXgQVErUXgDjALXNS+RwpUD4FuA/u4YzPQ79va+mHAMjCjD5tx
+QE7Sd+eCQt7UvlPa37YuopgN+gH4ohAuuKb2bQKeDVgEKsAS8ETbqnWDgvapKWRNB1QmPo4N
+aFPh9hF1wm4+1AE81fYP4NujLiFqLAGPEHfaCpoYnOC0WlFWAi4hAszjjsEA+K2f39j3tx9U
+0IdXFK6WAiKJFZFQiLKKMhwLc8HRqUB+CTyNOZ/rAhwr+w+Y1cYJ0E7Sx7N8XAC7SJr5qu3x
+SjMugB0kiW9oa7ZrYwOYSMHwYn2WFn62MwYHjuI8zQD6uOPgrMypng1oOp2HgpHPjYrBqF1v
+njZwBocB4XwmShfZI8YqaDqftZs7yIa2pZ8HxqBrooS35nmbLYizVnEpuI9UZT/QumCE1iYi
+/lyAgULtAjvAL0brZg8RokFCBX390WdgHSkTWyOC6yIC7CCCeDgyh2st9pEKbFOvPUajYgsR
+YB0RxCPk3kGApkysIwV3HSkB87QuMnAjQtMFB9E1rY9UWHNIuThNunIzyg6Aj8Bz4K0COjPG
+IMAe/aQNUobOIsV81i3aETIp1oCXwCf9znmwFHcq0EbcXULOZGaR04RhzUzA18Az4D3wk4iN
+SRRgoFdH+xlXVxnO1R6i3CpyvLGGJOg2Eet+nII9vczmoYocu1VSQvrAN0S5ZYVsIK51To6k
+gMbaSGB7yBFbLSXkAbJaLAOvkNwXC5cUMEBUbCHrZhpIX+F2EJeuAFvISVYsXFLAYSE9xK0b
+9GfsOpJSEu/W05xRp4E0E8LE3IrC7RIzKbIAxkFO6f1MKlmlH3Nb9JNxItcOCzgIsozM8B6S
+OtaQVLKKxN8hjs3oqABdkIfIrPyOJN8XCpkolURZ1oPKIuLiOeQVxDQyaxtIvGWCywMQTr6+
+KCrQiVcJWSzPo147XDKD/TP2FyMiX2MnSn2tAAAAAElFTkSuQmCC"/>
+
+<pattern id="Pattern_1" patternUnits="userSpaceOnUse" patternTransform="matrix( 1.3558197021484375, 0, 0, 1.3558197021484375, 0,0) " width="40" height="47">
+<use xlink:href="#Images_bitmap386_png"/>
+</pattern>
+
+<g id="Layer0_0_FILL">
+<path fill="url(#Pattern_1)" stroke="none" d="
+M 54.25 0
+L 0 0 0 63.7 54.25 63.7 54.25 0 Z"/>
+</g>
+</defs>
+
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<use xlink:href="#Layer0_0_FILL"/>
+</g>
+</svg>

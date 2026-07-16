@@ -1,0 +1,24 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="none" x="0px" y="0px" width="550px" height="400px" viewBox="0 0 550 400">
+<defs>
+<linearGradient id="Gradient_1" gradientUnits="userSpaceOnUse" x1="11" y1="22" x2="11" y2="0" spreadMethod="pad">
+<stop  offset="0%" stop-color="#99D7FE"/>
+
+<stop  offset="100%" stop-color="#D9F0FE"/>
+</linearGradient>
+
+<g id="Layer0_0_FILL">
+<path fill="url(#Gradient_1)" stroke="none" d="
+M 125 21
+L 125 1 3.85 1
+Q 1.0619140625 1.0619140625 1 3.85
+L 1 18.15
+Q 1.069921875 20.93828125 3.85 21
+L 125 21 Z"/>
+</g>
+</defs>
+
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<use xlink:href="#Layer0_0_FILL"/>
+</g>
+</svg>

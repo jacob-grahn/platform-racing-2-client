@@ -2,13 +2,13 @@
 # End-to-end feature/physics-parity test: drive the SAME sequence
 # (test/sequences/parity/dont-move-jv.json) through the full flow
 # (preloader -> intro -> login -> favorites -> "Don't Move JV" -> Play ->
-# idle ~75s -> Race Complete!) and assert the popup opened with EXP gain.
+# idle with timing headroom -> Race Complete!) and assert the popup opened with EXP gain.
 #
 # Usage:
 #   tools/test_dont_move_jv.sh flash [path-to-app]   # original Flash projector (default)
 #   tools/test_dont_move_jv.sh port                  # OpenFL HTML5 port
 #
-# Both targets do an identical fresh typed login (testjun6/testjun6): the sequence
+# Both targets do an identical fresh typed login (haxe-port-test/haxe-port-test): the sequence
 # clears any remembered session via the "-" button so both clients reach the same
 # name/pass form, with no per-client branching.
 set -euo pipefail
@@ -25,7 +25,7 @@ case "$TARGET" in
   flash)
     APP="${2:-flash/platform-racing-2.app}"
     FINAL="test/output/dmjv-flash/10-complete.png"
-    echo "==> [flash] Running Don't Move JV parity sequence against $APP (~2 min)..."
+    echo "==> [flash] Running Don't Move JV parity sequence against $APP (~2.5 min)..."
     python3 tools/pr2driver.py --app "$APP" sequence "$SEQ"
     ;;
   port|openfl)
@@ -41,7 +41,7 @@ case "$TARGET" in
     # pixel-identical rendering (set PR2_GPU=0 to fall back to software rendering).
     GPU_FLAG="--gpu"
     [ "${PR2_GPU:-1}" = "0" ] && GPU_FLAG=""
-    echo "==> [port] Running Don't Move JV parity sequence against the OpenFL HTML5 build via proxy (~2 min)..."
+    echo "==> [port] Running Don't Move JV parity sequence against the OpenFL HTML5 build via proxy (~2.5 min)..."
     python3 tools/openfl_driver.py --base-url "http://localhost:$PROXY_PORT/index.html?apiHost=/api" $GPU_FLAG sequence "$SEQ"
     ;;
   *)

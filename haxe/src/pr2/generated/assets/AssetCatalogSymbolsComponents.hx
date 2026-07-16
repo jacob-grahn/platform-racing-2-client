@@ -56,21 +56,7 @@ final class AssetCatalogSymbolsComponents {
 									{index: 0, keyMode: 9728},
 									{
 										elements: [
-											{
-												bottomLeftRadius: 20.0,
-												bottomRightRadius: 20.0,
-												fill: {color: "#EEEEEE", type: "SolidColor"},
-												matrix: {a: 1.239990234375, tx: -136.4, ty: 10.0},
-												objectHeight: 335.0,
-												objectWidth: 225.0,
-												stroke: {fill: {color: "#CCCCCC", type: "SolidColor"}, scaleMode: "normal", solidStyle: "hairline", type: "SolidStroke", weight: 0.05},
-												topLeftRadius: 20.0,
-												topRightRadius: 20.0,
-												transformationPoint: {x: 222.5, y: 157.5},
-												type: "DOMRectangleObject",
-												x: 110.0,
-												y: -10.0
-											},
+											{svgAssetPath: "assets/svg/timeline/components_button_5e65b83b34/t00_l001_f0001_r00.svg", type: "DOMSvgInstance"},
 											{
 												height: 310.2,
 												matrix: {tx: 141.95, ty: 7.699999999999999},
@@ -145,21 +131,7 @@ final class AssetCatalogSymbolsComponents {
 									{index: 0, keyMode: 9728},
 									{
 										elements: [
-											{
-												bottomLeftRadius: 20.0,
-												bottomRightRadius: 20.0,
-												fill: {color: "#EEEEEE", type: "SolidColor"},
-												matrix: {d: 0.889556884765625, tx: -121.05, ty: 111.35},
-												objectHeight: 335.0,
-												objectWidth: 225.0,
-												stroke: {fill: {color: "#CCCCCC", type: "SolidColor"}, scaleMode: "normal", solidStyle: "hairline", type: "SolidStroke", weight: 0.05},
-												topLeftRadius: 20.0,
-												topRightRadius: 20.0,
-												transformationPoint: {x: 233.55, y: 42.3},
-												type: "DOMRectangleObject",
-												x: 121.05,
-												y: -125.2
-											},
+											{svgAssetPath: "assets/svg/timeline/components_checkbox_d066b9af94/t00_l001_f0001_r00.svg", type: "DOMSvgInstance"},
 											{
 												height: 277.7,
 												matrix: {tx: 98.95, ty: 8.0},
@@ -286,21 +258,7 @@ final class AssetCatalogSymbolsComponents {
 									{index: 0, keyMode: 9728},
 									{
 										elements: [
-											{
-												bottomLeftRadius: 10.0,
-												bottomRightRadius: 10.0,
-												fill: {color: "#EEEEEE", type: "SolidColor"},
-												matrix: {a: 1.57962036132812, d: 1.96287536621094, tx: 2.45, ty: -59.7},
-												objectHeight: 183.0,
-												objectWidth: 388.95,
-												stroke: {fill: {color: "#CCCCCC", type: "SolidColor"}, scaleMode: "normal", type: "SolidStroke"},
-												topLeftRadius: 10.0,
-												topRightRadius: 10.0,
-												transformationPoint: {x: 192.9, y: 121.8},
-												type: "DOMRectangleObject",
-												x: -1.55,
-												y: 30.3
-											},
+											{svgAssetPath: "assets/svg/timeline/components_colorpicker_b8220f060e/t00_l001_f0001_r00.svg", type: "DOMSvgInstance"},
 											{
 												height: 14.5,
 												matrix: {d: 1.003173828125, tx: 427.65, ty: 42.3},
@@ -513,21 +471,7 @@ final class AssetCatalogSymbolsComponents {
 									{index: 0, keyMode: 9728},
 									{
 										elements: [
-											{
-												bottomLeftRadius: 6.0,
-												bottomRightRadius: 6.0,
-												fill: {color: "#EEEEEE", type: "SolidColor"},
-												matrix: {a: 2.14726257324219, d: 5.57821655273438, tx: -97.6, ty: -77.0},
-												objectHeight: 83.65,
-												objectWidth: 158.25,
-												stroke: {fill: {color: "#CCCCCC", type: "SolidColor"}, scaleMode: "normal", type: "SolidStroke"},
-												topLeftRadius: 6.0,
-												topRightRadius: 6.0,
-												transformationPoint: {x: 124.65, y: 55.6},
-												type: "DOMRectangleObject",
-												x: 45.45,
-												y: 13.8
-											},
+											{svgAssetPath: "assets/svg/timeline/components_combobox_61d30a26c5/t00_l001_f0001_r00.svg", type: "DOMSvgInstance"},
 											{
 												height: 14.5,
 												matrix: {a: 0.999893188476562, d: 0.999801635742188, tx: 177.45, ty: 101.3},
@@ -621,21 +565,7 @@ final class AssetCatalogSymbolsComponents {
 						layers: [
 							{
 								color: "#4FFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 440.0, left: 0.0, right: 1600.0, top: 0.0},
-												edges: [{edges: "!1600 440|0 440!0 440|0 0!0 0|1600 0!1600 0|1600 440", fillStyle1: 1, strokeStyle: 1}],
-												fills: [{index: 1, value: {color: "#FFFFFF", type: "SolidColor"}}],
-												strokes: [{index: 1, value: {fill: {type: "SolidColor"}, scaleMode: "normal", solidStyle: "hairline", type: "SolidStroke", weight: 0.05}}],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_private_component_avatar_e11eb9ec5d/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "Avatar"
 							}
@@ -662,106 +592,21 @@ final class AssetCatalogSymbolsComponents {
 						layers: [
 							{
 								color: "#4FFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 240.0, left: 3.0, right: 1620.5, top: 3.0},
-												edges: [{edges: "!1620.5 240|20.5 240!20.5 240|20 79.5!20 79.5[#13.FB #13.F3 80 20!80 20|1560 20!1560 20[#654.04 #13.F3 1620 79.5!1620 79.5|1620.5 240", fillStyle1: 1}],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{alpha: 0.0, color: "#CCCCCC", ratio: 0.0}, {alpha: 0.141176470588235, color: "#FFFFFF", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.00396728515625, c: 0.0183258056640625, d: 0.0, tx: 80.5, ty: 4.75},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_buttonskins_button_disabledskin_4a38b9c615/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "highlight",
 								visible: false
 							},
 							{
 								color: "#FFFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 1563.0, left: 4.7, right: 1620.5, top: 4.7},
-												edges: [
-													{
-														edges: "!1620.5 360[#654.84 #1A2.BC 1563 420!1563 420|78 420!78 420[#14.7B #1A2.BC 20.5 360!20.5 360|20.5 80!20.5 80[#14.7B #15.44 78 20!78 20|1563 20!1563 20[#654.84 #15.44 1620.5 80!1620.5 80|1620.5 360",
-														fillStyle1: 1
-													}
-												],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{alpha: 0.2, color: "#CCCCCC", ratio: 0.0}, {alpha: 0.298039215686275, color: "#FFFFFF", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.013427734375, c: 0.0134429931640625, d: 0.0, tx: 71.0, ty: 11.0},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_buttonskins_button_disabledskin_4a38b9c615/t00_l001_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 1,
 								name: "fill",
 								visible: false
 							},
 							{
 								color: "#9933CC",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 1620.5, left: 0.5, right: 1640.5, top: 0.0},
-												edges: [
-													{edges: "!820 440|1560.5 440!1560.5 440[#668.86 440 1640.5 360!1640.5 360|1640.5 80!1640.5 80[#668.86 0 1560.5 0!1560.5 0|820 0", fillStyle0: 1},
-													{edges: "!820 420|1563 420!1563 420[#654.84 #1A2.BC 1620.5 360!1620.5 360|1620.5 80!1620.5 80[#654.84 #15.44 1563 20!1563 20|820 20", fillStyle1: 1},
-													{edges: "!820 0|820 20!820 420|820 440", fillStyle0: 1, fillStyle1: 2},
-													{edges: "!820 0|80.5 0!80.5 0[#0.7A 0 0.5 80!0.5 80|0.5 360!0.5 360[#0.7A 440 80.5 440!80.5 440|820 440", fillStyle0: 2},
-													{edges: "!820 20|78 20!78 20[#14.7B #15.44 20.5 80!20.5 80|20.5 360!20.5 360[#14.7B #1A2.BC 78 420!78 420|820 420", fillStyle1: 2}
-												],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{alpha: 0.298039215686275, color: "#585F63", ratio: 0.0}, {alpha: 0.298039215686275, color: "#B7BABC", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.013427734375, c: 0.0134429931640625, d: 0.0, tx: 71.0, ty: 11.0},
-															type: "LinearGradient"
-														}
-													},
-													{
-														index: 2,
-														value: {
-															entries: [{alpha: 0.298039215686275, color: "#585F63", ratio: 0.0}, {alpha: 0.298039215686275, color: "#B7BABC", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.013427734375, c: -0.0134429931640625, d: 0.0, tx: 11.05, ty: 11.0},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_buttonskins_button_disabledskin_4a38b9c615/t00_l002_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 2,
 								name: "border"
 							}
@@ -788,115 +633,19 @@ final class AssetCatalogSymbolsComponents {
 						layers: [
 							{
 								color: "#4FFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 240.0, left: 20.0, right: 1620.0, top: 20.0},
-												edges: [
-													{edges: "!820 20|1560 20!1560 20[1619 20 1620 80!1620 80|1620 240!1620 240|820 240", fillStyle1: 1},
-													{edges: "!820 240|820 20", fillStyle0: 2, fillStyle1: 1},
-													{edges: "!820 20|80 20!80 20[20 20 20 80!20 80|20 240!20 240|820 240", fillStyle0: 2}
-												],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{alpha: 0.0, color: "#CCCCCC", ratio: 0.0}, {alpha: 0.298039215686275, color: "#FFFFFF", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.00396728515625, c: 0.0183258056640625, d: 0.0, tx: 80.5, ty: 4.75},
-															type: "LinearGradient"
-														}
-													},
-													{
-														index: 2,
-														value: {
-															entries: [{alpha: 0.0, color: "#CCCCCC", ratio: 0.0}, {alpha: 0.298039215686275, color: "#FFFFFF", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.00640869140625, c: 0.0183258056640625, d: 0.0, tx: 61.55, ty: 6.75},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_buttonskins_button_downskin_51b002c408/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "highlight"
 							},
 							{
 								color: "#9933CC",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 420.0, left: 20.0, right: 1621.0, top: 20.0},
-												edges: [
-													{edges: "!821 420|1563 420!1563 420[1621 419 1621 360!1621 360|1621 80!1621 80[1621 21 1563 20!1563 20|821 20", fillStyle0: 1},
-													{edges: "!821 420|821 20", fillStyle0: 2, fillStyle1: 1},
-													{edges: "!821 20|78 20!78 20[20 21 21 80!21 80|21 360!21 360[20 419 78 420!78 420|821 420", fillStyle0: 2}
-												],
-												fills: [
-													{
-														index: 1,
-														value: {entries: [{color: "#99D7FE", ratio: 0.0}, {color: "#D9F0FE", ratio: 1.0}], matrix: {a: 0.0, b: -0.013427734375, c: 0.0134429931640625, d: 0.0, tx: 71.0, ty: 11.0}, type: "LinearGradient"}
-													},
-													{
-														index: 2,
-														value: {entries: [{color: "#99D7FE", ratio: 0.0}, {color: "#D9F0FE", ratio: 1.0}], matrix: {a: 0.0, b: -0.013427734375, c: -0.0134429931640625, d: 0.0, tx: 11.05, ty: 11.0}, type: "LinearGradient"}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_buttonskins_button_downskin_51b002c408/t00_l001_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 1,
 								name: "fill"
 							},
 							{
 								color: "#FFFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 440.0, left: 0.0, right: 1640.0, top: 0.0},
-												edges: [
-													{edges: "!820 20|1563 20!1563 20[1620 21 1620 80!1620 80|1620 360!1620 360[1620 419 1563 420!1563 420|820 420", fillStyle0: 1},
-													{edges: "!820 0|1560 0!1560 0[1640 0 1640 80!1640 80|1640 360!1640 360[1640 440 1560 440!1560 440|820 440", fillStyle1: 1},
-													{edges: "!820 420|820 440!820 0|820 20", fillStyle0: 1, fillStyle1: 2},
-													{edges: "!820 420|78 420!78 420[20 419 20 360!20 360|20 80!20 80[20 21 78 20!78 20|820 20", fillStyle0: 2},
-													{edges: "!820 440|81 440!81 440[0 440 0 360!0 360|0 80!0 80[0 0 81 0!81 0|820 0", fillStyle1: 2}
-												],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{color: "#0075BF", ratio: 0.0}, {color: "#009DFF", ratio: 0.992156862745098}],
-															matrix: {a: 0.0, b: -0.013427734375, c: 0.0134429931640625, d: 0.0, tx: 71.0, ty: 11.0},
-															type: "LinearGradient"
-														}
-													},
-													{
-														index: 2,
-														value: {
-															entries: [{color: "#0075BF", ratio: 0.0}, {color: "#009DFF", ratio: 0.992156862745098}],
-															matrix: {a: 0.0, b: -0.013427734375, c: -0.0134429931640625, d: 0.0, tx: 11.05, ty: 11.0},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_buttonskins_button_downskin_51b002c408/t00_l002_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 2,
 								name: "border"
 							}
@@ -923,59 +672,13 @@ final class AssetCatalogSymbolsComponents {
 						layers: [
 							{
 								color: "#9933CC",
-								frames: [
-									{
-										elements: [
-											{
-												bottomLeftRadius: 3.0,
-												bottomRightRadius: 3.0,
-												fill: {alpha: 0.0, color: "#FFFFFF", type: "SolidColor"},
-												objectHeight: 20.0,
-												objectWidth: 80.05,
-												topLeftRadius: 3.0,
-												topRightRadius: 3.0,
-												type: "DOMRectangleObject",
-												x: 1.0,
-												y: 1.0
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_buttonskins_button_emphasizedskin_89bb21fc64/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "fill"
 							},
 							{
 								color: "#4FFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 1563.0, left: 0.5, right: 1640.5, top: 0.0},
-												edges: [
-													{
-														edges: "!1620.5 360[#654.84 #1A2.BC 1563 420!1563 420|78 420!78 420[#14.7B #1A2.BC 20.5 360!20.5 360|20.5 80!20.5 80[#14.7B #15.44 78 20!78 20|1563 20!1563 20[#654.84 #15.44 1620.5 80!1620.5 80|1620.5 360!1640.5 80[#668.86 0 1560.5 0!1560.5 0 |80.5 0!80.5 0[#0.7A 0 0.5 80!0.5 80|0.5 360!0.5 360[#0.7A 440 80.5 440!80.5 440|1560.5 440!1560.5 440[#668.86 440 1640.5 360!1640.5 360|1640.5 80",
-														fillStyle0: 1
-													}
-												],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{color: "#2C92F5", ratio: 0.0}, {color: "#3D00CC", ratio: 1.0}],
-															matrix: {a: 1.52587890625e-05, b: 0.01318359375, c: -0.013427734375, d: 1.52587890625e-05, tx: 41.05, ty: 11.0},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_buttonskins_button_emphasizedskin_89bb21fc64/t00_l001_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 1,
 								name: "border"
 							}
@@ -1002,111 +705,19 @@ final class AssetCatalogSymbolsComponents {
 						layers: [
 							{
 								color: "#4FFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 240.0, left: 20.0, right: 1620.0, top: 20.0},
-												edges: [
-													{edges: "!820 20|1560 20!1560 20[1619 20 1620 80!1620 80|1620 240!1620 240|820 240", fillStyle1: 1},
-													{edges: "!820 240|820 20", fillStyle0: 2, fillStyle1: 1},
-													{edges: "!820 20|80 20!80 20[20 20 20 80!20 80|20 240!20 240|820 240", fillStyle0: 2}
-												],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{alpha: 0.0, color: "#CCCCCC", ratio: 0.0}, {alpha: 0.298039215686275, color: "#FFFFFF", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.00396728515625, c: 0.0183258056640625, d: 0.0, tx: 80.5, ty: 4.75},
-															type: "LinearGradient"
-														}
-													},
-													{
-														index: 2,
-														value: {
-															entries: [{alpha: 0.0, color: "#CCCCCC", ratio: 0.0}, {alpha: 0.298039215686275, color: "#FFFFFF", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.00640869140625, c: 0.0183258056640625, d: 0.0, tx: 61.55, ty: 6.75},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_buttonskins_button_overskin_97c93add4a/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "highlight"
 							},
 							{
 								color: "#9933CC",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 420.0, left: 20.0, right: 1621.0, top: 20.0},
-												edges: [{edges: "!1621 360[1621 419 1563 420!1563 420|78 420!78 420[20 419 21 360!21 360|21 80!21 80[20 21 78 20!78 20|1563 20!1563 20[1621 21 1621 80!1621 80|1621 360", fillStyle1: 1}],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{alpha: 0.4, color: "#CCCCCC", ratio: 0.0}, {alpha: 0.6, color: "#FFFFFF", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.013427734375, c: 0.0134429931640625, d: 0.0, tx: 71.0, ty: 11.0},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_buttonskins_button_overskin_97c93add4a/t00_l001_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 1,
 								name: "fill"
 							},
 							{
 								color: "#FFFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 440.0, left: 0.0, right: 1640.0, top: 0.0},
-												edges: [
-													{edges: "!820 20|1563 20!1563 20[1620 21 1620 80!1620 80|1620 360!1620 360[1620 419 1563 420!1563 420|820 420", fillStyle0: 1},
-													{edges: "!820 0|1560 0!1560 0[1640 0 1640 80!1640 80|1640 360!1640 360[1640 440 1560 440!1560 440|820 440", fillStyle1: 1},
-													{edges: "!820 420|820 440!820 0|820 20", fillStyle0: 1, fillStyle1: 2},
-													{edges: "!820 420|78 420!78 420[20 419 20 360!20 360|20 80!20 80[20 21 78 20!78 20|820 20", fillStyle0: 2},
-													{edges: "!820 440|81 440!81 440[0 440 0 360!0 360|0 80!0 80[0 0 81 0!81 0|820 0", fillStyle1: 2}
-												],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{color: "#0075BF", ratio: 0.0}, {color: "#009DFF", ratio: 0.992156862745098}],
-															matrix: {a: 0.0, b: -0.013427734375, c: 0.0134429931640625, d: 0.0, tx: 71.0, ty: 11.0},
-															type: "LinearGradient"
-														}
-													},
-													{
-														index: 2,
-														value: {
-															entries: [{color: "#0075BF", ratio: 0.0}, {color: "#009DFF", ratio: 0.992156862745098}],
-															matrix: {a: 0.0, b: -0.013427734375, c: -0.0134429931640625, d: 0.0, tx: 11.05, ty: 11.0},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_buttonskins_button_overskin_97c93add4a/t00_l002_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 2,
 								name: "border"
 							}
@@ -1134,39 +745,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#9933CC",
 								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 821.0, left: 4.7, right: 1260.0, top: 4.7},
-												edges: [
-													{edges: "!821 20|821 420", fillStyle0: 1, fillStyle1: 2},
-													{edges: "!821 420|1202 420!1202 420[1260 419 1260 360!1260 360|1260 80!1260 80[1260 22 1202 20!1202 20|821 20", fillStyle0: 1},
-													{edges: "!821 420|78 420!78 420[#14.7B #1A2.BC 20.5 360!20.5 360|20.5 80!20.5 80[#14.7B #15.44 78 20!78 20|821 20", fillStyle1: 2}
-												],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{alpha: 0.2, color: "#CCCCCC", ratio: 0.0}, {alpha: 0.298039215686275, color: "#CCCCCC", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.013427734375, c: 0.0134429931640625, d: 0.0, tx: 71.0, ty: 11.0},
-															type: "LinearGradient"
-														}
-													},
-													{
-														index: 2,
-														value: {
-															entries: [{alpha: 0.2, color: "#CCCCCC", ratio: 0.0}, {alpha: 0.298039215686275, color: "#CCCCCC", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.013427734375, c: -0.0134429931640625, d: 0.0, tx: 11.05, ty: 11.0},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_buttonskins_button_selecteddisableds_8095f79ee1/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 0,
 								name: "fill"
@@ -1174,43 +753,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#4FFF4F",
 								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 820.0, left: 0.5, right: 1280.0, top: 0.0},
-												edges: [
-													{edges: "!820 20|1202 20!1202 20[1260 22 1260 80!1260 80|1260 360!1260 360[1260 419 1202 420!1202 420|820 420", fillStyle0: 1},
-													{edges: "!820 0|1200 0!1200 0[1280 0 1280 80!1280 80|1280 360!1280 360[1280 440 1200 440!1200 440|820 440", fillStyle1: 1},
-													{edges: "!820 440|820 420!820 20|820 0", fillStyle0: 2, fillStyle1: 1},
-													{
-														edges: "!820 0|80.5 0!80.5 0[#0.7A 0 0.5 80!0.5 80|0.5 360!0.5 360[#0.7A 440 80.5 440!80.5 440|820 440!820 420|78 420!78 420[#14.7B #1A2.BC 20.5 360!20.5 360|20.5 80!20.5 80[#14.7B #15.44 78 20!78 20|820 20",
-														fillStyle0: 2
-													}
-												],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{alpha: 0.298039215686275, color: "#585F63", ratio: 0.0}, {alpha: 0.2, color: "#B7BABC", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.013427734375, c: 0.0134429931640625, d: 0.0, tx: 71.0, ty: 11.0},
-															type: "LinearGradient"
-														}
-													},
-													{
-														index: 2,
-														value: {
-															entries: [{alpha: 0.298039215686275, color: "#585F63", ratio: 0.0}, {alpha: 0.2, color: "#B7BABC", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.013427734375, c: -0.0134429931640625, d: 0.0, tx: 11.05, ty: 11.0},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_buttonskins_button_selecteddisableds_8095f79ee1/t00_l001_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 1,
 								name: "border"
@@ -1238,77 +781,13 @@ final class AssetCatalogSymbolsComponents {
 						layers: [
 							{
 								color: "#9933CC",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 821.0, left: 4.7, right: 1260.0, top: 5.44},
-												edges: [
-													{edges: "!821 420|1202 420!1202 420[1260 419 1260 360!1260 360|1260 80!1260 80[1260 22 1202 20!1202 20|821 20", fillStyle0: 1},
-													{edges: "!821 20|821 420", fillStyle0: 1, fillStyle1: 2},
-													{edges: "!821 20|78 20!78 20[#14.7B #15.44 20.5 80!20.5 80|20.5 360!20.5 360[#14.7B #1A2.BC 78 420!78 420|821 420", fillStyle0: 2}
-												],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{color: "#94D2FC", ratio: 0.0}, {color: "#ADE4FC", ratio: 1.0}, {color: "#BEEAFC", ratio: 1.0}],
-															matrix: {a: 0.0, b: 0.013427734375, c: -0.0134429931640625, d: 0.0, tx: 33.1, ty: 11.0},
-															type: "LinearGradient"
-														}
-													},
-													{
-														index: 2,
-														value: {
-															entries: [{color: "#94D2FC", ratio: 0.0}, {color: "#ADE4FC", ratio: 1.0}, {color: "#BEEAFC", ratio: 1.0}],
-															matrix: {a: 0.0, b: 0.013427734375, c: 0.0134429931640625, d: 0.0, tx: 31.05, ty: 11.0},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_buttonskins_button_selecteddownskin_f7c6cee05f/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "fill"
 							},
 							{
 								color: "#4FFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 820.0, left: 0.5, right: 1280.0, top: 0.0},
-												edges: [
-													{edges: "!820 20|1202 20!1202 20[1260 22 1260 80!1260 80|1260 360!1260 360[1260 419 1202 420!1202 420|820 420", fillStyle0: 1},
-													{edges: "!820 0|1200 0!1200 0[1280 0 1280 80!1280 80|1280 360!1280 360[1280 440 1200 440!1200 440|820 440", fillStyle1: 1},
-													{edges: "!820 440|820 420!820 20|820 0", fillStyle0: 2, fillStyle1: 1},
-													{
-														edges: "!820 0|80.5 0!80.5 0[#0.7A 0 0.5 80!0.5 80|0.5 360!0.5 360[#0.7A 440 80.5 440!80.5 440|820 440!820 420|78 420!78 420[#14.7B #1A2.BC 20.5 360!20.5 360|20.5 80!20.5 80[#14.7B #15.44 78 20!78 20|820 20",
-														fillStyle0: 2
-													}
-												],
-												fills: [
-													{
-														index: 1,
-														value: {entries: [{color: "#0075BF", ratio: 0.0}, {color: "#009DFF", ratio: 1.0}], matrix: {a: 0.0, b: -0.013427734375, c: 0.0134429931640625, d: 0.0, tx: 71.0, ty: 11.0}, type: "LinearGradient"}
-													},
-													{
-														index: 2,
-														value: {entries: [{color: "#0075BF", ratio: 0.0}, {color: "#009DFF", ratio: 1.0}], matrix: {a: 0.0, b: -0.013427734375, c: -0.0134429931640625, d: 0.0, tx: 11.05, ty: 11.0}, type: "LinearGradient"}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_buttonskins_button_selecteddownskin_f7c6cee05f/t00_l001_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 1,
 								name: "border"
 							}
@@ -1335,77 +814,13 @@ final class AssetCatalogSymbolsComponents {
 						layers: [
 							{
 								color: "#4FFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 821.0, left: 4.7, right: 1260.0, top: 4.7},
-												edges: [
-													{edges: "!821 20|821 420", fillStyle0: 1, fillStyle1: 2},
-													{edges: "!821 420|1202 420!1202 420[1260 419 1260 360!1260 360|1260 80!1260 80[1260 22 1202 20!1202 20|821 20", fillStyle0: 1},
-													{edges: "!821 420|78 420!78 420[#14.7B #1A2.BC 20.5 360!20.5 360|20.5 80!20.5 80[#14.7B #15.44 78 20!78 20|821 20", fillStyle1: 2}
-												],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{alpha: 0.4, color: "#CCCCCC", ratio: 0.0}, {alpha: 0.6, color: "#CCCCCC", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.013427734375, c: 0.0134429931640625, d: 0.0, tx: 71.0, ty: 11.0},
-															type: "LinearGradient"
-														}
-													},
-													{
-														index: 2,
-														value: {
-															entries: [{alpha: 0.4, color: "#CCCCCC", ratio: 0.0}, {alpha: 0.6, color: "#CCCCCC", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.013427734375, c: -0.0134429931640625, d: 0.0, tx: 11.05, ty: 11.0},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_buttonskins_button_selectedoverskin_ea602dca3e/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "fill"
 							},
 							{
 								color: "#9933CC",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 820.0, left: 0.5, right: 1280.0, top: 0.0},
-												edges: [
-													{edges: "!820 20|1202 20!1202 20[1260 22 1260 80!1260 80|1260 360!1260 360[1260 419 1202 420!1202 420|820 420", fillStyle0: 1},
-													{edges: "!820 0|1200 0!1200 0[1280 0 1280 80!1280 80|1280 360!1280 360[1280 440 1200 440!1200 440|820 440", fillStyle1: 1},
-													{edges: "!820 440|820 420!820 20|820 0", fillStyle0: 2, fillStyle1: 1},
-													{
-														edges: "!820 0|80.5 0!80.5 0[#0.7A 0 0.5 80!0.5 80|0.5 360!0.5 360[#0.7A 440 80.5 440!80.5 440|820 440!820 420|78 420!78 420[#14.7B #1A2.BC 20.5 360!20.5 360|20.5 80!20.5 80[#14.7B #15.44 78 20!78 20|820 20",
-														fillStyle0: 2
-													}
-												],
-												fills: [
-													{
-														index: 1,
-														value: {entries: [{color: "#0075BF", ratio: 0.0}, {color: "#009DFF", ratio: 1.0}], matrix: {a: 0.0, b: -0.013427734375, c: 0.0134429931640625, d: 0.0, tx: 71.0, ty: 11.0}, type: "LinearGradient"}
-													},
-													{
-														index: 2,
-														value: {entries: [{color: "#0075BF", ratio: 0.0}, {color: "#009DFF", ratio: 1.0}], matrix: {a: 0.0, b: -0.013427734375, c: -0.0134429931640625, d: 0.0, tx: 11.05, ty: 11.0}, type: "LinearGradient"}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_buttonskins_button_selectedoverskin_ea602dca3e/t00_l001_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 1,
 								name: "border"
 							}
@@ -1432,77 +847,13 @@ final class AssetCatalogSymbolsComponents {
 						layers: [
 							{
 								color: "#9933CC",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 821.0, left: 4.7, right: 1260.0, top: 5.44},
-												edges: [
-													{edges: "!821 420|1202 420!1202 420[1260 419 1260 360!1260 360|1260 80!1260 80[1260 22 1202 20!1202 20|821 20", fillStyle0: 2},
-													{edges: "!821 20|821 420", fillStyle0: 2, fillStyle1: 1},
-													{edges: "!821 20|78 20!78 20[#14.7B #15.44 20.5 80!20.5 80|20.5 360!20.5 360[#14.7B #1A2.BC 78 420!78 420|821 420", fillStyle0: 1}
-												],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{alpha: 0.4, color: "#CCCCCC", ratio: 0.0}, {alpha: 0.6, color: "#CCCCCC", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.013427734375, c: -0.0134429931640625, d: 0.0, tx: 11.05, ty: 11.0},
-															type: "LinearGradient"
-														}
-													},
-													{
-														index: 2,
-														value: {
-															entries: [{alpha: 0.4, color: "#CCCCCC", ratio: 0.0}, {alpha: 0.6, color: "#CCCCCC", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.013427734375, c: 0.0134429931640625, d: 0.0, tx: 71.0, ty: 11.0},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_buttonskins_button_selectedupskin_4853e09859/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "fill"
 							},
 							{
 								color: "#4FFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 820.0, left: 0.5, right: 1280.0, top: 0.0},
-												edges: [
-													{edges: "!820 20|1202 20!1202 20[1260 22 1260 80!1260 80|1260 360!1260 360[1260 419 1202 420!1202 420|820 420", fillStyle0: 1},
-													{edges: "!820 0|1200 0!1200 0[1280 0 1280 80!1280 80|1280 360!1280 360[1280 440 1200 440!1200 440|820 440", fillStyle1: 1},
-													{edges: "!820 440|820 420!820 20|820 0", fillStyle0: 2, fillStyle1: 1},
-													{
-														edges: "!820 0|80.5 0!80.5 0[#0.7A 0 0.5 80!0.5 80|0.5 360!0.5 360[#0.7A 440 80.5 440!80.5 440|820 440!820 420|78 420!78 420[#14.7B #1A2.BC 20.5 360!20.5 360|20.5 80!20.5 80[#14.7B #15.44 78 20!78 20|820 20",
-														fillStyle0: 2
-													}
-												],
-												fills: [
-													{
-														index: 1,
-														value: {entries: [{color: "#585F63", ratio: 0.0}, {color: "#B7BABC", ratio: 1.0}], matrix: {a: 0.0, b: -0.013427734375, c: 0.0134429931640625, d: 0.0, tx: 71.0, ty: 11.0}, type: "LinearGradient"}
-													},
-													{
-														index: 2,
-														value: {entries: [{color: "#585F63", ratio: 0.0}, {color: "#B7BABC", ratio: 1.0}], matrix: {a: 0.0, b: -0.013427734375, c: -0.0134429931640625, d: 0.0, tx: 11.05, ty: 11.0}, type: "LinearGradient"}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_buttonskins_button_selectedupskin_4853e09859/t00_l001_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 1,
 								name: "border"
 							}
@@ -1529,115 +880,19 @@ final class AssetCatalogSymbolsComponents {
 						layers: [
 							{
 								color: "#4FFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 240.0, left: 3.0, right: 1620.5, top: 3.0},
-												edges: [
-													{edges: "!820 20|1560 20!1560 20[#654.04 #13.F3 1620 79.5!1620 79.5|1620.5 240!1620.5 240|820 240", fillStyle1: 1},
-													{edges: "!820 240|820 20", fillStyle0: 2, fillStyle1: 1},
-													{edges: "!820 20|80 20!80 20[#13.FB #13.F3 20 79.5!20 79.5|20.5 240!20.5 240|820 240", fillStyle0: 2}
-												],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{alpha: 0.0, color: "#CCCCCC", ratio: 0.0}, {alpha: 0.298039215686275, color: "#FFFFFF", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.00396728515625, c: 0.0183258056640625, d: 0.0, tx: 80.5, ty: 4.75},
-															type: "LinearGradient"
-														}
-													},
-													{
-														index: 2,
-														value: {
-															entries: [{alpha: 0.0, color: "#CCCCCC", ratio: 0.0}, {alpha: 0.298039215686275, color: "#FFFFFF", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.00640869140625, c: 0.0183258056640625, d: 0.0, tx: 61.55, ty: 6.75},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_buttonskins_button_upskin_2211b80242/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "highlight"
 							},
 							{
 								color: "#9933CC",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 1563.0, left: 4.7, right: 1620.5, top: 5.44},
-												edges: [
-													{edges: "!821 20|1563 20!1563 20[#654.84 #15.44 1620.5 80!1620.5 80|1620.5 360!1620.5 360[#654.84 #1A2.BC 1563 420!1563 420|821 420", fillStyle1: 1},
-													{edges: "!821 420|821 20", fillStyle0: 2, fillStyle1: 1},
-													{edges: "!821 20|78 20!78 20[#14.7B #15.44 20.5 80!20.5 80|20.5 360!20.5 360[#14.7B #1A2.BC 78 420!78 420|821 420", fillStyle0: 2}
-												],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{alpha: 0.4, color: "#CCCCCC", ratio: 0.0}, {alpha: 0.6, color: "#FFFFFF", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.013427734375, c: 0.0134429931640625, d: 0.0, tx: 71.0, ty: 11.0},
-															type: "LinearGradient"
-														}
-													},
-													{
-														index: 2,
-														value: {
-															entries: [{alpha: 0.4, color: "#CCCCCC", ratio: 0.0}, {alpha: 0.6, color: "#FFFFFF", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.013427734375, c: -0.0134429931640625, d: 0.0, tx: 11.05, ty: 11.0},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_buttonskins_button_upskin_2211b80242/t00_l001_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 1,
 								name: "fill"
 							},
 							{
 								color: "#FFFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 440.0, left: 0.0, right: 1640.0, top: 0.0},
-												edges: [
-													{edges: "!820 440|1560 440!1560 440[1640 440 1640 360!1640 360|1640 80!1640 80[1640 0 1560 0!1560 0|820 0", fillStyle0: 1},
-													{edges: "!820 420|1563 420!1563 420[1620 419 1620 360!1620 360|1620 80!1620 80[1620 21 1563 20!1563 20|820 20", fillStyle1: 1},
-													{edges: "!820 0|820 20!820 420|820 440", fillStyle0: 1, fillStyle1: 2},
-													{edges: "!820 0|81 0!81 0[0 0 0 80!0 80|0 360!0 360[0 440 81 440!81 440|820 440", fillStyle0: 2},
-													{edges: "!820 20|78 20!78 20[20 21 20 80!20 80|20 360!20 360[20 419 78 420!78 420|820 420", fillStyle1: 2}
-												],
-												fills: [
-													{
-														index: 1,
-														value: {entries: [{color: "#585F63", ratio: 0.0}, {color: "#B7BABC", ratio: 1.0}], matrix: {a: 0.0, b: -0.013427734375, c: 0.0134429931640625, d: 0.0, tx: 71.0, ty: 11.0}, type: "LinearGradient"}
-													},
-													{
-														index: 2,
-														value: {entries: [{color: "#585F63", ratio: 0.0}, {color: "#B7BABC", ratio: 1.0}], matrix: {a: 0.0, b: -0.013427734375, c: -0.0134429931640625, d: 0.0, tx: 11.05, ty: 11.0}, type: "LinearGradient"}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_buttonskins_button_upskin_2211b80242/t00_l002_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 2,
 								name: "border"
 							}
@@ -1725,21 +980,7 @@ final class AssetCatalogSymbolsComponents {
 									{index: 0, keyMode: 9728},
 									{
 										elements: [
-											{
-												bottomLeftRadius: 10.0,
-												bottomRightRadius: 10.0,
-												fill: {color: "#EEEEEE", type: "SolidColor"},
-												matrix: {a: 0.999893188476562, d: 1.493896484375, tx: 1.55, ty: -45.25},
-												objectHeight: 183.0,
-												objectWidth: 388.95,
-												stroke: {fill: {color: "#CCCCCC", type: "SolidColor"}, scaleMode: "normal", type: "SolidStroke"},
-												topLeftRadius: 10.0,
-												topRightRadius: 10.0,
-												transformationPoint: {x: 192.9, y: 121.85},
-												type: "DOMRectangleObject",
-												x: -1.55,
-												y: 30.3
-											},
+											{svgAssetPath: "assets/svg/timeline/components_component_assets_cellrenderer_545abd2b3d/t00_l001_f0001_r00.svg", type: "DOMSvgInstance"},
 											{
 												height: 14.5,
 												matrix: {a: 0.999893188476562, d: 0.999832153320312, tx: 210.45, ty: 19.4},
@@ -1848,27 +1089,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#4FFF4F",
 								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 440.0, left: 0.0, right: 3040.0, top: 0.0},
-												edges: [{edges: "!3040 0|0 0!0 0|0 440!0 440|3040 440!3040 440|3040 0!3020 420|20 420!20 420|20 20!20 20|3020 20!3020 20|3020 420", fillStyle0: 1}],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{alpha: 0.298039215686275, color: "#5B5D5E", ratio: 0.0}, {alpha: 0.298039215686275, color: "#B7BABC", ratio: 1.0}],
-															matrix: {a: 0.0, b: 0.00787353515625, c: -0.00787353515625, d: 0.0, tx: 143.5, ty: 7.55},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_cellrendererskins_cellrenderer_disab_0d2e7cf1e5/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 0,
 								name: "border"
@@ -1876,18 +1097,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#9933CC",
 								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 440.5, left: -0.5, right: 3039.5, top: 0.5},
-												edges: [{edges: "!3039.5 440.5|-0.5 440.5!-0.5 440.5|-0.5 0.5!-0.5 0.5|3039.5 0.5!3039.5 0.5|3039.5 440.5", fillStyle1: 1}],
-												fills: [{index: 1, value: {alpha: 0.298039215686275, color: "#FFFFFF", type: "SolidColor"}}],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_cellrendererskins_cellrenderer_disab_0d2e7cf1e5/t00_l001_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 1,
 								name: "fill"
@@ -1915,27 +1125,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#4FFF4F",
 								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 440.0, left: 0.0, right: 3040.0, top: 0.0},
-												edges: [{edges: "!3040 0|0 0!0 0|0 440!0 440|3040 440!3040 440|3040 0!3020 420|20 420!20 420|20 20!20 20|3020 20!3020 20|3020 420", fillStyle0: 1}],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{color: "#0075BF", ratio: 0.0}, {color: "#009DFF", ratio: 0.992156862745098}],
-															matrix: {a: 0.0, b: 0.00787353515625, c: -0.00787353515625, d: 0.0, tx: 143.5, ty: 7.55},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_cellrendererskins_cellrenderer_downs_6296effe1c/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 0,
 								name: "border"
@@ -1943,18 +1133,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#9933CC",
 								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 440.5, left: -0.5, right: 3039.5, top: 0.5},
-												edges: [{edges: "!3039.5 440.5|-0.5 440.5!-0.5 440.5|-0.5 0.5!-0.5 0.5|3039.5 0.5!3039.5 0.5|3039.5 440.5", fillStyle1: 1}],
-												fills: [{index: 1, value: {color: "#9AD8FF", type: "SolidColor"}}],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_cellrendererskins_cellrenderer_downs_6296effe1c/t00_l001_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 1,
 								name: "fill"
@@ -1982,27 +1161,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#4FFF4F",
 								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 440.0, left: 0.0, right: 3040.0, top: 0.0},
-												edges: [{edges: "!3020 420|20 420!20 420|20 20!20 20|3020 20!3020 20|3020 420!3040 0|0 0!0 0|0 440!0 440|3040 440!3040 440|3040 0", fillStyle0: 1}],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{color: "#0075BF", ratio: 0.0}, {color: "#009DFF", ratio: 0.992156862745098}],
-															matrix: {a: 0.0, b: 0.00787353515625, c: -0.00787353515625, d: 0.0, tx: 143.5, ty: 7.55},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_cellrendererskins_cellrenderer_overs_08f02b380a/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 0,
 								name: "border"
@@ -2010,18 +1169,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#9933CC",
 								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 440.5, left: -0.5, right: 3039.5, top: 0.5},
-												edges: [{edges: "!3039.5 440.5S2|-0.5 440.5!-0.5 440.5|-0.5 0.5!-0.5 0.5|3039.5 0.5!3039.5 0.5|3039.5 440.5", fillStyle1: 1}],
-												fills: [{index: 1, value: {color: "#DAF1FF", type: "SolidColor"}}],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_cellrendererskins_cellrenderer_overs_08f02b380a/t00_l001_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 1,
 								locked: true,
@@ -2050,32 +1198,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#FFFF4F",
 								frames: [
-									{
-										elements: [
-											{
-												children: [
-													{
-														bounds: {bottom: 240.0, left: 20.0, right: 3020.0, top: 20.0},
-														edges: [{edges: "!3020 240|20 240!20 240|20 20!20 20|3020 20!3020 20|3020 240", fillStyle1: 1}],
-														fills: [
-															{
-																index: 1,
-																value: {
-																	entries: [{alpha: 0.0, color: "#EEEEEE", ratio: 0.0}, {alpha: 0.2, color: "#FFFFFF", ratio: 1.0}],
-																	matrix: {a: 0.0, b: -0.007080078125, c: 0.103958129882812, d: 0.0, tx: 63.5, ty: 6.65},
-																	type: "LinearGradient"
-																}
-															}
-														],
-														type: "DOMShape"
-													}
-												],
-												type: "DOMGroup"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_cellrendererskins_cellrenderer_selec_32aebf7468/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 0,
 								name: "highlight"
@@ -2083,35 +1206,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#4FFF4F",
 								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 440.0, left: 0.0, right: 3040.0, top: 0.0},
-												edges: [{edges: "!3020 420|20 420!20 420|20 20!20 20|3020 20!3020 20|3020 420", fillStyle0: 1, fillStyle1: 2}, {edges: "!3040 0|0 0!0 0|0 440!0 440|3040 440!3040 440|3040 0", fillStyle0: 1}],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{alpha: 0.298039215686275, color: "#5B5D5E", ratio: 0.0}, {alpha: 0.298039215686275, color: "#B7BABC", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.00787353515625, c: 0.00787353515625, d: 0.0, tx: 8.5, ty: 14.45},
-															type: "LinearGradient"
-														}
-													},
-													{
-														index: 2,
-														value: {
-															entries: [{alpha: 0.2, color: "#CCCCCC", ratio: 0.0}, {alpha: 0.298039215686275, color: "#FFFFFF", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.0138702392578125, c: 0.0138702392578125, d: 0.0, tx: 63.5, ty: 11.25},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_cellrendererskins_cellrenderer_selec_32aebf7468/t00_l001_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 1,
 								name: "fill"
@@ -2139,32 +1234,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#4FFF4F",
 								frames: [
-									{
-										elements: [
-											{
-												children: [
-													{
-														bounds: {bottom: 440.0, left: 0.0, right: 3040.0, top: 0.0},
-														edges: [{edges: "!3040 0|0 0!0 0|0 440!0 440|3040 440!3040 440|3040 0!3020 420|20 420!20 420|20 20!20 20|3020 20!3020 20|3020 420", fillStyle0: 1}],
-														fills: [
-															{
-																index: 1,
-																value: {
-																	entries: [{color: "#0075BF", ratio: 0.0}, {color: "#009DFF", ratio: 0.992156862745098}],
-																	matrix: {a: 0.0, b: -0.00787353515625, c: 0.00787353515625, d: 0.0, tx: 8.5, ty: 14.45},
-																	type: "LinearGradient"
-																}
-															}
-														],
-														type: "DOMShape"
-													}
-												],
-												type: "DOMGroup"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_cellrendererskins_cellrenderer_selec_3c2012137f/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 0,
 								name: "border"
@@ -2172,18 +1242,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#FFFF4F",
 								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 440.5, left: -0.5, right: 3039.5, top: 0.5},
-												edges: [{edges: "!3039.5 440.5|-0.5 440.5!-0.5 440.5|-0.5 0.5!-0.5 0.5|3039.5 0.5!3039.5 0.5|3039.5 440.5", fillStyle1: 1}],
-												fills: [{index: 1, value: {color: "#9AD8FF", type: "SolidColor"}}],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_cellrendererskins_cellrenderer_selec_3c2012137f/t00_l001_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 1,
 								name: "fill"
@@ -2211,32 +1270,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#FFFF4F",
 								frames: [
-									{
-										elements: [
-											{
-												children: [
-													{
-														bounds: {bottom: 240.0, left: 20.0, right: 3020.0, top: 20.0},
-														edges: [{edges: "!3020 240|20 240!20 240|20 20!20 20|3020 20!3020 20|3020 240", fillStyle1: 1}],
-														fills: [
-															{
-																index: 1,
-																value: {
-																	entries: [{alpha: 0.0, color: "#EEEEEE", ratio: 0.0}, {alpha: 0.298039215686275, color: "#FFFFFF", ratio: 1.0}],
-																	matrix: {a: 0.0, b: -0.007080078125, c: 0.103958129882812, d: 0.0, tx: 63.5, ty: 6.65},
-																	type: "LinearGradient"
-																}
-															}
-														],
-														type: "DOMShape"
-													}
-												],
-												type: "DOMGroup"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_cellrendererskins_cellrenderer_selec_dda13f0211/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 0,
 								name: "highlight"
@@ -2244,35 +1278,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#4FFF4F",
 								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 440.0, left: 0.0, right: 3040.0, top: 0.0},
-												edges: [{edges: "!3020 420|20 420!20 420|20 20!20 20|3020 20!3020 20|3020 420", fillStyle0: 1, fillStyle1: 2}, {edges: "!3040 0|0 0!0 0|0 440!0 440|3040 440!3040 440|3040 0", fillStyle0: 1}],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{color: "#0075BF", ratio: 0.0}, {color: "#009DFF", ratio: 0.992156862745098}],
-															matrix: {a: 0.0, b: -0.00787353515625, c: 0.00787353515625, d: 0.0, tx: 8.5, ty: 14.45},
-															type: "LinearGradient"
-														}
-													},
-													{
-														index: 2,
-														value: {
-															entries: [{alpha: 0.650980392156863, color: "#EEEEEE", ratio: 0.0}, {alpha: 0.741176470588235, color: "#FFFFFF", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.0138702392578125, c: 0.0138702392578125, d: 0.0, tx: 63.5, ty: 11.25},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_cellrendererskins_cellrenderer_selec_dda13f0211/t00_l001_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 1,
 								name: "fill"
@@ -2280,18 +1286,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#9933CC",
 								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 440.5, left: -0.5, right: 3039.5, top: 0.5},
-												edges: [{edges: "!3039.5 440.5|-0.5 440.5!-0.5 440.5|-0.5 0.5!-0.5 0.5|3039.5 0.5!3039.5 0.5|3039.5 440.5", fillStyle1: 1}],
-												fills: [{index: 1, value: {color: "#DAF1FF", type: "SolidColor"}}],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_cellrendererskins_cellrenderer_selec_dda13f0211/t00_l002_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 2,
 								name: "border"
@@ -2319,37 +1314,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#4FFF4F",
 								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 440.0, left: 0.0, right: 3040.0, top: 0.0},
-												edges: [
-													{edges: "!20 25|20 20!20 20|3020 20!3020 20|3020 25", fillStyle0: 2},
-													{edges: "!3020 25|3040 25", fillStyle0: 2, fillStyle1: 1},
-													{edges: "!3020 25|3020 420", fillStyle0: 1},
-													{edges: "!3020 420|3040 420", fillStyle0: 1, fillStyle1: 2},
-													{edges: "!3040 25|3040 0!3040 0|0 0!0 0|0 25", fillStyle0: 2},
-													{edges: "!3040 420|3040 25", fillStyle0: 1},
-													{edges: "!0 420|0 440!0 440|3040 440!3040 440|3040 420", fillStyle0: 2},
-													{edges: "!20 25|0 25", fillStyle0: 1, fillStyle1: 2},
-													{edges: "!20 420|20 25", fillStyle0: 1},
-													{edges: "!0 420|20 420", fillStyle0: 1, fillStyle1: 2},
-													{edges: "!0 25|0 420", fillStyle0: 1},
-													{edges: "!3020 420|20 420", fillStyle0: 2}
-												],
-												fills: [
-													{index: 1, value: {color: "#B7BABC", type: "SolidColor"}},
-													{
-														index: 2,
-														value: {entries: [{color: "#5B5D5E", ratio: 0.0}, {color: "#B7BABC", ratio: 1.0}], matrix: {a: 0.0, b: -0.00787353515625, c: 0.00787353515625, d: 0.0, tx: 8.5, ty: 14.45}, type: "LinearGradient"}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_cellrendererskins_cellrenderer_selec_2f45317e29/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 0,
 								name: "border"
@@ -2357,18 +1322,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#9933CC",
 								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 440.5, left: -0.5, right: 3039.5, top: 0.5},
-												edges: [{edges: "!3039.5 440.5S2|-0.5 440.5!-0.5 440.5|-0.5 0.5!-0.5 0.5|3039.5 0.5!3039.5 0.5|3039.5 440.5", fillStyle1: 1}],
-												fills: [{index: 1, value: {color: "#9AD8FF", type: "SolidColor"}}],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_cellrendererskins_cellrenderer_selec_2f45317e29/t00_l001_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 1,
 								name: "fill"
@@ -2396,34 +1350,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#4FFF4F",
 								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 440.0, left: 0.0, right: 3040.0, top: 0.0},
-												edges: [
-													{edges: "!3020 415|3020 420!3020 420|20 420!20 420|20 415", fillStyle0: 2},
-													{edges: "!3020 415|3040 415", fillStyle0: 1, fillStyle1: 2},
-													{edges: "!3020 20|3020 415", fillStyle0: 1},
-													{edges: "!3040 20|3020 20", fillStyle0: 1, fillStyle1: 2},
-													{edges: "!3040 415|3040 20", fillStyle0: 1},
-													{edges: "!0 415|0 440!0 440|3040 440!3040 440|3040 415!3040 20|3040 0!3040 0|0 0!0 0|0 20", fillStyle0: 2},
-													{edges: "!20 415|0 415!0 20|20 20", fillStyle0: 2, fillStyle1: 1},
-													{edges: "!20 415|20 20!0 20|0 415", fillStyle0: 1},
-													{edges: "!20 20|3020 20", fillStyle0: 2}
-												],
-												fills: [
-													{index: 1, value: {color: "#B7BABC", type: "SolidColor"}},
-													{
-														index: 2,
-														value: {entries: [{color: "#5B5D5E", ratio: 0.0}, {color: "#B7BABC", ratio: 1.0}], matrix: {a: 0.0, b: 0.00787353515625, c: -0.00787353515625, d: 0.0, tx: 143.5, ty: 7.55}, type: "LinearGradient"}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_cellrendererskins_cellrenderer_upski_5bfd948812/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 0,
 								name: "border"
@@ -2431,18 +1358,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#9933CC",
 								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 440.5, left: -0.5, right: 3039.5, top: 0.5},
-												edges: [{edges: "!3039.5 440.5|-0.5 440.5!-0.5 440.5|-0.5 0.5!-0.5 0.5|3039.5 0.5!3039.5 0.5|3039.5 440.5", fillStyle1: 1}],
-												fills: [{index: 1, value: {color: "#FFFFFF", type: "SolidColor"}}],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_cellrendererskins_cellrenderer_upski_5bfd948812/t00_l001_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 1,
 								name: "fill"
@@ -2466,105 +1382,19 @@ final class AssetCatalogSymbolsComponents {
 						layers: [
 							{
 								color: "#9933CC",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 150.0, left: 20.0, right: 260.0, top: 20.0},
-												edges: [{edges: "!260 150|20 150!20 150|20 20!20 20|260 20!260 20|260 150", fillStyle1: 1}],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{alpha: 0.0, color: "#EEEEEE", ratio: 0.0}, {alpha: 0.298039215686275, color: "#FFFFFF", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.00408935546875, c: 0.0083160400390625, d: 0.0, tx: 6.0, ty: 4.35},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_checkboxskins_checkbox_disabledicon_86924d41ea/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "highlight"
 							},
 							{
 								color: "#FFFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 260.0, left: 20.0, right: 260.0, top: 20.0},
-												edges: [{edges: "!260 20|260 260!260 260|20 260!20 260|20 20!20 20|260 20", fillStyle1: 1}],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{alpha: 0.2, color: "#CCCCCC", ratio: 0.0}, {alpha: 0.298039215686275, color: "#FFFFFF", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.0083160400390625, c: 0.0083160400390625, d: 0.0, tx: 6.0, ty: 7.15},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_checkboxskins_checkbox_disabledicon_86924d41ea/t00_l001_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 1,
 								name: "fill"
 							},
 							{
 								color: "#4FFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 280.0, left: 0.0, right: 280.0, top: 0.0},
-												edges: [{edges: "!0 280|280 280!280 280|280 0!280 0|0 0!0 0|0 280!260 20|260 260!260 260|20 260!20 260|20 20!20 20|260 20", fillStyle0: 1}],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{alpha: 0.298039215686275, color: "#5B5D5E", ratio: 0.0}, {alpha: 0.298039215686275, color: "#B7BABC", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.00787353515625, c: 0.00787353515625, d: 0.0, tx: 8.5, ty: 6.45},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											},
-											{
-												children: [
-													{
-														bounds: {bottom: 260.0, left: 20.0, right: 260.0, top: 20.0},
-														edges: [{edges: "!260 260|20 260!20 260|20 20!20 20|260 20!260 20|260 260", fillStyle1: 1}],
-														fills: [
-															{
-																index: 1,
-																value: {
-																	entries: [{alpha: 0.2, color: "#CCCCCC", ratio: 0.0}, {alpha: 0.298039215686275, color: "#FFFFFF", ratio: 1.0}],
-																	matrix: {a: 0.0, b: -0.0083160400390625, c: 0.0083160400390625, d: 0.0, tx: 6.0, ty: 7.15},
-																	type: "LinearGradient"
-																}
-															}
-														],
-														type: "DOMShape"
-													}
-												],
-												type: "DOMGroup"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_checkboxskins_checkbox_disabledicon_86924d41ea/t00_l002_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 2,
 								name: "border"
 							}
@@ -2587,81 +1417,19 @@ final class AssetCatalogSymbolsComponents {
 						layers: [
 							{
 								color: "#FFFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 150.0, left: 20.0, right: 260.0, top: 20.0},
-												edges: [{edges: "!260 150|20 150!20 150|20 20!20 20|260 20!260 20|260 150", fillStyle1: 1}],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{alpha: 0.0, color: "#EEEEEE", ratio: 0.0}, {alpha: 0.298039215686275, color: "#FFFFFF", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.00408935546875, c: 0.0083160400390625, d: 0.0, tx: 6.0, ty: 4.35},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_checkboxskins_checkbox_downicon_0030cac676/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "highlight"
 							},
 							{
 								color: "#9933CC",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 260.0, left: 20.0, right: 260.0, top: 20.0},
-												edges: [{edges: "!260 20|260 260!260 260|20 260!20 260|20 20!20 20|260 20", fillStyle1: 1}],
-												fills: [
-													{
-														index: 1,
-														value: {entries: [{color: "#99D7FE", ratio: 0.0}, {color: "#D9F0FE", ratio: 1.0}], matrix: {a: 0.0, b: -0.0083160400390625, c: 0.0083160400390625, d: 0.0, tx: 6.0, ty: 7.15}, type: "LinearGradient"}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_checkboxskins_checkbox_downicon_0030cac676/t00_l001_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 1,
 								name: "fill"
 							},
 							{
 								color: "#4FFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 280.0, left: 0.0, right: 280.0, top: 0.0},
-												edges: [{edges: "!260 20|260 260!260 260|20 260!20 260|20 20!20 20|260 20!280 280|280 0!280 0|0 0!0 0|0 280!0 280|280 280", fillStyle0: 1}],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{color: "#0075BF", ratio: 0.0}, {color: "#009DFF", ratio: 0.992156862745098}],
-															matrix: {a: 0.0, b: -0.0088653564453125, c: 0.0088653564453125, d: 0.0, tx: 7.8, ty: 6.45},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_checkboxskins_checkbox_downicon_0030cac676/t00_l002_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 2,
 								name: "border"
 							}
@@ -2684,85 +1452,19 @@ final class AssetCatalogSymbolsComponents {
 						layers: [
 							{
 								color: "#FFFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 150.0, left: 20.0, right: 260.0, top: 20.0},
-												edges: [{edges: "!260 150|20 150!20 150|20 20!20 20|260 20!260 20|260 150", fillStyle1: 1}],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{alpha: 0.0, color: "#EEEEEE", ratio: 0.0}, {alpha: 0.298039215686275, color: "#FFFFFF", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.00408935546875, c: 0.0083160400390625, d: 0.0, tx: 6.0, ty: 4.35},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_checkboxskins_checkbox_overicon_dbb9d0c879/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "highlight"
 							},
 							{
 								color: "#9933CC",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 260.0, left: 20.0, right: 260.0, top: 20.0},
-												edges: [{edges: "!20 260|20 20!20 20|260 20!260 20|260 260!260 260|20 260", fillStyle1: 1}],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{alpha: 0.650980392156863, color: "#EEEEEE", ratio: 0.0}, {alpha: 0.741176470588235, color: "#FFFFFF", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.0083160400390625, c: 0.0083160400390625, d: 0.0, tx: 6.0, ty: 7.15},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_checkboxskins_checkbox_overicon_dbb9d0c879/t00_l001_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 1,
 								name: "fill"
 							},
 							{
 								color: "#4FFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 280.0, left: 0.0, right: 280.0, top: 0.0},
-												edges: [{edges: "!20 260|20 20!20 20|260 20!260 20|260 260!260 260|20 260!0 0|0 280!0 280|280 280!280 280|280 0!280 0|0 0", fillStyle0: 1}],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{color: "#0075BF", ratio: 0.0}, {color: "#009DFF", ratio: 0.992156862745098}],
-															matrix: {a: 0.0, b: -0.0088653564453125, c: 0.0088653564453125, d: 0.0, tx: 7.8, ty: 6.45},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_checkboxskins_checkbox_overicon_dbb9d0c879/t00_l002_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 2,
 								name: "border"
 							}
@@ -2806,27 +1508,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#FFFF4F",
 								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 150.0, left: 20.0, right: 260.0, top: 20.0},
-												edges: [{edges: "!260 150|20 150!20 150|20 20!20 20|260 20!260 20|260 150", fillStyle1: 1}],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{alpha: 0.0, color: "#EEEEEE", ratio: 0.0}, {alpha: 0.298039215686275, color: "#FFFFFF", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.00408935546875, c: 0.0083160400390625, d: 0.0, tx: 6.0, ty: 4.35},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_checkboxskins_checkbox_selecteddisab_549a1e0d89/t00_l001_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 1,
 								name: "highlight"
@@ -2834,27 +1516,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#9933CC",
 								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 260.0, left: 20.0, right: 260.0, top: 20.0},
-												edges: [{edges: "!260 260|20 260!20 260|20 20!20 20|260 20!260 20|260 260", fillStyle1: 1}],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{alpha: 0.2, color: "#CCCCCC", ratio: 0.0}, {alpha: 0.298039215686275, color: "#FFFFFF", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.0083160400390625, c: 0.0083160400390625, d: 0.0, tx: 6.0, ty: 7.15},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_checkboxskins_checkbox_selecteddisab_549a1e0d89/t00_l002_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 2,
 								name: "fill"
@@ -2862,27 +1524,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#4FFF4F",
 								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 280.0, left: 0.0, right: 280.0, top: 0.0},
-												edges: [{edges: "!260 260|20 260!20 260|20 20!20 20|260 20!260 20|260 260!0 280|280 280!280 280|280 0!280 0|0 0!0 0|0 280", fillStyle0: 1}],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{alpha: 0.298039215686275, color: "#5B5D5E", ratio: 0.0}, {alpha: 0.298039215686275, color: "#B7BABC", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.00787353515625, c: 0.00787353515625, d: 0.0, tx: 8.5, ty: 6.45},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_checkboxskins_checkbox_selecteddisab_549a1e0d89/t00_l003_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 3,
 								name: "border"
@@ -2919,27 +1561,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#FFFF4F",
 								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 150.0, left: 20.0, right: 260.0, top: 20.0},
-												edges: [{edges: "!260 150|20 150!20 150|20 20!20 20|260 20!260 20|260 150", fillStyle1: 1}],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{alpha: 0.0, color: "#EEEEEE", ratio: 0.0}, {alpha: 0.298039215686275, color: "#FFFFFF", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.00408935546875, c: 0.0083160400390625, d: 0.0, tx: 6.0, ty: 4.35},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_checkboxskins_checkbox_selecteddowni_11685d9bd1/t00_l001_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 1,
 								name: "highlight"
@@ -2947,23 +1569,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#9933CC",
 								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 260.0, left: 20.0, right: 260.0, top: 20.0},
-												edges: [{edges: "!260 20|260 260!260 260|20 260!20 260|20 20!20 20|260 20", fillStyle1: 1}],
-												fills: [
-													{
-														index: 1,
-														value: {entries: [{color: "#99D7FE", ratio: 0.0}, {color: "#D9F0FE", ratio: 1.0}], matrix: {a: 0.0, b: -0.0083160400390625, c: 0.0083160400390625, d: 0.0, tx: 6.0, ty: 7.15}, type: "LinearGradient"}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_checkboxskins_checkbox_selecteddowni_11685d9bd1/t00_l002_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 2,
 								name: "fill"
@@ -2971,27 +1577,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#4FFF4F",
 								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 280.0, left: 0.0, right: 280.0, top: 0.0},
-												edges: [{edges: "!20 260|20 20!20 20|260 20!260 20|260 260!260 260|20 260!0 0|0 280!0 280|280 280!280 280|280 0!280 0|0 0", fillStyle0: 1}],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{color: "#0075BF", ratio: 0.0}, {color: "#009DFF", ratio: 0.992156862745098}],
-															matrix: {a: 0.0, b: -0.0088653564453125, c: 0.0088653564453125, d: 0.0, tx: 7.8, ty: 6.45},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_checkboxskins_checkbox_selecteddowni_11685d9bd1/t00_l003_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 3,
 								name: "border"
@@ -3013,20 +1599,7 @@ final class AssetCatalogSymbolsComponents {
 						layers: [
 							{
 								color: "#4FFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 180.0, left: 0.0, right: 200.0, top: 0.0},
-												edges: [{edges: "!0 76|39 73!39 73|70 135!70 135|157 0!157 0|200 0!200 0|177 28!177 28|90 180!90 180|45 180!45 180|0 76", fillStyle1: 1}],
-												fills: [{index: 1, value: {type: "SolidColor"}}],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_checkboxskins_checkbox_selectedicon_7664e0cf5f/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "icon"
 							}
@@ -3062,27 +1635,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#FFFF4F",
 								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 150.0, left: 20.0, right: 260.0, top: 20.0},
-												edges: [{edges: "!260 150|20 150!20 150|20 20!20 20|260 20!260 20|260 150", fillStyle1: 1}],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{alpha: 0.0, color: "#EEEEEE", ratio: 0.0}, {alpha: 0.298039215686275, color: "#FFFFFF", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.00408935546875, c: 0.0083160400390625, d: 0.0, tx: 6.0, ty: 4.35},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_checkboxskins_checkbox_selectedoveri_00e16338fc/t00_l001_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 1,
 								name: "highlight"
@@ -3090,27 +1643,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#9933CC",
 								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 260.0, left: 20.0, right: 260.0, top: 20.0},
-												edges: [{edges: "!20 260|20 20!20 20|260 20!260 20|260 260!260 260|20 260", fillStyle1: 1}],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{alpha: 0.650980392156863, color: "#EEEEEE", ratio: 0.0}, {alpha: 0.741176470588235, color: "#FFFFFF", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.0083160400390625, c: 0.0083160400390625, d: 0.0, tx: 6.0, ty: 7.15},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_checkboxskins_checkbox_selectedoveri_00e16338fc/t00_l002_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 2,
 								name: "fill"
@@ -3118,27 +1651,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#4FFF4F",
 								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 280.0, left: 0.0, right: 280.0, top: 0.0},
-												edges: [{edges: "!20 260|20 20!20 20|260 20!260 20|260 260!260 260|20 260!0 0|0 280!0 280|280 280!280 280|280 0!280 0|0 0", fillStyle0: 1}],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{color: "#0075BF", ratio: 0.0}, {color: "#009DFF", ratio: 0.992156862745098}],
-															matrix: {a: 0.0, b: -0.0088653564453125, c: 0.0088653564453125, d: 0.0, tx: 7.8, ty: 6.45},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_checkboxskins_checkbox_selectedoveri_00e16338fc/t00_l003_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 3,
 								name: "border"
@@ -3175,27 +1688,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#FFFF4F",
 								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 150.0, left: 20.0, right: 260.0, top: 20.0},
-												edges: [{edges: "!260 150|20 150!20 150|20 20!20 20|260 20!260 20|260 150", fillStyle1: 1}],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{alpha: 0.0, color: "#EEEEEE", ratio: 0.0}, {alpha: 0.298039215686275, color: "#FFFFFF", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.00408935546875, c: 0.0083160400390625, d: 0.0, tx: 6.0, ty: 4.35},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_checkboxskins_checkbox_selectedupico_80c3ace1b1/t00_l001_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 1,
 								name: "highlight"
@@ -3203,27 +1696,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#9933CC",
 								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 260.0, left: 20.0, right: 260.0, top: 20.0},
-												edges: [{edges: "!20 20|260 20!260 20|260 260!260 260|20 260!20 260|20 20", fillStyle1: 1}],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{alpha: 0.4, color: "#CCCCCC", ratio: 0.0}, {alpha: 0.6, color: "#FFFFFF", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.0083160400390625, c: 0.0083160400390625, d: 0.0, tx: 6.0, ty: 7.15},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_checkboxskins_checkbox_selectedupico_80c3ace1b1/t00_l002_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 2,
 								name: "fill"
@@ -3231,23 +1704,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#4FFF4F",
 								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 280.0, left: 0.0, right: 280.0, top: 0.0},
-												edges: [{edges: "!0 0|0 280!0 280|280 280!280 280|280 0!280 0|0 0!20 20|260 20!260 20|260 260!260 260|20 260!20 260|20 20", fillStyle0: 1}],
-												fills: [
-													{
-														index: 1,
-														value: {entries: [{color: "#5B5D5E", ratio: 0.0}, {color: "#B7BABC", ratio: 1.0}], matrix: {a: 0.0, b: -0.00787353515625, c: 0.00787353515625, d: 0.0, tx: 8.5, ty: 6.45}, type: "LinearGradient"}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_checkboxskins_checkbox_selectedupico_80c3ace1b1/t00_l003_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 3,
 								name: "border"
@@ -3271,81 +1728,19 @@ final class AssetCatalogSymbolsComponents {
 						layers: [
 							{
 								color: "#FF4FFF",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 150.0, left: 20.0, right: 260.0, top: 20.0},
-												edges: [{edges: "!260 150|20 150!20 150|20 20!20 20|260 20!260 20|260 150", fillStyle1: 1}],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{alpha: 0.0, color: "#EEEEEE", ratio: 0.0}, {alpha: 0.298039215686275, color: "#FFFFFF", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.00408935546875, c: 0.0083160400390625, d: 0.0, tx: 6.0, ty: 4.35},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_checkboxskins_checkbox_upicon_a6991c47cf/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "highlight"
 							},
 							{
 								color: "#9933CC",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 260.0, left: 20.0, right: 260.0, top: 20.0},
-												edges: [{edges: "!260 20|260 260!260 260|20 260!20 260|20 20!20 20|260 20", fillStyle1: 1}],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{alpha: 0.4, color: "#CCCCCC", ratio: 0.0}, {alpha: 0.6, color: "#FFFFFF", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.0083160400390625, c: 0.0083160400390625, d: 0.0, tx: 6.0, ty: 7.15},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_checkboxskins_checkbox_upicon_a6991c47cf/t00_l001_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 1,
 								name: "fill"
 							},
 							{
 								color: "#4FFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 280.0, left: 0.0, right: 280.0, top: 0.0},
-												edges: [{edges: "!260 20|260 260!260 260|20 260!20 260|20 20!20 20|260 20!0 280|280 280!280 280|280 0!280 0|0 0!0 0|0 280", fillStyle0: 1}],
-												fills: [
-													{
-														index: 1,
-														value: {entries: [{color: "#5B5D5E", ratio: 0.0}, {color: "#B7BABC", ratio: 1.0}], matrix: {a: 0.0, b: -0.00787353515625, c: 0.00787353515625, d: 0.0, tx: 8.5, ty: 6.45}, type: "LinearGradient"}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_checkboxskins_checkbox_upicon_a6991c47cf/t00_l002_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 2,
 								name: "border"
 							}
@@ -3408,18 +1803,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#4FFF4F",
 								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 380.0, left: 0.0, right: 380.0, top: 0.0},
-												edges: [{edges: "!0 0|380 0!380 0|380 380!380 380|0 380!0 380|0 0", fillStyle1: 1}],
-												fills: [{index: 1, value: {color: "#999999", type: "SolidColor"}}],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_colorpickerskins_colorpicker_colorwe_9379d8b1a7/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 0,
 								name: "colorWell"
@@ -3448,40 +1832,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#4FFF4F",
 								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 440.0, left: 0.0, right: 440.0, top: 0.0},
-												edges: [
-													{edges: "!420 20|420 420!420 420|20 420", fillStyle0: 3, fillStyle1: 4},
-													{edges: "!420 20|420 0", fillStyle0: 5, fillStyle1: 3},
-													{edges: "!420 0|440 0!440 0|440 440!440 440|0 440!0 440|0 420", fillStyle1: 3},
-													{edges: "!380 60|380 40", fillStyle0: 3, fillStyle1: 5},
-													{edges: "!380 320|400 320!400 320|400 40!400 40|380 40", fillStyle0: 5, fillStyle1: 4},
-													{edges: "!60 380|40 380!0 420|20 420", fillStyle0: 5, fillStyle1: 3},
-													{edges: "!40 380|40 400!40 400|280 400!280 400|280 380", fillStyle0: 5, fillStyle1: 4},
-													{edges: "!309 351|389.5 351!389.5 351|349.5 391!349.5 391|309 351", fillStyle0: 4, fillStyle1: 1},
-													{edges: "!280 380|280 320!280 320|380 320", fillStyle0: 2, fillStyle1: 4},
-													{edges: "!420 0|0 0!0 0|0 420", fillStyle0: 5},
-													{edges: "!60 380|280 380", fillStyle0: 2, fillStyle1: 5},
-													{edges: "!380 60|60 60!60 60|60 380", fillStyle0: 2, fillStyle1: 3},
-													{edges: "!380 320|380 60", fillStyle0: 2, fillStyle1: 5},
-													{edges: "!20 420|20 20!20 20|420 20", fillStyle0: 5, fillStyle1: 4},
-													{edges: "!380 40|40 40!40 40|40 380", fillStyle0: 3, fillStyle1: 4}
-												],
-												fills: [
-													{index: 1, value: {alpha: 0.498039215686275, type: "SolidColor"}},
-													{index: 2, value: {alpha: 0.0, color: "#333333", type: "SolidColor"}},
-													{index: 3, value: {alpha: 0.498039215686275, color: "#9A9B9D", type: "SolidColor"}},
-													{index: 4, value: {alpha: 0.498039215686275, color: "#E5E6E7", type: "SolidColor"}},
-													{index: 5, value: {alpha: 0.498039215686275, color: "#FFFFFF", type: "SolidColor"}}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_colorpickerskins_colorpicker_disable_2daed58fb1/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 0,
 								name: "skin"
@@ -3510,42 +1861,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#FF4FFF",
 								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 440.0, left: 0.0, right: 440.0, top: 0.0},
-												edges: [
-													{edges: "!420 20S3|420 420!420 420|20 420", fillStyle0: 1, fillStyle1: 2},
-													{edges: "!420 20S3|420 0", fillStyle0: 3, fillStyle1: 1},
-													{edges: "!420 0S2|440 0!440 0|440 440!440 440|0 440!0 440|0 420", fillStyle1: 1},
-													{edges: "!380 40S3|400 40!400 40|400 320!400 320|380 320", fillStyle0: 2, fillStyle1: 3},
-													{edges: "!380 40S3|380 60", fillStyle0: 3, fillStyle1: 4},
-													{edges: "!0 420S3|20 420", fillStyle0: 3, fillStyle1: 1},
-													{edges: "!40 380S3|60 380", fillStyle0: 4, fillStyle1: 3},
-													{edges: "!280 380S3|280 400!280 400|40 400!40 400|40 380", fillStyle0: 2, fillStyle1: 3},
-													{edges: "!380 320S3|280 320!280 320|280 380", fillStyle0: 2, fillStyle1: 5},
-													{edges: "!389.5 351S3|349.5 391!349.5 391|309 351!309 351|389.5 351", fillStyle0: 2, fillStyle1: 6},
-													{edges: "!40 380S3|40 40!40 40|380 40", fillStyle0: 2, fillStyle1: 4},
-													{edges: "!0 420S2|0 0!0 0|420 0", fillStyle1: 3},
-													{edges: "!380 320S3|380 60", fillStyle0: 5, fillStyle1: 3},
-													{edges: "!20 420S3|20 20!20 20|420 20", fillStyle0: 3, fillStyle1: 2},
-													{edges: "!380 60S3|60 60!60 60|60 380", fillStyle0: 5, fillStyle1: 4},
-													{edges: "!60 380S3|280 380", fillStyle0: 5, fillStyle1: 3}
-												],
-												fills: [
-													{index: 1, value: {color: "#CCCCCC", type: "SolidColor"}},
-													{index: 2, value: {color: "#E5E6E7", type: "SolidColor"}},
-													{index: 3, value: {color: "#FFFFFF", type: "SolidColor"}},
-													{index: 4, value: {color: "#9A9B9D", type: "SolidColor"}},
-													{index: 5, value: {alpha: 0.0, color: "#333333", type: "SolidColor"}},
-													{index: 6, value: {type: "SolidColor"}}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_colorpickerskins_colorpicker_downski_88b914bf12/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 0,
 								name: "skin"
@@ -3574,40 +1890,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#4FFF4F",
 								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 440.0, left: 0.0, right: 440.0, top: 0.0},
-												edges: [
-													{edges: "!420 20S3|420 420!420 420|20 420", fillStyle0: 1, fillStyle1: 2},
-													{edges: "!420 20S3|420 0", fillStyle0: 3, fillStyle1: 1},
-													{edges: "!420 0S2|440 0!440 0|440 440!440 440|0 440!0 440|0 420", fillStyle1: 1},
-													{edges: "!380 60S3|380 40", fillStyle0: 1, fillStyle1: 3},
-													{edges: "!380 320S3|400 320!400 320|400 40!400 40|380 40", fillStyle0: 3, fillStyle1: 2},
-													{edges: "!60 380S3|40 380!0 420|20 420", fillStyle0: 3, fillStyle1: 1},
-													{edges: "!40 380S3|40 400!40 400|280 400!280 400|280 380", fillStyle0: 3, fillStyle1: 2},
-													{edges: "!309 351S3|389.5 351!389.5 351|349.5 391!349.5 391|309 351", fillStyle0: 2, fillStyle1: 5},
-													{edges: "!280 380S3|280 320!280 320|380 320", fillStyle0: 4, fillStyle1: 2},
-													{edges: "!420 0S1|0 0!0 0|0 420", fillStyle0: 3},
-													{edges: "!60 380S3|280 380", fillStyle0: 4, fillStyle1: 3},
-													{edges: "!380 60S3|60 60!60 60|60 380", fillStyle0: 4, fillStyle1: 1},
-													{edges: "!380 320S3|380 60", fillStyle0: 4, fillStyle1: 3},
-													{edges: "!20 420S3|20 20!20 20|420 20", fillStyle0: 3, fillStyle1: 2},
-													{edges: "!380 40S3|40 40!40 40|40 380", fillStyle0: 1, fillStyle1: 2}
-												],
-												fills: [
-													{index: 1, value: {color: "#9A9B9D", type: "SolidColor"}},
-													{index: 2, value: {color: "#E5E6E7", type: "SolidColor"}},
-													{index: 3, value: {color: "#FFFFFF", type: "SolidColor"}},
-													{index: 4, value: {alpha: 0.0, color: "#333333", type: "SolidColor"}},
-													{index: 5, value: {type: "SolidColor"}}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_colorpickerskins_colorpicker_overski_f2ffdfc8b1/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 0,
 								name: "skin"
@@ -3635,18 +1918,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#9933CC",
 								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 230.0, left: 9.0, right: 229.0, top: 10.0},
-												edges: [{edges: "!229 230S4|9 230!9 230|9 10!9 10|229 10!229 10|229 230", strokeStyle: 1}],
-												strokes: [{index: 1, value: {caps: "square", fill: {color: "#FFFFFF", type: "SolidColor"}, joints: "miter", scaleMode: "normal", type: "SolidStroke"}}],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_colorpickerskins_colorpicker_swatchs_dcf7447559/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 0,
 								name: "skin"
@@ -3670,18 +1942,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#FF4F4F",
 								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 160.0, left: 0.0, right: 160.0, top: 0.0},
-												edges: [{edges: "!160 160|0 160!0 160|0 0!0 0|160 0!160 0|160 160", fillStyle1: 1}],
-												fills: [{index: 1, value: {color: "#00CCFF", type: "SolidColor"}}],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_colorpickerskins_colorpicker_swatchs_960a145fb8/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 0,
 								name: "skin"
@@ -3709,44 +1970,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#9933CC",
 								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 1507.0, left: 1.0, right: 1510.0, top: 0.0},
-												edges: [
-													{edges: "!1490 21|1490 11!1490 11[#5D2.09 #6.E5 1493 4!1493 4[#5D7.CE #1.21 1499.5 1", fillStyle0: 2, fillStyle1: 1},
-													{
-														edges: "!1499.5 1|1500 1!1500 1[#5E0.1A #1.0A 1507 4!1507 4[#5E5.F8 #6.E9 1510 11!1510 11|1510 700!1510 700[#5E5.F7 #2C0.1B 1507 707!1507 707[#5E0.1B #2C5.F7 1500 710!1500 710|12 710!12 710[#7.E5 #2C5.F7 5 707!5 707[#2.09 #2C0.1B 2 700!2 700 |2 699.5!22 690|1490 690!1490 690|1490 21",
-														fillStyle1: 1
-													},
-													{edges: " !1499.5 1|12 1!12 1[#7.E8 #1.06 5 4!5 4[#2.07 #6.E4 2 11!2 11|2 699.5", fillStyle0: 2},
-													{edges: " !2 699.5[#2.21 #2B7.CE 5 693!5 693[#7.E5 #2B2.09 12 690!12 690|22 690", fillStyle0: 2, fillStyle1: 1},
-													{edges: " !1490 21|22 21!22 21|22 690", fillStyle1: 2}
-												],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{color: "#0075BF", ratio: 0.0}, {color: "#0075BF", ratio: 0.0}, {color: "#009DFF", ratio: 0.992156862745098}, {color: "#009DFF", ratio: 1.0}, {color: "#009DFF", ratio: 1.0}],
-															matrix: {a: 0.0460205078125, d: 0.021636962890625, tx: 37.8, ty: 17.75},
-															type: "LinearGradient"
-														}
-													},
-													{
-														index: 2,
-														value: {
-															entries: [{color: "#0075BF", ratio: 0.0}, {color: "#0075BF", ratio: 0.0}, {color: "#009DFF", ratio: 0.992156862745098}, {color: "#009DFF", ratio: 1.0}, {color: "#009DFF", ratio: 1.0}],
-															matrix: {a: 0.04571533203125, d: 0.021331787109375, tx: 37.55, ty: 17.5},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_colorpickerskins_colorpicker_textfie_a8fbf694cf/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 0,
 								name: "border"
@@ -3754,32 +1978,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#4FFF4F",
 								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 1498.0, left: -10.0, right: 1495.0, top: -10.0},
-												edges: [
-													{
-														edges: " !1488 -10|0 -10!0 -10[#FFFFFB.E5 #FFFFF6.09 -7 -7!-7 -7[#FFFFF6.09 #FFFFFB.E5 -10 0!-10 0|-10 689!-10 689[-9.96875 #2B5.1B -7 696!-7 696[-4.09375 #2BA.F9 0 699!0 699|1488 699!1488 699[#5D4.1A #2BA.F6 1495 696!1495 696[#5D9.F7 #2B5.16  1498 689!1498 689|1498 0!1498 0[#5D9.F7 #FFFFFB.E5 1495 -7!1495 -7[#5D4.1B #FFFFF6.09 1488 -10!1478 679|10 679!10 679|10 10!10 10|1478 10!1478 10|1478 679",
-														fillStyle0: 1
-													}
-												],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{color: "#0075BF", ratio: 0.0}, {color: "#0075BF", ratio: 0.0}, {color: "#009DFF", ratio: 0.992156862745098}, {color: "#009DFF", ratio: 1.0}, {color: "#009DFF", ratio: 1.0}],
-															matrix: {a: 0.0460205078125, d: 0.021636962890625, tx: 37.2, ty: 17.2},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_colorpickerskins_colorpicker_textfie_a8fbf694cf/t00_l001_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 1,
 								name: "fill"
@@ -3807,73 +2006,19 @@ final class AssetCatalogSymbolsComponents {
 						layers: [
 							{
 								color: "#4FFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 391.0, left: 309.0, right: 389.5, top: 351.0},
-												edges: [{edges: "!309 351|389.5 351!389.5 351|349.5 391!349.5 391|309 351", fillStyle1: 1}],
-												fills: [{index: 1, value: {type: "SolidColor"}}],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_colorpickerskins_colorpicker_upskin_21ceca783f/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "icon"
 							},
 							{
 								color: "#9933CC",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 440.0, left: 0.0, right: 440.0, top: 0.0},
-												edges: [
-													{edges: "!420 20|420 420!420 420|20 420", fillStyle0: 2, fillStyle1: 3},
-													{edges: "!420 20|420 0", fillStyle0: 1, fillStyle1: 2},
-													{edges: "!420 0|440 0!440 0|440 440!440 440|0 440!0 440|0 420", fillStyle1: 2},
-													{edges: "!380 60|380 40", fillStyle0: 2, fillStyle1: 1},
-													{edges: "!380 320|400 320!400 320|400 40!400 40|380 40", fillStyle0: 1, fillStyle1: 3},
-													{edges: "!60 380|40 380!0 420|20 420", fillStyle0: 1, fillStyle1: 2},
-													{edges: "!40 380|40 400!40 400|280 400!280 400|280 380", fillStyle0: 1, fillStyle1: 3},
-													{edges: "!280 380|280 320!280 320|380 320", fillStyle1: 3},
-													{edges: "!420 0|0 0!0 0|0 420", fillStyle0: 1},
-													{edges: "!60 380|280 380", fillStyle1: 1},
-													{edges: "!380 60|60 60!60 60|60 380", fillStyle1: 2},
-													{edges: "!380 320|380 60", fillStyle1: 1},
-													{edges: "!20 420|20 20!20 20|420 20", fillStyle0: 1, fillStyle1: 3},
-													{edges: "!380 40|40 40!40 40|40 380", fillStyle0: 2, fillStyle1: 3}
-												],
-												fills: [{index: 1, value: {color: "#FFFFFF", type: "SolidColor"}}, {index: 2, value: {color: "#9A9B9D", type: "SolidColor"}}, {index: 3, value: {color: "#E5E6E7", type: "SolidColor"}}],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_colorpickerskins_colorpicker_upskin_21ceca783f/t00_l001_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 1,
 								name: "skin"
 							},
 							{
 								color: "#FFFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 380.0, left: 60.0, right: 380.0, top: 60.0},
-												edges: [{edges: "!60 380|60 60!60 60|380 60!380 60|380 380!380 380|60 380", fillStyle1: 1}],
-												fills: [{index: 1, value: {alpha: 0.0, color: "#333333", type: "SolidColor"}}],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_colorpickerskins_colorpicker_upskin_21ceca783f/t00_l002_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 2,
 								name: "fill"
 							}
@@ -3899,135 +2044,25 @@ final class AssetCatalogSymbolsComponents {
 						layers: [
 							{
 								color: "#FF4FFF",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 260.0, left: 2640.0, right: 2780.0, top: 180.0},
-												edges: [
-													{
-														edges: "!2700 240|2700 260!2700 260|2720 260!2720 260|2720 240!2720 240|2740 240!2740 240|2740 220!2740 220|2760 220!2760 220|2760 200!2760 200|2780 200!2780 200|2780 180!2780 180|2640 180!2640 180|2640 200!2640 200|2660 200!2660 200|2660 220 !2660 220|2680 220!2680 220|2680 240!2680 240|2700 240",
-														fillStyle0: 1
-													}
-												],
-												fills: [{index: 1, value: {alpha: 0.4, type: "SolidColor"}}],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_comboboxskins_combobox_disabledskin_f80ae9b407/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "icon"
 							},
 							{
 								color: "#FFFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 240.0, left: 7.0, right: 2940.0, top: 3.0},
-												edges: [{edges: " !2940 240|20 240!20 240|19.5 79.5!19.5 79.5[19.5 #13.F3 79.5 20!79.5 20|2879.5 20!2879.5 20[#B7B.7F #13.F3 2939.5 79.5!2939.5 79.5|2940 240", fillStyle1: 1}],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{alpha: 0.0, color: "#CCCCCC", ratio: 0.0}, {alpha: 0.141176470588235, color: "#FFFFFF", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.00640869140625, c: 0.018310546875, d: 0.0, tx: 61.5, ty: 6.75},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_comboboxskins_combobox_disabledskin_f80ae9b407/t00_l001_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 1,
 								name: "highlight"
 							},
 							{
 								color: "#9933CC",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 2882.5, left: 20.0, right: 2940.0, top: 5.44},
-												edges: [
-													{
-														edges: " !2940 80|2940 360!2940 360[2940 #1A2.BC 2882.5 420!2882.5 420|77.5 420!77.5 420[20 #1A2.BC 20 360!20 360|20 80!20 80[20 #15.44 77.5 20!77.5 20|2882.5 20!2882.5 20[2940 #15.44 2940 80",
-														fillStyle1: 1
-													}
-												],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{alpha: 0.2, color: "#CCCCCC", ratio: 0.0}, {alpha: 0.298039215686275, color: "#FFFFFF", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.013427734375, c: -0.013427734375, d: 0.0, tx: 11.0, ty: 11.0},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_comboboxskins_combobox_disabledskin_f80ae9b407/t00_l002_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 2,
 								name: "fill"
 							},
 							{
 								color: "#4FFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 2882.5, left: 0.0, right: 2960.0, top: 0.0},
-												edges: [
-													{
-														edges: " !2940 80|2940 360!2940 360[2940 #1A2.BC 2882.5 420!2882.5 420|77.5 420!77.5 420[20 #1A2.BC 20 360!20 360|20 80!20 80[20 #15.44 77.5 20!77.5 20|2882.5 20!2882.5 20[2940 #15.44 2940 80!2880 0|80 0!80 0[0 0 0 80!0 80|0 360!0 360[0 440 80  440!80 440|2880 440!2880 440[2960 440 2960 360!2960 360|2960 80!2960 80[2960 0 2880 0",
-														fillStyle0: 1
-													}
-												],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{alpha: 0.298039215686275, color: "#585F63", ratio: 0.0}, {alpha: 0.298039215686275, color: "#B7BABC", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.013427734375, c: 0.013427734375, d: 0.0, tx: 137.0, ty: 11.0},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											},
-											{
-												bounds: {bottom: 420.0, left: 2500.0, right: 2520.0, top: 20.0},
-												edges: [{edges: " !2500 20|2520 20!2520 20|2520 420!2520 420|2500 420!2500 420|2500 20", fillStyle1: 1}],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{alpha: 0.298039215686275, color: "#585F63", ratio: 0.0}, {alpha: 0.298039215686275, color: "#B7BABC", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.018310546875, c: 0.018310546875, d: 0.0, tx: 125.65, ty: 15.95},
-															type: "LinearGradient"
-														}
-													}
-												],
-												transformationPoint: {x: 125.5, y: 11.0},
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_comboboxskins_combobox_disabledskin_f80ae9b407/t00_l003_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 3,
 								name: "border"
 							}
@@ -4053,139 +2088,26 @@ final class AssetCatalogSymbolsComponents {
 						layers: [
 							{
 								color: "#FFFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 260.0, left: 2640.0, right: 2780.0, top: 180.0},
-												edges: [
-													{
-														edges: "!2700 240|2700 260!2700 260|2720 260!2720 260|2720 240!2720 240|2740 240!2740 240|2740 220!2740 220|2760 220!2760 220|2760 200!2760 200|2780 200!2780 200|2780 180!2780 180|2640 180!2640 180|2640 200!2640 200|2660 200!2660 200|2660 220 !2660 220|2680 220!2680 220|2680 240!2680 240|2700 240",
-														fillStyle0: 1
-													}
-												],
-												fills: [{index: 1, value: {type: "SolidColor"}}],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_comboboxskins_combobox_downskin_732f4a6226/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "icon"
 							},
 							{
 								color: "#FF4FFF",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 240.0, left: 20.0, right: 2940.0, top: 20.0},
-												edges: [
-													{edges: " !2940 240S2|2520 240!2520 240|2520 20!2520 20|2880 20!2880 20[2939 20 2940 80!2940 80|2940 240", fillStyle1: 1},
-													{edges: " !2500 20|80 20!80 20[20 20 20 80!20 80|20 240!20 240|2500 240!2500 240|2500 20", fillStyle0: 2}
-												],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{alpha: 0.0, color: "#CCCCCC", ratio: 0.0}, {alpha: 0.298039215686275, color: "#FFFFFF", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.00640869140625, c: 0.018310546875, d: 0.0, tx: 61.5, ty: 6.75},
-															type: "LinearGradient"
-														}
-													},
-													{
-														index: 2,
-														value: {
-															entries: [{alpha: 0.0, color: "#CCCCCC", ratio: 0.0}, {alpha: 0.298039215686275, color: "#FFFFFF", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.00677490234375, c: 0.018310546875, d: 0.0, tx: 61.5, ty: 6.75},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_comboboxskins_combobox_downskin_732f4a6226/t00_l001_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 1,
 								locked: true,
 								name: "highlight"
 							},
 							{
 								color: "#9933CC",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 2500.0, left: 5.3, right: 2500.0, top: 5.3},
-												edges: [{edges: " !2500 20|77.5 20!77.5 20[#15.3D #15.3D 20 77.5!20 77.5|20 363!20 363[#15.66 #1A2.C4 77.5 420!77.5 420|2500 420!2500 420|2500 20", fillStyle0: 1}],
-												fills: [
-													{
-														index: 1,
-														value: {entries: [{color: "#99D7FE", ratio: 0.0}, {color: "#D9F0FE", ratio: 1.0}], matrix: {a: 0.0, b: -0.013427734375, c: -0.013427734375, d: 0.0, tx: 11.0, ty: 11.0}, type: "LinearGradient"}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_comboboxskins_combobox_downskin_732f4a6226/t00_l002_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 2,
 								name: "fill"
 							},
 							{
 								color: "#4FFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 2960.0, left: 0.0, right: 2960.0, top: 0.0},
-												edges: [
-													{
-														edges: " !2960 68[2954 0 2880 0!2880 0|80 0!80 0[40 0 20 20!20 20[#8.ED #1E.FB 4 48!4 48[0 #3D.FA 0 80!0 80|0 360!0 360[0 440 80 440!80 440|2880 440!2880 440[2954 440 2960 372!2960 372[2960 366 2960 360!2960 360|2960 80!2960 80[2960 74 2960 68",
-														fillStyle0: 1
-													},
-													{edges: " !2520 20|2883 20!2883 20[2940 #15.86 2940 80!2940 80|2940 360!2940 360[2940 #1A2.7A 2883 420!2883 420|2520 420", fillStyle0: 1, fillStyle1: 2},
-													{edges: " !2500 420|2500 20", fillStyle1: 3},
-													{edges: " !2500 420|2520 420!2520 20|2500 20", fillStyle0: 3, fillStyle1: 1},
-													{edges: " !2520 420|2520 20", fillStyle0: 3, fillStyle1: 2},
-													{edges: " !2500 20|78 20!78 20[#15.3E #14.FB 20 77.5!20 77.5|20 360!20 360[20 419 78 420!78 420|2500 420", fillStyle1: 1}
-												],
-												fills: [
-													{
-														index: 1,
-														value: {entries: [{color: "#0075BF", ratio: 0.0}, {color: "#009DFF", ratio: 0.992156862745098}], matrix: {a: 0.0, b: -0.013427734375, c: 0.013427734375, d: 0.0, tx: 137.0, ty: 11.0}, type: "LinearGradient"}
-													},
-													{
-														index: 2,
-														value: {
-															entries: [{alpha: 0.650980392156863, color: "#EEEEEE", ratio: 0.0}, {alpha: 0.741176470588235, color: "#FFFFFF", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.013427734375, c: -0.013427734375, d: 0.0, tx: 11.0, ty: 11.0},
-															type: "LinearGradient"
-														}
-													},
-													{
-														index: 3,
-														value: {
-															entries: [{color: "#0075C0", ratio: 0.0}, {color: "#009DFF", ratio: 0.992156862745098}],
-															matrix: {a: 0.0, b: -0.0124359130859375, c: 0.018310546875, d: 0.0, tx: 125.9, ty: 11.0},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_comboboxskins_combobox_downskin_732f4a6226/t00_l003_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 3,
 								name: "border"
 							}
@@ -4211,129 +2133,26 @@ final class AssetCatalogSymbolsComponents {
 						layers: [
 							{
 								color: "#FFFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 260.0, left: 2640.0, right: 2780.0, top: 180.0},
-												edges: [
-													{
-														edges: "!2700 240|2700 260!2700 260|2720 260!2720 260|2720 240!2720 240|2740 240!2740 240|2740 220!2740 220|2760 220!2760 220|2760 200!2760 200|2780 200!2780 200|2780 180!2780 180|2640 180!2640 180|2640 200!2640 200|2660 200!2660 200|2660 220 !2660 220|2680 220!2680 220|2680 240!2680 240|2700 240",
-														fillStyle0: 1
-													}
-												],
-												fills: [{index: 1, value: {type: "SolidColor"}}],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_comboboxskins_combobox_overskin_4642b92a78/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "icon"
 							},
 							{
 								color: "#FF4FFF",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 240.0, left: 20.0, right: 2940.0, top: 20.0},
-												edges: [
-													{edges: " !2940 240S2|2520 240!2520 240|2520 20!2520 20|2880 20!2880 20[2939 20 2940 80!2940 80|2940 240", fillStyle1: 1},
-													{edges: " !2500 20|80 20!80 20[20 20 20 80!20 80|20 240!20 240|2500 240!2500 240|2500 20", fillStyle0: 1}
-												],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{alpha: 0.0, color: "#CCCCCC", ratio: 0.0}, {alpha: 0.298039215686275, color: "#FFFFFF", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.00640869140625, c: 0.018310546875, d: 0.0, tx: 61.5, ty: 6.75},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_comboboxskins_combobox_overskin_4642b92a78/t00_l001_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 1,
 								locked: true,
 								name: "highlight"
 							},
 							{
 								color: "#9933CC",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 420.0, left: 20.0, right: 2940.0, top: 20.0},
-												edges: [
-													{edges: " !2940 360[2940 419 2883 420!2883 420|2520 420!2520 420|2520 20!2520 20|2883 20!2883 20[2940 21 2940 80!2940 80|2940 360", fillStyle1: 1},
-													{edges: " !2500 20|78 20!78 20[21 21 20 78!20 78|20 363!20 363[21 419 78 420!78 420|2500 420!2500 420|2500 20", fillStyle0: 1}
-												],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{alpha: 0.650980392156863, color: "#EEEEEE", ratio: 0.0}, {alpha: 0.741176470588235, color: "#FFFFFF", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.013427734375, c: -0.013427734375, d: 0.0, tx: 11.0, ty: 11.0},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_comboboxskins_combobox_overskin_4642b92a78/t00_l002_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 2,
 								name: "fill"
 							},
 							{
 								color: "#4FFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 440.0, left: 0.0, right: 2960.0, top: 0.0},
-												edges: [
-													{
-														edges: " !2960 372[2960 366 2960 360!2960 360|2960 80!2960 80[2960 74 2960 68!2960 68[2954 0 2880 0!2880 0|80 0!80 0[#4A.06 0 68.5 0.5!68.5 0.5[0 #5.F9 0 80!0 80|0 360!0 360[0 #171.EB 1 378.5!1 378.5[#1.7F #17D.F 2 385!2 385[#2.2F #181.DC 2.5  386.5!2.5 386.5[#2.B1 #183.54 3 388!3 388[#3.3 #184.C4 3.5 389.5!3.5 389.5[#3.DF #186.E8 4.5 392.5!4.5 392.5[#8.A9 #196.97 17 416.5!17 416.5|53.5 437.5!53.5 437.5[#41.81 440 80 440!80 440|2880 440!2880 440[2954 440 2960 372!2520 20|2883  20!2883 20[2940 21 2940 80!2940 80|2940 360!2940 360[2940 419 2883 420!2883 420|2520 420",
-														fillStyle0: 1
-													},
-													{edges: " !2500 420|2500 20", fillStyle1: 2},
-													{edges: " !2500 420|2520 420!2520 20|2500 20", fillStyle0: 2, fillStyle1: 1},
-													{edges: " !2520 420|2520 20", fillStyle0: 2},
-													{edges: " !2500 20|78 20!78 20[#15.3E #14.FB 20 77.5!20 77.5|20 363!20 363[#15.67 #1A3.06 78 420!78 420|2500 420", fillStyle1: 1}
-												],
-												fills: [
-													{
-														index: 1,
-														value: {entries: [{color: "#0075BF", ratio: 0.0}, {color: "#009DFF", ratio: 0.992156862745098}], matrix: {a: 0.0, b: -0.013427734375, c: 0.013427734375, d: 0.0, tx: 137.0, ty: 11.0}, type: "LinearGradient"}
-													},
-													{
-														index: 2,
-														value: {
-															entries: [{color: "#0075C0", ratio: 0.0}, {color: "#009DFF", ratio: 0.992156862745098}],
-															matrix: {a: 0.0, b: -0.0124359130859375, c: 0.018310546875, d: 0.0, tx: 125.9, ty: 11.0},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_comboboxskins_combobox_overskin_4642b92a78/t00_l003_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 3,
 								name: "border"
 							}
@@ -4359,119 +2178,26 @@ final class AssetCatalogSymbolsComponents {
 						layers: [
 							{
 								color: "#FFFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 260.0, left: 2640.0, right: 2780.0, top: 180.0},
-												edges: [
-													{
-														edges: "!2700 240|2700 260!2700 260|2720 260!2720 260|2720 240!2720 240|2740 240!2740 240|2740 220!2740 220|2760 220!2760 220|2760 200!2760 200|2780 200!2780 200|2780 180!2780 180|2640 180!2640 180|2640 200!2640 200|2660 200!2660 200|2660 220 !2660 220|2680 220!2680 220|2680 240!2680 240|2700 240",
-														fillStyle0: 1
-													}
-												],
-												fills: [{index: 1, value: {type: "SolidColor"}}],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_comboboxskins_combobox_upskin_3ecce3ff7f/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "icon"
 							},
 							{
 								color: "#FF4FFF",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 240.0, left: 20.0, right: 2940.0, top: 20.0},
-												edges: [{edges: " !2940 240S2|20 240!20 240|20 80!20 80[20 20 80 20!80 20|2880 20!2880 20[2939 20 2940 80!2940 80|2940 240", fillStyle1: 1}],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{alpha: 0.0, color: "#CCCCCC", ratio: 0.0}, {alpha: 0.298039215686275, color: "#FFFFFF", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.00640869140625, c: 0.018310546875, d: 0.0, tx: 61.5, ty: 6.75},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_comboboxskins_combobox_upskin_3ecce3ff7f/t00_l001_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 1,
 								locked: true,
 								name: "highlight"
 							},
 							{
 								color: "#9933CC",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 420.0, left: 20.0, right: 2940.0, top: 20.0},
-												edges: [{edges: " !2940 80|2940 360!2940 360[2940 419 2883 420!2883 420|78 420!78 420[20 419 20 360!20 360|20 80!20 80[20 21 78 20!78 20|2883 20!2883 20[2940 21 2940 80", fillStyle1: 1}],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{alpha: 0.4, color: "#CCCCCC", ratio: 0.0}, {alpha: 0.6, color: "#FFFFFF", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.013427734375, c: -0.013427734375, d: 0.0, tx: 11.0, ty: 11.0},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_comboboxskins_combobox_upskin_3ecce3ff7f/t00_l002_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 2,
 								name: "fill"
 							},
 							{
 								color: "#4FFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 440.0, left: 0.0, right: 2960.0, top: 0.0},
-												edges: [
-													{
-														edges: " !2960 80[2960 0 2880 0!2880 0|80 0!80 0[0 0 0 80!0 80|0 360!0 360[0 440 80 440!80 440|2880 440!2880 440[2960 440 2960 360!2960 360|2960 80!2520 20|2883 20!2883 20[2940 21 2940 80!2940 80|2940 360!2940 360[2940 419 2883 420!2883 420|2520  420",
-														fillStyle0: 2
-													},
-													{edges: " !2500 420|2500 20", fillStyle1: 1},
-													{edges: " !2500 420|2520 420!2520 20|2500 20", fillStyle0: 1, fillStyle1: 2},
-													{edges: " !2520 420|2520 20", fillStyle0: 1},
-													{edges: " !2500 20|78 20!78 20[20 21 20 80!20 80|20 360!20 360[20 419 78 420!78 420|2500 420", fillStyle1: 2}
-												],
-												fills: [
-													{
-														index: 1,
-														value: {entries: [{color: "#585F63", ratio: 0.0}, {color: "#B7BABC", ratio: 1.0}], matrix: {a: 0.0, b: -0.018310546875, c: 0.018310546875, d: 0.0, tx: 125.65, ty: 15.95}, type: "LinearGradient"}
-													},
-													{
-														index: 2,
-														value: {entries: [{color: "#585F63", ratio: 0.0}, {color: "#B7BABC", ratio: 1.0}], matrix: {a: 0.0, b: -0.013427734375, c: 0.013427734375, d: 0.0, tx: 137.0, ty: 11.0}, type: "LinearGradient"}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_comboboxskins_combobox_upskin_3ecce3ff7f/t00_l003_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 3,
 								name: "border"
 							}
@@ -4497,26 +2223,7 @@ final class AssetCatalogSymbolsComponents {
 						layers: [
 							{
 								color: "#9933CC",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 3840.0, left: 0.0, right: 5460.0, top: 0.0},
-												edges: [
-													{edges: "!5420 40[5440 60 5440 90!5440 90|5440 3820!5440 3820|20 3820!20 3820|20 90!20 90[20 60 40 40!40 40[60 20 90 20!90 20|5370 20!5370 20[5399 20 5420 40", fillStyle0: 2, fillStyle1: 1},
-													{
-														edges: "!5370 0|90 0!90 0[52 0 26 26!26 26[0 52 0 90!0 90|0 3830!0 3830[0 3834 3 3837!3 3837[6 3840 10 3840!10 3840|5450 3840!5450 3840[5454 3840 5457 3837!5457 3837[5460 3834 5460 3830!5460 3830|5460 90!5460 90[5460 52 5434 26!5434 26[5407 0  5370 0",
-														fillStyle0: 2
-													}
-												],
-												fills: [{index: 1, value: {color: "#FFFFFF", type: "SolidColor"}}, {index: 2, value: {color: "#CCCCCC", type: "SolidColor"}}],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_listskins_list_skin_69519fb65e/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "Layer 2"
 							}
@@ -4575,21 +2282,7 @@ final class AssetCatalogSymbolsComponents {
 									{index: 0, keyMode: 9728},
 									{
 										elements: [
-											{
-												bottomLeftRadius: 10.0,
-												bottomRightRadius: 10.0,
-												fill: {color: "#EEEEEE", type: "SolidColor"},
-												matrix: {a: 0.999893188476562, d: 1.493896484375, tx: 1.55, ty: -45.25},
-												objectHeight: 183.0,
-												objectWidth: 388.95,
-												stroke: {fill: {color: "#CCCCCC", type: "SolidColor"}, scaleMode: "normal", type: "SolidStroke"},
-												topLeftRadius: 10.0,
-												topRightRadius: 10.0,
-												transformationPoint: {x: 192.9, y: 121.85},
-												type: "DOMRectangleObject",
-												x: -1.55,
-												y: 30.3
-											},
+											{svgAssetPath: "assets/svg/timeline/components_component_assets_scrollbar_a56968834b/t00_l001_f0001_r00.svg", type: "DOMSvgInstance"},
 											{
 												height: 14.5,
 												matrix: {a: 0.999893188476562, d: 0.999832153320312, tx: 192.45, ty: 181.5},
@@ -4674,73 +2367,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#4FFF4F",
 								frames: [
-									{
-										elements: [
-											{
-												children: [
-													{
-														children: [
-															{
-																bounds: {bottom: 260.0, left: 20.0, right: 280.0, top: 20.0},
-																edges: [{edges: "!280 20S2|280 260!280 260|20 260!20 260|20 20!20 20|280 20", fillStyle1: 1}],
-																fills: [
-																	{
-																		index: 1,
-																		value: {entries: [{color: "#E6E6E6", ratio: 0.0}, {color: "#FFFFFF", ratio: 1.0}], matrix: {a: 0.0, b: -0.0083160400390625, c: 0.0083160400390625, d: 0.0, tx: 6.0, ty: 7.15}, type: "LinearGradient"}
-																	}
-																],
-																type: "DOMShape"
-															}
-														],
-														type: "DOMGroup"
-													},
-													{
-														children: [
-															{
-																bounds: {bottom: 280.0, left: 0.0, right: 300.0, top: 0.0},
-																edges: [{edges: "!20 260S1|20 20!20 20|280 20!280 20|280 260!280 260|20 260!300 280|300 0!300 0|0 0!0 0|0 280!0 280|300 280", fillStyle0: 1}],
-																fills: [
-																	{
-																		index: 1,
-																		value: {
-																			entries: [{alpha: 0.298039215686275, color: "#5B5D5E", ratio: 0.0}, {alpha: 0.298039215686275, color: "#B7BABC", ratio: 1.0}],
-																			matrix: {a: 0.0, b: -0.00787353515625, c: 0.00787353515625, d: 0.0, tx: 8.5, ty: 6.45},
-																			type: "LinearGradient"
-																		}
-																	}
-																],
-																type: "DOMShape"
-															}
-														],
-														type: "DOMGroup"
-													},
-													{
-														children: [
-															{
-																bounds: {bottom: 145.0, left: 20.0, right: 280.0, top: 15.0},
-																edges: [{edges: "!20 145S2|20 15!20 15|280 15!280 15|280 145!280 145|20 145", fillStyle1: 1}],
-																fills: [
-																	{
-																		index: 1,
-																		value: {
-																			entries: [{alpha: 0.0, color: "#EEEEEE", ratio: 0.0}, {alpha: 0.298039215686275, color: "#FFFFFF", ratio: 1.0}],
-																			matrix: {a: 0.0, b: -0.00408935546875, c: 0.009002685546875, d: 0.0, tx: 6.45, ty: 4.1},
-																			type: "LinearGradient"
-																		}
-																	}
-																],
-																type: "DOMShape"
-															}
-														],
-														type: "DOMGroup"
-													}
-												],
-												type: "DOMGroup"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_scrollbarskins_scrollarrowdown_disab_4a80cd4d14/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 0,
 								name: "skin"
@@ -4777,68 +2404,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#4FFF4F",
 								frames: [
-									{
-										elements: [
-											{
-												children: [
-													{
-														bounds: {bottom: 260.0, left: 20.0, right: 280.0, top: 20.0},
-														edges: [{edges: "!20 20|280 20!280 20|280 260!280 260|20 260!20 260|20 20", fillStyle1: 1}],
-														fills: [
-															{
-																index: 1,
-																value: {entries: [{color: "#99D7FE", ratio: 0.0}, {color: "#D9F0FE", ratio: 1.0}], matrix: {a: 0.0, b: -0.0083160400390625, c: 0.0083160400390625, d: 0.0, tx: 6.0, ty: 7.15}, type: "LinearGradient"}
-															}
-														],
-														type: "DOMShape"
-													}
-												],
-												type: "DOMGroup"
-											},
-											{
-												children: [
-													{
-														bounds: {bottom: 280.0, left: 0.0, right: 300.0, top: 0.0},
-														edges: [{edges: "!20 20|280 20!280 20|280 260!280 260|20 260!20 260|20 20!0 280|300 280!300 280|300 0!300 0|0 0!0 0|0 280", fillStyle0: 1}],
-														fills: [
-															{
-																index: 1,
-																value: {
-																	entries: [{color: "#0075BF", ratio: 0.0}, {color: "#009DFF", ratio: 0.992156862745098}],
-																	matrix: {a: 0.0, b: -0.00787353515625, c: 0.00787353515625, d: 0.0, tx: 8.5, ty: 6.45},
-																	type: "LinearGradient"
-																}
-															}
-														],
-														type: "DOMShape"
-													}
-												],
-												type: "DOMGroup"
-											},
-											{
-												children: [
-													{
-														bounds: {bottom: 150.0, left: 20.0, right: 280.0, top: 20.0},
-														edges: [{edges: "!20 150|20 20!20 20|280 20!280 20|280 150!280 150|20 150", fillStyle1: 1}],
-														fills: [
-															{
-																index: 1,
-																value: {
-																	entries: [{alpha: 0.0, color: "#EEEEEE", ratio: 0.0}, {alpha: 0.298039215686275, color: "#FFFFFF", ratio: 1.0}],
-																	matrix: {a: 0.0, b: -0.00408935546875, c: 0.009002685546875, d: 0.0, tx: 6.45, ty: 4.35},
-																	type: "LinearGradient"
-																}
-															}
-														],
-														type: "DOMShape"
-													}
-												],
-												type: "DOMGroup"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_scrollbarskins_scrollarrowdown_downs_0dfac3ce2d/t00_l001_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 1,
 								name: "fill"
@@ -4897,68 +2463,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#4FFF4F",
 								frames: [
-									{
-										elements: [
-											{
-												children: [
-													{
-														bounds: {bottom: 260.0, left: 20.0, right: 280.0, top: 20.0},
-														edges: [{edges: "!280 20|280 260!280 260|20 260!20 260|20 20!20 20|280 20", fillStyle1: 1}],
-														fills: [
-															{
-																index: 1,
-																value: {entries: [{color: "#E6E6E6", ratio: 0.0}, {color: "#FFFFFF", ratio: 1.0}], matrix: {a: 0.0, b: -0.0083160400390625, c: 0.0083160400390625, d: 0.0, tx: 6.0, ty: 7.15}, type: "LinearGradient"}
-															}
-														],
-														type: "DOMShape"
-													}
-												],
-												type: "DOMGroup"
-											},
-											{
-												children: [
-													{
-														bounds: {bottom: 280.0, left: 0.0, right: 300.0, top: 0.0},
-														edges: [{edges: "!300 280|300 0!300 0|0 0!0 0|0 280!0 280|300 280!280 20|280 260!280 260|20 260!20 260|20 20!20 20|280 20", fillStyle0: 1}],
-														fills: [
-															{
-																index: 1,
-																value: {
-																	entries: [{color: "#0075BF", ratio: 0.0}, {color: "#009DFF", ratio: 0.992156862745098}],
-																	matrix: {a: 0.0, b: -0.00787353515625, c: 0.00787353515625, d: 0.0, tx: 8.5, ty: 6.45},
-																	type: "LinearGradient"
-																}
-															}
-														],
-														type: "DOMShape"
-													}
-												],
-												type: "DOMGroup"
-											},
-											{
-												children: [
-													{
-														bounds: {bottom: 150.0, left: 20.0, right: 280.0, top: 20.0},
-														edges: [{edges: "!20 150|20 20!20 20|280 20!280 20|280 150!280 150|20 150", fillStyle1: 1}],
-														fills: [
-															{
-																index: 1,
-																value: {
-																	entries: [{alpha: 0.0, color: "#EEEEEE", ratio: 0.0}, {alpha: 0.298039215686275, color: "#FFFFFF", ratio: 1.0}],
-																	matrix: {a: 0.0, b: -0.00408935546875, c: 0.009002685546875, d: 0.0, tx: 6.45, ty: 4.35},
-																	type: "LinearGradient"
-																}
-															}
-														],
-														type: "DOMShape"
-													}
-												],
-												type: "DOMGroup"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_scrollbarskins_scrollarrowdown_overs_9cd71a793f/t00_l001_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 1,
 								name: "fill"
@@ -4995,64 +2500,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#4FFF4F",
 								frames: [
-									{
-										elements: [
-											{
-												children: [
-													{
-														bounds: {bottom: 260.0, left: 20.0, right: 280.0, top: 20.0},
-														edges: [{edges: "!280 20|280 260!280 260|20 260!20 260|20 20!20 20|280 20", fillStyle1: 1}],
-														fills: [
-															{
-																index: 1,
-																value: {entries: [{color: "#E6E6E6", ratio: 0.0}, {color: "#FFFFFF", ratio: 1.0}], matrix: {a: 0.0, b: -0.0083160400390625, c: 0.0083160400390625, d: 0.0, tx: 6.0, ty: 7.15}, type: "LinearGradient"}
-															}
-														],
-														type: "DOMShape"
-													}
-												],
-												type: "DOMGroup"
-											},
-											{
-												children: [
-													{
-														bounds: {bottom: 280.0, left: 0.0, right: 300.0, top: 0.0},
-														edges: [{edges: "!300 280|300 0!300 0|0 0!0 0|0 280!0 280|300 280!280 20|280 260!280 260|20 260!20 260|20 20!20 20|280 20", fillStyle0: 1}],
-														fills: [
-															{
-																index: 1,
-																value: {entries: [{color: "#5B5D5E", ratio: 0.0}, {color: "#B7BABC", ratio: 1.0}], matrix: {a: 0.0, b: -0.00787353515625, c: 0.00787353515625, d: 0.0, tx: 8.5, ty: 6.45}, type: "LinearGradient"}
-															}
-														],
-														type: "DOMShape"
-													}
-												],
-												type: "DOMGroup"
-											},
-											{
-												children: [
-													{
-														bounds: {bottom: 150.0, left: 20.0, right: 280.0, top: 20.0},
-														edges: [{edges: "!20 150|20 20!20 20|280 20!280 20|280 150!280 150|20 150", fillStyle1: 1}],
-														fills: [
-															{
-																index: 1,
-																value: {
-																	entries: [{alpha: 0.0, color: "#EEEEEE", ratio: 0.0}, {alpha: 0.298039215686275, color: "#FFFFFF", ratio: 1.0}],
-																	matrix: {a: 0.0, b: -0.00408935546875, c: 0.009002685546875, d: 0.0, tx: 6.45, ty: 4.35},
-																	type: "LinearGradient"
-																}
-															}
-														],
-														type: "DOMShape"
-													}
-												],
-												type: "DOMGroup"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_scrollbarskins_scrollarrowdown_upski_5a4fa47e32/t00_l001_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 1,
 								name: "fill"
@@ -5077,73 +2525,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#4FFF4F",
 								frames: [
-									{
-										elements: [
-											{
-												children: [
-													{
-														children: [
-															{
-																bounds: {bottom: 260.0, left: 20.0, right: 280.0, top: 20.0},
-																edges: [{edges: "!280 20|280 260!280 260|20 260!20 260|20 20!20 20|280 20", fillStyle1: 1}],
-																fills: [
-																	{
-																		index: 1,
-																		value: {entries: [{color: "#E6E6E6", ratio: 0.0}, {color: "#FFFFFF", ratio: 1.0}], matrix: {a: 0.0, b: -0.0083160400390625, c: 0.0083160400390625, d: 0.0, tx: 6.0, ty: 7.15}, type: "LinearGradient"}
-																	}
-																],
-																type: "DOMShape"
-															}
-														],
-														type: "DOMGroup"
-													},
-													{
-														children: [
-															{
-																bounds: {bottom: 280.0, left: 0.0, right: 300.0, top: 0.0},
-																edges: [{edges: "!20 260|20 20!20 20|280 20!280 20|280 260!280 260|20 260!300 280|300 0!300 0|0 0!0 0|0 280!0 280|300 280", fillStyle0: 1}],
-																fills: [
-																	{
-																		index: 1,
-																		value: {
-																			entries: [{alpha: 0.298039215686275, color: "#5B5D5E", ratio: 0.0}, {alpha: 0.298039215686275, color: "#B7BABC", ratio: 1.0}],
-																			matrix: {a: 0.0, b: -0.00787353515625, c: 0.00787353515625, d: 0.0, tx: 8.5, ty: 6.45},
-																			type: "LinearGradient"
-																		}
-																	}
-																],
-																type: "DOMShape"
-															}
-														],
-														type: "DOMGroup"
-													},
-													{
-														children: [
-															{
-																bounds: {bottom: 145.0, left: 20.0, right: 280.0, top: 15.0},
-																edges: [{edges: "!20 145|20 15!20 15|280 15!280 15|280 145!280 145|20 145", fillStyle1: 1}],
-																fills: [
-																	{
-																		index: 1,
-																		value: {
-																			entries: [{alpha: 0.0, color: "#EEEEEE", ratio: 0.0}, {alpha: 0.298039215686275, color: "#FFFFFF", ratio: 1.0}],
-																			matrix: {a: 0.0, b: -0.00408935546875, c: 0.009002685546875, d: 0.0, tx: 6.45, ty: 4.1},
-																			type: "LinearGradient"
-																		}
-																	}
-																],
-																type: "DOMShape"
-															}
-														],
-														type: "DOMGroup"
-													}
-												],
-												type: "DOMGroup"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_scrollbarskins_scrollarrowup_disable_1d8f2f02fd/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 0,
 								name: "skin"
@@ -5180,68 +2562,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#4FFF4F",
 								frames: [
-									{
-										elements: [
-											{
-												children: [
-													{
-														bounds: {bottom: 260.0, left: 20.0, right: 280.0, top: 20.0},
-														edges: [{edges: "!280 260|20 260!20 260|20 20!20 20|280 20!280 20|280 260", fillStyle1: 1}],
-														fills: [
-															{
-																index: 1,
-																value: {entries: [{color: "#99D7FE", ratio: 0.0}, {color: "#D9F0FE", ratio: 1.0}], matrix: {a: 0.0, b: -0.0083160400390625, c: 0.0083160400390625, d: 0.0, tx: 6.0, ty: 7.15}, type: "LinearGradient"}
-															}
-														],
-														type: "DOMShape"
-													}
-												],
-												type: "DOMGroup"
-											},
-											{
-												children: [
-													{
-														bounds: {bottom: 280.0, left: 0.0, right: 300.0, top: 0.0},
-														edges: [{edges: "!300 280|300 0!300 0|0 0!0 0|0 280!0 280|300 280!280 260|20 260!20 260|20 20!20 20|280 20!280 20|280 260", fillStyle0: 1}],
-														fills: [
-															{
-																index: 1,
-																value: {
-																	entries: [{color: "#0075BF", ratio: 0.0}, {color: "#009DFF", ratio: 0.992156862745098}],
-																	matrix: {a: 0.0, b: -0.00787353515625, c: 0.00787353515625, d: 0.0, tx: 8.5, ty: 6.45},
-																	type: "LinearGradient"
-																}
-															}
-														],
-														type: "DOMShape"
-													}
-												],
-												type: "DOMGroup"
-											},
-											{
-												children: [
-													{
-														bounds: {bottom: 150.0, left: 21.0, right: 281.0, top: 20.0},
-														edges: [{edges: "!281 150|21 150!21 150|21 20!21 20|281 20!281 20|281 150", fillStyle1: 1}],
-														fills: [
-															{
-																index: 1,
-																value: {
-																	entries: [{alpha: 0.0, color: "#EEEEEE", ratio: 0.0}, {alpha: 0.298039215686275, color: "#FFFFFF", ratio: 1.0}],
-																	matrix: {a: 0.0, b: -0.00408935546875, c: 0.009002685546875, d: 0.0, tx: 6.45, ty: 4.35},
-																	type: "LinearGradient"
-																}
-															}
-														],
-														type: "DOMShape"
-													}
-												],
-												type: "DOMGroup"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_scrollbarskins_scrollarrowup_downski_08e772c5f6/t00_l001_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 1,
 								name: "fill"
@@ -5306,68 +2627,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#4FFF4F",
 								frames: [
-									{
-										elements: [
-											{
-												children: [
-													{
-														bounds: {bottom: 260.0, left: 20.0, right: 280.0, top: 20.0},
-														edges: [{edges: "!280 20|280 260!280 260|20 260!20 260|20 20!20 20|280 20", fillStyle1: 1}],
-														fills: [
-															{
-																index: 1,
-																value: {entries: [{color: "#E6E6E6", ratio: 0.0}, {color: "#FFFFFF", ratio: 1.0}], matrix: {a: 0.0, b: -0.0083160400390625, c: 0.0083160400390625, d: 0.0, tx: 6.0, ty: 7.15}, type: "LinearGradient"}
-															}
-														],
-														type: "DOMShape"
-													}
-												],
-												type: "DOMGroup"
-											},
-											{
-												children: [
-													{
-														bounds: {bottom: 280.0, left: 0.0, right: 300.0, top: 0.0},
-														edges: [{edges: "!300 280|300 0!300 0|0 0!0 0|0 280!0 280|300 280!280 20|280 260!280 260|20 260!20 260|20 20!20 20|280 20", fillStyle0: 1}],
-														fills: [
-															{
-																index: 1,
-																value: {
-																	entries: [{color: "#0075BF", ratio: 0.0}, {color: "#009DFF", ratio: 0.992156862745098}],
-																	matrix: {a: 0.0, b: -0.00787353515625, c: 0.00787353515625, d: 0.0, tx: 8.5, ty: 6.45},
-																	type: "LinearGradient"
-																}
-															}
-														],
-														type: "DOMShape"
-													}
-												],
-												type: "DOMGroup"
-											},
-											{
-												children: [
-													{
-														bounds: {bottom: 150.0, left: 21.0, right: 281.0, top: 20.0},
-														edges: [{edges: "!21 150|21 20!21 20|281 20!281 20|281 150!281 150|21 150", fillStyle1: 1}],
-														fills: [
-															{
-																index: 1,
-																value: {
-																	entries: [{alpha: 0.0, color: "#EEEEEE", ratio: 0.0}, {alpha: 0.298039215686275, color: "#FFFFFF", ratio: 1.0}],
-																	matrix: {a: 0.0, b: -0.00408935546875, c: 0.009002685546875, d: 0.0, tx: 6.45, ty: 4.35},
-																	type: "LinearGradient"
-																}
-															}
-														],
-														type: "DOMShape"
-													}
-												],
-												type: "DOMGroup"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_scrollbarskins_scrollarrowup_overski_9744de0738/t00_l001_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 1,
 								name: "fill"
@@ -5403,66 +2663,7 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#4FFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												children: [
-													{
-														bounds: {bottom: 260.0, left: 20.0, right: 280.0, top: 20.0},
-														edges: [{edges: "!280 20|280 260!280 260|20 260!20 260|20 20!20 20|280 20", fillStyle1: 1}],
-														fills: [
-															{
-																index: 1,
-																value: {entries: [{color: "#E6E6E6", ratio: 0.0}, {color: "#FFFFFF", ratio: 1.0}], matrix: {a: 0.0, b: -0.0083160400390625, c: 0.0083160400390625, d: 0.0, tx: 6.0, ty: 7.15}, type: "LinearGradient"}
-															}
-														],
-														type: "DOMShape"
-													}
-												],
-												type: "DOMGroup"
-											},
-											{
-												children: [
-													{
-														bounds: {bottom: 280.0, left: 0.0, right: 300.0, top: 0.0},
-														edges: [{edges: "!300 280|300 0!300 0|0 0!0 0|0 280!0 280|300 280!280 20|280 260!280 260|20 260!20 260|20 20!20 20|280 20", fillStyle0: 1}],
-														fills: [
-															{
-																index: 1,
-																value: {entries: [{color: "#5B5D5E", ratio: 0.0}, {color: "#B7BABC", ratio: 1.0}], matrix: {a: 0.0, b: -0.00787353515625, c: 0.00787353515625, d: 0.0, tx: 8.5, ty: 6.45}, type: "LinearGradient"}
-															}
-														],
-														type: "DOMShape"
-													}
-												],
-												type: "DOMGroup"
-											},
-											{
-												children: [
-													{
-														bounds: {bottom: 150.0, left: 20.0, right: 280.0, top: 20.0},
-														edges: [{edges: "!20 150|20 20!20 20|280 20!280 20|280 150!280 150|20 150", fillStyle1: 1}],
-														fills: [
-															{
-																index: 1,
-																value: {
-																	entries: [{alpha: 0.0, color: "#EEEEEE", ratio: 0.0}, {alpha: 0.298039215686275, color: "#FFFFFF", ratio: 1.0}],
-																	matrix: {a: 0.0, b: -0.00408935546875, c: 0.009002685546875, d: 0.0, tx: 6.45, ty: 4.35},
-																	type: "LinearGradient"
-																}
-															}
-														],
-														type: "DOMShape"
-													}
-												],
-												type: "DOMGroup"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_scrollbarskins_scrollarrowup_upskin_03aeb6088e/t00_l001_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 1,
 								name: "fill"
 							}
@@ -5484,42 +2685,7 @@ final class AssetCatalogSymbolsComponents {
 						layers: [
 							{
 								color: "#4FFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 140.0, left: -60.0, right: 40.0, top: 120.0},
-												edges: [{edges: "!40 140S2|-60 140!-60 140|-60 120!-60 120|40 120!40 120|40 140", fillStyle1: 1}],
-												fills: [{index: 1, value: {color: "#5A6165", type: "SolidColor"}}],
-												matrix: {tx: 3.0},
-												type: "DOMShape"
-											},
-											{
-												bounds: {bottom: 100.0, left: -60.0, right: 40.0, top: 80.0},
-												edges: [{edges: "!40 100S2|-60 100!-60 100|-60 80!-60 80|40 80!40 80|40 100", fillStyle1: 1}],
-												fills: [{index: 1, value: {color: "#5A6165", type: "SolidColor"}}],
-												matrix: {tx: 3.0},
-												type: "DOMShape"
-											},
-											{
-												bounds: {bottom: 20.0, left: -60.0, right: 40.0, top: 0.0},
-												edges: [{edges: "!40 20S2|-60 20!-60 20|-60 0!-60 0|40 0!40 0|40 20", fillStyle1: 1}],
-												fills: [{index: 1, value: {color: "#5A6165", type: "SolidColor"}}],
-												matrix: {tx: 3.0},
-												type: "DOMShape"
-											},
-											{
-												bounds: {bottom: 60.0, left: -60.0, right: 40.0, top: 40.0},
-												edges: [{edges: "!40 60S2|-60 60!-60 60|-60 40!-60 40|40 40!40 40|40 60", fillStyle1: 1}],
-												fills: [{index: 1, value: {color: "#5A6165", type: "SolidColor"}}],
-												matrix: {tx: 3.0},
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_scrollbarskins_scrollbar_thumbicon_9dca80a08b/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "Layer 1"
 							}
@@ -5545,65 +2711,7 @@ final class AssetCatalogSymbolsComponents {
 						layers: [
 							{
 								color: "#4FFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												children: [
-													{
-														bounds: {bottom: 1040.0, left: 260.0, right: 320.0, top: 0.0},
-														edges: [{edges: "!320 0|320 1040!320 1040|260 1040!260 1040|260 0!260 0|320 0", fillStyle1: 1}],
-														fills: [{index: 1, value: {alpha: 0.0, color: "#FF0000", type: "SolidColor"}}],
-														type: "DOMShape"
-													}
-												],
-												type: "DOMGroup"
-											},
-											{
-												children: [
-													{
-														bounds: {bottom: 1040.0, left: 20.0, right: 260.0, top: 0.0},
-														edges: [
-															{edges: "!260 927|260 80!260 80[260 0 180 0!180 0|20 0!20 0|20 20!20 20|183 20!183 20[240 22 240 80!240 80|240 927", fillStyle0: 1},
-															{edges: "!240 927|240 960!240 960[240 1019 183 1020!183 1020|20 1020!20 1020|20 1040!20 1040|180 1040!180 1040[260 1040 260 960!260 960|260 927", fillStyle0: 2},
-															{edges: "!240 927|260 927", fillStyle0: 1, fillStyle1: 2}
-														],
-														fills: [
-															{
-																index: 1,
-																value: {entries: [{color: "#0075BF", ratio: 0.0}, {color: "#009DFF", ratio: 0.992156862745098}], matrix: {a: 0.0, b: -0.013427734375, c: 0.013427734375, d: 0.0, tx: 2.0, ty: 41.25}, type: "LinearGradient"}
-															},
-															{
-																index: 2,
-																value: {entries: [{color: "#0075BF", ratio: 0.0}, {color: "#009DFF", ratio: 0.992156862745098}], matrix: {a: 0.0, b: -0.013427734375, c: 0.013427734375, d: 0.0, tx: 2.0, ty: 41.0}, type: "LinearGradient"}
-															}
-														],
-														type: "DOMShape"
-													}
-												],
-												type: "DOMGroup"
-											},
-											{
-												children: [
-													{
-														bounds: {bottom: 1021.0, left: 20.0, right: 240.0, top: 20.0},
-														edges: [{edges: "!183 21[240 23 240 81!240 81|240 960!240 960[240 1020 183 1021!183 1021|20 1019.5!20 1019.5|20 20!20 20|183 21", fillStyle1: 1}],
-														fills: [
-															{
-																index: 1,
-																value: {entries: [{color: "#99D7FE", ratio: 0.0}, {color: "#D9F0FE", ratio: 1.0}], matrix: {a: 0.0, b: -0.013427734375, c: 0.013427734375, d: 0.0, tx: 32.85, ty: 31.0}, type: "LinearGradient"}
-															}
-														],
-														type: "DOMShape"
-													}
-												],
-												type: "DOMGroup"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_scrollbarskins_scrollthumb_downskin_6ef3014ed8/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "skin"
 							}
@@ -5630,65 +2738,7 @@ final class AssetCatalogSymbolsComponents {
 						layers: [
 							{
 								color: "#4FFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												children: [
-													{
-														bounds: {bottom: 1020.0, left: 20.0, right: 240.0, top: 20.0},
-														edges: [{edges: "!240 80|240 959!240 959[240 1018 183 1020!183 1020|20 1020!20 1020|20 20!20 20|183 20!183 20[240 21 240 80", fillStyle1: 1}],
-														fills: [
-															{
-																index: 1,
-																value: {entries: [{color: "#E6E6E6", ratio: 0.0}, {color: "#FFFFFF", ratio: 1.0}], matrix: {a: 0.0, b: -0.013427734375, c: 0.013427734375, d: 0.0, tx: 32.85, ty: 31.0}, type: "LinearGradient"}
-															}
-														],
-														type: "DOMShape"
-													}
-												],
-												type: "DOMGroup"
-											},
-											{
-												children: [
-													{
-														bounds: {bottom: 1040.0, left: 20.0, right: 260.0, top: 0.0},
-														edges: [
-															{edges: "!260 927|260 80!260 80[260 0 180 0!180 0|20 0!20 0|20 20!20 20|183 20!183 20[240 22 240 80!240 80|240 927", fillStyle0: 1},
-															{edges: "!240 927|240 960!240 960[240 1019 183 1020!183 1020|20 1020!20 1020|20 1040!20 1040|180 1040!180 1040[260 1040 260 960!260 960|260 927", fillStyle0: 2},
-															{edges: "!240 927|260 927", fillStyle0: 1, fillStyle1: 2}
-														],
-														fills: [
-															{
-																index: 1,
-																value: {entries: [{color: "#0075BF", ratio: 0.0}, {color: "#009DFF", ratio: 0.992156862745098}], matrix: {a: 0.0, b: -0.013427734375, c: 0.013427734375, d: 0.0, tx: 2.0, ty: 41.25}, type: "LinearGradient"}
-															},
-															{
-																index: 2,
-																value: {entries: [{color: "#0075BF", ratio: 0.0}, {color: "#009DFF", ratio: 0.992156862745098}], matrix: {a: 0.0, b: -0.013427734375, c: 0.013427734375, d: 0.0, tx: 2.0, ty: 41.0}, type: "LinearGradient"}
-															}
-														],
-														type: "DOMShape"
-													}
-												],
-												type: "DOMGroup"
-											},
-											{
-												children: [
-													{
-														bounds: {bottom: 1040.0, left: 260.0, right: 320.0, top: 0.0},
-														edges: [{edges: "!320 0|320 1040!320 1040|260 1040!260 1040|260 0!260 0|320 0", fillStyle1: 1}],
-														fills: [{index: 1, value: {alpha: 0.0, color: "#FF0000", type: "SolidColor"}}],
-														type: "DOMShape"
-													}
-												],
-												type: "DOMGroup"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_scrollbarskins_scrollthumb_overskin_81237085ba/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "skin"
 							}
@@ -5714,65 +2764,7 @@ final class AssetCatalogSymbolsComponents {
 						layers: [
 							{
 								color: "#4FFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												children: [
-													{
-														bounds: {bottom: 1040.0, left: 260.0, right: 320.0, top: 0.0},
-														edges: [{edges: "!320 0|320 1040!320 1040|260 1040!260 1040|260 0!260 0|320 0", fillStyle1: 1}],
-														fills: [{index: 1, value: {alpha: 0.0, color: "#FF0000", type: "SolidColor"}}],
-														type: "DOMShape"
-													}
-												],
-												type: "DOMGroup"
-											},
-											{
-												children: [
-													{
-														bounds: {bottom: 1040.0, left: 20.0, right: 260.0, top: 0.0},
-														edges: [
-															{edges: "!260 927|260 80!260 80[260 0 180 0!180 0|20 0!20 0|20 20!20 20|183 20!183 20[240 22 240 80!240 80|240 927", fillStyle0: 1},
-															{edges: "!240 927|240 960!240 960[240 1019 183 1020!183 1020|20 1020!20 1020|20 1040!20 1040|180 1040!180 1040[260 1040 260 960!260 960|260 927", fillStyle0: 2},
-															{edges: "!240 927|260 927", fillStyle0: 1, fillStyle1: 2}
-														],
-														fills: [
-															{
-																index: 1,
-																value: {entries: [{color: "#585F63", ratio: 0.0}, {color: "#B7BABC", ratio: 1.0}], matrix: {a: 0.0, b: -0.013427734375, c: 0.013427734375, d: 0.0, tx: 2.0, ty: 41.25}, type: "LinearGradient"}
-															},
-															{
-																index: 2,
-																value: {entries: [{color: "#585F63", ratio: 0.0}, {color: "#B7BABC", ratio: 1.0}], matrix: {a: 0.0, b: -0.013427734375, c: 0.013427734375, d: 0.0, tx: 2.0, ty: 41.0}, type: "LinearGradient"}
-															}
-														],
-														type: "DOMShape"
-													}
-												],
-												type: "DOMGroup"
-											},
-											{
-												children: [
-													{
-														bounds: {bottom: 1021.0, left: 20.0, right: 240.0, top: 20.0},
-														edges: [{edges: "!240 960[240 1020 183 1021!183 1021|20 1019.5!20 1019.5|20 20!20 20|183 21!183 21[240 23 240 81!240 81|240 960", fillStyle1: 1}],
-														fills: [
-															{
-																index: 1,
-																value: {entries: [{color: "#E6E6E6", ratio: 0.0}, {color: "#FFFFFF", ratio: 1.0}], matrix: {a: 0.0, b: -0.013427734375, c: 0.013427734375, d: 0.0, tx: 32.85, ty: 31.0}, type: "LinearGradient"}
-															}
-														],
-														type: "DOMShape"
-													}
-												],
-												type: "DOMGroup"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_scrollbarskins_scrollthumb_upskin_114bd98aac/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "skin"
 							}
@@ -5794,49 +2786,7 @@ final class AssetCatalogSymbolsComponents {
 						layers: [
 							{
 								color: "#4FFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												children: [
-													{
-														bounds: {bottom: 16540.0, left: 13460.0, right: 13480.0, top: 13580.0},
-														edges: [{edges: "!13480 13580|13480 16540!13480 16540|13460 16540!13460 16540|13460 13580!13460 13580|13480 13580", fillStyle1: 1}],
-														fills: [{index: 1, value: {color: "#585F63", type: "SolidColor"}}],
-														matrix: {tx: -659.0, ty: -679.0},
-														type: "DOMShape"
-													},
-													{
-														bounds: {bottom: 16540.0, left: 13200.0, right: 13460.0, top: 13580.0},
-														edges: [{edges: "!13460 13580|13460 16540!13460 16540|13200 16540!13200 16540|13200 13580!13200 13580|13460 13580", fillStyle1: 1}],
-														fills: [
-															{
-																index: 1,
-																value: {
-																	entries: [{color: "#94999B", ratio: 0.0}, {color: "#E7E7E7", ratio: 1.0}],
-																	matrix: {a: 0.008544921875, b: -0.000152587890625, c: 0.000152587890625, d: 0.008544921875, tx: 667.0, ty: 759.85},
-																	type: "LinearGradient"
-																}
-															}
-														],
-														matrix: {tx: -659.0, ty: -679.0},
-														type: "DOMShape"
-													},
-													{
-														bounds: {bottom: 16540.0, left: 13180.0, right: 13200.0, top: 13580.0},
-														edges: [{edges: "!13200 13580|13200 16540!13200 16540|13180 16540!13180 16540|13180 13580!13180 13580|13200 13580", fillStyle1: 1}],
-														fills: [{index: 1, value: {color: "#585F63", type: "SolidColor"}}],
-														matrix: {tx: -659.0, ty: -679.0},
-														type: "DOMShape"
-													}
-												],
-												type: "DOMGroup"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_scrollbarskins_scrolltrack_skin_1c49414a50/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "skin"
 							}
@@ -5858,25 +2808,7 @@ final class AssetCatalogSymbolsComponents {
 						layers: [
 							{
 								color: "#4FFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 80.0, left: 0.0, right: 140.0, top: 0.0},
-												edges: [
-													{
-														edges: "!140 0|0 0!0 0|0 20!0 20|20 20!20 20|20 40!20 40|40 40!40 40|40 60!40 60|60 60!60 60|60 80!60 80|80 80!80 80|80 60!80 60|100 60!100 60|100 40!100 40|120 40!120 40|120 20!120 20|140 20!140 20|140 0",
-														fillStyle0: 1
-													}
-												],
-												fills: [{index: 1, value: {type: "SolidColor"}}],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_shared_arrowicon_798337c868/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "icon"
 							}
@@ -5902,34 +2834,7 @@ final class AssetCatalogSymbolsComponents {
 						layers: [
 							{
 								color: "#4FFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 1563.0, left: 0.5, right: 1640.5, top: 0.0},
-												edges: [
-													{
-														edges: "!1640.5 80[#668.86 0 1560.5 0!1560.5 0|80.5 0!80.5 0[#0.7A 0 0.5 80!0.5 80|0.5 360!0.5 360[#0.7A 440 80.5 440!80.5 440|1560.5 440!1560.5 440[#668.86 440 1640.5 360!1640.5 360|1640.5 80!1620.5 360[#654.84 #1A2.BC 1563 420!1563 420|78 420 !78 420[#14.7B #1A2.BC 20.5 360!20.5 360|20.5 80!20.5 80[#14.7B #15.44 78 20!78 20|1563 20!1563 20[#654.84 #15.44 1620.5 80!1620.5 80|1620.5 360",
-														fillStyle0: 1
-													}
-												],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{color: "#0075BF", ratio: 0.0}, {color: "#009DFF", ratio: 1.0}],
-															matrix: {a: 1.52587890625e-05, b: 0.01318359375, c: -0.013427734375, d: 1.52587890625e-05, tx: 41.05, ty: 11.0},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_shared_focusrectskin_6b57e2d6f6/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "border"
 							}
@@ -5950,20 +2855,7 @@ final class AssetCatalogSymbolsComponents {
 						layers: [
 							{
 								color: "#4FFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 3820.0, left: 0.0, right: 5440.0, top: 0.0},
-												edges: [{edges: "!5360 0|80 0!80 0[46 0 23 23!23 23[0 46 0 80!0 80|0 3820!0 3820|5440 3820!5440 3820|5440 80!5440 80[5440 46 5417 23!5417 23[5393 0 5360 0", fillStyle0: 1}],
-												fills: [{index: 1, value: {alpha: 0.6, color: "#FFFFFF", type: "SolidColor"}}],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_shared_panelbackground_base_de08e49979/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "background"
 							}
@@ -5984,20 +2876,7 @@ final class AssetCatalogSymbolsComponents {
 						layers: [
 							{
 								color: "#4FFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 3840.0, left: 60.0, right: 5500.0, top: 20.0},
-												edges: [{edges: "!5420 20|140 20!140 20[106 20 83 43!83 43[60 66 60 100!60 100|60 3840!60 3840|5500 3840!5500 3840|5500 100!5500 100[5500 66 5477 43!5477 43[5453 20 5420 20", fillStyle0: 1}],
-												fills: [{index: 1, value: {color: "#FFFFFF", type: "SolidColor"}}],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_shared_panelbackground_shadow_f6d0dde8b4/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "shadow"
 							}
@@ -6020,38 +2899,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#4FFF4F",
 								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 260.0, left: -130.0, right: 130.0, top: 0.0},
-												edges: [
-													{edges: "!22 0|-22 0!-22 0|-130 200!-130 200|-90 260!-90 260|90 260!90 260|130 200!130 200|22 0", fillStyle0: 1},
-													{edges: "!110 200|70 240!70 240|-70 240!-70 240|-110 200!-110 200|-21 20!-21 20|21 20!21 20|110 200", fillStyle0: 1, fillStyle1: 2}
-												],
-												fills: [
-													{
-														index: 1,
-														value: {
-															entries: [{alpha: 0.298039215686275, color: "#5B5D5E", ratio: 0.0}, {alpha: 0.298039215686275, color: "#B7BABC", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.0079345703125, c: 0.0079345703125, d: 0.0, ty: 6.5},
-															type: "LinearGradient"
-														}
-													},
-													{
-														index: 2,
-														value: {
-															entries: [{alpha: 0.2, color: "#CCCCCC", ratio: 0.0}, {alpha: 0.298039215686275, color: "#FFFFFF", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.0067138671875, c: 0.0067138671875, d: 0.0, ty: 6.5},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_sliderskins_sliderthumb_disabledskin_4ca02bfaf4/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 0,
 								name: "skin"
@@ -6074,29 +2922,7 @@ final class AssetCatalogSymbolsComponents {
 						layers: [
 							{
 								color: "#4FFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 260.0, left: -130.0, right: 130.0, top: 0.0},
-												edges: [
-													{edges: "!22 0|-22 0!-22 0|-130 200!-130 200|-90 260!-90 260|90 260!90 260|130 200!130 200|22 0", fillStyle0: 1},
-													{edges: "!110 200|70 240!70 240|-70 240!-70 240|-110 200!-110 200|-21 20!-21 20|21 20!21 20|110 200", fillStyle0: 1, fillStyle1: 2}
-												],
-												fills: [
-													{
-														index: 1,
-														value: {entries: [{color: "#0075BF", ratio: 0.0}, {color: "#009DFF", ratio: 0.992156862745098}], matrix: {a: 0.0, b: -0.0079345703125, c: 0.0079345703125, d: 0.0, ty: 6.5}, type: "LinearGradient"}
-													},
-													{index: 2, value: {entries: [{color: "#99D7FE", ratio: 0.0}, {color: "#D9F0FE", ratio: 1.0}], matrix: {a: 0.0, b: -0.0067138671875, c: 0.0067138671875, d: 0.0, ty: 6.5}, type: "LinearGradient"}}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_sliderskins_sliderthumb_downskin_4c00b955bc/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "skin"
 							}
@@ -6118,36 +2944,7 @@ final class AssetCatalogSymbolsComponents {
 						layers: [
 							{
 								color: "#4FFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 260.0, left: -130.0, right: 130.0, top: 0.0},
-												edges: [
-													{edges: "!22 0|-22 0!-22 0|-130 200!-130 200|-90 260!-90 260|90 260!90 260|130 200!130 200|22 0", fillStyle0: 1},
-													{edges: "!110 200|70 240!70 240|-70 240!-70 240|-110 200!-110 200|-21 20!-21 20|21 20!21 20|110 200", fillStyle0: 1, fillStyle1: 2}
-												],
-												fills: [
-													{
-														index: 1,
-														value: {entries: [{color: "#0075BF", ratio: 0.0}, {color: "#009DFF", ratio: 0.992156862745098}], matrix: {a: 0.0, b: -0.0079345703125, c: 0.0079345703125, d: 0.0, ty: 6.5}, type: "LinearGradient"}
-													},
-													{
-														index: 2,
-														value: {
-															entries: [{alpha: 0.650980392156863, color: "#EEEEEE", ratio: 0.0}, {alpha: 0.741176470588235, color: "#FFFFFF", ratio: 1.0}],
-															matrix: {a: 0.0, b: -0.0067138671875, c: 0.0067138671875, d: 0.0, ty: 6.5},
-															type: "LinearGradient"
-														}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_sliderskins_sliderthumb_overskin_099a934879/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "skin"
 							}
@@ -6169,29 +2966,7 @@ final class AssetCatalogSymbolsComponents {
 						layers: [
 							{
 								color: "#4FFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 260.0, left: -130.0, right: 130.0, top: 0.0},
-												edges: [
-													{edges: "!22 0|-22 0!-22 0|-130 200!-130 200|-90 260!-90 260|90 260!90 260|130 200!130 200|22 0", fillStyle0: 1},
-													{edges: "!110 200|70 240!70 240|-70 240!-70 240|-110 200!-110 200|-21 20!-21 20|21 20!21 20|110 200", fillStyle0: 1, fillStyle1: 2}
-												],
-												fills: [
-													{index: 1, value: {entries: [{color: "#5B5D5E", ratio: 0.0}, {color: "#B7BABC", ratio: 1.0}], matrix: {a: 0.0, b: -0.0079345703125, c: 0.0079345703125, d: 0.0, ty: 6.5}, type: "LinearGradient"}},
-													{
-														index: 2,
-														value: {entries: [{alpha: 0.4, color: "#CCCCCC", ratio: 0.0}, {alpha: 0.6, color: "#FFFFFF", ratio: 1.0}], matrix: {a: 0.0, b: -0.0067138671875, c: 0.0067138671875, d: 0.0, ty: 6.5}, type: "LinearGradient"}
-													}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_sliderskins_sliderthumb_upskin_202d1f7fd2/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "skin"
 							}
@@ -6213,20 +2988,7 @@ final class AssetCatalogSymbolsComponents {
 						layers: [
 							{
 								color: "#4FFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 40.0, left: -10.0, right: 10.0, top: 0.0},
-												edges: [{edges: "!10 40|-10 40!-10 40|-10 0!-10 0|10 0!10 0|10 40", fillStyle1: 1}],
-												fills: [{index: 1, value: {color: "#919999", type: "SolidColor"}}],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_sliderskins_slidertick_skin_0b475bc39e/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "skin"
 							}
@@ -6253,38 +3015,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#4FFF4F",
 								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 60.0, left: 0.0, right: 1600.0, top: 0.0},
-												edges: [
-													{edges: "!20 20|20 0!20 0|1580 0!1580 0|1580 20", fillStyle1: 2},
-													{edges: "!1581 40|1580 40!1580 40|1580 60", fillStyle0: 3, fillStyle1: 4},
-													{edges: "!1580 60|1581 60!1581 60|1581 40", fillStyle0: 3},
-													{edges: "!1581 40|1600 40!1600 40|1600 20!1600 20|1580 20", fillStyle0: 4},
-													{edges: "!1580 20|1580 40", fillStyle0: 4, fillStyle1: 1},
-													{edges: "!1560 60|1560 40", fillStyle0: 3, fillStyle1: 4},
-													{edges: "!1580 40|1560 40", fillStyle0: 4, fillStyle1: 1},
-													{edges: "!1580 60|1560 60", fillStyle1: 4},
-													{edges: "!20 20|0 20!0 20|0 40!0 40|20 40!20 40|20 60!20 60|40 60", fillStyle0: 4},
-													{edges: "!40 40|40 60", fillStyle0: 3, fillStyle1: 4},
-													{edges: "!40 40|20 40!20 40|20 20", fillStyle0: 4, fillStyle1: 1},
-													{edges: "!40 60|1560 60", fillStyle0: 3},
-													{edges: "!1560 40|40 40", fillStyle0: 3, fillStyle1: 1},
-													{edges: "!1580 20|20 20", fillStyle0: 1, fillStyle1: 2}
-												],
-												fills: [
-													{index: 1, value: {color: "#EBEBEB", type: "SolidColor"}},
-													{index: 2, value: {color: "#999999", type: "SolidColor"}},
-													{index: 3, value: {color: "#CCCCCC", type: "SolidColor"}},
-													{index: 4, value: {color: "#BBBBBB", type: "SolidColor"}}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_sliderskins_slidertrack_disabledskin_4e8132a819/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 0,
 								name: "skin"
@@ -6311,37 +3042,7 @@ final class AssetCatalogSymbolsComponents {
 						layers: [
 							{
 								color: "#4FFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 60.0, left: 0.0, right: 1600.0, top: 0.0},
-												edges: [
-													{edges: "!1560 60|1580 60!1580 60|1580 40!1580 40|1600 40!1600 40|1600 20!1600 20|1580 20", fillStyle0: 3},
-													{edges: "!1580 20|1580 40", fillStyle0: 3, fillStyle1: 2},
-													{edges: "!20 20|20 0!20 0|1580 0!1580 0|1580 20", fillStyle1: 4},
-													{edges: "!1560 40|1560 60", fillStyle0: 3, fillStyle1: 1},
-													{edges: "!1580 40|1560 40", fillStyle0: 3, fillStyle1: 2},
-													{edges: "!20 40|0 40!0 40|0 20!0 20|20 20!40 60|20 60!20 60|20 40", fillStyle1: 3},
-													{edges: "!40 60|40 40", fillStyle0: 3, fillStyle1: 1},
-													{edges: "!20 20|20 40!20 40|40 40", fillStyle0: 2, fillStyle1: 3},
-													{edges: "!40 40|1560 40", fillStyle0: 2, fillStyle1: 1},
-													{edges: "!1560 60|40 60", fillStyle1: 1},
-													{edges: "!1580 20|20 20", fillStyle0: 2, fillStyle1: 4}
-												],
-												fills: [
-													{index: 1, value: {color: "#AEB2B4", type: "SolidColor"}},
-													{index: 2, value: {color: "#EBEBEB", type: "SolidColor"}},
-													{index: 3, value: {color: "#8C9295", type: "SolidColor"}},
-													{index: 4, value: {color: "#575E62", type: "SolidColor"}}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_sliderskins_slidertrack_skin_502cdb1159/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "skin"
 							}
@@ -6367,38 +3068,7 @@ final class AssetCatalogSymbolsComponents {
 						layers: [
 							{
 								color: "#4FFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 440.0, left: 0.0, right: 3040.0, top: 0.0},
-												edges: [
-													{edges: "!3020 20|3020 0", fillStyle0: 2, fillStyle1: 1},
-													{edges: "!3020 420|3020 20", fillStyle0: 4, fillStyle1: 1},
-													{edges: "!3020 440|3040 440!3040 440|3040 0!3040 0|3020 0", fillStyle0: 1},
-													{edges: "!3020 420|3020 440", fillStyle0: 1, fillStyle1: 3},
-													{edges: "!20 420|20 20", fillStyle0: 1, fillStyle1: 4},
-													{edges: "!20 20|0 20", fillStyle0: 1, fillStyle1: 2},
-													{edges: "!20 440|20 420", fillStyle0: 1, fillStyle1: 3},
-													{edges: "!0 20|0 440!0 440|20 440", fillStyle0: 1},
-													{edges: "!3020 0|0 0!0 0|0 20", fillStyle0: 2},
-													{edges: "!3020 440|20 440", fillStyle1: 3},
-													{edges: "!3020 20|20 20", fillStyle0: 4, fillStyle1: 2},
-													{edges: "!20 420|3020 420", fillStyle0: 4, fillStyle1: 3}
-												],
-												fills: [
-													{index: 1, value: {alpha: 0.298039215686275, color: "#C9CBCC", type: "SolidColor"}},
-													{index: 2, value: {alpha: 0.298039215686275, color: "#6D6F70", type: "SolidColor"}},
-													{index: 3, value: {alpha: 0.298039215686275, color: "#D3D5D6", type: "SolidColor"}},
-													{index: 4, value: {alpha: 0.298039215686275, color: "#FFFFFF", type: "SolidColor"}}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_textareaskins_textarea_disabledskin_a0ce165ae9/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "skin"
 							}
@@ -6424,38 +3094,7 @@ final class AssetCatalogSymbolsComponents {
 						layers: [
 							{
 								color: "#4FFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 440.0, left: 0.0, right: 3040.0, top: 0.0},
-												edges: [
-													{edges: "!3020 420|3020 20", fillStyle0: 4, fillStyle1: 1},
-													{edges: "!3020 0|3020 20", fillStyle0: 1, fillStyle1: 3},
-													{edges: "!3020 440|3040 440!3040 440|3040 0!3040 0|3020 0", fillStyle0: 1},
-													{edges: "!3020 420|3020 440", fillStyle0: 1, fillStyle1: 2},
-													{edges: "!20 20|20 420", fillStyle0: 4, fillStyle1: 1},
-													{edges: "!20 440|0 440!0 440|0 20", fillStyle1: 1},
-													{edges: "!20 440|20 420", fillStyle0: 1, fillStyle1: 2},
-													{edges: "!0 20|0 0!0 0|3020 0", fillStyle1: 3},
-													{edges: "!20 20|0 20", fillStyle0: 1, fillStyle1: 3},
-													{edges: "!3020 440|20 440", fillStyle1: 2},
-													{edges: "!20 420|3020 420", fillStyle0: 4, fillStyle1: 2},
-													{edges: "!3020 20|20 20", fillStyle0: 4, fillStyle1: 3}
-												],
-												fills: [
-													{index: 1, value: {color: "#C9CBCC", type: "SolidColor"}},
-													{index: 2, value: {color: "#D3D5D6", type: "SolidColor"}},
-													{index: 3, value: {color: "#6D6F70", type: "SolidColor"}},
-													{index: 4, value: {color: "#FFFFFF", type: "SolidColor"}}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_textareaskins_textarea_upskin_b24ab412f4/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "skin"
 							}
@@ -6482,35 +3121,7 @@ final class AssetCatalogSymbolsComponents {
 							{
 								color: "#4FFF4F",
 								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 440.0, left: 0.0, right: 3040.0, top: 0.0},
-												edges: [
-													{edges: "!3020 440|3040 440!3040 440|3040 0!3040 0|3020 0", fillStyle0: 1},
-													{edges: "!3020 20|3020 420", fillStyle0: 1, fillStyle1: 4},
-													{edges: "!3020 0|3020 20", fillStyle0: 1, fillStyle1: 2},
-													{edges: "!3020 440|3020 420!20 420|20 440", fillStyle0: 3, fillStyle1: 1},
-													{edges: "!0 20|0 440!0 440|20 440", fillStyle0: 1},
-													{edges: "!0 20|0 0!0 0|3020 0", fillStyle1: 2},
-													{edges: "!20 20|0 20", fillStyle0: 1, fillStyle1: 2},
-													{edges: "!20 420|20 20", fillStyle0: 1, fillStyle1: 4},
-													{edges: "!20 440|3020 440", fillStyle0: 3},
-													{edges: "!3020 20|20 20", fillStyle0: 4, fillStyle1: 2},
-													{edges: "!3020 420|20 420", fillStyle0: 3, fillStyle1: 4}
-												],
-												fills: [
-													{index: 1, value: {alpha: 0.298039215686275, color: "#C9CBCC", type: "SolidColor"}},
-													{index: 2, value: {alpha: 0.298039215686275, color: "#6D6F70", type: "SolidColor"}},
-													{index: 3, value: {alpha: 0.298039215686275, color: "#D3D5D6", type: "SolidColor"}},
-													{index: 4, value: {alpha: 0.298039215686275, color: "#FFFFFF", type: "SolidColor"}}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_textinputskins_textinput_disabledski_cf2542d3f2/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 0,
 								name: "skin"
@@ -6537,38 +3148,7 @@ final class AssetCatalogSymbolsComponents {
 						layers: [
 							{
 								color: "#4FFF4F",
-								frames: [
-									{
-										elements: [
-											{
-												bounds: {bottom: 440.0, left: 0.0, right: 3040.0, top: 0.0},
-												edges: [
-													{edges: "!3020 20|3020 0", fillStyle0: 2, fillStyle1: 1},
-													{edges: "!3020 420|3020 20", fillStyle0: 4, fillStyle1: 1},
-													{edges: "!3020 440|3020 420", fillStyle0: 3, fillStyle1: 1},
-													{edges: "!3020 440|3040 440!3040 440|3040 0!3040 0|3020 0", fillStyle0: 1},
-													{edges: "!20 420|20 440", fillStyle0: 3, fillStyle1: 1},
-													{edges: "!20 420|20 20", fillStyle0: 1, fillStyle1: 4},
-													{edges: "!20 20|0 20", fillStyle0: 1, fillStyle1: 2},
-													{edges: "!0 20|0 440!0 440|20 440", fillStyle0: 1},
-													{edges: "!3020 0|0 0!0 0|0 20", fillStyle0: 2},
-													{edges: "!3020 420|20 420", fillStyle0: 3, fillStyle1: 4},
-													{edges: "!3020 20|20 20", fillStyle0: 4, fillStyle1: 2},
-													{edges: "!20 440|3020 440", fillStyle0: 3}
-												],
-												fills: [
-													{index: 1, value: {color: "#C9CBCC", type: "SolidColor"}},
-													{index: 2, value: {color: "#6D6F70", type: "SolidColor"}},
-													{index: 3, value: {color: "#D3D5D6", type: "SolidColor"}},
-													{index: 4, value: {color: "#FFFFFF", type: "SolidColor"}}
-												],
-												type: "DOMShape"
-											}
-										],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{svgAssetPath: "assets/svg/timeline/components_component_assets_textinputskins_textinput_upskin_2ab47de342/t00_l000_f0000_r00.svg", type: "DOMSvgInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "skin"
 							}
@@ -6617,20 +3197,7 @@ final class AssetCatalogSymbolsComponents {
 									{index: 0, keyMode: 9728},
 									{
 										elements: [
-											{
-												bottomLeftRadius: 20.0,
-												bottomRightRadius: 20.0,
-												fill: {color: "#EEEEEE", type: "SolidColor"},
-												matrix: {d: 0.999862670898438, tx: -88.0, ty: -86.0},
-												objectHeight: 373.95,
-												objectWidth: 391.0,
-												stroke: {fill: {color: "#CCCCCC", type: "SolidColor"}, scaleMode: "normal", type: "SolidStroke"},
-												topLeftRadius: 20.0,
-												topRightRadius: 20.0,
-												type: "DOMRectangleObject",
-												x: 88.0,
-												y: 86.0
-											},
+											{svgAssetPath: "assets/svg/timeline/components_list_1d4ca804b9/t00_l001_f0001_r00.svg", type: "DOMSvgInstance"},
 											{
 												height: 14.5,
 												matrix: {d: 0.999862670898438, tx: 243.1, ty: 133.3},
@@ -6732,20 +3299,7 @@ final class AssetCatalogSymbolsComponents {
 									{index: 0, keyMode: 9728},
 									{
 										elements: [
-											{
-												bottomLeftRadius: 20.0,
-												bottomRightRadius: 20.0,
-												fill: {color: "#EEEEEE", type: "SolidColor"},
-												matrix: {tx: -88.0, ty: 32.0},
-												objectHeight: 298.0,
-												objectWidth: 280.0,
-												stroke: {fill: {color: "#CCCCCC", type: "SolidColor"}, scaleMode: "normal", type: "SolidStroke"},
-												topLeftRadius: 20.0,
-												topRightRadius: 20.0,
-												type: "DOMRectangleObject",
-												x: 88.0,
-												y: -32.0
-											},
+											{svgAssetPath: "assets/svg/timeline/components_slider_59825aded4/t00_l001_f0001_r00.svg", type: "DOMSvgInstance"},
 											{
 												height: 245.2,
 												matrix: {tx: 145.85, ty: 21.15},
@@ -6829,21 +3383,7 @@ final class AssetCatalogSymbolsComponents {
 									{index: 0, keyMode: 9728},
 									{
 										elements: [
-											{
-												bottomLeftRadius: 20.0,
-												bottomRightRadius: 20.0,
-												fill: {color: "#EEEEEE", type: "SolidColor"},
-												matrix: {a: 0.940902709960938, d: 0.999847412109375, tx: -108.25, ty: 21.0},
-												objectHeight: 318.95,
-												objectWidth: 456.0,
-												stroke: {fill: {color: "#CCCCCC", type: "SolidColor"}, scaleMode: "normal", type: "SolidStroke"},
-												topLeftRadius: 20.0,
-												topRightRadius: 20.0,
-												transformationPoint: {x: 343.0, y: 138.45},
-												type: "DOMRectangleObject",
-												x: 115.0,
-												y: -21.0
-											},
+											{svgAssetPath: "assets/svg/timeline/components_textarea_99ef962c5b/t00_l001_f0001_r00.svg", type: "DOMSvgInstance"},
 											{
 												height: 17.7,
 												matrix: {d: 0.999847412109375, tx: 222.0, ty: 174.15},
@@ -6940,21 +3480,7 @@ final class AssetCatalogSymbolsComponents {
 									{index: 0, keyMode: 9728},
 									{
 										elements: [
-											{
-												bottomLeftRadius: 20.0,
-												bottomRightRadius: 20.0,
-												fill: {color: "#EEEEEE", type: "SolidColor"},
-												matrix: {a: 0.899368286132812, tx: -155.6, ty: 109.0},
-												objectHeight: 161.0,
-												objectWidth: 405.95,
-												stroke: {fill: {color: "#CCCCCC", type: "SolidColor"}, scaleMode: "normal", type: "SolidStroke"},
-												topLeftRadius: 20.0,
-												topRightRadius: 20.0,
-												transformationPoint: {x: 375.85, y: -28.5},
-												type: "DOMRectangleObject",
-												x: 173.0,
-												y: -109.0
-											},
+											{svgAssetPath: "assets/svg/timeline/components_textinput_8806aa72be/t00_l001_f0001_r00.svg", type: "DOMSvgInstance"},
 											{
 												height: 17.7,
 												matrix: {d: 0.999847412109375, tx: 204.05, ty: 109.3},
@@ -7055,21 +3581,7 @@ final class AssetCatalogSymbolsComponents {
 									{index: 0, keyMode: 9728},
 									{
 										elements: [
-											{
-												bottomLeftRadius: 10.0,
-												bottomRightRadius: 10.0,
-												fill: {color: "#EEEEEE", type: "SolidColor"},
-												matrix: {a: 0.999893188476562, d: 1.493896484375, tx: 1.55, ty: -45.25},
-												objectHeight: 183.0,
-												objectWidth: 388.95,
-												stroke: {fill: {color: "#CCCCCC", type: "SolidColor"}, scaleMode: "normal", type: "SolidStroke"},
-												topLeftRadius: 10.0,
-												topRightRadius: 10.0,
-												transformationPoint: {x: 192.9, y: 121.85},
-												type: "DOMRectangleObject",
-												x: -1.55,
-												y: 30.3
-											},
+											{svgAssetPath: "assets/svg/timeline/components_uiscrollbar_075ff9e983/t00_l001_f0001_r00.svg", type: "DOMSvgInstance"},
 											{
 												height: 14.5,
 												matrix: {a: 0.999893188476562, d: 0.999832153320312, tx: 192.45, ty: 181.5},

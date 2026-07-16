@@ -37,13 +37,10 @@ class PR2MovieClipRuntimeTest {
 		testBlendModes();
 		testFilters();
 		testScale9Grids();
-		testAlphaOnlySolidFills();
-		testGradientStrokeUsesVisibleStop();
 		testAuthoredMineBitmapResolution();
 		testGeneratedSoundFrameMetadata();
 		testTimelineEventSounds();
-		testLeafVectorShapes();
-		testBakedSymbolStubsUseAtlasDirectly();
+		testBakedSymbolStubsUseSvgDirectly();
 		testGeneratedSiteLogoFrameScripts();
 		testGeneratedCharacterStateFrameScripts();
 		testGeneratedCharacterNestedStopFrameScripts();
@@ -53,7 +50,6 @@ class PR2MovieClipRuntimeTest {
 		testGeneratedPlayersTabListConstructorStop();
 		testGeneratedShortEffectStopFrameScripts();
 		testDisposeStopsClipsNestedInGroups();
-		testPrimitiveDrawingObjects();
 		testGeneratedStaticTextAndComponents();
 		testLoginPopupUsesAuthoredComponentsOnly();
 		testStaticTextHonorsAuthoredAttributes();
@@ -493,25 +489,6 @@ class PR2MovieClipRuntimeTest {
 		assertClose(10, squashed[8].x + squashed[8].width, "squashed slices still fit the 10px box");
 	}
 
-	private static function testAlphaOnlySolidFills():Void {
-		var solid = @:privateAccess VectorShapeRenderer.colorForStyle({type: "SolidColor", alpha: 0.25});
-		assertEquals(0, solid.color, "alpha-only solid fill defaults to black");
-		assertClose(0.25, solid.alpha, "alpha-only solid fill preserves authored opacity");
-	}
-
-	private static function testGradientStrokeUsesVisibleStop():Void {
-		var color = @:privateAccess VectorShapeRenderer.strongestGradientColor({
-			type: "LinearGradient",
-			entries: [
-				{color: "#FFFFFF", alpha: 0.0, ratio: 0.0},
-				{color: "#FDFD02", alpha: 0.65, ratio: 0.5},
-				{color: "#FFFFFF", ratio: 1.0}
-			]
-		});
-		assertEquals(0xFFFFFF, color.color, "gradient stroke uses its strongest visible authored color");
-		assertClose(1, color.alpha, "gradient stroke does not flatten to a transparent first stop");
-	}
-
 	private static function testAuthoredMineBitmapResolution():Void {
 		Assets.cache.setBitmapData("assets/blocks/mine_block.png", new BitmapData(30, 30, false, 0x6A6250));
 		var mine = PR2MovieClip.fromSymbolName("MovieClips/Symbol 859");
@@ -580,28 +557,15 @@ class PR2MovieClipRuntimeTest {
 		);
 	}
 
-	private static function testLeafVectorShapes():Void {
-		var clip = new PR2MovieClip(makeVectorSymbol());
-
-		var vectorShape = requireChild(clip, "vectorShape");
-		assertAtLeast(19, vectorShape.width, "DOMShape edge data renders vector width instead of placeholder");
-		assertAtLeast(19, vectorShape.height, "DOMShape edge data renders vector height instead of placeholder");
-
-		var group = Std.downcast(requireChild(clip, "group"), Sprite);
-		assertNotNull(group, "DOMGroup renders as a sprite");
-		assertEquals(1, group.numChildren, "DOMGroup renders member shapes");
-		assertAtLeast(9, group.getChildAt(0).width, "DOMGroup member shape renders vector width");
-	}
-
-	private static function testBakedSymbolStubsUseAtlasDirectly():Void {
+	private static function testBakedSymbolStubsUseSvgDirectly():Void {
 		var symbol = AssetLibrary.requireSymbol("MovieClips/Symbol 30");
-		assertEquals(0, symbol.timelines.length, "baked atlas symbol omits generated vector timelines");
+		assertEquals(0, symbol.timelines.length, "baked SVG symbol omits generated vector timelines");
 
 		var clip = PR2MovieClip.fromSymbolName("MovieClips/Symbol 30");
 		assertEquals(1, clip.totalFrames, "direct baked symbol construction stays single-frame");
-		assertEquals(1, clip.numChildren, "direct baked symbol mounts atlas sprite instead of vector timeline");
-		assertAtLeast(1, clip.width, "direct baked symbol keeps non-empty atlas bounds");
-		assertAtLeast(1, clip.height, "direct baked symbol keeps non-empty atlas bounds");
+		assertEquals(1, clip.numChildren, "direct baked symbol mounts an SVG instead of a generated vector timeline");
+		assertAtLeast(1, clip.width, "direct baked symbol keeps non-empty SVG bounds");
+		assertAtLeast(1, clip.height, "direct baked symbol keeps non-empty SVG bounds");
 	}
 
 	private static function testDisposeStopsClipsNestedInGroups():Void {

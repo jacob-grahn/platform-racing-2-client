@@ -5,23 +5,23 @@
 	<app main="Main" path="export" file="PlatformRacing2" />
 
 	<source path="haxe/src" />
-	<assets path="assets" rename="assets" exclude="fonts|blocks|character|intro|login|backgrounds|stamps" if="html5" />
-	<assets path="assets" rename="assets" exclude="fonts|blocks|character|intro|login|backgrounds|stamps" unless="html5" />
+	<assets path="assets" rename="assets" exclude="fonts|blocks|login" if="html5" />
+	<assets path="assets" rename="assets" exclude="fonts|blocks|login" unless="html5" />
 
 	<!-- Embedded fonts. Mapped to the original PR2 face names by pr2.runtime.FontResolver.
 	     DejaVu Sans (Verdana stand-in, metric-compatible) is split into distinct family
 	     names per weight so OpenFL's __fontByName variant lookup resolves bold/italic to the
 	     real outlines instead of browser faux-synthesis. -->
 	<assets path="assets/fonts" rename="assets/fonts" include="*.ttf" embed="true" />
-	<assets path="assets/blocks" rename="assets/blocks" exclude="arrow_overlay@4x.png|arrow2_overlay@4x.png|egg_overlay@4x.png|crumble_piece@4x.png|brick_piece@4x.png|start_block_text@4x.png" />
-	<assets path="assets/character/atlases/hats" rename="assets/character/atlases/hats" include="*.json" />
-	<assets path="assets/character/atlases/part-sets" rename="assets/character/atlases/part-sets" include="*.json" />
+	<assets path="assets/blocks" rename="assets/blocks" />
 	<!-- bg_front contains an embedded source bitmap in Animate's SVG export, so
 	     it remains raster until the original artwork is replaced with vectors. -->
 	<assets path="assets/login" rename="assets/login" include="bg_front@2x.png" />
 	<!-- Animate-exported vectors are rendered directly by openfl/svg. Keeping the
 	     source SVGs here also prevents derived PNG/WebP copies from entering export/. -->
-	<assets path="art/svg" rename="assets/svg" include="*.svg" />
+	<assets path="art/svg" rename="assets/svg" include="*.svg" exclude="timeline|character" />
+	<assets path="art/svg-packs/timeline" rename="assets/svg-packs/timeline" include="*.json" />
+	<assets path="art/png/timeline" rename="assets/timeline-bitmap" include="*.png" />
 	<template path="templates/html5/template/index.html" rename="index.html" if="html5" />
 
 	<haxelib name="openfl" />

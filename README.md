@@ -100,8 +100,8 @@ PR2_API_HOST=/api haxe test/real-server.hxml
 - `flash/platform-racing-2-xfl/`: extracted Animate/XFL migration source.
 - `tools/`: asset extraction, generation, rasterization, and harness helpers.
 - `art/svg/`: SVG exports from Animate.
-- `art/png/`: generated 4x rasters from SVG vector art.
-- `art/atlases/`: generated sprite sheets and frame JSON.
+- `art/png/timeline/`: generated PNG fallbacks for timeline artwork whose SVG
+  features OpenFL cannot render directly.
 - `docs/`: migration notes and inventories.
 - `docs/browser-platform-differences.md`: audited, platform-required HTML5
   differences and their parity boundaries.
@@ -226,12 +226,6 @@ python3 tools/extract_xfl_audio.py
 python3 tools/extract_xfl_audio.py --check
 ```
 
-Verify the Adobe-exported Kongregate intro art and its committed runtime atlas:
-
-```sh
-python3 tools/verify_kongregate_intro.py
-```
-
 The default inventory output is `docs/vector-art-inventory.json`.
 
 ## Adobe Animate SVG Export
@@ -278,79 +272,23 @@ python3 tools/generate_block_bitmap_jsfl.py
 open -a "/Applications/Adobe Animate 2024/Adobe Animate 2024.app" art/export-block-bitmaps.jsfl
 ```
 
-## SVG To Rasterization
+## Timeline Bitmap Fallbacks
 
-Rasterize committed SVGs to 4x rasters and sprite sheets. Character sprite
-sheets are emitted as on-demand lossless WebP atlases grouped by part ID, level
-backgrounds are emitted as standalone lossless WebP files, and the intermediate
-per-channel character rasters remain PNGs:
-
-```sh
-python3 tools/rasterize_vector_art.py --sheets --manifest art/raster-manifest.json
-```
-
-Rasterize only character art:
+Most exported artwork is rendered directly from SVG. Regenerate the small PNG
+fallback set for timeline SVGs containing unsupported bitmap fills or filters
+with:
 
 ```sh
-python3 tools/rasterize_vector_art.py --sheets --category character --manifest art/raster-manifest.json
+python3 tools/rasterize_timeline_bitmap_fills.py
 ```
 
-Rasterize the exported non-character SVGs. Backgrounds remain standalone WebP
-files; block overlays, effect symbols, and login page components remain
-standalone PNGs; stamps and item icons are packed into separate atlases:
-
-```sh
-python3 tools/rasterize_vector_art.py --sheets --category backgrounds --category blocks --category stamps --category effects --category items --category login --manifest art/raster-manifest-other.json
-```
-
-Rasterize the baked intro symbols. The Kongregate intro keeps its original
-timeline transforms in Haxe, while the difficult nested vector symbols are
-loaded from this atlas:
-
-```sh
-python3 tools/rasterize_vector_art.py --sheets --category intro --manifest art/raster-manifest-intro.json
-```
-
-The rasterizer uses Inkscape when available and falls back to Lime's bundled
-Batik renderer. The default Inkscape path is:
-
-```text
-/Applications/Inkscape.app/Contents/MacOS/inkscape
-```
+The generated files live in `art/png/timeline/` and are packaged as
+`assets/timeline-bitmap/` by `project.xml`.
 
 Check Inkscape availability:
 
 ```sh
 /Applications/Inkscape.app/Contents/MacOS/inkscape --version
-```
-
-## Raster Asset Verification
-
-Verify the current character raster output:
-
-```sh
-python3 - <<'PY'
-import json
-from pathlib import Path
-from PIL import Image
-
-with open('art/raster-manifest.json') as f:
-    manifest = json.load(f)
-
-pngs = sorted(Path('art/png/character').rglob('*.png'))
-atlas_webps = sorted(Path('assets/character/atlases').rglob('*.webp'))
-atlas_jsons = sorted(Path('assets/character/atlases').rglob('*.json'))
-assert len(manifest['pngs']) == 474
-assert len(pngs) == 474
-assert len(manifest['atlases']) == 51
-assert len(atlas_webps) == 51
-assert len(atlas_webps) == len(atlas_jsons)
-for path in atlas_webps:
-    image = Image.open(path)
-    assert image.width <= 4096 and image.height <= 4096, (path, image.size)
-    assert image.getbbox() is not None, path
-print('verified', len(pngs), 'character pngs,', len(atlas_webps), 'character webp atlases')
-PY
 ```
 
 ## Harness Helpers
@@ -445,7 +383,7 @@ per-case thresholds):
 
 ```sh
 python3 tools/compare_symbol_render.py --diff-dir test/output/symbol-diffs --metrics test/output/symbol-metrics.json
-python3 tools/compare_symbol_render.py --symbol UI/Global/MuteButton --reference assets/login/mute_button@4x.png
+python3 tools/compare_symbol_render.py --symbol UI/Global/MuteButton --reference test/baselines/vector-art/mute_button@4x.png
 ```
 
 Check approximate OpenFL frame rate:

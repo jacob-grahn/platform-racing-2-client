@@ -6,19 +6,19 @@
     {
       "name": "mute-button",
       "symbol": "UI/Global/MuteButton",
-      "reference": "assets/login/mute_button@4x.png",
+      "reference": "test/baselines/vector-art/mute_button@4x.png",
       "thresholdRms": 18
     },
     {
       "name": "stamp-tree1",
       "symbol": "UI/Pages/Levels/Stamps/tree1",
-      "reference": "assets/stamps/tree1@4x.png",
+      "reference": "test/baselines/vector-art/tree1@4x.png",
       "thresholdRms": 24
     },
     {
       "name": "stamp-rock1",
       "symbol": "UI/Pages/Levels/Stamps/rock1",
-      "reference": "assets/stamps/rock1@4x.png",
+      "reference": "test/baselines/vector-art/rock1@4x.png",
       "thresholdRms": 24
     }
   ]

@@ -1,0 +1,46 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="none" x="0px" y="0px" width="550px" height="400px" viewBox="0 0 550 400">
+<defs>
+<linearGradient id="Gradient_1" gradientUnits="userSpaceOnUse" x1="21.6" y1="86.35" x2="21.6" y2="0.3500000000000014" spreadMethod="pad">
+<stop  offset="0%" stop-color="#666666" stop-opacity="0"/>
+
+<stop  offset="100%" stop-color="#FFFFFF"/>
+</linearGradient>
+
+<linearGradient id="Gradient_2" gradientUnits="userSpaceOnUse" x1="43.3" y1="78.85" x2="43.3" y2="7.850000000000001" spreadMethod="pad">
+<stop  offset="0%" stop-color="#CCCCCC" stop-opacity="0.5019607843137255"/>
+
+<stop  offset="100%" stop-color="#FFFFFF" stop-opacity="0.7529411764705882"/>
+</linearGradient>
+
+<linearGradient id="Gradient_3" gradientUnits="userSpaceOnUse" x1="65" y1="0.3500000000000014" x2="65" y2="86.35" spreadMethod="pad">
+<stop  offset="0%" stop-color="#666666" stop-opacity="0"/>
+
+<stop  offset="100%" stop-color="#FFFFFF"/>
+</linearGradient>
+
+<g id="Layer0_0_FILL">
+<path fill="url(#Gradient_1)" stroke="none" d="
+M 43.3 7.85
+L 43.3 0
+Q 25.35 0 12.65 12.7 0 25.4 0 43.35 0 61.3 12.65 73.95 25.35 86.65 43.3 86.65
+L 43.3 78.85
+Q 28.6 78.85 18.2 68.45 7.8 58.05 7.8 43.35 7.8 28.65 18.2 18.25 28.6 7.85 43.3 7.85 Z"/>
+
+<path fill="url(#Gradient_2)" stroke="none" d="
+M 68.4 18.25
+Q 58 7.85 43.3 7.85 28.6 7.85 18.2 18.25 7.8 28.65 7.8 43.35 7.8 58.05 18.2 68.45 28.6 78.85 43.3 78.85 58 78.85 68.4 68.45 78.8 58.05 78.8 43.35 78.8 28.65 68.4 18.25 Z"/>
+
+<path fill="url(#Gradient_3)" stroke="none" d="
+M 43.3 7.85
+Q 58 7.85 68.4 18.25 78.8 28.65 78.8 43.35 78.8 58.05 68.4 68.45 58 78.85 43.3 78.85
+L 43.3 86.65
+Q 61.25 86.65 73.9 73.95 86.6 61.3 86.6 43.35 86.6 25.4 73.9 12.7 61.25 0 43.3 0
+L 43.3 7.85 Z"/>
+</g>
+</defs>
+
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<use xlink:href="#Layer0_0_FILL"/>
+</g>
+</svg>

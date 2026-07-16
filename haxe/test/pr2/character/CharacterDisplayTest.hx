@@ -14,11 +14,58 @@ class CharacterDisplayTest {
 	public static function main():Void {
 		testSuperJumpWobbleUsesCurrentFrame();
 		if (pr2.DeterministicTestMode.finishSmokeSuite("CharacterDisplayTest")) return;
+		testAuthoredTimelinePartsAndColors();
 		testHeldWeaponFrameAppliesToCharacterStates();
 		testHeldItemUseAnimationsSurviveCharacterTicks();
 		testHeldMineUsesExportedBitmap();
 		testSnakeHeldGraphicUsesEyedVanishBlock();
 		trace('CharacterDisplayTest passed $assertions assertions');
+	}
+
+	private static function testAuthoredTimelinePartsAndColors():Void {
+		var display = new CharacterDisplay();
+		var state = display.getStateClip("standAnim");
+		var head = Std.downcast(state.getChildByTimelineName("head"), PR2MovieClip);
+		assertTrue(head != null, "stand state exposes its authored head clip");
+		assertTrue(!head.cacheAsBitmap, "explicit head cache does not use OpenFL cacheAsBitmap");
+		assertTrue(display.explicitPartCacheForTest(head) != null, "stand head has an explicit local-space bitmap");
+		for (partName in ["body", "foot1", "foot2"]) {
+			var part = Std.downcast(state.getChildByTimelineName(partName), PR2MovieClip);
+			assertTrue(part != null, 'stand state exposes its authored $partName clip');
+			assertTrue(!part.cacheAsBitmap, '$partName does not use OpenFL cacheAsBitmap');
+			assertTrue(display.explicitPartCacheForTest(part) != null, '$partName has an explicit local-space bitmap');
+		}
+		assertEquals(null, descendantNamedWithPrefix(head, "__atlasLayer"), "character does not mount a legacy atlas layer");
+		assertTrue(visibleDescendantCount(head) > 0, "authored head timeline contains visible exported art");
+
+		var originalX = head.transform.matrix.tx;
+		var originalY = head.transform.matrix.ty;
+		display.setPartColor("head", 0x123456, -1);
+		var primary = Std.downcast(head.getChildByTimelineName("colorMC"), PR2MovieClip);
+		var secondary = Std.downcast(head.getChildByTimelineName("colorMC2"), PR2MovieClip);
+		assertTrue(primary != null, "authored head exposes its primary color clip");
+		assertTrue(secondary != null, "authored head exposes its secondary color clip");
+		assertClose(0, primary.transform.colorTransform.redMultiplier, "Flash color replacement clears red multiplication");
+		assertClose(0x12, primary.transform.colorTransform.redOffset, "Flash color replacement applies red offset");
+		assertClose(0x34, primary.transform.colorTransform.greenOffset, "Flash color replacement applies green offset");
+		assertClose(0x56, primary.transform.colorTransform.blueOffset, "Flash color replacement applies blue offset");
+		assertTrue(!secondary.visible, "missing epic color hides the authored secondary clip");
+		assertClose(originalX, head.transform.matrix.tx, "recoloring preserves authored head x position");
+		assertClose(originalY, head.transform.matrix.ty, "recoloring preserves authored head y position");
+
+		var uncached = new CharacterDisplay(null, null, false);
+		var uncachedState = uncached.getStateClip("standAnim");
+		var uncachedHead = Std.downcast(uncachedState.getChildByTimelineName("head"), PR2MovieClip);
+		assertEquals(null, uncached.explicitPartCacheForTest(uncachedHead), "visual-test mode can leave parts uncached");
+		assertClose(uncachedHead.transform.matrix.tx, head.transform.matrix.tx, "cache preserves first-frame head x registration");
+		assertClose(uncachedHead.transform.matrix.ty, head.transform.matrix.ty, "cache preserves first-frame head y registration");
+		assertClose(uncachedHead.transform.matrix.a, head.transform.matrix.a, "cache preserves first-frame head x scale");
+		assertClose(uncachedHead.transform.matrix.d, head.transform.matrix.d, "cache preserves first-frame head y scale");
+
+		display.advanceOneFrame();
+		var advancedHead = Std.downcast(state.getChildByTimelineName("head"), PR2MovieClip);
+		assertEquals(head, advancedHead, "standing sway reuses the cached head instance");
+		assertTrue(display.explicitPartCacheForTest(advancedHead) != null, "standing sway keeps the explicit head bitmap");
 	}
 
 	private static function testSuperJumpWobbleUsesCurrentFrame():Void {
@@ -154,6 +201,22 @@ class CharacterDisplayTest {
 			}
 		}
 		return count;
+	}
+
+	private static function descendantNamedWithPrefix(root:DisplayObject, prefix:String):Null<DisplayObject> {
+		if (root.name != null && StringTools.startsWith(root.name, prefix)) {
+			return root;
+		}
+		var container = Std.downcast(root, DisplayObjectContainer);
+		if (container != null) {
+			for (i in 0...container.numChildren) {
+				var match = descendantNamedWithPrefix(container.getChildAt(i), prefix);
+				if (match != null) {
+					return match;
+				}
+			}
+		}
+		return null;
 	}
 
 	private static function assertEquals<T>(expected:T, actual:T, message:String):Void {

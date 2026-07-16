@@ -20,7 +20,8 @@ game-facing part IDs in `flash/Parts.as`.
   - Bodies: 47 parts x 4 channels
   - Feet: 45 parts x 4 channels
 - Character channel targets per part: `static`, `primary`, `secondary`, `composite`
-- Raster target scale: 4x
+- Legacy standalone 4x character rasters have been removed; runtime character
+  parts use the exported timeline SVGs and targeted bitmap fallbacks.
 
 There are more raw `<DOMShape>` tags if every XML file under `LIBRARY/` is
 grepped directly. The manifest intentionally starts from the symbols included
@@ -37,7 +38,6 @@ Export paths follow this pattern:
 
 ```text
 art/svg/character/<kind>/<id>_<name>/<channel>.svg
-art/png/character/<kind>/<id>_<name>/<channel>@4x.png
 ```
 
 Examples:
@@ -129,7 +129,7 @@ At a high level:
    with `colorMC` and `colorMC2` hidden. This preserves the source line-art
    ordering without relying on Animate to advance nested movie clips during
    SVG export.
-8. Convert SVG outputs to `@4x.png` sprite sheets as a separate deterministic build step.
+8. Commit the SVG outputs as editable source art; the runtime renders them directly.
 
 To run a generated JSFL file through Animate on macOS:
 
@@ -156,34 +156,9 @@ art/svg/
 The smoke batch has been validated with `hat/002_exp`: the generated SVGs
 contain real `<path>` data for `static`, `primary`, and `secondary` exports.
 
-## Rasterization
+## Runtime assets
 
-Rasterize the committed SVGs with Inkscape:
-
-```sh
-python3 tools/rasterize_vector_art.py --sheets --manifest art/raster-manifest.json
-```
-
-The rasterizer queries each SVG's drawing bounds with Inkscape before exporting.
-This is important because some Animate SVGs contain negative coordinates outside
-the nominal stage viewBox. The output files are transparent-trimmed 4x rasters,
-and the manifest records the original drawing bounds plus the trim rectangle.
-
-Character sprite sheets are grouped for on-demand loading. Hats share one atlas,
-and head/body/feet art is packed by independent part ID:
-
-```text
-assets/character/atlases/hats/atlas@4x.webp
-assets/character/atlases/hats/atlas@4x.json
-assets/character/atlases/part-sets/<id>/atlas@4x.webp
-assets/character/atlases/part-sets/<id>/atlas@4x.json
-```
-
-Each atlas frame records its own `kind`, `channel`, and part `id`, so `static`,
-`primary`, and `secondary` can still be drawn or tinted independently after the
-part-set WebP is loaded. Composite character exports are intentionally omitted.
-Non-character exports use separate asset groups by gameplay area or screen. The
-current raster pass leaves backgrounds as standalone WebP files, leaves block
-overlays and effect symbols standalone PNGs, and packs stamps plus item display
-icons into their own atlases.
-Static block bitmaps are exported directly to `assets/blocks/`.
+The runtime loads the committed SVG exports directly. Timeline SVGs are grouped
+into on-demand JSON packs; the small set of SVGs containing unsupported bitmap
+fills use the generated files under `art/png/timeline/` as fallbacks. The legacy
+4x raster manifests and sprite atlases are no longer part of the build.

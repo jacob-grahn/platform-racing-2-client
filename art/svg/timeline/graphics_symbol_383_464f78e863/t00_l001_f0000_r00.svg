@@ -1,0 +1,27 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="none" x="0px" y="0px" width="550px" height="400px" viewBox="0 0 550 400">
+<defs>
+<linearGradient id="Gradient_1" gradientUnits="userSpaceOnUse" x1="27.912499999999998" y1="-21.7875" x2="29.3875" y2="24.1875" spreadMethod="pad">
+<stop  offset="0%" stop-color="#F1ECF7"/>
+
+<stop  offset="100%" stop-color="#DDFF00"/>
+</linearGradient>
+
+<g id="Layer0_0_FILL">
+<path fill="url(#Gradient_1)" stroke="none" d="
+M 68.95 -1.65
+Q 67.9 -1.6 66.95 -1.05 66 -0.6 65.15 0.4 64.3 1.35 63.85 2.35 63.35 3.25 63.15 4.5 63 5.6 63 6.8 63 8 63.15 8.85
+L 63.75 10.7 64.8 12.35 66.3 13.6
+Q 67.1 14.05 68.25 14.3
+L 70.3 14.55 72.15 14.45 73.9 13.95 75.55 12.9 76.95 11.4 77.85 9.35 78.2 7 77.95 4.4
+Q 77.65 2.85 77.2 2
+L 76.05 0.3 74.55 -0.8 72.9 -1.45 71.05 -1.7 68.95 -1.65
+M 72.85 4.9
+L 73.1 5.8 73.15 6.8 73.05 7.65 72.7 8.35 72.3 8.85 71.7 9.25 71.05 9.45 70.35 9.5 69.65 9.35 69.05 9.1 68.55 8.65 68.25 8.15 68 7.5 67.95 6.8 68 5.9 68.3 5.05 68.7 4.35 69.35 3.9 70.05 3.65 70.75 3.6 71.35 3.7 71.9 3.95 72.4 4.35 72.85 4.9 Z"/>
+</g>
+</defs>
+
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<use xlink:href="#Layer0_0_FILL"/>
+</g>
+</svg>

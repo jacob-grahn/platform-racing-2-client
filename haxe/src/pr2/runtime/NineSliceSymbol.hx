@@ -14,7 +14,7 @@ import pr2.runtime.PR2MovieClip.PR2MovieClipOptions;
 	Nine-slice (scale-grid) symbol rendering.
 
 	OpenFL 9.5.2's `scale9Grid` cannot be used here: every PR2 symbol draws its
-	geometry into child `Shape`s (`VectorShapeRenderer`), never the clip's own
+	geometry into child display objects, never the clip's own
 	`graphics`, and the default HTML5 (WebGL) renderer responds to a non-null
 	`__worldScale9Grid` by rasterizing the shape at native pixelRatio scale and
 	baking the instance scale back out (`Graphics.__updateRenderTransform`), never

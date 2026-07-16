@@ -62,15 +62,17 @@ class CharacterAppearance {
 			return;
 		}
 
-		part.gotoAndStop(partId);
+		if (part.currentFrame != partId) {
+			part.gotoAndStop(partId);
+		}
 
 		var colorMC = getClipChild(part, "colorMC");
-		if (colorMC != null) {
+		if (colorMC != null && colorMC.currentFrame != partId) {
 			colorMC.gotoAndStop(partId);
 		}
 
 		var colorMC2 = getClipChild(part, "colorMC2");
-		if (colorMC2 != null) {
+		if (colorMC2 != null && colorMC2.currentFrame != partId) {
 			colorMC2.gotoAndStop(partId);
 		}
 	}

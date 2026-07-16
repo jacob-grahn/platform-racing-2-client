@@ -20,8 +20,8 @@ class LoginBackground extends Sprite {
 		// copies of that tile placed one tileWidth apart, both sliding left by one
 		// tileWidth per loop so a copy always covers the seam the other leaves
 		// behind. bg_front is the exception: its art is already ~2 tiles wide
-		// (drawingBounds 2545 vs tileWidth ~1250), so a single copy never exposes a
-		// gap. See art/raster-manifest-login.json for trim values.
+		// (authored drawing width 2545 vs tileWidth ~1250), so a single copy never
+		// exposes a gap.
 		layers = [
 			new LoginBackgroundLayer("assets/svg/login/bg_sky.svg", 0, 0, 1, 0, 0, 1.0, 1.00010681152344, 1, 0, 0, 1),
 			new LoginBackgroundLayer("assets/svg/login/bg_far.svg", 0, 0, 1, -15.65, 240.25, 1.0, 1.0, 1508, 0, 1276.0, 2),

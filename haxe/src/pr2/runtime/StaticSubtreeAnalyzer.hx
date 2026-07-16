@@ -123,7 +123,7 @@ class StaticSubtreeAnalyzer {
 		if (element.libraryItemName == null) {
 			return true; // no symbol → rendered as a static vector shape or placeholder
 		}
-		if (BakedSymbolAtlas.isBaked(element.libraryItemName)) {
+		if (BakedSymbolSvg.isBaked(element.libraryItemName)) {
 			return true; // already collapsed to a single static Bitmap
 		}
 

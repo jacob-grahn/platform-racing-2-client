@@ -22,7 +22,7 @@ Cases come from a small committed manifest (default
   python3 tools/compare_symbol_render.py --cases tools/symbol_render_cases.json \
       --diff-dir test/output/symbol-diffs --metrics test/output/symbol-metrics.json
   python3 tools/compare_symbol_render.py --symbol UI/Global/MuteButton \
-      --reference assets/login/mute_button@4x.png
+      --reference test/baselines/vector-art/mute_button@4x.png
 """
 
 import argparse

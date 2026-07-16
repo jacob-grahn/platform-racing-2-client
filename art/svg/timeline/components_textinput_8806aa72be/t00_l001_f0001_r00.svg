@@ -1,0 +1,34 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="none" x="0px" y="0px" width="550px" height="400px" viewBox="0 0 550 400">
+<defs>
+<g id="Layer0_0_FILL">
+<path fill="#EEEEEE" stroke="none" d="
+M 193 -109
+Q 173 -109 173 -89
+L 173 32
+Q 173 52 193 52
+L 558.95 52
+Q 578.95 52 578.95 32
+L 578.95 -89
+Q 578.95 -109 558.95 -109
+L 193 -109 Z"/>
+</g>
+
+<path id="Layer0_0_1_STROKES" stroke="#CCCCCC" stroke-width="1" stroke-linejoin="round" stroke-linecap="round" fill="none" d="
+M 17.975134277343756 0
+L 347.09337463378915 0
+Q 365.08043518066404 0 365.08043518066404 20
+L 365.08043518066404 141
+Q 365.08043518066404 161 347.09337463378915 161
+L 17.975134277343756 161
+Q -0.011926269531244316 161 -0.011926269531244316 141
+L -0.011926269531244316 20
+Q -0.011926269531244316 0 17.975134277343756 0 Z"/>
+</defs>
+
+<g transform="matrix( 0.89935302734375, 0, 0, 1, -155.6,109) ">
+<use xlink:href="#Layer0_0_FILL"/>
+
+<use xlink:href="#Layer0_0_1_STROKES" transform="matrix( 1.111907958984375, 0, 0, 1, 173,-109) "/>
+</g>
+</svg>

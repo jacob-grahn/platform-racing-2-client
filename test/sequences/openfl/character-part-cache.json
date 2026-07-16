@@ -1,0 +1,16 @@
+{
+  "query": "screen=character_part_cache",
+  "steps": [
+    {
+      "time": 1.0,
+      "action": "body-attribute",
+      "name": "data-pr2-character-part-cache",
+      "value": "ready"
+    },
+    {
+      "time": 1.1,
+      "action": "shot",
+      "out": "test/output/openfl-character-part-cache.png"
+    }
+  ]
+}
