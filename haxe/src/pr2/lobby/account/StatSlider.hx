@@ -24,6 +24,9 @@ import pr2.util.DisplayUtil;
 **/
 class StatSlider extends Sprite {
 	private static inline final STAT_SLIDER_TRACK_WIDTH:Float = 80;
+	private static inline final ARROW_HITBOX_SIZE:Float = 24;
+	private static inline final ARROW_CENTER_X:Float = 5;
+	private static inline final ARROW_CENTER_Y:Float = 8;
 
 	public var value:Int = 0;
 
@@ -74,6 +77,12 @@ class StatSlider extends Sprite {
 		if (interactive != null) interactive.mouseEnabled = true;
 		var sprite = Std.downcast(button, Sprite);
 		if (sprite != null) {
+			// Draw the hit geometry on the interactive object itself. OpenFL's HTML5
+			// event picker does not reliably honor an unattached Sprite.hitArea.
+			sprite.graphics.beginFill(0x000000, 0.001);
+			sprite.graphics.drawRect(ARROW_CENTER_X - ARROW_HITBOX_SIZE / 2, ARROW_CENTER_Y - ARROW_HITBOX_SIZE / 2,
+				ARROW_HITBOX_SIZE, ARROW_HITBOX_SIZE);
+			sprite.graphics.endFill();
 			sprite.buttonMode = true;
 			sprite.useHandCursor = true;
 		}

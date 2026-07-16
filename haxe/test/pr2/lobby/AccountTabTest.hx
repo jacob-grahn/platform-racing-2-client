@@ -284,10 +284,18 @@ class AccountTabTest {
 		var speedSlider = @:privateAccess stats.speedSlider;
 		var accelSlider = @:privateAccess stats.accelSlider;
 		var jumpSlider = @:privateAccess stats.jumpnSlider;
+		var decButton = Std.downcast(@:privateAccess speedSlider.decButton, openfl.display.Sprite);
+		var incButton = Std.downcast(@:privateAccess speedSlider.incButton, openfl.display.Sprite);
 
 		assertEquals(80.0, @:privateAccess speedSlider.slider.trackWidth, "speed slider track ends before right arrow");
 		assertEquals(80.0, @:privateAccess accelSlider.slider.trackWidth, "acceleration slider track ends before right arrow");
 		assertEquals(80.0, @:privateAccess jumpSlider.slider.trackWidth, "jumping slider track ends before right arrow");
+		assertEquals(24.0, decButton.width, "left stat arrow has a larger square hitbox");
+		assertEquals(24.0, decButton.height, "left stat arrow hitbox is square");
+		assertEquals(24.0, incButton.width, "right stat arrow has a larger square hitbox");
+		assertEquals(24.0, incButton.height, "right stat arrow hitbox is square");
+		assertEquals(true, @:privateAccess incButton.graphics.__hitTest(-5, -2, true, new openfl.geom.Matrix()),
+			"right stat arrow accepts a point outside its triangle but inside the square target");
 		stats.remove();
 	}
 
