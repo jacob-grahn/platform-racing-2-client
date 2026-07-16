@@ -29,6 +29,8 @@ class LocalCharacterTest {
 		testJiggminHatSquashesRemotePlayersWhileFalling();
 		testJellyfishHatStingsNearbyRemotePlayersAndIgnoresStingHurt();
 		testCheeseHatIsCosmeticOnly();
+		testNormalRaceMineHitDropsHighestHat();
+		testAcceptedHitsShedTheFourHatStack();
 		testHatAttackHitDropsHighestHat();
 		trace('LocalCharacterTest passed $assertions assertions');
 	}
@@ -212,7 +214,7 @@ class LocalCharacterTest {
 			}
 		}
 
-		assertEquals("hurt", deathmatchCrown.stateSnapshot().mode, "crown hat does not block mine hurt in deathmatch");
+		assertEquals("land", deathmatchCrown.stateSnapshot().mode, "crown hit in deathmatch applies force without hurt animation");
 		assertClose(-50, deathmatchCrown.stateSnapshot().vy, "deathmatch crown mine hit still applies knockback");
 	}
 
@@ -408,7 +410,7 @@ class LocalCharacterTest {
 			}
 		}
 
-		assertEquals("hurt", local.stateSnapshot().mode, "hat attack mine hit hurts the local character");
+		assertEquals("land", local.stateSnapshot().mode, "crown hit in hat attack applies force without hurt animation");
 		assertEquals("loose_hat`75`40`0", LobbySocket.lastSent(), "hat attack hit emits Flash loose-hat drop");
 		assertEquals(6, local.hat1, "lower hat remains equipped after top hat drops");
 		assertEquals(1, local.hat2, "highest occupied slot is cleared after drop");
@@ -418,6 +420,54 @@ class LocalCharacterTest {
 			local.step(new LocalPlayerInput());
 		}
 		assertEquals("", LobbySocket.lastSent(), "hurt recovery frames do not drop more hats");
+	}
+
+	private static function testNormalRaceMineHitDropsHighestHat():Void {
+		var local = new LocalCharacter(delayedMineBlockLevel());
+		local.setHats([9, 0x00FF00, -1]);
+		LobbySocket.resetSent();
+
+		for (_ in 0...40) {
+			local.step(new LocalPlayerInput());
+			if (local.stateSnapshot().touchedBlockType == "mine") {
+				break;
+			}
+		}
+
+		assertEquals("hurt", local.stateSnapshot().mode, "normal-race mine hit hurts the local character");
+		assertEquals("loose_hat`75`40`0", LobbySocket.lastSent(), "normal-race mine hit emits Flash loose-hat drop");
+		assertEquals(1, local.hat1, "normal-race mine hit clears the highest occupied hat");
+	}
+
+	private static function testAcceptedHitsShedTheFourHatStack():Void {
+		var local = new LocalCharacter(flatLevel());
+		local.setHats([
+			4, 0x111111, -1,
+			5, 0x222222, -1,
+			9, 0x333333, -1,
+			11, 0x444444, -1
+		]);
+		LobbySocket.resetSent();
+
+		local.receiveHit();
+		assertEquals(1, local.hat4, "first accepted hit sheds stack slot four");
+		local.receiveHit();
+		assertEquals(1, local.hat3, "second accepted hit sheds stack slot three");
+		local.receiveHit();
+		assertEquals(1, local.hat2, "third accepted hit sheds stack slot two");
+		local.receiveHit();
+		assertEquals(1, local.hat1, "fourth accepted hit sheds stack slot one");
+		assertEquals(4, LobbySocket.sentCommands.length, "each accepted hit emits one loose-hat command");
+
+		local.receiveSting();
+		assertEquals(4, LobbySocket.sentCommands.length, "sting hurt does not invoke Flash hit or shed another hat");
+
+		var protectedCrown = new LocalCharacter(flatLevel());
+		protectedCrown.setHats([6, 0xFFFFFF, -1]);
+		LobbySocket.resetSent();
+		protectedCrown.receiveHit(10, -5);
+		assertEquals(6, protectedCrown.hat1, "race-mode crown blocks the hit and keeps its hat");
+		assertEquals(0, LobbySocket.sentCommands.length, "blocked crown hit emits no loose-hat command");
 	}
 
 	private static function assertSameState(controller:LocalPlayerController, character:LocalCharacter, label:String):Void {

@@ -37,7 +37,6 @@ class LocalCharacter extends Character {
 	private var lastNetItem:Int = 0;
 	private var exactPosNextUpdate:Bool = false;
 	private final baseGravityMultiplier:Float;
-	private var lastControllerMode:Null<String> = null;
 	private var lastJetPackActive:Bool = false;
 	private var lastSpeedBurstActive:Bool = false;
 
@@ -47,6 +46,7 @@ class LocalCharacter extends Character {
 		baseGravityMultiplier = level.gravity;
 		controller = new LocalPlayerController(level);
 		controller.onHeartGain = gainHeart;
+		controller.onHitAccepted = dropHighestHatFromHit;
 		syncFromController();
 	}
 
@@ -113,7 +113,6 @@ class LocalCharacter extends Character {
 			reversed.right = input.left;
 			input = reversed;
 		}
-		var previousMode = controller.stateSnapshot().mode;
 		controller.propellerHatActive = hasHatFlag(Character.PROP);
 		controller.cowboyHatActive = hasHatFlag(Character.COWBOY);
 		controller.crownHatActive = hasHatFlag(Character.CROWN);
@@ -123,7 +122,7 @@ class LocalCharacter extends Character {
 		controller.topHatActive = hasHatFlag(Character.TOP);
 		controller.cheeseHatActive = hasHatFlag(Character.CHEESE);
 		controller.step(input);
-		syncFromController(previousMode);
+		syncFromController();
 	}
 
 	public function maybeSquash(players:Array<Character>):Bool {
@@ -413,21 +412,18 @@ class LocalCharacter extends Character {
 	}
 
 	public function receiveSting():Void {
-		var previousMode = controller.stateSnapshot().mode;
 		controller.receiveSting();
-		syncFromController(previousMode);
+		syncFromController();
 	}
 
 	public function receiveZap():Void {
-		var previousMode = controller.stateSnapshot().mode;
 		controller.receiveZap();
-		syncFromController(previousMode);
+		syncFromController();
 	}
 
 	public function receiveHit(impulseX:Float = 0, impulseY:Float = 0):Void {
-		var previousMode = controller.stateSnapshot().mode;
 		controller.receiveHit(impulseX, impulseY);
-		syncFromController(previousMode);
+		syncFromController();
 	}
 
 	public function receiveSquash():Void {
@@ -440,7 +436,7 @@ class LocalCharacter extends Character {
 		}
 	}
 
-	private function syncFromController(?previousMode:Null<String>):Void {
+	private function syncFromController():Void {
 		var state = controller.stateSnapshot();
 		x = state.x;
 		y = state.y;
@@ -451,13 +447,6 @@ class LocalCharacter extends Character {
 		display.scaleX = 0.9 * controller.facingScaleX;
 		display.scaleY = 0.9;
 		syncMovementItemSideEffects(state);
-		if (previousMode == null) {
-			previousMode = lastControllerMode;
-		}
-		if (controller.gameMode == "hat" && previousMode != "hurt" && state.mode == "hurt") {
-			dropHighestHatFromHit();
-		}
-		lastControllerMode = state.mode;
 	}
 
 	private function syncMovementItemSideEffects(state:LocalPlayerState):Void {
@@ -482,7 +471,8 @@ class LocalCharacter extends Character {
 	private function dropHighestHatFromHit():Void {
 		var hat = getHighestHat();
 		if (hat.hatNum != 1 && hat.hatNum != 0) {
-			LobbySocket.write("loose_hat`" + Math.round(x) + "`" + Math.round(y - 50) + "`" + Math.round(rotation));
+			var hitState = controller.stateSnapshot();
+			LobbySocket.write("loose_hat`" + Math.round(hitState.x) + "`" + Math.round(hitState.y - 50) + "`" + controller.courseRotation);
 		}
 	}
 

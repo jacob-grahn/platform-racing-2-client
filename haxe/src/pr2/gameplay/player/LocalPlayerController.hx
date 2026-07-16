@@ -101,6 +101,8 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	public var crownHatActive:Bool = false;
 	public var cheeseHatActive:Bool = false;
 	public var onHeartGain:Null<Void->Void> = null;
+	/** Called for Flash `LocalCharacter.hit` damage, including mine collisions. */
+	public var onHitAccepted:Null<Void->Void> = null;
 	public var detailedTraceEnabled(default, null):Bool = false;
 
 	public static inline var MODE_LAND:String = "land";
@@ -510,6 +512,9 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		}
 		vx += impulseX;
 		vy += impulseY;
+		if (onHitAccepted != null) {
+			onHitAccepted();
+		}
 		if (!crownHatActive) {
 			receiveHurtEffect();
 		}
@@ -1460,9 +1465,12 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		if (!crownProtected) {
 			vx += Math.cos(angle) * MINE_HIT_SPEED;
 			vy += Math.sin(angle) * MINE_HIT_SPEED;
+			if (onHitAccepted != null) {
+				onHitAccepted();
+			}
 		}
 		activateBlock(block, "", true);
-		if (!crownProtected && mode != MODE_FREEZE) {
+		if (!crownProtected && !crownHatActive && mode != MODE_FREEZE) {
 			setMode(MODE_HURT);
 			beginHurtRecovery();
 		}
