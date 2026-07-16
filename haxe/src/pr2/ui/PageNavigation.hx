@@ -3,11 +3,11 @@ package pr2.ui;
 import openfl.events.TextEvent;
 import openfl.text.TextField;
 import openfl.text.TextFieldAutoSize;
+import openfl.text.TextFormat;
 import openfl.display.Sprite;
-import pr2.lobby.LobbyArt;
+import pr2.assets.NativeAssetIds.FontAsset;
+import pr2.assets.NativeAssets;
 import pr2.lobby.chat.ChatText;
-import pr2.runtime.PR2MovieClip;
-import pr2.util.DisplayUtil;
 
 /** Something `PageNavigation` can drive: page selection callbacks. */
 interface Paginated {
@@ -30,8 +30,7 @@ class PageNavigation extends Sprite {
 	private var mode:String;
 	private var count:Int;
 	private var maxW:Float;
-	private var navButtons:Array<PR2MovieClip> = [];
-	private var linkListeners:Array<TextEvent->Void> = [];
+	private var navButtons:Array<PageNavigationButton> = [];
 
 	public function new(target:Paginated, mode:String = "full", selected:Int = 1, count:Int = 9, maxW:Float = 200) {
 		super();
@@ -100,22 +99,7 @@ class PageNavigation extends Sprite {
 	}
 
 	private function makeNavButton(title:String, num:Int, clickable:Bool):Void {
-		var button = PR2MovieClip.fromLinkage("PageNumberGraphic", {maxNestedDepth: 3});
-		var textBox = Std.downcast(DisplayUtil.findByName(button, "textBox"), TextField);
-		if (textBox != null) {
-			textBox.autoSize = TextFieldAutoSize.LEFT;
-			if (clickable) {
-				textBox.htmlText = "<a href='event:" + num + "'><font color='#325638'><u>" + ChatText.escapeString(title) + "</u></font></a>";
-				var listener = makeLinkListener();
-				textBox.addEventListener(TextEvent.LINK, listener);
-				linkListeners.push(listener);
-			} else {
-				textBox.text = title;
-				linkListeners.push(null);
-			}
-		} else {
-			linkListeners.push(null);
-		}
+		var button = new PageNavigationButton(title, num, clickable, makeLinkListener());
 		addChild(button);
 		navButtons.push(button);
 	}
@@ -127,22 +111,13 @@ class PageNavigation extends Sprite {
 	}
 
 	private function clear():Void {
-		for (i in 0...navButtons.length) {
-			var button = navButtons[i];
-			var listener = linkListeners[i];
-			if (listener != null) {
-				var textBox = Std.downcast(DisplayUtil.findByName(button, "textBox"), TextField);
-				if (textBox != null) {
-					textBox.removeEventListener(TextEvent.LINK, listener);
-				}
-			}
+		for (button in navButtons) {
 			if (button.parent != null) {
 				button.parent.removeChild(button);
 			}
-			button.dispose();
+			button.remove();
 		}
 		navButtons = [];
-		linkListeners = [];
 	}
 
 	public function setPageNum(i:Int):Void {
@@ -157,10 +132,7 @@ class PageNavigation extends Sprite {
 			return;
 		}
 		var button = navButtons[buttonIndex(i)];
-		var textBox = button == null ? null : Std.downcast(DisplayUtil.findByName(button, "textBox"), TextField);
-		if (textBox != null) {
-			textBox.htmlText = "<a href='event:" + i + "'><font color='#FFFFFF'><u>" + i + "</u></font></a>";
-		}
+		if (button != null) button.highlight();
 	}
 
 	public function removePageHighlight(i:Int):Void {
@@ -168,10 +140,7 @@ class PageNavigation extends Sprite {
 			return;
 		}
 		var button = navButtons[buttonIndex(i)];
-		var textBox = button == null ? null : Std.downcast(DisplayUtil.findByName(button, "textBox"), TextField);
-		if (textBox != null) {
-			textBox.htmlText = "<a href='event:" + i + "'><font color='#325638'><u>" + i + "</u></font></a>";
-		}
+		if (button != null) button.unhighlight();
 	}
 
 	/**
@@ -194,5 +163,50 @@ class PageNavigation extends Sprite {
 
 	public function pageCountForTests():Int {
 		return count;
+	}
+}
+
+/** Explicit replacement for the one-field `PageNumberGraphic` symbol. */
+private class PageNavigationButton extends Sprite {
+	public final textBox:TextField;
+	private var title:String;
+	private var page:Int;
+	private var clickable:Bool;
+	private var listener:TextEvent->Void;
+
+	public function new(title:String, page:Int, clickable:Bool, listener:TextEvent->Void) {
+		super();
+		this.title = title;
+		this.page = page;
+		this.clickable = clickable;
+		this.listener = listener;
+		textBox = new TextField();
+		textBox.x = 2;
+		textBox.y = 2;
+		textBox.width = 6;
+		textBox.height = 14.55;
+		textBox.selectable = false;
+		textBox.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 12, 0);
+		textBox.autoSize = TextFieldAutoSize.LEFT;
+		addChild(textBox);
+		applyLinkColor(0x325638);
+	}
+
+	public function highlight():Void applyLinkColor(0xFFFFFF);
+	public function unhighlight():Void applyLinkColor(0x325638);
+
+	public function remove():Void {
+		textBox.removeEventListener(TextEvent.LINK, listener);
+		removeChild(textBox);
+	}
+
+	private function applyLinkColor(color:Int):Void {
+		if (!clickable) {
+			textBox.text = title;
+			return;
+		}
+		textBox.htmlText = "<a href='event:" + page + "'><font color='#" + StringTools.hex(color, 6) + "'><u>" + ChatText.escapeString(title) + "</u></font></a>";
+		textBox.removeEventListener(TextEvent.LINK, listener);
+		textBox.addEventListener(TextEvent.LINK, listener);
 	}
 }

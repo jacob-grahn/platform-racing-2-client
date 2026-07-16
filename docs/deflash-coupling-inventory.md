@@ -17,19 +17,19 @@ migration should make them decrease without changing observable behavior or visu
 
 ## Summary
 
-- 786 coupling occurrences
-- 127 files with coupling
-- 124 migration-adapter files in the dependency allowlist
+- 781 coupling occurrences
+- 126 files with coupling
+- 123 migration-adapter files in the dependency allowlist
 
 | Coupling kind | Occurrences |
 | --- | ---: |
 | Fl control dependency | 49 |
 | Fl control usage | 147 |
-| PR2MovieClip dependency | 118 |
+| PR2MovieClip dependency | 117 |
 | frame-label navigation | 15 |
 | generated timeline dependency | 2 |
 | numeric/dynamic frame navigation | 35 |
-| recursive name lookup | 388 |
+| recursive name lookup | 384 |
 | reflective display property | 19 |
 | timeline child lookup | 13 |
 
@@ -52,7 +52,7 @@ migration should make them decrease without changing observable behavior or visu
 | Lobby store | 20 |
 | Lobby tabs | 35 |
 | Login page | 20 |
-| Shared UI | 23 |
+| Shared UI | 18 |
 
 ## Occurrences By Feature Owner
 
@@ -925,11 +925,6 @@ migration should make them decrease without changing observable behavior or visu
 | frame-label navigation | `gotoAndStop` | `haxe/src/pr2/ui/LobbyTab.hx:65` |
 | frame-label navigation | `gotoAndStop` | `haxe/src/pr2/ui/LobbyTab.hx:76` |
 | frame-label navigation | `gotoAndStop` | `haxe/src/pr2/ui/LobbyTab.hx:89` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/ui/PageNavigation.hx:9` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/ui/PageNavigation.hx:104` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/ui/PageNavigation.hx:134` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/ui/PageNavigation.hx:160` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/ui/PageNavigation.hx:171` |
 | numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/ui/SelectableButton.hx:51` |
 
 ## Dependency Boundary
