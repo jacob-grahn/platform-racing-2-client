@@ -17,6 +17,7 @@ enum abstract StaticSvg(String) to String {
 	var LoginBackgroundMid = "assets/svg/login/bg_mid.svg";
 	var LoginBackgroundSky = "assets/svg/login/bg_sky.svg";
 	var QuantityPanel = "assets/svg/timeline/ui_shadowbg_95643069a8/t00_l000_f0000_r00.svg";
+	var RatingStarHighlight = "assets/svg/timeline/movieclips_symbol_1064_2f2dcafe56/t00_l001_f0005_r00.svg";
 	var RockStamp = "assets/svg/stamps/rock1.svg";
 	var SpeedBurstStar = "assets/svg/timeline/ui_pages_levels_in_game_effects_speedburst_speedburststar_64db9149b6/t00_l000_f0000_r00.svg";
 	var TimerPanel = "assets/svg/timeline/ui_popups_outside_levels_bg_d14a954e12/t00_l000_f0000_r00.svg";

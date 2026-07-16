@@ -20,6 +20,7 @@ class FinishedPageTest {
 		testExpGainAnimation();
 		testExpGainClamp();
 		testRatingFromOffset();
+		testNativeRatingMeter();
 		closeAll();
 		trace('FinishedPageTest passed $assertions assertions');
 	}
@@ -91,6 +92,13 @@ class FinishedPageTest {
 		assertEquals(5.0, RatingSelect.ratingFromOffset(150, 100, 1.5), "right edge is 5");
 		assertEquals(5.0, RatingSelect.ratingFromOffset(999, 100, 1.5), "past the edge clamps to 5");
 		assertEquals(1.0, RatingSelect.ratingFromOffset(50, 0, 1.5), "zero width falls back to 1");
+	}
+
+	private static function testNativeRatingMeter():Void {
+		var rating = new RatingSelect(12345);
+		assertEquals(3312, Math.round(rating.meterFillWidthForTests() * 100), "native star meter begins at the authored three-star width");
+		assertEquals(false, rating.hoverVisibleForTests(), "native hover star begins off");
+		rating.remove();
 	}
 
 	private static function closeAll():Void {

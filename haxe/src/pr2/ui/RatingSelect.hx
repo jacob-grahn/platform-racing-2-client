@@ -1,28 +1,29 @@
 package pr2.ui;
 
-import openfl.display.DisplayObject;
+import openfl.display.GradientType;
+import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.MouseEvent;
+import openfl.geom.Matrix;
 import openfl.geom.Point;
+import openfl.geom.Rectangle;
+import pr2.assets.NativeAssetIds.StaticSvg;
+import pr2.assets.NativeAssets;
 import pr2.gameplay.MiniMap;
-import pr2.lobby.LobbyArt;
 import pr2.lobby.dialogs.ConfirmPopup;
 import pr2.lobby.dialogs.UploadingPopup;
 import pr2.net.ServerConfig;
-import pr2.runtime.PR2MovieClip;
-import pr2.util.DisplayUtil;
 
 /**
-	Port of Flash `ui.RatingSelect`: the 1-5 star level-rating control on the
-	finished-race page. The bar (`m.bar`) is scaled to the hovered rating and the
-	`HighlightStar` slides to the matching star; clicking confirms via a
+	Native port of Flash `ui.RatingSelect`: the 1-5 star level-rating control on
+	the finished-race page. The meter keeps the authored masked-star appearance;
+	the explicit hover star slides to the matching star. Clicking confirms via a
 	`ConfirmPopup` and POSTs to `submit_rating.php` through an `UploadingPopup`,
 	exactly as the original.
 **/
 class RatingSelect extends Sprite {
-	private var art:Null<PR2MovieClip>;
-	private var bar:Null<DisplayObject>;
-	private var star:Null<PR2MovieClip>;
+	private var meter:Null<RatingStarMeter>;
+	private var star:Null<Shape>;
 	private var rating:Float = 3;
 	private var starWidth:Float;
 	private var courseID:Int;
@@ -30,15 +31,12 @@ class RatingSelect extends Sprite {
 	public function new(id:Int) {
 		super();
 		this.courseID = id;
-		art = PR2MovieClip.fromLinkage("RatingSelectGraphic", {maxNestedDepth: 4});
-		starWidth = art.width / 5;
-		star = PR2MovieClip.fromLinkage("HighlightStar", {maxNestedDepth: 2});
+		meter = new RatingStarMeter();
+		starWidth = RatingStarMeter.WIDTH / 5;
+		star = NativeAssets.svg(StaticSvg.RatingStarHighlight);
 		scaleX = scaleY = 1.5;
-		star.gotoAndStop("off");
-		star.mouseChildren = false;
-		star.mouseEnabled = false;
-		bar = DisplayUtil.findByName(art, "bar");
-		addChild(art);
+		star.visible = false;
+		addChild(meter);
 		addChild(star);
 		addEventListener(MouseEvent.MOUSE_MOVE, moveHandler);
 		addEventListener(MouseEvent.CLICK, clickHandler);
@@ -64,19 +62,19 @@ class RatingSelect extends Sprite {
 	private function outHandler(e:MouseEvent):Void {
 		displayRating(rating);
 		if (star != null) {
-			star.gotoAndStop("off");
+			star.visible = false;
 		}
 	}
 
 	private function overHandler(e:MouseEvent):Void {
 		if (star != null) {
-			star.gotoAndStop("on");
+			star.visible = true;
 		}
 	}
 
 	private function displayRating(value:Float):Void {
-		if (bar != null) {
-			bar.scaleX = value / 5;
+		if (meter != null) {
+			meter.displayRating(value);
 		}
 		if (star != null) {
 			star.x = (value - 1) * starWidth;
@@ -86,7 +84,7 @@ class RatingSelect extends Sprite {
 	private function ratingFromX(stageX:Float):Float {
 		var origin = localToGlobal(new Point(0, 0));
 		var offsetX = stageX - origin.x;
-		return ratingFromOffset(offsetX, art == null ? 0 : art.width, scaleX);
+		return ratingFromOffset(offsetX, meter == null ? 0 : RatingStarMeter.WIDTH, scaleX);
 	}
 
 	/**
@@ -105,17 +103,80 @@ class RatingSelect extends Sprite {
 		removeEventListener(MouseEvent.CLICK, clickHandler);
 		removeEventListener(MouseEvent.MOUSE_OUT, outHandler);
 		removeEventListener(MouseEvent.MOUSE_OVER, overHandler);
-		if (art != null) {
-			art.dispose();
-			art = null;
+		if (meter != null) {
+			removeChild(meter);
+			meter = null;
 		}
 		if (star != null) {
-			star.dispose();
+			removeChild(star);
 			star = null;
 		}
-		bar = null;
 		if (parent != null) {
 			parent.removeChild(this);
 		}
+	}
+
+	public function meterFillWidthForTests():Float {
+		return meter == null ? 0 : meter.fillWidth;
+	}
+
+	public function hoverVisibleForTests():Bool {
+		return star != null && star.visible;
+	}
+}
+
+/** Explicit rendering of the original `RatingSelectGraphic` masked meter. */
+private class RatingStarMeter extends Sprite {
+	public static inline var WIDTH:Float = 55.2;
+	private static inline var HEIGHT:Float = 11;
+	public var fillWidth(default, null):Float = 0;
+	private var fill:Shape;
+
+	public function new() {
+		super();
+		var background = new Shape();
+		background.graphics.beginGradientFill(GradientType.LINEAR, [0x8C8C8C, 0x474E29], [1, 1], [0, 255], verticalGradient());
+		background.graphics.drawRect(0, 0, WIDTH, HEIGHT);
+		background.graphics.endFill();
+		addChild(background);
+
+		fill = new Shape();
+		fill.graphics.beginGradientFill(GradientType.LINEAR, [0x50CD18, 0x248E58], [1, 1], [0, 255], verticalGradient());
+		for (index in 0...5) drawStar(fill, 5.5 + 11.05 * index, 5.35);
+		fill.graphics.endFill();
+		addChild(fill);
+		displayRating(3);
+	}
+
+	public function displayRating(value:Float):Void {
+		fillWidth = WIDTH * value / 5;
+		fill.scrollRect = new Rectangle(0, 0, fillWidth, HEIGHT);
+	}
+
+	private static function verticalGradient():Matrix {
+		var matrix = new Matrix();
+		matrix.createGradientBox(WIDTH, HEIGHT, Math.PI / 2, 0, 0);
+		return matrix;
+	}
+
+	private static function drawStar(shape:Shape, cx:Float, cy:Float):Void {
+		shape.graphics.moveTo(cx + 1.05, cy - 1);
+		shape.graphics.lineTo(cx - 0.05, cy - 5.35);
+		shape.graphics.lineTo(cx - 1.1, cy - 1);
+		shape.graphics.lineTo(cx - 5.5, cy - 1.25);
+		shape.graphics.lineTo(cx - 5.5, cy - 1.2);
+		shape.graphics.lineTo(cx - 4.6, cy - 0.9);
+		shape.graphics.lineTo(cx - 1.95, cy + 1.1);
+		shape.graphics.lineTo(cx - 3.55, cy + 5.3);
+		shape.graphics.lineTo(cx - 0.1, cy + 2.45);
+		shape.graphics.lineTo(cx - 0.05, cy + 2.5);
+		shape.graphics.lineTo(cx + 3.4, cy + 5.35);
+		shape.graphics.lineTo(cx + 1.7, cy + 1.2);
+		shape.graphics.lineTo(cx + 5.5, cy - 1.25);
+		shape.graphics.lineTo(cx + 5.5, cy - 1.3);
+		shape.graphics.lineTo(cx + 4.7, cy - 1.25);
+		shape.graphics.lineTo(cx + 2.05, cy - 1);
+		shape.graphics.lineTo(cx + 1.2, cy - 0.95);
+		shape.graphics.lineTo(cx + 1.05, cy - 1);
 	}
 }
