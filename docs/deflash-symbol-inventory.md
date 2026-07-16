@@ -20,8 +20,8 @@ and screenshot/parity tests.
 ## Summary
 
 - 153 unique production root linkages
-- 174 audited root usages
-- 378 handwritten source files scanned
+- 173 audited root usages
+- 379 handwritten source files scanned
 - Excluded developer routes: `SymbolPreview` and files under `pr2.harness`
 - Excluded transitive construction: files under `pr2.runtime`
 - Explicitly excluded as uncalled: `FollowFadeEffect` and `ScaffoldTab`
@@ -191,7 +191,6 @@ and screenshot/parity tests.
 | `ChangePasswordPopupGraphic` | UI composition | `haxe/src/pr2/lobby/dialogs/FormPopup.hx:23`; dynamic |
 | `ChatRoomInfoPopupGraphic` | UI composition | `haxe/src/pr2/lobby/dialogs/ChatRoomInfoPopup.hx:23` |
 | `ChooseLevelModModePopupGraphic` | UI composition | `haxe/src/pr2/lobby/dialogs/ChooseLevelModModePopup.hx:28` |
-| `ConfirmPopupGraphic` | UI composition | `haxe/src/pr2/lobby/dialogs/ConfirmPopup.hx:21` |
 | `CreateGuildPopupGraphic` | UI composition | `haxe/src/pr2/lobby/dialogs/CreateGuildPopup.hx:41` |
 | `CreditsPopupGraphic` | UI composition | `haxe/src/pr2/lobby/dialogs/CreditsPopup.hx:31` |
 | `DeleteMessageButtonGraphic` | state art | `haxe/src/pr2/lobby/dialogs/MessagesItem.hx:287`; dynamic |

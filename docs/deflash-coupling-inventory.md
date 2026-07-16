@@ -17,19 +17,19 @@ migration should make them decrease without changing observable behavior or visu
 
 ## Summary
 
-- 776 coupling occurrences
-- 125 files with coupling
-- 122 migration-adapter files in the dependency allowlist
+- 772 coupling occurrences
+- 124 files with coupling
+- 121 migration-adapter files in the dependency allowlist
 
 | Coupling kind | Occurrences |
 | --- | ---: |
 | Fl control dependency | 49 |
 | Fl control usage | 147 |
-| PR2MovieClip dependency | 116 |
+| PR2MovieClip dependency | 115 |
 | frame-label navigation | 15 |
 | generated timeline dependency | 2 |
 | numeric/dynamic frame navigation | 35 |
-| recursive name lookup | 380 |
+| recursive name lookup | 377 |
 | reflective display property | 19 |
 | timeline child lookup | 13 |
 
@@ -44,7 +44,7 @@ migration should make them decrease without changing observable behavior or visu
 | Level objects | 2 |
 | Level rendering | 5 |
 | Lobby account and customization | 79 |
-| Lobby dialogs | 212 |
+| Lobby dialogs | 208 |
 | Lobby level browser | 25 |
 | Lobby messages | 1 |
 | Lobby players | 13 |
@@ -554,10 +554,6 @@ migration should make them decrease without changing observable behavior or visu
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/ChooseLevelModModePopup.hx:30` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/ChooseLevelModModePopup.hx:31` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/ChooseLevelModModePopup.hx:32` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/dialogs/ConfirmPopup.hx:5` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/ConfirmPopup.hx:22` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/ConfirmPopup.hx:27` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/ConfirmPopup.hx:28` |
 | Fl control dependency | `pr2.runtime.FlTextInput` | `haxe/src/pr2/lobby/dialogs/CreateGuildPopup.hx:13` |
 | PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/dialogs/CreateGuildPopup.hx:14` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/CreateGuildPopup.hx:46` |
