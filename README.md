@@ -105,6 +105,9 @@ PR2_API_HOST=/api haxe test/real-server.hxml
 - `docs/`: migration notes and inventories.
 - `docs/browser-platform-differences.md`: audited, platform-required HTML5
   differences and their parity boundaries.
+- `docs/deflash-symbol-inventory.md`: generated inventory of the production
+  `PR2MovieClip` root symbols, grouped by feature owner and native replacement
+  shape; regenerate it with `tools/generate_deflash_symbol_inventory.py`.
 - `TODO.md`: current porting plan and next steps.
 
 ## Porting Status

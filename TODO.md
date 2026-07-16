@@ -5,6 +5,141 @@ Flash client, not a compatible remake: behavior, protocol,
 screen flow, layout, animation, sound, and failure states should match the AS3
 and XFL sources. Completed work belongs in git history and `README.md`.
 
+#### De-Flash The Haxe/OpenFL Architecture
+
+The application, networking, data, and gameplay layers are already largely
+ordinary Haxe/OpenFL code, but the presentation layer still interprets the
+Animate/XFL object model at runtime. `PR2MovieClip`, the generated asset catalog,
+the `Fl*` controls, linkage-class strings, frame labels, and recursive
+instance-name lookup collectively act as a small Flash compatibility runtime.
+Replace that runtime incrementally with typed Haxe views, PR2-specific controls,
+explicit animation state, and neutral art data. Keep OpenFL as the renderer and
+keep the AS3/XFL client as the parity specification throughout the migration.
+This is strictly a code-structure and asset-pipeline change: the finished client
+must be visually and functionally indistinguishable from the current port. Do
+not redesign screens, controls, animations, timing, sound, or user flows as part
+of this work. Use the existing deterministic domain tests and screenshot/parity
+sequences as regression gates, extending them where a migrated feature does not
+yet have enough coverage to prove that its observable behavior is unchanged.
+
+This must be a strangler migration, not a second port running in parallel: each
+item should replace a production flow behind the existing deterministic and
+screenshot coverage, and the compatibility path should remain available for
+unmigrated symbols until it has no production callers.
+
+##### Inventory And Boundaries
+
+- Inventory handwritten uses of `gotoAndPlay`, `gotoAndStop`, numeric frames,
+  frame labels, `getChildByTimelineName`, `DisplayUtil.findByName`, the `Fl*`
+  controls, and reflective property access. Assign each use to a migration
+  owner so deleting `PR2MovieClip` is measurable rather than an open-ended
+  cleanup task.
+- Add an architectural dependency rule: game/domain code may depend on typed
+  view interfaces, but must not introduce new imports of `PR2MovieClip`, `Fl*`
+  controls, or generated timeline definitions. Allow explicit exceptions for
+  files actively serving as migration adapters, with a test or allowlist that
+  shrinks as those adapters are removed.
+
+##### Native Presentation Foundation
+
+- Define a small typed asset API for static SVGs, bitmaps, fonts, and sounds.
+  Production code should request named PR2 assets or view factories rather than
+  raw XFL library paths or linkage-class strings. Keep asset paths as generated
+  data where useful, but make missing or renamed production assets fail during
+  generation or compilation instead of at runtime.
+- Add a lightweight native animation API with explicit playback state,
+  simulation/frame-clock advancement, looping, completion callbacks, and
+  teardown. Support the few shapes actually needed by PR2—frame sequences,
+  property tweens, and composed clips—without recreating a general Flash
+  timeline or frame-script interpreter.
+- Add PR2-native controls for buttons, check boxes, sliders, text inputs,
+  selects/lists, and scroll bars. Give them typed state and callbacks, explicit
+  focus/keyboard behavior, reusable skins, deterministic teardown, and parity
+  tests against the existing `Fl*` implementations.
+- Establish a typed view pattern in which a screen or dialog owns concrete
+  fields such as `confirmButton`, `nameInput`, and `contentHolder`. Permit a
+  generator or compact layout data to build these views, but do not expose
+  recursive instance-name lookup as their public API.
+
+##### Prove The Migration Path
+
+- Port one representative, modest dialog end to end. It should include static
+  art, text, at least two buttons, one editable/selectable control, focus and
+  keyboard handling, open/close animation, and listener cleanup. Remove that
+  dialog's catalog/runtime dependencies and verify its real user flow plus
+  screenshot parity before choosing the broader UI migration pattern.
+- Port one simple gameplay effect end to end. Replace its linkage lookup,
+  timeline playback, frame script, and completion detection with the native
+  animation API, then add deterministic lifetime and visual parity coverage.
+- Document the resulting view, control, asset, animation, ownership, and
+  teardown conventions. Update the generator/tooling only after these two
+  vertical slices demonstrate which data a native implementation actually
+  needs.
+
+##### Migrate Production Features
+
+- Replace static timeline symbols with direct SVG/bitmap assets or explicit
+  OpenFL display compositions. Start with modal overlays, HUD decorations,
+  block overlays, and other leaf visuals that have no named interactive
+  children or authored animation.
+- Replace button-like and state-only timelines with typed enums and native
+  controls. Migrate shared UI helpers such as tabs, rating stars, navigation,
+  arrows, progress bars, and scroll bars before converting the screens that use
+  them.
+- Migrate routine dialogs and forms to concrete typed views, grouped by shared
+  behavior rather than by catalog order. Each migrated dialog must retain its
+  loading, error, disabled, focus, keyboard, and teardown paths—not only its
+  successful click path.
+- Migrate lobby pages, listings, account/customization views, and level-browser
+  UI after their shared controls and row/list primitives are native. Remove
+  `LobbyArt`/`DisplayUtil.findByName` access as each view becomes typed.
+- Migrate level-editor menus, option popups, cursors, stamps, and block-setting
+  controls. Preserve live editing, save/load, report/moderation, and test-course
+  flows, and run the focused level-editor and UI parity coverage for each batch.
+- Replace gameplay effects and animated HUD elements with explicit native
+  clips. Move every linkage-specific frame script currently installed inside
+  `PR2MovieClip` into the owning typed effect/view and characterize its exact
+  looping, stopping, sound, and completion behavior in tests.
+- Rebuild the intro as an explicit composed animation with native sound cues
+  after the common animation primitives are stable. Preserve site-mode branches,
+  skip/play interactions, timing, labels that affect behavior, and final page
+  transition parity.
+
+##### Native Character Rig
+
+- Specify a PR2 character-rig format with typed animation states, a stable
+  attachment hierarchy, interchangeable head/body/feet/hat parts, primary and
+  secondary tint channels, held-item/weapon sockets, and explicit frame timing.
+  Initially generate this neutral format from XFL so artwork is not manually
+  re-authored during the runtime migration.
+- Implement a native `CharacterView` that consumes the rig without
+  `PR2MovieClip`, numeric part timelines, or recursive named-child discovery.
+  Keep gameplay state and physics outside the renderer and make animation
+  advancement deterministic from the gameplay clock.
+- Port character states and part/color combinations in parity-tested batches,
+  including standing, running, jumping, super-jumping, crouching, swimming,
+  frozen/bumped states, multiple hats, Fred-body placement, epic colors, held
+  items, weapon actions, and particle/effect attachment points.
+- Switch gameplay, lobby previews, editor previews, and player listings to the
+  same native character implementation. Delete the old character timeline path
+  only after all consumers and the existing character screenshot matrix pass.
+
+##### Remove The Compatibility Runtime
+
+- Change asset generation to emit only assets and neutral data still consumed
+  by native views. Stop packaging unreachable XFL symbol metadata and remove
+  catalog partitions as their final production consumers disappear.
+- Remove the `Fl*` controls, `FlComponentFactory`, recursive timeline-name
+  access, linkage factories, runtime frame scripts, timeline sound dispatch,
+  flattening analyzers, and `PR2MovieClip` in dependency order. Keep preview or
+  archival XFL tooling outside the production build if it remains useful for
+  parity investigation.
+- Add a final build-time check that production source and output contain no
+  `PR2MovieClip`, `Fl*`, linkage-class, frame-script, or generated XFL timeline
+  dependencies. Run the related domain suites and representative screenshot
+  sequences, audit HTML5 payload/performance, and update `README.md` to describe
+  the native architecture and one-way legacy asset migration workflow.
+
 
 #### Build Size And HTML5 Payload
 
