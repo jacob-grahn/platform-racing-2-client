@@ -19,8 +19,8 @@ and screenshot/parity tests.
 
 ## Summary
 
-- 153 unique production root linkages
-- 173 audited root usages
+- 152 unique production root linkages
+- 172 audited root usages
 - 379 handwritten source files scanned
 - Excluded developer routes: `SymbolPreview` and files under `pr2.harness`
 - Excluded transitive construction: files under `pr2.runtime`
@@ -28,7 +28,7 @@ and screenshot/parity tests.
 
 | Replacement shape | Unique roots |
 | --- | ---: |
-| UI composition | 95 |
+| UI composition | 94 |
 | character rig | 1 |
 | simple frame animation | 9 |
 | state art | 21 |
@@ -286,7 +286,6 @@ and screenshot/parity tests.
 | Linkage | Replacement shape | Source |
 | --- | --- | --- |
 | `GpNotificationGraphic` | simple frame animation | `haxe/src/pr2/ui/GpNotification.hx:40` |
-| `GuildNameGraphic` | UI composition | `haxe/src/pr2/ui/GuildName.hx:21` |
 | `LobbyTabGraphic` | state art | `haxe/src/pr2/ui/LobbyTab.hx:31` |
 
 ## Dynamic Factory Resolutions

@@ -17,19 +17,19 @@ migration should make them decrease without changing observable behavior or visu
 
 ## Summary
 
-- 772 coupling occurrences
-- 124 files with coupling
-- 121 migration-adapter files in the dependency allowlist
+- 770 coupling occurrences
+- 123 files with coupling
+- 120 migration-adapter files in the dependency allowlist
 
 | Coupling kind | Occurrences |
 | --- | ---: |
 | Fl control dependency | 49 |
 | Fl control usage | 147 |
-| PR2MovieClip dependency | 115 |
+| PR2MovieClip dependency | 114 |
 | frame-label navigation | 15 |
 | generated timeline dependency | 2 |
 | numeric/dynamic frame navigation | 35 |
-| recursive name lookup | 377 |
+| recursive name lookup | 376 |
 | reflective display property | 19 |
 | timeline child lookup | 13 |
 
@@ -52,7 +52,7 @@ migration should make them decrease without changing observable behavior or visu
 | Lobby store | 20 |
 | Lobby tabs | 35 |
 | Login page | 20 |
-| Shared UI | 13 |
+| Shared UI | 11 |
 
 ## Occurrences By Feature Owner
 
@@ -907,8 +907,6 @@ migration should make them decrease without changing observable behavior or visu
 | PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/ui/GpNotification.hx:7` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/ui/GpNotification.hx:47` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/ui/GpNotification.hx:48` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/ui/GuildName.hx:9` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/ui/GuildName.hx:88` |
 | PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/ui/LobbyTab.hx:9` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/ui/LobbyTab.hx:32` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/ui/LobbyTab.hx:37` |

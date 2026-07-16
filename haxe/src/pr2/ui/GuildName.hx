@@ -2,37 +2,44 @@ package pr2.ui;
 
 import openfl.events.MouseEvent;
 import openfl.text.TextField;
+import openfl.text.TextFormat;
+import pr2.assets.NativeAssetIds.FontAsset;
+import pr2.assets.NativeAssets;
 import pr2.display.Removable;
-import pr2.lobby.LobbyArt;
 import pr2.lobby.dialogs.GuildPopup;
 import pr2.net.ServerConfig;
-import pr2.runtime.PR2MovieClip;
 
 class GuildName extends Removable {
 	public static var popupFactory:Int->Void = defaultPopupFactory;
 
-	private var art:Null<PR2MovieClip>;
+	private var nameBox:Null<TextField>;
 	private var emblemLoader:Null<EmblemLoader>;
 	private var guildId:Int;
 
 	public function new(id:Int, name:String, emblem:String, boldText:Bool = false, wide:Bool = false) {
 		super();
 		guildId = id;
-		art = PR2MovieClip.fromLinkage("GuildNameGraphic", {maxNestedDepth: 3});
-		addChild(art);
+		nameBox = new TextField();
+		nameBox.name = "nameBox";
+		nameBox.x = 2;
+		nameBox.y = 2;
+		nameBox.width = wide ? 145 : 110;
+		nameBox.height = 14.55;
+		nameBox.selectable = false;
+		nameBox.mouseEnabled = false;
+		nameBox.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 12, 0);
+		addChild(nameBox);
 
 		useHandCursor = true;
 		buttonMode = true;
 		mouseChildren = false;
 
-		var nameBox = field();
 		if (nameBox != null) {
 			if (boldText) {
 				nameBox.htmlText = "<b>" + StringTools.htmlEscape(name) + "</b>";
 			} else {
 				nameBox.htmlText = StringTools.htmlEscape(name);
 			}
-			nameBox.width = wide ? 145 : 110;
 		}
 
 		emblemLoader = new EmblemLoader(20, 10, ServerConfig.emblemUploadUrl(), ServerConfig.emblemsUrl());
@@ -73,10 +80,7 @@ class GuildName extends Removable {
 			emblemLoader.remove();
 			emblemLoader = null;
 		}
-		if (art != null) {
-			art.dispose();
-			art = null;
-		}
+		nameBox = null;
 		super.remove();
 	}
 
@@ -85,7 +89,7 @@ class GuildName extends Removable {
 	}
 
 	private function field():Null<TextField> {
-		return LobbyArt.text(art, "nameBox");
+		return nameBox;
 	}
 
 	private static function defaultPopupFactory(guildId:Int):Void {
