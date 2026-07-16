@@ -19,21 +19,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
   runtime, but the broad `assets/` include appears to preload about 1.5 MB raw /
   1.28 MB gzipped of sounds up front.
 
-#### HTML5 Canvas Versus WebGL
-
-- Investigate OpenFL's WebGL renderer as an alternative to the current Canvas
-  renderer. Build an opt-in A/B target before changing the default, and compare:
-  - SVG edge quality and subpixel registration, especially the independently
-    colored and outlined layers in character animations;
-  - masks, filters, blend modes, bitmap fills, text, and `cacheAsBitmap` output
-    against both Canvas and the Flash/XFL reference;
-  - startup time, steady-state frame rate, frame-time spikes, heap/GPU memory,
-    texture uploads, and performance with multiple animated characters; and
-  - browser/device compatibility, software rendering, WebGL-disabled systems,
-    context loss/restoration, and whether a tested Canvas fallback is required.
-  Do not switch the production renderer until the visual parity and performance
-  results are recorded for representative lobby, level, editor, and race flows.
-
 #### HTML5 Multiplayer Transport
 
 - Replace the temporary hard-coded `wss://pr2hub.com/gameservers/{server_id}`
