@@ -50,9 +50,6 @@
     "haxe/src/pr2/gameplay/Countdown.hx": [
       "pr2.runtime.PR2MovieClip"
     ],
-    "haxe/src/pr2/gameplay/CourseTimer.hx": [
-      "pr2.runtime.PR2MovieClip"
-    ],
     "haxe/src/pr2/gameplay/CowboyMode.hx": [
       "pr2.runtime.PR2MovieClip"
     ],
@@ -74,9 +71,6 @@
     "haxe/src/pr2/gameplay/HatEffect.hx": [
       "pr2.runtime.PR2MovieClip"
     ],
-    "haxe/src/pr2/gameplay/Hearts.hx": [
-      "pr2.runtime.PR2MovieClip"
-    ],
     "haxe/src/pr2/gameplay/ItemDisplay.hx": [
       "pr2.runtime.PR2MovieClip"
     ],
@@ -84,9 +78,6 @@
       "pr2.runtime.PR2MovieClip"
     ],
     "haxe/src/pr2/gameplay/MiniMap.hx": [
-      "pr2.runtime.PR2MovieClip"
-    ],
-    "haxe/src/pr2/gameplay/MiniMapDot.hx": [
       "pr2.runtime.PR2MovieClip"
     ],
     "haxe/src/pr2/gameplay/MusicSelection.hx": [
@@ -127,9 +118,6 @@
       "pr2.runtime.PR2MovieClip"
     ],
     "haxe/src/pr2/levelEditor/EditorBlockOptionsPopup.hx": [
-      "pr2.runtime.PR2MovieClip"
-    ],
-    "haxe/src/pr2/levelEditor/EditorBrushCursor.hx": [
       "pr2.runtime.PR2MovieClip"
     ],
     "haxe/src/pr2/levelEditor/EditorBrushSizePickerButton.hx": [
@@ -361,9 +349,6 @@
       "pr2.runtime.PR2MovieClip"
     ],
     "haxe/src/pr2/lobby/dialogs/Popup.hx": [
-      "pr2.runtime.PR2MovieClip"
-    ],
-    "haxe/src/pr2/lobby/dialogs/ProgressBar.hx": [
       "pr2.runtime.PR2MovieClip"
     ],
     "haxe/src/pr2/lobby/dialogs/SendMessagePopup.hx": [

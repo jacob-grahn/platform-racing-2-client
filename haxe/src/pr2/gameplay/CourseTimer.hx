@@ -3,12 +3,17 @@ package pr2.gameplay;
 import com.jiggmin.data.Data;
 import haxe.Timer;
 import openfl.display.DisplayObjectContainer;
+import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.text.TextField;
+import openfl.text.TextFieldAutoSize;
+import openfl.text.TextFormat;
+import openfl.text.TextFormatAlign;
+import pr2.assets.NativeAssetIds.FontAsset;
+import pr2.assets.NativeAssetIds.StaticSvg;
+import pr2.assets.NativeAssets;
 import pr2.display.Removable;
 import pr2.net.LobbySocket;
-import pr2.runtime.PR2MovieClip;
-import pr2.util.DisplayUtil;
 
 typedef CourseTimerOptions = {
 	@:optional var now:Void->Float;
@@ -17,7 +22,6 @@ typedef CourseTimerOptions = {
 
 /** Flash `gameplay.CourseTimer`: HUD clock anchored to server milliseconds. */
 class CourseTimer extends Removable {
-	private var graphic:PR2MovieClip;
 	private var holder:DisplayObjectContainer;
 	private var timeBox:TextField;
 	private var time:Int = 120;
@@ -32,13 +36,30 @@ class CourseTimer extends Removable {
 		super();
 		now = options != null && options.now != null ? options.now : LobbySocket.getMS;
 		onOutOfTime = options != null ? options.onOutOfTime : null;
-		graphic = PR2MovieClip.fromLinkage("TimerGraphic");
-		addChild(graphic);
-		holder = Std.downcast(DisplayUtil.findByName(graphic, "holder"), DisplayObjectContainer);
-		timeBox = Std.downcast(DisplayUtil.findByName(graphic, "timeBox"), TextField);
-		if (timeBox != null) {
-			timeBox.text = "";
-		}
+		var panel = NativeAssets.svg(StaticSvg.TimerPanel);
+		panel.scaleX = 0.56982421875;
+		panel.scaleY = 0.299972534179688;
+		addChild(panel);
+
+		// TimerGraphic's `holder` lives at (41, 5.75). Its one text field is
+		// centred at (-38.95, 2), yielding the original (2.05, 7.75) HUD text
+		// origin after composition.
+		holder = new Sprite();
+		holder.x = 41;
+		holder.y = 5.75;
+		addChild(holder);
+		timeBox = new TextField();
+		timeBox.x = -38.95;
+		timeBox.y = 2;
+		timeBox.width = 52.95;
+		timeBox.height = 15;
+		timeBox.autoSize = TextFieldAutoSize.NONE;
+		timeBox.selectable = false;
+		timeBox.mouseEnabled = false;
+		timeBox.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 12, 0x000000, false, false, false, null, null,
+			TextFormatAlign.CENTER);
+		timeBox.text = "";
+		holder.addChild(timeBox);
 	}
 
 	public function setTime(t:Float):Void {

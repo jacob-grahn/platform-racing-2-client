@@ -62,6 +62,7 @@ import pr2.gameplay.QuitButtonTest;
 import pr2.gameplay.RaceSessionTranscriptTest;
 import pr2.level.WorldLevelParserTest;
 import pr2.lobby.LobbyServicesTest;
+import pr2.lobby.ProgressBarTest;
 import pr2.lobby.AccountTabTest;
 import pr2.lobby.ArtifactHintClientTest;
 import pr2.lobby.AutoDismissPopupTest;
@@ -230,6 +231,7 @@ class DeterministicTestSuite {
 		DeterministicTestMode.runSuite("AutoDismissPopupTest", ["lobby"], AutoDismissPopupTest.main);
 		DeterministicTestMode.runSuite("LobbySessionTest", ["lobby"], LobbySessionTest.main);
 		DeterministicTestMode.runSuite("LobbyServicesTest", ["lobby"], LobbyServicesTest.main);
+		DeterministicTestMode.runSuite("ProgressBarTest", ["lobby", "ui"], ProgressBarTest.main);
 		DeterministicTestMode.runSuite("AccountTabTest", ["lobby"], AccountTabTest.main);
 		DeterministicTestMode.runSuite("ChatTabTest", ["lobby"], ChatTabTest.main);
 		DeterministicTestMode.runSuite("ChangePasswordPopupTest", ["lobby"], ChangePasswordPopupTest.main);

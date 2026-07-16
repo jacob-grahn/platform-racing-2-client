@@ -1,6 +1,8 @@
 package pr2.gameplay;
 
 import openfl.events.MouseEvent;
+import openfl.display.Sprite;
+import pr2.level.ObjectCodes;
 
 class MiniMapTest {
 	private static var assertions:Int = 0;
@@ -12,6 +14,7 @@ class MiniMapTest {
 		testFitScale();
 		testDotLabels();
 		testDotColors();
+		testNativeMarkerStates();
 		testDotHoverSuppressedUntilConfigured();
 		testDotHoverCleanup();
 		trace('MiniMapTest passed $assertions assertions');
@@ -49,6 +52,29 @@ class MiniMapTest {
 		assertEquals(0x00FF00, MiniMapDot.colorForTempId(2), "remote 2 colour");
 		assertEquals(0x999999, MiniMapDot.colorForTempId(3), "remote 3 colour");
 		assertEquals(0xFFFF00, MiniMapDot.colorForTempId(4), "out-of-range id falls back to local yellow");
+	}
+
+	private static function testNativeMarkerStates():Void {
+		var dot = new MiniMapDot();
+		assertEquals(MiniMapDot.REMOTE0_COLOR, dot.markerColorForTests(), "native dot starts at remote0");
+		dot.setTempID(2);
+		assertEquals(MiniMapDot.REMOTE2_COLOR, dot.markerColorForTests(), "native dot selects its remote frame colour");
+		dot.setTempID(1);
+		assertEquals(MiniMapDot.REMOTE2_COLOR, dot.markerColorForTests(), "native dot latches its first assigned colour");
+		dot.remove();
+
+		var localDot = new MiniMapDot();
+		localDot.setTempID(0, true);
+		assertEquals(MiniMapDot.LOCAL_COLOR, localDot.markerColorForTests(), "native dot selects local frame colour");
+		localDot.remove();
+
+		var minimap = new MiniMap();
+		minimap.addBlock(ObjectCodes.BLOCK_FINISH, 30, 60);
+		var finishLayer:Sprite = cast Reflect.field(minimap, "finishSprite");
+		assertEquals(1, finishLayer.numChildren, "finish blocks create one native finish marker");
+		assertEquals(45.0, finishLayer.getChildAt(0).x, "native finish marker keeps its centred x position");
+		assertEquals(75.0, finishLayer.getChildAt(0).y, "native finish marker keeps its centred y position");
+		minimap.remove();
 	}
 
 	private static function testDotHoverSuppressedUntilConfigured():Void {

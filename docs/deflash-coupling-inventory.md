@@ -17,19 +17,19 @@ migration should make them decrease without changing observable behavior or visu
 
 ## Summary
 
-- 808 coupling occurrences
-- 138 files with coupling
-- 135 migration-adapter files in the dependency allowlist
+- 798 coupling occurrences
+- 133 files with coupling
+- 130 migration-adapter files in the dependency allowlist
 
 | Coupling kind | Occurrences |
 | --- | ---: |
 | Fl control dependency | 49 |
 | Fl control usage | 147 |
-| PR2MovieClip dependency | 129 |
-| frame-label navigation | 19 |
+| PR2MovieClip dependency | 124 |
+| frame-label navigation | 18 |
 | generated timeline dependency | 2 |
-| numeric/dynamic frame navigation | 36 |
-| recursive name lookup | 394 |
+| numeric/dynamic frame navigation | 35 |
+| recursive name lookup | 391 |
 | reflective display property | 19 |
 | timeline child lookup | 13 |
 
@@ -37,14 +37,14 @@ migration should make them decrease without changing observable behavior or visu
 | --- | ---: |
 | Audio | 2 |
 | Character | 21 |
-| Gameplay UI and visuals | 120 |
+| Gameplay UI and visuals | 113 |
 | Gameplay effects | 10 |
 | Intro page | 4 |
-| Level editor | 197 |
+| Level editor | 196 |
 | Level objects | 2 |
 | Level rendering | 5 |
 | Lobby account and customization | 79 |
-| Lobby dialogs | 215 |
+| Lobby dialogs | 213 |
 | Lobby level browser | 25 |
 | Lobby messages | 1 |
 | Lobby players | 13 |
@@ -96,9 +96,6 @@ migration should make them decrease without changing observable behavior or visu
 | PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/gameplay/CatCaptcha.hx:14` |
 | PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/gameplay/Countdown.hx:7` |
 | timeline child lookup | `getChildByTimelineName` | `haxe/src/pr2/gameplay/CourseParticleEffects.hx:80` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/gameplay/CourseTimer.hx:10` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/CourseTimer.hx:37` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/CourseTimer.hx:38` |
 | PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/gameplay/CowboyMode.hx:4` |
 | PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/gameplay/DrawingInfo.hx:14` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/DrawingInfo.hx:48` |
@@ -133,7 +130,6 @@ migration should make them decrease without changing observable behavior or visu
 | PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/gameplay/HappyHour.hx:4` |
 | PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/gameplay/HatEffect.hx:9` |
 | numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/gameplay/HatEffect.hx:55` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/gameplay/Hearts.hx:4` |
 | PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/gameplay/ItemDisplay.hx:10` |
 | numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/gameplay/ItemDisplay.hx:55` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/ItemDisplay.hx:67` |
@@ -142,10 +138,7 @@ migration should make them decrease without changing observable behavior or visu
 | PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/gameplay/LuxPopup.hx:10` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/LuxPopup.hx:38` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/LuxPopup.hx:42` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/gameplay/MiniMap.hx:10` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/gameplay/MiniMapDot.hx:6` |
-| frame-label navigation | `gotoAndStop` | `haxe/src/pr2/gameplay/MiniMapDot.hx:39` |
-| numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/gameplay/MiniMapDot.hx:49` |
+| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/gameplay/MiniMap.hx:11` |
 | Fl control dependency | `pr2.runtime.FlComboBox` | `haxe/src/pr2/gameplay/MusicSelection.hx:9` |
 | PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/gameplay/MusicSelection.hx:10` |
 | Fl control usage | `FlComboBox` | `haxe/src/pr2/gameplay/MusicSelection.hx:21` |
@@ -249,7 +242,6 @@ migration should make them decrease without changing observable behavior or visu
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/EditorBlockObject.hx:368` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/EditorBlockObject.hx:372` |
 | PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/levelEditor/EditorBlockOptionsPopup.hx:7` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/levelEditor/EditorBrushCursor.hx:5` |
 | PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/levelEditor/EditorBrushSizePickerButton.hx:4` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/EditorBrushSizePickerButton.hx:17` |
 | Fl control dependency | `pr2.runtime.FlSlider` | `haxe/src/pr2/levelEditor/EditorBrushSizePickerMenu.hx:7` |
@@ -746,8 +738,6 @@ migration should make them decrease without changing observable behavior or visu
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:549` |
 | Fl control usage | `FlButton` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:557` |
 | recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:568` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/dialogs/ProgressBar.hx:8` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/ProgressBar.hx:27` |
 | PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/dialogs/SendMessagePopup.hx:9` |
 | recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/SendMessagePopup.hx:36` |
 | recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/SendMessagePopup.hx:37` |

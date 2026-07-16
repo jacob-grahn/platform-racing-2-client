@@ -1,5 +1,7 @@
 package pr2.gameplay;
 
+import openfl.display.Sprite;
+
 class HeartsTest {
 	private static var assertions:Int = 0;
 
@@ -24,6 +26,10 @@ class HeartsTest {
 		hearts.setHearts(3);
 		assertEquals(3, hearts.getHeartCount(), "grows to requested count");
 		assertEquals(3, hearts.numChildren, "three heart icons attached");
+		var firstHeart:Sprite = cast hearts.getChildAt(0);
+		assertEquals(3, firstHeart.numChildren, "native heart preserves its three authored vector layers");
+		assertEquals(0.2, firstHeart.scaleX, "native heart preserves Flash's authored scale");
+		assertEquals(20.0, hearts.getChildAt(1).y, "native hearts preserve their vertical step");
 
 		hearts.setHearts(1);
 		assertEquals(1, hearts.getHeartCount(), "shrinks to requested count");

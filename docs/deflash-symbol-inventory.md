@@ -19,8 +19,8 @@ and screenshot/parity tests.
 
 ## Summary
 
-- 170 unique production root linkages
-- 191 audited root usages
+- 163 unique production root linkages
+- 184 audited root usages
 - 378 handwritten source files scanned
 - Excluded developer routes: `SymbolPreview` and files under `pr2.harness`
 - Excluded transitive construction: files under `pr2.runtime`
@@ -28,11 +28,11 @@ and screenshot/parity tests.
 
 | Replacement shape | Unique roots |
 | --- | ---: |
-| UI composition | 99 |
+| UI composition | 97 |
 | character rig | 1 |
 | simple frame animation | 11 |
 | state art | 25 |
-| static art | 30 |
+| static art | 25 |
 | tweened animation | 4 |
 
 ## Roots By Feature Owner
@@ -58,14 +58,11 @@ and screenshot/parity tests.
 | `FinishedPageGraphic` | UI composition | `haxe/src/pr2/gameplay/FinishedPage.hx:40` |
 | `HappyHour` | UI composition | `haxe/src/pr2/gameplay/HappyHour.hx:19` |
 | `HatGraphic` | UI composition | `haxe/src/pr2/gameplay/HatEffect.hx:54` |
-| `HeartGraphic` | static art | `haxe/src/pr2/gameplay/Hearts.hx:43` |
 | `IceWaveGraphic` | simple frame animation | `haxe/src/pr2/gameplay/EggRound.hx:454`; dynamic |
 | `ItemDisplayGraphic` | UI composition | `haxe/src/pr2/gameplay/ItemDisplay.hx:34` |
 | `LaserShotGraphic` | simple frame animation | `haxe/src/pr2/gameplay/EggRound.hx:454`; dynamic |
 | `LuxPopupGraphic` | UI composition | `haxe/src/pr2/gameplay/LuxPopup.hx:24` |
-| `MiniMapDot` | static art | `haxe/src/pr2/gameplay/MiniMapDot.hx:38` |
-| `MiniMapFinishGraphic` | static art | `haxe/src/pr2/gameplay/MiniMap.hx:51` |
-| `MiniMapGraphic` | UI composition | `haxe/src/pr2/gameplay/MiniMap.hx:43` |
+| `MiniMapGraphic` | UI composition | `haxe/src/pr2/gameplay/MiniMap.hx:44` |
 | `MusicSelectionGraphic` | UI composition | `haxe/src/pr2/gameplay/MusicSelection.hx:25` |
 | `PlaceArtifactGraphic` | UI composition | `haxe/src/pr2/gameplay/PlaceArtifact.hx:52` |
 | `PrizePopupGraphic` | UI composition | `haxe/src/pr2/gameplay/PrizePopup.hx:48` |
@@ -74,7 +71,6 @@ and screenshot/parity tests.
 | `SlashAnimation` | simple frame animation | `haxe/src/pr2/gameplay/EggRound.hx:454`; dynamic |
 | `SpectatePickerGraphic` | UI composition | `haxe/src/pr2/gameplay/SpectatePicker.hx:32` |
 | `StatsDisplayGraphic` | UI composition | `haxe/src/pr2/gameplay/StatsDisplay.hx:30` |
-| `TimerGraphic` | UI composition | `haxe/src/pr2/gameplay/CourseTimer.hx:35` |
 
 ### Gameplay effects
 
@@ -107,7 +103,6 @@ and screenshot/parity tests.
 | `BrushButtonGraphic` | state art | `haxe/src/pr2/levelEditor/EditorSideBarIconFactory.hx:61`; dynamic |
 | `BrushGraphic` | UI composition | `haxe/src/pr2/levelEditor/EditorSideBarIconFactory.hx:61`; dynamic |
 | `ChooseLevelsModePopupGraphic` | UI composition | `haxe/src/pr2/levelEditor/ChooseLevelsModePopup.hx:15` |
-| `Circle` | static art | `haxe/src/pr2/levelEditor/EditorBrushCursor.hx:19` |
 | `ConnectingPopupGraphic` | UI composition | `haxe/src/pr2/levelEditor/LevelEditorConnectingPopup.hx:33` |
 | `CustomStatsBlockOptionsGraphic` | UI composition | `haxe/src/pr2/levelEditor/EditorBlockOptionsPopup.hx:20`; dynamic |
 | `DeleteButton` | state art | `haxe/src/pr2/levelEditor/EditorBlockObject.hx:236`, `haxe/src/pr2/levelEditor/EditorStampDisplay.hx:43`, `haxe/src/pr2/levelEditor/EditorTextObject.hx:63` |
@@ -174,7 +169,6 @@ and screenshot/parity tests.
 | Linkage | Replacement shape | Source |
 | --- | --- | --- |
 | `ArrowBlockGraphic` | static art | `haxe/src/pr2/level/ServerLevelBlockFactory.hx:83` |
-| `MoveArrow` | static art | `haxe/src/pr2/level/ServerLevelRenderer.hx:652` |
 
 ### Lobby account and customization
 
@@ -221,7 +215,6 @@ and screenshot/parity tests.
 | `PlayerGuestPopupGraphic` | UI composition | `haxe/src/pr2/lobby/dialogs/PlayerGuestPopup.hx:23` |
 | `PlayerPopupGraphic` | UI composition | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:95` |
 | `PMRFCodesPopupGraphic` | UI composition | `haxe/src/pr2/lobby/dialogs/PMRFCodesPopup.hx:16` |
-| `ProgressBarGraphic` | UI composition | `haxe/src/pr2/lobby/dialogs/ProgressBar.hx:23` |
 | `ReplyMessageButtonGraphic` | state art | `haxe/src/pr2/lobby/dialogs/MessagesItem.hx:287`; dynamic |
 | `ReportMessageButtonGraphic` | state art | `haxe/src/pr2/lobby/dialogs/MessagesItem.hx:287`; dynamic |
 | `SendMessagePopupGraphic` | UI composition | `haxe/src/pr2/lobby/dialogs/SendMessagePopup.hx:35` |

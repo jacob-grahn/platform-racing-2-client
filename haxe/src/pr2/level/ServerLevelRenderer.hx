@@ -138,7 +138,7 @@ class ServerLevelRenderer extends Sprite {
 	private var viewInitialized:Bool = false;
 	private final arrowDisplays:Map<String, PR2MovieClip> = new Map();
 	private final arrowCompletionHandlers:Map<String, Event->Void> = new Map();
-	private final moveArrowDisplays:Map<String, PR2MovieClip> = new Map();
+	private final moveArrowDisplays:Map<String, Shape> = new Map();
 	private final waterRippleFrames:Map<String, Int> = new Map();
 	private final blockBounceVelocities:Map<String, Point> = new Map();
 	private final artDrawCursors:Array<ArtDrawCursor> = [];
@@ -649,7 +649,7 @@ class ServerLevelRenderer extends Sprite {
 		}
 		var arrow = moveArrowDisplays.get(key);
 		if (arrow == null) {
-			arrow = PR2MovieClip.fromLinkage("MoveArrow", {maxNestedDepth: 2});
+			arrow = createMoveBlockArrow();
 			arrow.x = TILE_SIZE / 2;
 			arrow.y = TILE_SIZE / 2;
 			display.addChild(arrow);
@@ -673,6 +673,27 @@ class ServerLevelRenderer extends Sprite {
 	public function moveBlockArrowRotationAt(worldX:Int, worldY:Int):Null<Float> {
 		var arrow = moveArrowDisplays.get(blockKey(worldX, worldY));
 		return arrow == null ? null : arrow.rotation;
+	}
+
+	/**
+		Native MoveArrow geometry. The original nests the white Arrow2Graphic at
+		0.200469970703125 scale with a -6.55px y translation; its tip remains
+		anchored at the centre of the moving block so rotation preserves Flash's
+		direction behaviour.
+	**/
+	public static function createMoveBlockArrow():Shape {
+		var arrow = new Shape();
+		arrow.graphics.beginFill(0xFFFFFF);
+		arrow.graphics.moveTo(1.403289794921875, -7.061199951171875);
+		arrow.graphics.lineTo(1.403289794921875, 0.03338623046875);
+		arrow.graphics.lineTo(-1.20281982421875, 0.03338623046875);
+		arrow.graphics.lineTo(-1.20281982421875, -7.061199951171875);
+		arrow.graphics.lineTo(-4.44041015625, -7.061199951171875);
+		arrow.graphics.lineTo(-0.0100234985351563, -13.09535400390625);
+		arrow.graphics.lineTo(4.430386657714844, -7.061199951171875);
+		arrow.graphics.lineTo(1.403289794921875, -7.061199951171875);
+		arrow.graphics.endFill();
+		return arrow;
 	}
 
 	public function showMineExplosion(worldX:Float, worldY:Float, playSound:Bool = true):MineExplosion {

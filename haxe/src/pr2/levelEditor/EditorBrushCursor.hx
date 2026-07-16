@@ -1,13 +1,13 @@
 package pr2.levelEditor;
 
+import openfl.display.Shape;
 import openfl.events.MouseEvent;
 import openfl.geom.ColorTransform;
-import pr2.runtime.PR2MovieClip;
 
 class EditorBrushCursor extends EditorToolCursor {
 	public final eraseMode:Bool;
 
-	private var circle:PR2MovieClip;
+	private var circle:Shape;
 	private var size:Float = 4;
 	private var zoom:Float = 1;
 	private var drawing:Bool = false;
@@ -16,11 +16,9 @@ class EditorBrushCursor extends EditorToolCursor {
 		super(manager, sidebar, toolId, true);
 		this.eraseMode = eraseMode;
 		disposable = false;
-		circle = PR2MovieClip.fromLinkage("Circle", {maxNestedDepth: 2});
+		circle = createCircle();
 		// Circle is authored around (0, 0), exactly as Flash's Brush expects.
 		// Generic cursor centering shifts an already-centered symbol up-left.
-		circle.mouseEnabled = false;
-		circle.mouseChildren = false;
 		addChild(circle);
 		setSize(size);
 	}
@@ -31,6 +29,15 @@ class EditorBrushCursor extends EditorToolCursor {
 			circle.width = size * zoom;
 			circle.height = size * zoom;
 		}
+	}
+
+	/** Native equivalent of the authored 100px-diameter white `Circle` symbol. */
+	public static function createCircle():Shape {
+		var result = new Shape();
+		result.graphics.beginFill(0xFFFFFF);
+		result.graphics.drawCircle(0, 0, 50);
+		result.graphics.endFill();
+		return result;
 	}
 
 	public function setZoom(nextZoom:Float):Void {
@@ -67,7 +74,9 @@ class EditorBrushCursor extends EditorToolCursor {
 
 	override public function remove():Void {
 		if (circle != null) {
-			circle.dispose();
+			if (circle.parent != null) {
+				circle.parent.removeChild(circle);
+			}
 			circle = null;
 		}
 		super.remove();

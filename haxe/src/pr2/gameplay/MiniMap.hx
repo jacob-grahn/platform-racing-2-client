@@ -3,6 +3,7 @@ package pr2.gameplay;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.display.DisplayObject;
+import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.geom.Rectangle;
 import pr2.display.Removable;
@@ -48,13 +49,26 @@ class MiniMap extends Removable {
 	/** Adds one block silhouette; finish blocks also get a finish box overlay. */
 	public function addBlock(blockCode:Int, blockX:Float, blockY:Float):Void {
 		if (blockCode == ObjectCodes.BLOCK_FINISH) {
-			var finishBox = PR2MovieClip.fromLinkage("MiniMapFinishGraphic");
+			var finishBox = createFinishMarker();
 			finishBox.x = blockX + 15;
 			finishBox.y = blockY + 15;
 			finishSprite.addChild(finishBox);
 		}
 		drawBlock(blockX, blockY);
 		blockCount++;
+	}
+
+	/**
+		Native equivalent of MiniMapFinishGraphic: a 4 x 4 green square centred
+		on the finish block, with Flash's white hairline outline.
+	**/
+	public static function createFinishMarker():Shape {
+		var marker = new Shape();
+		marker.graphics.lineStyle(0.05, 0xFFFFFF);
+		marker.graphics.beginFill(0x00CC00);
+		marker.graphics.drawRect(-2, -2, 4, 4);
+		marker.graphics.endFill();
+		return marker;
 	}
 
 	/** Removes a finish box previously placed at the given (centre) coordinates. */

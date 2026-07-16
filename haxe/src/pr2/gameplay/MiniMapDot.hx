@@ -3,7 +3,6 @@ package pr2.gameplay;
 import openfl.display.Sprite;
 import openfl.events.MouseEvent;
 import pr2.lobby.dialogs.HoverPopup;
-import pr2.runtime.PR2MovieClip;
 
 /**
 	Port of `MiniMapDot.as`. A single player marker on the minimap. The authored
@@ -23,8 +22,8 @@ class MiniMapDot extends Sprite {
 	public static inline var REMOTE3_COLOR:Int = 0x999999;
 	public static inline var LOCAL_COLOR:Int = 0xFFFF00;
 
-	private final clip:PR2MovieClip;
 	private var tempID:Int = -1;
+	private var selectedColor:Int = REMOTE0_COLOR;
 	public var hover(default, null):Null<HoverPopup>;
 	private var hoverEnabled:Bool = false;
 	private var hoverTitle:String = "";
@@ -32,12 +31,9 @@ class MiniMapDot extends Sprite {
 
 	public function new() {
 		super();
-		// Flash's MiniMapDot constructor calls stop(); gotoAndStop holds frame 1
-		// until setTempID picks the colour, and keeps the clip from animating
-		// through the colour frames.
-		clip = PR2MovieClip.fromLinkage("MiniMapDot");
-		clip.gotoAndStop("remote0");
-		addChild(clip);
+		// Flash's constructor stops on frame 1 (`remote0`) until setTempID
+		// chooses one of the other labelled colour states.
+		drawMarker();
 		addEventListener(MouseEvent.MOUSE_OVER, infoMouseEvent);
 		addEventListener(MouseEvent.MOUSE_OUT, infoMouseEvent);
 	}
@@ -46,8 +42,14 @@ class MiniMapDot extends Sprite {
 	public function setTempID(id:Int, local:Bool = false):Void {
 		if (tempID == -1 && id >= 0 && id <= 3) {
 			tempID = id;
-			clip.gotoAndStop(labelForTempId(tempID, local));
+			selectedColor = local ? LOCAL_COLOR : colorForTempId(tempID);
+			drawMarker();
 		}
+	}
+
+	/** Native marker colour, exposed for deterministic parity coverage. */
+	public function markerColorForTests():Int {
+		return selectedColor;
 	}
 
 	/** The authored frame label for a temp id, matching MiniMapDot.setTempID. */
@@ -95,5 +97,18 @@ class MiniMapDot extends Sprite {
 		if (parent != null) {
 			parent.removeChild(this);
 		}
+	}
+
+	/**
+		The XFL edges are `(-2,-4) .. (2,0)` in authored pixels. Keeping the
+		bottom-centre origin is important because minimap coordinates attach dots
+		at a player's exact course position.
+	**/
+	private function drawMarker():Void {
+		graphics.clear();
+		graphics.lineStyle(0.05, 0x000000);
+		graphics.beginFill(selectedColor);
+		graphics.drawRect(-2, -4, 4, 4);
+		graphics.endFill();
 	}
 }
