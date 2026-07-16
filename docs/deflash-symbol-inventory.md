@@ -19,8 +19,8 @@ and screenshot/parity tests.
 
 ## Summary
 
-- 159 unique production root linkages
-- 180 audited root usages
+- 158 unique production root linkages
+- 179 audited root usages
 - 378 handwritten source files scanned
 - Excluded developer routes: `SymbolPreview` and files under `pr2.harness`
 - Excluded transitive construction: files under `pr2.runtime`
@@ -32,7 +32,7 @@ and screenshot/parity tests.
 | character rig | 1 |
 | simple frame animation | 9 |
 | state art | 25 |
-| static art | 24 |
+| static art | 23 |
 | tweened animation | 4 |
 
 ## Roots By Feature Owner
@@ -126,7 +126,6 @@ and screenshot/parity tests.
 | `SaveLevelPopupGraphic` | UI composition | `haxe/src/pr2/levelEditor/SaveLevelPopup.hx:24` |
 | `SizePickerGraphic` | UI composition | `haxe/src/pr2/levelEditor/EditorBrushSizePickerButton.hx:13` |
 | `SizePickerMenuGraphic` | UI composition | `haxe/src/pr2/levelEditor/EditorBrushSizePickerMenu.hx:26` |
-| `SquareBG` | static art | `haxe/src/pr2/levelEditor/EditorSideBarEntry.hx:27` |
 | `StatBlockOptionsGraphic` | UI composition | `haxe/src/pr2/levelEditor/EditorBlockOptionsPopup.hx:20`; dynamic |
 | `TeleportBlockOptionsGraphic` | UI composition | `haxe/src/pr2/levelEditor/EditorBlockOptionsPopup.hx:20`; dynamic |
 | `TestCourseGraphic` | UI composition | `haxe/src/pr2/levelEditor/TestCoursePage.hx:49` |

@@ -293,8 +293,8 @@ migration should make them decrease without changing observable behavior or visu
 | Fl control usage | `FlComboBox` | `haxe/src/pr2/levelEditor/EditorMusicSettingsPopup.hx:28` |
 | PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/levelEditor/EditorObjectLayer.hx:11` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/EditorSideBar.hx:193` |
-| Fl control dependency | `pr2.runtime.FlComponents` | `haxe/src/pr2/levelEditor/EditorSideBarEntry.hx:10` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/levelEditor/EditorSideBarEntry.hx:11` |
+| Fl control dependency | `pr2.runtime.FlComponents` | `haxe/src/pr2/levelEditor/EditorSideBarEntry.hx:13` |
+| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/levelEditor/EditorSideBarEntry.hx:14` |
 | Fl control usage | `FlComponents` | `haxe/src/pr2/levelEditor/EditorSideBarEntry.hx:65` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/EditorSideBarEntry.hx:65` |
 | Fl control usage | `FlComponents` | `haxe/src/pr2/levelEditor/EditorSideBarEntry.hx:76` |

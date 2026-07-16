@@ -902,7 +902,7 @@ class EditorSettingsTest {
 		var treeIconBounds = treeEntry.iconBoundsForTests();
 		assertEquals(true, Math.max(treeIconBounds.width, treeIconBounds.height) >= 23,
 			"raster stamp preview fills the authored 24px button box");
-		assertEquals(false, @:privateAccess treeEntry.chrome.playing, "sidebar button chrome is frozen instead of advancing every frame");
+		assertEquals(true, treeEntry.usesNativeChromeForTests(), "sidebar button chrome is native and has no timeline to advance");
 
 		var buildingPoint = new Point(point.x + 250, point.y + 100);
 		var buildingLocal = editor.activeObjectLayer.globalToLocal(buildingPoint);

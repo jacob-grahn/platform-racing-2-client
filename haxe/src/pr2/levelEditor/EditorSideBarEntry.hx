@@ -3,9 +3,12 @@ package pr2.levelEditor;
 import openfl.display.DisplayObject;
 import openfl.display.DisplayObjectContainer;
 import openfl.display.InteractiveObject;
+import openfl.display.Shape;
 import openfl.events.MouseEvent;
 import openfl.geom.Rectangle;
 import openfl.geom.ColorTransform;
+import pr2.assets.NativeAssetIds.StaticSvg;
+import pr2.assets.NativeAssets;
 import pr2.lobby.dialogs.HoverDelayPopup;
 import pr2.runtime.FlComponents;
 import pr2.runtime.PR2MovieClip;
@@ -13,7 +16,7 @@ import pr2.util.DisplayUtil;
 
 class EditorSideBarEntry extends HoverDelayPopup {
 	public final id:String;
-	private var chrome:Null<PR2MovieClip>;
+	private var chrome:Null<Shape>;
 	private var icon:Null<DisplayObject>;
 	private var selected:Bool = false;
 
@@ -24,11 +27,8 @@ class EditorSideBarEntry extends HoverDelayPopup {
 		name = id + "Entry";
 		buttonMode = true;
 		useHandCursor = true;
-		chrome = PR2MovieClip.fromLinkage("SquareBG", {maxNestedDepth: 2});
+		chrome = NativeAssets.svg(StaticSvg.TimerPanel);
 		chrome.name = "SquareBG";
-		chrome.stopAll();
-		chrome.mouseEnabled = false;
-		chrome.mouseChildren = false;
 		chrome.width = 28;
 		chrome.height = 28;
 		chrome.x = 1;
@@ -80,9 +80,7 @@ class EditorSideBarEntry extends HoverDelayPopup {
 	override public function remove():Void {
 		removeEventListener(MouseEvent.MOUSE_OVER, overIcon);
 		removeEventListener(MouseEvent.MOUSE_OUT, outIcon);
-		if (Std.isOfType(chrome, PR2MovieClip)) {
-			chrome.dispose();
-		}
+		if (chrome != null && chrome.parent == this) removeChild(chrome);
 		if (Std.isOfType(icon, PR2MovieClip)) {
 			cast(icon, PR2MovieClip).dispose();
 		}
@@ -97,6 +95,10 @@ class EditorSideBarEntry extends HoverDelayPopup {
 
 	public function hasAuthoredChromeForTests():Bool {
 		return chrome != null && chrome.name == "SquareBG";
+	}
+
+	public function usesNativeChromeForTests():Bool {
+		return chrome != null;
 	}
 
 	public function iconColorTransformForTests():ColorTransform {
