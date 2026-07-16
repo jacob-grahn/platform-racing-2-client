@@ -35,6 +35,28 @@ class CharacterDisplayTest {
 			assertTrue(!part.cacheAsBitmap, '$partName does not use OpenFL cacheAsBitmap');
 			assertTrue(display.explicitPartCacheForTest(part) != null, '$partName has an explicit local-space bitmap');
 		}
+		var runState = display.getStateClip("runAnim");
+		var runHead = Std.downcast(runState.getChildByTimelineName("head"), PR2MovieClip);
+		var standHeadBitmap = display.explicitPartCacheForTest(head);
+		var runHeadBitmap = display.explicitPartCacheForTest(runHead);
+		assertTrue(runHeadBitmap != null, "inactive state mounts the shared head bitmap");
+		assertEquals(standHeadBitmap.bitmapData, runHeadBitmap.bitmapData, "animation states share one head raster");
+		var foot1 = Std.downcast(state.getChildByTimelineName("foot1"), PR2MovieClip);
+		var foot2 = Std.downcast(state.getChildByTimelineName("foot2"), PR2MovieClip);
+		assertEquals(display.explicitPartCacheForTest(foot1).bitmapData, display.explicitPartCacheForTest(foot2).bitmapData,
+			"both feet share one raster");
+		assertEquals(3, display.ownedPartCacheCountForTest(), "hatless character rasterizes only head, body, and one foot");
+
+		var hatted = new CharacterDisplay({hat: 2, hats: [2, 3, 1, 1], head: 1, body: 1, feet: 1});
+		assertEquals(5, hatted.ownedPartCacheCountForTest(), "two equipped hats add exactly two appearance rasters");
+		var hattedStandHead = Std.downcast(hatted.getStateClip("standAnim").getChildByTimelineName("head"), PR2MovieClip);
+		var hattedRunHead = Std.downcast(hatted.getStateClip("runAnim").getChildByTimelineName("head"), PR2MovieClip);
+		for (hatName in ["hat1", "hat2"]) {
+			var standHat = Std.downcast(hattedStandHead.getChildByTimelineName(hatName), PR2MovieClip);
+			var runHat = Std.downcast(hattedRunHead.getChildByTimelineName(hatName), PR2MovieClip);
+			assertEquals(hatted.explicitPartCacheForTest(standHat).bitmapData, hatted.explicitPartCacheForTest(runHat).bitmapData,
+				'$hatName shares one raster across animation states');
+		}
 		assertEquals(null, descendantNamedWithPrefix(head, "__atlasLayer"), "character does not mount a legacy atlas layer");
 		assertTrue(visibleDescendantCount(head) > 0, "authored head timeline contains visible exported art");
 

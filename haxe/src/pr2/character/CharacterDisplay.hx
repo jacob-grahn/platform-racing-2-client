@@ -23,9 +23,11 @@ typedef PartColor = {
 	var secondary:Int;
 }
 
-private typedef ExplicitPartCacheRecord = {
-	var cache:ExplicitBitmapCache;
-	var revision:Int;
+typedef CharacterPartColors = {
+	var hats:Array<PartColor>;
+	var head:PartColor;
+	var body:PartColor;
+	var feet:PartColor;
 }
 
 class CharacterDisplay extends Sprite {
@@ -65,8 +67,11 @@ class CharacterDisplay extends Sprite {
 	private var idleTicking:Bool = false;
 	private var superJumpWobbleRandom:Void->Float = Math.random;
 	private final explicitPartCacheEnabled:Bool;
-	private final explicitPartCaches:ObjectMap<PR2MovieClip, ExplicitPartCacheRecord> = new ObjectMap();
+	private final explicitPartBitmaps:ObjectMap<PR2MovieClip, Bitmap> = new ObjectMap();
+	private var sharedPartCaches:Array<ExplicitBitmapCache> = [];
+	private var ownedPartCaches:Array<ExplicitBitmapCache> = [];
 	private var explicitPartCacheRevision:Int = 0;
+	private var cachedPartRevision:Int = -1;
 
 	public function new(?partIds:CharacterPartIds, ?colors:CharacterColors, explicitPartCacheEnabled:Bool = true) {
 		super();
@@ -117,6 +122,19 @@ class CharacterDisplay extends Sprite {
 	public function setHatSlotColors(colors:Array<PartColor>):Void {
 		hatSlotColors = colors == null ? [] : [for (color in colors) {primary: color.primary, secondary: color.secondary}];
 		explicitPartCacheRevision++;
+		applyAuthoredColors();
+	}
+
+	/** Apply a complete character appearance with a single cache invalidation. */
+	public function setAppearance(partIds:CharacterPartIds, colors:CharacterPartColors):Void {
+		this.partIds = partIds;
+		partColors.set("hat", colors.hats.length > 0 ? colors.hats[0] : {primary: primaryColor, secondary: secondaryColor});
+		partColors.set("head", {primary: colors.head.primary, secondary: colors.head.secondary});
+		partColors.set("body", {primary: colors.body.primary, secondary: colors.body.secondary});
+		partColors.set("feet", {primary: colors.feet.primary, secondary: colors.feet.secondary});
+		hatSlotColors = [for (color in colors.hats) {primary: color.primary, secondary: color.secondary}];
+		explicitPartCacheRevision++;
+		CharacterAppearance.applyPartIds(clip, partIds);
 		applyAuthoredColors();
 	}
 
@@ -386,6 +404,10 @@ class CharacterDisplay extends Sprite {
 
 	/** Apply colors to Animate's authored part containers, matching Character.as. */
 	private function applyAuthoredColors():Void {
+		if (cachedPartRevision == explicitPartCacheRevision) {
+			return;
+		}
+		disposeAppearanceCaches();
 		for (stateName in STATE_NAMES) {
 			var stateClip = getClipChild(clip, stateName);
 			if (stateClip == null) {
@@ -411,19 +433,116 @@ class CharacterDisplay extends Sprite {
 					applyPartColor(getClipChild(hatContainer, "hat" + (slot + 1)), color);
 				}
 			}
-
-			cachePart(getClipChild(stateClip, "head"));
-			cachePart(getClipChild(stateClip, "body"));
-			cachePart(getClipChild(stateClip, "foot1"));
-			cachePart(getClipChild(stateClip, "foot2"));
 		}
+		cacheAppearanceParts();
+		cachedPartRevision = explicitPartCacheRevision;
+	}
+
+	private function cacheAppearanceParts():Void {
+		if (!explicitPartCacheEnabled) {
+			return;
+		}
+		var fredBody = partIds.body == 29;
+		var hatNames = ["hat1", "hat2", "hat3", "hat4"];
+		if (!fredBody) {
+			cacheSharedTargets(collectStateParts("head"), hatNames);
+			cacheSharedTargets(collectFeet(), []);
+		}
+		cacheSharedTargets(collectStateParts("body"), fredBody ? hatNames : []);
+
+		var hats = partIds.hats != null ? partIds.hats : [partIds.hat, 1, 1, 1];
+		for (slot in 0...4) {
+			if (hats.length <= slot || hats[slot] == 1) {
+				continue;
+			}
+			var targets:Array<PR2MovieClip> = [];
+			for (stateName in STATE_NAMES) {
+				var state = getClipChild(clip, stateName);
+				var container = state == null ? null : getClipChild(state, fredBody ? "body" : "head");
+				var hat = container == null ? null : getClipChild(container, "hat" + (slot + 1));
+				if (hat != null) {
+					targets.push(hat);
+				}
+			}
+			cacheSharedTargets(targets, []);
+		}
+	}
+
+	private function collectStateParts(partName:String):Array<PR2MovieClip> {
+		var targets:Array<PR2MovieClip> = [];
+		for (stateName in STATE_NAMES) {
+			var state = getClipChild(clip, stateName);
+			var part = state == null ? null : getClipChild(state, partName);
+			if (part != null) {
+				targets.push(part);
+			}
+		}
+		return targets;
+	}
+
+	private function collectFeet():Array<PR2MovieClip> {
+		var targets:Array<PR2MovieClip> = [];
+		for (stateName in STATE_NAMES) {
+			var state = getClipChild(clip, stateName);
+			if (state == null) {
+				continue;
+			}
+			for (partName in ["foot1", "foot2"]) {
+				var part = getClipChild(state, partName);
+				if (part != null) {
+					targets.push(part);
+				}
+			}
+		}
+		return targets;
+	}
+
+	private function cacheSharedTargets(targets:Array<PR2MovieClip>, preservedChildNames:Array<String>):Void {
+		if (targets.length == 0) {
+			return;
+		}
+		var options = {
+			scale: PART_CACHE_SCALE,
+			padding: PART_CACHE_PADDING,
+			bitmapName: "__explicitPartCache",
+			preservedChildNames: preservedChildNames
+		};
+		var owner = ExplicitBitmapCache.attach(targets[0], options);
+		if (!owner.valid || owner.bitmap == null) {
+			owner.dispose();
+			return;
+		}
+		ownedPartCaches.push(owner);
+		explicitPartBitmaps.set(targets[0], owner.bitmap);
+		for (index in 1...targets.length) {
+			var shared = owner.attachShared(targets[index], options);
+			if (shared.valid && shared.bitmap != null) {
+				sharedPartCaches.push(shared);
+				explicitPartBitmaps.set(targets[index], shared.bitmap);
+			} else {
+				shared.dispose();
+			}
+		}
+	}
+
+	private function disposeAppearanceCaches():Void {
+		var sharedIndex = sharedPartCaches.length;
+		while (sharedIndex > 0) {
+			sharedIndex--;
+			sharedPartCaches[sharedIndex].dispose();
+		}
+		var ownerIndex = ownedPartCaches.length;
+		while (ownerIndex > 0) {
+			ownerIndex--;
+			ownedPartCaches[ownerIndex].dispose();
+		}
+		sharedPartCaches = [];
+		ownedPartCaches = [];
+		explicitPartBitmaps.clear();
 	}
 
 	private function applyPartColor(part:Null<PR2MovieClip>, color:PartColor):Void {
 		if (part == null) {
-			return;
-		}
-		if (!preparePartForUpdate(part)) {
 			return;
 		}
 		var primary = getClipChild(part, "colorMC");
@@ -445,50 +564,14 @@ class CharacterDisplay extends Sprite {
 		}
 	}
 
-	private function preparePartForUpdate(part:PR2MovieClip):Bool {
-		if (!explicitPartCacheEnabled) {
-			return true;
-		}
-		var record = explicitPartCaches.get(part);
-		if (record == null) {
-			return true;
-		}
-		if (record.revision == explicitPartCacheRevision) {
-			return false;
-		}
-		record.cache.invalidate();
-		return true;
-	}
-
-	private function cachePart(part:Null<PR2MovieClip>):Void {
-		if (!explicitPartCacheEnabled || part == null) {
-			return;
-		}
-		var existing = explicitPartCaches.get(part);
-		if (existing != null) {
-			if (existing.revision == explicitPartCacheRevision) {
-				return;
-			}
-			existing.cache.refresh();
-			existing.revision = explicitPartCacheRevision;
-			return;
-		}
-
-		var cache = ExplicitBitmapCache.attach(part, {
-			scale: PART_CACHE_SCALE,
-			padding: PART_CACHE_PADDING,
-			bitmapName: "__explicitPartCache"
-		});
-		explicitPartCaches.set(part, {
-			cache: cache,
-			revision: explicitPartCacheRevision
-		});
+	@:allow(pr2.character.CharacterDisplayTest)
+	private function explicitPartCacheForTest(part:PR2MovieClip):Null<Bitmap> {
+		return explicitPartBitmaps.get(part);
 	}
 
 	@:allow(pr2.character.CharacterDisplayTest)
-	private function explicitPartCacheForTest(part:PR2MovieClip):Null<Bitmap> {
-		var record = explicitPartCaches.get(part);
-		return record == null ? null : record.cache.bitmap;
+	private function ownedPartCacheCountForTest():Int {
+		return ownedPartCaches.length;
 	}
 
 	private static function applyColorTransform(target:PR2MovieClip, desired:ColorTransform):Void {

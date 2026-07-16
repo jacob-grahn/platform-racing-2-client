@@ -13,6 +13,7 @@ typedef ExplicitBitmapCacheOptions = {
 	@:optional var smoothing:Bool;
 	@:optional var pixelSnapping:PixelSnapping;
 	@:optional var bitmapName:String;
+	@:optional var preservedChildNames:Array<String>;
 }
 
 private typedef CachedChildVisibility = {
@@ -38,9 +39,11 @@ class ExplicitBitmapCache {
 	private final smoothing:Bool;
 	private final pixelSnapping:PixelSnapping;
 	private final bitmapName:String;
+	private final preservedChildNames:Array<String>;
 	private final originalCacheAsBitmap:Bool;
 	private final originalCacheAsBitmapMatrix:Null<Matrix>;
 	private var sourceVisibility:Array<CachedChildVisibility> = [];
+	private var ownsBitmapData:Bool = true;
 
 	public static function attach(target:DisplayObjectContainer, ?options:ExplicitBitmapCacheOptions):ExplicitBitmapCache {
 		var cache = new ExplicitBitmapCache(target, options);
@@ -64,6 +67,14 @@ class ExplicitBitmapCache {
 		smoothing = options == null || options.smoothing == null ? true : options.smoothing;
 		pixelSnapping = options != null && options.pixelSnapping != null ? options.pixelSnapping : PixelSnapping.NEVER;
 		bitmapName = options != null && options.bitmapName != null ? options.bitmapName : DEFAULT_BITMAP_NAME;
+		preservedChildNames = options != null && options.preservedChildNames != null ? options.preservedChildNames.copy() : [];
+	}
+
+	/** Mount this cache's pixels in another container without rasterizing again. */
+	public function attachShared(target:DisplayObjectContainer, ?options:ExplicitBitmapCacheOptions):ExplicitBitmapCache {
+		var shared = new ExplicitBitmapCache(target, options);
+		shared.refreshFrom(this);
+		return shared;
 	}
 
 	/** Restore the source subtree so callers can safely modify it. */
@@ -82,8 +93,10 @@ class ExplicitBitmapCache {
 		target.cacheAsBitmap = false;
 		target.cacheAsBitmapMatrix = null;
 		var authoredTransform = target.transform.matrix.clone();
+		var preservedVisibility = hidePreservedChildren();
 		var bounds = target.getBounds(target);
 		if (bounds.width <= 0 || bounds.height <= 0) {
+			restoreVisibility(preservedVisibility);
 			target.transform.matrix = authoredTransform;
 			return false;
 		}
@@ -100,6 +113,7 @@ class ExplicitBitmapCache {
 			-bounds.y * scale + padding
 		);
 		bitmapData.draw(target, drawMatrix, null, null, null, true);
+		restoreVisibility(preservedVisibility);
 
 		var rendered = new Bitmap(bitmapData, pixelSnapping, smoothing);
 		rendered.name = bitmapName;
@@ -108,14 +122,32 @@ class ExplicitBitmapCache {
 		rendered.y = bounds.y - padding / scale;
 
 		sourceVisibility = [];
-		for (index in 0...target.numChildren) {
-			var child = target.getChildAt(index);
-			sourceVisibility.push({child: child, visible: child.visible});
-			child.visible = false;
-		}
-		target.addChild(rendered);
+		hideSourceChildren();
+		addRenderedBitmap(rendered);
 		target.transform.matrix = authoredTransform;
 		bitmap = rendered;
+		valid = true;
+		return true;
+	}
+
+	private function refreshFrom(source:ExplicitBitmapCache):Bool {
+		restoreSource();
+		var sourceBitmap = source.bitmap;
+		if (!source.valid || sourceBitmap == null || sourceBitmap.bitmapData == null) {
+			return false;
+		}
+		target.cacheAsBitmap = false;
+		target.cacheAsBitmapMatrix = null;
+		var rendered = new Bitmap(sourceBitmap.bitmapData, pixelSnapping, smoothing);
+		rendered.name = bitmapName;
+		rendered.scaleX = sourceBitmap.scaleX;
+		rendered.scaleY = sourceBitmap.scaleY;
+		rendered.x = sourceBitmap.x;
+		rendered.y = sourceBitmap.y;
+		hideSourceChildren();
+		addRenderedBitmap(rendered);
+		bitmap = rendered;
+		ownsBitmapData = false;
 		valid = true;
 		return true;
 	}
@@ -134,7 +166,7 @@ class ExplicitBitmapCache {
 			if (rendered.parent == target) {
 				target.removeChild(rendered);
 			}
-			if (rendered.bitmapData != null) {
+			if (ownsBitmapData && rendered.bitmapData != null) {
 				rendered.bitmapData.dispose();
 			}
 			bitmap = null;
@@ -145,5 +177,46 @@ class ExplicitBitmapCache {
 			}
 		}
 		sourceVisibility = [];
+	}
+
+	private function hideSourceChildren():Void {
+		sourceVisibility = [];
+		for (index in 0...target.numChildren) {
+			var child = target.getChildAt(index);
+			if (preservedChildNames.indexOf(child.name) != -1) {
+				continue;
+			}
+			sourceVisibility.push({child: child, visible: child.visible});
+			child.visible = false;
+		}
+	}
+
+	private function addRenderedBitmap(rendered:Bitmap):Void {
+		var insertionIndex = target.numChildren;
+		for (index in 0...target.numChildren) {
+			if (preservedChildNames.indexOf(target.getChildAt(index).name) != -1) {
+				insertionIndex = index;
+				break;
+			}
+		}
+		target.addChildAt(rendered, insertionIndex);
+	}
+
+	private function hidePreservedChildren():Array<CachedChildVisibility> {
+		var visibility:Array<CachedChildVisibility> = [];
+		for (index in 0...target.numChildren) {
+			var child = target.getChildAt(index);
+			if (preservedChildNames.indexOf(child.name) != -1) {
+				visibility.push({child: child, visible: child.visible});
+				child.visible = false;
+			}
+		}
+		return visibility;
+	}
+
+	private static function restoreVisibility(entries:Array<CachedChildVisibility>):Void {
+		for (entry in entries) {
+			entry.child.visible = entry.visible;
+		}
 	}
 }

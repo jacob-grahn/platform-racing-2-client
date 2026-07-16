@@ -9,6 +9,7 @@ class ExplicitBitmapCacheTest {
 	public static function main():Void {
 		testCachePreservesLocalRegistrationAndTransform();
 		testInvalidateRefreshAndDisposeRestoreSource();
+		testSharedBitmapAndPreservedChildren();
 		testEmptyTargetAndInvalidScale();
 		trace('ExplicitBitmapCacheTest passed $assertions assertions');
 	}
@@ -85,6 +86,37 @@ class ExplicitBitmapCacheTest {
 			threw = true;
 		}
 		assertTrue(threw, "non-positive cache scale is rejected");
+	}
+
+	private static function testSharedBitmapAndPreservedChildren():Void {
+		var source = new Sprite();
+		var sourceArt = rectangle(-4, -3, 12, 10);
+		var sourceOverlay = rectangle(20, 20, 4, 4);
+		sourceOverlay.name = "overlay";
+		source.addChild(sourceArt);
+		source.addChild(sourceOverlay);
+		var owner = ExplicitBitmapCache.attach(source, {preservedChildNames: ["overlay"]});
+		assertTrue(!sourceArt.visible, "owner hides rasterized source art");
+		assertTrue(sourceOverlay.visible, "owner leaves preserved overlay live");
+		assertTrue(source.getChildIndex(sourceOverlay) > source.getChildIndex(owner.bitmap), "preserved overlay remains above the base raster");
+
+		var target = new Sprite();
+		var targetArt = rectangle(-4, -3, 12, 10);
+		var targetOverlay = rectangle(20, 20, 4, 4);
+		targetOverlay.name = "overlay";
+		target.addChild(targetArt);
+		target.addChild(targetOverlay);
+		var shared = owner.attachShared(target, {preservedChildNames: ["overlay"]});
+		assertEquals(owner.bitmap.bitmapData, shared.bitmap.bitmapData, "shared mount reuses owner pixels");
+		assertTrue(!targetArt.visible, "shared mount hides its vector source");
+		assertTrue(targetOverlay.visible, "shared mount leaves its preserved overlay live");
+		assertTrue(target.getChildIndex(targetOverlay) > target.getChildIndex(shared.bitmap), "shared overlay remains above the base raster");
+
+		var pixels = owner.bitmap.bitmapData;
+		shared.dispose();
+		assertEquals(pixels, owner.bitmap.bitmapData, "disposing a shared mount leaves owner pixels intact");
+		owner.dispose();
+		assertTrue(sourceArt.visible && sourceOverlay.visible, "owner disposal restores all source layers");
 	}
 
 	private static function rectangle(x:Float, y:Float, width:Float, height:Float):Shape {

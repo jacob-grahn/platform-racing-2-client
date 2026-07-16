@@ -186,24 +186,27 @@ class Character extends Sprite {
 		dateControlsReversed = dateStringNow() == "Apr 1";
 		reversedControls = dateControlsReversed;
 
-		display = new CharacterDisplay(currentPartIds());
+		display = new CharacterDisplay(currentPartIds(), {primary: 0, secondary: -1});
 		addChild(display);
 		addEventListener(Event.ADDED, onAdded);
 		addEventListener(Event.REMOVED, onRemoved);
 
 		resetHats();
 		changeState("stand");
-		applyAppearance();
 	}
 
 	// ---- colours ---------------------------------------------------------
 
 	public function setColors(hatColor:Int, hatColor2:Int, headColor:Int, headColor2:Int, bodyColor:Int, bodyColor2:Int, feetColor:Int,
 			feetColor2:Int):Void {
-		setHatColors(hatColor, hatColor2);
-		setHeadColors(headColor, headColor2);
-		setBodyColors(bodyColor, bodyColor2);
-		setFeetColors(feetColor, feetColor2);
+		setHatSlotColors(1, hatColor, hatColor2);
+		this.headColor = headColor;
+		this.headColor2 = headColor2;
+		this.bodyColor = bodyColor;
+		this.bodyColor2 = bodyColor2;
+		this.feetColor = feetColor;
+		this.feetColor2 = feetColor2;
+		applyAppearance();
 	}
 
 	private function resetHats():Void {
@@ -361,12 +364,12 @@ class Character extends Sprite {
 	}
 
 	private function applyAppearance():Void {
-		display.setPartIds(currentPartIds());
-		display.setPartColor("hat", hatColors[0], hatColors2[0]);
-		display.setHatSlotColors([for (slot in 0...4) {primary: hatColors[slot], secondary: hatColors2[slot]}]);
-		display.setPartColor("head", headColor, headColor2);
-		display.setPartColor("body", bodyColor, bodyColor2);
-		display.setPartColor("feet", feetColor, feetColor2);
+		display.setAppearance(currentPartIds(), {
+			hats: [for (slot in 0...4) {primary: hatColors[slot], secondary: hatColors2[slot]}],
+			head: {primary: headColor, secondary: headColor2},
+			body: {primary: bodyColor, secondary: bodyColor2},
+			feet: {primary: feetColor, secondary: feetColor2}
+		});
 		applyItem();
 		updateDjinnEffects();
 	}

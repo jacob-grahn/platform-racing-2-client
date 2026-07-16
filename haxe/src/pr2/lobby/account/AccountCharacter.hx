@@ -40,7 +40,7 @@ class AccountCharacter extends Sprite {
 		this.head = headId;
 		this.body = bodyId;
 		this.feet = feetId;
-		display = new CharacterDisplay({hat: hatId, head: headId, body: bodyId, feet: feetId});
+		display = new CharacterDisplay({hat: hatId, head: headId, body: bodyId, feet: feetId}, {primary: 0, secondary: -1});
 		// CharacterDisplay instantiates the exported CharacterGraphic. Its state
 		// children already retain their authored ~0.15 matrices, so the wrapper
 		// itself remains at scale 1 exactly like Flash's Character instance.
@@ -49,7 +49,6 @@ class AccountCharacter extends Sprite {
 		// standing idle plays continuously. Drive it from the stage clock; the
 		// listener is released automatically when the preview is detached.
 		display.enableIdleAnimation();
-		applyAppearance();
 	}
 
 	public function setColors(hatColor:Int, hatColor2:Int, headColor:Int, headColor2:Int, bodyColor:Int, bodyColor2:Int, feetColor:Int,
@@ -110,11 +109,12 @@ class AccountCharacter extends Sprite {
 	}
 
 	private function applyAppearance():Void {
-		display.setPartIds({hat: hat1, head: head, body: body, feet: feet});
-		display.setPartColor("hat", hat1Color, hat1Color2);
-		display.setPartColor("head", headColor, headColor2);
-		display.setPartColor("body", bodyColor, bodyColor2);
-		display.setPartColor("feet", feetColor, feetColor2);
+		display.setAppearance({hat: hat1, head: head, body: body, feet: feet}, {
+			hats: [{primary: hat1Color, secondary: hat1Color2}],
+			head: {primary: headColor, secondary: headColor2},
+			body: {primary: bodyColor, secondary: bodyColor2},
+			feet: {primary: feetColor, secondary: feetColor2}
+		});
 	}
 
 	/**
