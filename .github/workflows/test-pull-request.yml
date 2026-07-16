@@ -27,6 +27,7 @@ jobs:
           haxelib setup "$GITHUB_WORKSPACE/.haxelib"
           haxelib install lime 8.3.2 --quiet
           haxelib install openfl 9.5.2 --quiet
+          haxelib install svg 1.2.0 --quiet
 
       - name: Run full deterministic test suite
         run: ./test.sh --full

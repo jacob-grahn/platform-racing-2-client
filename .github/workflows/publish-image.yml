@@ -28,6 +28,7 @@ jobs:
           haxelib setup "$GITHUB_WORKSPACE/.haxelib"
           haxelib install lime 8.3.2 --quiet
           haxelib install openfl 9.5.2 --quiet
+          haxelib install svg 1.2.0 --quiet
 
       - name: Build HTML5 game
         run: haxelib run openfl build html5
