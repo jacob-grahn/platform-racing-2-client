@@ -1,13 +1,14 @@
 package pr2.ui;
 
-import openfl.display.DisplayObject;
-import openfl.display.DisplayObjectContainer;
+import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.MouseEvent;
 import openfl.text.TextField;
 import openfl.text.TextFieldAutoSize;
-import pr2.runtime.PR2MovieClip;
-import pr2.util.DisplayUtil;
+import openfl.text.TextFormat;
+import pr2.assets.NativeAssetIds.FontAsset;
+import pr2.assets.NativeAssetIds.StaticSvg;
+import pr2.assets.NativeAssets;
 
 /**
 	Port of Flash `ui.LobbyTab`.
@@ -19,8 +20,10 @@ import pr2.util.DisplayUtil;
 	to the front so its label is never clipped by neighbours.
 **/
 class LobbyTab extends Sprite {
-	private var art:Null<PR2MovieClip>;
-	private var bg:Null<PR2MovieClip>;
+	private var bg:Sprite;
+	private var base:Null<Shape>;
+	private var selectedOverlay:Null<Shape>;
+	private var textBox:TextField;
 	private var tabsHolder:Null<TabsHolder>;
 	private var tabFunction:Void->Void;
 
@@ -28,17 +31,21 @@ class LobbyTab extends Sprite {
 		super();
 		this.tabFunction = tabFn;
 
-		art = PR2MovieClip.fromLinkage("LobbyTabGraphic", {maxNestedDepth: 6});
-		var textBox = Std.downcast(DisplayUtil.findByName(art, "textBox"), TextField);
-		if (textBox != null) {
-			textBox.autoSize = TextFieldAutoSize.LEFT;
-			textBox.text = tabText;
-		}
-		bg = Std.downcast(DisplayUtil.findByName(art, "bg"), PR2MovieClip);
-		if (bg != null && textBox != null) {
-			bg.width = textBox.width + 10;
-		}
-		addChild(art);
+		bg = new Sprite();
+		bg.name = "bg";
+		addChild(bg);
+		textBox = new TextField();
+		textBox.name = "textBox";
+		textBox.x = 5;
+		textBox.y = 2;
+		textBox.height = 14.55;
+		textBox.selectable = false;
+		textBox.mouseEnabled = false;
+		textBox.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 12, 0);
+		textBox.autoSize = TextFieldAutoSize.LEFT;
+		textBox.text = tabText;
+		addChild(textBox);
+		setState(StaticSvg.LobbyTabUp, false);
 		activate();
 	}
 
@@ -52,18 +59,14 @@ class LobbyTab extends Sprite {
 	}
 
 	private function onHover(_:MouseEvent):Void {
-		if (bg != null) {
-			bg.gotoAndStop("over");
-		}
+		setState(StaticSvg.LobbyTabOver, false);
 		if (tabsHolder != null) {
 			tabsHolder.moveToFront(this);
 		}
 	}
 
 	private function onHoverOut(_:MouseEvent):Void {
-		if (bg != null) {
-			bg.gotoAndStop("up");
-		}
+		setState(StaticSvg.LobbyTabUp, false);
 	}
 
 	public function select():Void {
@@ -72,9 +75,7 @@ class LobbyTab extends Sprite {
 		}
 		tabFunction();
 		deactivate();
-		if (bg != null) {
-			bg.gotoAndStop("selected");
-		}
+		setState(StaticSvg.LobbyTabOver, true);
 	}
 
 	public function activate():Void {
@@ -85,9 +86,7 @@ class LobbyTab extends Sprite {
 	}
 
 	private function deactivate():Void {
-		if (bg != null) {
-			bg.gotoAndStop("up");
-		}
+		setState(StaticSvg.LobbyTabUp, false);
 		removeEventListener(MouseEvent.CLICK, onClick);
 		removeEventListener(MouseEvent.MOUSE_OVER, onHover);
 		removeEventListener(MouseEvent.MOUSE_OUT, onHoverOut);
@@ -95,18 +94,24 @@ class LobbyTab extends Sprite {
 
 	public function remove():Void {
 		deactivate();
-		if (art != null) {
-			art.dispose();
-			if (art.parent != null) {
-				art.parent.removeChild(art);
-			}
-			art = null;
-		}
-		bg = null;
+		base = null;
+		selectedOverlay = null;
 		tabsHolder = null;
 		if (parent != null) {
 			parent.removeChild(this);
 		}
+	}
+
+	private function setState(asset:StaticSvg, selected:Bool):Void {
+		if (base != null) bg.removeChild(base);
+		if (selectedOverlay != null) bg.removeChild(selectedOverlay);
+		base = NativeAssets.svg(asset);
+		bg.addChild(base);
+		if (selected) {
+			selectedOverlay = NativeAssets.svg(StaticSvg.LobbyTabSelectedOverlay);
+			bg.addChild(selectedOverlay);
+		} else selectedOverlay = null;
+		bg.width = textBox.width + 10;
 	}
 
 }

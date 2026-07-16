@@ -23,6 +23,9 @@ enum abstract StaticSvg(String) to String {
 	var QuantityPanel = "assets/svg/timeline/ui_shadowbg_95643069a8/t00_l000_f0000_r00.svg";
 	var RatingStarHighlight = "assets/svg/timeline/movieclips_symbol_1064_2f2dcafe56/t00_l001_f0005_r00.svg";
 	var RockStamp = "assets/svg/stamps/rock1.svg";
+	var LobbyTabOver = "assets/svg/timeline/movieclips_pr2_graphics_1_apr_2014_fla_symbol_1224_f93a5fd6a6/t00_l002_f0005_r00.svg";
+	var LobbyTabSelectedOverlay = "assets/svg/timeline/graphics_symbol_1223_06a8b36222/t00_l000_f0000_r00.svg";
+	var LobbyTabUp = "assets/svg/timeline/movieclips_pr2_graphics_1_apr_2014_fla_symbol_1224_f93a5fd6a6/t00_l002_f0000_r00.svg";
 	var SpeedBurstStar = "assets/svg/timeline/ui_pages_levels_in_game_effects_speedburst_speedburststar_64db9149b6/t00_l000_f0000_r00.svg";
 	var ScrollArrowDown = "assets/svg/timeline/components_component_assets_scrollbarskins_scrollarrowdown_upski_5a4fa47e32/t00_l001_f0000_r00.svg";
 	var ScrollArrowUp = "assets/svg/timeline/components_component_assets_scrollbarskins_scrollarrowup_upskin_03aeb6088e/t00_l001_f0000_r00.svg";
