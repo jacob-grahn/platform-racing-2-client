@@ -200,7 +200,8 @@ KONGREGATE_INTRO_SYMBOLS = [
 
 LOGIN_SYMBOLS = [
     {"slug": "login_page_no_logo", "symbol": "UI/Pages/Login/LoginPage", "frame": 25},
-    {"slug": "mute_button", "symbol": "UI/Global/MuteButton"},
+    {"slug": "mute_button_base", "symbol": "UI/Global/MuteButton", "muteLayer": "base"},
+    {"slug": "mute_button_waves", "symbol": "MovieClips/Symbol 109", "tx": 15.1, "ty": -9.95},
     {"slug": "bg_sky", "symbol": "MovieClips/Symbol 364"},
     {"slug": "bg_far", "symbol": "MovieClips/Symbol 366"},
     {"slug": "bg_mid", "symbol": "MovieClips/Symbol 369"},
@@ -293,6 +294,9 @@ def build_jobs(svg_dir):
             "slug":       entry["slug"],
             "symbolName": entry["symbol"],
             "frame":      entry.get("frame", 0),
+            "muteLayer":  entry.get("muteLayer"),
+            "tx":         entry.get("tx", 0),
+            "ty":         entry.get("ty", 0),
             "exportPath": export_path,
             "outputUri":  (root / export_path).as_uri(),
         })
@@ -344,7 +348,9 @@ function selectFrame(timeline, frameIndex) {{
 \t}}
 }}
 
-function stageSymbol(doc, symbolName, frame) {{
+function stageSymbol(doc, symbolName, frame, tx, ty) {{
+\ttx = tx == null ? 0 : tx;
+\tty = ty == null ? 0 : ty;
 \tdoc.library.addItemToDocument({{ x: 0, y: 0 }}, symbolName);
 \tvar instance = doc.selection && doc.selection.length > 0 ? doc.selection[0] : null;
 \tif (!instance) {{
@@ -354,7 +360,7 @@ function stageSymbol(doc, symbolName, frame) {{
 \t// center. Resetting the instance matrix preserves the symbol registration
 \t// point, which is what timeline matrices in the XFL reference.
 \ttry {{
-\t\tinstance.matrix = {{ a: 1, b: 0, c: 0, d: 1, tx: 0, ty: 0 }};
+\t\tinstance.matrix = {{ a: 1, b: 0, c: 0, d: 1, tx: tx, ty: ty }};
 \t}} catch (e) {{
 \t}}
 \ttry {{
@@ -381,19 +387,56 @@ function hideSvgGroup(svg, id) {{
 \treturn svg.split(needle).join("<g display=\\"none\\" id=\\"" + id + "\\"");
 }}
 
-function postProcessExport(job) {{
-\tif (job.category != "login" || job.slug != "login_page_no_logo") {{
-\t\treturn;
+function removeSvgUse(svg, id) {{
+\treturn svg.split('<use xlink:href="#' + id + '"/>').join("");
+}}
+
+function removeSvgUses(svg, ids) {{
+\tfor (var i = 0; i < ids.length; i++) {{
+\t\tsvg = removeSvgUse(svg, ids[i]);
 \t}}
+\treturn svg;
+}}
+
+function removeSvgDefinition(svg, id) {{
+\tvar start = svg.indexOf('<path id="' + id + '"');
+\tif (start < 0) {{
+\t\treturn svg;
+\t}}
+\tvar end = svg.indexOf('/>', start);
+\tif (end < 0) {{
+\t\treturn svg;
+\t}}
+\treturn svg.substring(0, start) + svg.substring(end + 2);
+}}
+
+function postProcessExport(job) {{
 \tvar svg = FLfile.read(job.outputUri);
 \tif (!svg) {{
-\t\treturn;
+\t\tthrow new Error("Could not read exported SVG: " + job.outputUri);
 \t}}
-\tsvg = hideSvgGroup(svg, "kongLogo");
-\tsvg = hideSvgGroup(svg, "armorGamesLogo");
-\tsvg = hideSvgGroup(svg, "bubbleBoxLogo");
-\tsvg = hideSvgGroup(svg, "loggedInAs");
-\tsvg = hideSvgGroup(svg, "bg");
+\t// Animate serializes Flash hairlines (weight 0.05, solidStyle hairline)
+\t// as ordinary 0.05-unit SVG strokes. OpenFL uses width 0 for a true
+\t// one-device-pixel hairline, matching Flash at every display scale.
+\tsvg = svg.split('stroke-width=\"0.05\"').join('stroke-width=\"0\"');
+\tif (job.category == "login" && job.slug == "login_page_no_logo") {{
+\t\tsvg = hideSvgGroup(svg, "kongLogo");
+\t\tsvg = hideSvgGroup(svg, "armorGamesLogo");
+\t\tsvg = hideSvgGroup(svg, "bubbleBoxLogo");
+\t\tsvg = hideSvgGroup(svg, "loggedInAs");
+\t\tsvg = hideSvgGroup(svg, "bg");
+\t}}
+\tvar waveIds = [
+\t\t"MovieClips_Symbol_109_0_Layer0_0_1_STROKES",
+\t\t"MovieClips_Symbol_109_0_Layer0_0_2_STROKES",
+\t\t"MovieClips_Symbol_109_0_Layer0_0_3_STROKES"
+\t];
+\tif (job.muteLayer == "base") {{
+\t\tsvg = removeSvgUses(svg, waveIds);
+\t\tfor (var i = 0; i < waveIds.length; i++) {{
+\t\t\tsvg = removeSvgDefinition(svg, waveIds[i]);
+\t\t}}
+\t}}
 \tFLfile.write(job.outputUri, svg);
 }}
 
@@ -404,7 +447,7 @@ function exportJob(doc, job) {{
 \t\tdoc.deleteSelection();
 \t}} catch (e) {{
 \t}}
-\tstageSymbol(doc, job.symbolName, job.frame);
+\tstageSymbol(doc, job.symbolName, job.frame, job.tx, job.ty);
 \texportCurrentView(job.outputUri);
 \tpostProcessExport(job);
 \ttry {{

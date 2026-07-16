@@ -13,7 +13,7 @@ M 11 4.1
 L 11 4.05 6.7 4.4 6.55 4.4 6.55 4.35 5.45 0 4.4 4.35 0 4.1 0 4.15 3.55 6.45 1.95 10.65 5.4 7.8 5.45 7.85 8.9 10.7 7.2 6.55 11 4.1 Z"/>
 </g>
 
-<path id="Layer0_0_1_STROKES" stroke="url(#Gradient_1)" stroke-width="0.05" stroke-linejoin="round" stroke-linecap="round" fill="none" d="
+<path id="Layer0_0_1_STROKES" stroke="url(#Gradient_1)" stroke-width="0" stroke-linejoin="round" stroke-linecap="round" fill="none" d="
 M 11 4.05
 L 6.7 4.4 6.55 4.4 6.55 4.35 5.45 0 4.4 4.35 0 4.1 0 4.15 3.55 6.45 1.95 10.65 5.4 7.8 5.45 7.85 8.9 10.7 7.2 6.55 11 4.1 11 4.05 Z"/>
 </defs>

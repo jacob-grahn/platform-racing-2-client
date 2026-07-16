@@ -26,7 +26,7 @@ L 103 3
 Q 103 -2 98 -2 Z"/>
 </g>
 
-<path id="Layer0_0_1_STROKES" stroke="url(#Gradient_2)" stroke-width="0.05" stroke-linejoin="round" stroke-linecap="round" fill="none" d="
+<path id="Layer0_0_1_STROKES" stroke="url(#Gradient_2)" stroke-width="0" stroke-linejoin="round" stroke-linecap="round" fill="none" d="
 M 3 -2
 L 98 -2
 Q 103 -2 103 3

@@ -33,11 +33,14 @@ def main():
     total_bytes = 0
     empty = []
     invalid = []
+    legacy_hairlines = []
     for relative in sorted(actual):
         path = SVG_ROOT / relative
         if not path.exists():
             path = UNSUPPORTED_ROOT / relative
         total_bytes += path.stat().st_size
+        if 'stroke-width="0.05"' in path.read_text(encoding="utf-8"):
+            legacy_hairlines.append(relative)
         try:
             root = ET.parse(path).getroot()
         except ET.ParseError as error:
@@ -52,6 +55,8 @@ def main():
         errors.append(f"invalid XML={len(invalid)}")
     if empty:
         errors.append(f"empty exports={len(empty)}")
+    if legacy_hairlines:
+        errors.append(f"unnormalized hairlines={len(legacy_hairlines)}")
     report = {
         "schema": "pr2-timeline-svg-report-v1",
         "expectedExports": len(expected),
@@ -65,6 +70,7 @@ def main():
         "extra": sorted(actual - expected),
         "invalid": invalid,
         "empty": empty,
+        "unnormalizedHairlines": legacy_hairlines,
     }
     REPORT.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(json.dumps(report, indent=2, sort_keys=True))

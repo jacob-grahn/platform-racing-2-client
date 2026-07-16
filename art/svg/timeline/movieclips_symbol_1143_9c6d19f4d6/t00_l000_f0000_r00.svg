@@ -22,7 +22,7 @@ L 95 100
 Q 100 100 100 95 Z"/>
 </g>
 
-<path id="Layer0_0_1_STROKES" stroke="url(#Gradient_2)" stroke-width="0.05" stroke-linejoin="round" stroke-linecap="round" fill="none" d="
+<path id="Layer0_0_1_STROKES" stroke="url(#Gradient_2)" stroke-width="0" stroke-linejoin="round" stroke-linecap="round" fill="none" d="
 M 100 0
 L 0 0 0 95
 Q 0 100 5 100

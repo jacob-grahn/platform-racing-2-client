@@ -54,7 +54,7 @@ M 25.25 -8.9
 L 13.65 -29.85 -22.95 -29.85 1.45 -6.6 -16.6 10.85 6.1 33.5 -0.3 10.85 25.25 -8.9 Z"/>
 </g>
 
-<path id="UI_Popups__outside_levels__BG_0_Layer0_0_1_STROKES" stroke="url(#Gradient_2)" stroke-width="0.05" stroke-linejoin="round" stroke-linecap="round" fill="none" d="
+<path id="UI_Popups__outside_levels__BG_0_Layer0_0_1_STROKES" stroke="url(#Gradient_2)" stroke-width="0" stroke-linejoin="round" stroke-linecap="round" fill="none" d="
 M 0.005554962158203114 95.05616683959961
 L 0.005554962158203114 4.93258972167969
 Q 0.005554962158203114 -0.005688476562497158 4.9438331604003904 -0.005688476562497158

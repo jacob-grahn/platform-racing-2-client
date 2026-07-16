@@ -14,7 +14,7 @@ Q 346.05 -125.2 326.05 -125.2
 L 141.05 -125.2 Z"/>
 </g>
 
-<path id="Layer0_0_1_STROKES" stroke="#CCCCCC" stroke-width="0.05" stroke-linejoin="round" stroke-linecap="round" fill="none" d="
+<path id="Layer0_0_1_STROKES" stroke="#CCCCCC" stroke-width="0" stroke-linejoin="round" stroke-linecap="round" fill="none" d="
 M 141.05 -125.2
 L 326.05 -125.2
 Q 346.05 -125.2 346.05 -105.2

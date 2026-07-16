@@ -578,49 +578,78 @@ var JOBS = [
     "category": "login",
     "exportPath": "login/login_page_no_logo.svg",
     "frame": 25,
+    "muteLayer": null,
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/art/svg/login/login_page_no_logo.svg",
     "slug": "login_page_no_logo",
-    "symbolName": "UI/Pages/Login/LoginPage"
+    "symbolName": "UI/Pages/Login/LoginPage",
+    "tx": 0,
+    "ty": 0
   },
   {
     "category": "login",
-    "exportPath": "login/mute_button.svg",
+    "exportPath": "login/mute_button_base.svg",
     "frame": 0,
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/art/svg/login/mute_button.svg",
-    "slug": "mute_button",
-    "symbolName": "UI/Global/MuteButton"
+    "muteLayer": "base",
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/art/svg/login/mute_button_base.svg",
+    "slug": "mute_button_base",
+    "symbolName": "UI/Global/MuteButton",
+    "tx": 0,
+    "ty": 0
+  },
+  {
+    "category": "login",
+    "exportPath": "login/mute_button_waves.svg",
+    "frame": 0,
+    "muteLayer": null,
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/art/svg/login/mute_button_waves.svg",
+    "slug": "mute_button_waves",
+    "symbolName": "MovieClips/Symbol 109",
+    "tx": 15.1,
+    "ty": -9.95
   },
   {
     "category": "login",
     "exportPath": "login/bg_sky.svg",
     "frame": 0,
+    "muteLayer": null,
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/art/svg/login/bg_sky.svg",
     "slug": "bg_sky",
-    "symbolName": "MovieClips/Symbol 364"
+    "symbolName": "MovieClips/Symbol 364",
+    "tx": 0,
+    "ty": 0
   },
   {
     "category": "login",
     "exportPath": "login/bg_far.svg",
     "frame": 0,
+    "muteLayer": null,
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/art/svg/login/bg_far.svg",
     "slug": "bg_far",
-    "symbolName": "MovieClips/Symbol 366"
+    "symbolName": "MovieClips/Symbol 366",
+    "tx": 0,
+    "ty": 0
   },
   {
     "category": "login",
     "exportPath": "login/bg_mid.svg",
     "frame": 0,
+    "muteLayer": null,
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/art/svg/login/bg_mid.svg",
     "slug": "bg_mid",
-    "symbolName": "MovieClips/Symbol 369"
+    "symbolName": "MovieClips/Symbol 369",
+    "tx": 0,
+    "ty": 0
   },
   {
     "category": "login",
     "exportPath": "login/bg_front.svg",
     "frame": 0,
+    "muteLayer": null,
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/art/svg/login/bg_front.svg",
     "slug": "bg_front",
-    "symbolName": "MovieClips/Symbol 374"
+    "symbolName": "MovieClips/Symbol 374",
+    "tx": 0,
+    "ty": 0
   }
 ];
 
@@ -657,7 +686,9 @@ function selectFrame(timeline, frameIndex) {
 	}
 }
 
-function stageSymbol(doc, symbolName, frame) {
+function stageSymbol(doc, symbolName, frame, tx, ty) {
+	tx = tx == null ? 0 : tx;
+	ty = ty == null ? 0 : ty;
 	doc.library.addItemToDocument({ x: 0, y: 0 }, symbolName);
 	var instance = doc.selection && doc.selection.length > 0 ? doc.selection[0] : null;
 	if (!instance) {
@@ -667,7 +698,7 @@ function stageSymbol(doc, symbolName, frame) {
 	// center. Resetting the instance matrix preserves the symbol registration
 	// point, which is what timeline matrices in the XFL reference.
 	try {
-		instance.matrix = { a: 1, b: 0, c: 0, d: 1, tx: 0, ty: 0 };
+		instance.matrix = { a: 1, b: 0, c: 0, d: 1, tx: tx, ty: ty };
 	} catch (e) {
 	}
 	try {
@@ -694,19 +725,56 @@ function hideSvgGroup(svg, id) {
 	return svg.split(needle).join("<g display=\"none\" id=\"" + id + "\"");
 }
 
-function postProcessExport(job) {
-	if (job.category != "login" || job.slug != "login_page_no_logo") {
-		return;
+function removeSvgUse(svg, id) {
+	return svg.split('<use xlink:href="#' + id + '"/>').join("");
+}
+
+function removeSvgUses(svg, ids) {
+	for (var i = 0; i < ids.length; i++) {
+		svg = removeSvgUse(svg, ids[i]);
 	}
+	return svg;
+}
+
+function removeSvgDefinition(svg, id) {
+	var start = svg.indexOf('<path id="' + id + '"');
+	if (start < 0) {
+		return svg;
+	}
+	var end = svg.indexOf('/>', start);
+	if (end < 0) {
+		return svg;
+	}
+	return svg.substring(0, start) + svg.substring(end + 2);
+}
+
+function postProcessExport(job) {
 	var svg = FLfile.read(job.outputUri);
 	if (!svg) {
-		return;
+		throw new Error("Could not read exported SVG: " + job.outputUri);
 	}
-	svg = hideSvgGroup(svg, "kongLogo");
-	svg = hideSvgGroup(svg, "armorGamesLogo");
-	svg = hideSvgGroup(svg, "bubbleBoxLogo");
-	svg = hideSvgGroup(svg, "loggedInAs");
-	svg = hideSvgGroup(svg, "bg");
+	// Animate serializes Flash hairlines (weight 0.05, solidStyle hairline)
+	// as ordinary 0.05-unit SVG strokes. OpenFL uses width 0 for a true
+	// one-device-pixel hairline, matching Flash at every display scale.
+	svg = svg.split('stroke-width="0.05"').join('stroke-width="0"');
+	if (job.category == "login" && job.slug == "login_page_no_logo") {
+		svg = hideSvgGroup(svg, "kongLogo");
+		svg = hideSvgGroup(svg, "armorGamesLogo");
+		svg = hideSvgGroup(svg, "bubbleBoxLogo");
+		svg = hideSvgGroup(svg, "loggedInAs");
+		svg = hideSvgGroup(svg, "bg");
+	}
+	var waveIds = [
+		"MovieClips_Symbol_109_0_Layer0_0_1_STROKES",
+		"MovieClips_Symbol_109_0_Layer0_0_2_STROKES",
+		"MovieClips_Symbol_109_0_Layer0_0_3_STROKES"
+	];
+	if (job.muteLayer == "base") {
+		svg = removeSvgUses(svg, waveIds);
+		for (var i = 0; i < waveIds.length; i++) {
+			svg = removeSvgDefinition(svg, waveIds[i]);
+		}
+	}
 	FLfile.write(job.outputUri, svg);
 }
 
@@ -717,7 +785,7 @@ function exportJob(doc, job) {
 		doc.deleteSelection();
 	} catch (e) {
 	}
-	stageSymbol(doc, job.symbolName, job.frame);
+	stageSymbol(doc, job.symbolName, job.frame, job.tx, job.ty);
 	exportCurrentView(job.outputUri);
 	postProcessExport(job);
 	try {

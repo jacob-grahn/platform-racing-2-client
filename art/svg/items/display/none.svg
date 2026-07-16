@@ -36,7 +36,7 @@ M 35.35 -35.35
 Q 20.7 -50 0 -50 -20.65 -50 -35.3 -35.35 -50 -20.7 -50 0 -50 20.7 -35.3 35.35 -20.65 50 0 50 20.7 50 35.35 35.35 50 20.7 50 0 50 -20.7 35.35 -35.35 Z"/>
 </g>
 
-<path id="UI_Popups__outside_levels__BG_0_Layer0_0_1_STROKES" stroke="url(#Gradient_2)" stroke-width="0.05" stroke-linejoin="round" stroke-linecap="round" fill="none" d="
+<path id="UI_Popups__outside_levels__BG_0_Layer0_0_1_STROKES" stroke="url(#Gradient_2)" stroke-width="0" stroke-linejoin="round" stroke-linecap="round" fill="none" d="
 M 0.005554962158203114 95.05616683959961
 L 0.005554962158203114 4.93258972167969
 Q 0.005554962158203114 -0.005688476562497158 4.9438331604003904 -0.005688476562497158

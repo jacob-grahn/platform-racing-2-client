@@ -14,7 +14,7 @@ L 335 10
 Q 335 -10 315 -10 Z"/>
 </g>
 
-<path id="Layer0_0_1_STROKES" stroke="#CCCCCC" stroke-width="0.05" stroke-linejoin="round" stroke-linecap="round" fill="none" d="
+<path id="Layer0_0_1_STROKES" stroke="#CCCCCC" stroke-width="0" stroke-linejoin="round" stroke-linecap="round" fill="none" d="
 M 24.798730468749994 0
 L 254.196923828125 0
 Q 278.996728515625 0 278.996728515625 20

@@ -11,7 +11,7 @@ Q 0.3 0 0.05 4.45
 L 0 5 0 15 0 16.25 50 16.25 Z"/>
 </g>
 
-<path id="Layer0_0_1_STROKES" stroke="#4D4D4D" stroke-width="0.05" stroke-linejoin="round" stroke-linecap="round" fill="none" d="
+<path id="Layer0_0_1_STROKES" stroke="#4D4D4D" stroke-width="0" stroke-linejoin="round" stroke-linecap="round" fill="none" d="
 M 50 15
 L 50 4.45
 Q 49.7 0 45 0

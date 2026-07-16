@@ -23,7 +23,7 @@ M 12 -6
 L 6.6 -3 6.6 3 12 6 12 -6 Z"/>
 </g>
 
-<path id="Layer0_0_1_STROKES" stroke="#333333" stroke-width="0.05" stroke-linejoin="round" stroke-linecap="round" fill="none" d="
+<path id="Layer0_0_1_STROKES" stroke="#333333" stroke-width="0" stroke-linejoin="round" stroke-linecap="round" fill="none" d="
 M 6.6 -3
 L 12 -6 12 6 6.6 3 0 3 0 -3 6.6 -3 6.6 3"/>
 </defs>

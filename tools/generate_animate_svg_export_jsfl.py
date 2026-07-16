@@ -186,6 +186,19 @@ function exportCurrentView(outputUri) {{
 \t// Signature used by Animate's own Export SVG panel:
 \t// exportSVG(basePath, filePath, embed, folder, hiddenLayers, optimizeForCH, startFrame, endFrame)
 \tfl.runScript(ADOBE_SVG_EXPORTER_URI, "exportSVG", "", outputUri, true, "", false, false, 0, 0);
+\tnormalizeHairlineStrokes(outputUri);
+}}
+
+function normalizeHairlineStrokes(outputUri) {{
+\tvar svg = FLfile.read(outputUri);
+\tif (!svg) {{
+\t\tthrow new Error("Could not read exported SVG: " + outputUri);
+\t}}
+\t// Animate serializes Flash hairlines (weight 0.05, solidStyle hairline)
+\t// as ordinary 0.05-unit SVG strokes. OpenFL uses width 0 for a true
+\t// one-device-pixel hairline, matching Flash at every display scale.
+\tsvg = svg.split('stroke-width=\"0.05\"').join('stroke-width=\"0\"');
+\tFLfile.write(outputUri, svg);
 }}
 
 function registrationMatrix(doc, containerSymbol) {{

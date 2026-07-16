@@ -13,24 +13,24 @@ import pr2.runtime.SvgAsset;
 	game this lives at the document root (`Main`) and stays on screen across
 	every page, so it is owned by `Main` here rather than any single page.
 
-	The artwork is the `UI/Global/MuteButton` symbol baked through the vector
-	pipeline; the sprite's local origin matches the symbol registration point,
-	so positioning the sprite at the Flash coordinates places it identically.
+	The vector pipeline exports the base and the nested `waves` instance as
+	separate, registration-aligned SVGs. This preserves the original authored
+	hairlines while allowing the port to toggle the same logical child.
 **/
 class MuteButton extends Sprite {
-	private static inline var MUTE_BUTTON_ASSET = "assets/svg/login/mute_button.svg";
+	private static inline var MUTE_BUTTON_BASE_ASSET = "assets/svg/login/mute_button_base.svg";
+	private static inline var MUTE_BUTTON_WAVES_ASSET = "assets/svg/login/mute_button_waves.svg";
 	public static var muted(default, null):Bool = false;
 
-	private var artwork:Shape;
-	private var waves:Shape;
+	private var artworkBase:Shape;
+	private var artworkWaves:Shape;
 
 	public function new() {
 		super();
-		artwork = SvgAsset.create(MUTE_BUTTON_ASSET);
-		addChild(artwork);
-
-		waves = createWaves();
-		addChild(waves);
+		artworkBase = SvgAsset.create(MUTE_BUTTON_BASE_ASSET);
+		artworkWaves = SvgAsset.create(MUTE_BUTTON_WAVES_ASSET);
+		addChild(artworkBase);
+		addChild(artworkWaves);
 
 		buttonMode = true;
 		useHandCursor = true;
@@ -61,7 +61,7 @@ class MuteButton extends Sprite {
 	}
 
 	private function applyMutedState():Void {
-		waves.visible = !muted;
+		artworkWaves.visible = !muted;
 		SoundMixer.soundTransform = new SoundTransform(muted ? 0 : 1);
 	}
 
@@ -72,31 +72,4 @@ class MuteButton extends Sprite {
 		applyMutedState();
 	}
 
-	private function createWaves():Shape {
-		var shape = new Shape();
-		var graphics = shape.graphics;
-
-		graphics.lineStyle(1, 0x333333, 1);
-		graphics.moveTo(15.1, -6.15);
-		graphics.curveTo(17.6, -3.6, 17.8, -0.6);
-		graphics.lineTo(17.8, -0.05);
-		graphics.curveTo(17.8, 3.4, 15.15, 6.25);
-
-		graphics.lineStyle(1, 0x333333, 0.66);
-		graphics.moveTo(21.15, -8.05);
-		graphics.curveTo(22.3, -6.9, 23.05, -5.55);
-		graphics.lineTo(23.6, -4.55);
-		graphics.curveTo(24.6, -2.45, 24.6, -0.05);
-		graphics.curveTo(24.6, 1.9, 24, 3.65);
-		graphics.curveTo(23.1, 6, 21.15, 8.15);
-
-		graphics.lineStyle(1, 0x333333, 0.33);
-		graphics.moveTo(27.1, -9.95);
-		graphics.lineTo(28.7, -8.15);
-		graphics.curveTo(31.5, -4.4, 31.5, -0.1);
-		graphics.curveTo(31.5, 3.85, 29.35, 7.3);
-		graphics.lineTo(27.1, 10.05);
-
-		return shape;
-	}
 }

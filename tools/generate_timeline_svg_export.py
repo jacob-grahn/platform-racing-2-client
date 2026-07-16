@@ -353,6 +353,15 @@ function restoreLayerState(doc, job, state) {{
     }}
     fl.getDocumentDOM().exitEditMode();
 }}
+function normalizeHairlineStrokes(outputUri) {{
+    var svg = FLfile.read(outputUri);
+    if (!svg) throw new Error("Could not read exported SVG: " + outputUri);
+    // Animate serializes Flash hairlines (weight 0.05, solidStyle hairline)
+    // as ordinary 0.05-unit SVG strokes. OpenFL uses width 0 for a true
+    // one-device-pixel hairline, matching Flash at every display scale.
+    svg = svg.split('stroke-width=\"0.05\"').join('stroke-width=\"0\"');
+    FLfile.write(outputUri, svg);
+}}
 function exportJob(doc, job, index) {{
     fl.setActiveWindow(doc);
     if (!doc.library.editItem(job.editSymbolName)) throw new Error("Could not edit " + job.editSymbolName);
@@ -373,6 +382,7 @@ function exportJob(doc, job, index) {{
         mkdirs(dirname(job.outputUri));
         log((index + 1) + "/" + JOBS.length + " " + job.exportPath);
         fl.runScript(ADOBE_SVG_EXPORTER_URI, "exportSVG", "", job.outputUri, true, "", false, false, 0, 0);
+        normalizeHairlineStrokes(job.outputUri);
     }} finally {{
         try {{ if (exportDoc) exportDoc.close(false); }} catch (e) {{}}
         fl.setActiveWindow(doc);

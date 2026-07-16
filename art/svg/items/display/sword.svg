@@ -151,7 +151,7 @@ M -15.4 144.65
 Q -10.6 144.7 -7.3 141.35 -3.95 138.05 -4 133.25 -4 128.5 -7.3 125.2 -10.6 121.9 -15.4 121.85 -20.15 121.85 -23.5 125.15 -26.8 128.5 -26.8 133.25 -26.75 138.05 -23.45 141.35 -20.15 144.65 -15.4 144.65 Z"/>
 </g>
 
-<path id="UI_Popups__outside_levels__BG_0_Layer0_0_1_STROKES" stroke="url(#Gradient_2)" stroke-width="0.05" stroke-linejoin="round" stroke-linecap="round" fill="none" d="
+<path id="UI_Popups__outside_levels__BG_0_Layer0_0_1_STROKES" stroke="url(#Gradient_2)" stroke-width="0" stroke-linejoin="round" stroke-linecap="round" fill="none" d="
 M 0.005554962158203114 95.05616683959961
 L 0.005554962158203114 4.93258972167969
 Q 0.005554962158203114 -0.005688476562497158 4.9438331604003904 -0.005688476562497158
