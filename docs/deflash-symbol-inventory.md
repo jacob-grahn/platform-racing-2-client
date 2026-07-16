@@ -19,8 +19,8 @@ and screenshot/parity tests.
 
 ## Summary
 
-- 161 unique production root linkages
-- 182 audited root usages
+- 160 unique production root linkages
+- 181 audited root usages
 - 378 handwritten source files scanned
 - Excluded developer routes: `SymbolPreview` and files under `pr2.harness`
 - Excluded transitive construction: files under `pr2.runtime`
@@ -28,7 +28,7 @@ and screenshot/parity tests.
 
 | Replacement shape | Unique roots |
 | --- | ---: |
-| UI composition | 97 |
+| UI composition | 96 |
 | character rig | 1 |
 | simple frame animation | 9 |
 | state art | 25 |
@@ -62,7 +62,6 @@ and screenshot/parity tests.
 | `ItemDisplayGraphic` | UI composition | `haxe/src/pr2/gameplay/ItemDisplay.hx:34` |
 | `LaserShotGraphic` | simple frame animation | `haxe/src/pr2/gameplay/EggRound.hx:454`; dynamic |
 | `LuxPopupGraphic` | UI composition | `haxe/src/pr2/gameplay/LuxPopup.hx:24` |
-| `MiniMapGraphic` | UI composition | `haxe/src/pr2/gameplay/MiniMap.hx:44` |
 | `MusicSelectionGraphic` | UI composition | `haxe/src/pr2/gameplay/MusicSelection.hx:25` |
 | `PlaceArtifactGraphic` | UI composition | `haxe/src/pr2/gameplay/PlaceArtifact.hx:52` |
 | `PrizePopupGraphic` | UI composition | `haxe/src/pr2/gameplay/PrizePopup.hx:48` |

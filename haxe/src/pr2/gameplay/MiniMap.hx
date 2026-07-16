@@ -6,9 +6,10 @@ import openfl.display.DisplayObject;
 import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.geom.Rectangle;
+import pr2.assets.NativeAssetIds.StaticSvg;
+import pr2.assets.NativeAssets;
 import pr2.display.Removable;
 import pr2.level.ObjectCodes;
-import pr2.runtime.PR2MovieClip;
 
 /**
 	Port of `gameplay/MiniMap.as`.
@@ -35,14 +36,15 @@ class MiniMap extends Removable {
 	private var blockSprite:Sprite = new Sprite();
 	private var finishSprite:Sprite = new Sprite();
 	private var playerDots:Sprite = new Sprite();
-	private var m:PR2MovieClip;
 	private var scale:Float = 1;
 	private var blockCount:Int = 0;
 
 	public function new() {
 		super();
-		m = PR2MovieClip.fromLinkage("MiniMapGraphic");
-		addChild(m);
+		var background = NativeAssets.svg(StaticSvg.TimerPanel);
+		background.scaleX = 4.07011413574219;
+		background.scaleY = 0.5;
+		addChild(background);
 		blockSprite.graphics.beginFill(0);
 	}
 
@@ -188,15 +190,11 @@ class MiniMap extends Removable {
 				playerDots.removeChildAt(0);
 			}
 		}
-		if (m != null && m.parent == this) {
-			removeChild(m);
-		}
 		bitmap = null;
 		holder = null;
 		blockSprite = null;
 		finishSprite = null;
 		playerDots = null;
-		m = null;
 		super.remove();
 	}
 

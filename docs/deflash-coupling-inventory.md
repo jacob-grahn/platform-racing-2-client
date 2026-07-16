@@ -17,15 +17,15 @@ migration should make them decrease without changing observable behavior or visu
 
 ## Summary
 
-- 796 coupling occurrences
-- 131 files with coupling
-- 128 migration-adapter files in the dependency allowlist
+- 795 coupling occurrences
+- 130 files with coupling
+- 127 migration-adapter files in the dependency allowlist
 
 | Coupling kind | Occurrences |
 | --- | ---: |
 | Fl control dependency | 49 |
 | Fl control usage | 147 |
-| PR2MovieClip dependency | 122 |
+| PR2MovieClip dependency | 121 |
 | frame-label navigation | 18 |
 | generated timeline dependency | 2 |
 | numeric/dynamic frame navigation | 35 |
@@ -37,7 +37,7 @@ migration should make them decrease without changing observable behavior or visu
 | --- | ---: |
 | Audio | 2 |
 | Character | 21 |
-| Gameplay UI and visuals | 113 |
+| Gameplay UI and visuals | 112 |
 | Gameplay effects | 8 |
 | Intro page | 4 |
 | Level editor | 196 |
@@ -138,7 +138,6 @@ migration should make them decrease without changing observable behavior or visu
 | PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/gameplay/LuxPopup.hx:10` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/LuxPopup.hx:38` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/LuxPopup.hx:42` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/gameplay/MiniMap.hx:11` |
 | Fl control dependency | `pr2.runtime.FlComboBox` | `haxe/src/pr2/gameplay/MusicSelection.hx:9` |
 | PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/gameplay/MusicSelection.hx:10` |
 | Fl control usage | `FlComboBox` | `haxe/src/pr2/gameplay/MusicSelection.hx:21` |
