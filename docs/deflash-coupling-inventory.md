@@ -17,15 +17,15 @@ migration should make them decrease without changing observable behavior or visu
 
 ## Summary
 
-- 795 coupling occurrences
-- 130 files with coupling
-- 127 migration-adapter files in the dependency allowlist
+- 794 coupling occurrences
+- 129 files with coupling
+- 126 migration-adapter files in the dependency allowlist
 
 | Coupling kind | Occurrences |
 | --- | ---: |
 | Fl control dependency | 49 |
 | Fl control usage | 147 |
-| PR2MovieClip dependency | 121 |
+| PR2MovieClip dependency | 120 |
 | frame-label navigation | 18 |
 | generated timeline dependency | 2 |
 | numeric/dynamic frame navigation | 35 |
@@ -44,7 +44,7 @@ migration should make them decrease without changing observable behavior or visu
 | Level objects | 2 |
 | Level rendering | 5 |
 | Lobby account and customization | 79 |
-| Lobby dialogs | 213 |
+| Lobby dialogs | 212 |
 | Lobby level browser | 25 |
 | Lobby messages | 1 |
 | Lobby players | 13 |
@@ -615,7 +615,6 @@ migration should make them decrease without changing observable behavior or visu
 | Fl control usage | `FlCheckBox` | `haxe/src/pr2/lobby/dialogs/HatsMenu.hx:16` |
 | Fl control usage | `FlCheckBox` | `haxe/src/pr2/lobby/dialogs/HatsMenu.hx:24` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/HatsMenu.hx:24` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/dialogs/HoverPopup.hx:9` |
 | Fl control dependency | `pr2.runtime.FlCheckBox` | `haxe/src/pr2/lobby/dialogs/ItemMenu.hx:5` |
 | PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/dialogs/ItemMenu.hx:6` |
 | Fl control usage | `FlCheckBox` | `haxe/src/pr2/lobby/dialogs/ItemMenu.hx:12` |

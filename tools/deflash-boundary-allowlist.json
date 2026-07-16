@@ -301,9 +301,6 @@
       "pr2.runtime.FlCheckBox",
       "pr2.runtime.PR2MovieClip"
     ],
-    "haxe/src/pr2/lobby/dialogs/HoverPopup.hx": [
-      "pr2.runtime.PR2MovieClip"
-    ],
     "haxe/src/pr2/lobby/dialogs/ItemMenu.hx": [
       "pr2.runtime.FlCheckBox",
       "pr2.runtime.PR2MovieClip"

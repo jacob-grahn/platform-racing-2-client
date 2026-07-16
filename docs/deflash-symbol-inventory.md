@@ -19,8 +19,8 @@ and screenshot/parity tests.
 
 ## Summary
 
-- 160 unique production root linkages
-- 181 audited root usages
+- 159 unique production root linkages
+- 180 audited root usages
 - 378 handwritten source files scanned
 - Excluded developer routes: `SymbolPreview` and files under `pr2.harness`
 - Excluded transitive construction: files under `pr2.runtime`
@@ -32,7 +32,7 @@ and screenshot/parity tests.
 | character rig | 1 |
 | simple frame animation | 9 |
 | state art | 25 |
-| static art | 25 |
+| static art | 24 |
 | tweened animation | 4 |
 
 ## Roots By Feature Owner
@@ -216,7 +216,6 @@ and screenshot/parity tests.
 | `ReportMessageButtonGraphic` | state art | `haxe/src/pr2/lobby/dialogs/MessagesItem.hx:287`; dynamic |
 | `SendMessagePopupGraphic` | UI composition | `haxe/src/pr2/lobby/dialogs/SendMessagePopup.hx:35` |
 | `SetEmailPopupGraphic` | UI composition | `haxe/src/pr2/lobby/dialogs/FormPopup.hx:23`; dynamic |
-| `ShadowBG` | static art | `haxe/src/pr2/lobby/dialogs/HoverPopup.hx:31` |
 | `TempModMenuGraphic` | UI composition | `haxe/src/pr2/lobby/dialogs/TempModMenu.hx:24` |
 | `TransferGuildPopupGraphic` | UI composition | `haxe/src/pr2/lobby/dialogs/FormPopup.hx:23`; dynamic |
 | `UploadingPopupGraphic` | UI composition | `haxe/src/pr2/lobby/dialogs/UploadingPopup.hx:44` |

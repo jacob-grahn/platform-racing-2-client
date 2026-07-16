@@ -1,12 +1,14 @@
 package pr2.lobby.dialogs;
 
 import openfl.display.DisplayObject;
+import openfl.display.Shape;
 import openfl.text.AntiAliasType;
 import openfl.text.TextField;
 import openfl.text.TextFieldAutoSize;
 import openfl.text.TextFormat;
+import pr2.assets.NativeAssetIds.StaticSvg;
+import pr2.assets.NativeAssets;
 import pr2.runtime.FontResolver;
-import pr2.runtime.PR2MovieClip;
 
 /**
 	Port of Flash `dialogs.HoverPopup`: a tooltip with a bold title over wrapped
@@ -14,7 +16,7 @@ import pr2.runtime.PR2MovieClip;
 	An empty title and content produce nothing (matching Flash).
 **/
 class HoverPopup extends InfoPopup {
-	private var bg:Null<PR2MovieClip>;
+	private var bg:Null<Shape>;
 
 	public function new(title:String, content:String, target:DisplayObject) {
 		super();
@@ -28,7 +30,7 @@ class HoverPopup extends InfoPopup {
 		contentBox.htmlText = content;
 		contentBox.y = titleBox.height + titleBox.y + 5;
 
-		bg = PR2MovieClip.fromLinkage("ShadowBG", {maxNestedDepth: 2});
+		bg = NativeAssets.svg(StaticSvg.QuantityPanel);
 		bg.width = width + 10;
 		bg.height = height + 12;
 		addChildAt(bg, 0);
@@ -54,7 +56,7 @@ class HoverPopup extends InfoPopup {
 
 	override public function remove():Void {
 		if (bg != null) {
-			bg.dispose();
+			if (bg.parent == this) removeChild(bg);
 			bg = null;
 		}
 		super.remove();
