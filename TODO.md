@@ -27,19 +27,6 @@ item should replace a production flow behind the existing deterministic and
 screenshot coverage, and the compatibility path should remain available for
 unmigrated symbols until it has no production callers.
 
-##### Inventory And Boundaries
-
-- Inventory handwritten uses of `gotoAndPlay`, `gotoAndStop`, numeric frames,
-  frame labels, `getChildByTimelineName`, `DisplayUtil.findByName`, the `Fl*`
-  controls, and reflective property access. Assign each use to a migration
-  owner so deleting `PR2MovieClip` is measurable rather than an open-ended
-  cleanup task.
-- Add an architectural dependency rule: game/domain code may depend on typed
-  view interfaces, but must not introduce new imports of `PR2MovieClip`, `Fl*`
-  controls, or generated timeline definitions. Allow explicit exceptions for
-  files actively serving as migration adapters, with a test or allowlist that
-  shrinks as those adapters are removed.
-
 ##### Native Presentation Foundation
 
 - Define a small typed asset API for static SVGs, bitmaps, fonts, and sounds.

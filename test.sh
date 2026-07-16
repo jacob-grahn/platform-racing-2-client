@@ -75,6 +75,12 @@ if [[ "$full_suite" == true && -n "$groups" ]]; then
 	exit 1
 fi
 
+# These generated inventories are also architectural boundaries: existing
+# Flash-presentation adapters may shrink, but production code cannot add a new
+# PR2MovieClip/Fl*/generated-timeline dependency unnoticed.
+python3 tools/generate_deflash_symbol_inventory.py --check
+python3 tools/audit_deflash_boundaries.py --check
+
 if [[ -n "$groups" ]]; then
 	full_suite=true
 fi

@@ -108,6 +108,9 @@ PR2_API_HOST=/api haxe test/real-server.hxml
 - `docs/deflash-symbol-inventory.md`: generated inventory of the production
   `PR2MovieClip` root symbols, grouped by feature owner and native replacement
   shape; regenerate it with `tools/generate_deflash_symbol_inventory.py`.
+- `docs/deflash-coupling-inventory.md`: generated deletion ledger of handwritten
+  timeline navigation, name lookup, `Fl*` control, reflection, and legacy
+  dependency sites, grouped by migration owner.
 - `TODO.md`: current porting plan and next steps.
 
 ## Porting Status
@@ -127,6 +130,44 @@ Current foundation:
 - The `?screen=campaign&localLevel=<name>` sandbox can run synthetic levels
   without login/lobby/server flow and exposes deterministic debug state for
   movement checks.
+
+### De-Flash Architecture Goal
+
+The presentation layer will move incrementally from reflective Flash timeline
+access to concrete, typed Haxe views. For example, current code commonly loads
+an authored symbol and discovers its controls by string name:
+
+```haxe
+art = PR2MovieClip.fromLinkage("SomePopupGraphic");
+nameBox = LobbyArt.text(art, "nameBox");
+button = DisplayUtil.findByName(art, "ok_bt");
+```
+
+The target is an ordinary Haxe view whose structure is explicit and checked by
+the compiler:
+
+```haxe
+class ConfirmDialogView extends Sprite {
+	public final message:TextField;
+	public final confirmButton:GameButton;
+	public final cancelButton:GameButton;
+
+	public function new() {
+		super();
+		// Explicit construction and layout.
+	}
+}
+```
+
+This is a code-structure and asset-pipeline migration only. Layout, artwork,
+animation, sound, timing, behavior, and user flows must remain unchanged, with
+the deterministic and screenshot/parity tests acting as regression gates. See
+`TODO.md` for the incremental migration plan and
+`docs/deflash-symbol-inventory.md` for the generated production boundary.
+`tools/deflash-boundary-allowlist.json` records the maximum legacy dependencies
+of the current migration adapters. `./test.sh` checks both generated inventories
+and rejects a new `PR2MovieClip`, `Fl*`, or generated-timeline dependency; the
+allowlist may shrink as views are migrated, but should not grow.
 
 Campaign payload reference:
 
