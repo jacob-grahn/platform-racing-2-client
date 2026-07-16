@@ -8,11 +8,11 @@ import openfl.events.MouseEvent;
 import openfl.geom.Point;
 import openfl.geom.Rectangle;
 import pr2.app.AppStage;
-import pr2.runtime.PR2MovieClip;
-import pr2.util.DisplayUtil;
+import pr2.assets.NativeAssetIds.StaticSvg;
+import pr2.assets.NativeAssets;
 
 class CustomScrollBar extends Sprite {
-	private var art:PR2MovieClip;
+	private var art:Sprite;
 	private var target:Null<DisplayObject>;
 	private var thumb:Null<DisplayObject>;
 	private var upArrow:Null<DisplayObject>;
@@ -32,19 +32,23 @@ class CustomScrollBar extends Sprite {
 
 	public function new() {
 		super();
-		art = PR2MovieClip.fromLinkage("CustomScrollBarGraphic", {maxNestedDepth: 5});
-		// The Flash children are button symbols whose states are mouse-driven.
-		// Leaving their imported timelines playing cycles hit shapes and cursors.
-		art.stopAll();
+		art = new Sprite();
+		track = NativeAssets.svg(StaticSvg.ScrollTrack);
+		track.y = 12.95;
+		thumb = makeVisual(StaticSvg.ScrollThumb);
+		thumb.y = 40;
+		var thumbIcon = NativeAssets.svg(StaticSvg.ScrollThumbIcon);
+		thumbIcon.x = 4;
+		thumbIcon.y = -4;
+		Std.downcast(thumb, Sprite).addChild(thumbIcon);
+		upArrow = makeVisual(StaticSvg.ScrollArrowUp);
+		downArrow = makeVisual(StaticSvg.ScrollArrowDown);
+		downArrow.y = 190;
+		art.addChild(track);
+		art.addChild(thumb);
+		art.addChild(upArrow);
+		art.addChild(downArrow);
 		addChild(art);
-		thumb = DisplayUtil.findByName(art, "thumb");
-		upArrow = DisplayUtil.findByName(art, "upArrow");
-		downArrow = DisplayUtil.findByName(art, "downArrow");
-		track = DisplayUtil.findByName(art, "track");
-		var interactiveTrack = Std.downcast(track, InteractiveObject);
-		if (interactiveTrack != null) {
-			interactiveTrack.mouseEnabled = false;
-		}
 		thumbHitArea = installStableHitArea(thumb, 15, 20);
 		upArrowHitArea = installStableHitArea(upArrow, 15, 14);
 		downArrowHitArea = installStableHitArea(downArrow, 15, 14);
@@ -96,7 +100,7 @@ class CustomScrollBar extends Sprite {
 	}
 
 	public function timelinesPlayingForTests():Bool {
-		return art != null && @:privateAccess art.playing;
+		return false;
 	}
 
 	public function hasStableButtonHitAreasForTests():Bool {
@@ -206,12 +210,16 @@ class CustomScrollBar extends Sprite {
 		thumbHitArea = null;
 		upArrowHitArea = null;
 		downArrowHitArea = null;
-		if (art != null) {
-			art.dispose();
-			art = null;
-		}
+		if (art != null && art.parent != null) art.parent.removeChild(art);
+		art = null;
 		if (parent != null) {
 			parent.removeChild(this);
 		}
+	}
+
+	private static function makeVisual(asset:StaticSvg):Sprite {
+		var visual = new Sprite();
+		visual.addChild(NativeAssets.svg(asset));
+		return visual;
 	}
 }

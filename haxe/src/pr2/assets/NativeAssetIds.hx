@@ -24,6 +24,11 @@ enum abstract StaticSvg(String) to String {
 	var RatingStarHighlight = "assets/svg/timeline/movieclips_symbol_1064_2f2dcafe56/t00_l001_f0005_r00.svg";
 	var RockStamp = "assets/svg/stamps/rock1.svg";
 	var SpeedBurstStar = "assets/svg/timeline/ui_pages_levels_in_game_effects_speedburst_speedburststar_64db9149b6/t00_l000_f0000_r00.svg";
+	var ScrollArrowDown = "assets/svg/timeline/components_component_assets_scrollbarskins_scrollarrowdown_upski_5a4fa47e32/t00_l001_f0000_r00.svg";
+	var ScrollArrowUp = "assets/svg/timeline/components_component_assets_scrollbarskins_scrollarrowup_upskin_03aeb6088e/t00_l001_f0000_r00.svg";
+	var ScrollThumb = "assets/svg/timeline/components_component_assets_scrollbarskins_scrollthumb_upskin_114bd98aac/t00_l000_f0000_r00.svg";
+	var ScrollThumbIcon = "assets/svg/timeline/components_component_assets_scrollbarskins_scrollbar_thumbicon_9dca80a08b/t00_l000_f0000_r00.svg";
+	var ScrollTrack = "assets/svg/timeline/components_component_assets_scrollbarskins_scrolltrack_skin_1c49414a50/t00_l000_f0000_r00.svg";
 	var TimerPanel = "assets/svg/timeline/ui_popups_outside_levels_bg_d14a954e12/t00_l000_f0000_r00.svg";
 	var TreeStamp = "assets/svg/stamps/tree1.svg";
 }
