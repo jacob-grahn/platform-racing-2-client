@@ -18,6 +18,12 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 - Investigate making audio assets non-preloaded. The audio files are needed at
   runtime, but the broad `assets/` include appears to preload about 1.5 MB raw /
   1.28 MB gzipped of sounds up front.
+- Revisit lossless SVG minification if the asset payload grows. A conservative
+  SVGO 4.0.1 trial across all 2,130 files reduced the SVG tree from 5,512,063 to
+  5,061,915 bytes: about 450 KB raw (8.17%), but only 33 KB gzipped (1.76%). The
+  ten largest SVGs produced byte-identical 1100-pixel Inkscape renders. Before
+  adopting the pass, add OpenFL render coverage and fix the XML-invalid `--`
+  inside the comment in `art/svg/login/login_page_no_logo.svg`.
 
 #### HTML5 Multiplayer Transport
 
