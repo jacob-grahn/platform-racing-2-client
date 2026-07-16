@@ -19,8 +19,8 @@ and screenshot/parity tests.
 
 ## Summary
 
-- 151 unique production root linkages
-- 171 audited root usages
+- 150 unique production root linkages
+- 170 audited root usages
 - 379 handwritten source files scanned
 - Excluded developer routes: `SymbolPreview` and files under `pr2.harness`
 - Excluded transitive construction: files under `pr2.runtime`
@@ -31,7 +31,7 @@ and screenshot/parity tests.
 | UI composition | 94 |
 | character rig | 1 |
 | simple frame animation | 9 |
-| state art | 20 |
+| state art | 19 |
 | static art | 23 |
 | tweened animation | 4 |
 
@@ -48,8 +48,7 @@ and screenshot/parity tests.
 
 | Linkage | Replacement shape | Source |
 | --- | --- | --- |
-| `BlueSquareButton` | state art | `haxe/src/pr2/gameplay/CatCaptcha.hx:109` |
-| `CatCaptchaPopupGraphic` | UI composition | `haxe/src/pr2/gameplay/CatCaptcha.hx:35` |
+| `CatCaptchaPopupGraphic` | UI composition | `haxe/src/pr2/gameplay/CatCaptcha.hx:36` |
 | `CountdownGraphic` | simple frame animation | `haxe/src/pr2/gameplay/Countdown.hx:43` |
 | `CowboyMode` | UI composition | `haxe/src/pr2/gameplay/CowboyMode.hx:17` |
 | `DrawingInfoGraphic` | UI composition | `haxe/src/pr2/gameplay/DrawingInfo.hx:46` |

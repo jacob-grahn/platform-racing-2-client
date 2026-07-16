@@ -2,6 +2,7 @@ package pr2.gameplay;
 
 import openfl.display.DisplayObject;
 import openfl.display.Loader;
+import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.events.MouseEvent;
@@ -99,18 +100,21 @@ class CatImage extends Sprite implements CaptchaAnswer {
 	public var id(default, null):Int;
 	public var display(default, null):DisplayObject;
 
-	private var bg:PR2MovieClip;
+	private var bg:Shape;
 	private var loader:Loader;
 
 	public function new(id:Int) {
 		super();
 		this.id = id;
 		display = this;
-		bg = PR2MovieClip.fromLinkage("BlueSquareButton", {maxNestedDepth: 4});
+		bg = new Shape();
+		drawBackground(0xCCCCCC);
 		addChild(bg);
 		loader = new Loader();
 		addChild(loader);
 		loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onImgLoad);
+		addEventListener(MouseEvent.MOUSE_OVER, onOver);
+		addEventListener(MouseEvent.MOUSE_OUT, onOut);
 		getImg();
 	}
 
@@ -135,6 +139,8 @@ class CatImage extends Sprite implements CaptchaAnswer {
 	}
 
 	public function remove():Void {
+		removeEventListener(MouseEvent.MOUSE_OVER, onOver);
+		removeEventListener(MouseEvent.MOUSE_OUT, onOut);
 		if (loader != null) {
 			loader.contentLoaderInfo.removeEventListener(Event.COMPLETE, onImgLoad);
 			try loader.close() catch (_:Dynamic) {}
@@ -144,5 +150,15 @@ class CatImage extends Sprite implements CaptchaAnswer {
 		if (parent != null) {
 			parent.removeChild(this);
 		}
+	}
+
+	private function onOver(_:MouseEvent):Void drawBackground(0xC3E7E2);
+	private function onOut(_:MouseEvent):Void drawBackground(0xCCCCCC);
+
+	private function drawBackground(color:Int):Void {
+		bg.graphics.clear();
+		bg.graphics.beginFill(color);
+		bg.graphics.drawRect(0, 0, 210, 209.995727539063);
+		bg.graphics.endFill();
 	}
 }
