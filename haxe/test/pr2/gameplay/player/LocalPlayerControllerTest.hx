@@ -101,7 +101,8 @@ class LocalPlayerControllerTest {
 		testTimedMoveBlockRecursivelyMovesDestinationPushBlock();
 		testTimedMoveBlockWaitsWhenDestinationBlocked();
 		testTimedMoveBlockWaitsWhenDestinationOccupied();
-		testBumpingRotateBlockPutsPlayerInJumpState();
+		testBumpingRotateBlockPutsPlayerInFreezeState();
+		testWaterTouchDoesNotCancelRotation();
 		testRotateRightCompletesCourseRotation();
 		testRotateLeftCompletesCourseRotation();
 		testRotationTweenMatchesCourseFrames();
@@ -1842,22 +1843,41 @@ class LocalPlayerControllerTest {
 		assertEquals(null, level.blockAt(2, 2), "occupied destination stays free of moving blocks");
 	}
 
-	private static function testBumpingRotateBlockPutsPlayerInJumpState():Void {
+	private static function testBumpingRotateBlockPutsPlayerInFreezeState():Void {
 		var player = new LocalCharacter(rotateBlockLevel(BlockType.RotateRight));
 
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput(false, false, true));
-			if (player.stateSnapshot().mode == "jump") {
+			if (player.stateSnapshot().mode == "freeze") {
 				break;
 			}
 		}
 
 		var state = player.stateSnapshot();
 		assertEquals("rotate_right", state.touchedBlockType, "debug state reports rotate block touch");
-		assertEquals("jump", state.mode, "rotate block bump enters jump mode");
-		assertEquals("jump", state.animation, "jump mode exposes jump animation state");
+		assertEquals("freeze", state.mode, "rotate block bump pauses character physics");
+		assertEquals("freeze", state.animation, "rotate pause exposes frozen animation state");
 		assertClose(0, state.vx, "rotate block clears horizontal velocity");
 		assertClose(0, state.vy, "rotate block clears vertical velocity");
+	}
+
+	private static function testWaterTouchDoesNotCancelRotation():Void {
+		var level = rotateBlockLevel(BlockType.RotateLeft);
+		level.blocks.push(new LevelBlock(2, 2, BlockType.Water));
+		level.blocks.push(new LevelBlock(2, 3, BlockType.Water));
+		var player = new LocalCharacter(level);
+		player.setControllerPosition(75, 120);
+		@:privateAccess player.controller.vy = -10;
+
+		player.step(new LocalPlayerInput());
+		assertEquals("water", player.stateSnapshot().touchedBlockType, "regression frame includes the adjacent water touch");
+		assertEquals("freeze", player.stateSnapshot().mode, "same-frame water touch preserves rotate pause");
+
+		for (_ in 0...30) {
+			player.step(new LocalPlayerInput());
+		}
+		assertEquals(-90, player.stateSnapshot().courseRotation, "water-backed rotate block completes its rotation");
+		assertEquals("land", player.stateSnapshot().mode, "completed water-backed rotation resumes land physics");
 	}
 
 	private static function testRotateRightCompletesCourseRotation():Void {
@@ -1867,7 +1887,7 @@ class LocalPlayerControllerTest {
 		for (_ in 0...29) {
 			player.step(new LocalPlayerInput());
 		}
-		assertEquals("jump", player.stateSnapshot().mode, "right rotation keeps player in jump mode before final frame");
+		assertEquals("freeze", player.stateSnapshot().mode, "right rotation keeps player paused before final frame");
 
 		player.step(new LocalPlayerInput());
 		var state = player.stateSnapshot();
@@ -1928,7 +1948,7 @@ class LocalPlayerControllerTest {
 
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput(false, false, true));
-			if (player.stateSnapshot().mode == "jump") {
+			if (player.stateSnapshot().mode == "freeze") {
 				break;
 			}
 		}
@@ -1961,7 +1981,7 @@ class LocalPlayerControllerTest {
 
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput(false, false, true));
-			if (player.stateSnapshot().mode == "jump") {
+			if (player.stateSnapshot().mode == "freeze") {
 				break;
 			}
 		}
@@ -1984,7 +2004,7 @@ class LocalPlayerControllerTest {
 
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput(false, false, true));
-			if (player.stateSnapshot().mode == "jump") {
+			if (player.stateSnapshot().mode == "freeze") {
 				break;
 			}
 		}
@@ -2012,7 +2032,7 @@ class LocalPlayerControllerTest {
 
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput(false, false, true));
-			if (player.stateSnapshot().mode == "jump") {
+			if (player.stateSnapshot().mode == "freeze") {
 				break;
 			}
 		}
@@ -2045,7 +2065,7 @@ class LocalPlayerControllerTest {
 		var player = new LocalCharacter(rotateBlockLevel(type));
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput(false, false, true));
-			if (player.stateSnapshot().mode == "jump") {
+			if (player.stateSnapshot().mode == "freeze") {
 				return player;
 			}
 		}

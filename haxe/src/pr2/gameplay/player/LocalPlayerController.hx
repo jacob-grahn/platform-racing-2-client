@@ -1324,7 +1324,10 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		if (rotateFramesRemaining > 0 || isBlockFrozen(block)) {
 			return;
 		}
-		setMode(MODE_JUMP);
+		// Flash pauses character physics in `freezeGo` while Course owns the
+		// rotation tween. This also prevents adjacent water from replacing the
+		// rotate mode in the bump frame (level 6507177 relies on that layout).
+		setMode(MODE_FREEZE);
 		vx = 0;
 		vy = 0;
 		targetVelX = 0;

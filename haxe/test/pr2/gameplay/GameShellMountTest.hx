@@ -456,11 +456,11 @@ class GameShellMountTest {
 		var course = buildRotateCourse();
 		for (_ in 0...40) {
 			course.localCharacter.step(new LocalPlayerInput(false, false, true));
-			if (course.localCharacter.stateSnapshot().mode == "jump") {
+			if (course.localCharacter.stateSnapshot().mode == "freeze") {
 				break;
 			}
 		}
-		assertEquals("jump", course.localCharacter.stateSnapshot().mode, "local character reaches rotate jump state");
+		assertEquals("freeze", course.localCharacter.stateSnapshot().mode, "local character reaches rotate pause state");
 
 		course.localCharacter.step(new LocalPlayerInput());
 		course.updatePlayerDisplay();
