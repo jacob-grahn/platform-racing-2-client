@@ -1,6 +1,7 @@
 package pr2.gameplay.player;
 
 import pr2.gameplay.Items;
+import pr2.gameplay.BlockController;
 import pr2.gameplay.RotationMath;
 import pr2.gameplay.player.BlockVisualEvent.BlockVisualEventKind;
 import pr2.gameplay.player.LocalPlayerControllerTypes.PendingMinePlacement;
@@ -44,7 +45,7 @@ class ItemController {
 	}
 
 	public function nextRandom(maxValue:Int):Int {
-		return owner.itemRandom.nextMinMax(0, maxValue);
+		return Math.floor(owner.itemRandom() * maxValue);
 	}
 
 	public function useHeldItem(input:LocalPlayerInput):Void {
@@ -301,8 +302,8 @@ class ItemController {
 			if (block != null) {
 				if (block.type != BlockType.Ice) {
 					var state = owner.blockState(owner.blockKey(block.x, block.y));
-					state.frozenIceAlpha = LocalPlayerController.SANTA_ICE_OVERLAY_START_ALPHA;
-					state.frozenIceFadeRate = LocalPlayerController.SANTA_ICE_OVERLAY_FADE_RATE;
+					state.frozenIceAlpha = BlockController.SANTA_ICE_OVERLAY_START_ALPHA;
+					state.frozenIceFadeRate = BlockController.SANTA_ICE_OVERLAY_FADE_RATE;
 				}
 				return;
 			}

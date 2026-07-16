@@ -3,6 +3,7 @@ package pr2.character;
 import pr2.gameplay.player.LocalPlayerController;
 import pr2.gameplay.player.LocalPlayerState;
 import pr2.gameplay.player.LocalPlayerInput;
+import pr2.gameplay.BlockController;
 import pr2.level.WorldLevel;
 import pr2.net.LobbySocket;
 
@@ -40,11 +41,11 @@ class LocalCharacter extends Character {
 	private var lastJetPackActive:Bool = false;
 	private var lastSpeedBurstActive:Bool = false;
 
-	public function new(level:WorldLevel, hatId:Int = 1, headId:Int = 1, bodyId:Int = 1, feetId:Int = 1) {
+	public function new(level:WorldLevel, hatId:Int = 1, headId:Int = 1, bodyId:Int = 1, feetId:Int = 1, ?blockController:BlockController) {
 		super(hatId, headId, bodyId, feetId);
 		type = "local";
 		baseGravityMultiplier = level.gravity;
-		controller = new LocalPlayerController(level);
+		controller = new LocalPlayerController(level, blockController);
 		controller.onHeartGain = gainHeart;
 		controller.onHitAccepted = dropHighestHatFromHit;
 		syncFromController();

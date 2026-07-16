@@ -57,6 +57,8 @@ class GameShellMountTest {
 		assertEquals(true, course.characterLayer != null, "character layer present");
 		assertEquals(true, course.backCharacterLayer != null, "back character layer present");
 		assertEquals(true, course.localCharacter != null, "local character bridge mounted");
+		assertEquals(course.blockController, course.localCharacter.controller.blockController,
+			"Course owns the block controller shared with the local simulation");
 		assertEquals(course.localCharacter, course.characterLayer.getChildAt(0), "local character owns display-list slot");
 		var start = @:privateAccess course.level.startBlocks()[0];
 		var initialState = course.localCharacter.stateSnapshot();
@@ -190,7 +192,11 @@ class GameShellMountTest {
 		}
 		course.createRemoteCharacter(remoteInit(9));
 		assertEquals(2, course.localCharacter.networkPlayerCount, "remote creation enables multiplayer update cadence");
+		assertEquals(null, @:privateAccess course.blockController.moveBlockDeadlineMs,
+			"move-block wall-clock schedule stays stopped during loading and countdown");
 		@:privateAccess course.onCountdownFinish();
+		assertEquals(true, @:privateAccess course.blockController.moveBlockDeadlineMs != null,
+			"countdown finish starts the course move-block schedule");
 		LobbySocket.resetSent();
 		for (_ in 0...5) {
 			@:privateAccess course.onEnterFrame(new Event(Event.ENTER_FRAME));

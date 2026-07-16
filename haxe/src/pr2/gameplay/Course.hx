@@ -99,6 +99,7 @@ class Course extends Sprite {
 	public var playerSpectating(default, null):Null<Character>;
 	public var canSpectate(default, null):Bool = false;
 	private var worldLevel:WorldLevel;
+	private var blockController:BlockController;
 	private var player:LocalCharacter;
 	private var camera:CameraFollow;
 	private var snakeManager:SnakeManager;
@@ -218,7 +219,8 @@ class Course extends Sprite {
 		raceSounds = new RaceSounds(levelRenderer.cameraOffset);
 
 		worldLevel = ServerLevelWorldAdapter.convert(level, data.gravity, Std.string(config.levelId), config.title);
-		player = new LocalCharacter(worldLevel);
+		blockController = new BlockController(worldLevel);
+		player = new LocalCharacter(worldLevel, 1, 1, 1, 1, blockController);
 		snakeManager = new SnakeManager(worldLevel, levelRenderer, player.controller);
 		player.onPlayJumpSound = playJumpSound;
 		player.onPlayCharacterSound = playCharacterSound;
@@ -769,6 +771,7 @@ class Course extends Sprite {
 
 	private function onCountdownFinish():Void {
 		raceStarted = true;
+		blockController.startGameplay();
 		physicsTraceFrame = 0;
 		spawnMinionEggs();
 		if (localCharacter != null) {

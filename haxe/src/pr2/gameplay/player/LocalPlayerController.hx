@@ -9,6 +9,7 @@ import pr2.level.WorldLevel.LevelBlock;
 import pr2.level.BlockType;
 import pr2.gameplay.RotationMath;
 import pr2.gameplay.Items;
+import pr2.gameplay.BlockController;
 import pr2.gameplay.items.Item;
 import pr2.gameplay.items.ItemRuntimeOwner;
 import pr2.gameplay.player.BlockVisualEvent.BlockVisualEventKind;
@@ -20,7 +21,6 @@ import pr2.gameplay.player.LocalPlayerControllerTypes.PhysicsBlockTrace;
 import pr2.gameplay.player.LocalPlayerControllerTypes.PixelPoint;
 import pr2.gameplay.player.LocalPlayerControllerTypes.PlayerStats;
 import pr2.gameplay.player.LocalPlayerControllerTypes.TilePoint;
-import pr2.util.FlashRandom;
 
 class LocalPlayerController implements ItemRuntimeOwner {
 	public static inline var STANDING_WIDTH:Float = 20;
@@ -34,17 +34,9 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	private static inline var MAP_RETURN_MARGIN:Float = 500;
 	private static inline var DEFAULT_GRAVITY:Float = 0.7;
 	private static inline var CRUMBLE_INITIAL_LIFE:Int = 10;
-	private static inline var VANISH_FADE_FRAMES:Int = 10;
-	private static inline var VANISH_REAPPEAR_FRAMES:Int = 54;
-	private static inline var SANTA_ICE_OVERLAY_START_ALPHA:Float = 1;
-	private static inline var SANTA_ICE_OVERLAY_FADE_RATE:Float = 0.025;
-	private static inline var ICE_OVERLAY_REMOVE_ALPHA:Float = 0.05;
 	private static inline var MINE_HIT_SPEED:Float = 50;
 	private static inline var FLASH_TWIPS_PER_PIXEL:Float = 20;
 	private static inline var TELEPORT_DEFAULT_COLOR:String = "16744272";
-	private static inline var TELEPORT_RESET_FRAMES:Int = 81;
-	private static inline var MOVE_PREVIEW_FRAMES:Int = 27;
-	private static inline var MOVE_RESELECT_FRAMES:Int = 27;
 	private static inline var ROTATE_FRAMES:Int = 30;
 	private static inline var HURT_FRAMES:Int = 60;
 	private static inline var FROZEN_SOLID_FRAMES:Int = 54;
@@ -129,26 +121,12 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	private var jumpVelBoost:Float = 0;
 	private var crouchCharge:Float = 0;
 	private var waterTicks:Float = 0;
-	// Per-tile runtime block state (keyed by "x,y"), consolidating what used to be
-	// eight parallel maps: crumble life, the removed flag, the three vanish phases
-	// (fade-out / reappear-wait / fade-in), and the item/supply/visual-supply
-	// depletion flags. Entries are created lazily on first write; a tile with an
-	// absent entry reads identically to one whose fields are all at their defaults.
-	// Teleport cooldowns are keyed by color (not tile) and move-block directions
-	// are rebuilt wholesale each cycle, so those two stay as their own maps.
-	private final blockStates:LocalPlayerBlockStateStore = new LocalPlayerBlockStateStore();
 	// Snake trails are runtime-only solids. Keep them separate from authored
 	// blocks so a trail over a freshly dug (removed) block does not inherit that
 	// authored block's coordinate-keyed removed state.
 	private final snakeTrailBlocks:Map<String, LevelBlock> = new Map();
 	private final blockVisualEvents:Array<BlockVisualEvent> = [];
-	private final disabledTeleportFrames:Map<String, Int> = new Map();
-	private final moveBlockDirections:Map<String, Int> = new Map();
-	private var moveBlockTimer:Int = MOVE_PREVIEW_FRAMES;
-	private var moveBlockPhase:String = "shift";
-	private var moveRandom:FlashRandom = new FlashRandom(1);
-	private var itemRandom:FlashRandom = new FlashRandom(1);
-	private final originalBlockPositions:Array<{x:Int, y:Int}> = [];
+	private var itemRandom:Void->Float = Math.random;
 	private var mapMinX:Float = 0;
 	private var mapMinY:Float = 0;
 	private var mapMaxX:Float = 0;
@@ -185,19 +163,19 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	// still hands out items before Course wires the level config.
 	private var allowedItems:Array<Int> = Items.getAllCodes();
 	private final itemController:ItemController;
-	private final blockController:BlockController;
+	public final blockController:BlockController;
 	private final traceReporter:PhysicsTraceReporter;
 	private var roguelikeStartX:Float;
 	private var roguelikeStartY:Float;
 
-	public function new(level:WorldLevel) {
+	public function new(level:WorldLevel, ?courseBlockController:BlockController) {
 		this.level = level;
 		itemController = new ItemController(this);
-		blockController = new BlockController(this);
+		blockController = courseBlockController == null ? new BlockController(level) : courseBlockController;
+		blockController.bindPlayer(this, courseBlockController == null);
 		traceReporter = new PhysicsTraceReporter(this);
 		for (i in 0...level.blocks.length) {
 			var block = level.blocks[i];
-			originalBlockPositions.push({x: block.x, y: block.y});
 			var blockX = block.x * level.tileSize;
 			var blockY = block.y * level.tileSize;
 			if (i == 0) {
@@ -222,7 +200,6 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		lastSafeY = y;
 		standingTileX = level.playerStart.x;
 		standingTileY = level.playerStart.y + 1;
-		blockController.determineMoveBlockDirections();
 		processBlocks(new LocalPlayerInput());
 	}
 
@@ -259,16 +236,15 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		rotateDirection = 0;
 		hurtFramesRemaining = 0;
 		frozenSolidFramesRemaining = 0;
-		blockStates.clear();
 		snakeTrailBlocks.clear();
 		blockVisualEvents.resize(0);
-		disabledTeleportFrames.clear();
+		blockController.resetPreRaceState();
 		pendingMinePlacements.resize(0);
 		pendingProjectileDamages.resize(0);
 	}
 
 	public function resetTestCourseState(startX:Float, startY:Float, maxTime:Int):Void {
-		restoreOriginalBlockPositions();
+		blockController.resetTestCourseState();
 		setPlayerPos(startX, startY);
 		vx = 0;
 		vy = 0;
@@ -316,28 +292,9 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		animationRight = false;
 		pendingMinePlacements.resize(0);
 		pendingProjectileDamages.resize(0);
-		blockStates.clear();
 		snakeTrailBlocks.clear();
 		blockVisualEvents.resize(0);
-		disabledTeleportFrames.clear();
-		moveRandom = new FlashRandom(1);
-		itemRandom = new FlashRandom(1);
-		moveBlockPhase = "shift";
-		moveBlockTimer = MOVE_PREVIEW_FRAMES;
-		blockController.determineMoveBlockDirections();
 		processBlocks(new LocalPlayerInput());
-	}
-
-	private function restoreOriginalBlockPositions():Void {
-		for (i in 0...level.blocks.length) {
-			if (i >= originalBlockPositions.length) {
-				break;
-			}
-			var block = level.blocks[i];
-			var original = originalBlockPositions[i];
-			block.x = original.x;
-			block.y = original.y;
-		}
 	}
 
 	public function beginDetailedTraceFrame(frame:Int):Void {
@@ -676,42 +633,22 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	}
 
 	public function blockAlphaAt(tileX:Int, tileY:Int):Float {
-		var state = blockStates.get(blockKey(tileX, tileY));
-		if (state == null) {
-			return 1;
-		}
-		if (state.vanishFadeFrames != null) {
-			return Math.min(1, state.vanishFadeFrames / VANISH_FADE_FRAMES);
-		}
-		if (state.vanishFadeInFrames != null) {
-			return 1 - state.vanishFadeInFrames / VANISH_FADE_FRAMES;
-		}
-		return state.removed ? 0 : 1;
+		return blockController.blockAlphaAt(tileX, tileY);
 	}
 
 	public function blockColorMultiplierAt(tileX:Int, tileY:Int):Float {
-		var state = blockStates.get(blockKey(tileX, tileY));
-		var block = level.blockAt(tileX, tileY);
-		return block != null && state != null
-			&& ((block.type == BlockType.Item && state.depletedItem) || state.depletedVisualSupply) ? 0.5 : 1;
+		return blockController.blockColorMultiplierAt(tileX, tileY);
 	}
 
 	public function blockIceOverlayAlphaAt(tileX:Int, tileY:Int):Float {
-		var state = blockStates.get(blockKey(tileX, tileY));
-		return state != null && state.frozenIceAlpha != null ? state.frozenIceAlpha : 0;
+		return blockController.blockIceOverlayAlphaAt(tileX, tileY);
 	}
 
-	public function freezeBlock(tileX:Int, tileY:Int, fadeRate:Float = SANTA_ICE_OVERLAY_FADE_RATE):Void {
-		var block = level.blockAt(tileX, tileY);
-		if (block == null) {
-			return;
-		}
-		var state = blockState(blockKey(tileX, tileY));
-		state.frozenIceAlpha = SANTA_ICE_OVERLAY_START_ALPHA;
-		state.frozenIceFadeRate = fadeRate;
+	public function freezeBlock(tileX:Int, tileY:Int, fadeRate:Float = BlockController.SANTA_ICE_OVERLAY_FADE_RATE):Void {
+		blockController.freezeBlock(tileX, tileY, fadeRate);
 	}
 
-	public inline function freezeBlockForTest(tileX:Int, tileY:Int, fadeRate:Float = SANTA_ICE_OVERLAY_FADE_RATE):Void {
+	public inline function freezeBlockForTest(tileX:Int, tileY:Int, fadeRate:Float = BlockController.SANTA_ICE_OVERLAY_FADE_RATE):Void {
 		freezeBlock(tileX, tileY, fadeRate);
 	}
 
@@ -825,18 +762,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		renderer restyle only these instead of every block in the level each frame.
 	**/
 	public function activeVisualBlockKeys():Array<String> {
-		var keys:Array<String> = [];
-		for (key => state in blockStates) {
-			if (state.vanishFadeFrames != null
-				|| state.vanishFadeInFrames != null
-				|| state.removed
-				|| state.depletedItem
-				|| state.depletedVisualSupply
-				|| state.frozenIceAlpha != null) {
-				keys.push(key);
-			}
-		}
-		return keys;
+		return blockController.activeVisualBlockKeys();
 	}
 
 	private static function depletesAsSupplyVisual(type:BlockType):Bool {
@@ -849,19 +775,12 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	}
 
 	public function activeMoveBlockDirections():Map<String, Int> {
-		var directions:Map<String, Int> = new Map();
-		if (moveBlockPhase != "shift") {
-			return directions;
-		}
-		for (key in moveBlockDirections.keys()) {
-			directions.set(key, moveBlockDirections.get(key));
-		}
-		return directions;
+		return blockController.activeMoveBlockDirections();
 	}
 
 	/** The runtime state for a tile, creating (and storing) a fresh one on first write. */
 	private function blockState(key:String):LocalPlayerBlockState {
-		return blockStates.getOrCreate(key);
+		return blockController.stateForKey(key);
 	}
 
 	private function position(input:LocalPlayerInput):Void {
@@ -1565,7 +1484,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	}
 
 	private function resetSupplyState(block:LevelBlock):Void {
-		var state = blockStates.get(blockKey(block.x, block.y));
+		var state = blockController.stateAt(blockKey(block.x, block.y));
 		if (state != null) {
 			state.depletedItem = false;
 			state.depletedSupply = false;
@@ -1599,9 +1518,8 @@ class LocalPlayerController implements ItemRuntimeOwner {
 
 	// Mirrors ItemBlock.useSupply: an empty options string means "any of the
 	// level's allowed items", "none" yields nothing, and otherwise the dash list
-	// is the candidate pool. Flash then picks one candidate at random; the
-	// deterministic LCG keeps the test suite reproducible (single-item blocks,
-	// the only ones the suite exercises, resolve to the same id regardless).
+	// is the candidate pool. Flash picks one candidate with Math.random when the
+	// block is used, rather than deriving a repeatable sequence from the level.
 	private function itemFromBlockOptions(options:String):Null<Int> {
 		var candidates:Array<Int>;
 		if (options == "") {
@@ -1621,6 +1539,10 @@ class LocalPlayerController implements ItemRuntimeOwner {
 			return null;
 		}
 		return candidates[itemController.nextRandom(candidates.length)];
+	}
+
+	private function setItemRandomForTest(random:Void->Float):Void {
+		itemRandom = random == null ? Math.random : random;
 	}
 
 	private function useHeldItem(input:LocalPlayerInput):Void itemController.useHeldItem(input);
@@ -1745,7 +1667,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 
 	private function maybeTeleport(block:LevelBlock):Void {
 		var color = teleportColor(block);
-		if (disabledTeleportFrames.exists(color)) {
+		if (blockController.teleportDisabled(color)) {
 			return;
 		}
 
@@ -1754,7 +1676,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 			return;
 		}
 
-		disabledTeleportFrames.set(color, TELEPORT_RESET_FRAMES);
+		blockController.disableTeleports(color);
 		var index = blocks.indexOf(block);
 		if (index < 0) {
 			index = 0;
@@ -1835,7 +1757,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 			// Flash attaches fadeOut during onStand/onBump, then the listener starts
 			// ticking on a later ENTER_FRAME. This controller ticks timed blocks at
 			// the end of the same deterministic step, so seed one extra frame.
-			state.vanishFadeFrames = VANISH_FADE_FRAMES + 1;
+			state.vanishFadeFrames = BlockController.VANISH_FADE_FRAMES + 1;
 		}
 	}
 
@@ -1886,16 +1808,11 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	}
 
 	private function isBlockRemoved(block:LevelBlock):Bool {
-		if (block.type == BlockType.SnakeTrail) {
-			return false;
-		}
-		var state = blockStates.get(blockKey(block.x, block.y));
-		return state != null && state.removed;
+		return blockController.isBlockRemoved(block);
 	}
 
 	private function isBlockFrozen(block:LevelBlock):Bool {
-		var state = blockStates.get(blockKey(block.x, block.y));
-		return state != null && state.frozenIceAlpha != null;
+		return blockController.isBlockFrozen(block);
 	}
 
 	private function maybeFreezeSantaBlock(block:LevelBlock):Void {
@@ -1903,8 +1820,8 @@ class LocalPlayerController implements ItemRuntimeOwner {
 			return;
 		}
 		var state = blockState(blockKey(block.x, block.y));
-		state.frozenIceAlpha = SANTA_ICE_OVERLAY_START_ALPHA;
-		state.frozenIceFadeRate = SANTA_ICE_OVERLAY_FADE_RATE;
+		state.frozenIceAlpha = BlockController.SANTA_ICE_OVERLAY_START_ALPHA;
+		state.frozenIceFadeRate = BlockController.SANTA_ICE_OVERLAY_FADE_RATE;
 	}
 
 	private function canSantaFreeze(block:LevelBlock):Bool {

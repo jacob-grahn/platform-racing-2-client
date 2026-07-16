@@ -2,6 +2,7 @@ package pr2.gameplay.player;
 
 import com.jiggmin.data.SecureData;
 import pr2.character.LocalCharacter;
+import pr2.gameplay.BlockController;
 import pr2.level.WorldLevelParser;
 import pr2.level.BlockType;
 import pr2.level.WorldLevel;
@@ -55,6 +56,7 @@ class LocalPlayerControllerTest {
 		testBumpingItemBlockGrantsConfiguredItem();
 		testBumpingItemBlockEmitsStarSound();
 		testEmptyOptionsItemBlockGrantsAllowedItem();
+		testItemBlockUsesRuntimeRandom();
 		testItemBlockRandomnessDoesNotAffectMoveBlocks();
 		testRegularItemBlockDepletesAfterFirstUse();
 		testNewlyCollectedItemRequiresReleaseBeforeUse();
@@ -966,6 +968,23 @@ class LocalPlayerControllerTest {
 		assertEquals(null, noneAllowed.stateSnapshot().itemId, "a level with no allowed items grants nothing");
 	}
 
+	private static function testItemBlockUsesRuntimeRandom():Void {
+		var lowRoll = new LocalCharacter(lowItemCeilingLevel(BlockType.Item, "2-4"));
+		@:privateAccess lowRoll.controller.setItemRandomForTest(function() return 0.25);
+		var highRoll = new LocalCharacter(lowItemCeilingLevel(BlockType.Item, "2-4"));
+		@:privateAccess highRoll.controller.setItemRandomForTest(function() return 0.75);
+
+		for (_ in 0...20) {
+			lowRoll.step(new LocalPlayerInput());
+			highRoll.step(new LocalPlayerInput());
+		}
+		lowRoll.step(new LocalPlayerInput(false, false, true));
+		highRoll.step(new LocalPlayerInput(false, false, true));
+
+		assertEquals(2, lowRoll.stateSnapshot().itemId, "low runtime random roll selects the first candidate");
+		assertEquals(4, highRoll.stateSnapshot().itemId, "high runtime random roll selects the second candidate");
+	}
+
 	private static function testItemBlockRandomnessDoesNotAffectMoveBlocks():Void {
 		var untouched = new LocalCharacter(itemAndRandomMoveBlockLevel());
 		var itemUser = new LocalCharacter(itemAndRandomMoveBlockLevel());
@@ -1755,13 +1774,14 @@ class LocalPlayerControllerTest {
 
 	private static function testTimedMoveBlockShiftsAfterPreview():Void {
 		var level = timedMoveBlockLevel("right", false);
-		var player = new LocalCharacter(level);
+		var harness = timedMoveHarness(level);
+		var player = harness.player;
 
-		for (_ in 0...26) {
-			player.step(new LocalPlayerInput());
-		}
+		harness.clock.advance(999);
+		player.step(new LocalPlayerInput());
 		assertEquals(BlockType.Move, level.blockAt(2, 3).type, "move block waits through arrow preview");
 
+		harness.clock.advance(1);
 		player.step(new LocalPlayerInput());
 		assertEquals(null, level.blockAt(2, 3), "move block leaves original tile after one second");
 		assertEquals(BlockType.Move, level.blockAt(3, 3).type, "move block shifts one tile in chosen direction");
@@ -1769,11 +1789,11 @@ class LocalPlayerControllerTest {
 
 	private static function testTimedMoveBlockRecursivelyMovesDestinationPushBlock():Void {
 		var level = timedMovePushChainLevel();
-		var player = new LocalCharacter(level);
+		var harness = timedMoveHarness(level);
+		var player = harness.player;
 
-		for (_ in 0...27) {
-			player.step(new LocalPlayerInput());
-		}
+		harness.clock.advance(1000);
+		player.step(new LocalPlayerInput());
 
 		assertEquals(null, level.blockAt(2, 3), "move block leaves original tile after pushing chain");
 		assertEquals(BlockType.Move, level.blockAt(3, 3).type, "move block moves into destination push tile");
@@ -1794,17 +1814,22 @@ class LocalPlayerControllerTest {
 
 	private static function testTimedMoveBlockPreviewDirections():Void {
 		var level = timedMoveBlockLevel("right", false);
-		var player = new LocalCharacter(level);
+		var harness = timedMoveHarness(level);
+		var player = harness.player;
 
 		assertEquals(2, player.activeMoveBlockDirections().get("2,3"), "move block exposes right arrow during preview");
-		for (_ in 0...27) {
-			player.step(new LocalPlayerInput());
-		}
+		harness.clock.advance(1000);
+		player.step(new LocalPlayerInput());
 		assertEquals(false, player.activeMoveBlockDirections().exists("2,3"), "move block arrow clears after shifting");
 
-		for (_ in 0...27) {
-			player.step(new LocalPlayerInput());
-		}
+		harness.clock.advance(4999);
+		player.step(new LocalPlayerInput());
+		assertEquals(false, player.activeMoveBlockDirections().exists("3,3"), "move block keeps its arrow hidden for five seconds after shifting");
+		harness.clock.advance(1);
+		player.step(new LocalPlayerInput());
+		assertEquals(false, player.activeMoveBlockDirections().exists("3,3"), "Flash's clamped cadence correction keeps the arrow hidden for one extra millisecond");
+		harness.clock.advance(1);
+		player.step(new LocalPlayerInput());
 		assertEquals(2, player.activeMoveBlockDirections().get("3,3"), "move block exposes arrow again after reselect");
 	}
 
@@ -1821,11 +1846,11 @@ class LocalPlayerControllerTest {
 
 	private static function testTimedMoveBlockWaitsWhenDestinationBlocked():Void {
 		var level = timedMoveBlockLevel("right", true);
-		var player = new LocalCharacter(level);
+		var harness = timedMoveHarness(level);
+		var player = harness.player;
 
-		for (_ in 0...27) {
-			player.step(new LocalPlayerInput());
-		}
+		harness.clock.advance(1000);
+		player.step(new LocalPlayerInput());
 
 		assertEquals(BlockType.Move, level.blockAt(2, 3).type, "blocked move block stays in place");
 		assertEquals(BlockType.Solid, level.blockAt(3, 3).type, "blocking tile remains occupied");
@@ -1833,11 +1858,11 @@ class LocalPlayerControllerTest {
 
 	private static function testTimedMoveBlockWaitsWhenDestinationOccupied():Void {
 		var level = timedMoveBlockLevel("up", false);
-		var player = new LocalCharacter(level);
+		var harness = timedMoveHarness(level);
+		var player = harness.player;
 
-		for (_ in 0...27) {
-			player.step(new LocalPlayerInput());
-		}
+		harness.clock.advance(1000);
+		player.step(new LocalPlayerInput());
 
 		assertEquals(BlockType.Move, level.blockAt(2, 3).type, "move block does not shift into the player");
 		assertEquals(null, level.blockAt(2, 2), "occupied destination stays free of moving blocks");
@@ -2647,6 +2672,14 @@ class LocalPlayerControllerTest {
 		);
 	}
 
+	private static function timedMoveHarness(level:WorldLevel):{player:LocalCharacter, clock:ManualClock} {
+		var clock = new ManualClock();
+		var blockController = new BlockController(level, clock.read);
+		var player = new LocalCharacter(level, 1, 1, 1, 1, blockController);
+		blockController.startGameplay();
+		return {player: player, clock: clock};
+	}
+
 	private static function timedMovePushChainLevel():WorldLevel {
 		return new WorldLevel(
 			"timed-move-push-chain",
@@ -2824,5 +2857,19 @@ class LocalPlayerControllerTest {
 		if (actual <= minimum) {
 			throw '$message: expected $actual above $minimum';
 		}
+	}
+}
+
+private class ManualClock {
+	private var nowMs:Float = 0;
+
+	public function new() {}
+
+	public function read():Float {
+		return nowMs;
+	}
+
+	public function advance(milliseconds:Float):Void {
+		nowMs += milliseconds;
 	}
 }
