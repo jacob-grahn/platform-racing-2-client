@@ -15,6 +15,7 @@ class CharacterDisplayTest {
 		testSuperJumpWobbleUsesCurrentFrame();
 		if (pr2.DeterministicTestMode.finishSmokeSuite("CharacterDisplayTest")) return;
 		testAuthoredTimelinePartsAndColors();
+		testReturningToCachedPartRestoresSourceArtwork();
 		testHeldWeaponFrameAppliesToCharacterStates();
 		testHeldItemUseAnimationsSurviveCharacterTicks();
 		testHeldMineUsesExportedBitmap();
@@ -102,6 +103,23 @@ class CharacterDisplayTest {
 		assertClose(1.0, display.scaleY, "leaving super-jump resets vertical scale");
 		display.dispatchEvent(new Event(Event.ENTER_FRAME));
 		assertClose(1.0, display.scaleY, "super-jump wobble listener stops after leaving state");
+	}
+
+	private static function testReturningToCachedPartRestoresSourceArtwork():Void {
+		var expected = new CharacterDisplay({hat: 1, head: 1, body: 1, feet: 1});
+		var expectedHead = Std.downcast(expected.getStateClip("standAnim").getChildByTimelineName("head"), PR2MovieClip);
+		var expectedBitmap = expected.explicitPartCacheForTest(expectedHead);
+
+		var display = new CharacterDisplay({hat: 1, head: 1, body: 1, feet: 1});
+		display.setPartIds({hat: 1, head: 2, body: 1, feet: 1});
+		display.setPartIds({hat: 1, head: 1, body: 1, feet: 1});
+		var returnedHead = Std.downcast(display.getStateClip("standAnim").getChildByTimelineName("head"), PR2MovieClip);
+		var returnedBitmap = display.explicitPartCacheForTest(returnedHead);
+
+		assertTrue(expectedBitmap != null, "fresh head part has a cache bitmap");
+		assertTrue(returnedBitmap != null, "reselected head part has a cache bitmap");
+		assertBitmapDataEquals(expectedBitmap.bitmapData, returnedBitmap.bitmapData,
+			"head 1 -> 2 -> 1 rebuilds the complete original artwork");
 	}
 
 	private static function testHeldWeaponFrameAppliesToCharacterStates():Void {
@@ -246,6 +264,20 @@ class CharacterDisplayTest {
 		if (actual != expected) {
 			throw '$message: expected $expected, got $actual';
 		}
+	}
+
+	private static function assertBitmapDataEquals(expected:BitmapData, actual:BitmapData, message:String):Void {
+		assertEquals(expected.width, actual.width, '$message width');
+		assertEquals(expected.height, actual.height, '$message height');
+		for (y in 0...expected.height) {
+			for (x in 0...expected.width) {
+				if (expected.getPixel32(x, y) != actual.getPixel32(x, y)) {
+					assertTrue(false, '$message: pixels differ at ($x, $y)');
+					return;
+				}
+			}
+		}
+		assertTrue(true, message);
 	}
 
 	private static function assertTrue(value:Bool, message:String):Void {

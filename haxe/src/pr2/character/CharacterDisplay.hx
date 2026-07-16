@@ -45,7 +45,7 @@ class CharacterDisplay extends Sprite {
 
 	private static inline var SNAKE_ITEM_NAME:String = "__snakeHeldItem";
 	private static inline var VANISH_ASSET:String = "assets/blocks/vanish.png";
-	private static inline var PART_CACHE_SCALE:Float = 0.3;
+	private static inline var PART_CACHE_SCALE:Float = 0.6;
 	private static inline var PART_CACHE_PADDING:Int = 2;
 
 	public final clip:PR2MovieClip;
@@ -97,6 +97,11 @@ class CharacterDisplay extends Sprite {
 	public function setPartIds(partIds:CharacterPartIds):Void {
 		this.partIds = partIds;
 		explicitPartCacheRevision++;
+		// Restore the currently cached source children before changing timeline
+		// frames. PR2MovieClip may detach those children during the part swap; once
+		// detached, ExplicitBitmapCache can no longer restore their visibility and
+		// selecting that part again would rasterize its still-hidden artwork.
+		disposeAppearanceCaches();
 		CharacterAppearance.applyPartIds(clip, partIds);
 		applyAuthoredColors();
 	}
@@ -134,6 +139,7 @@ class CharacterDisplay extends Sprite {
 		partColors.set("feet", {primary: colors.feet.primary, secondary: colors.feet.secondary});
 		hatSlotColors = [for (color in colors.hats) {primary: color.primary, secondary: color.secondary}];
 		explicitPartCacheRevision++;
+		disposeAppearanceCaches();
 		CharacterAppearance.applyPartIds(clip, partIds);
 		applyAuthoredColors();
 	}
