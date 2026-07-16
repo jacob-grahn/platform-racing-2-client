@@ -1,10 +1,9 @@
 package pr2.lobby.dialogs;
 
 import openfl.events.Event;
-import openfl.geom.ColorTransform;
+import openfl.display.Shape;
 import pr2.app.AppStage;
 import pr2.display.Removable;
-import pr2.runtime.PR2MovieClip;
 import pr2.ui.StageFocus;
 
 /**
@@ -22,17 +21,17 @@ class Popup extends Removable {
 	private static var openPopups:Array<Popup> = [];
 
 	public var fadeOutStarted:Bool = false;
-	private var overlay:Null<PR2MovieClip>;
+	private var overlay:Null<Shape>;
 
 	public function new(addOverlay:Bool = true) {
 		super();
 		if (addOverlay) {
-			overlay = PR2MovieClip.fromLinkage("Square", {maxNestedDepth: 1});
-			overlay.width = 550;
-			overlay.height = 400;
-			var ct = new ColorTransform();
-			ct.color = 0;
-			overlay.transform.colorTransform = ct;
+			overlay = new Shape();
+			overlay.graphics.beginFill(0x000000);
+			overlay.graphics.drawRect(0, 0, 550, 400);
+			overlay.graphics.endFill();
+			overlay.x = -275;
+			overlay.y = -200;
 			overlay.alpha = 0.55;
 			addChild(overlay);
 		}
@@ -62,6 +61,8 @@ class Popup extends Removable {
 		if (overlay != null) {
 			overlay.width = stageW / density;
 			overlay.height = stageH / density;
+			overlay.x = -overlay.width / 2;
+			overlay.y = -overlay.height / 2;
 		}
 	}
 

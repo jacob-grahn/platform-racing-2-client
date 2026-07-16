@@ -9,8 +9,10 @@ import xml.etree.ElementTree as ET
 
 
 DEFAULT_XFL = Path("flash/platform-racing-2-xfl")
+ROOT = Path(__file__).resolve().parents[1]
 PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
 RECOVERY_TARGETS = {
+    "Images/bitmap19.jpg",
     "Images/bitmap97.jpg",
     "Images/bitmap371.png",
     "Images/bitmap379.jpg",
@@ -19,6 +21,7 @@ RECOVERY_TARGETS = {
 }
 # Animate's imported source JPEG can differ from its recompressed bin payload.
 PRESERVE_IMPORTED = {"Images/bitmap379.jpg"}
+NATIVE_TARGETS = {"Images/bitmap19.jpg": ROOT / "assets/bitmaps/mine.jpg"}
 
 
 def png_chunk(kind, data):
@@ -89,6 +92,10 @@ def recovered_bytes(xfl_dir, data_href):
     return decode_raw_bitmap(payload)
 
 
+def target_path(xfl_dir, href):
+    return NATIVE_TARGETS.get(href, xfl_dir / "LIBRARY" / href)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--xfl", type=Path, default=DEFAULT_XFL)
@@ -101,7 +108,7 @@ def main():
         if href not in RECOVERY_TARGETS:
             continue
         found.add(href)
-        target = args.xfl / "LIBRARY" / href
+        target = target_path(args.xfl, href)
         if href in PRESERVE_IMPORTED and target.exists():
             continue
         recovered = recovered_bytes(args.xfl, data_href)

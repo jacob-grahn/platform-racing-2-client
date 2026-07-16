@@ -27,6 +27,7 @@ import pr2.data.TimeCompatTest;
 import pr2.display.RemovableTest;
 import pr2.effects.PixelEffect1Test;
 import pr2.effects.PhysicsEffectTest;
+import pr2.effects.MineAppearTest;
 import pr2.effects.ShotEffectTest;
 import pr2.effects.SlashTest;
 import pr2.effects.TeleportPopTest;
@@ -150,6 +151,7 @@ class DeterministicTestSuite {
 		DeterministicTestMode.runSuite("RemovableTest", ["runtime"], RemovableTest.main);
 		DeterministicTestMode.runSuite("PixelEffect1Test", ["effects"], PixelEffect1Test.main);
 		DeterministicTestMode.runSuite("PhysicsEffectTest", ["effects", "physics"], PhysicsEffectTest.main);
+		DeterministicTestMode.runSuite("MineAppearTest", ["effects", "gameplay"], MineAppearTest.main);
 		DeterministicTestMode.runSuite("ShotEffectTest", ["effects"], ShotEffectTest.main);
 		DeterministicTestMode.runSuite("SlashTest", ["effects"], SlashTest.main);
 		DeterministicTestMode.runSuite("TeleportPopTest", ["effects"], TeleportPopTest.main);
@@ -256,7 +258,7 @@ class DeterministicTestSuite {
 		if (DeterministicTestMode.hasGroupSelection()) {
 			trace('DeterministicTestSuite selected run passed (${DeterministicTestMode.selectionSummary()})');
 		} else if (DeterministicTestMode.isSmoke()) {
-			trace("DeterministicTestSuite smoke run passed (124 suites)");
+			trace("DeterministicTestSuite smoke run passed (125 suites)");
 		} else {
 			trace("DeterministicTestSuite passed");
 		}

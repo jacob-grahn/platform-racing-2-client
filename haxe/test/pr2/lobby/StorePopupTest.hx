@@ -1,5 +1,7 @@
 package pr2.lobby;
 
+import openfl.events.KeyboardEvent;
+import openfl.ui.Keyboard;
 import pr2.lobby.dialogs.MessagePopup;
 import pr2.lobby.dialogs.Popup;
 import pr2.lobby.dialogs.UploadingPopup;
@@ -69,6 +71,7 @@ class StorePopupTest {
 		assertEquals(0, StorePopup.userCoins, "cleanup clears coin balance");
 
 		testPurchaseUploadCallbacks();
+		testNativeQuantityPopupFlow();
 
 		var opened = 0;
 		var previousFactory = LobbyPage.createStorePopup;
@@ -134,6 +137,30 @@ class StorePopupTest {
 		errorPopup.remove();
 		UploadingPopup.postFactory = previousFactory;
 		closeAllPopups();
+	}
+
+	private static function testNativeQuantityPopupFlow():Void {
+		StorePopup.userCoins = 125;
+		var purchases = 0;
+		var popup = new QuantityPopup(listing({slug: "hat", price: 50, max_quantity: 3}), function(quantity:Int):Void purchases += quantity);
+		assertEquals("3", popup.view.maxQuantity.text, "native quantity view owns typed maximum text");
+		assertEquals(true, popup.view.quantitySlider.focused == false, "native quantity slider begins unfocused");
+		popup.view.quantitySlider.focus();
+		assertEquals(true, popup.view.quantitySlider.focused, "native quantity slider accepts focus");
+		popup.view.quantitySlider.dispatchEvent(new KeyboardEvent(KeyboardEvent.KEY_DOWN, true, false, 0, Keyboard.RIGHT));
+		assertEquals(2, popup.numSelected, "keyboard increments selected quantity");
+		assertEquals(100, popup.totalCost, "keyboard selection recalculates regular cost");
+		popup.view.quantitySlider.setValueFromPositionForTests(175);
+		assertEquals(3, popup.numSelected, "pointer selection reaches slider maximum");
+		assertEquals(false, popup.view.buyButton.enabled, "unaffordable maximum disables typed buy button");
+		popup.view.quantitySlider.dispatchEvent(new KeyboardEvent(KeyboardEvent.KEY_DOWN, true, false, 0, Keyboard.LEFT));
+		assertEquals(true, popup.view.buyButton.enabled, "affordable keyboard selection re-enables buy button");
+		popup.view.buyButton.activate();
+		assertEquals(2, purchases, "typed buy action preserves selected quantity callback");
+		popup.view.cancelButton.activate();
+		assertEquals(true, popup.fadeOutStarted, "typed cancel action starts the existing close animation");
+		popup.remove();
+		assertEquals(true, popup.view.disposed, "native view disposes controls and listeners with popup");
 	}
 
 	private static function closeAllPopups():Void {

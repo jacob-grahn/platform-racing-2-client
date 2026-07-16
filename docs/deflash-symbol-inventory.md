@@ -19,20 +19,20 @@ and screenshot/parity tests.
 
 ## Summary
 
-- 173 unique production root linkages
-- 194 audited root usages
-- 375 handwritten source files scanned
+- 170 unique production root linkages
+- 191 audited root usages
+- 378 handwritten source files scanned
 - Excluded developer routes: `SymbolPreview` and files under `pr2.harness`
 - Excluded transitive construction: files under `pr2.runtime`
 - Explicitly excluded as uncalled: `FollowFadeEffect` and `ScaffoldTab`
 
 | Replacement shape | Unique roots |
 | --- | ---: |
-| UI composition | 100 |
+| UI composition | 99 |
 | character rig | 1 |
-| simple frame animation | 12 |
+| simple frame animation | 11 |
 | state art | 25 |
-| static art | 31 |
+| static art | 30 |
 | tweened animation | 4 |
 
 ## Roots By Feature Owner
@@ -83,7 +83,6 @@ and screenshot/parity tests.
 | `Arrow2Graphic` | simple frame animation | `haxe/src/pr2/effects/ArrowEffect.hx:26` |
 | `BrickPieceGraphic` | static art | `haxe/src/pr2/effects/BlockPiece.hx:37`; dynamic |
 | `CrumblePieceGraphic` | static art | `haxe/src/pr2/effects/BlockPiece.hx:37`; dynamic |
-| `MineAppearAnimation` | simple frame animation | `haxe/src/pr2/effects/MineAppear.hx:28` |
 | `MineExplodeAnimation` | simple frame animation | `haxe/src/pr2/effects/MineExplosion.hx:23` |
 | `MinePieceGraphic` | static art | `haxe/src/pr2/effects/BlockPiece.hx:37`; dynamic |
 | `PointyStar` | simple frame animation | `haxe/src/pr2/effects/StarEffect.hx:17` |
@@ -228,7 +227,6 @@ and screenshot/parity tests.
 | `SendMessagePopupGraphic` | UI composition | `haxe/src/pr2/lobby/dialogs/SendMessagePopup.hx:35` |
 | `SetEmailPopupGraphic` | UI composition | `haxe/src/pr2/lobby/dialogs/FormPopup.hx:23`; dynamic |
 | `ShadowBG` | static art | `haxe/src/pr2/lobby/dialogs/HoverPopup.hx:31` |
-| `Square` | static art | `haxe/src/pr2/lobby/dialogs/Popup.hx:30` |
 | `TempModMenuGraphic` | UI composition | `haxe/src/pr2/lobby/dialogs/TempModMenu.hx:24` |
 | `TransferGuildPopupGraphic` | UI composition | `haxe/src/pr2/lobby/dialogs/FormPopup.hx:23`; dynamic |
 | `UploadingPopupGraphic` | UI composition | `haxe/src/pr2/lobby/dialogs/UploadingPopup.hx:44` |
@@ -269,7 +267,6 @@ and screenshot/parity tests.
 | Linkage | Replacement shape | Source |
 | --- | --- | --- |
 | `LoadingGraphic` | simple frame animation | `haxe/src/pr2/lobby/store/StorePopup.hx:58` |
-| `QuantityPopupGraphic` | UI composition | `haxe/src/pr2/lobby/store/QuantityPopup.hx:22` |
 | `StoreListingGraphic` | UI composition | `haxe/src/pr2/lobby/store/StoreListing.hx:30` |
 | `StorePopupGraphic` | UI composition | `haxe/src/pr2/lobby/store/StorePopup.hx:41` |
 

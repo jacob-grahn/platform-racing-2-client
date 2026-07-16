@@ -12,6 +12,7 @@ enum abstract StaticSvg(String) to String {
 	var LoginBackgroundFar = "assets/svg/login/bg_far.svg";
 	var LoginBackgroundMid = "assets/svg/login/bg_mid.svg";
 	var LoginBackgroundSky = "assets/svg/login/bg_sky.svg";
+	var QuantityPanel = "assets/svg/timeline/ui_shadowbg_95643069a8/t00_l000_f0000_r00.svg";
 	var RockStamp = "assets/svg/stamps/rock1.svg";
 	var TreeStamp = "assets/svg/stamps/tree1.svg";
 }
@@ -19,6 +20,7 @@ enum abstract StaticSvg(String) to String {
 enum abstract BitmapAsset(String) to String {
 	var BasicBlock = "assets/blocks/basic1.png";
 	var FrontLoginBackground = "assets/login/bg_front@2x.png";
+	var Mine = "assets/bitmaps/mine.jpg";
 	var TeleportBlock = "assets/blocks/teleport_block.png";
 }
 
@@ -26,6 +28,7 @@ enum abstract FontAsset(String) to String {
 	var Body = "Arial";
 	var Display = "Gwibble";
 	var Icons = "FontAwesome";
+	var Interface = "Verdana";
 }
 
 enum abstract SoundAsset(String) to String {

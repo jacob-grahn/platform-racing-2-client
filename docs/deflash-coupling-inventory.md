@@ -17,19 +17,19 @@ migration should make them decrease without changing observable behavior or visu
 
 ## Summary
 
-- 824 coupling occurrences
-- 141 files with coupling
-- 138 migration-adapter files in the dependency allowlist
+- 808 coupling occurrences
+- 138 files with coupling
+- 135 migration-adapter files in the dependency allowlist
 
 | Coupling kind | Occurrences |
 | --- | ---: |
-| Fl control dependency | 51 |
-| Fl control usage | 151 |
-| PR2MovieClip dependency | 132 |
+| Fl control dependency | 49 |
+| Fl control usage | 147 |
+| PR2MovieClip dependency | 129 |
 | frame-label navigation | 19 |
 | generated timeline dependency | 2 |
 | numeric/dynamic frame navigation | 36 |
-| recursive name lookup | 401 |
+| recursive name lookup | 394 |
 | reflective display property | 19 |
 | timeline child lookup | 13 |
 
@@ -38,18 +38,18 @@ migration should make them decrease without changing observable behavior or visu
 | Audio | 2 |
 | Character | 21 |
 | Gameplay UI and visuals | 120 |
-| Gameplay effects | 11 |
+| Gameplay effects | 10 |
 | Intro page | 4 |
 | Level editor | 197 |
 | Level objects | 2 |
 | Level rendering | 5 |
 | Lobby account and customization | 79 |
-| Lobby dialogs | 216 |
+| Lobby dialogs | 215 |
 | Lobby level browser | 25 |
 | Lobby messages | 1 |
 | Lobby players | 13 |
 | Lobby shell | 8 |
-| Lobby store | 34 |
+| Lobby store | 20 |
 | Lobby tabs | 35 |
 | Login page | 20 |
 | Shared UI | 31 |
@@ -224,7 +224,6 @@ migration should make them decrease without changing observable behavior or visu
 | PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/effects/LaserShotTimeline.hx:4` |
 | numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/effects/LaserShotTimeline.hx:19` |
 | frame-label navigation | `gotoAndPlay` | `haxe/src/pr2/effects/LaserShotTimeline.hx:35` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/effects/MineAppear.hx:7` |
 | PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/effects/MineExplosion.hx:7` |
 | PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/effects/Slash.hx:8` |
 | PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/effects/StarEffect.hx:5` |
@@ -747,7 +746,6 @@ migration should make them decrease without changing observable behavior or visu
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:549` |
 | Fl control usage | `FlButton` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:557` |
 | recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:568` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/dialogs/Popup.hx:7` |
 | PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/dialogs/ProgressBar.hx:8` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/ProgressBar.hx:27` |
 | PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/dialogs/SendMessagePopup.hx:9` |
@@ -834,20 +832,6 @@ migration should make them decrease without changing observable behavior or visu
 
 | Kind | API | Source |
 | --- | --- | --- |
-| Fl control dependency | `pr2.runtime.FlButton` | `haxe/src/pr2/lobby/store/QuantityPopup.hx:6` |
-| Fl control dependency | `pr2.runtime.FlSlider` | `haxe/src/pr2/lobby/store/QuantityPopup.hx:7` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/store/QuantityPopup.hx:8` |
-| Fl control usage | `FlSlider` | `haxe/src/pr2/lobby/store/QuantityPopup.hx:23` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/store/QuantityPopup.hx:23` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/store/QuantityPopup.hx:29` |
-| Fl control usage | `FlSlider` | `haxe/src/pr2/lobby/store/QuantityPopup.hx:30` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/store/QuantityPopup.hx:30` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/store/QuantityPopup.hx:33` |
-| Fl control usage | `FlButton` | `haxe/src/pr2/lobby/store/QuantityPopup.hx:34` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/store/QuantityPopup.hx:34` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/store/QuantityPopup.hx:36` |
-| Fl control usage | `FlSlider` | `haxe/src/pr2/lobby/store/QuantityPopup.hx:39` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/store/QuantityPopup.hx:39` |
 | PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/store/StoreListing.hx:15` |
 | recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/store/StoreListing.hx:31` |
 | recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/store/StoreListing.hx:34` |

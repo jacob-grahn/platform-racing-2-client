@@ -3,8 +3,8 @@ package pr2.effects;
 import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.utils.Assets;
+import pr2.animation.AnimationClock;
 import pr2.audio.SoundEffects;
-import pr2.runtime.PR2MovieClip;
 
 /**
 	Authored mine placement effect from `effects.MineAppear`.
@@ -13,8 +13,8 @@ class MineAppear extends Sprite {
 	public static inline var LIFETIME_FRAMES:Int = 33;
 	public static inline var SOUND_PATH:String = "assets/audio/sfx/mine_appear.mp3";
 
-	private var animation:PR2MovieClip;
-	private var framesRemaining:Int = LIFETIME_FRAMES;
+	public var animation(default, null):Null<MineAppearAnimation>;
+	private final clock:AnimationClock;
 	private var onComplete:Null<Void->Void>;
 	private var completed:Bool = false;
 
@@ -25,8 +25,9 @@ class MineAppear extends Sprite {
 		y = worldY;
 		rotation = rotationDegrees;
 		this.onComplete = onComplete;
-		animation = PR2MovieClip.fromLinkage("MineAppearAnimation");
-		animation.setFrameScript(32, function():Void animation.stop());
+		clock = new AnimationClock();
+		animation = new MineAppearAnimation(function():Void remove(true));
+		clock.add(animation.playback);
 		addChild(animation);
 		addEventListener(Event.ENTER_FRAME, tick);
 
@@ -36,10 +37,7 @@ class MineAppear extends Sprite {
 	}
 
 	private function tick(event:Event):Void {
-		framesRemaining--;
-		if (framesRemaining <= 0) {
-			remove(true);
-		}
+		clock.advance();
 	}
 
 	public function remove(runComplete:Bool = false):Void {
@@ -51,9 +49,9 @@ class MineAppear extends Sprite {
 		onComplete = null;
 		if (animation != null) {
 			animation.dispose();
-			removeChild(animation);
 			animation = null;
 		}
+		clock.dispose();
 		if (parent != null) {
 			parent.removeChild(this);
 		}

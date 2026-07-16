@@ -73,21 +73,6 @@ Campaign payload reference:
   `validateSaveString`; `data` is backtick-delimited with read mode in
   `data[0]` and the relative-coordinate block string in `data[1]`.
 
-##### Prove The Migration Path
-
-- Port one representative, modest dialog end to end. It should include static
-  art, text, at least two buttons, one editable/selectable control, focus and
-  keyboard handling, open/close animation, and listener cleanup. Remove that
-  dialog's catalog/runtime dependencies and verify its real user flow plus
-  screenshot parity before choosing the broader UI migration pattern.
-- Port one simple gameplay effect end to end. Replace its linkage lookup,
-  timeline playback, frame script, and completion detection with the native
-  animation API, then add deterministic lifetime and visual parity coverage.
-- Document the resulting view, control, asset, animation, ownership, and
-  teardown conventions. Update the generator/tooling only after these two
-  vertical slices demonstrate which data a native implementation actually
-  needs.
-
 ##### Migrate Production Features
 
 - Replace static timeline symbols with direct SVG/bitmap assets or explicit

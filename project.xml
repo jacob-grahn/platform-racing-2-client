@@ -22,6 +22,10 @@
 	<assets path="art/svg" rename="assets/svg" include="*.svg" exclude="timeline|character" />
 	<assets path="art/svg-packs/timeline" rename="assets/svg-packs/timeline" include="*.json" />
 	<assets path="art/png/timeline" rename="assets/timeline-bitmap" include="*.png" />
+	<!-- Native presentation slices reference only the leaf art they own, without
+	     loading the generated XFL symbol catalog. -->
+	<asset path="art/svg/timeline/ui_shadowbg_95643069a8/t00_l000_f0000_r00.svg" rename="assets/svg/timeline/ui_shadowbg_95643069a8/t00_l000_f0000_r00.svg" />
+	<asset path="assets/bitmaps/mine.jpg" />
 	<template path="templates/html5/template/index.html" rename="index.html" if="html5" />
 
 	<haxelib name="openfl" />

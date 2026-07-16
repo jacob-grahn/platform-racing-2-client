@@ -81,6 +81,7 @@ fi
 python3 tools/generate_deflash_symbol_inventory.py --check
 python3 tools/audit_deflash_boundaries.py --check
 python3 tools/generate_native_assets.py --check
+python3 tools/extract_xfl_bitmaps.py --check
 
 if [[ -n "$groups" ]]; then
 	full_suite=true

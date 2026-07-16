@@ -161,7 +161,9 @@ class ConfirmDialogView extends Sprite {
 
 This is a code-structure and asset-pipeline change only; visuals and behavior
 must remain unchanged. The native conventions are documented in
-[`docs/native-presentation-foundation.md`](docs/native-presentation-foundation.md).
+[`docs/native-presentation-foundation.md`](docs/native-presentation-foundation.md)
+and the first production-slice rules in
+[`docs/deflash-native-conventions.md`](docs/deflash-native-conventions.md).
 
 ## Haxe/OpenFL Commands
 
