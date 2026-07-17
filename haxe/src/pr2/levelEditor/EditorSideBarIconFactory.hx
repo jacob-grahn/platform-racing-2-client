@@ -5,7 +5,6 @@ import openfl.display.DisplayObject;
 import pr2.level.ObjectCodes;
 import pr2.levelEditor.EditorBlockLayer;
 import pr2.runtime.FlComponents;
-import pr2.runtime.PR2MovieClip;
 import pr2.util.DisplayUtil;
 
 /**
@@ -57,10 +56,8 @@ class EditorSideBarIconFactory {
 		}
 	}
 
-	private static function linkage(name:String):PR2MovieClip {
-		var clip = PR2MovieClip.fromLinkage(name, {maxNestedDepth: 6});
-		clip.name = name;
-		return clip;
+	private static function linkage(name:String):EditorNativeGraphic {
+		return new EditorNativeGraphic(name);
 	}
 
 	private static function fittedCode(code:Int):Null<DisplayObject> {
@@ -118,7 +115,7 @@ class EditorSideBarIconFactory {
 		icon.y = ICON_OFFSET + (ICON_BOX - fittedHeight) / 2 - bounds.top * icon.scaleY;
 	}
 
-	private static function valueButton(title:String, value:String):PR2MovieClip {
+	private static function valueButton(title:String, value:String):EditorNativeGraphic {
 		var clip = linkage("ValueButtonGraphic");
 		var titleBox = FlComponents.asTextField(DisplayUtil.findByName(clip, "titleBox"));
 		if (titleBox != null) {

@@ -23,16 +23,16 @@ class ObjectsCompatTest {
 	}
 
 	private static function testStampMappings():Void {
-		assertLinkage("Tree", ObjectCodes.STAMP_TREE, "tree stamp");
-		assertLinkage("Tree2", ObjectCodes.STAMP_TREE2, "tree2 stamp");
-		assertLinkage("Tree3", ObjectCodes.STAMP_TREE3, "tree3 stamp");
-		assertLinkage("PetrifiedTree", ObjectCodes.STAMP_PETRIFIED_TREE, "petrified tree stamp");
-		assertNormalizedLinkage("Cactus", ObjectCodes.STAMP_CACTUS, "cactus stamp");
-		assertLinkage("Rock", ObjectCodes.STAMP_ROCK, "rock stamp");
-		assertLinkage("Rock2", ObjectCodes.STAMP_ROCK2, "rock2 stamp");
-		assertLinkage("Spire", ObjectCodes.STAMP_SPIRE, "spire stamp");
-		assertLinkage("Spire2", ObjectCodes.STAMP_SPIRE2, "spire2 stamp");
-		assertNormalizedLinkage("Building1", ObjectCodes.STAMP_BUILDING1, "building stamp");
+		assertNamedDisplay("Tree", ObjectCodes.STAMP_TREE, "tree stamp");
+		assertNamedDisplay("Tree2", ObjectCodes.STAMP_TREE2, "tree2 stamp");
+		assertNamedDisplay("Tree3", ObjectCodes.STAMP_TREE3, "tree3 stamp");
+		assertNamedDisplay("PetrifiedTree", ObjectCodes.STAMP_PETRIFIED_TREE, "petrified tree stamp");
+		assertNativeMatchesArchival("Cactus", ObjectCodes.STAMP_CACTUS, "cactus stamp");
+		assertNamedDisplay("Rock", ObjectCodes.STAMP_ROCK, "rock stamp");
+		assertNamedDisplay("Rock2", ObjectCodes.STAMP_ROCK2, "rock2 stamp");
+		assertNamedDisplay("Spire", ObjectCodes.STAMP_SPIRE, "spire stamp");
+		assertNamedDisplay("Spire2", ObjectCodes.STAMP_SPIRE2, "spire2 stamp");
+		assertNativeMatchesArchival("Building1", ObjectCodes.STAMP_BUILDING1, "building stamp");
 	}
 
 	private static function testBlockMappings():Void {
@@ -82,7 +82,7 @@ class ObjectsCompatTest {
 		var arrowGraphic = findChild(arrow, "ArrowBlockGraphic");
 		assertNotNull(arrowGraphic, "arrow block adds authored arrow graphic");
 		assertEquals(90.0, arrowGraphic.rotation, "right arrow rotation");
-		var egg = Std.downcast(Objects.getFromCode(ObjectCodes.BLOCK_MINION_EGG), PR2MovieClip);
+		var egg = Objects.getFromCode(ObjectCodes.BLOCK_MINION_EGG);
 		assertNotNull(egg, "minion egg returns authored graphic");
 		assertEquals("EggBlockGraphic", egg.name, "minion egg linkage");
 		var teleport = Std.downcast(Objects.getFromCode(ObjectCodes.BLOCK_TELEPORT), Sprite);
@@ -90,13 +90,13 @@ class ObjectsCompatTest {
 	}
 
 	private static function testBackgroundAndTextMappings():Void {
-		assertLinkage("BG1", ObjectCodes.BG1Code, "BG1");
-		assertLinkage("BG2", ObjectCodes.BG2Code, "BG2");
-		assertLinkage("BG3", ObjectCodes.BG3Code, "BG3");
-		assertLinkage("BG4", ObjectCodes.BG4Code, "BG4");
-		assertLinkage("BG5", ObjectCodes.BG5Code, "BG5");
-		assertLinkage("BG6", ObjectCodes.BG6Code, "BG6");
-		assertLinkage("BG7", ObjectCodes.BG7Code, "BG7");
+		assertNamedDisplay("BG1", ObjectCodes.BG1Code, "BG1");
+		assertNamedDisplay("BG2", ObjectCodes.BG2Code, "BG2");
+		assertNamedDisplay("BG3", ObjectCodes.BG3Code, "BG3");
+		assertNamedDisplay("BG4", ObjectCodes.BG4Code, "BG4");
+		assertNamedDisplay("BG5", ObjectCodes.BG5Code, "BG5");
+		assertNamedDisplay("BG6", ObjectCodes.BG6Code, "BG6");
+		assertNamedDisplay("BG7", ObjectCodes.BG7Code, "BG7");
 
 		var textBox = Std.downcast(Objects.getFromCode(ObjectCodes.TextCode), TextField);
 		assertNotNull(textBox, "text object returns nested textBox");
@@ -120,19 +120,29 @@ class ObjectsCompatTest {
 		assertEquals("Building1", container.getChildAt(1).name, "renderer uses building linkage");
 	}
 
-	private static function assertLinkage(linkage:String, code:Int, message:String):Void {
-		var clip = Std.downcast(Objects.getFromCode(code), PR2MovieClip);
-		assertNotNull(clip, message);
-		assertEquals(linkage, clip.symbol.linkageClassName, '$message linkage');
+	private static function assertNamedDisplay(name:String, code:Int, message:String):Void {
+		var display = Objects.getFromCode(code);
+		assertNotNull(display, message);
+		assertEquals(name, display.name, '$message native name');
+		assertTrue(display.width > 0 && display.height > 0, '$message has visible native art');
 	}
 
-	private static function assertNormalizedLinkage(linkage:String, code:Int, message:String):Void {
+	private static function assertNativeMatchesArchival(linkage:String, code:Int, message:String):Void {
 		var holder = Std.downcast(Objects.getFromCode(code), Sprite);
 		assertNotNull(holder, message);
 		assertEquals(linkage, holder.name, '$message holder name');
-		var clip = holder == null || holder.numChildren == 0 ? null : Std.downcast(holder.getChildAt(0), PR2MovieClip);
-		assertNotNull(clip, '$message authored child');
-		assertEquals(linkage, clip.symbol.linkageClassName, '$message linkage');
+		assertTrue(holder.numChildren > 0, '$message has composed SVG child');
+		assertEquals(null, Std.downcast(holder.getChildAt(0), PR2MovieClip), '$message no longer uses a timeline root');
+		var archival = PR2MovieClip.fromLinkage(linkage);
+		var bounds = archival.getBounds(archival);
+		assertNear(bounds.width, holder.width, '$message preserves archival width');
+		assertNear(bounds.height, holder.height, '$message preserves archival height');
+		archival.dispose();
+	}
+
+	private static function assertNear(expected:Float, actual:Float, message:String):Void {
+		assertions++;
+		if (Math.abs(expected - actual) > 0.05) throw '$message: expected $expected, got $actual';
 	}
 
 	private static function findChild(container:Sprite, name:String):Null<DisplayObject> {

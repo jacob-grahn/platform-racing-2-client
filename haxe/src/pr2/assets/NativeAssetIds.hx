@@ -13,11 +13,23 @@ enum abstract StaticSvg(String) to String {
 	var ArrowButtonDown = "assets/svg/timeline/graphics_symbol_1181_8da2d701eb/t00_l000_f0000_r00.svg";
 	var ArrowButtonOver = "assets/svg/timeline/graphics_symbol_1180_178f938050/t00_l000_f0000_r00.svg";
 	var ArrowButtonUp = "assets/svg/timeline/graphics_symbol_1179_688a9ff27c/t00_l000_f0000_r00.svg";
+	var BrickPiece1 = "assets/svg/timeline/movieclips_symbol_466_f7c8128c42/t00_l000_f0000_r00.svg";
+	var BrickPiece2 = "assets/svg/timeline/movieclips_symbol_466_f7c8128c42/t00_l000_f0001_r00.svg";
+	var BrickPiece3 = "assets/svg/timeline/movieclips_symbol_466_f7c8128c42/t00_l000_f0002_r00.svg";
+	var BrickPiece4 = "assets/svg/timeline/movieclips_symbol_466_f7c8128c42/t00_l000_f0003_r00.svg";
+	var BrickPiece5 = "assets/svg/timeline/movieclips_symbol_466_f7c8128c42/t00_l000_f0004_r00.svg";
+	var CrumblePiece = "assets/svg/timeline/movieclips_symbol_479_b6e029f803/t00_l000_f0000_r00.svg";
+	var ColorCrosshairsBack = "assets/svg/timeline/graphics_symbol_1202_46813a28a7/t00_l001_f0000_r00.svg";
+	var ColorCrosshairsFront = "assets/svg/timeline/graphics_symbol_1202_46813a28a7/t00_l000_f0000_r00.svg";
+	var ColorHueArrow = "assets/svg/timeline/movieclips_symbol_1205_4f15bd94d1/t00_l000_f0000_r00.svg";
+	var EyedropperBack = "assets/svg/timeline/graphics_symbol_1302_1e8ab2a882/t00_l001_f0000_r00.svg";
+	var EyedropperFront = "assets/svg/timeline/graphics_symbol_1302_1e8ab2a882/t00_l000_f0000_r00.svg";
 	var EggOverlay = "assets/svg/blocks/egg_overlay.svg";
 	var DjinnIce = "assets/svg/timeline/graphics_symbol_26_97e4207de0/t00_l000_f0000_r00.svg";
 	var HeartHighlight = "assets/svg/timeline/graphics_symbol_917_14a7be666e/t00_l001_f0000_r00.svg";
 	var HeartMain = "assets/svg/timeline/graphics_symbol_917_14a7be666e/t00_l002_f0000_r00.svg";
 	var HeartShadow = "assets/svg/timeline/graphics_symbol_917_14a7be666e/t00_l000_f0000_r00.svg";
+	var HalfSquarePanel = "assets/svg/timeline/movieclips_symbol_1143_9c6d19f4d6/t00_l000_f0000_r00.svg";
 	var LoginBackgroundFar = "assets/svg/login/bg_far.svg";
 	var LoginBackgroundMid = "assets/svg/login/bg_mid.svg";
 	var LoginBackgroundSky = "assets/svg/login/bg_sky.svg";
@@ -27,6 +39,22 @@ enum abstract StaticSvg(String) to String {
 	var LobbyTabOver = "assets/svg/timeline/movieclips_pr2_graphics_1_apr_2014_fla_symbol_1224_f93a5fd6a6/t00_l002_f0005_r00.svg";
 	var LobbyTabSelectedOverlay = "assets/svg/timeline/graphics_symbol_1223_06a8b36222/t00_l000_f0000_r00.svg";
 	var LobbyTabUp = "assets/svg/timeline/movieclips_pr2_graphics_1_apr_2014_fla_symbol_1224_f93a5fd6a6/t00_l002_f0000_r00.svg";
+	var MessageButtonBacking = "assets/svg/timeline/movieclips_symbol_1317_6df1c05aab/t00_l000_f0000_r00.svg";
+	var MessageDeleteOver = "assets/svg/timeline/graphics_symbol_1319_43210b7a4e/t00_l000_f0000_r00.svg";
+	var MessageDeleteUp = "assets/svg/timeline/graphics_symbol_1318_f224abe82c/t00_l000_f0000_r00.svg";
+	var MessageReplyOver = "assets/svg/timeline/graphics_symbol_1359_7eddacc142/t00_l000_f0000_r00.svg";
+	var MessageReplyUp = "assets/svg/timeline/graphics_symbol_1358_089008a498/t00_l000_f0000_r00.svg";
+	var MessageReportIcon = "assets/svg/timeline/movieclips_symbol_1356_2c2f6687f3/t00_l000_f0000_r00.svg";
+	var MinePiece1Back = "assets/svg/timeline/graphics_symbol_467_0feff9edef/t00_l002_f0000_r00.svg";
+	var MinePiece1Front = "assets/svg/timeline/graphics_symbol_467_0feff9edef/t00_l001_f0000_r00.svg";
+	var MinePiece2Back = "assets/svg/timeline/graphics_symbol_468_0726229f42/t00_l002_f0000_r00.svg";
+	var MinePiece2Middle = "assets/svg/timeline/graphics_symbol_468_0726229f42/t00_l001_f0000_r00.svg";
+	var MinePiece2Front = "assets/svg/timeline/graphics_symbol_468_0726229f42/t00_l000_f0000_r00.svg";
+	var MinePiece3Back = "assets/svg/timeline/graphics_symbol_469_82d3467630/t00_l001_f0000_r00.svg";
+	var MinePiece3Front = "assets/svg/timeline/graphics_symbol_469_82d3467630/t00_l000_f0000_r00.svg";
+	var MinePiece4 = "assets/svg/timeline/ui_pages_levels_in_game_effects_mine_symbol_472_df88e60ae7/t00_l002_f0003_r00.svg";
+	var MinePiece5 = "assets/svg/timeline/ui_pages_levels_in_game_effects_mine_symbol_472_df88e60ae7/t00_l002_f0004_r00.svg";
+	var MinePiece6 = "assets/svg/timeline/graphics_symbol_414_f06c3a9f70/t00_l000_f0000_r00.svg";
 	var SpeedBurstStar = "assets/svg/timeline/ui_pages_levels_in_game_effects_speedburst_speedburststar_64db9149b6/t00_l000_f0000_r00.svg";
 	var ScrollArrowDown = "assets/svg/timeline/components_component_assets_scrollbarskins_scrollarrowdown_upski_5a4fa47e32/t00_l001_f0000_r00.svg";
 	var ScrollArrowUp = "assets/svg/timeline/components_component_assets_scrollbarskins_scrollarrowup_upskin_03aeb6088e/t00_l001_f0000_r00.svg";
@@ -35,6 +63,7 @@ enum abstract StaticSvg(String) to String {
 	var ScrollTrack = "assets/svg/timeline/components_component_assets_scrollbarskins_scrolltrack_skin_1c49414a50/t00_l000_f0000_r00.svg";
 	var TimerPanel = "assets/svg/timeline/ui_popups_outside_levels_bg_d14a954e12/t00_l000_f0000_r00.svg";
 	var TreeStamp = "assets/svg/stamps/tree1.svg";
+	var UnreadNotification = "assets/svg/timeline/movieclips_symbol_444_3790021d8e/t00_l000_f0000_r00.svg";
 }
 
 enum abstract BitmapAsset(String) to String {

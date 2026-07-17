@@ -1,11 +1,15 @@
 package pr2.gameplay;
 
+import openfl.display.Shape;
+import openfl.display.Sprite;
 import openfl.events.MouseEvent;
 import openfl.text.TextField;
+import openfl.text.TextFormat;
+import openfl.text.TextFormatAlign;
+import pr2.assets.NativeAssetIds.FontAsset;
+import pr2.assets.NativeAssets;
 import pr2.display.Removable;
-import pr2.lobby.LobbyArt;
 import pr2.lobby.dialogs.HoverPopup;
-import pr2.runtime.PR2MovieClip;
 
 /**
 	Port of Flash `gameplay.StatsDisplay`.
@@ -18,7 +22,7 @@ import pr2.runtime.PR2MovieClip;
 class StatsDisplay extends Removable {
 	static inline var HOVER_DELAY_MS:Int = 250;
 
-	private var art:Null<PR2MovieClip>;
+	private var art:Null<Sprite>;
 	private var speedBox:Null<TextField>;
 	private var accelBox:Null<TextField>;
 	private var jumpBox:Null<TextField>;
@@ -27,15 +31,40 @@ class StatsDisplay extends Removable {
 
 	public function new() {
 		super();
-		art = PR2MovieClip.fromLinkage("StatsDisplayGraphic", {maxNestedDepth: 3});
+		art = new Sprite();
+		var background = new Shape();
+		background.graphics.beginFill(0xF3F3F3, 0.94);
+		background.graphics.lineStyle(1, 0x888888);
+		background.graphics.drawRoundRect(0, 0, 57, 18, 5, 5);
+		background.graphics.moveTo(19, 5.25);
+		background.graphics.lineTo(19, 13.25);
+		background.graphics.moveTo(38.25, 5.25);
+		background.graphics.lineTo(38.25, 13.25);
+		art.addChild(background);
+		speedBox = createStatBox("speedBox", 2.4);
+		accelBox = createStatBox("accelBox", 20.25);
+		jumpBox = createStatBox("jumpBox", 38.35);
+		art.addChild(speedBox);
+		art.addChild(accelBox);
+		art.addChild(jumpBox);
 		addChild(art);
-		speedBox = LobbyArt.text(art, "speedBox");
-		accelBox = LobbyArt.text(art, "accelBox");
-		jumpBox = LobbyArt.text(art, "jumpBox");
 		mouseChildren = false;
 		addEventListener(MouseEvent.MOUSE_OVER, onMouse);
 		addEventListener(MouseEvent.MOUSE_OUT, onMouse);
 		setStats(0, 0, 0);
+	}
+
+	private function createStatBox(name:String, x:Float):TextField {
+		var field = new TextField();
+		field.name = name;
+		field.x = x;
+		field.y = 3.75;
+		field.width = 16;
+		field.height = 10;
+		field.selectable = false;
+		field.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 8, 0, false, null, null, null, null,
+			TextFormatAlign.CENTER);
+		return field;
 	}
 
 	public function setStats(speed:Int, accel:Int, jump:Int):Void {
@@ -96,7 +125,7 @@ class StatsDisplay extends Removable {
 		removeEventListener(MouseEvent.MOUSE_OVER, onMouse);
 		removeEventListener(MouseEvent.MOUSE_OUT, onMouse);
 		if (art != null) {
-			art.dispose();
+			if (art.parent != null) art.parent.removeChild(art);
 			art = null;
 		}
 		speedBox = null;

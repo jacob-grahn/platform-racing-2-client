@@ -4,17 +4,17 @@ import openfl.text.TextField;
 import pr2.level.BlockType;
 import pr2.page.EditorBlockOptions;
 import pr2.runtime.FlComponents;
-import pr2.runtime.FlSlider;
-import pr2.runtime.FlSliderEvent;
+import openfl.events.Event;
+import pr2.ui.controls.GameSlider;
 import pr2.util.DisplayUtil;
 
 class EditorStatBlockOptionsPopup extends EditorBlockOptionsPopup {
-	private var slider:Null<FlSlider>;
+	private var slider:Null<GameSlider>;
 	private var statBox:Null<TextField>;
 
 	public function new(editor:LevelEditor, block:EditorBlockObject) {
 		super(editor, block, "StatBlockOptionsGraphic");
-		slider = Std.downcast(DisplayUtil.findByName(art, "slider"), FlSlider);
+		slider = Std.downcast(DisplayUtil.findByName(art, "slider"), GameSlider);
 		statBox = FlComponents.asTextField(DisplayUtil.findByName(art, "statBox"));
 		var titleBox = FlComponents.asTextField(DisplayUtil.findByName(art, "titleBox"));
 		var descBox = FlComponents.asTextField(DisplayUtil.findByName(art, "descBox"));
@@ -26,11 +26,7 @@ class EditorStatBlockOptionsPopup extends EditorBlockOptionsPopup {
 			descBox.text = "All the stats of players that bump this block will be " + (happy ? "increased" : "decreased") + " by:";
 		}
 		if (slider != null) {
-			slider.minimum = 5;
-			slider.maximum = 100;
-			slider.snapInterval = 5;
-			slider.addEventListener(FlSliderEvent.CHANGE, updateStatDisplay);
-			slider.addEventListener(FlSliderEvent.THUMB_DRAG, updateStatDisplay);
+			slider.addEventListener(Event.CHANGE, updateStatDisplay);
 		}
 		setStatMagnitude(Std.int(Math.abs(EditorBlockOptions.statChange(block.type, block.options))));
 	}
@@ -46,8 +42,7 @@ class EditorStatBlockOptionsPopup extends EditorBlockOptionsPopup {
 
 	override public function remove():Void {
 		if (slider != null) {
-			slider.removeEventListener(FlSliderEvent.CHANGE, updateStatDisplay);
-			slider.removeEventListener(FlSliderEvent.THUMB_DRAG, updateStatDisplay);
+			slider.removeEventListener(Event.CHANGE, updateStatDisplay);
 		}
 		var magnitude = slider == null ? Std.int(Math.abs(EditorBlockOptions.statChange(block.type, block.options))) : Std.int(Math.round(slider.value));
 		block.setOptions(EditorBlockOptions.applyStatChange(block.type, block.type == BlockType.Sad ? -magnitude : magnitude));

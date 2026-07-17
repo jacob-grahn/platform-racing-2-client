@@ -6,7 +6,6 @@ import openfl.events.Event;
 import openfl.geom.ColorTransform;
 import pr2.assets.NativeAssetIds.StaticSvg;
 import pr2.assets.NativeAssets;
-import pr2.runtime.PR2MovieClip;
 
 typedef PhysicsParticleParams = {
 	var graphic:String;
@@ -100,12 +99,10 @@ class PhysicsParticle extends Sprite {
 	}
 
 	private function makeGraphic(name:String):DisplayObject {
-		if (name == "DjinnIceGraphic") {
-			var ice = NativeAssets.svg(StaticSvg.DjinnIce);
-			ice.scaleX = ice.scaleY = 0.100006103515625;
-			return ice;
-		}
-		return PR2MovieClip.fromLinkage(name, {maxNestedDepth: 2});
+		if (name != "DjinnIceGraphic") throw 'Unsupported native particle graphic $name';
+		var ice = NativeAssets.svg(StaticSvg.DjinnIce);
+		ice.scaleX = ice.scaleY = 0.100006103515625;
+		return ice;
 	}
 
 	private function randRange(min:Null<Float>, max:Null<Float>):Float {
@@ -137,10 +134,6 @@ class PhysicsParticle extends Sprite {
 
 	public function remove():Void {
 		removeEventListener(Event.ENTER_FRAME, tick);
-		var clip = Std.downcast(graphic, PR2MovieClip);
-		if (clip != null) {
-			clip.dispose();
-		}
 		if (graphic != null && graphic.parent == this) {
 			removeChild(graphic);
 		}

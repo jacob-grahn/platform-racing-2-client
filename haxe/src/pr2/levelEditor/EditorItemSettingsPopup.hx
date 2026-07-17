@@ -5,32 +5,24 @@ import openfl.display.Sprite;
 import pr2.app.AppStage;
 import pr2.gameplay.Items;
 import pr2.lobby.dialogs.AutoDismissController;
-import pr2.runtime.FlCheckBox;
-import pr2.runtime.PR2MovieClip;
+import pr2.lobby.dialogs.ChecklistMenuView;
+import pr2.ui.controls.GameCheckBox;
 import pr2.util.DisplayUtil;
 
 class EditorItemSettingsPopup extends Sprite {
 	public final editor:LevelEditor;
-	public final art:PR2MovieClip;
-	private final checks:Map<Int, FlCheckBox> = new Map();
+	public final art:ChecklistMenuView;
+	private final checks:Map<Int, GameCheckBox> = new Map();
 	private var autoDismiss:Null<AutoDismissController>;
 	private var removed:Bool = false;
 
 	public function new(editor:LevelEditor, target:DisplayObject) {
 		super();
 		this.editor = editor;
-		art = PR2MovieClip.fromLinkage("ItemMenuGraphic", {maxNestedDepth: 6});
+		art = new ChecklistMenuView("items");
 		addChild(art);
 		for (itemId in Items.getAllCodes()) {
-			var check:Null<FlCheckBox> = Std.downcast(DisplayUtil.findByName(art, "check" + itemId), FlCheckBox);
-			if (check == null && itemId == Items.SNAKE) {
-				check = new FlCheckBox("Snake");
-				check.name = "check" + itemId;
-				var previous = Std.downcast(DisplayUtil.findByName(art, "check" + Items.ICE_WAVE), FlCheckBox);
-				check.x = previous == null ? 8 : previous.x;
-				check.y = previous == null ? 142 : previous.y + 18;
-				art.addChild(check);
-			}
+			var check:Null<GameCheckBox> = Std.downcast(DisplayUtil.findByName(art, "check" + itemId), GameCheckBox);
 			if (check != null) {
 				check.selected = editor.allowedItems.indexOf(itemId) >= 0;
 				checks.set(itemId, check);

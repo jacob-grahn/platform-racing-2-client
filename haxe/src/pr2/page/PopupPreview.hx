@@ -2,6 +2,7 @@ package pr2.page;
 
 import openfl.display.Sprite;
 import openfl.events.Event;
+import pr2.gameplay.FinishedPage;
 import pr2.lobby.account.LoadoutsPopup;
 import pr2.lobby.dialogs.ConfirmPopup;
 import pr2.lobby.dialogs.CreditsPopup;
@@ -26,6 +27,10 @@ class PopupPreview extends Sprite {
 		removeEventListener(Event.ADDED_TO_STAGE, show);
 		switch (variant) {
 			case "confirm": new ConfirmPopup(function() {}, "Are you sure you want to continue?");
+			case "finished":
+				var finished = new FinishedPage(6497936);
+				finished.award("Level Completed", "+ 26");
+				finished.setExpGain(520, 546, 546);
 			case "send-message": new SendMessagePopup("Jiggmin", "Hello from Platform Racing 2!");
 			case "codes": new PMRFCodesPopup();
 			case "credits": new CreditsPopup();

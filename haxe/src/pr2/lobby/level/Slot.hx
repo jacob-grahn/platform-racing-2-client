@@ -4,8 +4,7 @@ import openfl.display.Sprite;
 import openfl.events.MouseEvent;
 import openfl.text.TextField;
 import pr2.lobby.LobbyArt;
-import pr2.runtime.PR2MovieClip;
-import pr2.util.DisplayUtil;
+import pr2.lobby.level.SlotView.SlotBackground;
 
 /**
 	Port of Flash `level_browser.Slot` — one of the four join slots on a
@@ -19,8 +18,8 @@ import pr2.util.DisplayUtil;
 class Slot extends Sprite {
 	private var num:Int;
 	private var owner:Null<LevelItem>;
-	private var art:PR2MovieClip;
-	private var bg:Null<PR2MovieClip>;
+	private var art:SlotView;
+	private var bg:Null<SlotBackground>;
 	private var rankBox:Null<TextField>;
 	private var nameBox:Null<TextField>;
 	private var status:String = "empty";
@@ -34,15 +33,15 @@ class Slot extends Sprite {
 		name = "levelSlot";
 		this.num = num;
 		this.owner = owner;
-		art = PR2MovieClip.fromLinkage("SlotGraphic", {maxNestedDepth: 4});
+		art = new SlotView();
 		addChild(art);
-		bg = Std.downcast(DisplayUtil.findByName(art, "bg"), PR2MovieClip);
+		bg = art.background;
 		// The bg is a multi-frame state machine (emptyUp/emptyOver/pending/...),
 		// not an animation. Rest it on the initial status frame so it doesn't
 		// free-run through every state until the first server-driven change.
 		changeStatus(status);
-		rankBox = LobbyArt.text(art, "rankBox");
-		nameBox = LobbyArt.text(art, "nameBox");
+		rankBox = art.rankBox;
+		nameBox = art.nameBox;
 		addEventListener(MouseEvent.MOUSE_OVER, onOver);
 		addEventListener(MouseEvent.MOUSE_OUT, onOut);
 		addEventListener(MouseEvent.CLICK, onClick);
@@ -115,7 +114,7 @@ class Slot extends Sprite {
 
 	private inline function gotoBg(frame:String):Void {
 		if (bg != null) {
-			bg.gotoAndStop(frame);
+			bg.render(frame);
 		}
 	}
 

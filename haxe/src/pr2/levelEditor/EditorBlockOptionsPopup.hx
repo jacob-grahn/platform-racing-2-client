@@ -4,12 +4,11 @@ import openfl.display.Sprite;
 import openfl.geom.Rectangle;
 import pr2.app.AppStage;
 import pr2.lobby.dialogs.AutoDismissController;
-import pr2.runtime.PR2MovieClip;
 
 class EditorBlockOptionsPopup extends Sprite {
 	public final editor:LevelEditor;
 	public final block:EditorBlockObject;
-	public final art:PR2MovieClip;
+	public final art:EditorBlockOptionsView;
 	private var autoDismiss:Null<AutoDismissController>;
 	private var removed:Bool = false;
 
@@ -17,7 +16,7 @@ class EditorBlockOptionsPopup extends Sprite {
 		super();
 		this.editor = editor;
 		this.block = block;
-		art = PR2MovieClip.fromLinkage(linkage, {maxNestedDepth: 6});
+		art = new EditorBlockOptionsView(linkage);
 		addChild(art);
 		mountNearBlock();
 		autoDismiss = new AutoDismissController(this, remove);

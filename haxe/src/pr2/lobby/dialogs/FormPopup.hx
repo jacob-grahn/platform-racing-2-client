@@ -1,17 +1,13 @@
 package pr2.lobby.dialogs;
 
 import openfl.events.KeyboardEvent;
-import pr2.lobby.LobbyArt;
-import pr2.lobby.LobbyArt.Binding;
-import pr2.runtime.FlTextInput;
-import pr2.runtime.PR2MovieClip;
+import pr2.ui.controls.GameTextInput;
 import pr2.util.DisplayUtil;
 
 /** Shared authored-art, input, button-binding, and teardown lifecycle for form dialogs. */
 class FormPopup extends Popup {
-	private var art:Null<PR2MovieClip>;
-	private var bindings:Array<Null<Binding>> = [];
-	private var inputs:Array<FlTextInput> = [];
+	private var art:Null<NativeFormView>;
+	private var inputs:Array<GameTextInput> = [];
 	private var submit:Null<Void->Void>;
 
 	public function new() {
@@ -20,10 +16,10 @@ class FormPopup extends Popup {
 
 	function initializeForm(linkage:String, inputNames:Array<String>, submit:Void->Void):Void {
 		this.submit = submit;
-		art = PR2MovieClip.fromLinkage(linkage, {maxNestedDepth: 4});
+		art = new NativeFormView(linkage);
 		addChild(art);
-		bindings.push(LobbyArt.bind(DisplayUtil.findByName(art, "ok_bt"), submit));
-		bindings.push(LobbyArt.bind(DisplayUtil.findByName(art, "cancel_bt"), startFadeOut));
+		art.onSubmit = submit;
+		art.onCancel = startFadeOut;
 		for (name in inputNames) {
 			var input = textInput(name);
 			if (input != null) {
@@ -33,8 +29,8 @@ class FormPopup extends Popup {
 		}
 	}
 
-	function textInput(name:String):Null<FlTextInput> {
-		return Std.downcast(DisplayUtil.findByName(art, name), FlTextInput);
+	function textInput(name:String):Null<GameTextInput> {
+		return art == null ? null : art.inputs.get(name);
 	}
 
 	function inputText(name:String):String {
@@ -49,8 +45,6 @@ class FormPopup extends Popup {
 	}
 
 	override public function remove():Void {
-		for (binding in bindings) LobbyArt.unbind(binding);
-		bindings = [];
 		for (input in inputs) input.removeEventListener(KeyboardEvent.KEY_DOWN, listenForEnterKey);
 		inputs = [];
 		submit = null;

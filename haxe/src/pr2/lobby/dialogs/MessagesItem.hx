@@ -5,14 +5,17 @@ import openfl.display.Sprite;
 import openfl.events.MouseEvent;
 import openfl.text.TextField;
 import openfl.text.TextFieldAutoSize;
+import openfl.text.TextFormat;
+import openfl.text.TextFormatAlign;
 import openfl.ui.Mouse;
 import openfl.ui.MouseCursor;
+import pr2.assets.NativeAssetIds.StaticSvg;
+import pr2.assets.NativeAssetIds.FontAsset;
+import pr2.assets.NativeAssets;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.account.Settings;
 import pr2.lobby.chat.ChatText;
 import pr2.lobby.chat.HtmlNameMaker;
-import pr2.runtime.NineSliceSymbol;
-import pr2.runtime.PR2MovieClip;
 import pr2.util.DisplayUtil;
 
 /**
@@ -35,7 +38,7 @@ class MessagesItem extends Sprite {
 	private var time:Int;
 	private var group:Int;
 
-	private var art:PR2MovieClip;
+	private var art:MessagesItemView;
 	private var htmlNameMaker:HtmlNameMaker;
 	private var timeBox:Null<TextField>;
 	private var reportButton:MessageActionButton;
@@ -61,7 +64,7 @@ class MessagesItem extends Sprite {
 		}
 		this.messageText = body;
 
-		art = PR2MovieClip.fromLinkage("MessagesItemGraphic", {maxNestedDepth: 6});
+		art = new MessagesItemView();
 		htmlNameMaker = new HtmlNameMaker();
 		var nameBox = LobbyArt.text(art, "nameBox");
 		var textBox = LobbyArt.text(art, "textBox");
@@ -96,10 +99,10 @@ class MessagesItem extends Sprite {
 		}
 
 		addChild(art);
-		reportButton = makeButton("ReportMessageButtonGraphic", "Report Message",
+		reportButton = makeButton(Report, "Report Message",
 			"If this message is inappropriate, you can report it to the moderators.", 15, textBox);
-		deleteButton = makeButton("DeleteMessageButtonGraphic", "Delete Message", "Erase this flimsy correspondence from existence.", 37, textBox);
-		replyButton = makeButton("ReplyMessageButtonGraphic", "Reply to Message",
+		deleteButton = makeButton(Delete, "Delete Message", "Erase this flimsy correspondence from existence.", 37, textBox);
+		replyButton = makeButton(Reply, "Reply to Message",
 			"You've got something to say, and someone's gonna hear it.", 59, textBox);
 		reportBinding = LobbyArt.bind(reportButton, clickReport);
 		deleteBinding = LobbyArt.bind(deleteButton, clickDelete);
@@ -111,8 +114,8 @@ class MessagesItem extends Sprite {
 		}
 	}
 
-	private function makeButton(linkage:String, title:String, content:String, x:Float, textBox:Null<TextField>):MessageActionButton {
-		var button = new MessageActionButton(linkage, title, content);
+	private function makeButton(kind:MessageButtonKind, title:String, content:String, x:Float, textBox:Null<TextField>):MessageActionButton {
+		var button = new MessageActionButton(kind, title, content);
 		button.x = x;
 		button.y = (textBox != null ? textBox.height : 0) + 42;
 		addChild(button);
@@ -132,7 +135,7 @@ class MessagesItem extends Sprite {
 	}
 
 	private static function resizeMessageBackground(bg:DisplayObject, targetHeight:Float):Void {
-		var sliced = Std.downcast(bg, NineSliceSymbol);
+		var sliced = Std.downcast(bg, MessageBackground);
 		if (sliced != null) {
 			sliced.setTargetSize(bg.width, targetHeight);
 		} else {
@@ -253,7 +256,7 @@ class MessagesItem extends Sprite {
 
 	@:allow(pr2.lobby.MessagesItemTest)
 	private function messageBackgroundIsNineSlice():Bool {
-		return Std.downcast(DisplayUtil.findByName(art, "bg"), NineSliceSymbol) != null;
+		return Std.downcast(DisplayUtil.findByName(art, "bg"), MessageBackground) != null;
 	}
 
 	public function remove():Void {
@@ -279,20 +282,116 @@ class MessagesItem extends Sprite {
 	}
 }
 
-private class MessageActionButton extends HoverDelayPopup {
-	private var graphic:PR2MovieClip;
+private class MessagesItemView extends Sprite {
+	public function new() {
+		super();
+		var bg = new MessageBackground(205, 70);
+		bg.name = "bg";
+		addChild(bg);
+		addText("nameBox", 8, 5, 155, 18, 12, true, TextFormatAlign.LEFT);
+		addText("textBox", 8, 23, 159.5, 20, 11, false, TextFormatAlign.LEFT);
+		addText("timeBox", 104, 53, 93, 16, 9, false, TextFormatAlign.RIGHT);
+		var guild = new Sprite();
+		guild.name = "guildMsgIcon";
+		guild.x = 183;
+		guild.y = 13;
+		guild.graphics.beginFill(0xF2C84B);
+		guild.graphics.lineStyle(1, 0x8C6A13);
+		guild.graphics.drawCircle(0, 0, 7);
+		guild.graphics.endFill();
+		addChild(guild);
+	}
 
-	public function new(linkage:String, title:String, content:String) {
+	private function addText(name:String, x:Float, y:Float, width:Float, height:Float, size:Int, bold:Bool, align:TextFormatAlign):Void {
+		var field = new TextField();
+		field.name = name;
+		field.x = x;
+		field.y = y;
+		field.width = width;
+		field.height = height;
+		field.selectable = false;
+		field.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), size, 0, bold, null, null, null, null, align);
+		addChild(field);
+	}
+
+	public function dispose():Void {
+		if (parent != null) parent.removeChild(this);
+	}
+}
+
+private class MessageBackground extends Sprite {
+	private var targetWidth:Float;
+
+	public function new(width:Float, height:Float) {
+		super();
+		targetWidth = width;
+		setTargetSize(width, height);
+	}
+
+	public function setTargetSize(width:Float, height:Float):Void {
+		targetWidth = width;
+		graphics.clear();
+		graphics.beginFill(0xFFFFFF, 0.94);
+		graphics.lineStyle(1, 0x8B8B8B);
+		graphics.drawRoundRect(0, 0, width, height, 8, 8);
+		graphics.endFill();
+	}
+}
+
+private class MessageActionButton extends HoverDelayPopup {
+	private final kind:MessageButtonKind;
+	private var over:Bool = false;
+	private var down:Bool = false;
+
+	public function new(kind:MessageButtonKind, title:String, content:String) {
 		super(title, content);
-		graphic = PR2MovieClip.fromLinkage(linkage, {maxNestedDepth: 3});
-		addChild(graphic);
+		this.kind = kind;
+		mouseChildren = false;
+		buttonMode = true;
+		addEventListener(MouseEvent.MOUSE_OVER, onOver);
+		addEventListener(MouseEvent.MOUSE_OUT, onOut);
+		addEventListener(MouseEvent.MOUSE_DOWN, onDown);
+		addEventListener(MouseEvent.MOUSE_UP, onUp);
+		render();
+	}
+
+	private function onOver(_:MouseEvent):Void { over = true; render(); }
+	private function onOut(_:MouseEvent):Void { over = false; down = false; render(); }
+	private function onDown(_:MouseEvent):Void { down = true; render(); }
+	private function onUp(_:MouseEvent):Void { down = false; render(); }
+
+	private function render():Void {
+		while (numChildren > 0) removeChildAt(0);
+		var backing = NativeAssets.svg(StaticSvg.MessageButtonBacking);
+		backing.x = down || over ? -9 : -8;
+		backing.y = down || over ? -9 : -8;
+		backing.scaleX = backing.scaleY = down || over ? 1.125 : 1;
+		addChild(backing);
+		if (down) return;
+		var icon = switch (kind) {
+			case Delete: NativeAssets.svg(over ? StaticSvg.MessageDeleteOver : StaticSvg.MessageDeleteUp);
+			case Reply: NativeAssets.svg(over ? StaticSvg.MessageReplyOver : StaticSvg.MessageReplyUp);
+			case Report: NativeAssets.svg(StaticSvg.MessageReportIcon);
+		}
+		if (kind == Report) {
+			icon.x = over ? -2.25 : -1.7;
+			icon.y = over ? -8.6 : -6.7;
+			icon.scaleX = icon.scaleY = over ? 1.30987548828125 : 1;
+		}
+		addChild(icon);
 	}
 
 	override public function remove():Void {
-		if (graphic != null) {
-			graphic.dispose();
-			graphic = null;
-		}
+		removeEventListener(MouseEvent.MOUSE_OVER, onOver);
+		removeEventListener(MouseEvent.MOUSE_OUT, onOut);
+		removeEventListener(MouseEvent.MOUSE_DOWN, onDown);
+		removeEventListener(MouseEvent.MOUSE_UP, onUp);
 		super.remove();
 	}
+}
+
+private enum abstract MessageButtonKind(Int) {
+	var Report = 0;
+	var Delete = 1;
+	var Reply = 2;
 }

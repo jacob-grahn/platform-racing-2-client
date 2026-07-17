@@ -8,7 +8,7 @@ import pr2.lobby.dialogs.MessagePopup;
 import pr2.lobby.dialogs.Popup;
 import pr2.lobby.dialogs.SetEmailPopup;
 import pr2.net.ServerConfig;
-import pr2.runtime.FlTextInput;
+import pr2.ui.controls.GameTextInput;
 import pr2.util.DisplayUtil;
 
 class SetEmailPopupTest {
@@ -83,8 +83,8 @@ class SetEmailPopupTest {
 		closeAll();
 	}
 
-	private static function input(popup:SetEmailPopup, name:String):FlTextInput {
-		var value = Std.downcast(DisplayUtil.findByName(popup, name), FlTextInput);
+	private static function input(popup:SetEmailPopup, name:String):GameTextInput {
+		var value = Std.downcast(DisplayUtil.findByName(popup, name), GameTextInput);
 		if (value == null) throw name + " missing";
 		return value;
 	}

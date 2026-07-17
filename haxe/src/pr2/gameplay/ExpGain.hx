@@ -1,12 +1,15 @@
 package pr2.gameplay;
 
 import openfl.display.DisplayObject;
+import openfl.display.Sprite;
 import openfl.events.Event;
+import openfl.text.TextField;
+import openfl.text.TextFormat;
+import openfl.text.TextFormatAlign;
+import pr2.assets.NativeAssetIds.FontAsset;
+import pr2.assets.NativeAssets;
 import pr2.display.Removable;
-import pr2.lobby.LobbyArt;
 import pr2.lobby.NumberFormat;
-import pr2.runtime.PR2MovieClip;
-import pr2.util.DisplayUtil;
 
 /**
 	Port of Flash `gameplay.ExpGain`: the experience-gain bar shown on the
@@ -22,7 +25,7 @@ class ExpGain extends Removable {
 	private static inline var STEPS:Float = 45;
 	private static inline var BAR_WIDTH:Float = 200;
 
-	private var art:Null<PR2MovieClip>;
+	private var art:Null<ExpGainView>;
 	private var fill:Null<DisplayObject>;
 	private var textBox:Null<openfl.text.TextField>;
 
@@ -33,12 +36,10 @@ class ExpGain extends Removable {
 
 	public function new() {
 		super();
-		art = PR2MovieClip.fromLinkage("ExpGainGraphic", {maxNestedDepth: 4});
+		art = new ExpGainView();
 		addChild(art);
-		// `m.bar` is the ProgressBar instance; its inner fill is also named `bar`.
-		var bar = Std.downcast(DisplayUtil.findByName(art, "bar"), openfl.display.DisplayObjectContainer);
-		fill = DisplayUtil.findByName(bar, "bar");
-		textBox = LobbyArt.text(art, "textBox");
+		fill = art.fill;
+		textBox = art.textBox;
 		if (fill != null) {
 			fill.width = 1;
 		}
@@ -84,5 +85,46 @@ class ExpGain extends Removable {
 		fill = null;
 		textBox = null;
 		super.remove();
+	}
+}
+
+private class ExpGainView extends Sprite {
+	public final fill:Sprite;
+	public final textBox:TextField;
+
+	public function new() {
+		super();
+		name = "ExpGainGraphic";
+		graphics.beginFill(0x2E2E2E, 0.92);
+		graphics.lineStyle(1, 0x111111);
+		graphics.drawRoundRect(0, 0, 204, 31, 7, 7);
+		graphics.endFill();
+		var track = new Sprite();
+		track.x = 2;
+		track.y = 2;
+		track.graphics.beginFill(0x6C6C6C);
+		track.graphics.drawRoundRect(0, 0, 200, 12, 5, 5);
+		track.graphics.endFill();
+		addChild(track);
+		fill = new Sprite();
+		fill.name = "bar";
+		fill.graphics.beginFill(0xE8C348);
+		fill.graphics.drawRoundRect(0, 0, 200, 12, 5, 5);
+		fill.graphics.endFill();
+		track.addChild(fill);
+		textBox = new TextField();
+		textBox.name = "textBox";
+		textBox.x = 4;
+		textBox.y = 14;
+		textBox.width = 196;
+		textBox.height = 16;
+		textBox.selectable = false;
+		textBox.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 10, 0xFFFFFF, false, null, null, null, null,
+			TextFormatAlign.CENTER);
+		addChild(textBox);
+	}
+
+	public function dispose():Void {
+		if (parent != null) parent.removeChild(this);
 	}
 }

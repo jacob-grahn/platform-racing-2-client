@@ -16,7 +16,7 @@ import pr2.lobby.dialogs.SetEmailPopup;
 import pr2.lobby.dialogs.TransferGuildPopup;
 import pr2.lobby.dialogs.UploadingPopup;
 import pr2.net.ServerConfig;
-import pr2.runtime.FlSlider;
+import pr2.ui.controls.GameSlider;
 import pr2.runtime.FlSliderEvent;
 import pr2.util.DisplayUtil;
 
@@ -371,8 +371,8 @@ class OptionsPopupTest {
 		return count;
 	}
 
-	private static function slider(popup:OptionsPopup, name:String):FlSlider {
-		var value = Std.downcast(DisplayUtil.findByName(popup, name), FlSlider);
+	private static function slider(popup:OptionsPopup, name:String):GameSlider {
+		var value = Std.downcast(DisplayUtil.findByName(popup, name), GameSlider);
 		if (value == null) throw name + " missing";
 		return value;
 	}

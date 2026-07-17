@@ -8,15 +8,21 @@ import openfl.events.Event;
 import openfl.events.KeyboardEvent;
 import openfl.events.MouseEvent;
 import openfl.text.TextField;
+import openfl.text.TextFieldType;
+import openfl.text.TextFormat;
+import openfl.text.TextFormatAlign;
 import pr2.Constants;
+import pr2.assets.NativeAssetIds.FontAsset;
+import pr2.assets.NativeAssets;
 import pr2.runtime.FlCheckBox;
 import pr2.runtime.FlComponents;
 import pr2.runtime.FlComboBox;
-import pr2.runtime.PR2MovieClip;
+import pr2.ui.controls.GameButton;
+import pr2.ui.view.NativeView;
 import pr2.util.DisplayUtil;
 
 class LoginFlashPopup extends Sprite {
-	private var art:PR2MovieClip;
+	private var art:LoginPopupView;
 	private var buttonHandlers:Array<{target:DisplayObject, handler:MouseEvent->Void}> = [];
 	private var comboHandlers:Array<{target:FlComboBox, handler:Event->Void}> = [];
 	private var keyHandlers:Array<{target:TextField, handler:KeyboardEvent->Void}> = [];
@@ -27,7 +33,7 @@ class LoginFlashPopup extends Sprite {
 		graphics.drawRect(0, 0, Constants.STAGE_WIDTH, Constants.STAGE_HEIGHT);
 		graphics.endFill();
 
-		art = PR2MovieClip.fromLinkage(linkage, {maxNestedDepth: 6});
+		art = new LoginPopupView(linkage);
 		art.x = Constants.STAGE_WIDTH / 2;
 		art.y = Constants.STAGE_HEIGHT / 2;
 		addChild(art);
@@ -42,7 +48,7 @@ class LoginFlashPopup extends Sprite {
 		// unwrap the FlTextInput/FlTextArea sprite to its inner editable field.
 		var field = FlComponents.asTextField(child(name));
 		if (field == null) {
-			throw 'Popup ${art.symbol.linkageClassName} missing TextInput $name';
+			throw 'Login popup missing TextInput $name';
 		}
 		return field;
 	}
@@ -172,5 +178,113 @@ class LoginFlashPopup extends Sprite {
 			}
 		}
 		return null;
+	}
+}
+
+private class LoginPopupView extends NativeView {
+	public function new(linkage:String) {
+		super();
+		graphics.beginFill(0xF4F4F4, 0.98);
+		graphics.lineStyle(2, 0x666666);
+		if (linkage == "ServerSelectPopupGraphic") buildServerSelect();
+		else if (linkage == "ConnectingPopupGraphic") buildConnecting();
+		else if (linkage == "LoginPopupGraphic") buildCredentials();
+		else throw 'Unsupported native login popup: $linkage';
+	}
+
+	private function buildCredentials():Void {
+		graphics.drawRoundRect(-155, -112, 310, 224, 14, 14);
+		graphics.endFill();
+		label("-- Login --", null, -110, -96, 220, 24, 17, true, TextFormatAlign.CENTER);
+		label("name:", null, -128, -55, 70, 20, 11, false, TextFormatAlign.RIGHT);
+		input("nameBox", -51, -58, 165, false);
+		label("password:", null, -128, -22, 70, 20, 11, false, TextFormatAlign.RIGHT);
+		input("passBox", -51, -25, 165, true);
+		var combo = combo("dropdown", -51, 8, 165);
+		combo.rowCount = 6;
+		var remember = new FlCheckBox();
+		remember.name = "rememberMe_chk";
+		remember.label = "Remember me";
+		remember.x = -51;
+		remember.y = 38;
+		addChild(remember);
+		button("forgotPass", "Forgot?", -132, 72, 65);
+		button("reload_bt", "Reload", -61, 72, 60);
+		button("login_bt", "Login", 5, 72, 60);
+		button("cancel_bt", "Cancel", 71, 72, 60);
+	}
+
+	private function buildServerSelect():Void {
+		graphics.drawRoundRect(-160, -105, 320, 210, 14, 14);
+		graphics.endFill();
+		label("-- Choose Server --", null, -115, -90, 230, 24, 17, true, TextFormatAlign.CENTER);
+		label("Account:", null, -130, -50, 70, 18, 11, false, TextFormatAlign.RIGHT);
+		combo("userSelect", -53, -53, 166);
+		button("user_del_bt", "×", 118, -53, 27);
+		label("Server:", null, -130, -15, 70, 18, 11, false, TextFormatAlign.RIGHT);
+		combo("serverSelect", -53, -18, 166);
+		button("reload_bt", "Reload", 118, -18, 27);
+		label("", "textBox", -125, 18, 250, 18, 10, false, TextFormatAlign.CENTER);
+		button("login_bt", "Connect", -102, 57, 90);
+		button("cancel_bt", "Cancel", 12, 57, 90);
+	}
+
+	private function buildConnecting():Void {
+		graphics.drawRoundRect(-125, -65, 250, 130, 14, 14);
+		graphics.endFill();
+		label("Connecting...", null, -95, -45, 190, 23, 16, true, TextFormatAlign.CENTER);
+		label("", "textBox", -105, -13, 210, 22, 11, false, TextFormatAlign.CENTER);
+		button("var_1", "Cancel", -42, 25, 84);
+	}
+
+	private function input(name:String, x:Float, y:Float, width:Float, password:Bool):Void {
+		var field = new TextField();
+		field.name = name;
+		field.x = x;
+		field.y = y;
+		field.width = width;
+		field.height = 24;
+		field.type = TextFieldType.INPUT;
+		field.selectable = true;
+		field.displayAsPassword = password;
+		field.background = true;
+		field.backgroundColor = 0xFFFFFF;
+		field.border = true;
+		field.borderColor = 0x777777;
+		field.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 11, 0x222222);
+		addChild(field);
+	}
+
+	private function combo(name:String, x:Float, y:Float, width:Float):FlComboBox {
+		var control = new FlComboBox();
+		control.name = name;
+		control.x = x;
+		control.y = y;
+		control.setSize(width, 22);
+		addChild(control);
+		return control;
+	}
+
+	private function button(name:String, value:String, x:Float, y:Float, width:Float):Void {
+		var control = ownControl(new GameButton(value));
+		control.name = name;
+		control.x = x;
+		control.y = y;
+		control.setSize(width, 24);
+		addChild(control);
+	}
+
+	private function label(value:String, name:Null<String>, x:Float, y:Float, width:Float, height:Float, size:Int, bold:Bool,
+		align:TextFormatAlign):Void {
+		var field = new TextField();
+		if (name != null) field.name = name;
+		field.x = x;
+		field.y = y;
+		field.width = width;
+		field.height = height;
+		field.selectable = false;
+		field.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), size, 0x222222, bold, null, null, null, null, align);
+		field.text = value;
+		addChild(field);
 	}
 }

@@ -33,31 +33,6 @@ EXCLUDED_FILES = {
 # Dynamic factories are deliberately resolved here. Generation fails when a
 # new dynamic call site appears without an audited resolution or exclusion.
 DYNAMIC_ROOTS = {
-    "haxe/src/com/jiggmin/data/Objects.hx": [
-        "Tree",
-        "Tree2",
-        "Tree3",
-        "PetrifiedTree",
-        "Cactus",
-        "Rock",
-        "Rock2",
-        "Spire",
-        "Spire2",
-        "Building1",
-        "BG1",
-        "BG2",
-        "BG3",
-        "BG4",
-        "BG5",
-        "BG6",
-        "BG7",
-        "EggBlockGraphic",
-        "TextObjectGraphic",
-        "ArrowBlockGraphic",
-    ],
-    "haxe/src/pr2/character/PhysicsParticle.hx": ["DjinnIceGraphic"],
-    "haxe/src/pr2/effects/BlockPiece.hx": ["BrickPieceGraphic", "CrumblePieceGraphic", "MinePieceGraphic"],
-    "haxe/src/pr2/gameplay/EggRound.hx": ["SlashAnimation", "LaserShotGraphic", "IceWaveGraphic"],
     "haxe/src/pr2/levelEditor/EditorBlockOptionsPopup.hx": [
         "StatBlockOptionsGraphic",
         "CustomStatsBlockOptionsGraphic",
@@ -81,21 +56,9 @@ DYNAMIC_ROOTS = {
         "SetEmailPopupGraphic",
         "TransferGuildPopupGraphic",
     ],
-    "haxe/src/pr2/lobby/dialogs/MessagesItem.hx": [
-        "ReportMessageButtonGraphic",
-        "DeleteMessageButtonGraphic",
-        "ReplyMessageButtonGraphic",
-    ],
     "haxe/src/pr2/page/LoginFlashPopup.hx": [
         "LoginPopupGraphic",
-        "ForgotPassPopupGraphic",
-        "UploadingPopupGraphic",
-        "MessagePopupGraphic",
-        "CreateAccountPopupGraphic",
         "ServerSelectPopupGraphic",
-        "ConfirmPopupGraphic",
-        "ConnectingPopupGraphic",
-        "LoggingInPopupGraphic",
     ],
 }
 
@@ -138,9 +101,7 @@ SIMPLE_ANIMATIONS = {
     "IceWaveGraphic",
     "CountdownGraphic",
     "EggGraphic",
-    "GpNotificationGraphic",
     "LaserShotGraphic",
-    "LoadingGraphic",
     "MineAppearAnimation",
     "MineExplodeAnimation",
     "PointyStar",

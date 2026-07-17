@@ -7,7 +7,6 @@ import pr2.lobby.LobbyArt;
 import pr2.lobby.players.PlayerListSort.SortState;
 import pr2.net.ServerConfig;
 import pr2.net.TextLoader;
-import pr2.runtime.PR2MovieClip;
 import pr2.util.AsyncRemovalGuard;
 import pr2.util.DisplayUtil;
 
@@ -26,7 +25,7 @@ class Guilds extends PlayersListHolder {
 	private static inline var NAME_MODE:String = "guildName";
 	public static var fetchFactory:GuildsFetchFactory = defaultFetch;
 
-	private var graphic:Null<PR2MovieClip>;
+	private var graphic:Null<PlayersTabListView>;
 	private var nameButton:Null<DisplayObjectContainer>;
 	private var activeButton:Null<DisplayObjectContainer>;
 	private var gpButton:Null<DisplayObjectContainer>;
@@ -34,8 +33,7 @@ class Guilds extends PlayersListHolder {
 	private var asyncGuard:AsyncRemovalGuard = new AsyncRemovalGuard();
 
 	override public function initialize():Void {
-		graphic = PR2MovieClip.fromLinkage("PlayersTabListGraphic", {maxNestedDepth: 6});
-		graphic.gotoAndStop("guilds");
+		graphic = new PlayersTabListView(true);
 		addChild(graphic);
 		var listHolder = Std.downcast(DisplayUtil.findByName(graphic, "listHolder"), DisplayObjectContainer);
 		if (listHolder != null) {

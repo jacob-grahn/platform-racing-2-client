@@ -17,42 +17,38 @@ migration should make them decrease without changing observable behavior or visu
 
 ## Summary
 
-- 763 coupling occurrences
-- 122 files with coupling
-- 119 migration-adapter files in the dependency allowlist
+- 421 coupling occurrences
+- 71 files with coupling
+- 21 migration-adapter files in the dependency allowlist
 
 | Coupling kind | Occurrences |
 | --- | ---: |
-| Fl control dependency | 49 |
-| Fl control usage | 147 |
-| PR2MovieClip dependency | 113 |
-| frame-label navigation | 11 |
+| Fl control dependency | 17 |
+| Fl control usage | 71 |
+| PR2MovieClip dependency | 9 |
+| frame-label navigation | 2 |
 | generated timeline dependency | 2 |
-| numeric/dynamic frame navigation | 35 |
-| recursive name lookup | 374 |
+| numeric/dynamic frame navigation | 16 |
+| recursive name lookup | 276 |
 | reflective display property | 19 |
-| timeline child lookup | 13 |
+| timeline child lookup | 9 |
 
 | Feature owner | Occurrences |
 | --- | ---: |
 | Audio | 2 |
-| Character | 21 |
-| Gameplay UI and visuals | 112 |
-| Gameplay effects | 8 |
-| Intro page | 4 |
-| Level editor | 196 |
-| Level objects | 2 |
-| Level rendering | 5 |
-| Lobby account and customization | 79 |
-| Lobby dialogs | 208 |
-| Lobby level browser | 25 |
-| Lobby messages | 1 |
-| Lobby players | 13 |
-| Lobby shell | 8 |
-| Lobby store | 20 |
-| Lobby tabs | 35 |
-| Login page | 20 |
-| Shared UI | 4 |
+| Character | 20 |
+| Gameplay UI and visuals | 69 |
+| Level editor | 92 |
+| Level rendering | 3 |
+| Lobby account and customization | 29 |
+| Lobby dialogs | 106 |
+| Lobby level browser | 13 |
+| Lobby players | 8 |
+| Lobby shell | 5 |
+| Lobby store | 18 |
+| Lobby tabs | 33 |
+| Login page | 22 |
+| Shared UI | 1 |
 
 ## Occurrences By Feature Owner
 
@@ -81,216 +77,100 @@ migration should make them decrease without changing observable behavior or visu
 | numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/character/CharacterAppearance.hx:76` |
 | timeline child lookup | `getChildByTimelineName` | `haxe/src/pr2/character/CharacterAppearance.hx:88` |
 | timeline child lookup | `getChildByTimelineName` | `haxe/src/pr2/character/CharacterAppearance.hx:95` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/character/CharacterDisplay.hx:13` |
-| numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/character/CharacterDisplay.hx:181` |
-| numeric/dynamic frame navigation | `gotoAndPlay` | `haxe/src/pr2/character/CharacterDisplay.hx:217` |
-| numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/character/CharacterDisplay.hx:344` |
-| numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/character/CharacterDisplay.hx:372` |
-| timeline child lookup | `getChildByTimelineName` | `haxe/src/pr2/character/CharacterDisplay.hx:609` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/character/PhysicsParticle.hx:9` |
+| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/character/CharacterDisplay.hx:14` |
+| numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/character/CharacterDisplay.hx:182` |
+| numeric/dynamic frame navigation | `gotoAndPlay` | `haxe/src/pr2/character/CharacterDisplay.hx:218` |
+| numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/character/CharacterDisplay.hx:345` |
+| numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/character/CharacterDisplay.hx:373` |
+| timeline child lookup | `getChildByTimelineName` | `haxe/src/pr2/character/CharacterDisplay.hx:610` |
 
 ### Gameplay UI and visuals
 
 | Kind | API | Source |
 | --- | --- | --- |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/gameplay/CatCaptcha.hx:15` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/gameplay/Countdown.hx:7` |
 | timeline child lookup | `getChildByTimelineName` | `haxe/src/pr2/gameplay/CourseParticleEffects.hx:80` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/gameplay/CowboyMode.hx:4` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/gameplay/DrawingInfo.hx:14` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/DrawingInfo.hx:48` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/DrawingInfo.hx:49` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/gameplay/DrawingInfo.hx:197` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/DrawingInfo.hx:275` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/DrawingInfo.hx:276` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/gameplay/DrawingInfo.hx:285` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/gameplay/DrawingInfo.hx:292` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/DrawingInfo.hx:108` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/DrawingInfo.hx:109` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/gameplay/DrawingInfo.hx:253` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/DrawingInfo.hx:331` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/DrawingInfo.hx:332` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/gameplay/DrawingInfo.hx:341` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/gameplay/DrawingInfo.hx:348` |
 | PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/gameplay/EggRound.hx:15` |
-| frame-label navigation | `gotoAndPlay` | `haxe/src/pr2/gameplay/EggRound.hx:256` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/EggRound.hx:268` |
-| numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/gameplay/EggRound.hx:272` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/EggRound.hx:273` |
-| numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/gameplay/EggRound.hx:275` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/EggRound.hx:278` |
-| numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/gameplay/EggRound.hx:280` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/EggRound.hx:284` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/EggRound.hx:285` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/EggRound.hx:289` |
-| frame-label navigation | `gotoAndPlay` | `haxe/src/pr2/gameplay/EggRound.hx:304` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/gameplay/ExpGain.hx:8` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/ExpGain.hx:39` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/ExpGain.hx:40` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/gameplay/ExpGain.hx:41` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/gameplay/FinishedPage.hx:6` |
+| frame-label navigation | `gotoAndPlay` | `haxe/src/pr2/gameplay/EggRound.hx:260` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/FinishedPage.hx:40` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/FinishedPage.hx:41` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/FinishedPage.hx:42` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/gameplay/FinishedPage.hx:61` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/gameplay/FinishedPage.hx:65` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/gameplay/FinishedPage.hx:75` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/gameplay/HappyHour.hx:4` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/gameplay/HatEffect.hx:9` |
-| numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/gameplay/HatEffect.hx:55` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/gameplay/ItemDisplay.hx:10` |
-| numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/gameplay/ItemDisplay.hx:55` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/ItemDisplay.hx:67` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/ItemDisplay.hx:75` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/ItemDisplay.hx:111` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/gameplay/LuxPopup.hx:10` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/LuxPopup.hx:38` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/LuxPopup.hx:42` |
-| Fl control dependency | `pr2.runtime.FlComboBox` | `haxe/src/pr2/gameplay/MusicSelection.hx:9` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/gameplay/MusicSelection.hx:10` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/gameplay/FinishedPage.hx:60` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/gameplay/FinishedPage.hx:64` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/gameplay/FinishedPage.hx:74` |
+| numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/gameplay/HatEffect.hx:54` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/ItemDisplay.hx:66` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/ItemDisplay.hx:103` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/LuxPopup.hx:43` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/LuxPopup.hx:47` |
+| Fl control dependency | `pr2.runtime.FlComboBox` | `haxe/src/pr2/gameplay/MusicSelection.hx:10` |
 | Fl control usage | `FlComboBox` | `haxe/src/pr2/gameplay/MusicSelection.hx:21` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/gameplay/MusicSelection.hx:30` |
-| Fl control dependency | `pr2.runtime.FlCheckBox` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:11` |
-| Fl control dependency | `pr2.runtime.FlComboBox` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:12` |
-| Fl control dependency | `pr2.runtime.FlTextInput` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:13` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:14` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:31` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:32` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:33` |
-| Fl control usage | `FlTextInput` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:34` |
-| Fl control usage | `FlTextInput` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:35` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:36` |
-| Fl control usage | `FlCheckBox` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:37` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:59` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:59` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:60` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:60` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:61` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:61` |
-| Fl control usage | `FlTextInput` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:62` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:62` |
-| Fl control usage | `FlTextInput` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:63` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:63` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:64` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:64` |
-| Fl control usage | `FlCheckBox` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:65` |
+| Fl control usage | `FlComboBox` | `haxe/src/pr2/gameplay/MusicSelection.hx:34` |
+| Fl control dependency | `pr2.runtime.FlCheckBox` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:16` |
+| Fl control dependency | `pr2.runtime.FlComboBox` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:17` |
+| Fl control dependency | `pr2.runtime.FlTextInput` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:18` |
+| Fl control usage | `FlComboBox` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:37` |
+| Fl control usage | `FlComboBox` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:38` |
+| Fl control usage | `FlComboBox` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:39` |
+| Fl control usage | `FlTextInput` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:40` |
+| Fl control usage | `FlTextInput` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:41` |
+| Fl control usage | `FlComboBox` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:42` |
+| Fl control usage | `FlCheckBox` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:43` |
+| Fl control usage | `FlComboBox` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:65` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:65` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:72` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:73` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:235` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/gameplay/PrizePopup.hx:11` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/PrizePopup.hx:147` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/PrizePopup.hx:174` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/PrizePopup.hx:193` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/PrizePopup.hx:197` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/gameplay/PrizePopup.hx:201` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/PrizePopup.hx:211` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/PrizePopup.hx:225` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/PrizePopup.hx:232` |
-| numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/gameplay/PrizePopup.hx:241` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/gameplay/QuitButton.hx:9` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/QuitButton.hx:33` |
-| frame-label navigation | `gotoAndPlay` | `haxe/src/pr2/gameplay/QuitButton.hx:44` |
-| frame-label navigation | `gotoAndStop` | `haxe/src/pr2/gameplay/QuitButton.hx:51` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/QuitButton.hx:77` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/gameplay/RaceChat.hx:14` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/gameplay/RaceChat.hx:42` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/RaceChat.hx:43` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/gameplay/RaceChat.hx:43` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/RaceChat.hx:44` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/gameplay/RaceChat.hx:44` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/gameplay/SpectatePicker.hx:10` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/SpectatePicker.hx:34` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/SpectatePicker.hx:35` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/SpectatePicker.hx:128` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/SpectatePicker.hx:135` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/SpectatePicker.hx:136` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/gameplay/SpectatePicker.hx:137` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/SpectatePicker.hx:141` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/SpectatePicker.hx:142` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/gameplay/SpectatePicker.hx:143` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/gameplay/StatsDisplay.hx:8` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/gameplay/StatsDisplay.hx:32` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/gameplay/StatsDisplay.hx:33` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/gameplay/StatsDisplay.hx:34` |
-
-### Gameplay effects
-
-| Kind | API | Source |
-| --- | --- | --- |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/effects/BlockPiece.hx:7` |
-| numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/effects/BlockPiece.hx:56` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/effects/LaserShotTimeline.hx:4` |
-| numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/effects/LaserShotTimeline.hx:19` |
-| frame-label navigation | `gotoAndPlay` | `haxe/src/pr2/effects/LaserShotTimeline.hx:35` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/effects/MineExplosion.hx:7` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/effects/Slash.hx:8` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/effects/TeleportPop.hx:7` |
-
-### Intro page
-
-| Kind | API | Source |
-| --- | --- | --- |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/page/IntroPage.hx:15` |
-| timeline child lookup | `getChildByTimelineName` | `haxe/src/pr2/page/IntroPage.hx:77` |
-| timeline child lookup | `getChildByTimelineName` | `haxe/src/pr2/page/IntroPage.hx:212` |
-| timeline child lookup | `getChildByTimelineName` | `haxe/src/pr2/page/IntroPage.hx:217` |
+| Fl control usage | `FlComboBox` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:66` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:66` |
+| Fl control usage | `FlComboBox` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:67` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:67` |
+| Fl control usage | `FlTextInput` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:68` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:68` |
+| Fl control usage | `FlTextInput` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:69` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:69` |
+| Fl control usage | `FlComboBox` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:70` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:70` |
+| Fl control usage | `FlCheckBox` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:71` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:71` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:78` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:79` |
+| Fl control usage | `FlComboBox` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:241` |
+| Fl control usage | `FlCheckBox` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:325` |
+| Fl control usage | `FlComboBox` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:335` |
+| Fl control usage | `FlComboBox` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:336` |
+| Fl control usage | `FlTextInput` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:345` |
+| Fl control usage | `FlTextInput` | `haxe/src/pr2/gameplay/PlaceArtifact.hx:346` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/PrizePopup.hx:148` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/PrizePopup.hx:175` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/PrizePopup.hx:194` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/PrizePopup.hx:198` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/gameplay/PrizePopup.hx:202` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/PrizePopup.hx:212` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/PrizePopup.hx:226` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/PrizePopup.hx:233` |
+| numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/gameplay/PrizePopup.hx:242` |
+| numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/gameplay/PrizePopup.hx:246` |
+| numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/gameplay/PrizePopupView.hx:109` |
+| numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/gameplay/PrizePopupView.hx:110` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/SpectatePicker.hx:32` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/gameplay/SpectatePicker.hx:33` |
 
 ### Level editor
 
 | Kind | API | Source |
 | --- | --- | --- |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/levelEditor/ChooseLevelsModePopup.hx:6` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/ChooseLevelsModePopup.hx:33` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/levelEditor/EditorBlockObject.hx:13` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/EditorBlockObject.hx:363` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/EditorBlockObject.hx:368` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/EditorBlockObject.hx:372` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/levelEditor/EditorBlockOptionsPopup.hx:7` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/levelEditor/EditorBrushSizePickerButton.hx:4` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/EditorBrushSizePickerButton.hx:17` |
-| Fl control dependency | `pr2.runtime.FlSlider` | `haxe/src/pr2/levelEditor/EditorBrushSizePickerMenu.hx:7` |
-| Fl control dependency | `pr2.runtime.FlSliderEvent` | `haxe/src/pr2/levelEditor/EditorBrushSizePickerMenu.hx:8` |
-| Fl control dependency | `pr2.runtime.FlTextInput` | `haxe/src/pr2/levelEditor/EditorBrushSizePickerMenu.hx:9` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/levelEditor/EditorBrushSizePickerMenu.hx:10` |
-| Fl control usage | `FlSlider` | `haxe/src/pr2/levelEditor/EditorBrushSizePickerMenu.hx:17` |
-| Fl control usage | `FlTextInput` | `haxe/src/pr2/levelEditor/EditorBrushSizePickerMenu.hx:18` |
-| Fl control usage | `FlSlider` | `haxe/src/pr2/levelEditor/EditorBrushSizePickerMenu.hx:31` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/EditorBrushSizePickerMenu.hx:31` |
-| Fl control usage | `FlTextInput` | `haxe/src/pr2/levelEditor/EditorBrushSizePickerMenu.hx:32` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/EditorBrushSizePickerMenu.hx:32` |
-| Fl control usage | `FlSliderEvent` | `haxe/src/pr2/levelEditor/EditorBrushSizePickerMenu.hx:40` |
-| Fl control usage | `FlSliderEvent` | `haxe/src/pr2/levelEditor/EditorBrushSizePickerMenu.hx:41` |
-| Fl control usage | `FlSliderEvent` | `haxe/src/pr2/levelEditor/EditorBrushSizePickerMenu.hx:77` |
-| Fl control usage | `FlSliderEvent` | `haxe/src/pr2/levelEditor/EditorBrushSizePickerMenu.hx:78` |
-| Fl control usage | `FlSliderEvent` | `haxe/src/pr2/levelEditor/EditorBrushSizePickerMenu.hx:95` |
-| Fl control dependency | `pr2.runtime.FlCheckBox` | `haxe/src/pr2/levelEditor/EditorCustomStatsBlockOptionsPopup.hx:8` |
-| Fl control usage | `FlCheckBox` | `haxe/src/pr2/levelEditor/EditorCustomStatsBlockOptionsPopup.hx:15` |
-| Fl control usage | `FlCheckBox` | `haxe/src/pr2/levelEditor/EditorCustomStatsBlockOptionsPopup.hx:23` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/ChooseLevelsModePopup.hx:32` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/EditorBrushSizePickerButton.hx:16` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/EditorCustomStatsBlockOptionsPopup.hx:23` |
 | PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/levelEditor/EditorGraphicCursor.hx:5` |
-| Fl control dependency | `pr2.runtime.FlCheckBox` | `haxe/src/pr2/levelEditor/EditorHatsSettingsPopup.hx:10` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/levelEditor/EditorHatsSettingsPopup.hx:11` |
-| Fl control usage | `FlCheckBox` | `haxe/src/pr2/levelEditor/EditorHatsSettingsPopup.hx:19` |
-| Fl control usage | `FlCheckBox` | `haxe/src/pr2/levelEditor/EditorHatsSettingsPopup.hx:31` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/EditorHatsSettingsPopup.hx:31` |
-| Fl control usage | `FlCheckBox` | `haxe/src/pr2/levelEditor/EditorHatsSettingsPopup.hx:103` |
-| Fl control dependency | `pr2.runtime.FlCheckBox` | `haxe/src/pr2/levelEditor/EditorItemBlockOptionsPopup.hx:5` |
-| Fl control usage | `FlCheckBox` | `haxe/src/pr2/levelEditor/EditorItemBlockOptionsPopup.hx:9` |
-| Fl control usage | `FlCheckBox` | `haxe/src/pr2/levelEditor/EditorItemBlockOptionsPopup.hx:15` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/EditorItemBlockOptionsPopup.hx:15` |
-| Fl control usage | `FlCheckBox` | `haxe/src/pr2/levelEditor/EditorItemBlockOptionsPopup.hx:17` |
-| Fl control usage | `FlCheckBox` | `haxe/src/pr2/levelEditor/EditorItemBlockOptionsPopup.hx:19` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/EditorItemBlockOptionsPopup.hx:19` |
-| Fl control dependency | `pr2.runtime.FlCheckBox` | `haxe/src/pr2/levelEditor/EditorItemSettingsPopup.hx:8` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/levelEditor/EditorItemSettingsPopup.hx:9` |
-| Fl control usage | `FlCheckBox` | `haxe/src/pr2/levelEditor/EditorItemSettingsPopup.hx:15` |
-| Fl control usage | `FlCheckBox` | `haxe/src/pr2/levelEditor/EditorItemSettingsPopup.hx:25` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/EditorItemSettingsPopup.hx:25` |
-| Fl control usage | `FlCheckBox` | `haxe/src/pr2/levelEditor/EditorItemSettingsPopup.hx:27` |
-| Fl control usage | `FlCheckBox` | `haxe/src/pr2/levelEditor/EditorItemSettingsPopup.hx:29` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/EditorItemSettingsPopup.hx:29` |
-| Fl control dependency | `pr2.runtime.FlComboBox` | `haxe/src/pr2/levelEditor/EditorModeSettingsPopup.hx:9` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/levelEditor/EditorModeSettingsPopup.hx:10` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/levelEditor/EditorModeSettingsPopup.hx:17` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/levelEditor/EditorModeSettingsPopup.hx:27` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/EditorModeSettingsPopup.hx:27` |
-| Fl control dependency | `pr2.runtime.FlComboBox` | `haxe/src/pr2/levelEditor/EditorMusicSettingsPopup.hx:10` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/levelEditor/EditorMusicSettingsPopup.hx:11` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/levelEditor/EditorMusicSettingsPopup.hx:17` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/levelEditor/EditorMusicSettingsPopup.hx:28` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/EditorModeSettingsPopup.hx:26` |
 | PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/levelEditor/EditorObjectLayer.hx:11` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/EditorSideBar.hx:193` |
 | Fl control dependency | `pr2.runtime.FlComponents` | `haxe/src/pr2/levelEditor/EditorSideBarEntry.hx:13` |
@@ -300,17 +180,11 @@ migration should make them decrease without changing observable behavior or visu
 | Fl control usage | `FlComponents` | `haxe/src/pr2/levelEditor/EditorSideBarEntry.hx:76` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/EditorSideBarEntry.hx:76` |
 | Fl control dependency | `pr2.runtime.FlComponents` | `haxe/src/pr2/levelEditor/EditorSideBarIconFactory.hx:7` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/levelEditor/EditorSideBarIconFactory.hx:8` |
-| Fl control usage | `FlComponents` | `haxe/src/pr2/levelEditor/EditorSideBarIconFactory.hx:123` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/EditorSideBarIconFactory.hx:123` |
-| Fl control usage | `FlComponents` | `haxe/src/pr2/levelEditor/EditorSideBarIconFactory.hx:127` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/EditorSideBarIconFactory.hx:127` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/levelEditor/EditorStampDisplay.hx:7` |
+| Fl control usage | `FlComponents` | `haxe/src/pr2/levelEditor/EditorSideBarIconFactory.hx:120` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/EditorSideBarIconFactory.hx:120` |
+| Fl control usage | `FlComponents` | `haxe/src/pr2/levelEditor/EditorSideBarIconFactory.hx:124` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/EditorSideBarIconFactory.hx:124` |
 | Fl control dependency | `pr2.runtime.FlComponents` | `haxe/src/pr2/levelEditor/EditorStatBlockOptionsPopup.hx:6` |
-| Fl control dependency | `pr2.runtime.FlSlider` | `haxe/src/pr2/levelEditor/EditorStatBlockOptionsPopup.hx:7` |
-| Fl control dependency | `pr2.runtime.FlSliderEvent` | `haxe/src/pr2/levelEditor/EditorStatBlockOptionsPopup.hx:8` |
-| Fl control usage | `FlSlider` | `haxe/src/pr2/levelEditor/EditorStatBlockOptionsPopup.hx:12` |
-| Fl control usage | `FlSlider` | `haxe/src/pr2/levelEditor/EditorStatBlockOptionsPopup.hx:17` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/EditorStatBlockOptionsPopup.hx:17` |
 | Fl control usage | `FlComponents` | `haxe/src/pr2/levelEditor/EditorStatBlockOptionsPopup.hx:18` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/EditorStatBlockOptionsPopup.hx:18` |
@@ -318,130 +192,73 @@ migration should make them decrease without changing observable behavior or visu
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/EditorStatBlockOptionsPopup.hx:19` |
 | Fl control usage | `FlComponents` | `haxe/src/pr2/levelEditor/EditorStatBlockOptionsPopup.hx:20` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/EditorStatBlockOptionsPopup.hx:20` |
-| Fl control usage | `FlSliderEvent` | `haxe/src/pr2/levelEditor/EditorStatBlockOptionsPopup.hx:32` |
-| Fl control usage | `FlSliderEvent` | `haxe/src/pr2/levelEditor/EditorStatBlockOptionsPopup.hx:33` |
-| Fl control usage | `FlSliderEvent` | `haxe/src/pr2/levelEditor/EditorStatBlockOptionsPopup.hx:49` |
-| Fl control usage | `FlSliderEvent` | `haxe/src/pr2/levelEditor/EditorStatBlockOptionsPopup.hx:50` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/levelEditor/EditorTextObject.hx:16` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/levelEditor/EditorToolCursorManager.hx:5` |
 | Fl control dependency | `pr2.runtime.FlComponents` | `haxe/src/pr2/levelEditor/EditorValueSettingsPopup.hx:8` |
-| Fl control dependency | `pr2.runtime.FlTextInput` | `haxe/src/pr2/levelEditor/EditorValueSettingsPopup.hx:9` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/levelEditor/EditorValueSettingsPopup.hx:10` |
-| Fl control usage | `FlTextInput` | `haxe/src/pr2/levelEditor/EditorValueSettingsPopup.hx:18` |
+| Fl control usage | `FlComponents` | `haxe/src/pr2/levelEditor/EditorValueSettingsPopup.hx:74` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/EditorValueSettingsPopup.hx:74` |
 | Fl control usage | `FlComponents` | `haxe/src/pr2/levelEditor/EditorValueSettingsPopup.hx:75` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/EditorValueSettingsPopup.hx:75` |
-| Fl control usage | `FlComponents` | `haxe/src/pr2/levelEditor/EditorValueSettingsPopup.hx:76` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/EditorValueSettingsPopup.hx:76` |
-| Fl control usage | `FlTextInput` | `haxe/src/pr2/levelEditor/EditorValueSettingsPopup.hx:83` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/EditorValueSettingsPopup.hx:83` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/levelEditor/GetLevelsPopup.hx:14` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/EditorValueSettingsPopup.hx:82` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/GetLevelsPopup.hx:107` |
+| reflective display property | `Reflect.setProperty` | `haxe/src/pr2/levelEditor/GetLevelsPopup.hx:107` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/GetLevelsPopup.hx:108` |
 | reflective display property | `Reflect.setProperty` | `haxe/src/pr2/levelEditor/GetLevelsPopup.hx:108` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/GetLevelsPopup.hx:109` |
-| reflective display property | `Reflect.setProperty` | `haxe/src/pr2/levelEditor/GetLevelsPopup.hx:109` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/GetLevelsPopup.hx:113` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/GetLevelsPopup.hx:120` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/levelEditor/GetLevelsPopup.hx:124` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/GetLevelsPopup.hx:131` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/levelEditor/GetLevelsPopupItem.hx:8` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/levelEditor/GetLevelsPopupItem.hx:89` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/levelEditor/GetLevelsPopupItem.hx:104` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/levelEditor/GetLevelsPopupItem.hx:109` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/levelEditor/GetReportedLevelsPopup.hx:12` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/GetReportedLevelsPopup.hx:31` |
-| reflective display property | `Reflect.setProperty` | `haxe/src/pr2/levelEditor/GetReportedLevelsPopup.hx:32` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/GetLevelsPopup.hx:112` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/GetLevelsPopup.hx:119` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/levelEditor/GetLevelsPopup.hx:123` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/GetLevelsPopup.hx:130` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/levelEditor/GetLevelsPopupItem.hx:88` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/levelEditor/GetLevelsPopupItem.hx:103` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/levelEditor/GetLevelsPopupItem.hx:108` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/GetReportedLevelsPopup.hx:30` |
+| reflective display property | `Reflect.setProperty` | `haxe/src/pr2/levelEditor/GetReportedLevelsPopup.hx:31` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/GetReportedLevelsPopup.hx:93` |
+| reflective display property | `Reflect.setProperty` | `haxe/src/pr2/levelEditor/GetReportedLevelsPopup.hx:93` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/GetReportedLevelsPopup.hx:94` |
 | reflective display property | `Reflect.setProperty` | `haxe/src/pr2/levelEditor/GetReportedLevelsPopup.hx:94` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/GetReportedLevelsPopup.hx:95` |
-| reflective display property | `Reflect.setProperty` | `haxe/src/pr2/levelEditor/GetReportedLevelsPopup.hx:95` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/GetReportedLevelsPopup.hx:99` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/GetReportedLevelsPopup.hx:106` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/levelEditor/GetReportedLevelsPopup.hx:110` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/GetReportedLevelsPopup.hx:117` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/levelEditor/GetReportedLevelsPopupItem.hx:7` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/levelEditor/GetReportedLevelsPopupItem.hx:80` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/levelEditor/GetReportedLevelsPopupItem.hx:87` |
-| Fl control dependency | `pr2.runtime.FlComboBox` | `haxe/src/pr2/levelEditor/HandleLevelReportPopup.hx:15` |
-| Fl control dependency | `pr2.runtime.FlComponents` | `haxe/src/pr2/levelEditor/HandleLevelReportPopup.hx:16` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/levelEditor/HandleLevelReportPopup.hx:17` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/levelEditor/HandleLevelReportPopup.hx:43` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/HandleLevelReportPopup.hx:74` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/HandleLevelReportPopup.hx:102` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/HandleLevelReportPopup.hx:106` |
-| Fl control usage | `FlComponents` | `haxe/src/pr2/levelEditor/HandleLevelReportPopup.hx:186` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/HandleLevelReportPopup.hx:186` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/levelEditor/HandleLevelReportPopup.hx:190` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/levelEditor/HandleLevelReportPopup.hx:191` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/HandleLevelReportPopup.hx:191` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/levelEditor/HandleLevelReportPopup.hx:194` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/levelEditor/HandleLevelReportPopup.hx:195` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/HandleLevelReportPopup.hx:195` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/levelEditor/HandleLevelReportPopup.hx:198` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/levelEditor/HandleLevelReportPopup.hx:206` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/HandleLevelReportPopup.hx:212` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/HandleLevelReportPopup.hx:216` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/HandleLevelReportPopup.hx:223` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/levelEditor/LevelEditorConnectingPopup.hx:16` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/LevelEditorConnectingPopup.hx:39` |
-| Fl control dependency | `pr2.runtime.FlComboBox` | `haxe/src/pr2/levelEditor/LevelEditorMenu.hx:10` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/levelEditor/LevelEditorMenu.hx:11` |
-| reflective display property | `Reflect.setProperty` | `haxe/src/pr2/levelEditor/LevelEditorMenu.hx:61` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/GetReportedLevelsPopup.hx:98` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/GetReportedLevelsPopup.hx:105` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/levelEditor/GetReportedLevelsPopup.hx:109` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/GetReportedLevelsPopup.hx:116` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/levelEditor/GetReportedLevelsPopupItem.hx:79` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/levelEditor/GetReportedLevelsPopupItem.hx:86` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/levelEditor/HandleLevelReportPopup.hx:41` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/HandleLevelReportPopup.hx:72` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/HandleLevelReportPopup.hx:100` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/HandleLevelReportPopup.hx:104` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/levelEditor/HandleLevelReportPopup.hx:184` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/HandleLevelReportPopup.hx:189` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/HandleLevelReportPopup.hx:193` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/HandleLevelReportPopup.hx:209` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/HandleLevelReportPopup.hx:213` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/HandleLevelReportPopup.hx:220` |
+| reflective display property | `Reflect.setProperty` | `haxe/src/pr2/levelEditor/LevelEditorMenu.hx:60` |
+| reflective display property | `Reflect.setProperty` | `haxe/src/pr2/levelEditor/LevelEditorMenu.hx:65` |
 | reflective display property | `Reflect.setProperty` | `haxe/src/pr2/levelEditor/LevelEditorMenu.hx:66` |
-| reflective display property | `Reflect.setProperty` | `haxe/src/pr2/levelEditor/LevelEditorMenu.hx:67` |
-| reflective display property | `Reflect.setProperty` | `haxe/src/pr2/levelEditor/LevelEditorMenu.hx:73` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/LevelEditorMenu.hx:107` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/levelEditor/LevelEditorMenu.hx:110` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/levelEditor/LevelEditorMenu.hx:111` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/LevelEditorMenu.hx:115` |
+| reflective display property | `Reflect.setProperty` | `haxe/src/pr2/levelEditor/LevelEditorMenu.hx:72` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/LevelEditorMenu.hx:106` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/LevelEditorMenu.hx:114` |
+| reflective display property | `Reflect.setProperty` | `haxe/src/pr2/levelEditor/LevelEditorMenu.hx:211` |
 | reflective display property | `Reflect.setProperty` | `haxe/src/pr2/levelEditor/LevelEditorMenu.hx:212` |
-| reflective display property | `Reflect.setProperty` | `haxe/src/pr2/levelEditor/LevelEditorMenu.hx:213` |
+| reflective display property | `Reflect.setProperty` | `haxe/src/pr2/levelEditor/LevelEditorMenu.hx:216` |
 | reflective display property | `Reflect.setProperty` | `haxe/src/pr2/levelEditor/LevelEditorMenu.hx:217` |
-| reflective display property | `Reflect.setProperty` | `haxe/src/pr2/levelEditor/LevelEditorMenu.hx:218` |
+| reflective display property | `Reflect.setProperty` | `haxe/src/pr2/levelEditor/LevelEditorMenu.hx:221` |
 | reflective display property | `Reflect.setProperty` | `haxe/src/pr2/levelEditor/LevelEditorMenu.hx:222` |
-| reflective display property | `Reflect.setProperty` | `haxe/src/pr2/levelEditor/LevelEditorMenu.hx:223` |
+| reflective display property | `Reflect.setProperty` | `haxe/src/pr2/levelEditor/LevelEditorMenu.hx:226` |
 | reflective display property | `Reflect.setProperty` | `haxe/src/pr2/levelEditor/LevelEditorMenu.hx:227` |
-| reflective display property | `Reflect.setProperty` | `haxe/src/pr2/levelEditor/LevelEditorMenu.hx:228` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/levelEditor/LoadingLevelPopup.hx:10` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/levelEditor/LoadingLevelPopup.hx:30` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/LoadingLevelPopup.hx:39` |
-| Fl control dependency | `pr2.runtime.FlCheckBox` | `haxe/src/pr2/levelEditor/SaveLevelPopup.hx:9` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/levelEditor/SaveLevelPopup.hx:10` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/levelEditor/SaveLevelPopup.hx:57` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/levelEditor/SaveLevelPopup.hx:61` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/SaveLevelPopup.hx:116` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/levelEditor/SaveLevelPopup.hx:123` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/levelEditor/SaveLevelPopup.hx:127` |
-| Fl control usage | `FlCheckBox` | `haxe/src/pr2/levelEditor/SaveLevelPopup.hx:130` |
-| Fl control usage | `FlCheckBox` | `haxe/src/pr2/levelEditor/SaveLevelPopup.hx:131` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/SaveLevelPopup.hx:131` |
-| Fl control usage | `FlCheckBox` | `haxe/src/pr2/levelEditor/SaveLevelPopup.hx:134` |
-| Fl control usage | `FlCheckBox` | `haxe/src/pr2/levelEditor/SaveLevelPopup.hx:135` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/SaveLevelPopup.hx:135` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/levelEditor/TestCourseHatPicker.hx:8` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/TestCourseHatPicker.hx:27` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/TestCourseHatPicker.hx:60` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/TestCourseHatPicker.hx:90` |
-| numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/levelEditor/TestCourseHatPicker.hx:92` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/TestCourseHatPicker.hx:93` |
-| numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/levelEditor/TestCourseHatPicker.hx:95` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/TestCourseHatPicker.hx:97` |
-| numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/levelEditor/TestCourseHatPicker.hx:99` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/levelEditor/TestCoursePage.hx:15` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/TestCoursePage.hx:183` |
-
-### Level objects
-
-| Kind | API | Source |
-| --- | --- | --- |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/com/jiggmin/data/Objects.hx:11` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/com/jiggmin/data/Objects.hx:152` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/levelEditor/SaveLevelPopup.hx:56` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/levelEditor/SaveLevelPopup.hx:60` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/SaveLevelPopup.hx:115` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/levelEditor/SaveLevelPopup.hx:122` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/levelEditor/SaveLevelPopup.hx:126` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/SaveLevelPopup.hx:130` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/SaveLevelPopup.hx:134` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/TestCourseHatPicker.hx:58` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/levelEditor/TestCoursePage.hx:182` |
 
 ### Level rendering
 
 | Kind | API | Source |
 | --- | --- | --- |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/level/ServerLevelBlockFactory.hx:9` |
-| numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/level/ServerLevelBlockFactory.hx:89` |
 | PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/level/ServerLevelRenderer.hx:40` |
 | numeric/dynamic frame navigation | `gotoAndPlay` | `haxe/src/pr2/level/ServerLevelRenderer.hx:542` |
 | numeric/dynamic frame navigation | `gotoAndPlay` | `haxe/src/pr2/level/ServerLevelRenderer.hx:544` |
@@ -450,178 +267,79 @@ migration should make them decrease without changing observable behavior or visu
 
 | Kind | API | Source |
 | --- | --- | --- |
-| Fl control dependency | `pr2.runtime.FlButton` | `haxe/src/pr2/lobby/account/ColorPickerPopup.hx:17` |
-| Fl control dependency | `pr2.runtime.FlTextInput` | `haxe/src/pr2/lobby/account/ColorPickerPopup.hx:18` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/account/ColorPickerPopup.hx:19` |
-| Fl control usage | `FlButton` | `haxe/src/pr2/lobby/account/ColorPickerPopup.hx:51` |
-| Fl control usage | `FlButton` | `haxe/src/pr2/lobby/account/ColorPickerPopup.hx:52` |
-| Fl control usage | `FlTextInput` | `haxe/src/pr2/lobby/account/ColorPickerPopup.hx:53` |
-| Fl control usage | `FlButton` | `haxe/src/pr2/lobby/account/ColorPickerPopup.hx:60` |
-| Fl control usage | `FlButton` | `haxe/src/pr2/lobby/account/ColorPickerPopup.hx:61` |
-| Fl control usage | `FlTextInput` | `haxe/src/pr2/lobby/account/ColorPickerPopup.hx:62` |
-| timeline child lookup | `getChildByTimelineName` | `haxe/src/pr2/lobby/account/ColorPickerPopup.hx:452` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/account/CursorEyedropper.hx:11` |
-| Fl control dependency | `pr2.runtime.FlButton` | `haxe/src/pr2/lobby/account/LoadoutsPopup.hx:8` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/account/LoadoutsPopup.hx:9` |
-| Fl control usage | `FlButton` | `haxe/src/pr2/lobby/account/LoadoutsPopup.hx:21` |
-| Fl control usage | `FlButton` | `haxe/src/pr2/lobby/account/LoadoutsPopup.hx:22` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/account/LoadoutsPopup.hx:35` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/account/LoadoutsPopup.hx:37` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/account/LoadoutsPopup.hx:39` |
-| Fl control usage | `FlButton` | `haxe/src/pr2/lobby/account/LoadoutsPopup.hx:40` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/account/LoadoutsPopup.hx:40` |
-| Fl control usage | `FlButton` | `haxe/src/pr2/lobby/account/LoadoutsPopup.hx:41` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/account/LoadoutsPopup.hx:39` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/account/LoadoutsPopup.hx:41` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/account/LoadoutsPopup.hx:43` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/account/LoadoutsPopup.hx:44` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/account/LoadoutsPopup.hx:45` |
-| frame-label navigation | `gotoAndStop` | `haxe/src/pr2/lobby/account/LoadoutsPopup.hx:161` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/account/LoadoutsPopup.hx:184` |
-| numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/lobby/account/LoadoutsPopup.hx:190` |
-| frame-label navigation | `gotoAndStop` | `haxe/src/pr2/lobby/account/LoadoutsPopup.hx:198` |
-| frame-label navigation | `gotoAndStop` | `haxe/src/pr2/lobby/account/LoadoutsPopup.hx:202` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/account/PartInfoListing.hx:13` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/account/PartInfoListing.hx:53` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/account/PartInfoListing.hx:54` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/account/PartInfoListing.hx:55` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/account/PartInfoListing.hx:56` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/account/PartInfoListing.hx:57` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/account/PartInfoListing.hx:58` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/account/PartInfoListing.hx:122` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/account/PartInfoPopup.hx:9` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/account/LoadoutsPopup.hx:49` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/account/LoadoutsPopup.hx:192` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/account/PartInfoListing.hx:43` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/account/PartInfoListing.hx:44` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/account/PartInfoListing.hx:45` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/account/PartInfoListing.hx:46` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/account/PartInfoListing.hx:47` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/account/PartInfoListing.hx:48` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/account/PartInfoPopup.hx:47` |
 | recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/account/PartInfoPopup.hx:48` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/account/PartInfoPopup.hx:52` |
 | recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/account/PartInfoPopup.hx:53` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/account/PartInfoPopup.hx:56` |
-| Fl control dependency | `pr2.runtime.FlButton` | `haxe/src/pr2/lobby/account/PartPopup.hx:11` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/account/PartPopup.hx:12` |
-| Fl control usage | `FlButton` | `haxe/src/pr2/lobby/account/PartPopup.hx:20` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/account/PartPopup.hx:54` |
 | recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/account/PartPopup.hx:55` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/account/PartPopup.hx:56` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/account/PartPopup.hx:61` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/account/PartPopup.hx:73` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/account/PartPopup.hx:78` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/account/PartPopup.hx:83` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/account/PartPopup.hx:92` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/account/PartPopup.hx:171` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/account/PartPopup.hx:187` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/account/PartPopup.hx:188` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/account/PartPopup.hx:197` |
-| Fl control usage | `FlButton` | `haxe/src/pr2/lobby/account/PartPopup.hx:208` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/account/PartPopup.hx:208` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/account/PartPopup.hx:246` |
-| numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/lobby/account/PartPopup.hx:267` |
-| numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/lobby/account/PartPopup.hx:269` |
-| numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/lobby/account/PartPopup.hx:272` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/account/PartPopup.hx:296` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/account/PartPopup.hx:60` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/account/PartPopup.hx:72` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/account/PartPopup.hx:77` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/account/PartPopup.hx:82` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/account/PartPopup.hx:169` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/account/PartPopup.hx:185` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/account/PartPopup.hx:186` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/account/PartPopup.hx:205` |
 | PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/account/PlayerDisplay.hx:15` |
-| Fl control dependency | `pr2.runtime.FlSlider` | `haxe/src/pr2/lobby/account/StatSlider.hx:11` |
-| Fl control dependency | `pr2.runtime.FlSliderEvent` | `haxe/src/pr2/lobby/account/StatSlider.hx:12` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/account/StatSlider.hx:13` |
-| Fl control usage | `FlSlider` | `haxe/src/pr2/lobby/account/StatSlider.hx:35` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/account/StatSlider.hx:50` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/account/StatSlider.hx:54` |
-| Fl control usage | `FlSlider` | `haxe/src/pr2/lobby/account/StatSlider.hx:60` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/account/StatSlider.hx:60` |
-| Fl control usage | `FlSliderEvent` | `haxe/src/pr2/lobby/account/StatSlider.hx:66` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/account/StatSlider.hx:68` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/account/StatSlider.hx:69` |
-| Fl control usage | `FlSliderEvent` | `haxe/src/pr2/lobby/account/StatSlider.hx:102` |
-| Fl control usage | `FlSliderEvent` | `haxe/src/pr2/lobby/account/StatSlider.hx:234` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/account/StatsSelect.hx:7` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/account/StatsSelect.hx:38` |
 
 ### Lobby dialogs
 
 | Kind | API | Source |
 | --- | --- | --- |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/dialogs/AdminMenu.hx:7` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/AdminMenu.hx:31` |
-| Fl control dependency | `pr2.runtime.FlComboBox` | `haxe/src/pr2/lobby/dialogs/BanMenu.hx:12` |
-| Fl control dependency | `pr2.runtime.FlComponents` | `haxe/src/pr2/lobby/dialogs/BanMenu.hx:13` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/dialogs/BanMenu.hx:14` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/BanMenu.hx:107` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/lobby/dialogs/BanMenu.hx:206` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/lobby/dialogs/BanMenu.hx:207` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/BanMenu.hx:207` |
-| Fl control usage | `FlComponents` | `haxe/src/pr2/lobby/dialogs/BanMenu.hx:211` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/BanMenu.hx:211` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/lobby/dialogs/BanMenu.hx:215` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/lobby/dialogs/BanMenu.hx:223` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/dialogs/ChatRoomInfoPopup.hx:8` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/ChatRoomInfoPopup.hx:25` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/ChatRoomInfoPopup.hx:29` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/dialogs/ChooseLevelModModePopup.hx:5` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/ChooseLevelModModePopup.hx:30` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/ChooseLevelModModePopup.hx:31` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/ChooseLevelModModePopup.hx:32` |
-| Fl control dependency | `pr2.runtime.FlTextInput` | `haxe/src/pr2/lobby/dialogs/CreateGuildPopup.hx:13` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/dialogs/CreateGuildPopup.hx:14` |
+| Fl control dependency | `pr2.runtime.FlComboBox` | `haxe/src/pr2/lobby/dialogs/BanMenu.hx:18` |
+| Fl control dependency | `pr2.runtime.FlComponents` | `haxe/src/pr2/lobby/dialogs/BanMenu.hx:19` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/BanMenu.hx:114` |
+| Fl control usage | `FlComboBox` | `haxe/src/pr2/lobby/dialogs/BanMenu.hx:213` |
+| Fl control usage | `FlComboBox` | `haxe/src/pr2/lobby/dialogs/BanMenu.hx:214` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/BanMenu.hx:214` |
+| Fl control usage | `FlComponents` | `haxe/src/pr2/lobby/dialogs/BanMenu.hx:218` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/BanMenu.hx:218` |
+| Fl control usage | `FlComboBox` | `haxe/src/pr2/lobby/dialogs/BanMenu.hx:222` |
+| Fl control usage | `FlComboBox` | `haxe/src/pr2/lobby/dialogs/BanMenu.hx:230` |
+| Fl control usage | `FlComboBox` | `haxe/src/pr2/lobby/dialogs/BanMenu.hx:304` |
+| Fl control usage | `FlComboBox` | `haxe/src/pr2/lobby/dialogs/BanMenu.hx:305` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/CreateGuildPopup.hx:45` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/CreateGuildPopup.hx:46` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/CreateGuildPopup.hx:47` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/CreateGuildPopup.hx:48` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/CreateGuildPopup.hx:63` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/CreateGuildPopup.hx:98` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/CreateGuildPopup.hx:118` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/CreateGuildPopup.hx:150` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/CreateGuildPopup.hx:176` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/CreateGuildPopup.hx:202` |
-| Fl control usage | `FlTextInput` | `haxe/src/pr2/lobby/dialogs/CreateGuildPopup.hx:205` |
-| Fl control usage | `FlTextInput` | `haxe/src/pr2/lobby/dialogs/CreateGuildPopup.hx:206` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/CreateGuildPopup.hx:206` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/dialogs/CreditsPopup.hx:5` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/CreditsPopup.hx:47` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/CreditsPopup.hx:81` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/CreditsPopup.hx:90` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/dialogs/ExternalLinkPopup.hx:8` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/ExternalLinkPopup.hx:30` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/ExternalLinkPopup.hx:33` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/ExternalLinkPopup.hx:34` |
-| Fl control dependency | `pr2.runtime.FlTextInput` | `haxe/src/pr2/lobby/dialogs/FormPopup.hx:6` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/dialogs/FormPopup.hx:7` |
-| Fl control usage | `FlTextInput` | `haxe/src/pr2/lobby/dialogs/FormPopup.hx:14` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/FormPopup.hx:25` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/FormPopup.hx:26` |
-| Fl control usage | `FlTextInput` | `haxe/src/pr2/lobby/dialogs/FormPopup.hx:36` |
-| Fl control usage | `FlTextInput` | `haxe/src/pr2/lobby/dialogs/FormPopup.hx:37` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/FormPopup.hx:37` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/dialogs/GuildMemberName.hx:8` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/GuildMemberName.hx:25` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/GuildMemberName.hx:38` |
-| numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/lobby/dialogs/GuildMemberName.hx:40` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/GuildMemberName.hx:41` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/GuildMemberName.hx:42` |
-| numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/lobby/dialogs/GuildMemberName.hx:43` |
-| numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/lobby/dialogs/GuildMemberName.hx:44` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/GuildMemberName.hx:50` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/dialogs/GuildPopup.hx:16` |
-| frame-label navigation | `gotoAndStop` | `haxe/src/pr2/lobby/dialogs/GuildPopup.hx:58` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/GuildPopup.hx:59` |
-| numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/lobby/dialogs/GuildPopup.hx:85` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/GuildPopup.hx:86` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/GuildPopup.hx:94` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/GuildPopup.hx:99` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/GuildPopup.hx:101` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/GuildPopup.hx:105` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/GuildPopup.hx:120` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/GuildPopup.hx:122` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/GuildPopup.hx:173` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/GuildPopup.hx:178` |
-| Fl control dependency | `pr2.runtime.FlCheckBox` | `haxe/src/pr2/lobby/dialogs/HatsMenu.hx:5` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/dialogs/HatsMenu.hx:6` |
-| Fl control usage | `FlCheckBox` | `haxe/src/pr2/lobby/dialogs/HatsMenu.hx:16` |
-| Fl control usage | `FlCheckBox` | `haxe/src/pr2/lobby/dialogs/HatsMenu.hx:24` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/HatsMenu.hx:24` |
-| Fl control dependency | `pr2.runtime.FlCheckBox` | `haxe/src/pr2/lobby/dialogs/ItemMenu.hx:5` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/dialogs/ItemMenu.hx:6` |
-| Fl control usage | `FlCheckBox` | `haxe/src/pr2/lobby/dialogs/ItemMenu.hx:12` |
-| Fl control usage | `FlCheckBox` | `haxe/src/pr2/lobby/dialogs/ItemMenu.hx:20` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/ItemMenu.hx:20` |
-| Fl control usage | `FlCheckBox` | `haxe/src/pr2/lobby/dialogs/ItemMenu.hx:33` |
-| Fl control usage | `FlCheckBox` | `haxe/src/pr2/lobby/dialogs/ItemMenu.hx:34` |
-| Fl control usage | `FlCheckBox` | `haxe/src/pr2/lobby/dialogs/ItemMenu.hx:36` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/ItemMenu.hx:36` |
-| Fl control dependency | `pr2.runtime.FlButton` | `haxe/src/pr2/lobby/dialogs/LevelInfoPopup.hx:21` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/dialogs/LevelInfoPopup.hx:22` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/CreateGuildPopup.hx:62` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/CreateGuildPopup.hx:97` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/CreateGuildPopup.hx:117` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/CreateGuildPopup.hx:149` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/CreateGuildPopup.hx:175` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/CreateGuildPopup.hx:201` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/CreateGuildPopup.hx:205` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/CreditsPopup.hx:46` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/CreditsPopup.hx:80` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/CreditsPopup.hx:89` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/GuildMemberName.hx:30` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/GuildMemberName.hx:73` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/GuildPopup.hx:57` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/GuildPopup.hx:85` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/GuildPopup.hx:93` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/GuildPopup.hx:98` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/GuildPopup.hx:100` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/GuildPopup.hx:104` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/GuildPopup.hx:119` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/GuildPopup.hx:121` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/GuildPopup.hx:172` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/GuildPopup.hx:177` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/HatsMenu.hx:23` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/ItemMenu.hx:19` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/LevelInfoPopup.hx:97` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/LevelInfoPopup.hx:107` |
 | recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/LevelInfoPopup.hx:145` |
@@ -645,157 +363,81 @@ migration should make them decrease without changing observable behavior or visu
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/LevelInfoPopup.hx:482` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/LevelInfoPopup.hx:500` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/LevelInfoPopup.hx:504` |
-| Fl control usage | `FlButton` | `haxe/src/pr2/lobby/dialogs/LevelInfoPopup.hx:505` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/LevelInfoPopup.hx:588` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/LevelInfoPopup.hx:611` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/LevelInfoPopup.hx:632` |
-| numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/lobby/dialogs/LevelInfoPopup.hx:634` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/dialogs/LevelReportPopup.hx:6` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/LevelReportPopup.hx:32` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/LevelReportPopup.hx:33` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/LevelReportPopup.hx:63` |
-| Fl control dependency | `pr2.runtime.FlTextInput` | `haxe/src/pr2/lobby/dialogs/LogoutPassPopup.hx:10` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/dialogs/LogoutPassPopup.hx:11` |
-| Fl control usage | `FlTextInput` | `haxe/src/pr2/lobby/dialogs/LogoutPassPopup.hx:26` |
-| Fl control usage | `FlTextInput` | `haxe/src/pr2/lobby/dialogs/LogoutPassPopup.hx:33` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/LogoutPassPopup.hx:33` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/LogoutPassPopup.hx:34` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/LogoutPassPopup.hx:35` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/dialogs/MessagePopup.hx:4` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/MessagePopup.hx:18` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/MessagePopup.hx:23` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/dialogs/MessagesItem.hx:15` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/MessagesItem.hx:66` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/MessagesItem.hx:67` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/MessagesItem.hx:68` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/MessagesItem.hx:84` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/MessagesItem.hx:93` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/MessagesItem.hx:219` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/MessagesItem.hx:256` |
-| Fl control dependency | `pr2.runtime.FlCheckBox` | `haxe/src/pr2/lobby/dialogs/OptionsArtQualityMenu.hx:5` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/dialogs/OptionsArtQualityMenu.hx:6` |
-| Fl control usage | `FlCheckBox` | `haxe/src/pr2/lobby/dialogs/OptionsArtQualityMenu.hx:59` |
-| Fl control usage | `FlCheckBox` | `haxe/src/pr2/lobby/dialogs/OptionsArtQualityMenu.hx:60` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/OptionsArtQualityMenu.hx:60` |
-| Fl control dependency | `pr2.runtime.FlSlider` | `haxe/src/pr2/lobby/dialogs/OptionsPopup.hx:15` |
-| Fl control dependency | `pr2.runtime.FlSliderEvent` | `haxe/src/pr2/lobby/dialogs/OptionsPopup.hx:16` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/dialogs/OptionsPopup.hx:17` |
-| Fl control usage | `FlSliderEvent` | `haxe/src/pr2/lobby/dialogs/OptionsPopup.hx:51` |
-| Fl control usage | `FlSlider` | `haxe/src/pr2/lobby/dialogs/OptionsPopup.hx:71` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/OptionsPopup.hx:71` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/OptionsPopup.hx:72` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/OptionsPopup.hx:75` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/OptionsPopup.hx:80` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/OptionsPopup.hx:100` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/MessagesItem.hx:69` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/MessagesItem.hx:70` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/MessagesItem.hx:71` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/MessagesItem.hx:87` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/MessagesItem.hx:96` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/MessagesItem.hx:222` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/MessagesItem.hx:259` |
+| Fl control dependency | `pr2.runtime.FlSliderEvent` | `haxe/src/pr2/lobby/dialogs/OptionsPopup.hx:15` |
+| Fl control usage | `FlSliderEvent` | `haxe/src/pr2/lobby/dialogs/OptionsPopup.hx:50` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/OptionsPopup.hx:70` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/OptionsPopup.hx:71` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/OptionsPopup.hx:74` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/OptionsPopup.hx:79` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/OptionsPopup.hx:99` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/OptionsPopup.hx:170` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/OptionsPopup.hx:171` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/OptionsPopup.hx:172` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/OptionsPopup.hx:178` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/OptionsPopup.hx:183` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/OptionsPopup.hx:193` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/OptionsPopup.hx:233` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/OptionsPopup.hx:246` |
-| Fl control usage | `FlSliderEvent` | `haxe/src/pr2/lobby/dialogs/OptionsPopup.hx:278` |
-| Fl control dependency | `pr2.runtime.FlCheckBox` | `haxe/src/pr2/lobby/dialogs/OptionsSongsMenu.hx:5` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/dialogs/OptionsSongsMenu.hx:6` |
-| Fl control usage | `FlCheckBox` | `haxe/src/pr2/lobby/dialogs/OptionsSongsMenu.hx:73` |
-| Fl control usage | `FlCheckBox` | `haxe/src/pr2/lobby/dialogs/OptionsSongsMenu.hx:74` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/OptionsSongsMenu.hx:74` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/dialogs/PMRFCodesPopup.hx:5` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/PMRFCodesPopup.hx:18` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/PMRFCodesPopup.hx:28` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/dialogs/PlayerGuestPopup.hx:7` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/PlayerGuestPopup.hx:24` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/PlayerGuestPopup.hx:29` |
-| Fl control dependency | `pr2.runtime.FlButton` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:27` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:28` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:96` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:100` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:104` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:210` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/OptionsPopup.hx:177` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/OptionsPopup.hx:182` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/OptionsPopup.hx:192` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/OptionsPopup.hx:232` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/OptionsPopup.hx:245` |
+| Fl control usage | `FlSliderEvent` | `haxe/src/pr2/lobby/dialogs/OptionsPopup.hx:277` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:95` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:99` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:103` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:209` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:253` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:254` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:255` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:281` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:317` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:324` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:334` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:339` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:411` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:420` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:426` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:440` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:535` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:542` |
-| Fl control usage | `FlButton` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:548` |
-| Fl control usage | `FlButton` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:549` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:549` |
-| Fl control usage | `FlButton` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:557` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:568` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/dialogs/SendMessagePopup.hx:9` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/SendMessagePopup.hx:36` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/SendMessagePopup.hx:37` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/SendMessagePopup.hx:38` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/SendMessagePopup.hx:39` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/SendMessagePopup.hx:56` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/SendMessagePopup.hx:57` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/dialogs/TempModMenu.hx:7` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/TempModMenu.hx:34` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/dialogs/UploadingPopup.hx:9` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/UploadingPopup.hx:45` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/UploadingPopup.hx:54` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:280` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:316` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:323` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:333` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:338` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:410` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:419` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:425` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:439` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:534` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:541` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:548` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/dialogs/PlayerPopup.hx:567` |
 
 ### Lobby level browser
 
 | Kind | API | Source |
 | --- | --- | --- |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/level/CourseMenu.hx:9` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/level/CourseMenu.hx:58` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/level/CourseMenu.hx:59` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/level/LevelItem.hx:25` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/level/LevelItem.hx:103` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/level/LevelItem.hx:110` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/level/LevelItem.hx:111` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/level/LevelItem.hx:114` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/level/LevelItem.hx:116` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/level/CourseMenu.hx:56` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/level/CourseMenu.hx:57` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/level/LevelItem.hx:109` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/level/LevelItem.hx:116` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/level/LevelItem.hx:117` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/level/LevelItem.hx:121` |
-| Fl control usage | `FlComponents` | `haxe/src/pr2/lobby/level/LevelItem.hx:122` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/level/LevelItem.hx:137` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/level/LevelItem.hx:139` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/level/LevelItem.hx:155` |
-| numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/lobby/level/LevelItem.hx:157` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/level/LevelItem.hx:406` |
-| reflective display property | `Reflect.setProperty` | `haxe/src/pr2/lobby/level/LevelItem.hx:551` |
-| reflective display property | `Reflect.getProperty` | `haxe/src/pr2/lobby/level/LevelItem.hx:565` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/level/LevelListingPage.hx:12` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/level/Slot.hx:7` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/level/Slot.hx:39` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/level/Slot.hx:44` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/level/Slot.hx:45` |
-| numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/lobby/level/Slot.hx:118` |
-
-### Lobby messages
-
-| Kind | API | Source |
-| --- | --- | --- |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/messages/UnreadNotif.hx:4` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/level/LevelItem.hx:122` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/level/LevelItem.hx:123` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/level/LevelItem.hx:127` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/level/LevelItem.hx:143` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/level/LevelItem.hx:145` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/level/LevelItem.hx:412` |
+| reflective display property | `Reflect.setProperty` | `haxe/src/pr2/lobby/level/LevelItem.hx:557` |
+| reflective display property | `Reflect.getProperty` | `haxe/src/pr2/lobby/level/LevelItem.hx:571` |
 
 ### Lobby players
 
 | Kind | API | Source |
 | --- | --- | --- |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/players/Guilds.hx:10` |
-| frame-label navigation | `gotoAndStop` | `haxe/src/pr2/lobby/players/Guilds.hx:38` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/players/Guilds.hx:40` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/players/Guilds.hx:38` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/players/Guilds.hx:42` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/players/Guilds.hx:43` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/players/Guilds.hx:44` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/players/Guilds.hx:45` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/players/Guilds.hx:46` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/players/PlayerListItem.hx:8` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/players/PlayersListHolder.hx:7` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/players/PlayersTabList.hx:9` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/players/PlayersTabList.hx:34` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/players/PlayersTabList.hx:33` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/players/PlayersTabList.hx:37` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/players/PlayersTabList.hx:38` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/players/PlayersTabList.hx:39` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/players/PlayersTabList.hx:40` |
 
 ### Lobby shell
 
@@ -804,30 +446,25 @@ migration should make them decrease without changing observable behavior or visu
 | Fl control dependency | `pr2.runtime.FlComponents` | `haxe/src/pr2/lobby/LobbyArt.hx:9` |
 | Fl control usage | `FlComponents` | `haxe/src/pr2/lobby/LobbyArt.hx:30` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/LobbyArt.hx:30` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/LobbySide.hx:12` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/page/LobbyPage.hx:19` |
-| numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/page/LobbyPage.hx:86` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/page/LobbyPage.hx:132` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/page/LobbyPage.hx:139` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/page/LobbyPage.hx:133` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/page/LobbyPage.hx:140` |
 
 ### Lobby store
 
 | Kind | API | Source |
 | --- | --- | --- |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/store/StoreListing.hx:15` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/store/StoreListing.hx:31` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/store/StoreListing.hx:34` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/store/StoreListing.hx:43` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/store/StoreListing.hx:48` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/store/StoreListing.hx:57` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/store/StoreListing.hx:62` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/store/StoreListing.hx:66` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/store/StoreListing.hx:73` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/store/StoreListing.hx:104` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/store/StoreListing.hx:105` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/store/StoreListing.hx:106` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/store/StoreListing.hx:107` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/store/StorePopup.hx:19` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/store/StoreListing.hx:33` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/store/StoreListing.hx:36` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/store/StoreListing.hx:45` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/store/StoreListing.hx:50` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/store/StoreListing.hx:59` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/store/StoreListing.hx:124` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/store/StoreListing.hx:128` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/store/StoreListing.hx:135` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/store/StoreListing.hx:166` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/store/StoreListing.hx:167` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/store/StoreListing.hx:168` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/store/StoreListing.hx:169` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/store/StorePopup.hx:42` |
 | recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/store/StorePopup.hx:43` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/store/StorePopup.hx:45` |
@@ -839,74 +476,71 @@ migration should make them decrease without changing observable behavior or visu
 
 | Kind | API | Source |
 | --- | --- | --- |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/tabs/AccountTab.hx:30` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/tabs/AccountTab.hx:77` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/tabs/AccountTab.hx:78` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/tabs/AccountTab.hx:79` |
 | recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/tabs/AccountTab.hx:307` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/tabs/AccountTab.hx:313` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/tabs/ChatTab.hx:18` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/tabs/AccountTab.hx:318` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/tabs/ChatTab.hx:62` |
 | recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/tabs/ChatTab.hx:63` |
 | recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/tabs/ChatTab.hx:64` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/tabs/ChatTab.hx:65` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/tabs/ChatTab.hx:77` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/tabs/ChatTab.hx:78` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/tabs/ChatTab.hx:79` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/tabs/ChatTab.hx:80` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/tabs/MessagesTab.hx:15` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/tabs/MessagesTab.hx:55` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/tabs/MessagesTab.hx:67` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/tabs/MessagesTab.hx:68` |
-| Fl control dependency | `pr2.runtime.FlComboBox` | `haxe/src/pr2/lobby/tabs/SearchTab.hx:14` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/lobby/tabs/SearchTab.hx:15` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/lobby/tabs/SearchTab.hx:29` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/lobby/tabs/SearchTab.hx:44` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/lobby/tabs/SearchTab.hx:45` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/lobby/tabs/SearchTab.hx:46` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/tabs/SearchTab.hx:70` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/lobby/tabs/SearchTab.hx:76` |
+| Fl control dependency | `pr2.runtime.FlComboBox` | `haxe/src/pr2/lobby/tabs/SearchTab.hx:17` |
+| Fl control usage | `FlComboBox` | `haxe/src/pr2/lobby/tabs/SearchTab.hx:35` |
+| Fl control usage | `FlComboBox` | `haxe/src/pr2/lobby/tabs/SearchTab.hx:50` |
+| Fl control usage | `FlComboBox` | `haxe/src/pr2/lobby/tabs/SearchTab.hx:51` |
+| Fl control usage | `FlComboBox` | `haxe/src/pr2/lobby/tabs/SearchTab.hx:52` |
 | recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/tabs/SearchTab.hx:76` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/lobby/tabs/SearchTab.hx:77` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/tabs/SearchTab.hx:77` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/lobby/tabs/SearchTab.hx:78` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/tabs/SearchTab.hx:78` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/lobby/tabs/SearchTab.hx:166` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/lobby/tabs/SearchTab.hx:182` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/lobby/tabs/SearchTab.hx:192` |
+| Fl control usage | `FlComboBox` | `haxe/src/pr2/lobby/tabs/SearchTab.hx:82` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/tabs/SearchTab.hx:82` |
+| Fl control usage | `FlComboBox` | `haxe/src/pr2/lobby/tabs/SearchTab.hx:83` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/tabs/SearchTab.hx:83` |
+| Fl control usage | `FlComboBox` | `haxe/src/pr2/lobby/tabs/SearchTab.hx:84` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/lobby/tabs/SearchTab.hx:84` |
+| Fl control usage | `FlComboBox` | `haxe/src/pr2/lobby/tabs/SearchTab.hx:172` |
+| Fl control usage | `FlComboBox` | `haxe/src/pr2/lobby/tabs/SearchTab.hx:188` |
 | Fl control usage | `FlComboBox` | `haxe/src/pr2/lobby/tabs/SearchTab.hx:198` |
-| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/tabs/SearchTab.hx:230` |
+| Fl control usage | `FlComboBox` | `haxe/src/pr2/lobby/tabs/SearchTab.hx:204` |
+| recursive name lookup | `LobbyArt.text` | `haxe/src/pr2/lobby/tabs/SearchTab.hx:236` |
+| Fl control usage | `FlComboBox` | `haxe/src/pr2/lobby/tabs/SearchTab.hx:287` |
+| Fl control usage | `FlComboBox` | `haxe/src/pr2/lobby/tabs/SearchTab.hx:288` |
 
 ### Login page
 
 | Kind | API | Source |
 | --- | --- | --- |
-| Fl control dependency | `pr2.runtime.FlCheckBox` | `haxe/src/pr2/page/LoginFlashPopup.hx:12` |
-| Fl control dependency | `pr2.runtime.FlComponents` | `haxe/src/pr2/page/LoginFlashPopup.hx:13` |
-| Fl control dependency | `pr2.runtime.FlComboBox` | `haxe/src/pr2/page/LoginFlashPopup.hx:14` |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/page/LoginFlashPopup.hx:15` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/page/LoginFlashPopup.hx:21` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/page/LoginFlashPopup.hx:37` |
-| Fl control usage | `FlComponents` | `haxe/src/pr2/page/LoginFlashPopup.hx:43` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/page/LoginFlashPopup.hx:50` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/page/LoginFlashPopup.hx:51` |
-| Fl control usage | `FlCheckBox` | `haxe/src/pr2/page/LoginFlashPopup.hx:54` |
-| Fl control usage | `FlCheckBox` | `haxe/src/pr2/page/LoginFlashPopup.hx:55` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/page/LoginFlashPopup.hx:58` |
-| Fl control usage | `FlComponents` | `haxe/src/pr2/page/LoginFlashPopup.hx:123` |
-| Fl control usage | `FlComponents` | `haxe/src/pr2/page/LoginFlashPopup.hx:130` |
+| Fl control dependency | `pr2.runtime.FlCheckBox` | `haxe/src/pr2/page/LoginFlashPopup.hx:17` |
+| Fl control dependency | `pr2.runtime.FlComponents` | `haxe/src/pr2/page/LoginFlashPopup.hx:18` |
+| Fl control dependency | `pr2.runtime.FlComboBox` | `haxe/src/pr2/page/LoginFlashPopup.hx:19` |
+| Fl control usage | `FlComboBox` | `haxe/src/pr2/page/LoginFlashPopup.hx:27` |
+| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/page/LoginFlashPopup.hx:43` |
+| Fl control usage | `FlComponents` | `haxe/src/pr2/page/LoginFlashPopup.hx:49` |
+| Fl control usage | `FlComboBox` | `haxe/src/pr2/page/LoginFlashPopup.hx:56` |
+| Fl control usage | `FlComboBox` | `haxe/src/pr2/page/LoginFlashPopup.hx:57` |
+| Fl control usage | `FlCheckBox` | `haxe/src/pr2/page/LoginFlashPopup.hx:60` |
+| Fl control usage | `FlCheckBox` | `haxe/src/pr2/page/LoginFlashPopup.hx:61` |
+| Fl control usage | `FlComboBox` | `haxe/src/pr2/page/LoginFlashPopup.hx:64` |
+| Fl control usage | `FlComponents` | `haxe/src/pr2/page/LoginFlashPopup.hx:129` |
+| Fl control usage | `FlComponents` | `haxe/src/pr2/page/LoginFlashPopup.hx:136` |
+| Fl control usage | `FlCheckBox` | `haxe/src/pr2/page/LoginFlashPopup.hx:205` |
+| Fl control usage | `FlComboBox` | `haxe/src/pr2/page/LoginFlashPopup.hx:258` |
+| Fl control usage | `FlComboBox` | `haxe/src/pr2/page/LoginFlashPopup.hx:259` |
 | Fl control dependency | `pr2.runtime.FlComboBox` | `haxe/src/pr2/page/LoginPage.hx:28` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/page/LoginPage.hx:170` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/page/LoginPage.hx:320` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/page/LoginPage.hx:334` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/page/LoginPage.hx:512` |
-| Fl control usage | `FlComboBox` | `haxe/src/pr2/page/LoginPage.hx:520` |
+| Fl control usage | `FlComboBox` | `haxe/src/pr2/page/LoginPage.hx:186` |
+| Fl control usage | `FlComboBox` | `haxe/src/pr2/page/LoginPage.hx:319` |
+| Fl control usage | `FlComboBox` | `haxe/src/pr2/page/LoginPage.hx:333` |
+| Fl control usage | `FlComboBox` | `haxe/src/pr2/page/LoginPage.hx:659` |
+| Fl control usage | `FlComboBox` | `haxe/src/pr2/page/LoginPage.hx:667` |
 
 ### Shared UI
 
 | Kind | API | Source |
 | --- | --- | --- |
-| PR2MovieClip dependency | `pr2.runtime.PR2MovieClip` | `haxe/src/pr2/ui/GpNotification.hx:7` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/ui/GpNotification.hx:47` |
-| recursive name lookup | `DisplayUtil.findByName` | `haxe/src/pr2/ui/GpNotification.hx:48` |
 | numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/ui/SelectableButton.hx:51` |
 
 ## Dependency Boundary

@@ -102,7 +102,7 @@ Campaign payload reference:
   skip/play interactions, timing, labels that affect behavior, and final page
   transition parity.
 
-###### Production root checklist (150 remaining)
+###### Production root checklist (complete — 0 remaining)
 
 This is the current migration boundary from
 `docs/deflash-symbol-inventory.md`. Each checkbox represents one unique root
@@ -112,195 +112,195 @@ visual and functional behavior is covered by the relevant focused tests.
 
 **Character**
 
-- [ ] `CharacterGraphic`
-- [ ] `DjinnIceGraphic`
+- [x] `CharacterGraphic`
+- [x] `DjinnIceGraphic`
 
 **Gameplay UI and visuals**
 
-- [ ] `CatCaptchaPopupGraphic`
-- [ ] `CountdownGraphic`
-- [ ] `CowboyMode`
-- [ ] `DrawingInfoGraphic`
-- [ ] `EggGraphic`
-- [ ] `ExpGainGraphic`
-- [ ] `FinishedPageGraphic`
-- [ ] `HappyHour`
-- [ ] `HatGraphic`
-- [ ] `IceWaveGraphic`
-- [ ] `ItemDisplayGraphic`
-- [ ] `LaserShotGraphic`
-- [ ] `LuxPopupGraphic`
-- [ ] `MusicSelectionGraphic`
-- [ ] `PlaceArtifactGraphic`
-- [ ] `PrizePopupGraphic`
-- [ ] `QuitButtonGraphic`
-- [ ] `RaceChatGraphic`
-- [ ] `SlashAnimation`
-- [ ] `SpectatePickerGraphic`
-- [ ] `StatsDisplayGraphic`
+- [x] `CatCaptchaPopupGraphic`
+- [x] `CountdownGraphic`
+- [x] `CowboyMode`
+- [x] `DrawingInfoGraphic`
+- [x] `EggGraphic`
+- [x] `ExpGainGraphic`
+- [x] `FinishedPageGraphic`
+- [x] `HappyHour`
+- [x] `HatGraphic`
+- [x] `IceWaveGraphic`
+- [x] `ItemDisplayGraphic`
+- [x] `LaserShotGraphic`
+- [x] `LuxPopupGraphic`
+- [x] `MusicSelectionGraphic`
+- [x] `PlaceArtifactGraphic`
+- [x] `PrizePopupGraphic`
+- [x] `QuitButtonGraphic`
+- [x] `RaceChatGraphic`
+- [x] `SlashAnimation`
+- [x] `SpectatePickerGraphic`
+- [x] `StatsDisplayGraphic`
 
 **Gameplay effects**
 
-- [ ] `BrickPieceGraphic`
-- [ ] `CrumblePieceGraphic`
-- [ ] `MineExplodeAnimation`
-- [ ] `MinePieceGraphic`
-- [ ] `TeleportAnimation`
+- [x] `BrickPieceGraphic`
+- [x] `CrumblePieceGraphic`
+- [x] `MineExplodeAnimation`
+- [x] `MinePieceGraphic`
+- [x] `TeleportAnimation`
 
 **Intro page**
 
-- [ ] `ArmorIntroGraphic`
-- [ ] `BubbleBoxIntroGraphic`
-- [ ] `IntroPageGraphic`
-- [ ] `JiggminIntroGraphic`
-- [ ] `KongregateIntroGraphic`
+- [x] `ArmorIntroGraphic`
+- [x] `BubbleBoxIntroGraphic`
+- [x] `IntroPageGraphic`
+- [x] `JiggminIntroGraphic`
+- [x] `KongregateIntroGraphic`
 
 **Level editor**
 
-- [ ] `BlockOptionsButton`
-- [ ] `BrushButtonGraphic`
-- [ ] `BrushGraphic`
-- [ ] `ChooseLevelsModePopupGraphic`
-- [ ] `ConnectingPopupGraphic`
-- [ ] `CustomStatsBlockOptionsGraphic`
-- [ ] `DeleteButton`
-- [ ] `EditTextButton`
-- [ ] `EggBlockGraphic`
-- [ ] `EraserButtonGraphic`
-- [ ] `GetLevelsPopupGraphic`
-- [ ] `GetLevelsPopupItemGraphic`
-- [ ] `GetReportedLevelsPopupItemGraphic`
-- [ ] `HandleLevelReportPopupGraphic`
-- [ ] `HatPickerGraphic`
-- [ ] `HatsButtonGraphic`
-- [ ] `HatsMenuGraphic`
-- [ ] `ItemBlockOptionsGraphic`
-- [ ] `ItemButtonGraphic`
-- [ ] `ItemMenuGraphic`
-- [ ] `LandscapeGraphic`
-- [ ] `LevelEditorMenuGraphic`
-- [ ] `ModeMenuGraphic`
-- [ ] `MusicMenuGraphic`
-- [ ] `MusicNoteGraphic`
-- [ ] `ObjectDeleterButtonGraphic`
-- [ ] `ResizeButton`
-- [ ] `SaveLevelPopupGraphic`
-- [ ] `SizePickerGraphic`
-- [ ] `SizePickerMenuGraphic`
-- [ ] `StatBlockOptionsGraphic`
-- [ ] `TeleportBlockOptionsGraphic`
-- [ ] `TestCourseGraphic`
-- [ ] `TextToolButtonGraphic`
-- [ ] `TextToolCursorGraphic`
-- [ ] `UploadingPopupGraphic`
-- [ ] `ValueButtonGraphic`
-- [ ] `ValueMenuGraphic`
+- [x] `BlockOptionsButton`
+- [x] `BrushButtonGraphic`
+- [x] `BrushGraphic`
+- [x] `ChooseLevelsModePopupGraphic`
+- [x] `ConnectingPopupGraphic`
+- [x] `CustomStatsBlockOptionsGraphic`
+- [x] `DeleteButton`
+- [x] `EditTextButton`
+- [x] `EggBlockGraphic`
+- [x] `EraserButtonGraphic`
+- [x] `GetLevelsPopupGraphic`
+- [x] `GetLevelsPopupItemGraphic`
+- [x] `GetReportedLevelsPopupItemGraphic`
+- [x] `HandleLevelReportPopupGraphic`
+- [x] `HatPickerGraphic`
+- [x] `HatsButtonGraphic`
+- [x] `HatsMenuGraphic`
+- [x] `ItemBlockOptionsGraphic`
+- [x] `ItemButtonGraphic`
+- [x] `ItemMenuGraphic`
+- [x] `LandscapeGraphic`
+- [x] `LevelEditorMenuGraphic`
+- [x] `ModeMenuGraphic`
+- [x] `MusicMenuGraphic`
+- [x] `MusicNoteGraphic`
+- [x] `ObjectDeleterButtonGraphic`
+- [x] `ResizeButton`
+- [x] `SaveLevelPopupGraphic`
+- [x] `SizePickerGraphic`
+- [x] `SizePickerMenuGraphic`
+- [x] `StatBlockOptionsGraphic`
+- [x] `TeleportBlockOptionsGraphic`
+- [x] `TestCourseGraphic`
+- [x] `TextToolButtonGraphic`
+- [x] `TextToolCursorGraphic`
+- [x] `UploadingPopupGraphic`
+- [x] `ValueButtonGraphic`
+- [x] `ValueMenuGraphic`
 
 **Level objects and rendering**
 
-- [ ] `ArrowBlockGraphic`
-- [ ] `BG1`
-- [ ] `BG2`
-- [ ] `BG3`
-- [ ] `BG4`
-- [ ] `BG5`
-- [ ] `BG6`
-- [ ] `BG7`
-- [ ] `Building1`
-- [ ] `Cactus`
-- [ ] `PetrifiedTree`
-- [ ] `Rock`
-- [ ] `Rock2`
-- [ ] `Spire`
-- [ ] `Spire2`
-- [ ] `TextObjectGraphic`
-- [ ] `Tree`
-- [ ] `Tree2`
-- [ ] `Tree3`
+- [x] `ArrowBlockGraphic`
+- [x] `BG1`
+- [x] `BG2`
+- [x] `BG3`
+- [x] `BG4`
+- [x] `BG5`
+- [x] `BG6`
+- [x] `BG7`
+- [x] `Building1`
+- [x] `Cactus`
+- [x] `PetrifiedTree`
+- [x] `Rock`
+- [x] `Rock2`
+- [x] `Spire`
+- [x] `Spire2`
+- [x] `TextObjectGraphic`
+- [x] `Tree`
+- [x] `Tree2`
+- [x] `Tree3`
 
 **Lobby account and customization**
 
-- [ ] `ColorPickerCrosshairsGraphic`
-- [ ] `ColorPickerHueArrowGraphic`
-- [ ] `ColorPickerPopupGraphic`
-- [ ] `CursorEyedropperGraphic`
-- [ ] `PartInfoListingGraphic`
-- [ ] `PartPopupGraphic`
-- [ ] `PointsRemainingGraphic`
-- [ ] `PresetListingGraphic`
-- [ ] `StatSliderGraphic`
-- [ ] `StorePopupGraphic`
+- [x] `ColorPickerCrosshairsGraphic`
+- [x] `ColorPickerHueArrowGraphic`
+- [x] `ColorPickerPopupGraphic`
+- [x] `CursorEyedropperGraphic`
+- [x] `PartInfoListingGraphic`
+- [x] `PartPopupGraphic`
+- [x] `PointsRemainingGraphic`
+- [x] `PresetListingGraphic`
+- [x] `StatSliderGraphic`
+- [x] `StorePopupGraphic`
 
 **Lobby dialogs**
 
-- [ ] `AdminMenuGraphic`
-- [ ] `BanMenuGraphic`
-- [ ] `ChangePasswordPopupGraphic`
-- [ ] `ChatRoomInfoPopupGraphic`
-- [ ] `ChooseLevelModModePopupGraphic`
-- [ ] `CreateGuildPopupGraphic`
-- [ ] `CreditsPopupGraphic`
-- [ ] `DeleteMessageButtonGraphic`
-- [ ] `ExternalLinkPopupGraphic`
-- [ ] `GuildMemberNameGraphic`
-- [ ] `GuildPopupGraphic`
-- [ ] `LevelInfoPopupGraphic`
-- [ ] `LevelReportPopupGraphic`
-- [ ] `LogoutPassPopupGraphic`
-- [ ] `MessagePopupGraphic`
-- [ ] `MessagesItemGraphic`
-- [ ] `OptionsArtQualityMenuGraphic`
-- [ ] `OptionsPopupGraphic`
-- [ ] `OptionsSongsMenuGraphic`
-- [ ] `PlayerGuestPopupGraphic`
-- [ ] `PlayerPopupGraphic`
-- [ ] `PMRFCodesPopupGraphic`
-- [ ] `ReplyMessageButtonGraphic`
-- [ ] `ReportMessageButtonGraphic`
-- [ ] `SendMessagePopupGraphic`
-- [ ] `SetEmailPopupGraphic`
-- [ ] `TempModMenuGraphic`
-- [ ] `TransferGuildPopupGraphic`
+- [x] `AdminMenuGraphic`
+- [x] `BanMenuGraphic`
+- [x] `ChangePasswordPopupGraphic`
+- [x] `ChatRoomInfoPopupGraphic`
+- [x] `ChooseLevelModModePopupGraphic`
+- [x] `CreateGuildPopupGraphic`
+- [x] `CreditsPopupGraphic`
+- [x] `DeleteMessageButtonGraphic`
+- [x] `ExternalLinkPopupGraphic`
+- [x] `GuildMemberNameGraphic`
+- [x] `GuildPopupGraphic`
+- [x] `LevelInfoPopupGraphic`
+- [x] `LevelReportPopupGraphic`
+- [x] `LogoutPassPopupGraphic`
+- [x] `MessagePopupGraphic`
+- [x] `MessagesItemGraphic`
+- [x] `OptionsArtQualityMenuGraphic`
+- [x] `OptionsPopupGraphic`
+- [x] `OptionsSongsMenuGraphic`
+- [x] `PlayerGuestPopupGraphic`
+- [x] `PlayerPopupGraphic`
+- [x] `PMRFCodesPopupGraphic`
+- [x] `ReplyMessageButtonGraphic`
+- [x] `ReportMessageButtonGraphic`
+- [x] `SendMessagePopupGraphic`
+- [x] `SetEmailPopupGraphic`
+- [x] `TempModMenuGraphic`
+- [x] `TransferGuildPopupGraphic`
 
 **Lobby level browser**
 
-- [ ] `CourseMenuGraphic`
-- [ ] `LevelItemGraphic`
-- [ ] `LoadingGraphic`
-- [ ] `SlotGraphic`
+- [x] `CourseMenuGraphic`
+- [x] `LevelItemGraphic`
+- [x] `LoadingGraphic`
+- [x] `SlotGraphic`
 
 **Lobby messages and players**
 
-- [ ] `UnreadNotifGraphic`
-- [ ] `PlayersTabListGraphic`
-- [ ] `PlayersTabListItemGraphic`
+- [x] `UnreadNotifGraphic`
+- [x] `PlayersTabListGraphic`
+- [x] `PlayersTabListItemGraphic`
 
 **Lobby shell and store**
 
-- [ ] `HalfSquareBG`
-- [ ] `LobbyBottomButtonsGraphic`
-- [ ] `LobbyGraphic`
-- [ ] `StoreListingGraphic`
+- [x] `HalfSquareBG`
+- [x] `LobbyBottomButtonsGraphic`
+- [x] `LobbyGraphic`
+- [x] `StoreListingGraphic`
 
 **Lobby tabs**
 
-- [ ] `AccountInfoGraphic`
-- [ ] `ChatGraphic`
-- [ ] `MessagesGraphic`
-- [ ] `SearchGraphic`
+- [x] `AccountInfoGraphic`
+- [x] `ChatGraphic`
+- [x] `MessagesGraphic`
+- [x] `SearchGraphic`
 
 **Login page**
 
-- [ ] `ConfirmPopupGraphic`
-- [ ] `CreateAccountPopupGraphic`
-- [ ] `ForgotPassPopupGraphic`
-- [ ] `LoggingInPopupGraphic`
-- [ ] `LoginPopupGraphic`
-- [ ] `ServerSelectPopupGraphic`
+- [x] `ConfirmPopupGraphic`
+- [x] `CreateAccountPopupGraphic`
+- [x] `ForgotPassPopupGraphic`
+- [x] `LoggingInPopupGraphic`
+- [x] `LoginPopupGraphic`
+- [x] `ServerSelectPopupGraphic`
 
 **Shared UI**
 
-- [ ] `GpNotificationGraphic`
+- [x] `GpNotificationGraphic`
 
 ##### Native Character Rig
 

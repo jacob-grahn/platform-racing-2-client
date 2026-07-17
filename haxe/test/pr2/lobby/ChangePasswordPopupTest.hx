@@ -8,7 +8,7 @@ import pr2.lobby.dialogs.ChangePasswordPopup;
 import pr2.lobby.dialogs.MessagePopup;
 import pr2.lobby.dialogs.Popup;
 import pr2.net.ServerConfig;
-import pr2.runtime.FlTextInput;
+import pr2.ui.controls.GameTextInput;
 import pr2.util.DisplayUtil;
 
 class ChangePasswordPopupTest {
@@ -94,8 +94,8 @@ class ChangePasswordPopupTest {
 		closeAll();
 	}
 
-	private static function input(popup:ChangePasswordPopup, name:String):FlTextInput {
-		var value = Std.downcast(DisplayUtil.findByName(popup, name), FlTextInput);
+	private static function input(popup:ChangePasswordPopup, name:String):GameTextInput {
+		var value = Std.downcast(DisplayUtil.findByName(popup, name), GameTextInput);
 		if (value == null) throw name + " missing";
 		return value;
 	}
@@ -107,7 +107,7 @@ class ChangePasswordPopupTest {
 	}
 
 	private static function assertPasswordInput(popup:ChangePasswordPopup, name:String):Void {
-		assertEquals(true, input(popup, name).displayAsPassword, name + " is password-masked");
+		assertEquals(true, input(popup, name).textField.displayAsPassword, name + " is password-masked");
 	}
 
 	private static function lastMessageText():String {

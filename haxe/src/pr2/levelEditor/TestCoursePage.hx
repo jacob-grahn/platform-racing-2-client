@@ -12,7 +12,6 @@ import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
 import pr2.net.ServerLevelData;
 import pr2.page.Page;
-import pr2.runtime.PR2MovieClip;
 import pr2.util.DisplayUtil;
 
 class TestCoursePage extends Page {
@@ -31,7 +30,7 @@ class TestCoursePage extends Page {
 	public final isMod:Bool;
 	public final reportsMode:Bool;
 	public var course(default, null):Null<Course>;
-	public var art(default, null):Null<PR2MovieClip>;
+	public var art(default, null):Null<TestCourseView>;
 	public var statsSelect(default, null):Null<StatsSelect>;
 	public var hatPicker(default, null):Null<TestCourseHatPicker>;
 	private var bindings:Array<Binding> = [];
@@ -46,7 +45,7 @@ class TestCoursePage extends Page {
 	override public function initialize():Void {
 		super.initialize();
 		mountCourse();
-		art = PR2MovieClip.fromLinkage("TestCourseGraphic", {maxNestedDepth: 6});
+		art = new TestCourseView();
 		bind("back_bt", clickBack);
 		bind("restart_bt", clickRestart);
 		stackOverlayControls();

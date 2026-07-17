@@ -1,9 +1,6 @@
 package pr2.lobby.dialogs;
 
-import pr2.lobby.LobbyArt;
 import pr2.net.ServerConfig;
-import pr2.runtime.PR2MovieClip;
-import pr2.util.DisplayUtil;
 
 typedef LevelModerateUploadFactory = String->Map<String, String>->String->(Dynamic->Void)->(String->Void)->Null<UploadingPopup>;
 
@@ -16,20 +13,17 @@ class ChooseLevelModModePopup extends Popup {
 
 	public final levelId:Int;
 
-	private var art:Null<PR2MovieClip>;
+	private var art:Null<ChooseLevelModModeView>;
 	private var uploading:Null<UploadingPopup>;
-	private var unpublishBinding:Null<LobbyArt.Binding>;
-	private var restrictBinding:Null<LobbyArt.Binding>;
-	private var cancelBinding:Null<LobbyArt.Binding>;
 
 	public function new(levelId:Int = 0) {
 		super();
 		this.levelId = levelId;
-		art = PR2MovieClip.fromLinkage("ChooseLevelModModePopupGraphic", {maxNestedDepth: 4});
+		art = new ChooseLevelModModeView();
 		addChild(art);
-		unpublishBinding = LobbyArt.bind(DisplayUtil.findByName(art, "unpublish_bt"), clickUnpublish);
-		restrictBinding = LobbyArt.bind(DisplayUtil.findByName(art, "restrict_bt"), clickRestrict);
-		cancelBinding = LobbyArt.bind(DisplayUtil.findByName(art, "cancel_bt"), function():Void startFadeOut());
+		art.onUnpublish = clickUnpublish;
+		art.onRestrict = clickRestrict;
+		art.onCancel = startFadeOut;
 	}
 
 	private function clickUnpublish():Void {
@@ -71,9 +65,6 @@ class ChooseLevelModModePopup extends Popup {
 	}
 
 	override public function remove():Void {
-		LobbyArt.unbind(unpublishBinding);
-		LobbyArt.unbind(restrictBinding);
-		LobbyArt.unbind(cancelBinding);
 		if (uploading != null) {
 			uploading.startFadeOut();
 			uploading = null;

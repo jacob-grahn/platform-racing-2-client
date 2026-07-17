@@ -2,7 +2,6 @@ package pr2.levelEditor;
 
 import com.jiggmin.data.Objects;
 import pr2.lobby.Memory;
-import pr2.runtime.PR2MovieClip;
 import pr2.ui.CustomCursor;
 
 class EditorToolCursorManager {
@@ -129,9 +128,9 @@ class EditorToolCursorManager {
 			case ["tools", "eraser"]:
 				new EditorBrushCursor(this, sidebar, toolId, true);
 			case ["stamps", "delete"] | ["blocks", "delete"]:
-				new EditorGraphicCursor(this, sidebar, toolId, PR2MovieClip.fromLinkage("ObjectDeleterButtonGraphic", {maxNestedDepth: 4}));
+				new EditorGraphicCursor(this, sidebar, toolId, new EditorNativeGraphic("ObjectDeleterButtonGraphic"));
 			case ["stamps", "text"]:
-				new EditorGraphicCursor(this, sidebar, toolId, PR2MovieClip.fromLinkage("TextToolCursorGraphic", {maxNestedDepth: 4}), true, true);
+				new EditorGraphicCursor(this, sidebar, toolId, new EditorNativeGraphic("TextToolCursorGraphic"), true, true);
 			case ["stamps", id] if (StringTools.startsWith(id, "stamp")):
 				var code = Std.parseInt(id.substr("stamp".length));
 				code == null ? null : objectCursor(sidebar, toolId, code, true);

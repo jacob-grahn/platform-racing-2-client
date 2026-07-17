@@ -70,12 +70,11 @@ class QuitButtonTest {
 
 	private static function testGlowControls():Void {
 		var quit = new QuitButton(function():Void {}, function():Bool return false);
-		var glow = Std.downcast(DisplayUtil.findByName(quit, "glow"), pr2.runtime.PR2MovieClip);
-		var offFrame = glow.currentFrame;
+		assertEquals(false, quit.glowActive, "glow starts off");
 		quit.startGlow();
-		assertEquals(true, glow.currentFrame > offFrame, "startGlow enters the on animation");
+		assertEquals(true, quit.glowActive, "startGlow enters the on animation");
 		quit.stopGlow();
-		assertEquals(offFrame, glow.currentFrame, "stopGlow returns to the off frame");
+		assertEquals(false, quit.glowActive, "stopGlow returns to the off state");
 		quit.remove();
 	}
 

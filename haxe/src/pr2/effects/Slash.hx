@@ -5,7 +5,6 @@ import pr2.audio.SoundEffects;
 import pr2.gameplay.RotationMath;
 import pr2.level.ServerLevel;
 import pr2.level.ServerLevel.DecodedBlock;
-import pr2.runtime.PR2MovieClip;
 
 typedef SlashContext = {
 	final level:ServerLevel;
@@ -30,7 +29,7 @@ class Slash extends Effect {
 	public static inline var HIT_VEL_Y:Int = -9;
 	public static inline var SOUND_PATH:String = "assets/audio/sfx/slash_swish.mp3";
 
-	public var animation(default, null):PR2MovieClip;
+	public var animation(default, null):NativeEffectAnimation;
 	public var reach(default, null):Int = RIGHT_REACH;
 	public final shooterID:Int;
 	private var context:Null<SlashContext>;
@@ -39,7 +38,7 @@ class Slash extends Effect {
 		shooterID = tempID;
 		this.context = context;
 		super(startX, startY);
-		animation = PR2MovieClip.fromLinkage("SlashAnimation", {maxNestedDepth: 3});
+		animation = new NativeEffectAnimation("slash", LIFETIME_FRAMES);
 		addChild(animation);
 		scheduleRemove(LIFETIME_FRAMES);
 		if (dir == "left") {

@@ -3,10 +3,14 @@ package pr2.lobby.account;
 import openfl.display.DisplayObjectContainer;
 import openfl.display.Sprite;
 import openfl.events.MouseEvent;
+import openfl.text.TextField;
+import openfl.text.TextFormat;
+import pr2.assets.NativeAssetIds.FontAsset;
+import pr2.assets.NativeAssets;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.dialogs.Popup;
-import pr2.runtime.FlButton;
-import pr2.runtime.PR2MovieClip;
+import pr2.levelEditor.GetLevelsView;
+import pr2.ui.controls.GameButton;
 import pr2.util.DisplayUtil;
 
 /** Flash-faithful loadout chooser built from `GetLevelsPopupGraphic`. */
@@ -14,12 +18,12 @@ class LoadoutsPopup extends Popup {
 	private var character:Null<AccountCharacter>;
 	private var stats:Null<StatsSelect>;
 	private var display:Null<PlayerDisplay>;
-	private var art:Null<PR2MovieClip>;
+	private var art:Null<GetLevelsView>;
 	private var holder:Null<DisplayObjectContainer>;
 	private var listings:Array<LoadoutListing> = [];
 	private var selected:Null<LoadoutListing>;
-	private var loadButton:Null<FlButton>;
-	private var saveButton:Null<FlButton>;
+	private var loadButton:Null<GameButton>;
+	private var saveButton:Null<GameButton>;
 	private var cancelBinding:Null<LobbyArt.Binding>;
 	private var loadBinding:Null<LobbyArt.Binding>;
 	private var saveBinding:Null<LobbyArt.Binding>;
@@ -29,7 +33,7 @@ class LoadoutsPopup extends Popup {
 		this.character = character;
 		this.stats = stats;
 		this.display = display;
-		art = PR2MovieClip.fromLinkage("GetLevelsPopupGraphic", {maxNestedDepth: 8});
+		art = new GetLevelsView();
 		addChild(art);
 
 		var title = LobbyArt.text(art, "titleBox");
@@ -37,8 +41,8 @@ class LoadoutsPopup extends Popup {
 		var loading = DisplayUtil.findByName(art, "loadingGraphic");
 		if (loading != null && loading.parent != null) loading.parent.removeChild(loading);
 		holder = Std.downcast(DisplayUtil.findByName(art, "levelsHolder"), DisplayObjectContainer);
-		loadButton = Std.downcast(DisplayUtil.findByName(art, "load_bt"), FlButton);
-		saveButton = Std.downcast(DisplayUtil.findByName(art, "delete_bt"), FlButton);
+		loadButton = Std.downcast(DisplayUtil.findByName(art, "load_bt"), GameButton);
+		saveButton = Std.downcast(DisplayUtil.findByName(art, "delete_bt"), GameButton);
 		if (saveButton != null) saveButton.label = "Save";
 
 		for (preset in Presets.getPresets()) addListing(preset);
@@ -147,7 +151,7 @@ class LoadoutsPopup extends Popup {
 
 private class LoadoutListing extends Sprite {
 	public final preset:Preset;
-	private var art:Null<PR2MovieClip>;
+	private var art:Null<Sprite>;
 	private var preview:Null<AccountCharacter>;
 	private var selected:Bool = false;
 
@@ -157,8 +161,12 @@ private class LoadoutListing extends Sprite {
 		mouseChildren = false;
 		doubleClickEnabled = true;
 		buttonMode = true;
-		art = PR2MovieClip.fromLinkage("PresetListingGraphic", {maxNestedDepth: 4});
-		art.gotoAndStop("up");
+		art = new Sprite();
+		art.addChild(createText("loadoutNum", 10, 25, 24, 16));
+		art.addChild(createText("loadoutSpeed", 92, 7, 116, 12));
+		art.addChild(createText("loadoutAccel", 92, 27, 116, 12));
+		art.addChild(createText("loadoutJump", 92, 47, 116, 12));
+		redraw(0xF0F0F0, 0x777777);
 		setText("loadoutSpeed", "Speed: " + preset.speed);
 		setText("loadoutAccel", "Acceleration: " + preset.acceleration);
 		setText("loadoutJump", "Jumping: " + preset.jumping);
@@ -185,9 +193,30 @@ private class LoadoutListing extends Sprite {
 		if (field != null) field.text = value;
 	}
 
+	private function createText(name:String, x:Float, y:Float, width:Float, size:Int):TextField {
+		var field = new TextField();
+		field.name = name;
+		field.x = x;
+		field.y = y;
+		field.width = width;
+		field.height = size + 5;
+		field.selectable = false;
+		field.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), size, 0, name == "loadoutNum");
+		return field;
+	}
+
+	private function redraw(fill:Int, border:Int):Void {
+		if (art == null) return;
+		art.graphics.clear();
+		art.graphics.beginFill(fill);
+		art.graphics.lineStyle(1, border);
+		art.graphics.drawRoundRect(0, 0, 218, 70, 8, 8);
+		art.graphics.endFill();
+	}
+
 	public function setSelected(value:Bool):Void {
 		selected = value;
-		if (art != null) art.gotoAndStop(value ? "selected" : "up");
+		redraw(value ? 0xDCEBFF : 0xF0F0F0, value ? 0x4B78B5 : 0x777777);
 	}
 
 	public function previewForTests():Null<AccountCharacter> {
@@ -195,11 +224,11 @@ private class LoadoutListing extends Sprite {
 	}
 
 	private function onOver(_:MouseEvent):Void {
-		if (!selected && art != null) art.gotoAndStop("over");
+		if (!selected) redraw(0xE8F2FF, 0x6B91C2);
 	}
 
 	private function onOut(_:MouseEvent):Void {
-		if (!selected && art != null) art.gotoAndStop("up");
+		if (!selected) redraw(0xF0F0F0, 0x777777);
 	}
 
 	public function remove():Void {
@@ -210,7 +239,7 @@ private class LoadoutListing extends Sprite {
 			preview = null;
 		}
 		if (art != null) {
-			art.dispose();
+			if (art.parent != null) art.parent.removeChild(art);
 			art = null;
 		}
 		if (parent != null) parent.removeChild(this);

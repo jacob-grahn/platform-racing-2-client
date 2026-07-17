@@ -36,7 +36,6 @@ import pr2.levelEditor.EditorTextObject;
 import pr2.levelEditor.EditorValueSettingsPopup;
 import pr2.levelEditor.TestCoursePage;
 import pr2.levelEditor.EditorBrushCursor;
-import pr2.runtime.FlSliderEvent;
 import pr2.runtime.FontResolver;
 import pr2.ui.CustomCursor;
 import pr2.ui.StageFocus;
@@ -635,7 +634,7 @@ class EditorSettingsTest {
 		assertEquals(true, @:privateAccess stats.localChar.inLE(), "test stats character reports level editor mode");
 		assertEquals(91, stats.getStats().speed, "stat picker holds changed speed before save path");
 		assertEquals(persistedBeforeChange, Reflect.field(Settings.getValue(Settings.LE_TEST_STATS), "speed"), "stat change does not persist before save path");
-		@:privateAccess speedSlider.onSliderThumbRelease(new FlSliderEvent(FlSliderEvent.THUMB_RELEASE, speedSlider.value));
+		@:privateAccess speedSlider.onSliderThumbRelease();
 		assertEquals(91, Reflect.field(Settings.getValue(Settings.LE_TEST_STATS), "speed"), "thumb release persists pending LE stats");
 		stats.setStats(92, 82, 73);
 		stats.noteUserStatChange();

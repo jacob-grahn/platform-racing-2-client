@@ -3,13 +3,9 @@ package pr2.lobby.dialogs;
 import haxe.Json;
 import openfl.events.KeyboardEvent;
 import pr2.crypto.PR2Encryptor;
-import pr2.lobby.LobbyArt;
-import pr2.lobby.LobbyArt.Binding;
 import pr2.lobby.LobbySession;
 import pr2.net.ServerConfig;
-import pr2.runtime.FlTextInput;
-import pr2.runtime.PR2MovieClip;
-import pr2.util.DisplayUtil;
+import pr2.ui.controls.GameTextInput;
 
 typedef LogoutUploadFactory = String->Map<String, String>->String->(Dynamic->Void)->Null<UploadingPopup>;
 
@@ -20,19 +16,17 @@ class LogoutPassPopup extends Popup {
 
 	public static var uploadFactory:LogoutUploadFactory = defaultUpload;
 
-	private var art:Null<PR2MovieClip>;
-	private var logoutBinding:Null<Binding>;
-	private var cancelBinding:Null<Binding>;
-	private var passBox:Null<FlTextInput>;
+	private var art:Null<NativeFormView>;
+	private var passBox:Null<GameTextInput>;
 	private var uploading:Null<UploadingPopup>;
 
 	public function new(?hideGraphic:Void->Void) {
 		super();
-		art = PR2MovieClip.fromLinkage("LogoutPassPopupGraphic", {maxNestedDepth: 4});
+		art = new NativeFormView("LogoutPassPopupGraphic");
 		addChild(art);
-		passBox = Std.downcast(DisplayUtil.findByName(art, "passBox"), FlTextInput);
-		logoutBinding = LobbyArt.bind(DisplayUtil.findByName(art, "logout_bt"), clickLogOut);
-		cancelBinding = LobbyArt.bind(DisplayUtil.findByName(art, "cancel_bt"), startFadeOut);
+		passBox = art.inputs.get("passBox");
+		art.onSubmit = clickLogOut;
+		art.onCancel = startFadeOut;
 		if (passBox != null) {
 			passBox.addEventListener(KeyboardEvent.KEY_DOWN, listenForEnter);
 		}
@@ -70,8 +64,6 @@ class LogoutPassPopup extends Popup {
 	}
 
 	override public function remove():Void {
-		LobbyArt.unbind(logoutBinding);
-		LobbyArt.unbind(cancelBinding);
 		if (passBox != null) {
 			passBox.removeEventListener(KeyboardEvent.KEY_DOWN, listenForEnter);
 			passBox = null;

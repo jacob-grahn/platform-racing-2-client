@@ -5,22 +5,18 @@ import openfl.display.InteractiveObject;
 import openfl.display.Sprite;
 import openfl.events.MouseEvent;
 import openfl.text.TextField;
-import openfl.text.TextFieldAutoSize;
-import pr2.character.Parts;
 import pr2.display.Removable;
 import pr2.lobby.LobbyArt;
 import pr2.runtime.EpicFlash;
-import pr2.runtime.PR2MovieClip;
 import pr2.util.DisplayUtil;
 
 class PartInfoListing extends Removable {
-	private var art:Null<PR2MovieClip>;
-	private var fallbackArt:Null<Sprite>;
+	private var art:Null<PartInfoListingView>;
 	private var cover:Null<DisplayObject>;
 	private var bg:Null<DisplayObject>;
 	private var ownedBox:Null<DisplayObject>;
 	private var epicBox:Null<TextField>;
-	private var target:Null<PR2MovieClip>;
+	private var target:Null<PartPreview>;
 	private var djinnPreview:Null<AccountCharacter>;
 	private var hasEpicEverything:Bool;
 	private var partType:String;
@@ -41,15 +37,9 @@ class PartInfoListing extends Removable {
 		partOwned = has;
 		partEpic = hasEpic;
 		this.hasEpicEverything = hasEpicEverything;
-		try {
-			art = PR2MovieClip.fromLinkage("PartInfoListingGraphic", {maxNestedDepth: 8});
-			addChild(art);
-		} catch (_:Dynamic) {
-			fallbackArt = createFallbackArt();
-			addChild(fallbackArt);
-		}
-
-		var root = art != null ? art : fallbackArt;
+		art = new PartInfoListingView();
+		addChild(art);
+		var root = art;
 		bg = DisplayUtil.findByName(root, "bg");
 		cover = DisplayUtil.findByName(root, "cover");
 		ownedBox = DisplayUtil.findByName(root, "ownedBox");
@@ -110,7 +100,7 @@ class PartInfoListing extends Removable {
 		return epicBox == null ? "" : epicBox.text;
 	}
 
-	public function targetForTests():Null<PR2MovieClip> {
+	public function targetForTests():Null<PartPreview> {
 		return target;
 	}
 
@@ -119,8 +109,7 @@ class PartInfoListing extends Removable {
 	}
 
 	public function colorMC2VisibleForTests():Bool {
-		var colorMC2 = target == null ? null : DisplayUtil.findByName(target, "colorMC2");
-		return colorMC2 != null && colorMC2.visible;
+		return target != null && target.secondaryVisible;
 	}
 
 	public function addEpicFlash(epicFlash:EpicFlash):Void {
@@ -148,9 +137,6 @@ class PartInfoListing extends Removable {
 			art.dispose();
 			art = null;
 		}
-		if (fallbackArt != null) {
-			fallbackArt = null;
-		}
 		super.remove();
 	}
 
@@ -167,9 +153,7 @@ class PartInfoListing extends Removable {
 	}
 
 	private function showPartPreview():Void {
-		if (art == null) {
-			return;
-		}
+		if (art == null) return;
 		if (ownedBox != null) {
 			ownedBox.y = 23.55;
 		}
@@ -185,44 +169,4 @@ class PartInfoListing extends Removable {
 		return value.charAt(0).toUpperCase() + value.substr(1).toLowerCase();
 	}
 
-	private static function createFallbackArt():Sprite {
-		var root = new Sprite();
-		var bg = new Sprite();
-		bg.name = "bg";
-		bg.graphics.beginFill(0xE3E2C3);
-		bg.graphics.drawRect(0, 0, 122, 145);
-		bg.graphics.endFill();
-		root.addChild(bg);
-		var title = field("titleBox", 10, 5, 109);
-		root.addChild(title);
-		var owned = field("ownedBox", 10, 25.55, 42);
-		owned.text = "Owned!";
-		root.addChild(owned);
-		var epic = field("epicBox", 65.05, 77.35, 55.95);
-		epic.text = "Purchased!";
-		root.addChild(epic);
-		var desc = field("descBox", 10, 96, 108);
-		desc.wordWrap = true;
-		desc.multiline = true;
-		root.addChild(desc);
-		var cover = new Sprite();
-		cover.name = "cover";
-		cover.graphics.beginFill(0, 0);
-		cover.graphics.drawRect(0, 0, 122, 145);
-		cover.graphics.endFill();
-		root.addChild(cover);
-		return root;
-	}
-
-	private static function field(name:String, x:Float, y:Float, width:Float):TextField {
-		var text = new TextField();
-		text.name = name;
-		text.x = x;
-		text.y = y;
-		text.width = width;
-		text.height = 70;
-		text.autoSize = TextFieldAutoSize.LEFT;
-		text.selectable = false;
-		return text;
-	}
 }

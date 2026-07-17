@@ -14,7 +14,7 @@ class SetEmailPopup extends FormPopup {
 
 	public function new() {
 		super();
-		initializeForm("SetEmailPopupGraphic", ["email1Box", "email2Box"], clickOk);
+		initializeForm("SetEmailPopupGraphic", ["email1Box", "email2Box", "passBox"], clickOk);
 	}
 
 	private function clickOk():Void {

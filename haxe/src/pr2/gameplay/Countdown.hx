@@ -1,10 +1,15 @@
 package pr2.gameplay;
 
 import openfl.display.Sprite;
+import openfl.events.Event;
+import openfl.text.TextField;
+import openfl.text.TextFormat;
+import openfl.text.TextFormatAlign;
 import openfl.utils.Assets;
 import pr2.audio.SoundEffects;
+import pr2.assets.NativeAssetIds.FontAsset;
+import pr2.assets.NativeAssets;
 import pr2.lobby.account.Settings;
-import pr2.runtime.PR2MovieClip;
 
 typedef CountdownEffectPlayer = String->Float->Void;
 
@@ -26,7 +31,9 @@ class Countdown extends Sprite {
 	static inline var READY_SOUND:String = "assets/audio/sfx/countdown_ready.mp3";
 	static inline var GO_SOUND:String = "assets/audio/sfx/countdown_go.mp3";
 
-	private var art:Null<PR2MovieClip>;
+	private var art:Null<Sprite>;
+	private var text:Null<TextField>;
+	private var frame:Int = 1;
 	private var onFinish:Null<Void->Void>;
 	private var onPlayEffect:Null<CountdownEffectPlayer>;
 
@@ -40,23 +47,49 @@ class Countdown extends Sprite {
 		this.onPlayEffect = onPlayEffect;
 		mouseEnabled = false;
 		mouseChildren = false;
-		art = PR2MovieClip.fromLinkage("CountdownGraphic", {maxNestedDepth: 3});
-		// Mirror CountdownGraphic.addFrameScript(8, frame9, 23, frame24, 38,
-		// frame39, 53, frame54, 61, frame62) — frame indices are zero-based.
-		art.setFrameScript(8, handleCount);
-		art.setFrameScript(23, handleCount);
-		art.setFrameScript(38, handleCount);
-		art.setFrameScript(53, handleFinish);
-		art.setFrameScript(61, handleEnd);
+		art = new Sprite();
+		text = new TextField();
+		text.x = -120;
+		text.y = -70;
+		text.width = 240;
+		text.height = 140;
+		text.selectable = false;
+		text.mouseEnabled = false;
+		text.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 92, 0xFFFFFF, true, null, null, null, null,
+			TextFormatAlign.CENTER);
+		text.filters = [new openfl.filters.GlowFilter(0x000000, 0.9, 8, 8, 2)];
+		art.addChild(text);
+		art.addEventListener(Event.ENTER_FRAME, onEnterFrame);
+		applyVisual();
 		addChild(art);
 	}
 
 	/** Step the countdown one frame. Production lets PR2MovieClip auto-play, so
 		this is only needed to drive the timeline deterministically (tests). */
 	public function advance():Void {
-		if (art != null) {
-			art.advanceOneFrame();
-		}
+		advanceOneFrame();
+	}
+
+	private function onEnterFrame(_:Event):Void advanceOneFrame();
+
+	private function advanceOneFrame():Void {
+		if (art == null) return;
+		frame++;
+		if (frame == 9 || frame == 24 || frame == 39) handleCount();
+		if (frame == 54) handleFinish();
+		applyVisual();
+		if (frame >= 62) handleEnd();
+	}
+
+	private function applyVisual():Void {
+		if (text == null) return;
+		var phase = frame <= 15 ? 0 : frame <= 30 ? 1 : frame <= 45 ? 2 : 3;
+		var local = frame - phase * 15;
+		text.text = phase == 0 ? "3" : phase == 1 ? "2" : phase == 2 ? "1" : "Go!";
+		var progress = Math.min(1, local / 9);
+		var scale = 1 + 8 * (1 - progress) * (1 - progress);
+		text.scaleX = text.scaleY = scale;
+		text.alpha = local > 12 ? Math.max(0, (15 - local) / 3) : 1;
 	}
 
 	private function handleCount():Void {
@@ -73,9 +106,6 @@ class Countdown extends Sprite {
 	}
 
 	private function handleEnd():Void {
-		if (art != null) {
-			art.stop();
-		}
 		remove();
 	}
 
@@ -93,9 +123,11 @@ class Countdown extends Sprite {
 
 	public function remove():Void {
 		if (art != null) {
-			art.dispose();
+			art.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
+			if (art.parent != null) art.parent.removeChild(art);
 			art = null;
 		}
+		text = null;
 		if (parent != null) {
 			parent.removeChild(this);
 		}

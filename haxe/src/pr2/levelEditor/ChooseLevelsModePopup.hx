@@ -3,16 +3,15 @@ package pr2.levelEditor;
 import pr2.lobby.dialogs.Popup;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
-import pr2.runtime.PR2MovieClip;
 import pr2.util.DisplayUtil;
 
 class ChooseLevelsModePopup extends Popup {
-	public final art:PR2MovieClip;
+	public final art:ChooseLevelsModeView;
 	private var bindings:Array<Binding> = [];
 
 	public function new() {
 		super();
-		art = PR2MovieClip.fromLinkage("ChooseLevelsModePopupGraphic", {maxNestedDepth: 5});
+		art = new ChooseLevelsModeView();
 		addChild(art);
 		bind("reports_bt", clickReports);
 		bind("mine_bt", clickMine);

@@ -10,9 +10,7 @@ import pr2.level.BlockType;
 import pr2.level.ObjectCodes;
 import pr2.level.ServerLevelRenderer;
 import pr2.page.EditorBlockOptions;
-import pr2.runtime.PR2MovieClip;
 import pr2.runtime.SvgAsset;
-import pr2.util.DisplayUtil;
 
 class EditorBlockObject extends Sprite {
 	public final editor:LevelEditor;
@@ -24,8 +22,8 @@ class EditorBlockObject extends Sprite {
 	public var deleteable:Bool = true;
 	private final display:Sprite;
 	private var highlight:Null<Sprite>;
-	private var deleteButton:Null<PR2MovieClip>;
-	private var optionsButton:Null<PR2MovieClip>;
+	private var deleteButton:Null<EditorNativeGraphic>;
+	private var optionsButton:Null<EditorNativeGraphic>;
 	private var dragging:Bool = false;
 	private var dragMoved:Bool = false;
 	private var dragOffsetX:Float = 0;
@@ -233,8 +231,7 @@ class EditorBlockObject extends Sprite {
 		if (deleteButton != null) {
 			return;
 		}
-		deleteButton = PR2MovieClip.fromLinkage("DeleteButton", {maxNestedDepth: 4});
-		deleteButton.name = "DeleteButton";
+		deleteButton = new EditorNativeGraphic("DeleteButton");
 		deleteButton.x = 0;
 		deleteButton.y = LevelEditor.segSize;
 		deleteButton.addEventListener(MouseEvent.MOUSE_DOWN, deletePressed);
@@ -255,7 +252,7 @@ class EditorBlockObject extends Sprite {
 		if (optionsButton != null) {
 			return;
 		}
-		optionsButton = PR2MovieClip.fromLinkage("BlockOptionsButton", {maxNestedDepth: 4});
+		optionsButton = new EditorNativeGraphic("BlockOptionsButton");
 		optionsButton.name = "optionsButton";
 		optionsButton.buttonMode = true;
 		optionsButton.x = LevelEditor.segSize;
@@ -324,9 +321,8 @@ class EditorBlockObject extends Sprite {
 	private static function createDisplay(code:Int, options:String):Sprite {
 		var holder = new Sprite();
 		if (code == ObjectCodes.BLOCK_MINION_EGG) {
-			var eggBlock = PR2MovieClip.fromLinkage("EggBlockGraphic", {maxNestedDepth: 8});
-			stopEggBlockFoot(eggBlock, "var_152");
-			stopEggBlockFoot(eggBlock, "var_165");
+			var eggBlock = SvgAsset.createFitted("assets/svg/blocks/egg_overlay.svg", LevelEditor.segSize, LevelEditor.segSize);
+			eggBlock.name = "EggBlockGraphic";
 			holder.addChild(eggBlock);
 			return holder;
 		}
@@ -357,21 +353,5 @@ class EditorBlockObject extends Sprite {
 			holder.addChild(arrow);
 		}
 		return holder;
-	}
-
-	private static function stopEggBlockFoot(root:PR2MovieClip, name:String):Void {
-		var foot = Std.downcast(DisplayUtil.findByName(root, name), PR2MovieClip);
-		if (foot == null) {
-			return;
-		}
-		foot.stop();
-		var colorMC = Std.downcast(DisplayUtil.findByName(foot, "colorMC"), PR2MovieClip);
-		if (colorMC != null) {
-			colorMC.stop();
-		}
-		var colorMC2 = Std.downcast(DisplayUtil.findByName(foot, "colorMC2"), PR2MovieClip);
-		if (colorMC2 != null) {
-			colorMC2.stop();
-		}
 	}
 }

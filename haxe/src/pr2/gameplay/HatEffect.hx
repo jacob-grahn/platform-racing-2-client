@@ -6,7 +6,6 @@ import openfl.geom.ColorTransform;
 import pr2.level.ServerLevel;
 import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
-import pr2.runtime.PR2MovieClip;
 
 typedef HatEffectInfo = {
 	final x:Float;
@@ -25,7 +24,7 @@ typedef HatEffectInfo = {
 **/
 class HatEffect {
 	public final id:Int;
-	public final display:PR2MovieClip;
+	public final display:HatEffectView;
 	public var posX:Float;
 	public var posY:Float;
 	public var rot:Int;
@@ -51,7 +50,7 @@ class HatEffect {
 		this.color2 = color2;
 		this.commandHandler = commandHandler != null ? commandHandler : CommandHandler.commandHandler;
 
-		display = PR2MovieClip.fromLinkage("HatGraphic", {maxNestedDepth: 8});
+		display = new HatEffectView();
 		display.gotoAndStop(num);
 		display.x = x;
 		display.y = y;

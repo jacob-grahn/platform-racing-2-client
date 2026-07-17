@@ -4,13 +4,15 @@ import openfl.display.Bitmap;
 import openfl.display.DisplayObject;
 import openfl.display.Shape;
 import openfl.display.Sprite;
+import openfl.text.TextField;
+import openfl.text.TextFormat;
 import openfl.utils.AssetType;
 import openfl.utils.Assets;
 import pr2.level.ObjectCodes;
+import pr2.level.ArrowBlockView;
 import pr2.level.ServerLevelRenderer;
-import pr2.runtime.PR2MovieClip;
+import pr2.runtime.FontResolver;
 import pr2.runtime.SvgAsset;
-import pr2.util.DisplayUtil;
 
 class Objects {
 	public static inline var STAMP_TREE:Int = ObjectCodes.STAMP_TREE;
@@ -84,16 +86,11 @@ class Objects {
 			case ObjectCodes.STAMP_SPIRE: stampDisplay(code, "Spire");
 			case ObjectCodes.STAMP_SPIRE2: stampDisplay(code, "Spire2");
 			case ObjectCodes.STAMP_BUILDING1: stampDisplay(code, "Building1");
-			case ObjectCodes.BG1Code: fromLinkage("BG1");
-			case ObjectCodes.BG2Code: fromLinkage("BG2");
-			case ObjectCodes.BG3Code: fromLinkage("BG3");
-			case ObjectCodes.BG4Code: fromLinkage("BG4");
-			case ObjectCodes.BG5Code: fromLinkage("BG5");
-			case ObjectCodes.BG6Code: fromLinkage("BG6");
-			case ObjectCodes.BG7Code: fromLinkage("BG7");
+			case ObjectCodes.BG1Code | ObjectCodes.BG2Code | ObjectCodes.BG3Code | ObjectCodes.BG4Code | ObjectCodes.BG5Code | ObjectCodes.BG6Code | ObjectCodes.BG7Code:
+				backgroundDisplay(code);
 			case ObjectCodes.TextCode: textObjectTextBox();
 			case ObjectCodes.BLOCK_MINION_EGG:
-				var egg = fromLinkage("EggBlockGraphic");
+				var egg = SvgAsset.createFitted("assets/svg/blocks/egg_overlay.svg", TILE_SIZE, TILE_SIZE);
 				egg.name = "EggBlockGraphic";
 				egg;
 			case code if (code >= ObjectCodes.BLOCK_BASIC1 && code <= ObjectCodes.BLOCK_TELEPORT):
@@ -103,34 +100,37 @@ class Objects {
 		}
 	}
 
-	private static function fromLinkage(linkage:String):PR2MovieClip {
-		var clip = PR2MovieClip.fromLinkage(linkage);
-		clip.name = linkage;
-		return clip;
-	}
-
 	private static function stampDisplay(code:Int, linkage:String):DisplayObject {
 		var assetPath = ServerLevelRenderer.stampAssetPath(code);
-		if (assetPath != "" && Assets.exists(assetPath, AssetType.TEXT)) {
-			var size = stampSize(code);
-			var vector = SvgAsset.createFitted(assetPath, size.width, size.height);
+		if (assetPath != "") {
+			var vector = if (code == ObjectCodes.STAMP_CACTUS || code == ObjectCodes.STAMP_BUILDING1) {
+				// These standalone SVGs compose the exact timeline SVG leaves, so
+				// preserve their authored geometry instead of fitting to a measured box.
+				SvgAsset.createNormalized(assetPath);
+			} else {
+				var size = stampSize(code);
+				SvgAsset.createFitted(assetPath, size.width, size.height);
+			};
 			vector.name = linkage;
 			return vector;
 		}
-		var clip = fromLinkage(linkage);
-		if (code != ObjectCodes.STAMP_CACTUS && code != ObjectCodes.STAMP_BUILDING1) {
-			return clip;
+		return null;
+	}
+
+	private static function backgroundDisplay(code:Int):DisplayObject {
+		var path = ServerLevelRenderer.artBackgroundAssetPath(code);
+		var background = SvgAsset.create(path);
+		background.name = switch (code) {
+			case ObjectCodes.BG1Code: "BG1";
+			case ObjectCodes.BG2Code: "BG2";
+			case ObjectCodes.BG3Code: "BG3";
+			case ObjectCodes.BG4Code: "BG4";
+			case ObjectCodes.BG5Code: "BG5";
+			case ObjectCodes.BG6Code: "BG6";
+			case ObjectCodes.BG7Code: "BG7";
+			default: "";
 		}
-		var bounds = clip.getBounds(clip);
-		// The two stamps without raster exports have authored positive bounds.
-		// Normalize those bounds so saved x/y denotes the visual top-left just as
-		// it does for the raster-backed stamps and in the Flash bitmap canvas.
-		clip.x = -bounds.left;
-		clip.y = -bounds.top;
-		var holder = new Sprite();
-		holder.name = linkage;
-		holder.addChild(clip);
-		return holder;
+		return background;
 	}
 
 	private static function stampSize(code:Int):{width:Float, height:Float} {
@@ -148,11 +148,13 @@ class Objects {
 	}
 
 	private static function textObjectTextBox():Null<DisplayObject> {
-		var clip = fromLinkage("TextObjectGraphic");
-		var textBox = DisplayUtil.findByName(clip, "textBox");
-		if (textBox != null) {
-			textBox.name = "textBox";
-		}
+		var textBox = new TextField();
+		textBox.name = "textBox";
+		textBox.defaultTextFormat = new TextFormat(FontResolver.resolve("Verdana"), 18);
+		textBox.x = 2;
+		textBox.y = 0;
+		textBox.width = 76;
+		textBox.height = 29.2;
 		return textBox;
 	}
 
@@ -194,7 +196,7 @@ class Objects {
 		if (rotation == null) {
 			return;
 		}
-		var arrow = fromLinkage("ArrowBlockGraphic");
+		var arrow = new ArrowBlockView();
 		arrow.name = "ArrowBlockGraphic";
 		arrow.x = TILE_SIZE / 2;
 		arrow.y = TILE_SIZE / 2;

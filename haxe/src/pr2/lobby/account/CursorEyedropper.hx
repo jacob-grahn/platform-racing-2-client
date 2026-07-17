@@ -3,12 +3,14 @@ package pr2.lobby.account;
 import openfl.display.BitmapData;
 import openfl.display.Bitmap;
 import openfl.display.DisplayObject;
+import openfl.display.Sprite;
 import openfl.display.Stage;
 import openfl.events.Event;
 import openfl.events.MouseEvent;
 import openfl.geom.Matrix;
 import openfl.geom.Point;
-import pr2.runtime.PR2MovieClip;
+import pr2.assets.NativeAssetIds.StaticSvg;
+import pr2.assets.NativeAssets;
 import pr2.ui.CustomCursor;
 
 /**
@@ -24,9 +26,19 @@ class CursorEyedropper extends CustomCursor {
 	public function new(?sampleSource:DisplayObject) {
 		super();
 		visible = false;
-		applyCursorGraphic(PR2MovieClip.fromLinkage("CursorEyedropperGraphic"));
+		applyCursorGraphic(makeCursorGraphic());
 		this.sampleSource = sampleSource;
 		ensureBitmap();
+	}
+
+	private function makeCursorGraphic():DisplayObject {
+		var art = new Sprite();
+		art.addChild(NativeAssets.svg(StaticSvg.EyedropperBack));
+		art.addChild(NativeAssets.svg(StaticSvg.EyedropperFront));
+		art.scaleX = art.scaleY = 0.681365966796875;
+		art.x = 6.4;
+		art.y = -8.4;
+		return art;
 	}
 
 	override public function init():Void {

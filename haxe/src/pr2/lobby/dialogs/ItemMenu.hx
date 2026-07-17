@@ -2,25 +2,21 @@ package pr2.lobby.dialogs;
 
 import openfl.display.DisplayObject;
 import pr2.gameplay.Items;
-import pr2.runtime.FlCheckBox;
-import pr2.runtime.PR2MovieClip;
+import pr2.ui.controls.GameCheckBox;
 import pr2.util.DisplayUtil;
 
 /** Read-only level-info item hover menu, ported from Flash `dialogs.ItemMenu`. */
 class ItemMenu extends InfoPopup {
-	private var art:Null<PR2MovieClip>;
-	private var checks:Map<Int, FlCheckBox> = new Map();
+	private var art:Null<ChecklistMenuView>;
+	private var checks:Map<Int, GameCheckBox> = new Map();
 
 	public function new(itemsStr:Null<String>, target:DisplayObject) {
 		super();
-		art = PR2MovieClip.fromLinkage("ItemMenuGraphic", {maxNestedDepth: 6});
+		art = new ChecklistMenuView("items");
 		addChild(art);
 		var selected = parseItems(itemsStr);
 		for (itemId in Items.getAllCodes()) {
-			var check:Null<FlCheckBox> = Std.downcast(DisplayUtil.findByName(art, "check" + itemId), FlCheckBox);
-			if (check == null && itemId == Items.SNAKE) {
-				check = createSnakeCheck();
-			}
+			var check:Null<GameCheckBox> = Std.downcast(DisplayUtil.findByName(art, "check" + itemId), GameCheckBox);
 			if (check != null) {
 				check.selected = selected.indexOf(itemId) >= 0;
 				check.enabled = false;
@@ -28,16 +24,6 @@ class ItemMenu extends InfoPopup {
 			}
 		}
 		positionNear(target);
-	}
-
-	private function createSnakeCheck():FlCheckBox {
-		var check = new FlCheckBox("Snake");
-		check.name = "check" + Items.SNAKE;
-		var previous = Std.downcast(DisplayUtil.findByName(art, "check" + Items.ICE_WAVE), FlCheckBox);
-		check.x = previous == null ? 8 : previous.x;
-		check.y = previous == null ? 142 : previous.y + 18;
-		art.addChild(check);
-		return check;
 	}
 
 	public function isItemSelected(itemId:Int):Bool {

@@ -11,7 +11,6 @@ import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
 import pr2.net.FormPostClient;
 import pr2.net.ServerConfig;
-import pr2.runtime.PR2MovieClip;
 import pr2.ui.CustomScrollBar;
 import pr2.util.DisplayUtil;
 import pr2.levelEditor.EditorPersistenceTypes.GetLevelsPostFactory;
@@ -21,7 +20,7 @@ class GetLevelsPopup extends Popup {
 	public static var postFactory:GetLevelsPostFactory = defaultPost;
 	public static var loadFactory:GetLevelsLoadFactory = defaultLoad;
 
-	public final art:PR2MovieClip;
+	public final art:GetLevelsView;
 	public final listings:Array<GetLevelsPopupItem> = [];
 	public var selected(default, null):Null<GetLevelsPopupItem>;
 	private var bindings:Array<Binding> = [];
@@ -29,7 +28,7 @@ class GetLevelsPopup extends Popup {
 
 	public function new() {
 		super();
-		art = PR2MovieClip.fromLinkage("GetLevelsPopupGraphic", {maxNestedDepth: 6});
+		art = new GetLevelsView();
 		addChild(art);
 		scroll = new CustomScrollBar();
 		scroll.x = 119;

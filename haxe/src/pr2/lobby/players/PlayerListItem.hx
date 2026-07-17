@@ -5,7 +5,6 @@ import pr2.display.Removable;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.chat.HtmlNameMaker;
 import pr2.lobby.players.PlayerListSort.SortableRow;
-import pr2.runtime.PR2MovieClip;
 
 /**
 	Base for a single row in the players/guilds list, wrapping
@@ -15,7 +14,7 @@ import pr2.runtime.PR2MovieClip;
 	The name field gets link handling via `HtmlNameMaker`.
 **/
 class PlayerListItem extends Removable implements SortableRow {
-	private var art:PR2MovieClip;
+	private var art:PlayerListItemView;
 	private var htmlNameMaker:HtmlNameMaker;
 	private var nameField:Null<TextField>;
 	private var midField:Null<TextField>;
@@ -23,7 +22,7 @@ class PlayerListItem extends Removable implements SortableRow {
 
 	public function new() {
 		super();
-		art = PR2MovieClip.fromLinkage("PlayersTabListItemGraphic", {maxNestedDepth: 4});
+		art = new PlayerListItemView();
 		addChild(art);
 		var fields = LobbyArt.textFields(art);
 		nameField = fields.length > 0 ? fields[0] : null;

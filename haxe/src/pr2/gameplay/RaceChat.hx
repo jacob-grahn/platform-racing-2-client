@@ -6,13 +6,14 @@ import openfl.events.Event;
 import openfl.events.KeyboardEvent;
 import openfl.events.MouseEvent;
 import openfl.text.TextField;
+import openfl.text.TextFormat;
+import pr2.assets.NativeAssetIds.FontAsset;
+import pr2.assets.NativeAssets;
 import openfl.ui.Keyboard;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.chat.ChatText;
 import pr2.lobby.chat.HtmlNameMaker;
 import pr2.net.LobbySocket;
-import pr2.runtime.PR2MovieClip;
-import pr2.util.DisplayUtil;
 
 /**
 	Port of Flash `gameplay.RaceChat` around the authored `RaceChatGraphic`.
@@ -22,7 +23,7 @@ class RaceChat extends Sprite {
 
 	private static inline final MAX_MESSAGES:Int = 7;
 
-	private var art:Null<PR2MovieClip>;
+	private var art:Null<RaceChatView>;
 	private var chatInput:Null<TextField>;
 	private var topText:Null<TextField>;
 	private var bgText:Null<TextField>;
@@ -36,12 +37,12 @@ class RaceChat extends Sprite {
 	public function new(?sendHandler:String->Bool) {
 		super();
 		this.sendHandler = sendHandler;
-		art = PR2MovieClip.fromLinkage("RaceChatGraphic", {maxNestedDepth: 6});
+		art = new RaceChatView();
 		addChild(art);
 
-		chatInput = LobbyArt.text(art, "chatInput");
-		topText = LobbyArt.text(cast DisplayUtil.findByName(art, "top"), "textBox1");
-		bgText = LobbyArt.text(cast DisplayUtil.findByName(art, "bg"), "textBox2");
+		chatInput = art.chatInput;
+		topText = art.topText;
+		bgText = art.bgText;
 
 		if (chatInput != null) {
 			chatInput.restrict = "^`";
@@ -189,5 +190,62 @@ class RaceChat extends Sprite {
 
 	private static function stripForbidden(message:String):String {
 		return message == null ? "" : StringTools.replace(message, "`", "");
+	}
+}
+
+private class RaceChatView extends Sprite {
+	public final chatInput:TextField;
+	public final topText:TextField;
+	public final bgText:TextField;
+
+	public function new() {
+		super();
+		graphics.beginFill(0xFFFFFF, 0.78);
+		graphics.lineStyle(1, 0x555555);
+		graphics.drawRoundRect(0, 0, 310, 156, 8, 8);
+		graphics.endFill();
+		bgText = makeOutput("textBox2", 7, 6, 296, 119, 0xFFFFFF);
+		bgText.x += 1;
+		bgText.y += 1;
+		var bg = new Sprite();
+		bg.name = "bg";
+		bg.addChild(bgText);
+		addChild(bg);
+		topText = makeOutput("textBox1", 7, 6, 296, 119, 0x222222);
+		var top = new Sprite();
+		top.name = "top";
+		top.addChild(topText);
+		addChild(top);
+		chatInput = new TextField();
+		chatInput.name = "chatInput";
+		chatInput.x = 7;
+		chatInput.y = 129;
+		chatInput.width = 296;
+		chatInput.height = 21;
+		chatInput.type = openfl.text.TextFieldType.INPUT;
+		chatInput.background = true;
+		chatInput.backgroundColor = 0xFFFFFF;
+		chatInput.border = true;
+		chatInput.borderColor = 0x777777;
+		chatInput.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 11, 0x111111);
+		addChild(chatInput);
+	}
+
+	private static function makeOutput(name:String, x:Float, y:Float, width:Float, height:Float, color:Int):TextField {
+		var field = new TextField();
+		field.name = name;
+		field.x = x;
+		field.y = y;
+		field.width = width;
+		field.height = height;
+		field.multiline = true;
+		field.wordWrap = true;
+		field.selectable = false;
+		field.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 11, color);
+		return field;
+	}
+
+	public function dispose():Void {
+		if (parent != null) parent.removeChild(this);
 	}
 }

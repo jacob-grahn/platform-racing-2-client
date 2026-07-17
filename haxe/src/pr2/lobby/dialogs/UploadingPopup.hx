@@ -3,12 +3,10 @@ package pr2.lobby.dialogs;
 import openfl.events.Event;
 import openfl.net.URLRequest;
 import openfl.net.URLVariables;
-import pr2.lobby.LobbyArt;
 import pr2.net.FormPostClient;
 import pr2.net.SuperLoader;
-import pr2.runtime.PR2MovieClip;
 import pr2.util.AsyncRemovalGuard;
-import pr2.util.DisplayUtil;
+import pr2.ui.view.ProgressPopupView;
 
 typedef UploadPostFactory = String->Map<String, String>->(String->Void)->(String->Void)->Void;
 typedef UploadRequestFactory = URLRequest->(String->Void)->(String->Void)->Void;
@@ -32,26 +30,21 @@ class UploadingPopup extends Popup {
 	public var data:String = null;
 	public var parsedData:Dynamic = null;
 
-	private var art:PR2MovieClip;
+	private var art:ProgressPopupView;
 	private var progressBar:ProgressBar;
-	private var closeBinding:Null<LobbyArt.Binding>;
 	private var asyncGuard:AsyncRemovalGuard = new AsyncRemovalGuard();
 
 	public function new(requestOrUrl:Dynamic = null, ?fieldsOrDataMode:Dynamic = null, dispText:String = "Uploading...", ?aemOrOnResult:Dynamic = true,
 			?onError:String->Void, ?autoEchoMessage:Bool) {
 		super();
 		var options = parseOptions(requestOrUrl, fieldsOrDataMode, dispText, aemOrOnResult, onError, autoEchoMessage);
-		art = PR2MovieClip.fromLinkage("UploadingPopupGraphic", {maxNestedDepth: 4});
-		var textBox = LobbyArt.text(art, "textBox");
-		if (textBox != null) {
-			textBox.text = options.dispText;
-		}
+		art = new ProgressPopupView(options.dispText);
+		art.onClose = function():Void startFadeOut();
 		addChild(art);
 		progressBar = new ProgressBar();
 		progressBar.x = -100;
 		progressBar.y = -5;
 		addChild(progressBar);
-		closeBinding = LobbyArt.bind(DisplayUtil.findByName(art, "close_bt"), function():Void startFadeOut());
 
 		if (options.request != null) {
 			prepareRequest(options.request);
@@ -163,7 +156,6 @@ class UploadingPopup extends Popup {
 
 	override public function remove():Void {
 		asyncGuard.remove();
-		LobbyArt.unbind(closeBinding);
 		if (progressBar != null) {
 			progressBar.remove();
 			progressBar = null;

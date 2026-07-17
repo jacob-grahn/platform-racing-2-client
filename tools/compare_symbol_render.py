@@ -135,16 +135,35 @@ def compare_case(case, defaults, temp_dir):
     name = case.get("name") or case["symbol"]
     slug = slugify(name)
     symbol = case["symbol"]
-    reference = case["reference"]
+    reference = case.get("reference")
+    reference_symbol = case.get("referenceSymbol")
     bg_hex = str(case.get("bg", defaults["bg"]))
     background = parse_color(bg_hex)
     threshold_percent = case.get("thresholdPercent", defaults["threshold_percent"])
     threshold_rms = case.get("thresholdRms", defaults["threshold_rms"])
 
-    expected = flatten_reference(reference, background)
-    # Fit the render to the stage from the reference dimensions so large symbols
-    # are not clipped; comparison is scale-independent after trim + resize.
-    scale = round(fit_scale(expected.size, case.get("scale", defaults["scale"])), 4)
+    if reference_symbol:
+        scale = case.get("scale", defaults["scale"])
+        reference_capture = os.path.join(temp_dir, f"{slug}-reference.png")
+        expected_stage = render_symbol(
+            defaults["base_url"], reference_symbol, scale, bg_hex,
+            defaults["browser"], defaults["delay"], reference_capture
+        )
+        expected = trim_to_content(expected_stage, background)
+        if expected is None:
+            return {
+                "name": name,
+                "symbol": symbol,
+                "referenceSymbol": reference_symbol,
+                "scale": scale,
+                "failures": ["reference symbol was blank"],
+                "metrics": None,
+            }
+    else:
+        expected = flatten_reference(reference, background)
+        # Fit the render to the stage from the reference dimensions so large symbols
+        # are not clipped; comparison is scale-independent after trim + resize.
+        scale = round(fit_scale(expected.size, case.get("scale", defaults["scale"])), 4)
     capture_path = os.path.join(temp_dir, f"{slug}.png")
     rendered = render_symbol(
         defaults["base_url"], symbol, scale, bg_hex, defaults["browser"], defaults["delay"], capture_path
@@ -156,6 +175,7 @@ def compare_case(case, defaults, temp_dir):
             "name": name,
             "symbol": symbol,
             "reference": reference,
+            "referenceSymbol": reference_symbol,
             "scale": scale,
             "failures": ["rendered symbol was blank (no non-background pixels)"],
             "metrics": None,
@@ -184,6 +204,7 @@ def compare_case(case, defaults, temp_dir):
         "name": name,
         "symbol": symbol,
         "reference": reference,
+		"referenceSymbol": reference_symbol,
         "scale": scale,
         "size": list(expected.size),
         "thresholds": {"maxDifferingPercent": threshold_percent, "maxRmsDelta": threshold_rms},
@@ -196,12 +217,14 @@ def compare_case(case, defaults, temp_dir):
 
 def load_cases(args):
     if args.symbol:
-        if not args.reference:
-            raise SystemExit("--symbol requires --reference")
+        if not args.reference and not args.reference_symbol:
+            raise SystemExit("--symbol requires --reference or --reference-symbol")
+        if args.reference and args.reference_symbol:
+            raise SystemExit("use only one of --reference or --reference-symbol")
         return {
             "scale": args.scale or DEFAULT_SCALE,
             "bg": args.bg or DEFAULT_BG,
-            "cases": [{"symbol": args.symbol, "reference": args.reference}],
+            "cases": [{"symbol": args.symbol, "reference": args.reference, "referenceSymbol": args.reference_symbol}],
         }
     try:
         with open(args.cases, encoding="utf-8") as handle:
@@ -235,6 +258,7 @@ def main(argv=None):
     parser.add_argument("--cases", default=DEFAULT_CASES, help="JSON cases manifest")
     parser.add_argument("--symbol", help="render a single symbol instead of the manifest")
     parser.add_argument("--reference", help="reference @4x PNG for --symbol")
+    parser.add_argument("--reference-symbol", help="render this OpenFL symbol as the comparison reference")
     parser.add_argument("--root", default=DEFAULT_ROOT, help="HTML5 build root")
     parser.add_argument("--scale", type=float, help="render scale override")
     parser.add_argument("--bg", help="background hex override, e.g. FFFFFF")

@@ -27,7 +27,7 @@ import pr2.lobby.level.CourseMenu;
 import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
 import pr2.page.Page;
-import pr2.runtime.PR2MovieClip;
+import pr2.ui.controls.GameButton;
 import pr2.ui.GuildName;
 import pr2.ui.StageFocus;
 import pr2.util.DisplayUtil;
@@ -39,7 +39,7 @@ class AccountTab extends Page {
 
 	private static final manualPartDispatcher:EventDispatcher = new EventDispatcher();
 
-	private var art:Null<PR2MovieClip>;
+	private var art:Null<AccountInfoView>;
 	private var character:Null<AccountCharacter>;
 	private var characterHolder:Null<Sprite>;
 	private var stats:Null<StatsSelect>;
@@ -72,7 +72,7 @@ class AccountTab extends Page {
 	}
 
 	override public function initialize():Void {
-		art = PR2MovieClip.fromLinkage("AccountInfoGraphic", {maxNestedDepth: 8});
+		art = new AccountInfoView();
 		addChild(art);
 		rankUp = DisplayUtil.findByName(art, "rankTokenUp_bt");
 		rankDown = DisplayUtil.findByName(art, "rankTokenDown_bt");
@@ -309,6 +309,11 @@ class AccountTab extends Page {
 	}
 
 	private function setButtonText(button:Null<DisplayObject>, value:Int):Void {
+		var native = Std.downcast(button, GameButton);
+		if (native != null) {
+			native.label = Std.string(value);
+			return;
+		}
 		var container = Std.downcast(button, openfl.display.DisplayObjectContainer);
 		var field = LobbyArt.text(container, "textBox");
 		if (field != null) field.text = Std.string(value);

@@ -1,16 +1,15 @@
 package pr2.levelEditor;
 
 import openfl.display.DisplayObject;
-import pr2.runtime.PR2MovieClip;
 import pr2.util.DisplayUtil;
 
 class EditorBrushSizePickerButton extends EditorSideBarEntry {
-	private final art:PR2MovieClip;
+	private final art:BrushSizeButtonView;
 	private var circle:Null<DisplayObject>;
 
 	public function new(title:String = "", desc:String = "") {
 		super("size", title, desc);
-		art = PR2MovieClip.fromLinkage("SizePickerGraphic", {maxNestedDepth: 4});
+		art = new BrushSizeButtonView();
 		art.mouseEnabled = false;
 		art.mouseChildren = false;
 		addChild(art);

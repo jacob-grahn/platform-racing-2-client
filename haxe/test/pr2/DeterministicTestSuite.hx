@@ -112,6 +112,7 @@ import pr2.net.SuperLoaderTest;
 import pr2.page.EditorBlockOptionsTest;
 import pr2.page.EditorSettingsTest;
 import pr2.page.CampaignTestScreenTest;
+import pr2.page.IntroPageTest;
 import pr2.runtime.FlButtonTest;
 import pr2.runtime.FlComponentsTest;
 import pr2.runtime.EpicFlashTest;
@@ -229,6 +230,7 @@ class DeterministicTestSuite {
 		DeterministicTestMode.runSuite("EditorBlockOptionsTest", ["level-editor"], EditorBlockOptionsTest.main);
 		DeterministicTestMode.runSuite("EditorSettingsTest", ["level-editor"], EditorSettingsTest.main);
 		DeterministicTestMode.runSuite("CampaignTestScreenTest", ["level-editor"], CampaignTestScreenTest.main);
+		DeterministicTestMode.runSuite("IntroPageTest", ["ui", "runtime"], IntroPageTest.main);
 		DeterministicTestMode.runSuite("ArtifactHintClientTest", ["lobby"], ArtifactHintClientTest.main);
 		DeterministicTestMode.runSuite("AutoDismissPopupTest", ["lobby"], AutoDismissPopupTest.main);
 		DeterministicTestMode.runSuite("LobbySessionTest", ["lobby"], LobbySessionTest.main);
@@ -262,7 +264,7 @@ class DeterministicTestSuite {
 		if (DeterministicTestMode.hasGroupSelection()) {
 			trace('DeterministicTestSuite selected run passed (${DeterministicTestMode.selectionSummary()})');
 		} else if (DeterministicTestMode.isSmoke()) {
-			trace("DeterministicTestSuite smoke run passed (125 suites)");
+			trace("DeterministicTestSuite smoke run passed (126 suites)");
 		} else {
 			trace("DeterministicTestSuite passed");
 		}

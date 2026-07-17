@@ -6,15 +6,14 @@ import openfl.events.Event;
 import pr2.app.AppStage;
 import pr2.gameplay.Modes;
 import pr2.lobby.dialogs.AutoDismissController;
-import pr2.runtime.FlComboBox;
-import pr2.runtime.PR2MovieClip;
+import pr2.ui.controls.GameSelect;
 import pr2.ui.StageFocus;
 import pr2.util.DisplayUtil;
 
 class EditorModeSettingsPopup extends Sprite {
 	public final editor:LevelEditor;
-	public final art:PR2MovieClip;
-	public final dropdown:Null<FlComboBox>;
+	public final art:EditorSettingsMenuView;
+	public final dropdown:Null<GameSelect<String>>;
 	private var autoDismiss:Null<AutoDismissController>;
 	private var removed:Bool = false;
 	private var dropdownOpen:Bool = false;
@@ -22,31 +21,21 @@ class EditorModeSettingsPopup extends Sprite {
 	public function new(editor:LevelEditor, target:DisplayObject) {
 		super();
 		this.editor = editor;
-		art = PR2MovieClip.fromLinkage("ModeMenuGraphic", {maxNestedDepth: 6});
+		art = new EditorSettingsMenuView("mode");
 		addChild(art);
-		dropdown = Std.downcast(DisplayUtil.findByName(art, "modeSelect"), FlComboBox);
+		dropdown = Std.downcast(DisplayUtil.findByName(art, "modeSelect"), GameSelect);
 		if (dropdown != null) {
-			var hasRoguelike = false;
-			for (i in 0...dropdown.length) {
-				if (Std.string(Reflect.field(dropdown.dataProvider.getItemAt(i), "data")) == Modes.roguelike) {
-					hasRoguelike = true;
-					break;
-				}
-			}
-			if (!hasRoguelike) {
-				dropdown.addItem({label: "Roguelike", data: Modes.roguelike});
-			}
 			selectMode(editor.gameMode);
 			dropdown.addEventListener(Event.OPEN, openDropdown);
 			dropdown.addEventListener(Event.CHANGE, changeMode);
 			dropdown.addEventListener(Event.CLOSE, closeDropdown);
 		}
 		mountNear(target);
-		autoDismiss = new AutoDismissController(this, remove, function() return !dropdownOpen);
+		autoDismiss = new AutoDismissController(this, remove, function() return !dropdownOpen && (dropdown == null || !dropdown.open));
 	}
 
 	public function selectedMode():String {
-		return dropdown == null || dropdown.selectedItem == null ? "" : Std.string(Reflect.field(dropdown.selectedItem, "data"));
+		return dropdown == null || dropdown.selectedOption == null ? "" : dropdown.selectedOption.value;
 	}
 
 	public function setSelectedMode(mode:String):Void {
@@ -82,9 +71,8 @@ class EditorModeSettingsPopup extends Sprite {
 		}
 		var normalized = mode == "eggs" ? "egg" : (mode == null || mode == "" ? "race" : mode);
 		for (i in 0...dropdown.length) {
-			var item = dropdown.dataProvider.getItemAt(i);
-			if (Std.string(Reflect.field(item, "data")) == normalized) {
-				dropdown.selectedIndex = i;
+			dropdown.selectedIndex = i;
+			if (dropdown.selectedOption != null && dropdown.selectedOption.value == normalized) {
 				return;
 			}
 		}
@@ -92,8 +80,8 @@ class EditorModeSettingsPopup extends Sprite {
 	}
 
 	private function changeMode(_:Event):Void {
-		if (dropdown != null && dropdown.selectedItem != null) {
-			editor.setGameMode(Std.string(Reflect.field(dropdown.selectedItem, "data")));
+		if (dropdown != null && dropdown.selectedOption != null) {
+			editor.setGameMode(dropdown.selectedOption.value);
 		}
 	}
 

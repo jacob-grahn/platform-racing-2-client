@@ -8,15 +8,17 @@ import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.events.MouseEvent;
 import openfl.geom.ColorTransform;
+import openfl.geom.Matrix;
 import openfl.geom.Point;
 import openfl.geom.Rectangle;
 import openfl.ui.Mouse;
 import openfl.ui.MouseCursor;
 import pr2.app.AppStage;
+import pr2.assets.NativeAssetIds.StaticSvg;
+import pr2.assets.NativeAssets;
 import pr2.data.ColorUtil;
-import pr2.runtime.FlButton;
-import pr2.runtime.FlTextInput;
-import pr2.runtime.PR2MovieClip;
+import pr2.ui.controls.GameButton;
+import pr2.ui.controls.GameTextInput;
 import pr2.ui.CustomCursor;
 
 /**
@@ -47,22 +49,22 @@ class ColorPickerPopup extends Sprite {
 	private var crosshairs:DisplayObject;
 	private var priorCursor:Null<CustomCursor>;
 	private var priorCursorActive:Bool = false;
-	private var art:PR2MovieClip;
-	private var okButton:FlButton;
-	private var cancelButton:FlButton;
-	private var textBox:FlTextInput;
+	private var art:ColorPickerView;
+	private var okButton:GameButton;
+	private var cancelButton:GameButton;
+	private var textBox:GameTextInput;
 	private var removed:Bool = false;
 
 	public function new(initialColor:Int) {
 		super();
-		art = PR2MovieClip.fromLinkage("ColorPickerPopupGraphic");
+		art = new ColorPickerView();
 		addChild(art);
-		okButton = requireChild("ok_bt", FlButton);
-		cancelButton = requireChild("cancel_bt", FlButton);
-		textBox = requireChild("textBox", FlTextInput);
+		okButton = art.okButton;
+		cancelButton = art.cancelButton;
+		textBox = art.textInput;
 		okButton.addEventListener(MouseEvent.CLICK, clickOK);
 		cancelButton.addEventListener(MouseEvent.CLICK, clickCancel);
-		textBox.restrict = "0123456789abcdefABCDEF#x";
+		textBox.textField.restrict = "0123456789abcdefABCDEF#x";
 		textBox.addEventListener(Event.CHANGE, setColorFromText);
 
 		spectrum = initSpectrum(SPECTRUM_SIZE, SPECTRUM_SIZE);
@@ -196,6 +198,7 @@ class ColorPickerPopup extends Sprite {
 			spectrumBG.dispose();
 		}
 		restorePriorCursor();
+		art.dispose();
 		if (parent != null) {
 			parent.removeChild(this);
 		}
@@ -386,7 +389,7 @@ class ColorPickerPopup extends Sprite {
 			var hue = 360 - 360 * y / h;
 			data.fillRect(new Rectangle(0, y, w, 1), ColorUtil.hsbToHex24(hue, 100, 100));
 		}
-		hueArrow = PR2MovieClip.fromLinkage("ColorPickerHueArrowGraphic");
+		hueArrow = makeHueArrow();
 		hueArrow.x = w + 1;
 		hueArrow.y = h;
 		var interactiveHueArrow = Std.downcast(hueArrow, InteractiveObject);
@@ -406,7 +409,7 @@ class ColorPickerPopup extends Sprite {
 
 	private function initSpectrum(w:Int, h:Int):Sprite {
 		spectrumBG = new BitmapData(w, h, false, 0);
-		crosshairs = PR2MovieClip.fromLinkage("ColorPickerCrosshairsGraphic");
+		crosshairs = makeCrosshairs();
 		var interactiveCrosshairs = Std.downcast(crosshairs, InteractiveObject);
 		if (interactiveCrosshairs != null) {
 			interactiveCrosshairs.mouseEnabled = false;
@@ -417,6 +420,19 @@ class ColorPickerPopup extends Sprite {
 		spectrum.addChild(new Bitmap(spectrumBG));
 		spectrum.addChild(crosshairs);
 		return spectrum;
+	}
+
+	private function makeHueArrow():DisplayObject {
+		var arrow = NativeAssets.svg(StaticSvg.ColorHueArrow);
+		arrow.transform.matrix = new Matrix(0, 0.119796752929688, -0.120452880859375, 0, 4.5, -4.5);
+		return arrow;
+	}
+
+	private function makeCrosshairs():DisplayObject {
+		var holder = new Sprite();
+		holder.addChild(NativeAssets.svg(StaticSvg.ColorCrosshairsBack));
+		holder.addChild(NativeAssets.svg(StaticSvg.ColorCrosshairsFront));
+		return holder;
 	}
 
 	private function updateSpectrumGradient():Void {
@@ -446,15 +462,6 @@ class ColorPickerPopup extends Sprite {
 		outline.graphics.lineTo(width, height);
 		outline.graphics.lineTo(0, height);
 		return outline;
-	}
-
-	private function requireChild<T:DisplayObject>(name:String, cls:Class<T>):T {
-		var child = art.getChildByTimelineName(name);
-		var typed = Std.downcast(child, cls);
-		if (typed == null) {
-			throw 'ColorPickerPopupGraphic missing $name';
-		}
-		return typed;
 	}
 
 	private function restorePriorCursor():Void {

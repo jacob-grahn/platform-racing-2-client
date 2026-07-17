@@ -6,7 +6,6 @@ import openfl.events.TimerEvent;
 import openfl.utils.Timer;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.players.PlayerListSort.SortState;
-import pr2.runtime.PR2MovieClip;
 import pr2.util.DisplayUtil;
 
 /**
@@ -19,7 +18,7 @@ import pr2.util.DisplayUtil;
 class PlayersTabList extends PlayersListHolder {
 	private static inline var NAME_MODE:String = "userName";
 
-	private var graphic:Null<PR2MovieClip>;
+	private var graphic:Null<PlayersTabListView>;
 	private var nameButton:Null<DisplayObjectContainer>;
 	private var rankButton:Null<DisplayObjectContainer>;
 	private var hatsButton:Null<DisplayObjectContainer>;
@@ -29,7 +28,7 @@ class PlayersTabList extends PlayersListHolder {
 	private var updateSort:Bool = false;
 
 	override public function initialize():Void {
-		graphic = PR2MovieClip.fromLinkage("PlayersTabListGraphic", {maxNestedDepth: 6});
+		graphic = new PlayersTabListView(false);
 		addChild(graphic);
 		var listHolder = Std.downcast(DisplayUtil.findByName(graphic, "listHolder"), DisplayObjectContainer);
 		if (listHolder != null) {

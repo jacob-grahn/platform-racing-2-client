@@ -1,7 +1,10 @@
 package pr2.page;
 
+import com.jiggmin.data.Objects;
+import openfl.display.DisplayObject;
 import openfl.display.Sprite;
 import openfl.geom.Rectangle;
+import pr2.level.ObjectCodes;
 import pr2.runtime.PR2MovieClip;
 
 /**
@@ -28,7 +31,8 @@ class SymbolPreview extends Sprite {
 		}
 
 		var holder = new Sprite();
-		holder.addChild(PR2MovieClip.fromSymbolName(symbolName));
+		var content = nativeStamp(symbolName);
+		holder.addChild(content == null ? PR2MovieClip.fromSymbolName(symbolName) : content);
 		holder.scaleX = scale;
 		holder.scaleY = scale;
 		addChild(holder);
@@ -36,5 +40,14 @@ class SymbolPreview extends Sprite {
 		var bounds:Rectangle = holder.getBounds(this);
 		holder.x = INSET - bounds.x;
 		holder.y = INSET - bounds.y;
+	}
+
+	/** `native-stamp:<linkage>` previews production SVG art against archival roots. */
+	private static function nativeStamp(symbolName:String):Null<DisplayObject> {
+		return switch (symbolName) {
+			case "native-stamp:Cactus": Objects.getFromCode(ObjectCodes.STAMP_CACTUS);
+			case "native-stamp:Building1": Objects.getFromCode(ObjectCodes.STAMP_BUILDING1);
+			default: null;
+		}
 	}
 }

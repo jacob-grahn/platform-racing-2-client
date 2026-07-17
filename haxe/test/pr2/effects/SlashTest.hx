@@ -42,7 +42,7 @@ class SlashTest {
 			playSound: function(x:Float, y:Float):Void sounds.push('$x,$y')
 		});
 
-		assertEquals("SlashAnimation", slash.animation.symbol.linkageClassName, "slash uses authored animation");
+		assertEquals(Slash.LIFETIME_FRAMES, slash.animation.totalFrames, "slash uses the six-frame native animation");
 		assertEquals(6, hits.length, "slash probes Flash's six block hit points");
 		assertEquals("30,0:29", hits[5], "slash passes reach as block damage force");
 		assertEquals("29,-9", playerHits[0], "slash hits local player with Flash recoil");

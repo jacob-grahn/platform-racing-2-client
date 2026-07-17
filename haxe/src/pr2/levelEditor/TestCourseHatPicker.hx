@@ -5,7 +5,6 @@ import pr2.character.LocalCharacter;
 import pr2.lobby.account.Settings;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
-import pr2.runtime.PR2MovieClip;
 import pr2.util.DisplayUtil;
 
 class TestCourseHatPicker extends Sprite {
@@ -15,18 +14,17 @@ class TestCourseHatPicker extends Sprite {
 	private static inline var DEFAULT_HAT:Int = 2;
 
 	private var localCharacter:Null<LocalCharacter>;
-	private var art:Null<PR2MovieClip>;
+	private var art:Null<TestCourseHatPickerView>;
 	private var bindings:Array<Binding> = [];
 	public var pickedHat(default, null):Int = DEFAULT_HAT;
 
 	public function new(localCharacter:LocalCharacter) {
 		super();
 		this.localCharacter = localCharacter;
-		art = PR2MovieClip.fromLinkage("HatPickerGraphic", {maxNestedDepth: 6});
+		art = new TestCourseHatPickerView();
 		addChild(art);
-		var arrows = Std.downcast(DisplayUtil.findByName(art, "var_173"), PR2MovieClip);
-		bind(arrows, "left", clickLeft);
-		bind(arrows, "right", clickRight);
+		bind("left", clickLeft);
+		bind("right", clickRight);
 		pickedHat = normalizeHat(parseInt(Std.string(Settings.getValue(Settings.LE_TEST_HAT, DEFAULT_HAT)), DEFAULT_HAT));
 		display();
 	}
@@ -56,8 +54,8 @@ class TestCourseHatPicker extends Sprite {
 		}
 	}
 
-	private function bind(container:Null<PR2MovieClip>, name:String, handler:Void->Void):Void {
-		var target = container == null ? null : DisplayUtil.findByName(container, name);
+	private function bind(name:String, handler:Void->Void):Void {
+		var target = art == null ? null : DisplayUtil.findByName(art, name);
 		var binding = LobbyArt.bind(target, handler);
 		if (binding != null) {
 			bindings.push(binding);
@@ -87,19 +85,7 @@ class TestCourseHatPicker extends Sprite {
 	}
 
 	private function display():Void {
-		var hat = Std.downcast(DisplayUtil.findByName(art, "hat"), PR2MovieClip);
-		if (hat != null) {
-			hat.gotoAndStop(pickedHat);
-			var colorMC = Std.downcast(DisplayUtil.findByName(hat, "colorMC"), PR2MovieClip);
-			if (colorMC != null) {
-				colorMC.gotoAndStop(pickedHat);
-			}
-			var colorMC2 = Std.downcast(DisplayUtil.findByName(hat, "colorMC2"), PR2MovieClip);
-			if (colorMC2 != null) {
-				colorMC2.gotoAndStop(pickedHat);
-				colorMC2.visible = pickedHat == MAX_HAT;
-			}
-		}
+		if (art != null) art.setHat(pickedHat);
 		var color = Math.round(Math.random() * 0xFFFFFF);
 		var color2 = 0;
 		if (localCharacter != null) {

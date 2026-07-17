@@ -13,7 +13,6 @@ import openfl.text.TextFieldType;
 import openfl.text.TextFormat;
 import openfl.ui.Keyboard;
 import pr2.lobby.account.ColorPicker;
-import pr2.runtime.PR2MovieClip;
 import pr2.runtime.FontResolver;
 
 class EditorTextObject extends Sprite {
@@ -24,9 +23,9 @@ class EditorTextObject extends Sprite {
 	private final owner:EditorObjectLayer;
 	private final displayField:TextField;
 	private final selectionOutline:Sprite;
-	private final deleteButton:PR2MovieClip;
-	private final resizeHandle:PR2MovieClip;
-	private var editButton:Null<PR2MovieClip>;
+	private final deleteButton:EditorNativeGraphic;
+	private final resizeHandle:EditorNativeGraphic;
+	private var editButton:Null<EditorNativeGraphic>;
 	private var editField:Null<TextField>;
 	private var colorPicker:Null<ColorPicker>;
 	private var originalText:String;
@@ -60,8 +59,7 @@ class EditorTextObject extends Sprite {
 		selectionOutline = new Sprite();
 		selectionOutline.name = "selectionOutline";
 		addChild(selectionOutline);
-		deleteButton = PR2MovieClip.fromLinkage("DeleteButton", {maxNestedDepth: 4});
-		deleteButton.name = "DeleteButton";
+		deleteButton = new EditorNativeGraphic("DeleteButton");
 		deleteButton.addEventListener(MouseEvent.MOUSE_DOWN, deleteButtonPressed);
 		addChild(deleteButton);
 		resizeHandle = createResizeHandle();
@@ -516,8 +514,7 @@ class EditorTextObject extends Sprite {
 		if (editButton != null) {
 			return;
 		}
-		editButton = PR2MovieClip.fromLinkage("EditTextButton", {maxNestedDepth: 4});
-		editButton.name = "EditTextButton";
+		editButton = new EditorNativeGraphic("EditTextButton");
 		editButton.buttonMode = true;
 		editButton.mouseChildren = false;
 		editButton.addEventListener(MouseEvent.MOUSE_DOWN, editButtonPressed);
@@ -626,9 +623,8 @@ class EditorTextObject extends Sprite {
 		selectionOutline.graphics.lineTo(0, 0);
 	}
 
-	private function createResizeHandle():PR2MovieClip {
-		var handle = PR2MovieClip.fromLinkage("ResizeButton", {maxNestedDepth: 4});
-		handle.name = "ResizeButton";
+	private function createResizeHandle():EditorNativeGraphic {
+		var handle = new EditorNativeGraphic("ResizeButton");
 		handle.buttonMode = true;
 		handle.mouseChildren = false;
 		handle.addEventListener(MouseEvent.MOUSE_DOWN, resizeHandlePressed);

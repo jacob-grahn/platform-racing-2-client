@@ -7,16 +7,16 @@ import openfl.events.MouseEvent;
 import pr2.app.AppStage;
 import pr2.lobby.dialogs.AutoDismissController;
 import pr2.lobby.dialogs.HoverPopup;
-import pr2.runtime.FlCheckBox;
-import pr2.runtime.PR2MovieClip;
+import pr2.lobby.dialogs.ChecklistMenuView;
+import pr2.ui.controls.GameCheckBox;
 import pr2.util.DisplayUtil;
 
 class EditorHatsSettingsPopup extends Sprite {
 	public final editor:LevelEditor;
-	public final art:PR2MovieClip;
+	public final art:ChecklistMenuView;
 	private static inline final LOWEST_HAT_ID:Int = 2;
 	private static inline final HIGHEST_HAT_ID:Int = 16;
-	private final checks:Map<Int, FlCheckBox> = new Map();
+	private final checks:Map<Int, GameCheckBox> = new Map();
 	private var autoDismiss:Null<AutoDismissController>;
 	private var removed:Bool = false;
 	private var cowboyHover:Null<HoverPopup>;
@@ -25,10 +25,10 @@ class EditorHatsSettingsPopup extends Sprite {
 	public function new(editor:LevelEditor, target:DisplayObject) {
 		super();
 		this.editor = editor;
-		art = PR2MovieClip.fromLinkage("HatsMenuGraphic", {maxNestedDepth: 6});
+		art = new ChecklistMenuView("hats");
 		addChild(art);
 		for (hatId in LOWEST_HAT_ID...HIGHEST_HAT_ID + 1) {
-			var check = Std.downcast(DisplayUtil.findByName(art, "hat" + hatId), FlCheckBox);
+			var check = Std.downcast(DisplayUtil.findByName(art, "hat" + hatId), GameCheckBox);
 			if (check != null) {
 				check.selected = editor.badHats.indexOf(hatId) < 0;
 				checks.set(hatId, check);
@@ -100,7 +100,7 @@ class EditorHatsSettingsPopup extends Sprite {
 	}
 
 	private function maybeAddHover(event:Event):Void {
-		var target = Std.downcast(event.currentTarget, FlCheckBox);
+		var target = Std.downcast(event.currentTarget, GameCheckBox);
 		if (target == null) {
 			return;
 		}

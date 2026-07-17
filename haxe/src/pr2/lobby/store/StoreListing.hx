@@ -9,17 +9,19 @@ import openfl.events.TextEvent;
 import openfl.net.URLRequest;
 import openfl.text.TextField;
 import openfl.text.TextFieldAutoSize;
+import openfl.text.TextFormat;
+import pr2.assets.NativeAssetIds.FontAsset;
+import pr2.assets.NativeAssets;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.account.AccountCharacter;
 import pr2.runtime.EpicFlash;
-import pr2.runtime.PR2MovieClip;
 import pr2.util.DisplayUtil;
 
 class StoreListing extends Sprite {
 	public static inline var PURCHASE:String = "itemPurchase";
 	public static inline var INFO:String = "itemInfo";
 	public final listing:StoreListingData;
-	private var art:PR2MovieClip;
+	private var art:Sprite;
 	private var loader:Null<Loader>;
 	private var cover:Null<Sprite>;
 	private var desc:Null<TextField>;
@@ -27,7 +29,7 @@ class StoreListing extends Sprite {
 
 	public function new(listing:StoreListingData, ?saleFlash:EpicFlash) {
 		super(); this.listing = listing;
-		art = PR2MovieClip.fromLinkage("StoreListingGraphic", {maxNestedDepth: 6}); addChild(art);
+		art = createArt(); addChild(art);
 		var title = LobbyArt.text(art, "titleBox");
 		if (title != null) title.text = listing.title;
 		layoutPrice();
@@ -59,6 +61,66 @@ class StoreListing extends Sprite {
 		}
 	}
 
+	private function createArt():Sprite {
+		var root = new Sprite();
+		var cover = new Sprite();
+		cover.name = "cover";
+		cover.graphics.beginFill(0xFFFFFF, 0.001);
+		cover.graphics.drawRoundRect(0, 0, 220, 118, 8, 8);
+		cover.graphics.endFill();
+		root.addChild(cover);
+		var hover = new Sprite();
+		hover.name = "bg";
+		hover.graphics.beginFill(0xDCEBFF, 0.45);
+		hover.graphics.lineStyle(1, 0x6B91C2);
+		hover.graphics.drawRoundRect(0, 0, 220, 118, 8, 8);
+		hover.graphics.endFill();
+		hover.visible = false;
+		root.addChild(hover);
+		var pic = new Sprite();
+		pic.name = "picHolder";
+		pic.x = 8;
+		pic.y = 8;
+		root.addChild(pic);
+		var priceBG = new Sprite();
+		priceBG.name = "priceBG";
+		priceBG.x = 112;
+		priceBG.y = 7;
+		priceBG.graphics.beginFill(0xFFF3B0, 0.9);
+		priceBG.graphics.drawRoundRect(0, 0, 96, 20, 6, 6);
+		priceBG.graphics.endFill();
+		root.addChild(priceBG);
+		root.addChild(createField("titleBox", 72, 31, 136, 18, 13, true));
+		root.addChild(createField("descBox", 72, 55, 136, 55, 10, false));
+		root.addChild(createField("priceBox", 117, 9, 35, 16, 11, true));
+		root.addChild(createField("saleBox", 170, 9, 50, 16, 10, false));
+		var coin = new Sprite();
+		coin.name = "coin";
+		coin.x = 154;
+		coin.y = 11;
+		coin.graphics.beginFill(0xF4C542);
+		coin.graphics.lineStyle(1, 0x8A6913);
+		coin.graphics.drawCircle(5, 5, 5);
+		coin.graphics.endFill();
+		root.addChild(coin);
+		root.addChild(cover);
+		return root;
+	}
+
+	private function createField(name:String, x:Float, y:Float, width:Float, height:Float, size:Int, bold:Bool):TextField {
+		var field = new TextField();
+		field.name = name;
+		field.x = x;
+		field.y = y;
+		field.width = width;
+		field.height = height;
+		field.multiline = true;
+		field.wordWrap = true;
+		field.selectable = false;
+		field.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), size, 0, bold);
+		return field;
+	}
+
 	private function setText(name:String, value:String):Void { var field = LobbyArt.text(art, name); if (field != null) field.text = value; }
 	private static function link(event:String, label:String):String return '<u><font color="#4E4EFE"><a href="event:$event">$label</a></font></u>';
 	private function textLink(e:TextEvent):Void dispatchEvent(new Event(e.text));
@@ -79,7 +141,7 @@ class StoreListing extends Sprite {
 		if (loader != null) { try loader.unload() catch (_:Dynamic) {}; loader = null; }
 		for (character in randomCharacters) character.remove();
 		randomCharacters = [];
-		art.dispose(); if (parent != null) parent.removeChild(this);
+		if (art.parent != null) art.parent.removeChild(art); if (parent != null) parent.removeChild(this);
 	}
 
 	private function generateRandomCharacter(x:Float):Void {

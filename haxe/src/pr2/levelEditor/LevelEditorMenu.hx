@@ -7,13 +7,12 @@ import pr2.lobby.LobbySession;
 import pr2.lobby.dialogs.ConfirmPopup;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
-import pr2.runtime.FlComboBox;
-import pr2.runtime.PR2MovieClip;
+import pr2.ui.controls.GameSelect;
 import pr2.util.DisplayUtil;
 
 class LevelEditorMenu extends Sprite {
 	public final editor:LevelEditor;
-	public final art:PR2MovieClip;
+	public final art:LevelEditorMenuView;
 	public final blocks:EditorSideBar;
 	public final settings:EditorSideBar;
 	public final stamps:EditorSideBar;
@@ -25,7 +24,7 @@ class LevelEditorMenu extends Sprite {
 	public function new(editor:LevelEditor) {
 		super();
 		this.editor = editor;
-		art = PR2MovieClip.fromLinkage("LevelEditorMenuGraphic", {maxNestedDepth: 8});
+		art = new LevelEditorMenuView();
 		addChild(art);
 		blocks = new EditorSideBar("blocks", ["delete", "basic1", "basic2", "basic3", "basic4", "brick", "finish", "ice", "item", "infItem", "left",
 			"right", "up", "down", "teleport", "mine", "crumble", "vanish", "move", "water", "rotateR", "rotateL", "push", "happy", "sad",
@@ -107,8 +106,8 @@ class LevelEditorMenu extends Sprite {
 		return pr2.util.DisplayUtil.findByName(art, name);
 	}
 
-	private function zoomCombo():Null<FlComboBox> {
-		return Std.downcast(find("zoomSelect"), FlComboBox);
+	private function zoomCombo():Null<GameSelect<String>> {
+		return Std.downcast(find("zoomSelect"), GameSelect);
 	}
 
 	private function bind(name:String, handler:Void->Void):Void {
@@ -192,10 +191,10 @@ class LevelEditorMenu extends Sprite {
 
 	private function chooseZoom(_):Void {
 		var combo = zoomCombo();
-		if (combo == null || combo.selectedItem == null) {
+		if (combo == null || combo.selectedOption == null) {
 			return;
 		}
-		var data = Std.string(Reflect.field(combo.selectedItem, "data"));
+		var data = combo.selectedOption.value;
 		var percent = Std.parseFloat(data);
 		if (Math.isNaN(percent)) {
 			return;

@@ -26,18 +26,26 @@ class SvgAsset {
 		return shape;
 	}
 
-	/** Returns artwork normalized to its visible top-left and fitted to a box. */
-	public static function createFitted(assetPath:String, width:Float, height:Float):Sprite {
+	/** Returns artwork translated so its visible bounds begin at local (0, 0). */
+	public static function createNormalized(assetPath:String):Sprite {
 		var container = new Sprite();
 		var shape = create(assetPath);
 		var bounds = shape.getBounds(shape);
 		shape.x = -bounds.x;
 		shape.y = -bounds.y;
+		container.addChild(shape);
+		return container;
+	}
+
+	/** Returns artwork normalized to its visible top-left and fitted to a box. */
+	public static function createFitted(assetPath:String, width:Float, height:Float):Sprite {
+		var container = createNormalized(assetPath);
+		var shape = container.getChildAt(0);
+		var bounds = shape.getBounds(shape);
 		if (bounds.width > 0 && bounds.height > 0) {
 			shape.scaleX = width / bounds.width;
 			shape.scaleY = height / bounds.height;
 		}
-		container.addChild(shape);
 		return container;
 	}
 

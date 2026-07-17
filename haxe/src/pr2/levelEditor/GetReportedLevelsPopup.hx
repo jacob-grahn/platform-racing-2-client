@@ -9,7 +9,6 @@ import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
 import pr2.net.FormPostClient;
 import pr2.net.ServerConfig;
-import pr2.runtime.PR2MovieClip;
 import pr2.util.DisplayUtil;
 import pr2.levelEditor.EditorPersistenceTypes.GetLevelsPostFactory;
 import pr2.levelEditor.EditorPersistenceTypes.GetLevelsLoadFactory;
@@ -18,14 +17,14 @@ class GetReportedLevelsPopup extends Popup {
 	public static var postFactory:GetLevelsPostFactory = defaultPost;
 	public static var loadFactory:GetLevelsLoadFactory = defaultLoad;
 
-	public final art:PR2MovieClip;
+	public final art:GetLevelsView;
 	public final listings:Array<GetReportedLevelsPopupItem> = [];
 	public var selected(default, null):Null<GetReportedLevelsPopupItem>;
 	private var bindings:Array<Binding> = [];
 
 	public function new() {
 		super();
-		art = PR2MovieClip.fromLinkage("GetLevelsPopupGraphic", {maxNestedDepth: 6});
+		art = new GetLevelsView();
 		addChild(art);
 		setText("titleBox", "-- Reported Levels --");
 		var handle = DisplayUtil.findByName(art, "delete_bt");

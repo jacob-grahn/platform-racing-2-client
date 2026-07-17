@@ -5,14 +5,14 @@ import openfl.events.MouseEvent;
 import pr2.lobby.account.StatSlider;
 import pr2.lobby.dialogs.HoverPopup;
 import pr2.page.EditorBlockOptions;
-import pr2.runtime.FlCheckBox;
+import pr2.ui.controls.GameCheckBox;
 import pr2.util.DisplayUtil;
 
 class EditorCustomStatsBlockOptionsPopup extends EditorBlockOptionsPopup {
 	private var speedSlider:StatSlider;
 	private var accelSlider:StatSlider;
 	private var jumpnSlider:StatSlider;
-	private var resetCheck:Null<FlCheckBox>;
+	private var resetCheck:Null<GameCheckBox>;
 	private var resetPop:Null<HoverPopup>;
 
 	public function new(editor:LevelEditor, block:EditorBlockObject) {
@@ -20,7 +20,7 @@ class EditorCustomStatsBlockOptionsPopup extends EditorBlockOptionsPopup {
 		speedSlider = makeSlider("Speed", "speedSlider", -62.75, -40);
 		accelSlider = makeSlider("Acceleration", "accelSlider", -62.75, 0);
 		jumpnSlider = makeSlider("Jumping", "jumpnSlider", -62.75, 40);
-		resetCheck = Std.downcast(DisplayUtil.findByName(art, "resetChk"), FlCheckBox);
+		resetCheck = Std.downcast(DisplayUtil.findByName(art, "resetChk"), GameCheckBox);
 		if (resetCheck != null) {
 			resetCheck.addEventListener(Event.CHANGE, onResetClick);
 			resetCheck.addEventListener(MouseEvent.MOUSE_OVER, onResetMouse);

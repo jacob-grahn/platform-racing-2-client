@@ -6,7 +6,7 @@ import pr2.lobby.LobbyArt;
 import pr2.lobby.dialogs.MessagePopup;
 import pr2.lobby.dialogs.Popup;
 import pr2.runtime.EpicFlash;
-import pr2.runtime.PR2MovieClip;
+import pr2.lobby.store.StorePopupView;
 import pr2.util.DisplayUtil;
 
 /**
@@ -18,7 +18,7 @@ import pr2.util.DisplayUtil;
 class PartInfoPopup extends Popup {
 	public static var instance:Null<PartInfoPopup>;
 
-	private var art:Null<PR2MovieClip>;
+	private var art:Null<StorePopupView>;
 	private var closeBinding:Null<LobbyArt.Binding>;
 	private var holder:Null<DisplayObjectContainer>;
 	private var listings:Array<PartInfoListing> = [];
@@ -41,7 +41,7 @@ class PartInfoPopup extends Popup {
 		ownedEpics = epics.copy();
 		hasEpicEverything = ownedEpics.indexOf("*") != -1;
 
-		art = PR2MovieClip.fromLinkage("StorePopupGraphic", {maxNestedDepth: 7});
+		art = new StorePopupView();
 		art.y += 20;
 		addChild(art);
 		holder = Std.downcast(DisplayUtil.findByName(art, "itemsHolder"), DisplayObjectContainer);

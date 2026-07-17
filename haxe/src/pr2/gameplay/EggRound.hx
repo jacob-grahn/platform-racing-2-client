@@ -2,11 +2,11 @@ package pr2.gameplay;
 
 import openfl.display.Shape;
 import openfl.display.Sprite;
-import openfl.geom.ColorTransform;
 import openfl.geom.Point;
 import openfl.utils.Assets;
 import pr2.audio.SoundEffects;
-import pr2.effects.LaserShotTimeline;
+import pr2.effects.LaserShotView;
+import pr2.effects.NativeEffectAnimation;
 import pr2.effects.PhysicsEffect;
 import pr2.level.ServerLevel.DecodedBlock;
 import pr2.level.ServerLevel;
@@ -30,7 +30,7 @@ typedef EggState = {
 	var attackCooldown:Int;
 	var removing:Bool;
 	var removeFrames:Int;
-	final display:PR2MovieClip;
+	final display:EggView;
 }
 
 typedef EggAttackVisual = {
@@ -44,7 +44,7 @@ typedef EggAttackVisual = {
 	var shooterId:Int;
 	var hitPlayer:Bool;
 	var hitBlock:Bool;
-	var display:PR2MovieClip;
+	var display:Sprite;
 }
 
 /**
@@ -218,8 +218,7 @@ class EggRound {
 	}
 
 	private function createEgg(id:Int, x:Int, y:Int, rot:Int, velX:Float):Void {
-		var display = PR2MovieClip.fromLinkage("EggGraphic", {maxNestedDepth: 8});
-		applyEggGraphicFrameScripts(display);
+		var display = new EggView();
 		applyEggVisualRandomization(display, visualRandom);
 		display.x = x;
 		display.y = y;
@@ -251,51 +250,8 @@ class EggRound {
 		});
 	}
 
-	private static function applyEggGraphicFrameScripts(display:PR2MovieClip):Void {
-		display.setFrameScript(24, function():Void {
-			display.gotoAndPlay("walk");
-		});
-		display.setFrameScript(45, function():Void {
-			display.stop();
-		});
-	}
-
-	private static function applyEggVisualRandomization(display:PR2MovieClip, nextRandom:Void->Float):Void {
-		var feetColor = randomColorTransform(nextRandom);
-		var baseColor = randomColorTransform(nextRandom);
-		var dotsColor = randomColorTransform(nextRandom);
-		for (name in ["var_165", "var_152"]) {
-			var foot = Std.downcast(DisplayUtil.findByName(display, name), PR2MovieClip);
-			if (foot == null) {
-				continue;
-			}
-			foot.gotoAndStop(1);
-			var colorMC = Std.downcast(DisplayUtil.findByName(foot, "colorMC"), PR2MovieClip);
-			if (colorMC != null) {
-				colorMC.gotoAndStop(1);
-				colorMC.transform.colorTransform = feetColor;
-			}
-			var colorMC2 = Std.downcast(DisplayUtil.findByName(foot, "colorMC2"), PR2MovieClip);
-			if (colorMC2 != null) {
-				colorMC2.gotoAndStop(1);
-				colorMC2.visible = false;
-			}
-		}
-		var egg = Std.downcast(DisplayUtil.findByName(display, "egg"), Sprite);
-		var base = egg == null ? null : DisplayUtil.findByName(egg, "base");
-		if (base != null) {
-			base.transform.colorTransform = baseColor;
-		}
-		var dots = egg == null ? null : DisplayUtil.findByName(egg, "dots");
-		if (dots != null) {
-			dots.transform.colorTransform = dotsColor;
-		}
-	}
-
-	private static function randomColorTransform(nextRandom:Void->Float):ColorTransform {
-		var transform = new ColorTransform();
-		transform.color = Math.floor(nextRandom() * 0xFFFFFF);
-		return transform;
+	private static function applyEggVisualRandomization(display:EggView, nextRandom:Void->Float):Void {
+		display.applyRandomColors(nextRandom);
 	}
 
 	private function beginSquash(egg:EggState):Void {
@@ -451,10 +407,11 @@ class EggRound {
 
 	private function addAttackVisual(linkage:String, x:Int, y:Int, scaleX:Float, scaleY:Float, velX:Float, velY:Float, life:Int,
 			alphaJitter:Bool, effectType:String = "", shooterId:Int = -1):EggAttackVisual {
-		var display = PR2MovieClip.fromLinkage(linkage, {maxNestedDepth: 8});
-		if (linkage == "LaserShotGraphic") {
-			LaserShotTimeline.apply(display);
-		}
+		var display:Sprite = linkage == "SlashAnimation"
+			? new NativeEffectAnimation("slash", 6)
+			: linkage == "LaserShotGraphic"
+				? new LaserShotView()
+				: new Sprite();
 		display.x = x;
 		display.y = y;
 		display.scaleX = scaleX;
@@ -508,7 +465,7 @@ class EggRound {
 					visual.velX = 0;
 					visual.velY = 0;
 					visual.life = 18;
-					LaserShotTimeline.playHit(visual.display);
+					Std.downcast(visual.display, LaserShotView).playHit();
 					playLaserHitSound(Std.int(visual.posX), Std.int(visual.posY));
 				}
 			}
@@ -522,7 +479,7 @@ class EggRound {
 		attackVisuals = remaining;
 	}
 
-	private static function addIceWaveCore(display:PR2MovieClip):Void {
+	private static function addIceWaveCore(display:Sprite):Void {
 		var core = new Shape();
 		core.name = "iceWaveCore";
 		core.graphics.lineStyle(1, 0x8ACBFF, 1);
@@ -540,7 +497,12 @@ class EggRound {
 	}
 
 	private static function removeAttackVisual(visual:EggAttackVisual):Void {
-		visual.display.dispose();
+		var legacy = Std.downcast(visual.display, PR2MovieClip);
+		if (legacy != null) legacy.dispose();
+		var nativeEffect = Std.downcast(visual.display, NativeEffectAnimation);
+		if (nativeEffect != null) nativeEffect.dispose();
+		var laser = Std.downcast(visual.display, LaserShotView);
+		if (laser != null) laser.dispose();
 		if (visual.display.parent != null) {
 			visual.display.parent.removeChild(visual.display);
 		}

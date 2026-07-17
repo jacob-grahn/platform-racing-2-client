@@ -10,8 +10,7 @@ import pr2.lobby.LobbySession;
 import pr2.net.FormPostClient;
 import pr2.net.ServerConfig;
 import pr2.net.TextLoader;
-import pr2.runtime.FlTextInput;
-import pr2.runtime.PR2MovieClip;
+import pr2.ui.controls.GameTextInput;
 import pr2.ui.EmblemLoader;
 import pr2.util.AsyncRemovalGuard;
 import pr2.util.DisplayUtil;
@@ -26,7 +25,7 @@ class CreateGuildPopup extends Popup {
 	public static var saveFactory:GuildSaveFactory = defaultSave;
 	public static var transferFactory:Void->Void = function():Void new MessagePopup("Guild transfer is not available yet.");
 
-	private var art:Null<PR2MovieClip>;
+	private var art:Null<CreateGuildView>;
 	private var guildId:Int;
 	private var loading:Bool = false;
 	private var emblem:Null<EmblemLoader>;
@@ -38,7 +37,7 @@ class CreateGuildPopup extends Popup {
 	public function new(id:Int = 0) {
 		super();
 		guildId = id;
-		art = PR2MovieClip.fromLinkage("CreateGuildPopupGraphic", {maxNestedDepth: 6});
+		art = new CreateGuildView();
 		addChild(art);
 		setVisible("transfer_bg", false);
 		setVisible("transfer_bt", false);
@@ -202,8 +201,8 @@ class CreateGuildPopup extends Popup {
 		return LobbyArt.text(art, name);
 	}
 
-	private function textInput(name:String):Null<FlTextInput> {
-		return Std.downcast(DisplayUtil.findByName(art, name), FlTextInput);
+	private function textInput(name:String):Null<GameTextInput> {
+		return Std.downcast(DisplayUtil.findByName(art, name), GameTextInput);
 	}
 
 	private static function intAny(ret:Dynamic, names:Array<String>):Int {

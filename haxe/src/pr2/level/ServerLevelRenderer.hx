@@ -136,7 +136,7 @@ class ServerLevelRenderer extends Sprite {
 	private var viewRowMin:Int = 0;
 	private var viewRowMax:Int = 0;
 	private var viewInitialized:Bool = false;
-	private final arrowDisplays:Map<String, PR2MovieClip> = new Map();
+	private final arrowDisplays:Map<String, ArrowBlockView> = new Map();
 	private final arrowCompletionHandlers:Map<String, Event->Void> = new Map();
 	private final moveArrowDisplays:Map<String, Shape> = new Map();
 	private final waterRippleFrames:Map<String, Int> = new Map();
@@ -899,10 +899,12 @@ class ServerLevelRenderer extends Sprite {
 			case 1: "assets/svg/stamps/tree2.svg";
 			case 2: "assets/svg/stamps/tree3.svg";
 			case 3: "assets/svg/stamps/petrified_tree.svg";
+			case 4: "assets/svg/stamps/cactus.svg";
 			case 5: "assets/svg/stamps/rock1.svg";
 			case 6: "assets/svg/stamps/rock2.svg";
 			case 7: "assets/svg/stamps/spire1.svg";
 			case 8: "assets/svg/stamps/spire2.svg";
+			case 9: "assets/svg/stamps/building1.svg";
 			default: "";
 		}
 	}

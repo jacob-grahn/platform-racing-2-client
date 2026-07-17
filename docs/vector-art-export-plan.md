@@ -85,6 +85,11 @@ asset families:
   - item display icons: 10 SVGs
 - `tools/generate_block_bitmap_jsfl.py`
   - block bitmap tiles: 26 PNGs
+- `tools/compose_static_xfl_symbol_svg.py`
+  - license-free static-symbol composition from the XFL hierarchy
+  - reuses exact Animate-exported timeline SVG leaves, preserving their paths,
+    fills, alpha, layer order, and instance transforms
+  - currently produces the legacy `Building1` and `Cactus` stamp composites
 
 Animated effects are intentionally not exported as per-frame SVG sequences.
 The Haxe/OpenFL timeline runtime should own labels, frame scripts, nested

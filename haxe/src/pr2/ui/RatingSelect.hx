@@ -123,6 +123,10 @@ class RatingSelect extends Sprite {
 	public function hoverVisibleForTests():Bool {
 		return star != null && star.visible;
 	}
+
+	public function meterBackgroundHeightForTests():Float {
+		return meter == null ? 0 : meter.backgroundHeight();
+	}
 }
 
 /** Explicit rendering of the original `RatingSelectGraphic` masked meter. */
@@ -130,13 +134,17 @@ private class RatingStarMeter extends Sprite {
 	public static inline var WIDTH:Float = 55.2;
 	private static inline var HEIGHT:Float = 11;
 	public var fillWidth(default, null):Float = 0;
+	private var background:Shape;
 	private var fill:Shape;
 
 	public function new() {
 		super();
-		var background = new Shape();
+		background = new Shape();
 		background.graphics.beginGradientFill(GradientType.LINEAR, [0x8C8C8C, 0x474E29], [1, 1], [0, 255], verticalGradient());
-		background.graphics.drawRect(0, 0, WIDTH, HEIGHT);
+		// Both gradient layers are children of the five-star mask in the XFL.
+		// Drawing a solid rectangle here leaves an opaque olive strip around the
+		// stars on the finished-race popup.
+		for (index in 0...5) drawStar(background, 5.5 + 11.05 * index, 5.35);
 		background.graphics.endFill();
 		addChild(background);
 
@@ -151,6 +159,10 @@ private class RatingStarMeter extends Sprite {
 	public function displayRating(value:Float):Void {
 		fillWidth = WIDTH * value / 5;
 		fill.scrollRect = new Rectangle(0, 0, fillWidth, HEIGHT);
+	}
+
+	public function backgroundHeight():Float {
+		return background.getBounds(background).height;
 	}
 
 	private static function verticalGradient():Matrix {

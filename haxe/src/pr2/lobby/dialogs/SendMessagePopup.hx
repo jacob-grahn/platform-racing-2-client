@@ -4,10 +4,7 @@ import openfl.display.DisplayObject;
 import openfl.events.Event;
 import openfl.events.MouseEvent;
 import openfl.text.TextField;
-import pr2.lobby.LobbyArt;
 import pr2.net.ServerConfig;
-import pr2.runtime.PR2MovieClip;
-import pr2.util.DisplayUtil;
 
 /**
 	Port of Flash `dialogs.SendMessagePopup`: compose and send a private (or guild)
@@ -17,7 +14,7 @@ import pr2.util.DisplayUtil;
 	pending, so the codes button only shows its tooltip.
 **/
 class SendMessagePopup extends Popup {
-	private var art:PR2MovieClip;
+	private var art:SendMessageView;
 	private var nameBox:Null<TextField>;
 	private var textBox:Null<TextField>;
 	private var charsRemaining:Null<TextField>;
@@ -25,18 +22,14 @@ class SendMessagePopup extends Popup {
 	private var isGuildMessage:Bool;
 	private var hover:Null<HoverPopup>;
 
-	private var sendBinding:Null<LobbyArt.Binding>;
-	private var cancelBinding:Null<LobbyArt.Binding>;
-	private var codesBinding:Null<LobbyArt.Binding>;
-
 	public function new(name:String = "", message:String = "", guild:Bool = false, focusName:Bool = false) {
 		super();
 		this.isGuildMessage = guild;
-		art = PR2MovieClip.fromLinkage("SendMessagePopupGraphic", {maxNestedDepth: 6});
-		nameBox = LobbyArt.text(art, "nameBox");
-		textBox = LobbyArt.text(art, "textBox");
-		charsRemaining = LobbyArt.text(art, "messageCharsRemaining");
-		codesButton = DisplayUtil.findByName(art, "codes_bt");
+		art = new SendMessageView(name, message);
+		nameBox = art.nameInput.textField;
+		textBox = art.messageInput.textField;
+		charsRemaining = art.charsRemaining;
+		codesButton = art.codesButton;
 
 		if (nameBox != null) {
 			nameBox.text = name;
@@ -50,12 +43,13 @@ class SendMessagePopup extends Popup {
 
 		if (isGuildMessage && nameBox != null) {
 			nameBox.selectable = false;
+			art.nameInput.editable = false;
 			nameBox.alpha = 0.5;
 		}
 
-		sendBinding = LobbyArt.bind(DisplayUtil.findByName(art, "send_bt"), clickSend);
-		cancelBinding = LobbyArt.bind(DisplayUtil.findByName(art, "cancel_bt"), function():Void startFadeOut());
-		codesBinding = LobbyArt.bind(codesButton, function():Void new PMRFCodesPopup());
+		art.onSend = clickSend;
+		art.onCancel = startFadeOut;
+		art.onCodes = function():Void new PMRFCodesPopup();
 		if (codesButton != null) {
 			codesButton.addEventListener(MouseEvent.MOUSE_OVER, hoverOverCodes);
 			codesButton.addEventListener(MouseEvent.MOUSE_OUT, hoverOutCodes);
@@ -117,9 +111,6 @@ class SendMessagePopup extends Popup {
 			codesButton.removeEventListener(MouseEvent.MOUSE_OVER, hoverOverCodes);
 			codesButton.removeEventListener(MouseEvent.MOUSE_OUT, hoverOutCodes);
 		}
-		LobbyArt.unbind(sendBinding);
-		LobbyArt.unbind(cancelBinding);
-		LobbyArt.unbind(codesBinding);
 		if (art != null) {
 			art.dispose();
 			art = null;

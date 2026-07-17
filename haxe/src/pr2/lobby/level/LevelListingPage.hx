@@ -9,7 +9,7 @@ import pr2.net.CampaignLevelInfo;
 import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
 import pr2.page.Page;
-import pr2.runtime.PR2MovieClip;
+import pr2.ui.view.LoadingView;
 import pr2.ui.PageNavigation;
 import pr2.ui.PageNavigation.Paginated;
 import pr2.util.AsyncRemovalGuard;
@@ -30,7 +30,7 @@ class LevelListingPage extends Page implements Paginated {
 	private var pageNum:Int = 1;
 	private var pageCount:Int = 9;
 	private var holder:Sprite;
-	private var loading:Null<PR2MovieClip>;
+	private var loading:Null<LoadingView>;
 	private var pageNavigation:PageNavigation;
 	private var levelItems:Array<LevelItem> = [];
 	private var asyncGuard:AsyncRemovalGuard = new AsyncRemovalGuard();
@@ -50,7 +50,7 @@ class LevelListingPage extends Page implements Paginated {
 		holder = new Sprite();
 		addChild(holder);
 
-		loading = PR2MovieClip.fromLinkage("LoadingGraphic", {maxNestedDepth: 4});
+		loading = new LoadingView();
 		loading.x = 164;
 		loading.y = 150;
 		addChild(loading);
@@ -183,6 +183,10 @@ class LevelListingPage extends Page implements Paginated {
 			pageNavigation.remove();
 		}
 		removeLevels();
+		if (loading != null) {
+			loading.dispose();
+			loading = null;
+		}
 		onTeardown();
 		super.remove();
 	}
@@ -230,7 +234,7 @@ class LevelListingPage extends Page implements Paginated {
 		return loading != null && loading.visible;
 	}
 
-	public function loadingGraphicForTests():Null<PR2MovieClip> {
+	public function loadingGraphicForTests():Null<LoadingView> {
 		return loading;
 	}
 }

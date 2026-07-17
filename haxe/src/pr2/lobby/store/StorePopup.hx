@@ -16,7 +16,7 @@ import pr2.lobby.dialogs.UploadingPopup;
 import pr2.net.ServerConfig;
 import pr2.net.TextLoader;
 import pr2.runtime.EpicFlash;
-import pr2.runtime.PR2MovieClip;
+import pr2.ui.view.LoadingView;
 import pr2.ui.CustomScrollBar;
 import pr2.util.AsyncRemovalGuard;
 import pr2.util.DisplayUtil;
@@ -26,11 +26,11 @@ class StorePopup extends Popup {
 	public static var userCoins(default, null):Int = 0;
 	private static inline var URL_KEY = "OTkhX24+S0VVaHlAIXhqbA==";
 	private static inline var URL_IV = "J1N0QSJzSWV6ZT4mIz5vKA==";
-	private var art:PR2MovieClip;
+	private var art:StorePopupView;
 	private var holder:Null<DisplayObjectContainer>;
 	private var listings:Array<StoreListing> = [];
 	private var bindings:Array<LobbyArt.Binding> = [];
-	private var loading:Null<PR2MovieClip>;
+	private var loading:Null<LoadingView>;
 	private var scroll:Null<CustomScrollBar>;
 	private var saleFlash:EpicFlash = new EpicFlash();
 	private var asyncGuard:AsyncRemovalGuard = new AsyncRemovalGuard();
@@ -38,7 +38,7 @@ class StorePopup extends Popup {
 	/** `fixture` is used by deterministic tests; production always loads the API. */
 	public function new(?fixture:Dynamic) {
 		super();
-		art = PR2MovieClip.fromLinkage("StorePopupGraphic", {maxNestedDepth: 7}); addChild(art);
+		art = new StorePopupView(); addChild(art);
 		holder = Std.downcast(DisplayUtil.findByName(art, "itemsHolder"), DisplayObjectContainer);
 		var coins = LobbyArt.text(art, "coinsLeftBox");
 		if (coins != null) { coins.visible = false; coins.addEventListener(TextEvent.LINK, needMore); }
@@ -55,7 +55,7 @@ class StorePopup extends Popup {
 	}
 
 	private function load():Void {
-		loading = PR2MovieClip.fromLinkage("LoadingGraphic", {maxNestedDepth: 4}); addChild(loading);
+		loading = new LoadingView(); addChild(loading);
 		var join = ServerConfig.vaultUrl().indexOf("?") < 0 ? "?" : "&";
 		var url = ServerConfig.vaultUrl() + join + "rand=" + Std.random(10000000) + "&token=" + StringTools.urlEncode(LobbySession.token);
 		asyncGuard.watch(TextLoader.load(url, asyncGuard.wrap(function(body:String):Void {

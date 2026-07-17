@@ -8,7 +8,7 @@ import pr2.lobby.dialogs.LogoutPassPopup;
 import pr2.lobby.dialogs.MessagePopup;
 import pr2.lobby.dialogs.Popup;
 import pr2.net.ServerConfig;
-import pr2.runtime.FlTextInput;
+import pr2.ui.controls.GameTextInput;
 import pr2.util.DisplayUtil;
 
 class LogoutPassPopupTest {
@@ -38,7 +38,7 @@ class LogoutPassPopupTest {
 			return null;
 		};
 		var popup = new LogoutPassPopup();
-		assertEquals(true, input(popup).displayAsPassword, "password field is masked");
+		assertEquals(true, input(popup).textField.displayAsPassword, "password field is masked");
 		click(popup, "logout_bt");
 		assertEquals(0, uploads, "blank password does not upload");
 		assertEquals("Error: You must enter a password in order to log out.", lastMessageText(), "blank-password error copy");
@@ -92,8 +92,8 @@ class LogoutPassPopupTest {
 		popup.remove();
 	}
 
-	private static function input(popup:LogoutPassPopup):FlTextInput {
-		var value = Std.downcast(DisplayUtil.findByName(popup, "passBox"), FlTextInput);
+	private static function input(popup:LogoutPassPopup):GameTextInput {
+		var value = Std.downcast(DisplayUtil.findByName(popup, "passBox"), GameTextInput);
 		if (value == null) throw "passBox missing";
 		return value;
 	}

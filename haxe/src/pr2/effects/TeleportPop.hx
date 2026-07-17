@@ -4,7 +4,6 @@ import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.utils.Assets;
 import pr2.audio.SoundEffects;
-import pr2.runtime.PR2MovieClip;
 
 /**
 	Port of `effects.TeleportPop`: the 15-frame authored teleport poof and sound.
@@ -13,14 +12,14 @@ class TeleportPop extends Sprite {
 	public static inline var LIFETIME_FRAMES:Int = 15;
 	public static inline var SOUND_PATH:String = "assets/audio/sfx/teleport.mp3";
 
-	private var animation:PR2MovieClip;
+	private var animation:NativeEffectAnimation;
 	private var framesRemaining:Int = LIFETIME_FRAMES;
 
 	public function new(worldX:Float, worldY:Float, cameraX:Float = 0, cameraY:Float = 0, playSound:Bool = true) {
 		super();
 		x = worldX;
 		y = worldY;
-		animation = PR2MovieClip.fromLinkage("TeleportAnimation", {maxNestedDepth: 3});
+		animation = new NativeEffectAnimation("teleport", LIFETIME_FRAMES);
 		addChild(animation);
 		addEventListener(Event.ENTER_FRAME, tick);
 
@@ -40,7 +39,7 @@ class TeleportPop extends Sprite {
 		removeEventListener(Event.ENTER_FRAME, tick);
 		if (animation != null) {
 			animation.dispose();
-			removeChild(animation);
+			if (animation.parent != null) animation.parent.removeChild(animation);
 			animation = null;
 		}
 		if (parent != null) {

@@ -12,9 +12,7 @@ import pr2.lobby.dialogs.HoverPopup;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
 import pr2.net.ServerConfig;
-import pr2.runtime.FlComboBox;
-import pr2.runtime.FlComponents;
-import pr2.runtime.PR2MovieClip;
+import pr2.ui.controls.GameSelect;
 import pr2.util.DisplayUtil;
 import pr2.levelEditor.EditorPersistenceTypes.HandleLevelReportUploadFactory;
 import pr2.levelEditor.EditorPersistenceTypes.HandleLevelReportReopenFactory;
@@ -27,7 +25,7 @@ class HandleLevelReportPopup extends Popup {
 
 	public final reportsPopup:GetReportedLevelsPopup;
 	public final level:Dynamic;
-	public var art(default, null):Null<PR2MovieClip>;
+	public var art(default, null):Null<HandleLevelReportView>;
 	private var htmlNameMaker:HtmlNameMaker = new HtmlNameMaker();
 	private var bindings:Array<Null<Binding>> = [];
 	private var uploading:Null<UploadingPopup>;
@@ -38,7 +36,7 @@ class HandleLevelReportPopup extends Popup {
 		super();
 		this.reportsPopup = reportsPopup;
 		this.level = level;
-		art = PR2MovieClip.fromLinkage("HandleLevelReportPopupGraphic", {maxNestedDepth: 6});
+		art = new HandleLevelReportView();
 		addChild(art);
 		var titleBox = LobbyArt.text(art, "titleBox");
 		if (titleBox != null) {
@@ -183,27 +181,26 @@ class HandleLevelReportPopup extends Popup {
 	}
 
 	private function otherReasonText():String {
-		var field = FlComponents.asTextField(DisplayUtil.findByName(art, "otherReasonBox"));
+		var field = LobbyArt.text(art, "otherReasonBox");
 		return field == null ? "" : field.text;
 	}
 
-	private function reasonCombo():Null<FlComboBox> {
-		return Std.downcast(DisplayUtil.findByName(art, "reason"), FlComboBox);
+	private function reasonCombo():Null<GameSelect<String>> {
+		return Std.downcast(DisplayUtil.findByName(art, "reason"), GameSelect);
 	}
 
-	private function durationCombo():Null<FlComboBox> {
-		return Std.downcast(DisplayUtil.findByName(art, "duration"), FlComboBox);
+	private function durationCombo():Null<GameSelect<String>> {
+		return Std.downcast(DisplayUtil.findByName(art, "duration"), GameSelect);
 	}
 
-	private static function selectedData(combo:Null<FlComboBox>, fallback:String):String {
-		if (combo == null || combo.selectedItem == null) {
+	private static function selectedData(combo:Null<GameSelect<String>>, fallback:String):String {
+		if (combo == null || combo.selectedOption == null) {
 			return fallback;
 		}
-		var data:Dynamic = Reflect.field(combo.selectedItem, "data");
-		return data == null ? fallback : Std.string(data);
+		return combo.selectedOption.value;
 	}
 
-	private static function selectedDataInt(combo:Null<FlComboBox>, fallback:Int):Int {
+	private static function selectedDataInt(combo:Null<GameSelect<String>>, fallback:Int):Int {
 		var parsed = Std.parseInt(selectedData(combo, Std.string(fallback)));
 		return parsed == null ? fallback : parsed;
 	}

@@ -2,16 +2,13 @@ package pr2.lobby.dialogs;
 
 import openfl.display.DisplayObject;
 import openfl.text.TextField;
-import pr2.lobby.LobbyArt;
 import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
-import pr2.runtime.PR2MovieClip;
-import pr2.util.DisplayUtil;
 
 class ChatRoomInfoPopup extends InfoPopup {
 	private static inline var FONT_TAG:String = "<font face=\"_sans\" size=\"11\">";
 
-	private var art:Null<PR2MovieClip>;
+	private var art:Null<ChatRoomInfoView>;
 	private var textBox:Null<TextField>;
 	private var loadingGraphic:Null<DisplayObject>;
 	private var commandHandler:CommandHandler;
@@ -20,13 +17,13 @@ class ChatRoomInfoPopup extends InfoPopup {
 	public function new(target:DisplayObject, ?commandHandler:CommandHandler) {
 		super();
 		this.commandHandler = commandHandler != null ? commandHandler : CommandHandler.commandHandler;
-		art = PR2MovieClip.fromLinkage("ChatRoomInfoPopupGraphic", {maxNestedDepth: 8});
+		art = new ChatRoomInfoView();
 		addChild(art);
-		textBox = LobbyArt.text(art, "textBox");
+		textBox = art.textBox;
 		if (textBox != null) {
 			textBox.htmlText = "";
 		}
-		loadingGraphic = DisplayUtil.findByName(art, "loadingGraphic");
+		loadingGraphic = art.loadingGraphic;
 		this.commandHandler.defineCommand("setChatRoomList", setChatRoomList);
 		LobbySocket.write("get_chat_rooms`");
 		positionNear(target);

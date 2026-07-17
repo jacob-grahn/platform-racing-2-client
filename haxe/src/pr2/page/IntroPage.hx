@@ -3,7 +3,6 @@ package pr2.page;
 #if js
 import js.Browser;
 #end
-import openfl.display.DisplayObject;
 import openfl.display.DisplayObjectContainer;
 import openfl.display.Sprite;
 import openfl.display.Stage;
@@ -12,7 +11,6 @@ import openfl.events.MouseEvent;
 import openfl.utils.Assets;
 import pr2.Constants;
 import pr2.effects.PixelEffect1;
-import pr2.runtime.PR2MovieClip;
 import StringTools;
 
 /**
@@ -24,9 +22,9 @@ import StringTools;
 	click skips the rest. When the queue drains (or on click) the flow advances
 	to the login page.
 
-	Here the intro symbols are driven by `PR2MovieClip`, and the final-frame
-	stop/COMPLETE behaviour is reproduced with `setFrameScript` to match the
-	original `addFrameScript` calls in the intro graphic classes.
+	Here the intro symbols are explicit native views, and their final-frame
+	stop/COMPLETE behaviour matches the original `addFrameScript` calls in the
+	intro graphic classes.
 **/
 class IntroPage extends Page {
 	// Intro identifiers, matching menu.IntroPage.
@@ -48,9 +46,9 @@ class IntroPage extends Page {
 
 	private var toPlay:Array<Int> = [];
 	private var background:Null<Sprite>;
-	private var introPageGraphic:Null<PR2MovieClip>;
+	private var introPageGraphic:Null<IntroPageView>;
 	private var introHolder:Null<DisplayObjectContainer>;
-	private var currentIntro:Null<PR2MovieClip>;
+	private var currentIntro:Null<IntroAnimationView>;
 	private var skipHitArea:Null<Sprite>;
 	private var listeningStage:Null<Stage>;
 	private var ended:Bool = false;
@@ -72,9 +70,9 @@ class IntroPage extends Page {
 		background = new Sprite();
 		addChild(background);
 
-		introPageGraphic = PR2MovieClip.fromLinkage("IntroPageGraphic");
+		introPageGraphic = new IntroPageView();
 		addChild(introPageGraphic);
-		introHolder = Std.downcast(introPageGraphic.getChildByTimelineName("introHolder"), DisplayObjectContainer);
+		introHolder = introPageGraphic.introHolder;
 
 		// Flash's `menu.IntroPage` listened for `MouseEvent.CLICK` on
 		// `Main.stage`, so a click *anywhere* skipped straight to the login page.
@@ -92,6 +90,7 @@ class IntroPage extends Page {
 		// direct children. (`Main.muteButton` is layered above this page by
 		// `Main.addGlobalChrome`, so its click still reaches the stage handler.)
 		skipHitArea = new Sprite();
+		skipHitArea.name = "skipHitArea";
 		skipHitArea.graphics.beginFill(0xFFFFFF, 0);
 		skipHitArea.graphics.drawRect(0, 0, Constants.STAGE_WIDTH, Constants.STAGE_HEIGHT);
 		skipHitArea.graphics.endFill();
@@ -152,21 +151,18 @@ class IntroPage extends Page {
 		}
 
 		var type = toPlay.shift();
-		var intro:Null<PR2MovieClip> = null;
-		var completeFrame = 0;
+		var intro:Null<IntroAnimationView> = null;
 
 		switch (type) {
 			case JIGG_INTRO:
-				intro = PR2MovieClip.fromLinkage("JiggminIntroGraphic");
-				completeFrame = JIGG_COMPLETE_FRAME;
+				intro = new IntroAnimationView("jiggmin", 249, JIGG_COMPLETE_FRAME);
 				injectJiggminLogo(intro);
 			case KONG_INTRO:
-				intro = PR2MovieClip.fromLinkage("KongregateIntroGraphic");
-				completeFrame = KONG_COMPLETE_FRAME;
+				intro = new IntroAnimationView("kongregate", 153, KONG_COMPLETE_FRAME);
 			case ARMOR_INTRO:
-				intro = PR2MovieClip.fromLinkage("ArmorIntroGraphic");
+				intro = new IntroAnimationView("armor", 218, 218);
 			case BUBBOX_INTRO:
-				intro = PR2MovieClip.fromLinkage("BubbleBoxIntroGraphic");
+				intro = new IntroAnimationView("bubblebox", 117, 117);
 		}
 
 		if (intro == null) {
@@ -177,17 +173,6 @@ class IntroPage extends Page {
 		currentIntro = intro;
 		reportState("intro-" + introName(type));
 
-		// Reproduce the original final-frame frame script: stop and dispatch
-		// COMPLETE. Where we do not know the exact stop frame, fall back to the
-		// symbol's last frame.
-		var stopFrame = completeFrame > 0 ? completeFrame : intro.totalFrames;
-		if (stopFrame > intro.totalFrames) {
-			stopFrame = intro.totalFrames;
-		}
-		intro.setFrameScript(stopFrame - 1, function() {
-			intro.stop();
-			intro.dispatchEvent(new Event(Event.COMPLETE));
-		});
 		intro.addEventListener(Event.COMPLETE, onComplete);
 
 		if (introHolder != null) {
@@ -204,19 +189,8 @@ class IntroPage extends Page {
 		floating blocks that fly in and assemble the wordmark over the intro.
 		Best-effort: never throws if the slot or asset is missing.
 	**/
-	private function injectJiggminLogo(intro:PR2MovieClip):Void {
+	private function injectJiggminLogo(intro:IntroAnimationView):Void {
 		if (!Assets.exists(JIGGMIN_LOGO_ASSET)) {
-			return;
-		}
-
-		var logo = Std.downcast(intro.getChildByTimelineName("logo"), PR2MovieClip);
-		if (logo == null) {
-			return;
-		}
-
-		var logoMc = Std.downcast(logo.getChildByTimelineName("logo_mc"), DisplayObjectContainer);
-		var container:Null<DisplayObjectContainer> = logoMc != null ? logoMc : logo;
-		if (container == null) {
 			return;
 		}
 
@@ -227,7 +201,10 @@ class IntroPage extends Page {
 		// Mirror `new PixelEffect1(new JiggminLogo(300, 87))`: the effect owns a
 		// copy of the logo pixels, so clone rather than handing it the shared
 		// cached asset bitmap (SegPixel mutates and disposes its source).
-		container.addChild(new PixelEffect1(bitmapData.clone()));
+		var effect = new PixelEffect1(bitmapData.clone());
+		effect.x = 125;
+		effect.y = 155;
+		intro.logoHolder.addChild(effect);
 	}
 
 	private function clearCurrentIntro():Void {
@@ -237,9 +214,6 @@ class IntroPage extends Page {
 
 		currentIntro.stop();
 		currentIntro.removeEventListener(Event.COMPLETE, onComplete);
-		if (currentIntro.parent != null) {
-			currentIntro.parent.removeChild(currentIntro);
-		}
 		currentIntro.dispose();
 		currentIntro = null;
 	}
@@ -304,6 +278,9 @@ class IntroPage extends Page {
 		}
 		clearCurrentIntro();
 		introHolder = null;
+		if (introPageGraphic != null) {
+			introPageGraphic.dispose();
+		}
 		introPageGraphic = null;
 		background = null;
 		super.remove();

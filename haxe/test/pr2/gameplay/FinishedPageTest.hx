@@ -98,6 +98,8 @@ class FinishedPageTest {
 		var rating = new RatingSelect(12345);
 		assertEquals(3312, Math.round(rating.meterFillWidthForTests() * 100), "native star meter begins at the authored three-star width");
 		assertEquals(false, rating.hoverVisibleForTests(), "native hover star begins off");
+		assertEquals(1070, Math.round(rating.meterBackgroundHeightForTests() * 100),
+			"rating background uses the 10.7px star geometry instead of an opaque 11px strip");
 		rating.remove();
 	}
 

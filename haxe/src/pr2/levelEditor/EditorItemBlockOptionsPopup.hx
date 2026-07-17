@@ -2,21 +2,21 @@ package pr2.levelEditor;
 
 import pr2.gameplay.Items;
 import pr2.page.EditorBlockOptions;
-import pr2.runtime.FlCheckBox;
+import pr2.ui.controls.GameCheckBox;
 import pr2.util.DisplayUtil;
 
 class EditorItemBlockOptionsPopup extends EditorBlockOptionsPopup {
-	private final checks:Map<Int, FlCheckBox> = new Map();
+	private final checks:Map<Int, GameCheckBox> = new Map();
 
 	public function new(editor:LevelEditor, block:EditorBlockObject) {
 		super(editor, block, "ItemBlockOptionsGraphic");
 		var selected = EditorBlockOptions.selectedItems(block.options, editor.allowedItems);
 		for (itemId in Items.getAllCodes()) {
-			var check:Null<FlCheckBox> = Std.downcast(DisplayUtil.findByName(art, "check" + itemId), FlCheckBox);
+			var check:Null<GameCheckBox> = Std.downcast(DisplayUtil.findByName(art, "check" + itemId), GameCheckBox);
 			if (check == null && itemId == Items.SNAKE) {
-				check = new FlCheckBox("Snake");
+				check = new GameCheckBox("Snake");
 				check.name = "check" + itemId;
-				var previous = Std.downcast(DisplayUtil.findByName(art, "check" + Items.ICE_WAVE), FlCheckBox);
+				var previous = Std.downcast(DisplayUtil.findByName(art, "check" + Items.ICE_WAVE), GameCheckBox);
 				check.x = previous == null ? 8 : previous.x;
 				check.y = previous == null ? 142 : previous.y + 18;
 				art.addChild(check);

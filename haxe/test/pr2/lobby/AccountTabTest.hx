@@ -287,9 +287,9 @@ class AccountTabTest {
 		var decButton = Std.downcast(@:privateAccess speedSlider.decButton, openfl.display.Sprite);
 		var incButton = Std.downcast(@:privateAccess speedSlider.incButton, openfl.display.Sprite);
 
-		assertEquals(80.0, @:privateAccess speedSlider.slider.trackWidth, "speed slider track ends before right arrow");
-		assertEquals(80.0, @:privateAccess accelSlider.slider.trackWidth, "acceleration slider track ends before right arrow");
-		assertEquals(80.0, @:privateAccess jumpSlider.slider.trackWidth, "jumping slider track ends before right arrow");
+		assertEquals(80.0, @:privateAccess speedSlider.slider.controlWidth, "speed slider track ends before right arrow");
+		assertEquals(80.0, @:privateAccess accelSlider.slider.controlWidth, "acceleration slider track ends before right arrow");
+		assertEquals(80.0, @:privateAccess jumpSlider.slider.controlWidth, "jumping slider track ends before right arrow");
 		assertEquals(24.0, decButton.width, "left stat arrow has a larger square hitbox");
 		assertEquals(24.0, decButton.height, "left stat arrow hitbox is square");
 		assertEquals(24.0, incButton.width, "right stat arrow has a larger square hitbox");

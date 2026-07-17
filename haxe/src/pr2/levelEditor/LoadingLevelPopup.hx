@@ -3,22 +3,18 @@ package pr2.levelEditor;
 import pr2.lobby.dialogs.MessagePopup;
 import pr2.lobby.dialogs.Popup;
 import pr2.lobby.dialogs.ProgressBar;
-import pr2.lobby.LobbyArt;
-import pr2.lobby.LobbyArt.Binding;
 import pr2.net.LevelDataClient;
 import pr2.net.ServerLevelData;
-import pr2.runtime.PR2MovieClip;
-import pr2.util.DisplayUtil;
+import pr2.ui.view.ProgressPopupView;
 import pr2.levelEditor.EditorPersistenceTypes.LoadingLevelFetchFactory;
 
 class LoadingLevelPopup extends Popup {
 	public static var fetchFactory:LoadingLevelFetchFactory = defaultFetch;
 
-	public var art(default, null):Null<PR2MovieClip>;
+	public var art(default, null):Null<ProgressPopupView>;
 	public final levelId:Int;
 	public final version:Int;
 	public final report:Bool;
-	private var closeBinding:Null<Binding>;
 	private var progressBar:Null<ProgressBar>;
 
 	public function new(levelId:Int, version:Int, report:Bool = false) {
@@ -26,17 +22,13 @@ class LoadingLevelPopup extends Popup {
 		this.levelId = levelId;
 		this.version = version;
 		this.report = report;
-		art = PR2MovieClip.fromLinkage("UploadingPopupGraphic", {maxNestedDepth: 4});
-		var textBox = LobbyArt.text(art, "textBox");
-		if (textBox != null) {
-			textBox.text = "Loading level...";
-		}
+		art = new ProgressPopupView("Loading level...");
+		art.onClose = function():Void startFadeOut();
 		addChild(art);
 		progressBar = new ProgressBar();
 		progressBar.x = -100;
 		progressBar.y = -5;
 		addChild(progressBar);
-		closeBinding = LobbyArt.bind(DisplayUtil.findByName(art, "close_bt"), function():Void startFadeOut());
 		fetchFactory(levelId, version, handleLoad, handleError);
 	}
 
@@ -69,8 +61,6 @@ class LoadingLevelPopup extends Popup {
 	}
 
 	override public function remove():Void {
-		LobbyArt.unbind(closeBinding);
-		closeBinding = null;
 		if (progressBar != null) {
 			progressBar.remove();
 			progressBar = null;

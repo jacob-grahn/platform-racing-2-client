@@ -9,12 +9,13 @@ import pr2.lobby.dialogs.LevelInfoPopup;
 import pr2.lobby.dialogs.PlayerGuestPopup;
 import pr2.lobby.dialogs.PlayerPopup;
 import pr2.lobby.dialogs.Popup;
+import pr2.lobby.dialogs.ModerationMenuView;
 import pr2.net.LobbySocket;
 import pr2.net.ServerConfig;
-import pr2.runtime.FlButton;
 import pr2.runtime.FlComboBox;
 import pr2.runtime.FlComponents;
 import pr2.runtime.PR2MovieClip;
+import pr2.ui.controls.GameButton;
 import pr2.ui.GuildName;
 import pr2.util.DisplayUtil;
 
@@ -114,9 +115,9 @@ class PlayerPopupTest {
 		rankBox.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_OVER));
 		assertEquals(true, DisplayUtil.findByName(popup, "supplBg").visible, "rank hover shows supplement background");
 		assertEquals("", LobbyArt.text(popup, "supplText").text, "rank hover no longer uses text fallback");
-		assertNotNull(findSymbolOrNull(popup, "ExpGainGraphic"), "rank hover shows authored ExpGain supplement");
+		assertNotNull(DisplayUtil.findByName(popup, "ExpGainGraphic"), "rank hover shows native ExpGain supplement");
 		rankBox.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_OUT));
-		assertEquals(null, findSymbolOrNull(popup, "ExpGainGraphic"), "rank mouse-out removes ExpGain supplement");
+		assertEquals(null, DisplayUtil.findByName(popup, "ExpGainGraphic"), "rank mouse-out removes ExpGain supplement");
 		popup.remove();
 		LobbySession.serverOwner = 0;
 	}
@@ -432,9 +433,9 @@ class PlayerPopupTest {
 		popup.remove();
 	}
 
-	private static function flButton(popup:PlayerPopup, name:String):FlButton {
-		var button = Std.downcast(DisplayUtil.findByName(popup, name), FlButton);
-		if (button == null) throw name + " is not an FlButton";
+	private static function flButton(popup:PlayerPopup, name:String):GameButton {
+		var button = Std.downcast(DisplayUtil.findByName(popup, name), GameButton);
+		if (button == null) throw name + " is not a GameButton";
 		return button;
 	}
 
@@ -448,16 +449,30 @@ class PlayerPopupTest {
 		target.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 	}
 
-	private static function tempModMenu(popup:PlayerPopup):PR2MovieClip {
-		return findSymbol(popup, "TempModMenuGraphic");
+	private static function tempModMenu(popup:PlayerPopup):ModerationMenuView {
+		return findModerationMenu(popup);
 	}
 
-	private static function banMenu(container:DisplayObjectContainer):PR2MovieClip {
-		return findSymbol(container, "BanMenuGraphic");
+	private static function banMenu(container:DisplayObjectContainer):DisplayObjectContainer {
+		return Std.downcast(DisplayUtil.findByName(container, "BanMenuGraphic"), DisplayObjectContainer);
 	}
 
-	private static function adminMenu(container:DisplayObjectContainer):PR2MovieClip {
-		return findSymbol(container, "AdminMenuGraphic");
+	private static function adminMenu(container:DisplayObjectContainer):ModerationMenuView {
+		return findModerationMenu(container);
+	}
+
+	private static function findModerationMenu(container:DisplayObjectContainer):ModerationMenuView {
+		for (index in 0...container.numChildren) {
+			var child = container.getChildAt(index);
+			var menu = Std.downcast(child, ModerationMenuView);
+			if (menu != null) return menu;
+			var nested = Std.downcast(child, DisplayObjectContainer);
+			if (nested != null) {
+				menu = findModerationMenu(nested);
+				if (menu != null) return menu;
+			}
+		}
+		return null;
 	}
 
 	private static function combo(container:DisplayObjectContainer, name:String):FlComboBox {
@@ -466,7 +481,7 @@ class PlayerPopupTest {
 		return combo;
 	}
 
-	private static function directBanMenu(name:String):{popup:Popup, menu:BanMenu, art:PR2MovieClip} {
+	private static function directBanMenu(name:String):{popup:Popup, menu:BanMenu, art:DisplayObjectContainer} {
 		var popup = new Popup(false);
 		var menu = new BanMenu(name, popup);
 		popup.addChild(menu);

@@ -4,12 +4,13 @@ package pr2.lobby;
 import js.Browser;
 #end
 import openfl.display.DisplayObject;
+import openfl.display.Sprite;
+import openfl.geom.Rectangle;
 import pr2.app.QueryParams;
+import pr2.assets.NativeAssetIds.StaticSvg;
+import pr2.assets.NativeAssets;
 import pr2.page.Page;
 import pr2.page.PageHolder;
-import pr2.runtime.AssetLibrary;
-import pr2.runtime.NineSliceSymbol;
-import pr2.runtime.PR2MovieClip;
 import pr2.ui.LobbyTab;
 import pr2.ui.TabsHolder;
 
@@ -26,7 +27,6 @@ import pr2.ui.TabsHolder;
 **/
 class LobbySide extends PageHolder {
 	private var bg:Null<DisplayObject>;
-	private var bgSlice:Null<NineSliceSymbol>;
 	private var bgExtraW:Float = 0;
 	private var bgExtraH:Float = 0;
 	private var tabsHolder:Null<TabsHolder>;
@@ -39,13 +39,19 @@ class LobbySide extends PageHolder {
 			bgExtraH:Float = 0):Void {
 		this.bgExtraW = bgExtraW;
 		this.bgExtraH = bgExtraH;
-		bgSlice = NineSliceSymbol.tryCreate(AssetLibrary.requireSymbolByLinkage("HalfSquareBG"), {maxNestedDepth: 4});
-		bg = bgSlice != null ? bgSlice : PR2MovieClip.fromLinkage("HalfSquareBG", {maxNestedDepth: 4});
+		bg = makeBackground();
 		bg.y = 15;
 		addChild(bg);
 		tabsHolder = new TabsHolder(tabs, hId, tabSel, maxW);
 		addChild(tabsHolder);
 		setSize(maxW, h);
+	}
+
+	private function makeBackground():Sprite {
+		var panel = new Sprite();
+		panel.addChild(NativeAssets.svg(StaticSvg.HalfSquarePanel));
+		panel.scale9Grid = new Rectangle(4.55, 3.9, 90.85, 91.4);
+		return panel;
 	}
 
 	/**
@@ -71,12 +77,8 @@ class LobbySide extends PageHolder {
 		if (bg != null) {
 			var bgW = w + bgExtraW;
 			var bgH = h - 15 + bgExtraH;
-			if (bgSlice != null) {
-				bgSlice.setTargetSize(bgW, bgH);
-			} else {
-				bg.height = bgH;
-				bg.width = bgW;
-			}
+			bg.height = bgH;
+			bg.width = bgW;
 		}
 		if (tabsHolder != null) {
 			tabsHolder.populateTabs(w);
@@ -104,12 +106,7 @@ class LobbySide extends PageHolder {
 			if (bg.parent != null) {
 				bg.parent.removeChild(bg);
 			}
-			var bgClip = Std.downcast(bg, PR2MovieClip);
-			if (bgClip != null) {
-				bgClip.dispose();
-			}
 			bg = null;
-			bgSlice = null;
 		}
 		if (parent != null) {
 			parent.removeChild(this);

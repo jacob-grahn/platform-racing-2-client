@@ -89,17 +89,17 @@ class ServerLevelRendererTest {
 		assertEquals(block.x + 15, piece.x, "piece starts at randomized position inside block");
 		assertEquals(block.y + 15, piece.y, "piece starts at randomized position inside block");
 		assertEquals(180.0, piece.rotation, "piece starts with randomized rotation");
-		assertEquals(3, piece.graphic.currentFrame, "brick fragment chooses and stops on a random authored frame");
+		assertEquals(3, piece.selectedFrame, "brick fragment chooses a random native authored frame");
 		piece.dispatchEvent(new openfl.events.Event(openfl.events.Event.ENTER_FRAME));
 		assertEquals(block.y + 15.75, piece.y, "piece applies friction then gravity");
-		assertEquals(3, piece.graphic.currentFrame, "brick fragment frame does not auto-play after construction");
+		assertEquals(3, piece.selectedFrame, "brick fragment frame does not auto-play after construction");
 		assertClose(0.95, piece.alpha, "piece fades by Flash rate");
 		var minePieces = renderer.showBlockPieces("MinePieceGraphic", block.x, block.y, 1, 10, 10, 25, 0.75, 0.95, 0.05,
 			function() return 0.5);
 		var minePiece = minePieces[0];
-		assertEquals(4, minePiece.graphic.currentFrame, "mine fragment chooses and stops on a random authored frame");
+		assertEquals(4, minePiece.selectedFrame, "mine fragment chooses and stops on a random authored frame");
 		minePiece.dispatchEvent(new openfl.events.Event(openfl.events.Event.ENTER_FRAME));
-		assertEquals(4, minePiece.graphic.currentFrame, "mine fragment frame does not auto-play after construction");
+		assertEquals(4, minePiece.selectedFrame, "mine fragment frame does not auto-play after construction");
 		minePiece.remove();
 		var basic = new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 10110, 10050);
 		var basicRenderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [basic]), basic);
@@ -116,7 +116,7 @@ class ServerLevelRendererTest {
 		assertEquals(1, blockLayer.numChildren, "piece removes itself after 20 frames");
 		assertEquals(false, piece.hasEventListener(openfl.events.Event.ENTER_FRAME), "expired piece clears its frame listener");
 		assertEquals(null, piece.parent, "expired piece is detached from the effect layer");
-		assertEquals(null, piece.graphic, "expired piece disposes its authored graphic");
+		assertEquals(null, piece.visual, "expired piece releases its authored visual");
 	}
 
 	private static function testBlockAlphaUpdate():Void {
@@ -546,7 +546,8 @@ class ServerLevelRendererTest {
 		assertEquals("", ServerLevelRenderer.artBackgroundAssetPath(999), "unknown background asset");
 		assertEquals("assets/svg/stamps/tree1.svg", ServerLevelRenderer.stampAssetPath(0), "tree stamp asset");
 		assertEquals("assets/svg/stamps/spire2.svg", ServerLevelRenderer.stampAssetPath(8), "spire stamp asset");
-		assertEquals("", ServerLevelRenderer.stampAssetPath(4), "unexported cactus stamp skipped");
+		assertEquals("assets/svg/stamps/cactus.svg", ServerLevelRenderer.stampAssetPath(4), "composed cactus stamp asset");
+		assertEquals("assets/svg/stamps/building1.svg", ServerLevelRenderer.stampAssetPath(9), "composed building stamp asset");
 	}
 
 	private static function testDefaultArtStrokeThickness():Void {

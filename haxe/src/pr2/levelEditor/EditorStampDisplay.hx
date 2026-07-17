@@ -4,7 +4,6 @@ import openfl.display.Sprite;
 import openfl.events.MouseEvent;
 import openfl.geom.Point;
 import openfl.geom.Rectangle;
-import pr2.runtime.PR2MovieClip;
 
 class EditorStampDisplay extends Sprite {
 	private final owner:EditorObjectLayer;
@@ -12,8 +11,8 @@ class EditorStampDisplay extends Sprite {
 	private final size:StampSize;
 	private final content:Sprite;
 	private final selectionOutline:Sprite;
-	private final deleteButton:PR2MovieClip;
-	private final resizeButton:PR2MovieClip;
+	private final deleteButton:EditorNativeGraphic;
+	private final resizeButton:EditorNativeGraphic;
 	private var dragging:Bool = false;
 	private var dragMoved:Bool = false;
 	private var dragOffsetX:Float = 0;
@@ -40,12 +39,10 @@ class EditorStampDisplay extends Sprite {
 		selectionOutline = new Sprite();
 		selectionOutline.name = "selectionOutline";
 		addChild(selectionOutline);
-		deleteButton = PR2MovieClip.fromLinkage("DeleteButton", {maxNestedDepth: 4});
-		deleteButton.name = "DeleteButton";
+		deleteButton = new EditorNativeGraphic("DeleteButton");
 		deleteButton.addEventListener(MouseEvent.MOUSE_DOWN, deletePressed);
 		addChild(deleteButton);
-		resizeButton = PR2MovieClip.fromLinkage("ResizeButton", {maxNestedDepth: 4});
-		resizeButton.name = "ResizeButton";
+		resizeButton = new EditorNativeGraphic("ResizeButton");
 		resizeButton.mouseChildren = false;
 		resizeButton.addEventListener(MouseEvent.MOUSE_DOWN, resizePressed);
 		addChild(resizeButton);

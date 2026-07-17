@@ -4,7 +4,8 @@ import openfl.display.DisplayObject;
 import openfl.display.Bitmap;
 import openfl.display.Sprite;
 import openfl.events.Event;
-import pr2.runtime.PR2MovieClip;
+import pr2.assets.NativeAssetIds.StaticSvg;
+import pr2.assets.NativeAssets;
 
 /**
 	Ports `effects/BlockPiece.as`: an authored block fragment with randomized
@@ -15,8 +16,8 @@ class BlockPiece extends Sprite {
 	public static inline var FRICTION:Float = 0.95;
 	public static inline var FADE_RATE:Float = 0.01;
 
-	public var graphic(default, null):Null<PR2MovieClip>;
 	public var visual(default, null):DisplayObject;
+	public var selectedFrame(default, null):Int = 1;
 	private var velX:Float;
 	private var velY:Float;
 	private var rotVel:Float;
@@ -34,9 +35,7 @@ class BlockPiece extends Sprite {
 			visual = customVisual;
 			ownsCustomVisual = true;
 		} else {
-			graphic = PR2MovieClip.fromLinkage(linkage);
-			applyConstructorFrameScript(linkage, nextRandom);
-			visual = graphic;
+			visual = createAuthoredVisual(linkage, nextRandom);
 		}
 		addChild(visual);
 		x = startX;
@@ -51,10 +50,44 @@ class BlockPiece extends Sprite {
 		addEventListener(Event.ENTER_FRAME, tick);
 	}
 
-	private function applyConstructorFrameScript(linkage:String, nextRandom:Void->Float):Void {
-		if (linkage == "BrickPieceGraphic" || linkage == "MinePieceGraphic") {
-			graphic.gotoAndStop(Std.int(nextRandom() * graphic.totalFrames) + 1);
+	private function createAuthoredVisual(linkage:String, nextRandom:Void->Float):DisplayObject {
+		return switch (linkage) {
+			case "BrickPieceGraphic":
+				var frames:Array<StaticSvg> = [StaticSvg.BrickPiece1, StaticSvg.BrickPiece2, StaticSvg.BrickPiece3, StaticSvg.BrickPiece4, StaticSvg.BrickPiece5];
+				selectedFrame = Std.int(nextRandom() * frames.length) + 1;
+				NativeAssets.svg(frames[selectedFrame - 1]);
+			case "CrumblePieceGraphic":
+				selectedFrame = 1;
+				NativeAssets.svg(StaticSvg.CrumblePiece);
+			case "MinePieceGraphic":
+				selectedFrame = Std.int(nextRandom() * 6) + 1;
+				makeMinePiece(selectedFrame);
+			default:
+				throw 'Unsupported block piece graphic $linkage';
 		}
+	}
+
+	private function makeMinePiece(frame:Int):DisplayObject {
+		return switch (frame) {
+			case 1: stack([StaticSvg.MinePiece1Back, StaticSvg.MinePiece1Front]);
+			case 2: stack([StaticSvg.MinePiece2Back, StaticSvg.MinePiece2Middle, StaticSvg.MinePiece2Front]);
+			case 3: stack([StaticSvg.MinePiece3Back, StaticSvg.MinePiece3Front]);
+			case 4: NativeAssets.svg(StaticSvg.MinePiece4);
+			case 5: NativeAssets.svg(StaticSvg.MinePiece5);
+			case 6:
+				var art = NativeAssets.svg(StaticSvg.MinePiece6);
+				art.scaleX = art.scaleY = 0.050994873046875;
+				art.x = -2.4;
+				art.y = -2.35;
+				art;
+			default: throw 'Invalid mine piece frame $frame';
+		}
+	}
+
+	private function stack(ids:Array<StaticSvg>):Sprite {
+		var holder = new Sprite();
+		for (id in ids) holder.addChild(NativeAssets.svg(id));
+		return holder;
 	}
 
 	private function tick(_:Event):Void {
@@ -73,10 +106,6 @@ class BlockPiece extends Sprite {
 
 	public function remove():Void {
 		removeEventListener(Event.ENTER_FRAME, tick);
-		if (graphic != null) {
-			graphic.dispose();
-			graphic = null;
-		}
 		if (visual != null && visual.parent == this) {
 			removeChild(visual);
 		}

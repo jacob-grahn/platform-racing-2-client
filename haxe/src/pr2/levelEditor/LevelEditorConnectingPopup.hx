@@ -1,7 +1,5 @@
 package pr2.levelEditor;
 
-import pr2.lobby.LobbyArt;
-import pr2.lobby.LobbyArt.Binding;
 import pr2.lobby.LobbySession;
 import pr2.lobby.dialogs.Popup;
 import pr2.lobby.dialogs.MessagePopup;
@@ -13,15 +11,13 @@ import pr2.page.LobbyPage;
 import pr2.page.LoginSessionInstaller;
 import pr2.page.LoginSocketProbe;
 import pr2.page.LoginSocketProbe.LoginProbeStatus;
-import pr2.runtime.PR2MovieClip;
-import pr2.util.DisplayUtil;
+import pr2.ui.view.StatusPopupView;
 
 class LevelEditorConnectingPopup extends Popup {
-	public var art(default, null):Null<PR2MovieClip>;
+	public var art(default, null):Null<StatusPopupView>;
 	public var connectionAttempted(default, null):Bool = false;
 	private var probe:Null<LoginSocketProbe>;
 	private var gate:Null<LoginSessionGate>;
-	private var cancelBinding:Null<Binding>;
 	private var server:Null<ServerInfo>;
 	private var userName:String;
 	private var token:String;
@@ -30,13 +26,13 @@ class LevelEditorConnectingPopup extends Popup {
 
 	public function new() {
 		super();
-		art = PR2MovieClip.fromLinkage("ConnectingPopupGraphic", {maxNestedDepth: 4});
+		art = new StatusPopupView("Connecting...", true);
+		art.onClose = cancel;
 		addChild(art);
 		userName = LobbySession.userName;
 		token = LobbySession.token;
 		remember = LobbySession.remember;
 		server = LobbySession.server;
-		cancelBinding = LobbyArt.bind(DisplayUtil.findByName(art, "var_1"), cancel);
 		startConnection();
 	}
 
@@ -108,8 +104,6 @@ class LevelEditorConnectingPopup extends Popup {
 			return;
 		}
 		reconnectStopped = true;
-		LobbyArt.unbind(cancelBinding);
-		cancelBinding = null;
 		gate = null;
 		if (probe != null) {
 			probe.close();

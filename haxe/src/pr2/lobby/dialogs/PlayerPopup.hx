@@ -24,8 +24,7 @@ import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
 import pr2.net.ServerConfig;
 import pr2.net.TextLoader;
-import pr2.runtime.FlButton;
-import pr2.runtime.PR2MovieClip;
+import pr2.ui.controls.GameButton;
 import pr2.ui.GuildName;
 import pr2.util.AsyncRemovalGuard;
 import pr2.util.DisplayUtil;
@@ -54,7 +53,7 @@ class PlayerPopup extends Popup {
 		"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
 	];
 
-	private var art:Null<PR2MovieClip>;
+	private var art:Null<PlayerView>;
 	private var playerInfo:Null<DisplayObjectContainer>;
 	private var nameBox:Null<TextField>;
 	private var userName:String;
@@ -92,7 +91,7 @@ class PlayerPopup extends Popup {
 		PlayerPopup.instance = this;
 
 		this.userName = name;
-		art = PR2MovieClip.fromLinkage("PlayerPopupGraphic", {maxNestedDepth: 8});
+		art = new PlayerView();
 		nameBox = LobbyArt.text(art, "nameBox");
 		if (nameBox != null) {
 			nameBox.text = "-- " + name + " --";
@@ -545,8 +544,8 @@ class PlayerPopup extends Popup {
 		}
 	}
 
-	private function flButton(name:String):Null<FlButton> {
-		return Std.downcast(DisplayUtil.findByName(playerInfo, name), FlButton);
+	private function flButton(name:String):Null<GameButton> {
+		return Std.downcast(DisplayUtil.findByName(playerInfo, name), GameButton);
 	}
 
 	private function bindClick(target:Null<DisplayObject>, handler:Void->Void):Void {
@@ -554,7 +553,7 @@ class PlayerPopup extends Popup {
 			return;
 		}
 		var sprite = Std.downcast(target, Sprite);
-		if (sprite != null && !Std.isOfType(target, FlButton)) {
+		if (sprite != null && !Std.isOfType(target, GameButton)) {
 			sprite.buttonMode = true;
 			sprite.useHandCursor = true;
 			sprite.mouseChildren = false;

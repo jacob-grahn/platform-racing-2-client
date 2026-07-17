@@ -2,9 +2,10 @@ package pr2.lobby.account;
 
 import openfl.display.Sprite;
 import openfl.text.TextField;
+import openfl.text.TextFormat;
+import pr2.assets.NativeAssetIds.FontAsset;
+import pr2.assets.NativeAssets;
 import pr2.character.LocalCharacter;
-import pr2.lobby.LobbyArt;
-import pr2.runtime.PR2MovieClip;
 
 /**
 	Port of Flash `ui.StatsSelect`: the speed / acceleration / jumping sliders over
@@ -17,7 +18,7 @@ import pr2.runtime.PR2MovieClip;
 	stats through `Settings.LE_TEST_STATS`.
 **/
 class StatsSelect extends Sprite {
-	private var m:PR2MovieClip;
+	private var m:Sprite;
 	private var remainingBox:Null<TextField>;
 	private var speedSlider:StatSlider;
 	private var accelSlider:StatSlider;
@@ -33,9 +34,26 @@ class StatsSelect extends Sprite {
 		if (totalPoints < speed + accel + jumpn) {
 			totalPoints = speed + accel + jumpn;
 		}
-		m = PR2MovieClip.fromLinkage("PointsRemainingGraphic", {maxNestedDepth: 4});
+		m = new Sprite();
 		addChild(m);
-		remainingBox = LobbyArt.text(m, "textBox");
+		var label = new TextField();
+		label.x = 2;
+		label.y = 2;
+		label.width = 122;
+		label.height = 15;
+		label.selectable = false;
+		label.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 12, 0, true);
+		label.text = "Points Remaining:";
+		m.addChild(label);
+		remainingBox = new TextField();
+		remainingBox.name = "textBox";
+		remainingBox.x = 130.05;
+		remainingBox.y = 2;
+		remainingBox.width = 38;
+		remainingBox.height = 15;
+		remainingBox.selectable = false;
+		remainingBox.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 12, 0, true);
+		m.addChild(remainingBox);
 
 		speedSlider = new StatSlider("Speed", this);
 		accelSlider = new StatSlider("Acceleration", this);
@@ -108,7 +126,7 @@ class StatsSelect extends Sprite {
 		jumpnSlider.remove();
 		localChar = null;
 		if (m != null) {
-			m.dispose();
+			if (m.parent != null) m.parent.removeChild(m);
 			m = null;
 		}
 		if (parent != null) {

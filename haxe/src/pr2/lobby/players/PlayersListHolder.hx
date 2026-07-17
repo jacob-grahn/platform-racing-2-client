@@ -4,7 +4,7 @@ import openfl.display.DisplayObjectContainer;
 import pr2.lobby.players.PlayerListSort.SortState;
 import pr2.lobby.players.PlayerListSort.SortableRow;
 import pr2.page.Page;
-import pr2.runtime.PR2MovieClip;
+import pr2.ui.view.LoadingView;
 import pr2.ui.CustomScrollBar;
 
 /**
@@ -19,7 +19,7 @@ class PlayersListHolder extends Page {
 
 	private var holder:Null<DisplayObjectContainer>;
 	private var scrollBar:Null<CustomScrollBar>;
-	private var loadingGraphic:Null<PR2MovieClip>;
+	private var loadingGraphic:Null<LoadingView>;
 	private var listings:Array<PlayerListItem> = [];
 
 	private function attachHolder(holder:DisplayObjectContainer):Void {
@@ -29,7 +29,7 @@ class PlayersListHolder extends Page {
 		scrollBar.y = 20;
 		scrollBar.init(holder, 330, 325);
 		addChild(scrollBar);
-		loadingGraphic = PR2MovieClip.fromLinkage("LoadingGraphic", {maxNestedDepth: 4});
+		loadingGraphic = new LoadingView();
 		loadingGraphic.x = 85;
 		loadingGraphic.y = 140;
 		addChild(loadingGraphic);

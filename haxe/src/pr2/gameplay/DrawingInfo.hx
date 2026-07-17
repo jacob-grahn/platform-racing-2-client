@@ -3,15 +3,19 @@ package pr2.gameplay;
 import com.jiggmin.data.Data;
 import openfl.display.DisplayObject;
 import openfl.display.DisplayObjectContainer;
+import openfl.display.Sprite;
+import openfl.events.Event;
 import openfl.events.MouseEvent;
 import openfl.text.TextField;
+import openfl.text.TextFormat;
+import pr2.assets.NativeAssetIds.FontAsset;
+import pr2.assets.NativeAssets;
 import pr2.Constants;
 import pr2.display.Removable;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbySession;
 import pr2.lobby.dialogs.HoverPopup;
 import pr2.net.CommandHandler;
-import pr2.runtime.PR2MovieClip;
 import pr2.util.DisplayUtil;
 
 /**
@@ -20,7 +24,7 @@ import pr2.util.DisplayUtil;
 class DrawingInfo extends Removable {
 	private static inline final MAX_PLAYERS:Int = 4;
 
-	private var art:Null<PR2MovieClip>;
+	private var art:Null<Sprite>;
 	private var info1:Null<DisplayObjectContainer>;
 	private var info2:Null<DisplayObjectContainer>;
 	private var names:Array<Null<String>> = [];
@@ -33,6 +37,7 @@ class DrawingInfo extends Removable {
 	private var localTimeHover:Null<HoverPopup>;
 	private var localTimeHoverContent:String = "";
 	private var localTimeBox:Null<TextField>;
+	private var drawingFrame:Int = 0;
 
 	public function new(?commandHandler:CommandHandler, gameMode:String = "race", courseId:Int = 0, ?framesPlaying:Void->Int, ?frameRate:Void->Float,
 			?submitKongStat:String->String->Void) {
@@ -43,10 +48,13 @@ class DrawingInfo extends Removable {
 		this.framesPlaying = framesPlaying == null ? function():Int return 0 : framesPlaying;
 		this.frameRate = frameRate == null ? function():Float return Constants.FRAME_RATE : frameRate;
 		this.submitKongStat = submitKongStat;
-		art = PR2MovieClip.fromLinkage("DrawingInfoGraphic", {maxNestedDepth: 5});
+		art = new Sprite();
+		info2 = createInfoLayer("info2", 1, 1, 0xFFFFFF, 0.5);
+		info1 = createInfoLayer("info1", 0, 0, 0x000000, 0.5);
+		art.addChild(info2);
+		art.addChild(info1);
+		art.addEventListener(Event.ENTER_FRAME, animateDrawingLabels);
 		addChild(art);
-		info1 = Std.downcast(DisplayUtil.findByName(art, "info1"), DisplayObjectContainer);
-		info2 = Std.downcast(DisplayUtil.findByName(art, "info2"), DisplayObjectContainer);
 		for (i in 0...MAX_PLAYERS) {
 			names[i] = null;
 			setDrawingVisible(i, false);
@@ -55,6 +63,53 @@ class DrawingInfo extends Removable {
 		}
 		this.commandHandler.defineCommand("finishDrawing", onFinishDrawingCommand);
 		this.commandHandler.defineCommand("finishTimes", onFinishTimesCommand);
+	}
+
+	private function createInfoLayer(name:String, x:Float, y:Float, color:Int, alpha:Float):Sprite {
+		var layer = new Sprite();
+		layer.name = name;
+		layer.x = x;
+		layer.y = y;
+		layer.alpha = alpha;
+		for (row in 0...MAX_PLAYERS) {
+			var nameBox = createField("nameBox" + row, 2, 2 + row * 22, 84, color);
+			layer.addChild(nameBox);
+			var timeBox = createField("timeBox" + row, 93, 2 + row * 22, 129, color);
+			layer.addChild(timeBox);
+			var anim = new Sprite();
+			anim.name = "anim" + row;
+			anim.x = 91.1;
+			anim.y = row * 22;
+			var drawing = createField("drawingText", 2, 2, 64, color);
+			drawing.text = "drawing";
+			anim.addChild(drawing);
+			layer.addChild(anim);
+		}
+		return layer;
+	}
+
+	private function createField(name:String, x:Float, y:Float, width:Float, color:Int):TextField {
+		var field = new TextField();
+		field.name = name;
+		field.x = x;
+		field.y = y;
+		field.width = width;
+		field.height = 15;
+		field.selectable = false;
+		field.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 12, color);
+		return field;
+	}
+
+	private function animateDrawingLabels(_:Event):Void {
+		drawingFrame = (drawingFrame + 1) % 17;
+		var dots = drawingFrame < 4 ? "" : drawingFrame < 8 ? "." : drawingFrame < 12 ? ".." : "...";
+		for (layer in [info1, info2]) {
+			for (row in 0...MAX_PLAYERS) {
+				var anim = Std.downcast(DisplayUtil.findByName(layer, "anim" + row), DisplayObjectContainer);
+				var field = Std.downcast(DisplayUtil.findByName(anim, "drawingText"), TextField);
+				if (field != null) field.text = "drawing" + dots;
+			}
+		}
 	}
 
 	public function addPlayer(name:String, tempID:Int):Void {
@@ -92,7 +147,8 @@ class DrawingInfo extends Removable {
 		commandHandler.defineCommand("finishTimes", null);
 		commandHandler.defineCommand("finishDrawing", null);
 		if (art != null) {
-			art.dispose();
+			art.removeEventListener(Event.ENTER_FRAME, animateDrawingLabels);
+			if (art.parent != null) art.parent.removeChild(art);
 			art = null;
 		}
 		info1 = null;

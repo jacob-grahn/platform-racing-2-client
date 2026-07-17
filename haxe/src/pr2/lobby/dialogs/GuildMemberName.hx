@@ -1,24 +1,29 @@
 package pr2.lobby.dialogs;
 
 import openfl.display.Sprite;
+import openfl.display.Shape;
 import openfl.text.TextField;
+import openfl.text.TextFormat;
+import pr2.assets.NativeAssetIds.FontAsset;
+import pr2.assets.NativeAssets;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.NumberFormat;
 import pr2.lobby.chat.HtmlNameMaker;
-import pr2.runtime.PR2MovieClip;
-import pr2.util.DisplayUtil;
 
 /**
 	Port of Flash `dialogs.GuildMemberName`: one linked member row in
 	`GuildPopup`'s member list.
 **/
 class GuildMemberName extends Sprite {
-	private var art:Null<PR2MovieClip>;
+	private var art:Null<Sprite>;
 	private var htmlNameMaker:HtmlNameMaker;
 
 	public function new(member:Dynamic, owner:Bool) {
 		super();
-		art = PR2MovieClip.fromLinkage("GuildMemberNameGraphic", {maxNestedDepth: 5});
+		art = new Sprite();
+		art.addChild(createField("nameBox", 2, 2, 112));
+		art.addChild(createField("gpTodayBox", 122, 2, 65));
+		art.addChild(createField("gpTotalBox", 193, 2, 67));
 		addChild(art);
 
 		htmlNameMaker = new HtmlNameMaker();
@@ -35,15 +40,33 @@ class GuildMemberName extends Sprite {
 		setText("gpTotalBox", NumberFormat.withCommas(intField(member, "gp_total")));
 
 		if (owner) {
-			var hat = Std.downcast(DisplayUtil.findByName(art, "hat"), PR2MovieClip);
-			if (hat != null) {
-				hat.gotoAndStop(6);
-				var colorMC = Std.downcast(DisplayUtil.findByName(hat, "colorMC"), PR2MovieClip);
-				var colorMC2 = Std.downcast(DisplayUtil.findByName(hat, "colorMC2"), PR2MovieClip);
-				if (colorMC != null) colorMC.gotoAndStop(6);
-				if (colorMC2 != null) colorMC2.gotoAndStop(6);
-			}
+			var hat = new Shape();
+			hat.name = "hat";
+			hat.x = 6;
+			hat.y = 15;
+			hat.graphics.beginFill(0xFFD447);
+			hat.graphics.lineStyle(1, 0x8A6913);
+			hat.graphics.moveTo(0, 0);
+			hat.graphics.lineTo(4, -9);
+			hat.graphics.lineTo(8, -3);
+			hat.graphics.lineTo(13, -10);
+			hat.graphics.lineTo(16, 0);
+			hat.graphics.lineTo(0, 0);
+			hat.graphics.endFill();
+			art.addChild(hat);
 		}
+	}
+
+	private function createField(name:String, x:Float, y:Float, width:Float):TextField {
+		var field = new TextField();
+		field.name = name;
+		field.x = x;
+		field.y = y;
+		field.width = width;
+		field.height = 15;
+		field.selectable = false;
+		field.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 12, 0);
+		return field;
 	}
 
 	private function setText(name:String, value:String):Void {
@@ -70,7 +93,7 @@ class GuildMemberName extends Sprite {
 			htmlNameMaker = null;
 		}
 		if (art != null) {
-			art.dispose();
+			if (art.parent != null) art.parent.removeChild(art);
 			art = null;
 		}
 		if (parent != null) {

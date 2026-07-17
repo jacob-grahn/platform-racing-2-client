@@ -4,7 +4,6 @@ import com.jiggmin.data.Data;
 import openfl.events.MouseEvent;
 import pr2.lobby.dialogs.HoverPopup;
 import pr2.lobby.LobbyArt;
-import pr2.runtime.PR2MovieClip;
 import pr2.ui.SelectableButton;
 
 class GetReportedLevelsPopupItem extends SelectableButton {
@@ -12,12 +11,12 @@ class GetReportedLevelsPopupItem extends SelectableButton {
 	public final levelId:Int;
 	public final version:Int;
 	public final title:String;
-	public var art(default, null):PR2MovieClip;
+	public var art(default, null):LevelListItemView;
 	private var popup:Null<GetReportedLevelsPopup>;
 	private var info:Null<HoverPopup>;
 
 	public function new(level:Dynamic, popup:GetReportedLevelsPopup) {
-		super(PR2MovieClip.fromLinkage("GetReportedLevelsPopupItemGraphic", {maxNestedDepth: 4}));
+		super(new LevelListItemView(true));
 		this.level = level;
 		this.popup = popup;
 		art = cast selectableTarget;

@@ -1,5 +1,5 @@
 {
-  "_comment": "Representative symbols scored by tools/compare_symbol_render.py: each renders through the OpenFL vector path and is compared to its Adobe @4x reference raster. Per-case scale/bg/thresholdPercent/thresholdRms override the manifest defaults. thresholdRms is the meaningful gate; thresholdPercent is report-only (gradient/anti-alias diffs keep it near 100%). thresholdRms values lock in current fidelity as a regression baseline.",
+  "_comment": "Representative symbols scored by tools/compare_symbol_render.py: each renders through the OpenFL vector path and is compared to an Adobe @4x reference raster or an archival OpenFL referenceSymbol. Per-case scale/bg/thresholdPercent/thresholdRms override the manifest defaults. thresholdRms values lock in current fidelity as a regression baseline.",
   "scale": 4,
   "bg": "FFFFFF",
   "cases": [
@@ -20,6 +20,22 @@
       "symbol": "UI/Pages/Levels/Stamps/rock1",
       "reference": "test/baselines/vector-art/rock1@4x.png",
       "thresholdRms": 24
+    },
+    {
+      "name": "stamp-building1-native",
+      "symbol": "native-stamp:Building1",
+      "referenceSymbol": "MovieClips/Symbol 340",
+      "scale": 1,
+      "thresholdPercent": 2,
+      "thresholdRms": 1
+    },
+    {
+      "name": "stamp-cactus-native",
+      "symbol": "native-stamp:Cactus",
+      "referenceSymbol": "MovieClips/Symbol 349",
+      "scale": 2,
+      "thresholdPercent": 2,
+      "thresholdRms": 1
     }
   ]
 }

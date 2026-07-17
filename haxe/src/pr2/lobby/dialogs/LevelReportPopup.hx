@@ -1,10 +1,6 @@
 package pr2.lobby.dialogs;
 
-import openfl.text.TextField;
-import pr2.lobby.LobbyArt;
 import pr2.net.ServerConfig;
-import pr2.runtime.PR2MovieClip;
-import pr2.util.DisplayUtil;
 
 typedef LevelReportUploadFactory = String->Map<String, String>->String->Null<UploadingPopup>;
 
@@ -18,19 +14,17 @@ class LevelReportPopup extends Popup {
 	public final levelId:Int;
 	public final version:Int;
 
-	private var art:Null<PR2MovieClip>;
-	private var reportBinding:Null<LobbyArt.Binding>;
-	private var cancelBinding:Null<LobbyArt.Binding>;
+	private var art:Null<LevelReportView>;
 
 	public function new(levelId:Int = 0, version:Int = 0) {
 		super();
 		this.levelId = levelId;
 		this.version = version;
 
-		art = PR2MovieClip.fromLinkage("LevelReportPopupGraphic", {maxNestedDepth: 5});
+		art = new LevelReportView();
 		addChild(art);
-		reportBinding = LobbyArt.bind(DisplayUtil.findByName(art, "report_bt"), clickReport);
-		cancelBinding = LobbyArt.bind(DisplayUtil.findByName(art, "cancel_bt"), function():Void startFadeOut());
+		art.onReport = clickReport;
+		art.onCancel = startFadeOut;
 	}
 
 	private function clickReport():Void {
@@ -60,13 +54,10 @@ class LevelReportPopup extends Popup {
 	}
 
 	private function reasonText():String {
-		var field:Null<TextField> = LobbyArt.text(art, "reasonBox");
-		return field == null || field.text == null ? "" : field.text;
+		return art == null ? "" : art.reasonInput.text;
 	}
 
 	override public function remove():Void {
-		LobbyArt.unbind(reportBinding);
-		LobbyArt.unbind(cancelBinding);
 		if (art != null) {
 			art.dispose();
 			art = null;

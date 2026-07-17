@@ -6,7 +6,6 @@ import pr2.lobby.LobbyArt;
 import pr2.lobby.dialogs.AutoDismissPopup;
 import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
-import pr2.runtime.PR2MovieClip;
 import pr2.util.DisplayUtil;
 
 /**
@@ -26,7 +25,7 @@ import pr2.util.DisplayUtil;
 class CourseMenu extends AutoDismissPopup {
 	public static var instance:Null<CourseMenu> = null;
 
-	private var art:Null<PR2MovieClip>;
+	private var art:Null<CourseMenuView>;
 	private var slot:Null<Slot>;
 	private var textBox:Null<TextField>;
 	private var playButton:Null<openfl.display.DisplayObject>;
@@ -47,13 +46,12 @@ class CourseMenu extends AutoDismissPopup {
 		CourseMenu.instance = this;
 
 		this.slot = s;
-		art = PR2MovieClip.fromLinkage("CourseMenuGraphic", {maxNestedDepth: 6});
+		art = new CourseMenuView();
 		addChild(art);
 
 		// CourseMenuGraphic's countdown field was exported without an instance name;
 		// recover it as the single top-level dynamic text on the clip.
-		var fields = LobbyArt.directTextFields(art);
-		textBox = fields.length > 0 ? fields[0] : null;
+		textBox = art.countdown;
 
 		playButton = DisplayUtil.findByName(art, "play_bt");
 		cancelButton = DisplayUtil.findByName(art, "cancel_bt");

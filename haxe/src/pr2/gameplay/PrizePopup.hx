@@ -8,7 +8,8 @@ import pr2.lobby.LobbyArt.Binding;
 import pr2.lobby.NumberFormat;
 import pr2.lobby.dialogs.Popup;
 import pr2.runtime.EpicFlash;
-import pr2.runtime.PR2MovieClip;
+import pr2.gameplay.PrizePopupView.PrizePartSymbol;
+import pr2.gameplay.PrizePopupView.PrizePartSymbolChannel;
 import pr2.util.DisplayUtil;
 
 /**
@@ -26,7 +27,7 @@ import pr2.util.DisplayUtil;
 class PrizePopup extends Popup {
 	public static var instance:Null<PrizePopup>;
 
-	private var art:Null<PR2MovieClip>;
+	private var art:Null<PrizePopupView>;
 	private var target:Null<DisplayObjectContainer>;
 	private var epicFlash:EpicFlash = new EpicFlash();
 	private var closeBinding:Null<Binding>;
@@ -45,7 +46,7 @@ class PrizePopup extends Popup {
 			PrizePopup.instance.remove();
 		}
 		super(false);
-		art = PR2MovieClip.fromLinkage("PrizePopupGraphic", {maxNestedDepth: 6});
+		art = new PrizePopupView();
 
 		setVisible("exp", false);
 		setVisible("hat", false);
@@ -236,10 +237,13 @@ class PrizePopup extends Popup {
 	}
 
 	private function gotoChild(target:Null<DisplayObject>, frame:Int):Void {
-		var clip = Std.downcast(target, PR2MovieClip);
+		var clip = Std.downcast(target, PrizePartSymbol);
 		if (clip != null) {
 			clip.gotoAndStop(frame);
+			return;
 		}
+		var channel = Std.downcast(target, PrizePartSymbolChannel);
+		if (channel != null) channel.gotoAndStop(frame);
 	}
 
 	/** Mirrors `Data.aOrAn`: "an" before a vowel, otherwise "a". */

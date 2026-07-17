@@ -3,7 +3,6 @@ package pr2.gameplay;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
 import pr2.lobby.dialogs.Popup;
-import pr2.runtime.PR2MovieClip;
 import pr2.ui.RatingSelect;
 import pr2.util.DisplayUtil;
 
@@ -22,7 +21,7 @@ import pr2.util.DisplayUtil;
 class FinishedPage extends Popup {
 	public static var kongStatSubmit:Null<String->Int->Void> = null;
 
-	private var art:Null<PR2MovieClip>;
+	private var art:Null<FinishedPageView>;
 	private var stars:Null<RatingSelect>;
 	private var expGain:Null<ExpGain>;
 	private var onReturn:Null<Void->Void>;
@@ -37,7 +36,7 @@ class FinishedPage extends Popup {
 		this.onReturn = onReturn;
 		this.onClose = onClose;
 
-		art = PR2MovieClip.fromLinkage("FinishedPageGraphic", {maxNestedDepth: 6});
+		art = new FinishedPageView();
 		returnBinding = LobbyArt.bind(DisplayUtil.findByName(art, "return_bt"), clickReturn);
 		closeBinding = LobbyArt.bind(DisplayUtil.findByName(art, "close_bt"), function():Void startFadeOut());
 		addChild(art);

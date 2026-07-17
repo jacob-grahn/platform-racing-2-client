@@ -2,14 +2,12 @@ package pr2.lobby.dialogs;
 
 import openfl.display.DisplayObject;
 import pr2.lobby.account.Settings;
-import pr2.runtime.FlCheckBox;
-import pr2.runtime.PR2MovieClip;
-import pr2.util.DisplayUtil;
+import pr2.ui.controls.GameCheckBox;
 
 class OptionsSongsMenu extends AutoDismissPopup {
 	public static var instance:Null<OptionsSongsMenu> = null;
 
-	private var art:Null<PR2MovieClip>;
+	private var art:Null<OptionsSongsView>;
 
 	public function new(target:DisplayObject) {
 		if (OptionsSongsMenu.instance != null) {
@@ -17,18 +15,8 @@ class OptionsSongsMenu extends AutoDismissPopup {
 		}
 		super();
 		OptionsSongsMenu.instance = this;
-		art = PR2MovieClip.fromLinkage("OptionsSongsMenuGraphic", {maxNestedDepth: 4});
+		art = new OptionsSongsView(Settings.disabledSongs());
 		addChild(art);
-		var disabled = Settings.disabledSongs();
-		for (i in 1...22) {
-			if (i == 9 || i == 16) {
-				continue;
-			}
-			var check = songCheck(i);
-			if (check != null) {
-				check.selected = disabled.indexOf(Std.string(i)) < 0;
-			}
-		}
 		positionNear(target);
 		y -= 45;
 	}
@@ -70,7 +58,7 @@ class OptionsSongsMenu extends AutoDismissPopup {
 		super.remove();
 	}
 
-	private function songCheck(songId:Int):Null<FlCheckBox> {
-		return art == null ? null : Std.downcast(DisplayUtil.findByName(art, "song" + songId), FlCheckBox);
+	private function songCheck(songId:Int):Null<GameCheckBox> {
+		return art == null ? null : art.checks.get(songId);
 	}
 }

@@ -7,11 +7,14 @@ import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.events.MouseEvent;
 import openfl.text.TextField;
-import pr2.lobby.LobbyArt;
-import pr2.runtime.FlSlider;
-import pr2.runtime.FlSliderEvent;
-import pr2.runtime.PR2MovieClip;
-import pr2.util.DisplayUtil;
+import openfl.text.TextFieldType;
+import openfl.text.TextFormat;
+import pr2.assets.NativeAssetIds.FontAsset;
+import pr2.assets.NativeAssetIds.StaticSvg;
+import pr2.assets.NativeAssets;
+import pr2.ui.controls.ControlState;
+import pr2.ui.controls.GameSlider;
+import pr2.ui.controls.NativeControl;
 
 /**
 	Port of Flash `ui.StatSlider`: one labelled 0–100 stat row with a slider, a
@@ -30,9 +33,8 @@ class StatSlider extends Sprite {
 
 	public var value:Int = 0;
 
-	private var m:PR2MovieClip;
 	private var target:StatsSelect;
-	private var slider:Null<FlSlider>;
+	private var slider:Null<GameSlider>;
 	private var textBox:Null<TextField>;
 	private var decButton:Null<DisplayObject>;
 	private var incButton:Null<DisplayObject>;
@@ -44,31 +46,44 @@ class StatSlider extends Sprite {
 	public function new(statName:String, ss:StatsSelect) {
 		super();
 		this.target = ss;
-		m = PR2MovieClip.fromLinkage("StatSliderGraphic", {maxNestedDepth: 6});
-		addChild(m);
+		var nameBox = makeTextField(statName, false, 1.85, 0, 81, 14.55);
+		addChild(nameBox);
+		textBox = makeTextField("100", true, 93, 0, 33.95, 14.5);
+		textBox.scaleX = 1.00131225585938;
+		textBox.restrict = "0123456789";
+		textBox.addEventListener(Event.CHANGE, onTextChange);
+		addChild(textBox);
 
-		var nameBox = LobbyArt.text(m, "nameBox");
-		if (nameBox != null) {
-			nameBox.text = statName;
-		}
-		textBox = LobbyArt.text(m, "textBox");
-		if (textBox != null) {
-			textBox.restrict = "0123456789";
-			textBox.type = openfl.text.TextFieldType.INPUT;
-			textBox.addEventListener(Event.CHANGE, onTextChange);
-		}
-		slider = Std.downcast(DisplayUtil.findByName(m, "slider"), FlSlider);
-		if (slider != null) {
-			slider.setSize(STAT_SLIDER_TRACK_WIDTH, slider.height);
-			slider.minimum = 0;
-			slider.maximum = 100;
-			slider.addEventListener(Event.CHANGE, onSliderChange);
-			slider.addEventListener(FlSliderEvent.THUMB_RELEASE, onSliderThumbRelease);
-		}
-		decButton = DisplayUtil.findByName(m, "decBtn");
-		incButton = DisplayUtil.findByName(m, "incBtn");
+		slider = new GameSlider(0, 100, 0, 1);
+		slider.y = 20;
+		slider.setSize(STAT_SLIDER_TRACK_WIDTH, 16);
+		slider.addEventListener(Event.CHANGE, onSliderChange);
+		slider.onRelease = onSliderThumbRelease;
+		addChild(slider);
+
+		decButton = new StatArrowButton(false);
+		decButton.x = -8.7;
+		decButton.y = 7;
+		incButton = new StatArrowButton(true);
+		incButton.x = 133.3;
+		incButton.y = 7;
+		addChild(decButton);
+		addChild(incButton);
 		prepareButton(decButton);
 		prepareButton(incButton);
+	}
+
+	private function makeTextField(value:String, input:Bool, x:Float, y:Float, width:Float, height:Float):TextField {
+		var field = new TextField();
+		field.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 12, 0);
+		field.text = value;
+		field.type = input ? TextFieldType.INPUT : TextFieldType.DYNAMIC;
+		field.selectable = input;
+		field.x = x;
+		field.y = y;
+		field.width = width;
+		field.height = height;
+		return field;
 	}
 
 	private function prepareButton(button:Null<DisplayObject>):Void {
@@ -99,7 +114,7 @@ class StatSlider extends Sprite {
 		}
 	}
 
-	private function onSliderThumbRelease(_:FlSliderEvent):Void {
+	private function onSliderThumbRelease():Void {
 		if (target != null) {
 			target.saveLEStats();
 		}
@@ -231,7 +246,8 @@ class StatSlider extends Sprite {
 		}
 		if (slider != null) {
 			slider.removeEventListener(Event.CHANGE, onSliderChange);
-			slider.removeEventListener(FlSliderEvent.THUMB_RELEASE, onSliderThumbRelease);
+			slider.dispose();
+			slider = null;
 		}
 		if (decButton != null) {
 			decButton.removeEventListener(MouseEvent.MOUSE_DOWN, arrowBtnDown);
@@ -241,13 +257,36 @@ class StatSlider extends Sprite {
 			incButton.removeEventListener(MouseEvent.MOUSE_DOWN, arrowBtnDown);
 			incButton.removeEventListener(MouseEvent.MOUSE_UP, arrowBtnUp);
 		}
-		if (m != null) {
-			m.dispose();
-			m = null;
-		}
 		target = null;
 		if (parent != null) {
 			parent.removeChild(this);
 		}
+	}
+}
+
+private class StatArrowButton extends NativeControl {
+	private final pointsRight:Bool;
+	private var visual:Null<openfl.display.Shape>;
+
+	public function new(pointsRight:Bool) {
+		super(10, 16);
+		this.pointsRight = pointsRight;
+		redraw();
+	}
+
+	override public function redraw():Void {
+		if (visual != null && visual.parent == this) removeChild(visual);
+		if (disposed) return;
+		visual = NativeAssets.svg(switch (state()) {
+			case Disabled: StaticSvg.ArrowButtonDisabled;
+			case Hovered | Focused: StaticSvg.ArrowButtonOver;
+			case Pressed: StaticSvg.ArrowButtonDown;
+			case Normal | Selected: StaticSvg.ArrowButtonUp;
+		});
+		if (!pointsRight) {
+			visual.scaleX = -1;
+			visual.x = 10;
+		}
+		addChild(visual);
 	}
 }

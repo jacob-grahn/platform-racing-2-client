@@ -2,7 +2,6 @@ package pr2.lobby.dialogs;
 
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
-import pr2.runtime.PR2MovieClip;
 import pr2.Constants;
 import openfl.events.TextEvent;
 import openfl.text.TextField;
@@ -21,14 +20,14 @@ class CreditsPopup extends Popup {
 	public var artPage(default, null):Int = 1;
 	public var musicPage(default, null):Int = 1;
 
-	private var art:PR2MovieClip;
+	private var art:CreditsView;
 	private var closeBinding:Null<Binding>;
 	private var artNav:Null<TextField>;
 	private var musicNav:Null<TextField>;
 
 	public function new() {
 		super();
-		art = PR2MovieClip.fromLinkage("CreditsPopupGraphic", {maxNestedDepth: 4});
+		art = new CreditsView();
 		addChild(art);
 		setText("versionBox", "PR2 v" + Constants.VERSION + (Constants.BETA ? " Beta" : ""));
 		setText("buildBox", "Build: " + Constants.BUILD);

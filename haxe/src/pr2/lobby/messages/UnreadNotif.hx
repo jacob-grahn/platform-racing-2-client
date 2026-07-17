@@ -1,7 +1,9 @@
 package pr2.lobby.messages;
 
 import openfl.display.DisplayObjectContainer;
-import pr2.runtime.PR2MovieClip;
+import openfl.display.Sprite;
+import pr2.assets.NativeAssetIds.StaticSvg;
+import pr2.assets.NativeAssets;
 
 /**
 	Port of Flash `com.jiggmin.data.UnreadNotif`: the small unread-PM badge that
@@ -12,7 +14,7 @@ import pr2.runtime.PR2MovieClip;
 class UnreadNotif {
 	private static var lastReadTime:Float = 0;
 	private static var unreadMessages:Array<Float> = [];
-	private static var notificationIcon:Null<PR2MovieClip> = null;
+	private static var notificationIcon:Null<Sprite> = null;
 	private static var pmTab:Null<DisplayObjectContainer> = null;
 
 	private function new() {}
@@ -60,9 +62,14 @@ class UnreadNotif {
 		return notificationIcon != null && notificationIcon.parent != null;
 	}
 
-	private static function icon():PR2MovieClip {
+	private static function icon():Sprite {
 		if (notificationIcon == null) {
-			notificationIcon = PR2MovieClip.fromLinkage("UnreadNotifGraphic", {maxNestedDepth: 2});
+			var holder = new Sprite();
+			var art = NativeAssets.svg(StaticSvg.UnreadNotification);
+			art.x = 3.3;
+			art.y = 3.15;
+			holder.addChild(art);
+			notificationIcon = holder;
 		}
 		return notificationIcon;
 	}

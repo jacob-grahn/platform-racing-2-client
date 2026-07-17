@@ -2,6 +2,11 @@ package pr2.gameplay;
 
 import openfl.events.Event;
 import openfl.events.FocusEvent;
+import openfl.text.TextField;
+import openfl.text.TextFormat;
+import openfl.text.TextFormatAlign;
+import pr2.assets.NativeAssetIds.FontAsset;
+import pr2.assets.NativeAssets;
 import pr2.lobby.dialogs.ConfirmPopup;
 import pr2.lobby.dialogs.Popup;
 import pr2.lobby.dialogs.UploadingPopup;
@@ -11,8 +16,9 @@ import pr2.net.ServerConfig;
 import pr2.runtime.FlCheckBox;
 import pr2.runtime.FlComboBox;
 import pr2.runtime.FlTextInput;
-import pr2.runtime.PR2MovieClip;
 import pr2.gameplay.SpecialEvent.PlaceArtifactRequest;
+import pr2.ui.controls.GameButton;
+import pr2.ui.view.NativeView;
 import pr2.util.DisplayUtil;
 
 private typedef UploadFactory = String->Map<String, String>->String->(Dynamic->Void)->UploadingPopup;
@@ -27,7 +33,7 @@ class PlaceArtifact extends Popup {
 	private static var nowSeconds:Void->Int = function():Int return Std.int(Date.now().getTime() / 1000);
 
 	public final request:PlaceArtifactRequest;
-	private var art:Null<PR2MovieClip>;
+	private var art:Null<PlaceArtifactView>;
 	private var monthSel:Null<FlComboBox>;
 	private var daySel:Null<FlComboBox>;
 	private var yearSel:Null<FlComboBox>;
@@ -49,7 +55,7 @@ class PlaceArtifact extends Popup {
 			return;
 		}
 		PlaceArtifact.instance = this;
-		art = PR2MovieClip.fromLinkage("PlaceArtifactGraphic", {maxNestedDepth: 6});
+		art = new PlaceArtifactView();
 		addChild(art);
 		wireControls();
 		populateOptions(true);
@@ -291,5 +297,79 @@ class PlaceArtifact extends Popup {
 			case 11: "December";
 			default: "";
 		}
+	}
+}
+
+private class PlaceArtifactView extends NativeView {
+	public function new() {
+		super();
+		graphics.beginFill(0xF4F4F4, 0.98);
+		graphics.lineStyle(2, 0x666666);
+		graphics.drawRoundRect(-190, -115, 380, 230, 14, 14);
+		graphics.endFill();
+		addLabel("-- Place Artifact --", -145, -98, 290, 22, 16, true, TextFormatAlign.CENTER);
+		addLabel("Choose when the artifact should appear:", -160, -67, 320, 18, 11, false, TextFormatAlign.CENTER);
+		var month = combo("monthSel", -166, -34, 105);
+		var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+		for (index in 0...months.length) month.addItem({label: months[index], data: index});
+		combo("daySel", -54, -34, 62);
+		combo("yearSel", 15, -34, 78);
+		var hour = input("hourBox", -89, 4, 45);
+		hour.maxChars = 2;
+		addLabel(":", -43, 7, 12, 18, 12, true, TextFormatAlign.CENTER);
+		var minute = input("minBox", -29, 4, 45);
+		minute.maxChars = 2;
+		var merid = combo("meridSel", 22, 4, 62);
+		merid.addItem({label: "AM", data: 0});
+		merid.addItem({label: "PM", data: 1});
+		var now = new FlCheckBox();
+		now.name = "now_chk";
+		now.x = 102;
+		now.y = 5;
+		now.label = "Now";
+		addChild(now);
+		button("place_bt", "Place", -94, 66);
+		button("cancel_bt", "Cancel", 10, 66);
+	}
+
+	private function combo(name:String, x:Float, y:Float, width:Float):FlComboBox {
+		var control = new FlComboBox();
+		control.name = name;
+		control.x = x;
+		control.y = y;
+		control.setSize(width, 22);
+		addChild(control);
+		return control;
+	}
+
+	private function input(name:String, x:Float, y:Float, width:Float):FlTextInput {
+		var control = new FlTextInput();
+		control.name = name;
+		control.x = x;
+		control.y = y;
+		control.setSize(width, 22);
+		addChild(control);
+		return control;
+	}
+
+	private function button(name:String, label:String, x:Float, y:Float):Void {
+		var control = ownControl(new GameButton(label));
+		control.name = name;
+		control.x = x;
+		control.y = y;
+		control.setSize(84, 24);
+		addChild(control);
+	}
+
+	private function addLabel(value:String, x:Float, y:Float, width:Float, height:Float, size:Int, bold:Bool, align:TextFormatAlign):Void {
+		var field = new TextField();
+		field.x = x;
+		field.y = y;
+		field.width = width;
+		field.height = height;
+		field.selectable = false;
+		field.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), size, 0x222222, bold, null, null, null, null, align);
+		field.text = value;
+		addChild(field);
 	}
 }

@@ -1,20 +1,20 @@
 package pr2.gameplay;
 
 import openfl.events.Event;
+import openfl.display.Sprite;
 import pr2.audio.GameMusic;
 import pr2.audio.MusicCatalog;
 import pr2.audio.MusicCatalog.MusicTrack;
 import pr2.display.Removable;
 import pr2.lobby.account.Settings;
 import pr2.runtime.FlComboBox;
-import pr2.runtime.PR2MovieClip;
 import pr2.ui.StageFocus;
 
 /**
 	Port of Flash `gameplay.MusicSelection` and its `ui.GameSound` dropdown.
 **/
 class MusicSelection extends Removable {
-	private var art:Null<PR2MovieClip>;
+	private var art:Null<Sprite>;
 	private var music:Null<GameMusic>;
 	private var songs:Array<MusicTrack>;
 
@@ -22,7 +22,11 @@ class MusicSelection extends Removable {
 
 	public function new(?music:GameMusic) {
 		super();
-		art = PR2MovieClip.fromLinkage("MusicSelectionGraphic", {maxNestedDepth: 5});
+		art = new Sprite();
+		art.graphics.beginFill(0xECECEC, 0.94);
+		art.graphics.lineStyle(1, 0x777777);
+		art.graphics.drawRoundRect(0, 0, 214, 36, 8, 8);
+		art.graphics.endFill();
 		addChild(art);
 
 		this.music = music == null ? new GameMusic() : music;
@@ -76,7 +80,7 @@ class MusicSelection extends Removable {
 			music = null;
 		}
 		if (art != null) {
-			art.dispose();
+			if (art.parent != null) art.parent.removeChild(art);
 			art = null;
 		}
 		songs = [];

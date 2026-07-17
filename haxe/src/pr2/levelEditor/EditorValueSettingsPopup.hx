@@ -6,16 +6,15 @@ import openfl.events.Event;
 import pr2.app.AppStage;
 import pr2.lobby.dialogs.AutoDismissController;
 import pr2.runtime.FlComponents;
-import pr2.runtime.FlTextInput;
-import pr2.runtime.PR2MovieClip;
+import pr2.ui.controls.GameTextInput;
 import pr2.ui.StageFocus;
 import pr2.util.DisplayUtil;
 
 class EditorValueSettingsPopup extends Sprite {
 	public final editor:LevelEditor;
-	public final art:PR2MovieClip;
+	public final art:EditorSettingsMenuView;
 	public final settingId:String;
-	private var valueInput:Null<FlTextInput>;
+	private var valueInput:Null<GameTextInput>;
 	private var autoDismiss:Null<AutoDismissController>;
 	private var removed:Bool = false;
 	private var defaultVal:String = "0";
@@ -24,7 +23,7 @@ class EditorValueSettingsPopup extends Sprite {
 		super();
 		this.editor = editor;
 		this.settingId = settingId;
-		art = PR2MovieClip.fromLinkage("ValueMenuGraphic", {maxNestedDepth: 6});
+		art = new EditorSettingsMenuView("value");
 		addChild(art);
 		configure();
 		mountNear(target);
@@ -59,7 +58,7 @@ class EditorValueSettingsPopup extends Sprite {
 			autoDismiss = null;
 		}
 		if (valueInput != null) {
-			valueInput.removeEventListener(Event.CHANGE, commitValue);
+			valueInput.textField.removeEventListener(Event.CHANGE, commitValue);
 		}
 		art.dispose();
 		if (parent != null) {
@@ -80,15 +79,15 @@ class EditorValueSettingsPopup extends Sprite {
 		if (descBox != null) {
 			descBox.htmlText = spec.desc;
 		}
-		valueInput = Std.downcast(DisplayUtil.findByName(art, "valueBox"), FlTextInput);
+		valueInput = Std.downcast(DisplayUtil.findByName(art, "valueBox"), GameTextInput);
 		if (valueInput != null) {
 			valueInput.text = spec.value;
-			valueInput.maxChars = spec.maxChars;
+			valueInput.textField.maxChars = spec.maxChars;
 			if (spec.restrict != null) {
-				valueInput.restrict = spec.restrict;
+				valueInput.textField.restrict = spec.restrict;
 			}
-			valueInput.displayAsPassword = spec.displayAsPassword;
-			valueInput.addEventListener(Event.CHANGE, commitValue);
+			valueInput.textField.displayAsPassword = spec.displayAsPassword;
+			valueInput.textField.addEventListener(Event.CHANGE, commitValue);
 			if (AppStage.stage != null) {
 				AppStage.stage.focus = valueInput.textField;
 			}

@@ -2,14 +2,12 @@ package pr2.lobby.dialogs;
 
 import openfl.display.DisplayObject;
 import pr2.lobby.account.Settings;
-import pr2.runtime.FlCheckBox;
-import pr2.runtime.PR2MovieClip;
-import pr2.util.DisplayUtil;
+import pr2.ui.controls.GameCheckBox;
 
 class OptionsArtQualityMenu extends AutoDismissPopup {
 	public static var instance:Null<OptionsArtQualityMenu> = null;
 
-	private var art:Null<PR2MovieClip>;
+	private var art:Null<OptionsArtQualityView>;
 
 	public function new(target:DisplayObject) {
 		if (OptionsArtQualityMenu.instance != null) {
@@ -17,12 +15,8 @@ class OptionsArtQualityMenu extends AutoDismissPopup {
 		}
 		super();
 		OptionsArtQualityMenu.instance = this;
-		art = PR2MovieClip.fromLinkage("OptionsArtQualityMenuGraphic", {maxNestedDepth: 4});
+		art = new OptionsArtQualityView(Settings.getValue(Settings.ART_LOSSLESS_QUALITY, false));
 		addChild(art);
-		var check = losslessCheck();
-		if (check != null) {
-			check.selected = Settings.getValue(Settings.ART_LOSSLESS_QUALITY, false);
-		}
 		positionNear(target);
 	}
 
@@ -56,7 +50,7 @@ class OptionsArtQualityMenu extends AutoDismissPopup {
 		super.remove();
 	}
 
-	private function losslessCheck():Null<FlCheckBox> {
-		return art == null ? null : Std.downcast(DisplayUtil.findByName(art, "lossless_chk"), FlCheckBox);
+	private function losslessCheck():Null<GameCheckBox> {
+		return art == null ? null : art.losslessCheck;
 	}
 }

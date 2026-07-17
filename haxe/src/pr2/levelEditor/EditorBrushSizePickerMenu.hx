@@ -4,18 +4,16 @@ import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.geom.Point;
 import pr2.lobby.dialogs.AutoDismissController;
-import pr2.runtime.FlSlider;
-import pr2.runtime.FlSliderEvent;
-import pr2.runtime.FlTextInput;
-import pr2.runtime.PR2MovieClip;
+import pr2.ui.controls.GameSlider;
+import pr2.ui.controls.GameTextInput;
 import pr2.util.DisplayUtil;
 
 class EditorBrushSizePickerMenu extends Sprite {
 	public final editor:LevelEditor;
 	public final target:EditorBrushSizePickerButton;
-	public final art:PR2MovieClip;
-	private var slider:Null<FlSlider>;
-	private var textInput:Null<FlTextInput>;
+	public final art:BrushSizeMenuView;
+	private var slider:Null<GameSlider>;
+	private var textInput:Null<GameTextInput>;
 	private var autoDismiss:Null<AutoDismissController>;
 	private var removed:Bool = false;
 
@@ -23,27 +21,20 @@ class EditorBrushSizePickerMenu extends Sprite {
 		super();
 		this.editor = editor;
 		this.target = target;
-		art = PR2MovieClip.fromLinkage("SizePickerMenuGraphic", {maxNestedDepth: 6});
+		art = new BrushSizeMenuView();
 		addChild(art);
 		var origin = editor.globalToLocal(target.localToGlobal(new Point(0, 0)));
 		x = origin.x - 85;
 		y = origin.y - 35;
-		slider = Std.downcast(DisplayUtil.findByName(art, "slider"), FlSlider);
-		textInput = Std.downcast(DisplayUtil.findByName(art, "textBox"), FlTextInput);
+		slider = art.slider;
+		textInput = art.textInput;
 		if (slider != null) {
-			// Flash's Slider component has an 80px authored track. The instance is
-			// scaled to 150px in SizePickerMenuGraphic and centered at x = 0.
-			slider.setSize(80, 16);
-			slider.minimum = 1;
-			slider.maximum = 255;
-			slider.snapInterval = 1;
-			slider.addEventListener(FlSliderEvent.CHANGE, slideChange);
-			slider.addEventListener(FlSliderEvent.THUMB_DRAG, slideChange);
+			slider.addEventListener(Event.CHANGE, slideChange);
 		}
 		if (textInput != null) {
-			textInput.restrict = "0-9";
-			textInput.maxChars = 3;
-			textInput.addEventListener(Event.CHANGE, textChange);
+			textInput.textField.restrict = "0-9";
+			textInput.textField.maxChars = 3;
+			textInput.textField.addEventListener(Event.CHANGE, textChange);
 		}
 		setSize(editor.brushSize);
 		autoDismiss = new AutoDismissController(this, remove);
@@ -74,12 +65,11 @@ class EditorBrushSizePickerMenu extends Sprite {
 			autoDismiss = null;
 		}
 		if (slider != null) {
-			slider.removeEventListener(FlSliderEvent.CHANGE, slideChange);
-			slider.removeEventListener(FlSliderEvent.THUMB_DRAG, slideChange);
+			slider.removeEventListener(Event.CHANGE, slideChange);
 			slider = null;
 		}
 		if (textInput != null) {
-			textInput.removeEventListener(Event.CHANGE, textChange);
+			textInput.textField.removeEventListener(Event.CHANGE, textChange);
 			textInput = null;
 		}
 		if (parent != null) {
@@ -92,8 +82,8 @@ class EditorBrushSizePickerMenu extends Sprite {
 		}
 	}
 
-	private function slideChange(event:FlSliderEvent):Void {
-		setSize(event.value);
+	private function slideChange(_:Event):Void {
+		if (slider != null) setSize(slider.value);
 	}
 
 	private function textChange(_:Event):Void {

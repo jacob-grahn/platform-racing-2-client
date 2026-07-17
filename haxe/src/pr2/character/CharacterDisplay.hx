@@ -10,6 +10,7 @@ import openfl.utils.Assets;
 import haxe.ds.ObjectMap;
 import pr2.character.CharacterAppearance.CharacterPartIds;
 import pr2.runtime.ExplicitBitmapCache;
+import pr2.runtime.CharacterRigAsset;
 import pr2.runtime.PR2MovieClip;
 
 typedef CharacterColors = {
@@ -86,7 +87,7 @@ class CharacterDisplay extends Sprite {
 		// is instantiated like the others and setState below selects the active one
 		// — previously the frozen state was missing and the character vanished while
 		// frozen (e.g. during the rotate-block spin).
-		clip = PR2MovieClip.fromLinkage("CharacterGraphic", {maxNestedDepth: 12});
+		clip = CharacterRigAsset.create();
 		addChild(clip);
 		clip.stopAll();
 

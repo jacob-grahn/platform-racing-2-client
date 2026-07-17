@@ -2,8 +2,7 @@ package pr2.lobby.dialogs;
 
 import openfl.display.DisplayObject;
 import pr2.character.Parts;
-import pr2.runtime.FlCheckBox;
-import pr2.runtime.PR2MovieClip;
+import pr2.ui.controls.GameCheckBox;
 import pr2.util.DisplayUtil;
 
 /** Read-only level-info hat hover menu, ported from Flash `dialogs.HatsMenu`. */
@@ -12,16 +11,16 @@ class HatsMenu extends InfoPopup {
 	private static final HIGHEST_HAT_ID:Int = Parts.getPartArray("HAT").length + 1;
 	private static inline var ARTIFACT_HAT_ID:Int = 14;
 
-	private var art:Null<PR2MovieClip>;
-	private var checks:Map<Int, FlCheckBox> = new Map();
+	private var art:Null<ChecklistMenuView>;
+	private var checks:Map<Int, GameCheckBox> = new Map();
 
 	public function new(hatsStr:Null<String>, gameMode:Null<String>, target:DisplayObject) {
 		super();
-		art = PR2MovieClip.fromLinkage("HatsMenuGraphic", {maxNestedDepth: 6});
+		art = new ChecklistMenuView("hats");
 		addChild(art);
 		var allowed = parseHats(hatsStr, gameMode);
 		for (hatId in LOWEST_HAT_ID...HIGHEST_HAT_ID + 1) {
-			var check = Std.downcast(DisplayUtil.findByName(art, "hat" + hatId), FlCheckBox);
+			var check = Std.downcast(DisplayUtil.findByName(art, "hat" + hatId), GameCheckBox);
 			if (check != null) {
 				check.selected = allowed.indexOf(hatId) >= 0;
 				check.enabled = false;

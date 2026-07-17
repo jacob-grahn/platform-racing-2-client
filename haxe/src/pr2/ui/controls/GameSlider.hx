@@ -11,6 +11,7 @@ class GameSlider extends NativeControl {
 	public var step(default, null):Float;
 	public var value(default, set):Float;
 	public var onChange:Null<Float->Void>;
+	public var onRelease:Null<Void->Void>;
 	private final thumb:openfl.display.Sprite;
 	private var dragging:Bool = false;
 
@@ -44,6 +45,7 @@ class GameSlider extends NativeControl {
 		removeEventListener(MouseEvent.CLICK, selectFromMouse);
 		removeStageDragListeners();
 		onChange = null;
+		onRelease = null;
 		super.dispose();
 	}
 	private function set_value(next:Float):Float {
@@ -65,7 +67,12 @@ class GameSlider extends NativeControl {
 		if (!dragging) return;
 		setValueFromPosition(globalToLocal(new openfl.geom.Point(event.stageX, event.stageY)).x);
 	}
-	private function endDrag(_:MouseEvent):Void { dragging = false; removeStageDragListeners(); }
+	private function endDrag(_:MouseEvent):Void {
+		if (!dragging) return;
+		dragging = false;
+		removeStageDragListeners();
+		if (onRelease != null) onRelease();
+	}
 	private function removeStageDragListeners():Void {
 		if (stage == null) return;
 		stage.removeEventListener(MouseEvent.MOUSE_MOVE, drag);

@@ -6,8 +6,7 @@ import pr2.lobby.dialogs.MessagePopup;
 import pr2.lobby.dialogs.Popup;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
-import pr2.runtime.FlCheckBox;
-import pr2.runtime.PR2MovieClip;
+import pr2.ui.controls.GameCheckBox;
 import pr2.util.DisplayUtil;
 import pr2.levelEditor.EditorPersistenceTypes.SaveLevelUploadFactory;
 
@@ -15,13 +14,13 @@ class SaveLevelPopup extends Popup {
 	public static var uploadFactory:SaveLevelUploadFactory = defaultUpload;
 
 	public final editor:LevelEditor;
-	public var art(default, null):Null<PR2MovieClip>;
+	public var art(default, null):Null<SaveLevelView>;
 	private var bindings:Array<Binding> = [];
 
 	public function new(editor:LevelEditor) {
 		super();
 		this.editor = editor;
-		art = PR2MovieClip.fromLinkage("SaveLevelPopupGraphic", {maxNestedDepth: 6});
+		art = new SaveLevelView();
 		addChild(art);
 		var titleBox = titleField();
 		if (titleBox != null) {
@@ -127,12 +126,12 @@ class SaveLevelPopup extends Popup {
 		return LobbyArt.text(art, "noteBox");
 	}
 
-	private function publishCheck():Null<FlCheckBox> {
-		return Std.downcast(DisplayUtil.findByName(art, "publish_chk"), FlCheckBox);
+	private function publishCheck():Null<GameCheckBox> {
+		return Std.downcast(DisplayUtil.findByName(art, "publish_chk"), GameCheckBox);
 	}
 
-	private function newestCheck():Null<FlCheckBox> {
-		return Std.downcast(DisplayUtil.findByName(art, "newest_chk"), FlCheckBox);
+	private function newestCheck():Null<GameCheckBox> {
+		return Std.downcast(DisplayUtil.findByName(art, "newest_chk"), GameCheckBox);
 	}
 
 	private static function fieldText(field:Null<TextField>):String {

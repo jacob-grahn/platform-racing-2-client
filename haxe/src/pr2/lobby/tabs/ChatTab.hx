@@ -15,7 +15,6 @@ import pr2.lobby.dialogs.ChatRoomInfoPopup;
 import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
 import pr2.page.Page;
-import pr2.runtime.PR2MovieClip;
 import pr2.util.DisplayUtil;
 
 /**
@@ -30,7 +29,7 @@ import pr2.util.DisplayUtil;
 class ChatTab extends Page {
 	public static var instance(default, null):Null<ChatTab> = null;
 
-	private var art:Null<PR2MovieClip>;
+	private var art:Null<ChatView>;
 	private var roomBox:Null<TextField>;
 	private var chatInput:Null<TextField>;
 	private var textBox:Null<TextField>;
@@ -57,7 +56,7 @@ class ChatTab extends Page {
 	}
 
 	override public function initialize():Void {
-		art = PR2MovieClip.fromLinkage("ChatGraphic", {maxNestedDepth: 8});
+		art = new ChatView();
 		addChild(art);
 
 		roomBox = LobbyArt.text(art, "roomBox");

@@ -7,7 +7,7 @@ import openfl.ui.Keyboard;
 import pr2.character.Character;
 import pr2.display.Removable;
 import pr2.effects.Effect;
-import pr2.effects.LaserShotTimeline;
+import pr2.effects.LaserShotView;
 import pr2.effects.Slash;
 import pr2.effects.StingEffect;
 import pr2.effects.ZapEffect;
@@ -539,11 +539,10 @@ class CharacterLifecycleTest {
 		assertTrue(LobbySocket.lastSent().indexOf("add_effect`Laser`") == 0, "laser emits Flash add_effect payload");
 		assertTrue(LobbySocket.lastSent().indexOf("`right`0`0") > 0, "laser payload includes direction, rotation, and temp id");
 		assertEquals(1, laser.eggRound.activeAttackVisualCount(), "laser mounts the authored local shot visual");
-		var laserClip = Std.downcast(laser.effectBackground.getChildAt(laser.effectBackground.numChildren - 1), PR2MovieClip);
-		assertTrue(laserClip != null, "local laser item uses a movie clip visual");
-		assertEquals("LaserShotGraphic", laserClip.symbol.linkageClassName, "local laser item uses the authored laser graphic");
+		var laserClip = Std.downcast(laser.effectBackground.getChildAt(laser.effectBackground.numChildren - 1), LaserShotView);
+		assertTrue(laserClip != null, "local laser item uses the native laser visual");
 		assertEquals(2, laserClip.currentFrame, "local laser item starts stopped on idle frame 2");
-		assertTrue(laserClip.getChildByName(LaserShotTimeline.TRAVEL_BEAM_NAME) != null,
+		assertTrue(laserClip.getChildByName(LaserShotView.TRAVEL_BEAM_NAME) != null,
 			"local laser item has a guaranteed visible travel beam");
 		var laserCameraOffset = laser.levelRenderer.cameraOffset();
 		assertEquals(laserCameraOffset.x, laser.effectBackground.transform.matrix.tx,
@@ -552,7 +551,7 @@ class CharacterLifecycleTest {
 			"attack effect layer follows the editor/world camera y offset");
 		laserClip.dispatchEvent(new Event(Event.ENTER_FRAME));
 		assertEquals(2, laserClip.currentFrame, "local laser item does not auto-play while idle");
-		LaserShotTimeline.playHit(laserClip);
+		laserClip.playHit();
 		for (_ in 0...20) {
 			laserClip.dispatchEvent(new Event(Event.ENTER_FRAME));
 		}
@@ -563,13 +562,10 @@ class CharacterLifecycleTest {
 		assertTrue(LobbySocket.lastSent().indexOf("add_effect`IceWave`") == 0, "ice wave emits Flash add_effect payload");
 		assertTrue(LobbySocket.lastSent().indexOf("`0`0`0") > 0, "ice wave payload includes angle, rotation, and temp id");
 		assertEquals(3, ice.eggRound.activeAttackVisualCount(), "ice wave mounts the three authored local wave visuals");
-		var firstIce = Std.downcast(ice.effectBackground.getChildAt(ice.effectBackground.numChildren - 3), PR2MovieClip);
-		var secondIce = Std.downcast(ice.effectBackground.getChildAt(ice.effectBackground.numChildren - 2), PR2MovieClip);
-		var thirdIce = Std.downcast(ice.effectBackground.getChildAt(ice.effectBackground.numChildren - 1), PR2MovieClip);
-		assertTrue(firstIce != null && secondIce != null && thirdIce != null, "local ice wave item uses movie clip visuals");
-		assertEquals("IceWaveGraphic", firstIce.symbol.linkageClassName, "local ice wave item uses the authored first graphic");
-		assertEquals("IceWaveGraphic", secondIce.symbol.linkageClassName, "local ice wave item uses the authored second graphic");
-		assertEquals("IceWaveGraphic", thirdIce.symbol.linkageClassName, "local ice wave item uses the authored third graphic");
+		var firstIce = Std.downcast(ice.effectBackground.getChildAt(ice.effectBackground.numChildren - 3), Sprite);
+		var secondIce = Std.downcast(ice.effectBackground.getChildAt(ice.effectBackground.numChildren - 2), Sprite);
+		var thirdIce = Std.downcast(ice.effectBackground.getChildAt(ice.effectBackground.numChildren - 1), Sprite);
+		assertTrue(firstIce != null && secondIce != null && thirdIce != null, "local ice wave item uses native visuals");
 		assertTrue(firstIce.getChildByName("iceWaveCore") != null && secondIce.getChildByName("iceWaveCore") != null
 			&& thirdIce.getChildByName("iceWaveCore") != null, "local ice wave shots have visible beam cores");
 		assertEquals(0.0, firstIce.rotation, "local ice wave item centers the first wave");
@@ -789,8 +785,8 @@ class CharacterLifecycleTest {
 
 		handler.dispatch("addEffect", ["Laser", "100", "90", "right", "0", "6"]);
 		assertEquals(1, course.eggRound.activeAttackVisualCount(), "remote laser mounts an attack visual");
-		var laser = Std.downcast(course.effectBackground.getChildAt(course.effectBackground.numChildren - 1), PR2MovieClip);
-		assertTrue(laser != null, "remote laser uses a movie clip visual");
+		var laser = Std.downcast(course.effectBackground.getChildAt(course.effectBackground.numChildren - 1), LaserShotView);
+		assertTrue(laser != null, "remote laser uses the native laser visual");
 		assertEquals(2, laser.currentFrame, "remote laser starts on the stopped idle frame");
 		assertTrue(laser.getBounds(laser).width > 1, "remote laser travel frame has visible authored artwork");
 
@@ -840,7 +836,7 @@ class CharacterLifecycleTest {
 			function(x:Int, y:Int):Void hitSounds.push('$x,$y'));
 		var level = new ServerLevel(0xffffff, [new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 30, 0)]);
 		round.mountAttackVisual("Laser`0`15`right`0`7");
-		var laser = Std.downcast(layer.getChildAt(0), PR2MovieClip);
+		var laser = Std.downcast(layer.getChildAt(0), LaserShotView);
 
 		round.step(level);
 		assertEquals(29.0, laser.x, "laser continues travelling before reaching a block");
@@ -992,12 +988,12 @@ class CharacterLifecycleTest {
 		assertEquals(expectedCount, round.activeAttackVisualCount(), message);
 		assertEquals(expectedCount + 1, layer.numChildren, '$message: visuals share the egg display layer');
 		var visual = layer.getChildAt(1);
-		var laserClip = Std.downcast(visual, PR2MovieClip);
+		var laserClip = Std.downcast(visual, LaserShotView);
 		if (expectedType == "Laser") {
 			assertEquals(2, laserClip.currentFrame, "laser attack visual starts stopped on idle frame 2");
 			laserClip.dispatchEvent(new Event(Event.ENTER_FRAME));
 			assertEquals(2, laserClip.currentFrame, "laser attack visual does not auto-play while idle");
-			LaserShotTimeline.playHit(laserClip);
+			laserClip.playHit();
 			for (_ in 0...20) {
 				laserClip.dispatchEvent(new Event(Event.ENTER_FRAME));
 			}
@@ -1010,15 +1006,15 @@ class CharacterLifecycleTest {
 		assertEquals(0, layer.numChildren, '$message: clear removes mounted visuals');
 	}
 
-	private static function assertEggFoot(display:PR2MovieClip, name:String, expectedColor:Int):Void {
-		var foot = Std.downcast(DisplayUtil.findByName(display, name), PR2MovieClip);
+	private static function assertEggFoot(display:EggView, name:String, expectedColor:Int):Void {
+		var foot = Std.downcast(DisplayUtil.findByName(display, name), pr2.gameplay.EggView.EggPartView);
 		assertTrue(foot != null, '$name foot exists');
 		assertEquals(1, foot.currentFrame, '$name foot stops on frame 1');
-		var colorMC = Std.downcast(DisplayUtil.findByName(foot, "colorMC"), PR2MovieClip);
+		var colorMC = Std.downcast(DisplayUtil.findByName(foot, "colorMC"), pr2.gameplay.EggView.EggPartChannel);
 		assertTrue(colorMC != null, '$name colorMC exists');
 		assertEquals(1, colorMC.currentFrame, '$name colorMC stops on frame 1');
 		assertEquals(expectedColor, colorMC.transform.colorTransform.color, '$name colorMC uses first random color');
-		var colorMC2 = Std.downcast(DisplayUtil.findByName(foot, "colorMC2"), PR2MovieClip);
+		var colorMC2 = Std.downcast(DisplayUtil.findByName(foot, "colorMC2"), pr2.gameplay.EggView.EggPartChannel);
 		assertTrue(colorMC2 != null, '$name colorMC2 exists');
 		assertEquals(1, colorMC2.currentFrame, '$name colorMC2 stops on frame 1');
 		assertEquals(false, colorMC2.visible, '$name colorMC2 is hidden');

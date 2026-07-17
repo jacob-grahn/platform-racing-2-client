@@ -4,11 +4,14 @@ package pr2.page;
 import js.Browser;
 #end
 import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
 import openfl.display.StageQuality;
 import openfl.events.MouseEvent;
 import pr2.app.AppStage;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyLeft;
+import pr2.lobby.LobbyBottomButtonsView;
+import pr2.lobby.LobbyBackgroundView;
 import pr2.lobby.LobbyPopups;
 import pr2.lobby.LobbyRight;
 import pr2.lobby.LobbySession;
@@ -16,7 +19,6 @@ import pr2.net.FormPostClient;
 import pr2.net.LobbySocket;
 import pr2.net.ServerInfo;
 import pr2.net.ServerConfig;
-import pr2.runtime.PR2MovieClip;
 import pr2.audio.AudioManager;
 import pr2.lobby.dialogs.ConfirmPopup;
 import pr2.lobby.dialogs.HoverPopup;
@@ -49,10 +51,10 @@ class LobbyPage extends Page {
 	};
 	public static var logoutPostFactory:LobbyLogoutPostFactory = defaultLogoutPost;
 
-	private var background:Null<PR2MovieClip>;
+	private var background:Null<LobbyBackgroundView>;
 	private var left:Null<LobbyLeft>;
 	private var right:Null<LobbyRight>;
-	private var bottom:Null<PR2MovieClip>;
+	private var bottom:Null<LobbyBottomButtonsView>;
 	private var bindings:Array<Binding> = [];
 	private var hoverCleanups:Array<Void->Void> = [];
 	private var hover:Null<HoverPopup>;
@@ -73,7 +75,7 @@ class LobbyPage extends Page {
 		if (AppStage.stage != null) {
 			AppStage.stage.quality = StageQuality.HIGH;
 		}
-		background = PR2MovieClip.fromLinkage("LobbyGraphic", {maxNestedDepth: 8});
+		background = new LobbyBackgroundView();
 		addChild(background);
 
 		left = new LobbyLeft();
@@ -82,8 +84,7 @@ class LobbyPage extends Page {
 		right = new LobbyRight();
 		addChild(right);
 
-		bottom = PR2MovieClip.fromLinkage("LobbyBottomButtonsGraphic", {maxNestedDepth: 8});
-		bottom.gotoAndStop(LobbySession.isMember() ? "kongregateSite" : "sponsoredSite");
+		bottom = new LobbyBottomButtonsView(LobbySession.isMember());
 		bind(bottom, "logoutButton", function():Void clickLogout());
 		bind(bottom, "levelEditorButton", function():Void clickLevelEditor());
 		bind(bottom, "moreGamesButton", clickKong);
@@ -128,14 +129,14 @@ class LobbyPage extends Page {
 		super.remove();
 	}
 
-	private function bind(art:PR2MovieClip, name:String, handler:Void->Void):Void {
+	private function bind(art:DisplayObjectContainer, name:String, handler:Void->Void):Void {
 		var binding = LobbyArt.bind(DisplayUtil.findByName(art, name), handler);
 		if (binding != null) {
 			bindings.push(binding);
 		}
 	}
 
-	private function bindHover(art:PR2MovieClip, name:String, over:DisplayObject->Void, out:Void->Void):Void {
+	private function bindHover(art:DisplayObjectContainer, name:String, over:DisplayObject->Void, out:Void->Void):Void {
 		var target = DisplayUtil.findByName(art, name);
 		if (target == null) return;
 		var onOver = function(_:MouseEvent):Void over(target);

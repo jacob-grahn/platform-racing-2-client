@@ -28,9 +28,13 @@ import pr2.net.ServerStatusClient;
 import pr2.runtime.FlComboBox;
 import pr2.audio.AudioManager;
 import pr2.lobby.LobbySession;
+import pr2.lobby.dialogs.ConfirmDialogView;
+import pr2.lobby.dialogs.MessageDialogView;
 import pr2.lobby.account.Settings;
 import pr2.lobby.account.Presets;
 import pr2.lobby.messages.UnreadNotif;
+import pr2.ui.view.StatusPopupView;
+import pr2.ui.view.ProgressPopupView;
 import pr2.util.RequestGeneration;
 
 private typedef LoginPageArt = {
@@ -60,6 +64,18 @@ class LoginPage extends Page {
 	private var titleText:Null<TextField>;
 	private var buttons:Array<LoginPageMenuButton> = [];
 	private var activePopup:Null<LoginFlashPopup>;
+	private var activeConfirm:Null<ConfirmDialogView>;
+	private var confirmOverlay:Null<Shape>;
+	private var activeLogging:Null<StatusPopupView>;
+	private var loggingOverlay:Null<Shape>;
+	private var activeProgress:Null<ProgressPopupView>;
+	private var progressOverlay:Null<Shape>;
+	private var activeMessage:Null<MessageDialogView>;
+	private var messageOverlay:Null<Shape>;
+	private var activeForgot:Null<ForgotPasswordView>;
+	private var forgotOverlay:Null<Shape>;
+	private var activeCreateAccount:Null<CreateAccountView>;
+	private var createAccountOverlay:Null<Shape>;
 	private var servers:Array<ServerInfo> = [];
 	private var selectedServerIndex:Int = 0;
 	private var socketProbe:Null<LoginSocketProbe>;
@@ -192,18 +208,15 @@ class LoginPage extends Page {
 	}
 
 	private function openForgotPasswordDialog(prefilledName:String):Void {
-		var popup = openPopup("ForgotPassPopupGraphic");
-		var nameInput = popup.input("nameBox");
-		var emailInput = popup.input("emailBox");
-		nameInput.text = prefilledName;
+		var popup = mountForgotPasswordView(prefilledName);
+		var nameInput = popup.nameInput;
+		var emailInput = popup.emailInput;
 
 		var submit = function():Void {
 			var name = nameInput.text;
 			var email = emailInput.text;
-			var progress = openPopup("UploadingPopupGraphic");
 			var canceled = false;
-			progress.setText("textBox", "Checking your information...");
-			progress.bindButton("close_bt", function():Void {
+			openProgressPopup("Checking your information...", function():Void {
 				canceled = true;
 				closePopup();
 			});
@@ -218,16 +231,12 @@ class LoginPage extends Page {
 			});
 		};
 
-		popup.bindButton("ok_bt", submit);
-		popup.bindButton("cancel_bt", closePopup);
-		popup.bindEnter("nameBox", submit);
-		popup.bindEnter("emailBox", submit);
+		popup.onSubmit = submit;
+		popup.onCancel = closePopup;
 	}
 
 	private function openLoginMessage(message:String, ?afterClose:Void->Void):Void {
-		var popup = openPopup("MessagePopupGraphic");
-		popup.setText("textBox", message);
-		popup.bindButton("ok_bt", afterClose == null ? closePopup : afterClose);
+		openMessageDialog(message, afterClose);
 	}
 
 	private function openGuestDialog():Void {
@@ -242,24 +251,16 @@ class LoginPage extends Page {
 		?initialEmail:String = ""
 	):Void {
 		loginToken = "";
-		var popup = openPopup("CreateAccountPopupGraphic");
-		var nameInput = popup.input("nameBox");
-		var passInput = popup.input("passBox1");
-		var confirmInput = popup.input("passBox2");
-		var emailInput = popup.input("emailBox");
-		nameInput.text = initialName;
-		passInput.text = initialPassword;
-		confirmInput.text = initialConfirmation;
-		emailInput.text = initialEmail;
-		popup.bindButton("cancel_bt", function():Void {
+		var popup = mountCreateAccountView(initialName, initialPassword, initialConfirmation, initialEmail);
+		popup.onCancel = function():Void {
 			accountGeneration.cancel();
 			closePopup();
-		});
-		popup.bindButton("createAccount_bt", function():Void {
-			var userName = nameInput.text;
-			var userPass = passInput.text;
-			var confirmation = confirmInput.text;
-			var email = emailInput.text;
+		};
+		popup.onSubmit = function():Void {
+			var userName = popup.nameInput.text;
+			var userPass = popup.passwordInput.text;
+			var confirmation = popup.confirmationInput.text;
+			var email = popup.emailInput.text;
 			var retry = function():Void openCreateAccountDialog(userName, userPass, confirmation, email);
 			if (userPass != confirmation) {
 				openLoginMessage("The passwords don't match. Please enter your password again.", retry);
@@ -267,9 +268,7 @@ class LoginPage extends Page {
 			}
 
 			var generation = accountGeneration.begin();
-			var progress = openPopup("UploadingPopupGraphic");
-			progress.setText("textBox", "Creating account...");
-			progress.bindButton("close_bt", function():Void {
+			openProgressPopup("Creating account...", function():Void {
 				if (!accountGeneration.claim(generation)) return;
 				retry();
 			});
@@ -289,7 +288,7 @@ class LoginPage extends Page {
 				if (!accountGeneration.claim(generation)) return;
 				openLoginMessage("Error: " + message, retry);
 			});
-		});
+		};
 	}
 
 	private function openCreditsDialog():Void {
@@ -342,10 +341,7 @@ class LoginPage extends Page {
 			if (selectedToken == "") return;
 			var name = selectedName;
 			var token = selectedToken;
-			var confirm = openPopup("ConfirmPopupGraphic");
-			confirm.setText("textBox", 'Are you sure you want to delete "$name" from your saved accounts?');
-			confirm.bindButton("cancel_bt", function():Void openServerSelectPopup(false, false));
-			confirm.bindButton("ok_bt", function():Void {
+			openConfirm('Are you sure you want to delete "$name" from your saved accounts?', function():Void openServerSelectPopup(false, false), function():Void {
 				FormPostClient.post(pr2.net.ServerConfig.logoutUrl(), ["token" => token], function(_):Void {}, function(_):Void {});
 				SavedAccounts.deleteAccount(name);
 				if (SavedAccounts.getAll().length == 0) openCredentialDialog(); else openServerSelectPopup(false, false);
@@ -379,11 +375,11 @@ class LoginPage extends Page {
 	}
 
 	private function openLoggingInPopup(loginId:String, userName:String, userPass:String, remember:Bool, server:ServerInfo):Void {
-		var popup = openPopup("LoggingInPopupGraphic");
-		popup.bindButton("close_bt", function():Void {
+		var popup = openLoggingInView();
+		popup.onClose = function():Void {
 			closeSocketProbe();
 			closePopup();
-		});
+		};
 		var parsedLoginId = Std.parseInt(loginId);
 		if (parsedLoginId == null) {
 			popup.setMessage('Invalid login id from server: $loginId');
@@ -424,6 +420,109 @@ class LoginPage extends Page {
 		return popup;
 	}
 
+	private function openConfirm(message:String, onCancel:Void->Void, onConfirm:Void->Void):Void {
+		closePopup();
+		confirmOverlay = new Shape();
+		confirmOverlay.graphics.beginFill(0x000000, 0.55);
+		confirmOverlay.graphics.drawRect(0, 0, Constants.STAGE_WIDTH, Constants.STAGE_HEIGHT);
+		confirmOverlay.graphics.endFill();
+		addChild(confirmOverlay);
+
+		var view = new ConfirmDialogView(message);
+		view.x = Constants.STAGE_WIDTH / 2;
+		view.y = Constants.STAGE_HEIGHT / 2;
+		view.onCancel = function():Void {
+			closePopup();
+			onCancel();
+		};
+		view.onConfirm = function():Void {
+			closePopup();
+			onConfirm();
+		};
+		activeConfirm = view;
+		addChild(view);
+	}
+
+	private function openLoggingInView():StatusPopupView {
+		closePopup();
+		loggingOverlay = new Shape();
+		loggingOverlay.graphics.beginFill(0x000000, 0.55);
+		loggingOverlay.graphics.drawRect(0, 0, Constants.STAGE_WIDTH, Constants.STAGE_HEIGHT);
+		loggingOverlay.graphics.endFill();
+		addChild(loggingOverlay);
+		var view = new StatusPopupView("Logging In...");
+		view.x = Constants.STAGE_WIDTH / 2;
+		view.y = Constants.STAGE_HEIGHT / 2;
+		activeLogging = view;
+		addChild(view);
+		return view;
+	}
+
+	private function openProgressPopup(message:String, onClose:Void->Void):ProgressPopupView {
+		closePopup();
+		progressOverlay = new Shape();
+		progressOverlay.graphics.beginFill(0x000000, 0.55);
+		progressOverlay.graphics.drawRect(0, 0, Constants.STAGE_WIDTH, Constants.STAGE_HEIGHT);
+		progressOverlay.graphics.endFill();
+		addChild(progressOverlay);
+		var view = new ProgressPopupView(message);
+		view.x = Constants.STAGE_WIDTH / 2;
+		view.y = Constants.STAGE_HEIGHT / 2;
+		view.onClose = onClose;
+		activeProgress = view;
+		addChild(view);
+		return view;
+	}
+
+	private function openMessageDialog(message:String, afterClose:Null<Void->Void>):MessageDialogView {
+		closePopup();
+		messageOverlay = new Shape();
+		messageOverlay.graphics.beginFill(0x000000, 0.55);
+		messageOverlay.graphics.drawRect(0, 0, Constants.STAGE_WIDTH, Constants.STAGE_HEIGHT);
+		messageOverlay.graphics.endFill();
+		addChild(messageOverlay);
+		var view = new MessageDialogView(message);
+		view.x = Constants.STAGE_WIDTH / 2;
+		view.y = Constants.STAGE_HEIGHT / 2;
+		view.onClose = function():Void {
+			closePopup();
+			if (afterClose != null) afterClose();
+		};
+		activeMessage = view;
+		addChild(view);
+		return view;
+	}
+
+	private function mountForgotPasswordView(prefilledName:String):ForgotPasswordView {
+		closePopup();
+		forgotOverlay = new Shape();
+		forgotOverlay.graphics.beginFill(0x000000, 0.55);
+		forgotOverlay.graphics.drawRect(0, 0, Constants.STAGE_WIDTH, Constants.STAGE_HEIGHT);
+		forgotOverlay.graphics.endFill();
+		addChild(forgotOverlay);
+		var view = new ForgotPasswordView(prefilledName);
+		view.x = Constants.STAGE_WIDTH / 2;
+		view.y = Constants.STAGE_HEIGHT / 2;
+		activeForgot = view;
+		addChild(view);
+		return view;
+	}
+
+	private function mountCreateAccountView(name:String, password:String, confirmation:String, email:String):CreateAccountView {
+		closePopup();
+		createAccountOverlay = new Shape();
+		createAccountOverlay.graphics.beginFill(0x000000, 0.55);
+		createAccountOverlay.graphics.drawRect(0, 0, Constants.STAGE_WIDTH, Constants.STAGE_HEIGHT);
+		createAccountOverlay.graphics.endFill();
+		addChild(createAccountOverlay);
+		var view = new CreateAccountView(name, password, confirmation, email);
+		view.x = Constants.STAGE_WIDTH / 2;
+		view.y = Constants.STAGE_HEIGHT / 2;
+		activeCreateAccount = view;
+		addChild(view);
+		return view;
+	}
+
 	private function closePopup():Void {
 		if (activePopup != null) {
 			activePopup.remove();
@@ -431,6 +530,54 @@ class LoginPage extends Page {
 				activePopup.parent.removeChild(activePopup);
 			}
 			activePopup = null;
+		}
+		if (activeConfirm != null) {
+			activeConfirm.dispose();
+			activeConfirm = null;
+		}
+		if (confirmOverlay != null) {
+			if (confirmOverlay.parent != null) confirmOverlay.parent.removeChild(confirmOverlay);
+			confirmOverlay = null;
+		}
+		if (activeLogging != null) {
+			activeLogging.dispose();
+			activeLogging = null;
+		}
+		if (loggingOverlay != null) {
+			if (loggingOverlay.parent != null) loggingOverlay.parent.removeChild(loggingOverlay);
+			loggingOverlay = null;
+		}
+		if (activeProgress != null) {
+			activeProgress.dispose();
+			activeProgress = null;
+		}
+		if (progressOverlay != null) {
+			if (progressOverlay.parent != null) progressOverlay.parent.removeChild(progressOverlay);
+			progressOverlay = null;
+		}
+		if (activeMessage != null) {
+			activeMessage.dispose();
+			activeMessage = null;
+		}
+		if (messageOverlay != null) {
+			if (messageOverlay.parent != null) messageOverlay.parent.removeChild(messageOverlay);
+			messageOverlay = null;
+		}
+		if (activeForgot != null) {
+			activeForgot.dispose();
+			activeForgot = null;
+		}
+		if (forgotOverlay != null) {
+			if (forgotOverlay.parent != null) forgotOverlay.parent.removeChild(forgotOverlay);
+			forgotOverlay = null;
+		}
+		if (activeCreateAccount != null) {
+			activeCreateAccount.dispose();
+			activeCreateAccount = null;
+		}
+		if (createAccountOverlay != null) {
+			if (createAccountOverlay.parent != null) createAccountOverlay.parent.removeChild(createAccountOverlay);
+			createAccountOverlay = null;
 		}
 	}
 

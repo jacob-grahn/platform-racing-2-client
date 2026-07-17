@@ -6,7 +6,7 @@ import pr2.lobby.dialogs.GuildPopup;
 import pr2.lobby.dialogs.MessagePopup;
 import pr2.lobby.dialogs.Popup;
 import pr2.net.ServerConfig;
-import pr2.runtime.FlTextInput;
+import pr2.ui.controls.GameTextInput;
 import pr2.util.DisplayUtil;
 
 class CreateGuildPopupTest {
@@ -177,7 +177,7 @@ class CreateGuildPopupTest {
 	}
 
 	private static function setInput(popup:Popup, name:String, value:String):Void {
-		var input = Std.downcast(DisplayUtil.findByName(popup, name), FlTextInput);
+		var input = Std.downcast(DisplayUtil.findByName(popup, name), GameTextInput);
 		if (input != null) {
 			input.text = value;
 			return;
@@ -186,7 +186,7 @@ class CreateGuildPopupTest {
 	}
 
 	private static function inputText(popup:Popup, name:String):String {
-		var input = Std.downcast(DisplayUtil.findByName(popup, name), FlTextInput);
+		var input = Std.downcast(DisplayUtil.findByName(popup, name), GameTextInput);
 		if (input != null) return input.text;
 		return LobbyArt.text(popup, name).text;
 	}

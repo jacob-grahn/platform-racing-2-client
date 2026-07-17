@@ -5,7 +5,6 @@ import openfl.events.MouseEvent;
 import pr2.gameplay.Modes;
 import pr2.lobby.dialogs.HoverPopup;
 import pr2.lobby.LobbyArt;
-import pr2.runtime.PR2MovieClip;
 import pr2.ui.SelectableButton;
 
 class GetLevelsPopupItem extends SelectableButton {
@@ -13,12 +12,12 @@ class GetLevelsPopupItem extends SelectableButton {
 	public final levelId:Int;
 	public final version:Int;
 	public final title:String;
-	public var art(default, null):PR2MovieClip;
+	public var art(default, null):LevelListItemView;
 	private var popup:Null<GetLevelsPopup>;
 	private var info:Null<HoverPopup>;
 
 	public function new(level:Dynamic, popup:GetLevelsPopup) {
-		super(PR2MovieClip.fromLinkage("GetLevelsPopupItemGraphic", {maxNestedDepth: 4}));
+		super(new LevelListItemView());
 		this.level = level;
 		this.popup = popup;
 		art = cast selectableTarget;

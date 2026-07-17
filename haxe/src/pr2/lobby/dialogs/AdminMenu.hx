@@ -1,34 +1,25 @@
 package pr2.lobby.dialogs;
 
 import openfl.display.Sprite;
-import pr2.lobby.LobbyArt;
-import pr2.lobby.LobbyArt.Binding;
 import pr2.net.LobbySocket;
-import pr2.runtime.PR2MovieClip;
-import pr2.util.DisplayUtil;
 
 class AdminMenu extends Sprite {
-	private var art:Null<PR2MovieClip>;
+	private var art:Null<ModerationMenuView>;
 	private var target:Popup;
 	private var userName:String;
 	private var mode:Null<String>;
-	private var bindings:Array<Null<Binding>> = [];
 
 	public function new(name:String, popup:Popup) {
 		super();
 		userName = name;
 		target = popup;
-		art = PR2MovieClip.fromLinkage("AdminMenuGraphic", {maxNestedDepth: 4});
+		art = new ModerationMenuView("-- Administrator --", [
+			{name: "tempMod_bt", label: "Temporary", press: clickTemp},
+			{name: "trialMod_bt", label: "Trial", press: clickTrial},
+			{name: "permaMod_bt", label: "Permanent", press: clickPerma},
+			{name: "demote_bt", label: "Demote", press: clickDemote}
+		]);
 		addChild(art);
-
-		bind("tempMod_bt", clickTemp);
-		bind("trialMod_bt", clickTrial);
-		bind("permaMod_bt", clickPerma);
-		bind("demote_bt", clickDemote);
-	}
-
-	private function bind(name:String, handler:Void->Void):Void {
-		bindings.push(LobbyArt.bind(DisplayUtil.findByName(art, name), handler));
 	}
 
 	private function clickTemp():Void {
@@ -65,10 +56,6 @@ class AdminMenu extends Sprite {
 	}
 
 	public function remove():Void {
-		for (binding in bindings) {
-			LobbyArt.unbind(binding);
-		}
-		bindings = [];
 		if (art != null) {
 			art.dispose();
 			art = null;

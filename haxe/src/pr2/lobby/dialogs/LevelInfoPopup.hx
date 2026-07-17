@@ -18,8 +18,8 @@ import pr2.lobby.LobbySession;
 import pr2.gameplay.Modes;
 import pr2.net.ServerConfig;
 import pr2.net.SuperLoader;
-import pr2.runtime.FlButton;
-import pr2.runtime.PR2MovieClip;
+import pr2.lobby.dialogs.LevelInfoView.LevelModeSymbol;
+import pr2.ui.controls.GameButton;
 import pr2.util.DisplayUtil;
 
 /**
@@ -55,7 +55,7 @@ class LevelInfoPopup extends Popup {
 	public var cowboyChance(default, null):Int = 5;
 	public var badHats(default, null):String = "";
 
-	private var art:Null<PR2MovieClip>;
+	private var art:Null<LevelInfoView>;
 	private var levelInfo:Null<DisplayObjectContainer>;
 	private var htmlNameMaker:HtmlNameMaker = new HtmlNameMaker();
 	private var superLoader:Null<SuperLoader>;
@@ -93,7 +93,7 @@ class LevelInfoPopup extends Popup {
 		LevelInfoPopup.instance = this;
 		levelId = id;
 
-		art = PR2MovieClip.fromLinkage("LevelInfoPopupGraphic", {maxNestedDepth: 8});
+		art = new LevelInfoView();
 		levelInfo = Std.downcast(DisplayUtil.findByName(art, "levelInfo"), DisplayObjectContainer);
 		if (levelInfo != null) {
 			levelInfo.visible = false;
@@ -502,9 +502,9 @@ class LevelInfoPopup extends Popup {
 
 	private function setPlayButtonEnabled(enabled:Bool):Void {
 		var button = DisplayUtil.findByName(art, "play_bt");
-		var flButton = Std.downcast(button, FlButton);
-		if (flButton != null) {
-			flButton.enabled = enabled;
+		var gameButton = Std.downcast(button, GameButton);
+		if (gameButton != null) {
+			gameButton.enabled = enabled;
 			return;
 		}
 		var interactive = Std.downcast(button, InteractiveObject);
@@ -629,9 +629,10 @@ class LevelInfoPopup extends Popup {
 			// while still showing the correct full mode name.
 			frame = 1;
 		}
-		var modeSym = Std.downcast(DisplayUtil.findByName(Std.downcast(DisplayUtil.findByName(levelInfo, "gameMode"), DisplayObjectContainer), "modeSym"), PR2MovieClip);
+		var modeSym = Std.downcast(DisplayUtil.findByName(Std.downcast(DisplayUtil.findByName(levelInfo, "gameMode"), DisplayObjectContainer), "modeSym"),
+			LevelModeSymbol);
 		if (modeSym != null) {
-			modeSym.gotoAndStop(frame);
+			modeSym.setFrame(frame);
 		}
 		return Modes.getFullName(mode);
 	}

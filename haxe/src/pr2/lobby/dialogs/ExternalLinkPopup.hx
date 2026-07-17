@@ -3,10 +3,6 @@ package pr2.lobby.dialogs;
 #if js
 import js.Browser;
 #end
-import pr2.lobby.LobbyArt;
-import pr2.lobby.LobbyArt.Binding;
-import pr2.runtime.PR2MovieClip;
-import pr2.util.DisplayUtil;
 
 /** Port of Flash `dialogs.ExternalLinkPopup`. */
 class ExternalLinkPopup extends Popup {
@@ -17,21 +13,17 @@ class ExternalLinkPopup extends Popup {
 
 	public var url(default, null):String;
 
-	private var art:PR2MovieClip;
-	private var proceedBinding:Null<Binding>;
-	private var closeBinding:Null<Binding>;
+	private var art:ExternalLinkView;
 
 	public function new(url:String) {
 		if (instance != null) instance.startFadeOut();
 		super();
 		instance = this;
 		this.url = url;
-		art = PR2MovieClip.fromLinkage("ExternalLinkPopupGraphic", {maxNestedDepth: 5});
-		var linkBox = LobbyArt.text(art, "linkBox");
-		if (linkBox != null) linkBox.text = url;
+		art = new ExternalLinkView(url);
 		addChild(art);
-		proceedBinding = LobbyArt.bind(DisplayUtil.findByName(art, "proceed_bt"), proceed);
-		closeBinding = LobbyArt.bind(DisplayUtil.findByName(art, "close_bt"), startFadeOut);
+		art.onProceed = proceed;
+		art.onClose = startFadeOut;
 	}
 
 	private function proceed():Void {
@@ -51,8 +43,6 @@ class ExternalLinkPopup extends Popup {
 
 	override public function remove():Void {
 		if (instance == this) instance = null;
-		LobbyArt.unbind(proceedBinding);
-		LobbyArt.unbind(closeBinding);
 		if (art != null) {
 			art.dispose();
 			art = null;

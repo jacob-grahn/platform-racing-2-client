@@ -1,13 +1,11 @@
 package pr2.gameplay;
 
-import openfl.display.DisplayObjectContainer;
 import openfl.display.Sprite;
 import openfl.text.TextField;
 import pr2.character.Character;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
 import pr2.lobby.chat.HtmlNameMaker;
-import pr2.runtime.PR2MovieClip;
 import pr2.util.DisplayUtil;
 
 /**
@@ -19,7 +17,7 @@ import pr2.util.DisplayUtil;
 **/
 class SpectatePicker extends Sprite {
 	private var course:Course;
-	private var art:Null<PR2MovieClip>;
+	private var art:Null<SpectatePickerView>;
 	private var htmlNameMaker:HtmlNameMaker = new HtmlNameMaker();
 	private var leftBinding:Null<Binding>;
 	private var rightBinding:Null<Binding>;
@@ -29,7 +27,7 @@ class SpectatePicker extends Sprite {
 	public function new(course:Course) {
 		super();
 		this.course = course;
-		art = PR2MovieClip.fromLinkage("SpectatePickerGraphic", {maxNestedDepth: 6});
+		art = new SpectatePickerView();
 		addChild(art);
 		leftBinding = LobbyArt.bind(DisplayUtil.findByName(art, "arrowLeft"), clickLeft);
 		rightBinding = LobbyArt.bind(DisplayUtil.findByName(art, "arrowRight"), clickRight);
@@ -125,22 +123,15 @@ class SpectatePicker extends Sprite {
 	}
 
 	private function setSpectatingVisible(value:Bool):Void {
-		var spectating = DisplayUtil.findByName(art, "spectatingText");
-		if (spectating != null) {
-			spectating.visible = value;
-		}
+		if (art != null) art.spectatingText.visible = value;
 	}
 
 	private function playerNameTop():Null<TextField> {
-		var playerName = Std.downcast(DisplayUtil.findByName(art, "playerName"), DisplayObjectContainer);
-		var top = Std.downcast(DisplayUtil.findByName(playerName, "top"), DisplayObjectContainer);
-		return LobbyArt.text(top, "box");
+		return art == null ? null : art.nameTop;
 	}
 
 	private function playerNameBg():Null<TextField> {
-		var playerName = Std.downcast(DisplayUtil.findByName(art, "playerName"), DisplayObjectContainer);
-		var bg = Std.downcast(DisplayUtil.findByName(playerName, "bg"), DisplayObjectContainer);
-		return LobbyArt.text(bg, "box");
+		return art == null ? null : art.nameBg;
 	}
 
 	public function remove():Void {

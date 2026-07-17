@@ -13,7 +13,6 @@ import pr2.net.FormPostClient;
 import pr2.net.ServerConfig;
 import pr2.net.SuperLoader;
 import pr2.net.TextLoader;
-import pr2.runtime.PR2MovieClip;
 import pr2.ui.CustomScrollBar;
 import pr2.ui.EmblemLoader;
 import pr2.ui.StageFocus;
@@ -31,7 +30,7 @@ class GuildPopup extends Popup {
 	public static var instance:Null<GuildPopup>;
 	public static var deleteFactory:GuildDeleteFactory = defaultDelete;
 
-	private var art:Null<PR2MovieClip>;
+	private var art:Null<GuildView>;
 	private var guildMembers:Array<GuildMemberName> = [];
 	private var scroll:Null<CustomScrollBar>;
 	private var closeBinding:Null<LobbyArt.Binding>;
@@ -54,8 +53,7 @@ class GuildPopup extends Popup {
 		GuildPopup.instance = this;
 		guildId = id;
 
-		art = PR2MovieClip.fromLinkage("GuildPopupGraphic", {maxNestedDepth: 8});
-		art.gotoAndStop("loading");
+		art = new GuildView();
 		closeBinding = LobbyArt.bind(DisplayUtil.findByName(art, "close_bt"), clickClose);
 		addChild(art);
 
@@ -82,7 +80,8 @@ class GuildPopup extends Popup {
 		ownerId = intAny(ret, ["owner_id", "ownerId"]);
 		guildName = strAny(ret, ["guild_name", "guildName"]);
 
-		art.gotoAndStop(LobbySession.guildId != 0 && LobbySession.guildId == guildId ? "member" : "nonMember");
+		var isMember = LobbySession.guildId != 0 && LobbySession.guildId == guildId;
+		art.setMember(isMember);
 		titleBox = LobbyArt.text(art, "titleBox");
 		setText("titleBox", "-- " + guildName + " --");
 		setText("gpTodayBox", "GP Today: " + NumberFormat.withCommas(intAny(ret, ["gp_today", "gpToday"])));
@@ -118,7 +117,7 @@ class GuildPopup extends Popup {
 		}
 
 		closeBinding = replaceBinding(closeBinding, DisplayUtil.findByName(art, "close_bt"), clickClose);
-		if (LobbySession.guildId != 0 && LobbySession.guildId == guildId) {
+		if (isMember) {
 			messageBinding = LobbyArt.bind(DisplayUtil.findByName(art, "messageButton"), clickMessage);
 		}
 		if (AppStage.stage != null) {

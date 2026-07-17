@@ -6,7 +6,6 @@ import openfl.display.Sprite;
 import openfl.utils.AssetType;
 import openfl.utils.Assets;
 import pr2.level.ServerLevel.DecodedBlock;
-import pr2.runtime.PR2MovieClip;
 
 /** Constructs block display trees, overlays, and deterministic vector fallbacks. */
 @:access(pr2.level.ServerLevelRenderer)
@@ -78,15 +77,9 @@ class ServerLevelBlockFactory {
 		which places the ArrowBlockGraphic at the tile centre (15,15) and rotates
 		it about that point.
 	**/
-	public static function addArrowOverlay(container:Sprite, rotation:Float):Null<PR2MovieClip> {
+	public static function addArrowOverlay(container:Sprite, rotation:Float):ArrowBlockView {
 		var pivot = new Sprite();
-		var arrow = PR2MovieClip.fromLinkage("ArrowBlockGraphic", {maxNestedDepth: 2});
-		// ArrowBlockGraphic's generated AS3 class stops on frame 1. Reinstall that
-		// class script here so gotoAndPlay runs the authored brighten/fade cycle
-		// once and stops after wrapping back to the first frame.
-		arrow.stop();
-		arrow.setFrameScript(0, arrow.stop);
-		arrow.gotoAndStop(1);
+		var arrow = new ArrowBlockView();
 		pivot.addChild(arrow);
 		pivot.x = ServerLevelRenderer.TILE_SIZE / 2;
 		pivot.y = ServerLevelRenderer.TILE_SIZE / 2;

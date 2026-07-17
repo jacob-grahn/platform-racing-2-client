@@ -8,11 +8,15 @@ import openfl.events.Event;
 import openfl.events.MouseEvent;
 import openfl.net.URLRequest;
 import openfl.net.URLVariables;
+import openfl.text.TextField;
+import openfl.text.TextFormat;
+import openfl.text.TextFormatAlign;
+import pr2.assets.NativeAssetIds.FontAsset;
+import pr2.assets.NativeAssets;
 import pr2.lobby.dialogs.Popup;
 import pr2.net.FormPostClient;
 import pr2.net.ServerConfig;
 import pr2.net.TextLoader;
-import pr2.runtime.PR2MovieClip;
 
 typedef CaptchaLoad = (onReady:Void->Void, onError:Void->Void) -> Void;
 typedef CaptchaSubmit = (answer:Int, onDone:Void->Void, onError:Void->Void) -> Void;
@@ -28,14 +32,43 @@ class CatCaptcha extends Popup {
 	private static inline var IMG_SPACING:Int = 220;
 	private static inline var IMG_COUNT:Int = 2;
 
-	private var art:PR2MovieClip;
+	private var art:Sprite;
 	private var answers:Array<CaptchaAnswer> = [];
 
 	public function new() {
 		super();
-		art = PR2MovieClip.fromLinkage("CatCaptchaPopupGraphic", {maxNestedDepth: 5});
+		art = createNativePanel();
 		addChild(art);
 		loadFactory(showCatImages, function():Void startFadeOut());
+	}
+
+	private static function createNativePanel():Sprite {
+		var panel = new Sprite();
+		panel.graphics.beginFill(0xF4F4F4, 0.98);
+		panel.graphics.lineStyle(2, 0x666666);
+		panel.graphics.drawRoundRect(-230, -128, 460, 355, 14, 14);
+		panel.graphics.endFill();
+		var title = new TextField();
+		title.x = -215;
+		title.y = -116;
+		title.width = 430;
+		title.height = 27;
+		title.selectable = false;
+		title.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 18, 0x222222, true, null, null, null, null,
+			TextFormatAlign.CENTER);
+		title.text = "Cat Captcha";
+		panel.addChild(title);
+		var prompt = new TextField();
+		prompt.x = -215;
+		prompt.y = -91 - 28;
+		prompt.width = 430;
+		prompt.height = 20;
+		prompt.selectable = false;
+		prompt.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 11, 0x444444, false, null, null, null, null,
+			TextFormatAlign.CENTER);
+		prompt.text = "Choose one of the cats to continue.";
+		panel.addChild(prompt);
+		return panel;
 	}
 
 	private function showCatImages():Void {

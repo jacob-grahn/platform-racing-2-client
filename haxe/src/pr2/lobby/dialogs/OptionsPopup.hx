@@ -12,9 +12,8 @@ import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
 import pr2.lobby.account.Settings;
 import pr2.net.ServerConfig;
-import pr2.runtime.FlSlider;
 import pr2.runtime.FlSliderEvent;
-import pr2.runtime.PR2MovieClip;
+import pr2.ui.controls.GameSlider;
 import pr2.util.DisplayUtil;
 
 /** Authored lobby options popup: volume, chat/art toggles, controls and songs. */
@@ -24,7 +23,7 @@ class OptionsPopup extends Popup {
 	private static final CONTROL_DEFAULTS = {wasdUp: "W", wasdRight: "D", wasdDown: "S", wasdLeft: "A", wasdItem: "I"};
 	public static var playJumpSound:Float->Void = defaultPlayJumpSound;
 
-	private var art:PR2MovieClip;
+	private var art:OptionsView;
 	private var bindings:Array<Binding> = [];
 	private var hoverCleanups:Array<Void->Void> = [];
 	private var filterSwears:Bool;
@@ -34,7 +33,7 @@ class OptionsPopup extends Popup {
 
 	public function new() {
 		super();
-		art = PR2MovieClip.fromLinkage("OptionsPopupGraphic", {maxNestedDepth: 6});
+		art = new OptionsView();
 		addChild(art);
 		filterSwears = Settings.getValue(Settings.FILTER_SWEARS, true);
 		drawArt = Settings.getValue(Settings.DRAW_ART, true);
@@ -68,7 +67,7 @@ class OptionsPopup extends Popup {
 		setupAccountButtons();
 	}
 
-	private function slider(name:String):Null<FlSlider> return Std.downcast(DisplayUtil.findByName(art, name), FlSlider);
+	private function slider(name:String):Null<GameSlider> return Std.downcast(DisplayUtil.findByName(art, name), GameSlider);
 	private function text(name:String):Null<TextField> return LobbyArt.text(art, name);
 	private function setText(name:String, value:String):Void { var field = text(name); if (field != null) field.text = value; }
 	private function bind(name:String, handler:Void->Void):Void {

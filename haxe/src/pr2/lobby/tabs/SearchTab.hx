@@ -4,6 +4,9 @@ import openfl.display.DisplayObjectContainer;
 import openfl.events.Event;
 import openfl.events.KeyboardEvent;
 import openfl.text.TextField;
+import openfl.text.TextFieldType;
+import openfl.text.TextFormat;
+import openfl.text.TextFormatAlign;
 import openfl.ui.Keyboard;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.Memory;
@@ -12,7 +15,10 @@ import pr2.lobby.search.SearchQuery;
 import pr2.net.LevelListClient;
 import pr2.net.LevelListClient.LevelListResult;
 import pr2.runtime.FlComboBox;
-import pr2.runtime.PR2MovieClip;
+import pr2.assets.NativeAssetIds.FontAsset;
+import pr2.assets.NativeAssets;
+import pr2.ui.controls.GameButton;
+import pr2.ui.view.NativeView;
 import pr2.ui.StageFocus;
 import pr2.util.AsyncRemovalGuard.AsyncRemovable;
 import pr2.util.DisplayUtil;
@@ -36,7 +42,7 @@ typedef SearchFetchFactory = Map<String, String>->(LevelListResult->Void)->(Stri
 class SearchTab extends LevelListingPage {
 	public static var searchFactory:SearchFetchFactory = defaultSearch;
 
-	private var art:PR2MovieClip;
+	private var art:SearchView;
 	private var searchBox:Null<TextField>;
 	private var searchButton:Null<openfl.display.DisplayObject>;
 	private var searchBinding:Null<LobbyArt.Binding>;
@@ -61,7 +67,7 @@ class SearchTab extends LevelListingPage {
 	}
 
 	override private function onInitialized():Void {
-		art = PR2MovieClip.fromLinkage("SearchGraphic", {maxNestedDepth: 8});
+		art = new SearchView();
 		art.x = 36;
 		art.y = 8;
 		addToListingHolder(art);
@@ -236,5 +242,68 @@ class SearchTab extends LevelListingPage {
 
 	public static function resetHooksForTests():Void {
 		searchFactory = defaultSearch;
+	}
+}
+
+private class SearchView extends NativeView {
+	public function new() {
+		super();
+		label("Search By:", 0, 2, 62);
+		var mode = combo("mode_cb", 63, 0, 105);
+		mode.addItem({label: "User Name", data: "user"});
+		mode.addItem({label: "Level Title", data: "title"});
+		mode.addItem({label: "Level ID", data: "id"});
+		label("Sort By:", 0, 34, 48);
+		var order = combo("order_cb", 49, 30, 94);
+		order.addItem({label: "Date", data: "date"});
+		order.addItem({label: "Alphabetical", data: "alphabetical"});
+		order.addItem({label: "Rating", data: "rating"});
+		order.addItem({label: "Popularity", data: "popularity"});
+		var dir = combo("dir_cb", 149, 30, 98);
+		dir.addItem({label: "Descending", data: "desc"});
+		dir.addItem({label: "Ascending", data: "asc"});
+		var input = new TextField();
+		input.name = "searchBox";
+		input.x = 0;
+		input.y = 61;
+		input.width = 145;
+		input.height = 24;
+		input.type = TextFieldType.INPUT;
+		input.background = true;
+		input.backgroundColor = 0xFFFFFF;
+		input.border = true;
+		input.borderColor = 0x777777;
+		input.maxChars = 50;
+		input.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 11, 0x222222);
+		addChild(input);
+		var search = ownControl(new GameButton("Search"));
+		search.name = "search_bt";
+		search.x = 151;
+		search.y = 61;
+		search.setSize(78, 24);
+		addChild(search);
+	}
+
+	private function combo(name:String, x:Float, y:Float, width:Float):FlComboBox {
+		var control = new FlComboBox();
+		control.name = name;
+		control.x = x;
+		control.y = y;
+		control.setSize(width, 22);
+		addChild(control);
+		return control;
+	}
+
+	private function label(value:String, x:Float, y:Float, width:Float):Void {
+		var field = new TextField();
+		field.x = x;
+		field.y = y;
+		field.width = width;
+		field.height = 18;
+		field.selectable = false;
+		field.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 10, 0x222222, false, null, null, null, null,
+			TextFormatAlign.LEFT);
+		field.text = value;
+		addChild(field);
 	}
 }

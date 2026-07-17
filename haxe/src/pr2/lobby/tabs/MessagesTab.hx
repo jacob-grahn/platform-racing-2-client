@@ -12,7 +12,7 @@ import pr2.lobby.messages.UnreadNotif;
 import pr2.net.ServerConfig;
 import pr2.net.TextLoader;
 import pr2.page.Page;
-import pr2.runtime.PR2MovieClip;
+import pr2.ui.view.LoadingView;
 import pr2.ui.CustomScrollBar;
 import pr2.ui.PageNavigation;
 import pr2.ui.PageNavigation.Paginated;
@@ -33,10 +33,10 @@ import pr2.util.DisplayUtil;
 class MessagesTab extends Page implements Paginated {
 	private static inline var ITEMS_PER_PAGE:Int = MessagesPaging.ITEMS_PER_PAGE;
 
-	private var art:PR2MovieClip;
+	private var art:MessagesView;
 	private var holder:Null<DisplayObjectContainer>;
 	private var scrollBar:CustomScrollBar;
-	private var loading:PR2MovieClip;
+	private var loading:LoadingView;
 	private var pageNavigation:PageNavigation;
 	private var messages:Array<MessagesItem> = [];
 	private var currentPage:Int = 1;
@@ -51,7 +51,7 @@ class MessagesTab extends Page implements Paginated {
 	}
 
 	override public function initialize():Void {
-		art = PR2MovieClip.fromLinkage("MessagesGraphic", {maxNestedDepth: 8});
+		art = new MessagesView();
 		holder = Std.downcast(DisplayUtil.findByName(art, "var_295"), DisplayObjectContainer);
 
 		scrollBar = new CustomScrollBar();
@@ -68,7 +68,7 @@ class MessagesTab extends Page implements Paginated {
 		deleteAllBinding = LobbyArt.bind(DisplayUtil.findByName(art, "deleteAll_bt"), clickDeleteAll);
 		addChild(art);
 
-		loading = PR2MovieClip.fromLinkage("LoadingGraphic", {maxNestedDepth: 4});
+		loading = new LoadingView();
 		loading.x = 88;
 		loading.y = 150;
 
@@ -197,6 +197,7 @@ class MessagesTab extends Page implements Paginated {
 			uploading.remove();
 			uploading = null;
 		}
+		if (loading != null) loading.dispose();
 		if (art != null) {
 			art.dispose();
 			art = null;

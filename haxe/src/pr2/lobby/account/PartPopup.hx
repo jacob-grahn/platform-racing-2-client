@@ -8,17 +8,16 @@ import pr2.lobby.chat.HtmlNameMaker;
 import pr2.lobby.dialogs.Popup;
 import pr2.lobby.tabs.AccountTab;
 import pr2.runtime.EpicFlash;
-import pr2.runtime.FlButton;
-import pr2.runtime.PR2MovieClip;
+import pr2.ui.controls.GameButton;
 import pr2.util.DisplayUtil;
 
 class PartPopup extends Popup {
 	public static var instance:Null<PartPopup>;
 
-	private var art:Null<PR2MovieClip>;
+	private var art:Null<PartPopupView>;
 	private var closeBinding:Null<LobbyArt.Binding>;
-	private var equipButton:Null<FlButton>;
-	private var target:Null<PR2MovieClip>;
+	private var equipButton:Null<GameButton>;
+	private var target:Null<PartPreview>;
 	private var djinnPreview:Null<AccountCharacter>;
 	private var epicFlash:EpicFlash = new EpicFlash();
 	private var nameMaker:HtmlNameMaker = new HtmlNameMaker();
@@ -50,7 +49,7 @@ class PartPopup extends Popup {
 		partEpic = hasEpic;
 		this.hasEpicEverything = hasEpicEverything;
 
-		art = PR2MovieClip.fromLinkage("PartPopupGraphic", {maxNestedDepth: 8});
+		art = new PartPopupView();
 		addChild(art);
 		var title = LobbyArt.text(art, "titleBox");
 		var descBox = LobbyArt.text(art, "descBox");
@@ -61,7 +60,7 @@ class PartPopup extends Popup {
 		closeBinding = LobbyArt.bind(DisplayUtil.findByName(art, "close_bt"), startFadeOut);
 	}
 
-	public function targetForTests():Null<PR2MovieClip> {
+	public function targetForTests():Null<PartPreview> {
 		return target;
 	}
 
@@ -89,8 +88,7 @@ class PartPopup extends Popup {
 	}
 
 	public function colorMC2VisibleForTests():Bool {
-		var colorMC2 = target == null ? null : DisplayUtil.findByName(target, "colorMC2");
-		return colorMC2 != null && colorMC2.visible;
+		return target != null && target.secondaryVisible;
 	}
 
 	public function equipEnabledForTests():Bool {
@@ -194,18 +192,17 @@ class PartPopup extends Popup {
 		}
 		target = setupPartPreview(art, partType, partId, partOwned, 1.8);
 		djinnPreview = setupDjinnPreview(art, partType, partId, partOwned, -130, 10);
-		var colorMC2 = target == null ? null : DisplayUtil.findByName(target, "colorMC2");
 		if (partOwned) {
 			if (target != null) target.alpha = 1;
 			if (ownedBox != null) {
 				ownedBox.text = "You own this part!";
 				ownedBox.textColor = 0x006600;
 			}
-			if ((partEpic || hasEpicEverything) && colorMC2 != null) {
-				colorMC2.visible = true;
-				epicFlash.addItem(colorMC2);
+			if ((partEpic || hasEpicEverything) && target != null) {
+				target.showEpic();
+				epicFlash.addItem(target.epicTarget);
 			}
-			equipButton = Std.downcast(DisplayUtil.findByName(art, "equip_bt"), FlButton);
+			equipButton = Std.downcast(DisplayUtil.findByName(art, "equip_bt"), GameButton);
 			if (equipButton != null) {
 				equipButton.enabled = true;
 				equipButton.addEventListener(MouseEvent.CLICK, equipPart, false, 0, true);
@@ -233,49 +230,26 @@ class PartPopup extends Popup {
 		}
 	}
 
-	public static function setupPartPreview(root:PR2MovieClip, type:String, id:Int, has:Bool, fredScaleDivisor:Float):Null<PR2MovieClip> {
-		var hat = clip(root, "hat");
-		var head = clip(root, "head");
-		var body = clip(root, "body");
-		var foot = clip(root, "foot");
-		for (part in [hat, head, body, foot]) {
-			if (part != null) part.visible = false;
-		}
-		if (head != null) {
-			for (name in ["hat1", "hat2", "hat3", "hat4"]) {
-				var headHat = DisplayUtil.findByName(head, name);
-				if (headHat != null) headHat.visible = false;
-			}
-		}
-		var target = switch (type) {
-			case "HAT": hat;
-			case "HEAD": head;
-			case "BODY": body;
-			case "FEET": foot;
-			default: null;
-		}
-		if (target == null) return null;
+	public static function setupPartPreview(root:openfl.display.DisplayObjectContainer, type:String, id:Int, has:Bool,
+		fredScaleDivisor:Float):Null<PartPreview> {
+		if (["HAT", "HEAD", "BODY", "FEET"].indexOf(type) == -1) return null;
+		var target = new PartPreview(type, id, has);
+		target.x = type == "HAT" || type == "HEAD" ? 59 : 55;
+		target.y = 30;
+		target.scaleX = target.scaleY = fredScaleDivisor <= 0 ? 1 : 2 / fredScaleDivisor;
 		if (id == 29 && type == "BODY") {
 			target.y += 10;
-			target.width = target.width / fredScaleDivisor;
-			target.height = target.height / fredScaleDivisor;
+			target.scaleX /= fredScaleDivisor;
+			target.scaleY /= fredScaleDivisor;
 		} else if (id == 14 && type == "HAT") {
 			target.y += 10;
 		}
-		target.visible = true;
-		target.alpha = has ? 1 : 0.1;
-		target.gotoAndStop(id);
-		var colorMC = clip(target, "colorMC");
-		if (colorMC != null) colorMC.gotoAndStop(id);
-		var colorMC2 = clip(target, "colorMC2");
-		if (colorMC2 != null) {
-			colorMC2.gotoAndStop(id);
-			colorMC2.visible = type == "HAT" && id == 16;
-		}
+		root.addChildAt(target, Std.int(Math.min(2, root.numChildren)));
 		return target;
 	}
 
-	public static function setupDjinnPreview(root:PR2MovieClip, type:String, id:Int, has:Bool, x:Float, y:Float):Null<AccountCharacter> {
+	public static function setupDjinnPreview(root:openfl.display.DisplayObjectContainer, type:String, id:Int, has:Bool, x:Float,
+		y:Float):Null<AccountCharacter> {
 		if (id != 35 || (type != "BODY" && type != "FEET")) {
 			return null;
 		}
@@ -290,10 +264,6 @@ class PartPopup extends Popup {
 		var insert = Std.int(Math.min(2, root.numChildren));
 		root.addChildAt(character, insert);
 		return character;
-	}
-
-	private static function clip(root:Null<openfl.display.DisplayObjectContainer>, name:String):Null<PR2MovieClip> {
-		return Std.downcast(DisplayUtil.findByName(root, name), PR2MovieClip);
 	}
 
 	private static function ucfirst(value:String):String {

@@ -38,7 +38,7 @@ class GpNotificationTest {
 			notification.art.dispatchEvent(new Event(Event.ENTER_FRAME));
 		}
 		assertEquals(0, holder.numChildren, "frame 71 script removes the notification");
-		assertEquals(71, notification.art.currentFrame, "notification reaches Flash removal frame");
+		assertEquals(71, notification.currentFrame, "notification reaches Flash removal frame");
 	}
 
 	private static function assertEquals(expected:Dynamic, actual:Dynamic, message:String):Void {

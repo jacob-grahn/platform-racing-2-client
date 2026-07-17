@@ -7,14 +7,13 @@ import pr2.app.AppStage;
 import pr2.audio.MusicCatalog;
 import pr2.audio.MusicCatalog.MusicTrack;
 import pr2.lobby.dialogs.AutoDismissController;
-import pr2.runtime.FlComboBox;
-import pr2.runtime.PR2MovieClip;
+import pr2.ui.controls.GameSelect;
 import pr2.ui.StageFocus;
 
 class EditorMusicSettingsPopup extends Sprite {
 	public final editor:LevelEditor;
-	public final art:PR2MovieClip;
-	public final dropdown:FlComboBox;
+	public final art:EditorSettingsMenuView;
+	public final dropdown:GameSelect<MusicTrack>;
 	private final songs:Array<MusicTrack>;
 	private var autoDismiss:Null<AutoDismissController>;
 	private var removed:Bool = false;
@@ -22,16 +21,15 @@ class EditorMusicSettingsPopup extends Sprite {
 	public function new(editor:LevelEditor, target:DisplayObject) {
 		super();
 		this.editor = editor;
-		art = PR2MovieClip.fromLinkage("MusicMenuGraphic", {maxNestedDepth: 6});
+		art = new EditorSettingsMenuView("music");
 		addChild(art);
 		songs = MusicCatalog.enabled([], true);
-		dropdown = new FlComboBox();
+		dropdown = new GameSelect<MusicTrack>();
 		dropdown.x = -100;
 		dropdown.y = -15;
 		dropdown.setSize(200, 22);
-		dropdown.rowCount = 4;
 		for (song in songs) {
-			dropdown.addItem(song);
+			dropdown.addOption(song.label, song);
 		}
 		selectSong(editor.song == "" ? "random" : editor.song);
 		dropdown.addEventListener(Event.CHANGE, changeSong);
@@ -41,7 +39,7 @@ class EditorMusicSettingsPopup extends Sprite {
 	}
 
 	public function selectedSongId():String {
-		var selected:MusicTrack = cast dropdown.selectedItem;
+		var selected = dropdown.selectedOption == null ? null : dropdown.selectedOption.value;
 		return selected == null ? "" : selected.id;
 	}
 
@@ -60,6 +58,7 @@ class EditorMusicSettingsPopup extends Sprite {
 			autoDismiss = null;
 		}
 		dropdown.removeEventListener(Event.CHANGE, changeSong);
+		dropdown.dispose();
 		if (dropdown.parent == this) {
 			removeChild(dropdown);
 		}
@@ -81,7 +80,7 @@ class EditorMusicSettingsPopup extends Sprite {
 	}
 
 	private function changeSong(_:Event):Void {
-		var selected:MusicTrack = cast dropdown.selectedItem;
+		var selected = dropdown.selectedOption == null ? null : dropdown.selectedOption.value;
 		if (selected != null) {
 			editor.setSong(selected.id);
 		}
