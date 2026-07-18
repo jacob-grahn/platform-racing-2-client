@@ -2,18 +2,20 @@ package pr2.effects;
 
 import openfl.display.Sprite;
 import openfl.events.Event;
-import pr2.runtime.SvgAsset;
+import pr2.animation.TimelineClip;
 
 /** Native travel beam and 18-frame impact sequence for LaserShotGraphic. */
 class LaserShotView extends Sprite {
 	public static inline var TRAVEL_BEAM_NAME:String = "laserTravelBeam";
 	public var currentFrame(default, null):Int = 2;
-	public var currentAssetPath(default, null):String;
+	public final timeline:TimelineClip;
 	private var playingHit:Bool = false;
-	private var art:Sprite;
 
 	public function new() {
 		super();
+		timeline = new TimelineClip("assets/effects/laser.lottie.json");
+		timeline.stop();
+		addChild(timeline);
 		renderFrame();
 		addEventListener(Event.ENTER_FRAME, advance);
 	}
@@ -32,15 +34,12 @@ class LaserShotView extends Sprite {
 	}
 
 	private function renderFrame():Void {
-		if (art != null && art.parent == this) removeChild(art);
-		currentAssetPath = 'assets/svg/effects/laser_${StringTools.lpad(Std.string(currentFrame), "0", 2)}.svg';
-		art = new Sprite();
-		art.name = playingHit ? "laserImpact" : TRAVEL_BEAM_NAME;
-		art.addChild(SvgAsset.create(currentAssetPath));
-		addChild(art);
+		timeline.name = playingHit ? "laserImpact" : TRAVEL_BEAM_NAME;
+		timeline.gotoAndStop(currentFrame);
 	}
 
 	public function dispose():Void {
 		removeEventListener(Event.ENTER_FRAME, advance);
+		timeline.dispose();
 	}
 }

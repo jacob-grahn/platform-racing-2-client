@@ -150,6 +150,27 @@ final class ServerConfig {
 	public static function vaultBuyCoinsUrl():String return host + "/vault/buy_coins.php";
 
 	/**
+		Resolve an image path returned by the Vault API against the configured API
+		host. The live catalog contains a mixture of root-relative, vault-relative,
+		and legacy absolute PR2 Hub URLs. In HTML5 those absolute URLs bypass the
+		same-origin development proxy (and `http` URLs are blocked as mixed content).
+	**/
+	public static function vaultImageUrl(value:String):String {
+		var url = StringTools.trim(value);
+		if (url == "") return "";
+		var lower = url.toLowerCase();
+		for (origin in ["https://pr2hub.com", "http://pr2hub.com", "https://www.pr2hub.com", "http://www.pr2hub.com", "//pr2hub.com", "//www.pr2hub.com"]) {
+			if (StringTools.startsWith(lower, origin) && (url.length == origin.length || url.charAt(origin.length) == "/")) {
+				return host + url.substr(origin.length);
+			}
+		}
+		if (StringTools.startsWith(url, "//")) return "https:" + url;
+		if (StringTools.startsWith(url, "/")) return host + url;
+		if (lower.indexOf("://") >= 0 || StringTools.startsWith(lower, "data:") || StringTools.startsWith(lower, "blob:")) return url;
+		return host + "/vault/" + url;
+	}
+
+	/**
 		Friends/Following/Ignored player list endpoint, matching
 		`social.PlayersTabUserListDataLoader`: `{host}/user_list_get.php?mode={mode}`.
 	**/

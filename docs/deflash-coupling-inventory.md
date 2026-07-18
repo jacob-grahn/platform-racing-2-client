@@ -17,19 +17,38 @@ migration should make them decrease without changing observable behavior or visu
 
 ## Summary
 
-- 2 coupling occurrences
-- 1 files with coupling
+- 9 coupling occurrences
+- 5 files with coupling
 - 0 migration-adapter files in the dependency allowlist
 
 | Coupling kind | Occurrences |
 | --- | ---: |
-| numeric/dynamic frame navigation | 2 |
+| numeric/dynamic frame navigation | 9 |
 
 | Feature owner | Occurrences |
 | --- | ---: |
+| Gameplay UI and visuals | 5 |
+| Gameplay effects | 2 |
 | Intro page | 2 |
 
 ## Occurrences By Feature Owner
+
+### Gameplay UI and visuals
+
+| Kind | API | Source |
+| --- | --- | --- |
+| numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/gameplay/EggView.hx:106` |
+| numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/gameplay/EggView.hx:107` |
+| numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/gameplay/EggView.hx:108` |
+| numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/gameplay/EggView.hx:109` |
+| numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/gameplay/ItemDisplay.hx:198` |
+
+### Gameplay effects
+
+| Kind | API | Source |
+| --- | --- | --- |
+| numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/effects/LaserShotView.hx:38` |
+| numeric/dynamic frame navigation | `gotoAndStop` | `haxe/src/pr2/effects/NativeEffectAnimation.hx:31` |
 
 ### Intro page
 

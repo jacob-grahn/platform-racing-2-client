@@ -586,6 +586,12 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		vy = clamp(vy, -MAX_SPEED, MAX_SPEED);
 		movePlayerBy(vx, vy);
 		processBlocks(input);
+		// A block interaction can replace water mode (notably a rotate-block bump
+		// across a one-tile air gap). Do not let the remainder of this stale water
+		// frame count down and overwrite the newly-entered mode with land.
+		if (mode != MODE_WATER) {
+			return;
+		}
 		waterTicks--;
 		if (waterTicks <= 0) {
 			if (input.jump) {
@@ -619,7 +625,10 @@ class LocalPlayerController implements ItemRuntimeOwner {
 			if (mode == MODE_WATER && animationState != CharacterState.Bumped) {
 				animationState = CharacterState.Swim;
 			}
-			if (mode == MODE_FREEZE || mode == MODE_FROZEN_SOLID) {
+			// Flash's generically named "freeze" mode is only the physics pause used
+			// while Course rotates. The freeze-ray visual belongs exclusively to the
+			// separate frozenSolid mode.
+			if (mode == MODE_FROZEN_SOLID) {
 				animationState = CharacterState.Freeze;
 			}
 			if (mode == MODE_JUMP) {
@@ -919,7 +928,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 					return;
 				}
 				if (standingTileX != block.x || standingTileY < block.y || standingTileY > block.y + 2) {
-					returnToLastSafeSpot();
+					returnToLastSafeSpot(true);
 				}
 			default:
 		}
@@ -1231,16 +1240,18 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		standingTileY = block.y;
 	}
 
-	private function returnToLastSafeSpot():Void {
+	private function returnToLastSafeSpot(preserveMotion:Bool = false):Void {
 		var poofTile = rotatedTileAtPixel(lastSafeX, lastSafeY);
 		setPlayerPos(lastSafeX, lastSafeY);
-		vx = 0;
-		vy = 0;
-		targetVelX = 0;
-		jumpVelBoost = 0;
-		jumpHeld = false;
-		setMode(MODE_LAND);
-		grounded = true;
+		if (!preserveMotion) {
+			vx = 0;
+			vy = 0;
+			targetVelX = 0;
+			jumpVelBoost = 0;
+			jumpHeld = false;
+			setMode(MODE_LAND);
+			grounded = true;
+		}
 		blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.SafetyPoof, poofTile.x, poofTile.y));
 	}
 

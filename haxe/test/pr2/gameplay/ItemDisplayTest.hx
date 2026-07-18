@@ -33,16 +33,16 @@ class ItemDisplayTest {
 
 	private static function testAuthoredDisplayState():Void {
 		var display = new ItemDisplay();
-		@:privateAccess assertEquals("assets/svg/effects/item_display_01.svg", display.art.currentAssetPath,
-			"empty display uses exact authored XFL frame one");
+		@:privateAccess assertEquals("assets/effects/item_display.lottie.json", display.art.timeline.sourcePath,
+			"empty display uses semantic Lottie data");
+		@:privateAccess assertEquals(1, display.art.timeline.currentFrame, "empty display uses authored frame one");
 		assertEquals("None", display.itemName, "display starts empty");
 		assertEquals("None", display.labelText("holder1"), "dark label starts empty");
 		assertEquals("None", display.labelText("holder2"), "light label starts empty");
 		assertEquals(false, display.ammoVisible(1), "empty display hides ammo");
 
 		display.setItemCode(1);
-		@:privateAccess assertEquals("assets/svg/effects/item_display_36.svg", display.art.currentAssetPath,
-			"laser selects its exact authored label frame");
+		@:privateAccess assertEquals(36, display.art.timeline.currentFrame, "laser selects its exact authored label frame");
 		display.setAmmo(3);
 		assertEquals("Laser", display.itemName, "laser frame selected");
 		assertEquals("Laser", display.labelText("holder1"), "dark label updates");
@@ -59,11 +59,9 @@ class ItemDisplayTest {
 		assertEquals(0, ItemDisplay.clampAmmo(-1), "ammo clamps at zero");
 
 		display.setItemCode(2);
-		@:privateAccess assertEquals("assets/svg/effects/item_display_11.svg", display.art.currentAssetPath,
-			"mine HUD uses its exact composed XFL label frame");
+		@:privateAccess assertEquals(11, display.art.timeline.currentFrame, "mine HUD uses its exact authored label frame");
 		@:privateAccess display.art.advanceFrame();
-		@:privateAccess assertEquals("assets/svg/effects/item_display_12.svg", display.art.currentAssetPath,
-			"nested mine animation advances through authored frames");
+		@:privateAccess assertEquals(12, display.art.timeline.currentFrame, "nested mine animation advances through authored frames");
 		display.remove();
 	}
 

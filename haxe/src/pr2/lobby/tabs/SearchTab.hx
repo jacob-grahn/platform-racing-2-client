@@ -242,6 +242,7 @@ class SearchView extends NativeView {
 		mode.addItem({label: "User Name", data: "user"});
 		mode.addItem({label: "Level Title", data: "title"});
 		mode.addItem({label: "Level ID", data: "id"});
+		mode.selectedIndex = 0;
 		label("Sort By:", 4, 34, 41.55);
 		orderSelect = combo("order_cb", 52.8, 30, 100 * 0.901611328125);
 		var order = orderSelect;
@@ -249,10 +250,12 @@ class SearchView extends NativeView {
 		order.addItem({label: "Alphabetical", data: "alphabetical"});
 		order.addItem({label: "Rating", data: "rating"});
 		order.addItem({label: "Popularity", data: "popularity"});
+		order.selectedIndex = 0;
 		directionSelect = combo("dir_cb", 152.8, 30, 100 * 0.939773559570312);
 		var dir = directionSelect;
 		dir.addItem({label: "Descending", data: "desc"});
 		dir.addItem({label: "Ascending", data: "asc"});
+		dir.selectedIndex = 0;
 		searchInput = ownControl(new GameTextInput());
 		searchInput.name = "searchInput";
 		searchInput.x = 10.85;

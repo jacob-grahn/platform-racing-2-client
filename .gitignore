@@ -48,7 +48,6 @@ test/output/
 /tools/frame-script-cue-inventory.json
 /tools/generate_bubble_body_animation.py
 /tools/generate_character_item_art.py
-/tools/generate_classic_standing_rig.py
 /tools/generate_credits_data.py
 /tools/generate_deflash_parity_manifest.py
 /tools/generate_editor_native_art.py

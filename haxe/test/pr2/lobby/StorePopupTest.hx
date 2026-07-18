@@ -10,6 +10,7 @@ import pr2.lobby.store.QuantityPopup;
 import pr2.lobby.store.StoreListing;
 import pr2.lobby.store.StoreListingData;
 import pr2.lobby.store.StorePopup;
+import pr2.net.ServerConfig;
 import pr2.page.LobbyPage;
 import pr2.util.TestDisplayUtil as DisplayUtil;
 
@@ -101,6 +102,11 @@ class StorePopupTest {
 		assertClose(0.183242797851562, coinsPanel.scaleY, "coins ShadowBG keeps XFL vertical scale");
 		assertClose(-213, holder.x, "store items holder keeps XFL X");
 		assertClose(-135, holder.y, "store items holder keeps XFL Y");
+		assertNotNull(holder.mask, "store items holder keeps the authored XFL mask");
+		assertClose(-213, holder.mask.x, "store items mask keeps XFL X");
+		assertClose(-135, holder.mask.y, "store items mask keeps XFL Y");
+		assertClose(410, holder.mask.width, "store items mask keeps XFL width");
+		assertClose(225, holder.mask.height, "store items mask keeps XFL height");
 		assertClose(-50, close.x, "store Close keeps XFL X");
 		assertClose(100.05, close.y, "store Close keeps XFL Y");
 		assertEquals(3, popup.listingsForTests()[0].randomCharactersForTests().length, "epic_everything listing renders three random characters");
@@ -113,6 +119,13 @@ class StorePopupTest {
 		popup.remove();
 		assertEquals(true, scroll.removedForTests(), "store cleanup removes authored scrollbar listeners");
 		assertEquals(0, StorePopup.userCoins, "cleanup clears coin balance");
+
+		ServerConfig.setHost("/api");
+		assertEquals("/api/vault/item.png", ServerConfig.vaultImageUrl("http://pr2hub.com/vault/item.png"), "vault images use the configured proxy host");
+		assertEquals("/api/vault/item.png", ServerConfig.vaultImageUrl("//pr2hub.com/vault/item.png"), "protocol-relative PR2 Hub images use the configured proxy host");
+		assertEquals("/api/vault/item.png", ServerConfig.vaultImageUrl("item.png"), "vault-relative image paths resolve beside the catalog");
+		assertEquals("https://cdn.example/item.png", ServerConfig.vaultImageUrl("https://cdn.example/item.png"), "external vault image hosts remain unchanged");
+		ServerConfig.resetHost();
 
 		testPurchaseUploadCallbacks();
 		testNativeQuantityPopupFlow();

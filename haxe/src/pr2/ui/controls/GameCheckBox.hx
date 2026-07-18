@@ -53,6 +53,9 @@ class GameCheckBox extends NativeControl {
 			return;
 		}
 		graphics.clear();
+		graphics.beginFill(0x000000, 0.001);
+		graphics.drawRect(0, 0, controlWidth, controlHeight);
+		graphics.endFill();
 		while (iconHolder.numChildren > 0) iconHolder.removeChildAt(0);
 		iconHolder.addChild(NativeAssets.svg(authoredAsset()));
 		layoutLabel();

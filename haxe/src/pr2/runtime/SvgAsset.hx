@@ -1,19 +1,107 @@
 package pr2.runtime;
 
 import format.SVG;
+import format.svg.FillType;
+import format.svg.Group;
+import format.svg.Group.DisplayElement;
+import format.svg.Text;
+import haxe.Json;
 import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.geom.Rectangle;
+import openfl.text.TextField;
+import openfl.text.TextFieldAutoSize;
+import openfl.text.TextFormat;
 import openfl.utils.Assets;
 
 /** Loads Animate-exported SVG text and renders it as OpenFL vector graphics. */
 class SvgAsset {
+	private static inline var SVG_PREFIX = "assets/svg/";
+	private static inline var SVG_PACK_PREFIX = "assets/svg-packs/";
 	private static final parsed:Map<String, SVG> = new Map();
+	private static final packEntries:Map<String, Dynamic> = new Map();
 
 	public static function create(assetPath:String):Shape {
 		var shape = new Shape();
 		get(assetPath).render(shape.graphics);
 		return shape;
+	}
+
+	/**
+		Renders an SVG plus its static text elements. The `format.svg` Graphics
+		backend deliberately no-ops `renderText`, so source-derived presentation
+		frames containing authored text otherwise appear blank. TextFields retain
+		the SVG parser's composed matrices and use the embedded PR2 font faces.
+	**/
+	public static function createWithText(assetPath:String):Sprite {
+		var content = prepare(loadText(assetPath));
+		var svg = new SVG(content);
+		var container = new Sprite();
+		var shape = new Shape();
+		svg.render(shape.graphics);
+		container.addChild(shape);
+
+		var descriptors:Array<Text> = [];
+		collectTextDescriptors(svg.data, descriptors);
+		var values:Array<String> = [];
+		collectTextValues(Xml.parse(content).firstElement(), values);
+		for (i in 0...descriptors.length) {
+			if (i >= values.length || values[i] == "") continue;
+			var descriptor = descriptors[i];
+			var color = switch (descriptor.fill) {
+				case FillSolid(value): value;
+				default: 0x000000;
+			};
+			var field = new TextField();
+			field.autoSize = TextFieldAutoSize.LEFT;
+			field.embedFonts = true;
+			field.mouseEnabled = false;
+			field.selectable = false;
+			field.defaultTextFormat = new TextFormat(FontResolver.resolve(descriptor.font_family), Math.round(descriptor.font_size), color);
+			field.text = values[i];
+			// TextField includes a two-pixel gutter; remove it and align its top to
+			// the SVG baseline before applying the fully composed SVG matrix.
+			field.x = descriptor.x - 2;
+			field.y = descriptor.y - descriptor.font_size - 2;
+			field.alpha = descriptor.fill_alpha;
+			var textContainer = new Sprite();
+			textContainer.transform.matrix = descriptor.matrix;
+			textContainer.addChild(field);
+			container.addChild(textContainer);
+		}
+		return container;
+	}
+
+	private static function collectTextDescriptors(group:Group, output:Array<Text>):Void {
+		for (child in group.children) {
+			switch (child) {
+				case DisplayText(text): output.push(text);
+				case DisplayGroup(childGroup): collectTextDescriptors(childGroup, output);
+				case DisplayPath(_):
+			}
+		}
+	}
+
+	private static function collectTextValues(node:Xml, output:Array<String>):Void {
+		if (node == null) return;
+		if (node.nodeType == Xml.Element && localName(node.nodeName) == "text") {
+			output.push(xmlText(node));
+			return;
+		}
+		if (node.nodeType != Xml.Element && node.nodeType != Xml.Document) return;
+		for (child in node) collectTextValues(child, output);
+	}
+
+	private static function xmlText(node:Xml):String {
+		var value = "";
+		for (child in node) {
+			switch (child.nodeType) {
+				case Xml.PCData, Xml.CData: value += child.nodeValue;
+				case Xml.Element: value += xmlText(child);
+				default:
+			}
+		}
+		return value;
 	}
 
 	public static function createFromText(content:String):Shape {
@@ -88,29 +176,55 @@ class SvgAsset {
 
 	private static function loadText(assetPath:String):String {
 		var content:Null<String> = null;
+		#if sys
+		if (StringTools.startsWith(assetPath, SVG_PREFIX)) {
+			content = sys.io.File.getContent("art/svg/" + assetPath.substr(SVG_PREFIX.length));
+		}
+		#end
+		if (content == null && StringTools.startsWith(assetPath, SVG_PREFIX)) {
+			content = loadPackEntry(assetPath);
+		}
+		// Non-SVG text assets retain the ordinary OpenFL lookup path.
 		try {
-			content = Assets.getText(assetPath);
+			if (content == null) content = Assets.getText(assetPath);
 		} catch (_:Dynamic) {
 			// Direct `<asset>` SVG entries are classified as binary by OpenFL.
-			// Fall through to getBytes before the sys-only source-tree fallback.
+			// Fall through to getBytes for any remaining legacy asset.
 		}
 		if (content == null) {
 			try {
 				var bytes = Assets.getBytes(assetPath);
 				if (bytes != null) content = bytes.toString();
 			} catch (_:Dynamic) {
-				// Packed timeline entries deliberately have no individual OpenFL asset.
+				// Packed SVG entries deliberately have no individual OpenFL asset.
 			}
 		}
-		#if sys
-		if (content == null && StringTools.startsWith(assetPath, "assets/svg/")) {
-			content = sys.io.File.getContent("art/svg/" + assetPath.substr("assets/svg/".length));
-		}
-		#end
 		if (content == null) {
 			throw 'Missing SVG asset $assetPath';
 		}
 		return content;
+	}
+
+	private static function loadPackEntry(assetPath:String):Null<String> {
+		var group = packGroup(assetPath);
+		var entries = packEntries.get(group);
+		if (entries == null) {
+			var packPath = SVG_PACK_PREFIX + group + ".json";
+			var packText = Assets.getText(packPath);
+			if (packText == null) throw 'Missing SVG pack $packPath';
+			var pack:Dynamic = Json.parse(packText);
+			entries = Reflect.field(pack, "entries");
+			if (entries == null) throw 'Invalid SVG pack $packPath';
+			packEntries.set(group, entries);
+		}
+		var content:Dynamic = Reflect.field(entries, assetPath);
+		return content == null ? null : Std.string(content);
+	}
+
+	private static function packGroup(assetPath:String):String {
+		var relative = assetPath.substr(SVG_PREFIX.length);
+		var parts = relative.split("/");
+		return parts[0] == "character" ? "character_" + parts[1] : parts[0];
 	}
 
 	/** openfl/svg does not implement SVG <use>; Animate relies on it heavily. */
@@ -126,11 +240,13 @@ class SvgAsset {
 		var definitions:Map<String, Xml> = new Map();
 		collectIds(root, definitions);
 		expandChildren(root, definitions, false);
-		bakeGroupOpacity(root, 1);
+		var expandedDefinitions:Map<String, Xml> = new Map();
+		collectIds(root, expandedDefinitions);
+		bakeGroupOpacity(root, 1, expandedDefinitions, new Map());
 		return document.toString();
 	}
 
-	private static function bakeGroupOpacity(node:Xml, inherited:Float):Void {
+	private static function bakeGroupOpacity(node:Xml, inherited:Float, definitions:Map<String, Xml>, gradientFactors:Map<String, Float>):Void {
 		if (node.nodeType != Xml.Element || localName(node.nodeName) == "defs") return;
 		var local = 1.0;
 		if (node.exists("opacity")) {
@@ -141,10 +257,26 @@ class SvgAsset {
 		var combined = inherited * local;
 		if (isPaintedElement(localName(node.nodeName))) {
 			multiplyOpacity(node, "fill-opacity", combined);
+			multiplyGradientOpacity(node, combined, definitions, gradientFactors);
 			multiplyOpacity(node, "stroke-opacity", combined);
 			combined = 1;
 		}
-		for (child in node.elements()) bakeGroupOpacity(child, combined);
+		for (child in node.elements()) bakeGroupOpacity(child, combined, definitions, gradientFactors);
+	}
+
+	/** `format.svg` applies path alpha to solid fills but not gradient fills. */
+	private static function multiplyGradientOpacity(node:Xml, inherited:Float, definitions:Map<String, Xml>, gradientFactors:Map<String, Float>):Void {
+		if (inherited == 1) return;
+		var fill = node.get("fill");
+		if (fill == null || !StringTools.startsWith(fill, "url(#") || !StringTools.endsWith(fill, ")")) return;
+		var id = fill.substr(5, fill.length - 6);
+		var gradient = definitions.get(id);
+		if (gradient == null) return;
+		var previous = gradientFactors.get(id);
+		if (previous != null && previous == inherited) return;
+		var factor = previous == null || previous == 0 ? inherited : inherited / previous;
+		for (stop in gradient.elements()) multiplyOpacity(stop, "stop-opacity", factor);
+		gradientFactors.set(id, inherited);
 	}
 
 	private static function multiplyOpacity(node:Xml, attribute:String, inherited:Float):Void {

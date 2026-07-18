@@ -3,6 +3,7 @@ package pr2.gameplay;
 import openfl.display.DisplayObject;
 import openfl.display.Shape;
 import openfl.display.Sprite;
+import pr2.animation.TimelineClip;
 import openfl.events.Event;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
@@ -152,14 +153,16 @@ class ItemDisplay extends Removable {
 }
 
 private class ItemDisplayView extends Sprite {
-	private var exactArt:Null<Shape>;
+	public final timeline:TimelineClip;
 	private var frameStart:Int = 1;
 	private var frameSpan:Int = 5;
 	private var frameOffset:Int = 0;
-	public var currentAssetPath(default, null):String = "";
 
 	public function new() {
 		super();
+		timeline = new TimelineClip("assets/effects/item_display.lottie.json");
+		timeline.stop();
+		addChild(timeline);
 		redraw();
 		for (index in 1...4) {
 			var dot = SvgAsset.create('assets/svg/effects/item_ammo_${StringTools.lpad(Std.string(index), "0", 2)}.svg');
@@ -192,9 +195,6 @@ private class ItemDisplayView extends Sprite {
 	}
 
 	private function redraw():Void {
-		if (exactArt != null && exactArt.parent == this) removeChild(exactArt);
-		currentAssetPath = 'assets/svg/effects/item_display_${StringTools.lpad(Std.string(frameStart + frameOffset), "0", 2)}.svg';
-		exactArt = SvgAsset.create(currentAssetPath);
-		addChildAt(exactArt, 0);
+		timeline.gotoAndStop(frameStart + frameOffset);
 	}
 }

@@ -1170,6 +1170,11 @@ class LevelEditor extends Page {
 			return;
 		}
 		var target = Std.downcast(event.target, DisplayObject);
+		if (target != null && isTargetWithinActiveEditorPopup(target)) {
+			// Editor settings/block-option popups mount directly on the stage. They
+			// are interactive editor chrome, not level-canvas input.
+			return;
+		}
 		var targetInMenu = target != null && isTargetWithinEditorMenu(target);
 		var targetInPlacedObject = target != null && isTargetWithinPlacedEditorObject(target);
 		mouseDownEventsForTests++;
@@ -1241,6 +1246,10 @@ class LevelEditor extends Page {
 		if (Popup.getOpen().length > 0) {
 			return;
 		}
+		var target = Std.downcast(event.target, DisplayObject);
+		if (target != null && isTargetWithinActiveEditorPopup(target)) {
+			return;
+		}
 		if (continueSelectedBrushAt(event.stageX, event.stageY)) {
 			event.stopImmediatePropagation();
 			return;
@@ -1306,6 +1315,22 @@ class LevelEditor extends Page {
 		var current:Null<DisplayObject> = target;
 		while (current != null) {
 			if (current == menu || current == activeBrushSizeMenu) {
+				return true;
+			}
+			current = current.parent;
+		}
+		return false;
+	}
+
+	private function isTargetWithinActiveEditorPopup(target:DisplayObject):Bool {
+		var current:Null<DisplayObject> = target;
+		while (current != null) {
+			if (current == activeBlockOptionsPopup
+				|| current == activeItemSettingsPopup
+				|| current == activeHatsSettingsPopup
+				|| current == activeMusicSettingsPopup
+				|| current == activeModeSettingsPopup
+				|| current == activeValueSettingsPopup) {
 				return true;
 			}
 			current = current.parent;

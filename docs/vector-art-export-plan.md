@@ -163,7 +163,7 @@ contain real `<path>` data for `static`, `primary`, and `secondary` exports.
 
 ## Runtime assets
 
-The runtime loads the committed SVG exports directly. Timeline SVGs are grouped
-into on-demand JSON packs; the small set of SVGs containing unsupported bitmap
-fills use the generated files under `art/png/timeline/` as fallbacks. The legacy
-4x raster manifests and sprite atlases are no longer part of the build.
+The runtime keeps the `assets/svg/...` API but loads the committed production
+SVG exports from category JSON packs under `art/svg-packs/`. This avoids one
+HTML5 startup request per vector. The old generated timeline SVG packs are no
+longer part of the build.

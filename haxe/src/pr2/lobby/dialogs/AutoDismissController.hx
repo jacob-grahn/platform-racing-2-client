@@ -76,6 +76,18 @@ class AutoDismissController {
 	}
 
 	private function onStageMouseDown(event:MouseEvent):Void {
+		if (isOwnerOrDescendant(event.target)) {
+			return;
+		}
 		stageMouseDownForTests(event.stageX, event.stageY);
+	}
+
+	private function isOwnerOrDescendant(target:Dynamic):Bool {
+		var current = Std.downcast(target, DisplayObject);
+		while (current != null) {
+			if (current == owner) return true;
+			current = current.parent;
+		}
+		return false;
 	}
 }

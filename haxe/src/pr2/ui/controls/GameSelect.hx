@@ -132,7 +132,7 @@ class GameSelect<T> extends NativeControl {
 		var listSkin = new Sprite();
 		listSkin.mouseEnabled = false;
 		var listArt = NativeAssets.svg(StaticSvg.ListSkin);
-		listArt.scale9Grid = new Rectangle(2, 2, 146, 18);
+		listArt.scale9Grid = new Rectangle(2, 2, 269, 187);
 		listArt.width = controlWidth;
 		listArt.height = listHeight;
 		listSkin.addChild(listArt);
@@ -209,13 +209,15 @@ class GameSelect<T> extends NativeControl {
 	private function mountListOnStage():Void {
 		if (stage == null || listHolder == null) return;
 		var listHeight = visibleRowCount() * 22 + 4;
-		var below = localToGlobal(new Point(0, controlHeight));
-		var above = localToGlobal(new Point(0, -listHeight));
-		var bottom = localToGlobal(new Point(0, controlHeight + listHeight));
+		var below = stage.globalToLocal(localToGlobal(new Point(0, controlHeight)));
+		var above = stage.globalToLocal(localToGlobal(new Point(0, -listHeight)));
+		var bottom = stage.globalToLocal(localToGlobal(new Point(0, controlHeight + listHeight)));
 		var localY = below.y + Math.abs(bottom.y - below.y) <= stage.stageHeight || above.y < 0 ? controlHeight : -listHeight;
-		var origin = localToGlobal(new Point(0, localY));
-		var right = localToGlobal(new Point(controlWidth, localY));
-		var matrix = transform.concatenatedMatrix.clone();
+		var origin = stage.globalToLocal(localToGlobal(new Point(0, localY)));
+		var right = stage.globalToLocal(localToGlobal(new Point(controlWidth, localY)));
+		var lower = stage.globalToLocal(localToGlobal(new Point(0, localY + listHeight)));
+		var matrix = new Matrix((right.x - origin.x) / controlWidth, (right.y - origin.y) / controlWidth,
+			(lower.x - origin.x) / listHeight, (lower.y - origin.y) / listHeight);
 		matrix.tx = Math.max(0, Math.min(origin.x, stage.stageWidth - Math.abs(right.x - origin.x)));
 		matrix.ty = origin.y;
 		stage.addChild(listHolder);
@@ -248,6 +250,9 @@ class GameSelect<T> extends NativeControl {
 			return;
 		}
 		graphics.clear();
+		graphics.beginFill(0x000000, 0.001);
+		graphics.drawRect(0, 0, controlWidth, controlHeight);
+		graphics.endFill();
 		while (skinHolder.numChildren > 0) skinHolder.removeChildAt(0);
 		var art = NativeAssets.svg(authoredAsset());
 		art.scale9Grid = new Rectangle(4, 13.45, 120.75, 4.6);

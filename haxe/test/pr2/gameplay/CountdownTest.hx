@@ -1,6 +1,9 @@
 package pr2.gameplay;
 
 import openfl.display.Sprite;
+import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
+import openfl.text.TextField;
 import pr2.lobby.account.Settings;
 
 class CountdownTest {
@@ -21,11 +24,14 @@ class CountdownTest {
 
 		assertEquals(0, countdown.counts, "no counts before playing");
 		assertEquals(false, countdown.finished, "not finished before playing");
-		@:privateAccess assertEquals("assets/svg/effects/countdown_01.svg", countdown.art.currentAssetPath,
-			"countdown starts on exact composed XFL frame one");
+		@:privateAccess assertEquals("assets/effects/countdown.lottie.json", countdown.art.timeline.sourcePath,
+			"countdown uses semantic Lottie data");
+		@:privateAccess assertEquals(1, countdown.art.currentFrame, "countdown starts on authored frame one");
 		for (_ in 0...8) countdown.advance();
-		@:privateAccess assertEquals("assets/svg/effects/countdown_09.svg", countdown.art.currentAssetPath,
-			"first ready cue uses exact composed XFL frame nine");
+		@:privateAccess assertEquals(9, countdown.art.currentFrame, "first ready cue uses exact authored frame nine");
+		@:privateAccess var label = findVisibleText(countdown.art.timeline);
+		assertEquals(true, label != null, "countdown frame includes its visible native text layer");
+		assertEquals("3", label.text, "first countdown frame renders its authored label");
 
 		// Drive the authored 62-frame timeline to completion. Frame scripts at
 		// 9/24/39 tick "count" and 54 fires "finish"; 62 self-removes.
@@ -39,6 +45,21 @@ class CountdownTest {
 		assertEquals(true, countdown.finished, "finish reached");
 		assertEquals(1, finishCalls, "onFinish invoked exactly once");
 		assertEquals(true, countdown.parent == null, "countdown self-removes after the last frame");
+	}
+
+	private static function findVisibleText(root:DisplayObjectContainer):Null<TextField> {
+		for (index in 0...root.numChildren) {
+			var child:DisplayObject = root.getChildAt(index);
+			if (!child.visible) continue;
+			var text = Std.downcast(child, TextField);
+			if (text != null && text.text != "") return text;
+			var container = Std.downcast(child, DisplayObjectContainer);
+			if (container != null) {
+				var nested = findVisibleText(container);
+				if (nested != null) return nested;
+			}
+		}
+		return null;
 	}
 
 	private static function testCountdownSounds():Void {

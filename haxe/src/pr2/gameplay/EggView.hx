@@ -1,21 +1,22 @@
 package pr2.gameplay;
 
 import openfl.display.Sprite;
-import openfl.display.Shape;
 import openfl.events.Event;
 import openfl.geom.ColorTransform;
-import pr2.runtime.SvgAsset;
+import pr2.animation.TimelineClip;
 
 /** Explicit native walk/squash timeline for an egg-mode minion. */
 class EggView extends Sprite {
 	public var currentFrame(default, null):Int = 1;
-	public var currentAssetPath(default, null):String;
 	public final leftFoot:EggPartView;
 	public final rightFoot:EggPartView;
 	public final base:Sprite;
 	public final dots:Sprite;
+	public final fixedTimeline:TimelineClip;
+	public final feetTimeline:TimelineClip;
+	public final baseTimeline:TimelineClip;
+	public final dotsTimeline:TimelineClip;
 	private var playing:Bool = true;
-	private var exactArt:Null<Shape>;
 	private var footTint:Int = 0xFFFFFF;
 	private var baseTint:Int = 0xFFFFFF;
 	private var dotsTint:Int = 0xFFFFFF;
@@ -23,15 +24,23 @@ class EggView extends Sprite {
 	public function new() {
 		super();
 		name = "EggGraphic";
+		fixedTimeline = effectTimeline("egg_fixed");
+		addChild(fixedTimeline);
 		var egg = new Sprite();
 		egg.name = "egg";
 		base = new Sprite();
 		base.name = "base";
+		baseTimeline = effectTimeline("egg_base");
+		base.addChild(baseTimeline);
 		egg.addChild(base);
 		dots = new Sprite();
 		dots.name = "dots";
+		dotsTimeline = effectTimeline("egg_dots");
+		dots.addChild(dotsTimeline);
 		egg.addChild(dots);
 		addChild(egg);
+		feetTimeline = effectTimeline("egg_feet");
+		addChild(feetTimeline);
 		leftFoot = new EggPartView();
 		leftFoot.name = "var_165";
 		leftFoot.x = -17;
@@ -69,11 +78,16 @@ class EggView extends Sprite {
 		rightFoot.colorMC2.visible = false;
 		base.transform.colorTransform = colorTransformFor(baseColor);
 		dots.transform.colorTransform = colorTransformFor(dotsColor);
+		feetTimeline.transform.colorTransform = colorTransformFor(footColor);
 		redraw();
 	}
 
 	public function dispose():Void {
 		removeEventListener(Event.ENTER_FRAME, advance);
+		fixedTimeline.dispose();
+		feetTimeline.dispose();
+		baseTimeline.dispose();
+		dotsTimeline.dispose();
 		if (parent != null) parent.removeChild(this);
 	}
 
@@ -89,12 +103,16 @@ class EggView extends Sprite {
 	}
 
 	private function redraw():Void {
-		if (exactArt != null && exactArt.parent == this) removeChild(exactArt);
-		currentAssetPath = 'assets/svg/effects/egg_${StringTools.lpad(Std.string(currentFrame), "0", 2)}.svg';
-		var tints:Map<String, Int> = ["colorMC" => footTint, "base" => baseTint, "dots" => dotsTint];
-		exactArt = SvgAsset.createTinted(currentAssetPath, tints, ["colorMC2"]);
-		exactArt.name = currentAssetPath;
-		addChildAt(exactArt, 0);
+		fixedTimeline.gotoAndStop(currentFrame);
+		feetTimeline.gotoAndStop(currentFrame);
+		baseTimeline.gotoAndStop(currentFrame);
+		dotsTimeline.gotoAndStop(currentFrame);
+	}
+
+	private static function effectTimeline(kind:String):TimelineClip {
+		var result = new TimelineClip('assets/effects/$kind.lottie.json');
+		result.stop();
+		return result;
 	}
 
 	private static function randomColor(nextRandom:Void->Float):Int {

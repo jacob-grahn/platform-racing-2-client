@@ -26,6 +26,15 @@ class StorePopupView extends NativeView {
 		holder.x = -213;
 		holder.y = -135;
 		addChild(holder);
+		var itemsMask = new Sprite();
+		itemsMask.name = "itemsMask";
+		itemsMask.graphics.beginFill(0xCCCCCC);
+		itemsMask.graphics.drawRect(0, 0, 410, 225);
+		itemsMask.graphics.endFill();
+		itemsMask.x = -213;
+		itemsMask.y = -135;
+		addChild(itemsMask);
+		holder.mask = itemsMask;
 		var close = ownControl(new GameButton("Close"));
 		close.name = "close_bt";
 		close.x = -50;

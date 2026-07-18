@@ -69,6 +69,7 @@ class LocalPlayerControllerTest {
 		testLaserGunReloadTiming();
 		testLaserGunShotAnimatesBlockFromSide();
 		testLaserGunDamageBreaksBrickBlock();
+		testTopHatLaserDamagesVanishBlock();
 		testMineItemPlacesMineAndConsumesItem();
 		testMineItemBlockedByOccupiedTile();
 		testMineAppearSkipsPlacementWhenTileBecomesOccupied();
@@ -105,6 +106,7 @@ class LocalPlayerControllerTest {
 		testTimedMoveBlockWaitsWhenDestinationOccupied();
 		testBumpingRotateBlockPutsPlayerInFreezeState();
 		testWaterTouchDoesNotCancelRotation();
+		testWaterBelowGapDoesNotStrandRotation();
 		testRotateRightCompletesCourseRotation();
 		testRotateLeftCompletesCourseRotation();
 		testRotationTweenMatchesCourseFrames();
@@ -612,6 +614,7 @@ class LocalPlayerControllerTest {
 
 	private static function testSafetyBlockReturnsPlayerToLastSafeSpot():Void {
 		var player = new LocalCharacter(safetyDropLevel());
+		@:privateAccess player.controller.vx = 6;
 		var touchedSafety = false;
 
 		for (_ in 0...120) {
@@ -626,9 +629,9 @@ class LocalPlayerControllerTest {
 		assertEquals(true, touchedSafety, "falling player touches safety block");
 		assertClose(75, state.x, "safety block restores last safe x");
 		assertClose(90, state.y, "safety block restores last safe y");
-		assertClose(0, state.vx, "safety block clears horizontal velocity");
-		assertClose(0, state.vy, "safety block clears vertical velocity");
-		assertEquals(true, state.grounded, "safety return leaves player grounded");
+		assertEquals(true, Math.abs(state.vx) > 0.1, "safety block preserves horizontal velocity");
+		assertEquals(true, state.vy > 0.1, "safety block preserves falling velocity");
+		assertEquals(false, state.grounded, "safety return does not rewrite the airborne motion state");
 	}
 
 	private static function testSafetyBlockEmitsPoofVisual():Void {
@@ -1298,6 +1301,25 @@ class LocalPlayerControllerTest {
 		assertEquals(0.0, player.blockAlphaAt(4, 5), "laser-damaged brick is removed");
 	}
 
+	private static function testTopHatLaserDamagesVanishBlock():Void {
+		var level = heldItemWithTargetBlockLevel(1, BlockType.Vanish, 3);
+		level.blocks.push(new LevelBlock(4, 5, BlockType.Brick));
+		var player = collectItem(level, 1);
+		player.setHats([9, 0xFFFFFF, -1]);
+		player.consumeBlockVisualEvents();
+
+		makeItemAvailable(player);
+		player.step(new LocalPlayerInput(false, false, false, false, true));
+		stepFrames(player, 2);
+		var events = player.consumeBlockVisualEvents();
+
+		assertEquals(1, events.length, "top-hat laser damages only the vanish block");
+		assertEquals(3, events[0].tileX, "top-hat laser damage stops at the vanish block");
+		assertEquals("BlockBumpSound", Std.string(events[0].kind), "top-hat laser bumps the vanish block");
+		assertBelow(player.blockAlphaAt(3, 5), 1.0, "top-hat laser starts fading the vanish block");
+		assertEquals(1.0, player.blockAlphaAt(4, 5), "brick behind the vanish block remains undamaged");
+	}
+
 	private static function testMineItemPlacesMineAndConsumesItem():Void {
 		var level = heldItemLevel(2);
 		var player = collectItem(level, 2);
@@ -1881,7 +1903,7 @@ class LocalPlayerControllerTest {
 		var state = player.stateSnapshot();
 		assertEquals("rotate_right", state.touchedBlockType, "debug state reports rotate block touch");
 		assertEquals("freeze", state.mode, "rotate block bump pauses character physics");
-		assertEquals("freeze", state.animation, "rotate pause exposes frozen animation state");
+		assertEquals("jump", state.animation, "rotate pause preserves the pre-bump animation instead of showing freeze-ray ice");
 		assertClose(0, state.vx, "rotate block clears horizontal velocity");
 		assertClose(0, state.vy, "rotate block clears vertical velocity");
 	}
@@ -1903,6 +1925,30 @@ class LocalPlayerControllerTest {
 		}
 		assertEquals(-90, player.stateSnapshot().courseRotation, "water-backed rotate block completes its rotation");
 		assertEquals("land", player.stateSnapshot().mode, "completed water-backed rotation resumes land physics");
+	}
+
+	private static function testWaterBelowGapDoesNotStrandRotation():Void {
+		var level = rotateBlockLevel(BlockType.RotateRight);
+		// Rotate block at y=1, empty y=2, water at y=3: the player swims upward
+		// through the gap and reaches the rotate block as the water linger expires.
+		level.blocks.splice(1, 1); // remove the helper fixture's solid below the water
+		level.blocks.push(new LevelBlock(2, 3, BlockType.Water));
+		var player = new LocalCharacter(level);
+		var bumped = false;
+		for (_ in 0...60) {
+			player.step(new LocalPlayerInput(false, false, true));
+			if (player.stateSnapshot().mode == "freeze") {
+				bumped = true;
+				break;
+			}
+		}
+		assertEquals(true, bumped, "water-gap setup reaches the rotate block");
+		assertEquals("freeze", player.stateSnapshot().mode, "expiring water linger cannot cancel the rotate pause");
+		assertEquals("swim", player.stateSnapshot().animation, "water-gap rotate pause does not borrow the freeze-ray animation");
+
+		for (_ in 0...30) player.step(new LocalPlayerInput());
+		assertEquals(90, player.stateSnapshot().courseRotation, "water-gap rotation completes instead of leaving a stale rotation lock");
+		@:privateAccess assertEquals(0, player.controller.rotateFramesRemaining, "completed water-gap rotation allows later rotate blocks");
 	}
 
 	private static function testRotateRightCompletesCourseRotation():Void {

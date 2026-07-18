@@ -6,7 +6,7 @@ from __future__ import annotations
 import argparse
 
 from character_lottie_motion import load_lottie_motion
-from generate_classic_standing_rig import ROOT, STATE_SOURCES, animation_record, root_matrices
+from generate_character_rig import ROOT, STATE_SOURCES, animation_record, root_matrices
 
 
 STATES = tuple(state[0] for state in STATE_SOURCES)
@@ -25,7 +25,7 @@ def main() -> None:
     maximum = 0.0
     frame_total = 0
     for name in STATES:
-        path = ROOT / "art/rigs/lottie" / f"{name}.lottie.json"
+        path = ROOT / "art/intermediate/character-lottie" / f"{name}.lottie.json"
         motion = load_lottie_motion(path)
         frame_total += motion["frameCount"]
         if not args.xfl_parity:

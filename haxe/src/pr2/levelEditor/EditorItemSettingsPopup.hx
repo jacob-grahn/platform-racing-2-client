@@ -2,6 +2,8 @@ package pr2.levelEditor;
 
 import openfl.display.DisplayObject;
 import openfl.display.Sprite;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
 import pr2.app.AppStage;
 import pr2.gameplay.Items;
 import pr2.lobby.dialogs.AutoDismissController;
@@ -75,18 +77,29 @@ class EditorItemSettingsPopup extends Sprite {
 		AppStage.stage.addChild(this);
 		var targetBounds = target.getBounds(AppStage.stage);
 		var popupBounds = getBounds(this);
+		var stageWidth = AppStage.stage.stageWidth > 0 ? AppStage.stage.stageWidth : 550;
+		var stageHeight = AppStage.stage.stageHeight > 0 ? AppStage.stage.stageHeight : 400;
+		var position = positionNear(targetBounds, popupBounds, stageWidth, stageHeight);
+		x = position.x;
+		y = position.y;
+	}
+
+	public static function positionNear(targetBounds:Rectangle, popupBounds:Rectangle, stageWidth:Float, stageHeight:Float):Point {
 		var popupWidth = popupBounds.width <= 0 ? 180 : popupBounds.width;
-		var popupHeight = popupBounds.height <= 0 ? 150 : popupBounds.height;
-		x = targetBounds.left > popupWidth ? targetBounds.left - popupWidth - 7 : targetBounds.right + 7;
-		y = targetBounds.top;
-		if (y < 0) {
-			y = 0;
-		}
-		if (y + popupHeight > 400) {
-			y = 400 - popupHeight;
-		}
+		var fitsLeft = targetBounds.left - popupWidth - 7 >= 0;
+		var x = fitsLeft ? targetBounds.left - popupBounds.right - 7 : targetBounds.right - popupBounds.left + 7;
+		var y = targetBounds.top - popupBounds.top;
+		if (x + popupBounds.left < 0) x = -popupBounds.left;
+		if (x + popupBounds.right > stageWidth) x = stageWidth - popupBounds.right;
+		if (y + popupBounds.top < 0) y = -popupBounds.top;
+		if (y + popupBounds.bottom > stageHeight) y = stageHeight - popupBounds.bottom;
 		x = Math.round(x);
 		y = Math.round(y);
+		if (x + popupBounds.left < 0) x = Math.ceil(-popupBounds.left);
+		if (x + popupBounds.right > stageWidth) x = Math.floor(stageWidth - popupBounds.right);
+		if (y + popupBounds.top < 0) y = Math.ceil(-popupBounds.top);
+		if (y + popupBounds.bottom > stageHeight) y = Math.floor(stageHeight - popupBounds.bottom);
+		return new Point(x, y);
 	}
 
 }

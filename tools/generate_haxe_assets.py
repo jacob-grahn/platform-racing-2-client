@@ -14,7 +14,6 @@ import sys
 
 from xfl_metadata import DEFAULT_XFL_DIR, build_metadata
 from generate_timeline_svg_export import apply_plan, build_plan
-from generate_timeline_svg_packs import main as generate_timeline_svg_packs
 
 
 DEFAULT_OUT_DIR = os.path.join("haxe", "legacy", "pr2", "generated", "assets")
@@ -428,10 +427,6 @@ def parse_args(argv):
 
 def main(argv=None):
     args = parse_args(argv or sys.argv[1:])
-
-    # Keep the shipped runtime packs synchronized with the canonical SVG tree
-    # whenever the generated timeline catalog is refreshed.
-    generate_timeline_svg_packs()
 
     try:
         metadata = build_metadata(args.xfl_dir)

@@ -154,6 +154,8 @@ class AccountTabTest {
 		var tab = new AccountTab();
 		tab.initialize();
 		handler.dispatch("setCustomizeInfo", customizeArgs());
+		assertEquals(80.0, @:privateAccess tab.characterHolder.x, "account character keeps its authored container placement");
+		assertEquals(182.0, @:privateAccess tab.characterHolder.y, "account character preview keeps its authored vertical placement");
 		@:privateAccess tab.showLoadoutsHover();
 		var hover = @:privateAccess tab.loadoutsHover;
 		assertNotNull(hover, "loadouts hover is created after the delay callback");

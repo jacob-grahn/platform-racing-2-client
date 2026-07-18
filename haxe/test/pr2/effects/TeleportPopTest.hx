@@ -28,7 +28,8 @@ class TeleportPopTest {
 		parent.addChild(pop);
 
 		assertTrue(pop.numChildren > 0, "authored animation linkage resolved into a child");
-		@:privateAccess assertEquals("assets/svg/effects/teleport_01.svg", pop.animation.currentAssetPath, "teleport starts on exact composed XFL frame one");
+		@:privateAccess assertEquals("assets/effects/teleport.lottie.json", pop.animation.timeline.sourcePath, "teleport uses semantic Lottie data");
+		@:privateAccess assertEquals(1, pop.animation.currentFrame, "teleport starts on authored frame one");
 		assertEquals(parent, pop.parent, "poof is mounted before it plays out");
 
 		for (_ in 0...TeleportPop.LIFETIME_FRAMES) {

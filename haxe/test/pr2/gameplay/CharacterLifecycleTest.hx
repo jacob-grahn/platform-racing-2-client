@@ -544,7 +544,8 @@ class CharacterLifecycleTest {
 		assertEquals(2, laserClip.currentFrame, "local laser item starts stopped on idle frame 2");
 		assertTrue(laserClip.getChildByName(LaserShotView.TRAVEL_BEAM_NAME) != null,
 			"local laser item has a guaranteed visible travel beam");
-		assertEquals("assets/svg/effects/laser_02.svg", laserClip.currentAssetPath, "laser travel uses exact composed XFL stop frame");
+		assertEquals("assets/effects/laser.lottie.json", laserClip.timeline.sourcePath, "laser travel uses semantic Lottie data");
+		assertEquals(2, laserClip.currentFrame, "laser travel uses authored stop frame");
 		var laserCameraOffset = laser.levelRenderer.cameraOffset();
 		assertEquals(laserCameraOffset.x, laser.effectBackground.transform.matrix.tx,
 			"attack effect layer follows the editor/world camera x offset");
@@ -556,7 +557,7 @@ class CharacterLifecycleTest {
 		for (_ in 0...20) {
 			laserClip.dispatchEvent(new Event(Event.ENTER_FRAME));
 		}
-		assertEquals("assets/svg/effects/laser_18.svg", laserClip.currentAssetPath, "laser impact reaches exact composed XFL stop frame");
+		assertEquals(18, laserClip.currentFrame, "laser impact reaches exact authored stop frame");
 		assertEquals(18, laserClip.currentFrame, "local laser item hit animation stops on authored frame 18");
 		laser.remove();
 
@@ -902,8 +903,9 @@ class CharacterLifecycleTest {
 		assertTrue(egg != null, "visual test egg spawned");
 		var display = egg.display;
 		assertEquals(3, index, "egg visual randomization consumes Flash's three color randoms");
-		assertEquals("assets/svg/effects/egg_01.svg", display.currentAssetPath, "egg starts on exact composed XFL frame one");
-		@:privateAccess assertTrue(display.exactArt.width > 0, "egg renders the exact source frame after named-channel tinting");
+		assertEquals("assets/effects/egg_fixed.lottie.json", display.fixedTimeline.sourcePath, "egg uses semantic Lottie data");
+		assertEquals(1, display.currentFrame, "egg starts on authored frame one");
+		assertTrue(display.fixedTimeline.width > 0, "egg renders reusable source artwork after named-channel tinting");
 
 		var footColor = Std.int(Math.floor(0.10 * 0xFFFFFF));
 		var baseColor = Std.int(Math.floor(0.20 * 0xFFFFFF));

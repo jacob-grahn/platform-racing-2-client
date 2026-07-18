@@ -46,12 +46,13 @@ class EditorSettingsMenuView extends NativeView {
 		select.x = -50;
 		select.y = 23;
 		select.setSize(100, 22);
-		select.rowCount = 5;
+		select.rowCount = 6;
 		select.addOption("Race", Modes.race);
 		select.addOption("Objective", Modes.obj);
 		select.addOption("Deathmatch", Modes.dm);
 		select.addOption("Alien Eggs", Modes.egg);
 		select.addOption("Hat Attack", Modes.hat);
+		select.addOption("Roguelike", Modes.roguelike);
 		addChild(select);
 	}
 

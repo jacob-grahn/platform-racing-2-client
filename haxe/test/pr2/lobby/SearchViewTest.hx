@@ -26,6 +26,12 @@ class SearchViewTest {
 		assertEquals("User Name", Reflect.field(view.modeSelect.itemAt(0), "label"), "search mode preserves XFL order");
 		assertEquals("Popularity", Reflect.field(view.orderSelect.itemAt(3), "label"), "search order preserves XFL order");
 		assertEquals("Ascending", Reflect.field(view.directionSelect.itemAt(1), "label"), "search direction preserves XFL order");
+		assertEquals(0, view.modeSelect.selectedIndex, "search mode selects its first authored item by default");
+		assertEquals("User Name", view.modeSelect.labelField.text, "search mode displays its default caption");
+		assertEquals(0, view.orderSelect.selectedIndex, "search order selects its first authored item by default");
+		assertEquals("Date", view.orderSelect.labelField.text, "search order displays its default caption");
+		assertEquals(0, view.directionSelect.selectedIndex, "search direction selects its first authored item by default");
+		assertEquals("Descending", view.directionSelect.labelField.text, "search direction displays its default caption");
 		view.dispose();
 		trace('SearchViewTest passed $assertions assertions');
 	}

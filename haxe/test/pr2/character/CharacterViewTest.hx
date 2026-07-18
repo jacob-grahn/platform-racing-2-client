@@ -447,6 +447,7 @@ class CharacterViewTest {
 	private static function testExplicitHierarchyAndColors():Void {
 		var view = new CharacterView(0x123456, 0xABCDEF);
 		assertEquals("rigRoot", view.getChildAt(0).name, "native rig root is explicit");
+		assertClose(5.382218985911458, view.getChildAt(0).transform.matrix.tx, "shared native root matches the legacy horizontal registration");
 		assertClose(14.05, view.getChildAt(0).transform.matrix.ty, "shared native root matches the legacy character registration");
 		assertEquals("heldItem", view.heldItemSocket.name, "held-item socket is explicit");
 		assertEquals("hatSocket", view.hatSocket.name, "hat socket is explicit");
@@ -474,6 +475,13 @@ class CharacterViewTest {
 			{legacy: "foot1", nativeSlot: "frontFoot"},
 			{legacy: "foot2", nativeSlot: "backFoot"}
 		]) {
+			var legacyX = legacyState.getChildByTimelineName(pair.legacy).getBounds(legacy).x;
+			var nativeX = nativeView.slot(pair.nativeSlot).getBounds(nativeView).x;
+			// The asymmetric classic-head silhouette is not the character's physical
+			// axis; body and both feet establish the shared registration point.
+			if (pair.nativeSlot != "head") {
+				assertTrue(Math.abs(legacyX - nativeX) < 0.02, '${pair.nativeSlot} matches the legacy shared-root horizontal registration');
+			}
 			var legacyY = legacyState.getChildByTimelineName(pair.legacy).getBounds(legacy).y;
 			var nativeY = nativeView.slot(pair.nativeSlot).getBounds(nativeView).y;
 			assertTrue(Math.abs(legacyY - nativeY) < 0.02, '${pair.nativeSlot} matches the legacy shared-root vertical registration');

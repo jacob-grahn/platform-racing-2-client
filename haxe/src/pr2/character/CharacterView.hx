@@ -46,6 +46,7 @@ typedef CharacterViewPartColors = {
 class CharacterView extends Sprite {
 	public static final STATE_NAMES = ["run", "stand", "jump", "superJump", "bumped", "crouch", "crouchWalk", "swim", "frozen"];
 	/** Common legacy CharacterGraphic-to-native content registration delta. */
+	public static inline var LEGACY_ROOT_OFFSET_X:Float = 5.732218985911458;
 	public static inline var LEGACY_ROOT_OFFSET_Y:Float = 13.6;
 	private static inline var VANISH_ASSET:String = "assets/blocks/vanish.png";
 
@@ -211,10 +212,10 @@ class CharacterView extends Sprite {
 		endSignal = null;
 		completeDispatched = false;
 		var root = animation.root;
-		// Direct legacy/native bounds comparison gives a common 13.6 px vertical
-		// delta across the head, body, and both feet. Apply it at their shared root
-		// so the assembled character moves intact while slot matrices stay authored.
-		rigRoot.transform.matrix = new Matrix(root.a, root.b, root.c, root.d, root.tx, root.ty + LEGACY_ROOT_OFFSET_Y);
+		// Apply the measured vertical registration correction and shared horizontal
+		// visual-origin correction at the complete rig root. Keeping both outside
+		// the slot matrices moves the assembled character intact in every context.
+		rigRoot.transform.matrix = new Matrix(root.a, root.b, root.c, root.d, root.tx + LEGACY_ROOT_OFFSET_X, root.ty + LEGACY_ROOT_OFFSET_Y);
 		for (target in slots) target.visible = false;
 		var ordered = animation.slots.copy();
 		ordered.sort(function(left:RigSlot, right:RigSlot):Int return left.drawOrder - right.drawOrder);
@@ -586,8 +587,8 @@ class CharacterView extends Sprite {
 		if (Math.abs(determinant) < 0.000001) return;
 		var current = heldItemSocket.transform.matrix;
 		heldItemSocket.transform.matrix = new Matrix(current.a, current.b, current.c, current.d,
-			current.tx + root.c * LEGACY_ROOT_OFFSET_Y / determinant,
-			current.ty - root.a * LEGACY_ROOT_OFFSET_Y / determinant);
+			current.tx + (-root.d * LEGACY_ROOT_OFFSET_X + root.c * LEGACY_ROOT_OFFSET_Y) / determinant,
+			current.ty + (root.b * LEGACY_ROOT_OFFSET_X - root.a * LEGACY_ROOT_OFFSET_Y) / determinant);
 	}
 
 	private function registrationFor(partKind:Null<String>):{x:Float, y:Float} {
@@ -723,10 +724,10 @@ class CharacterView extends Sprite {
 
 	private function compensateHatRootOffset():Void {
 		if (hatSocket.parent == null) return;
-		// The 13.6 px legacy correction belongs to the exported head/body/feet
-		// artwork, while the authored hat attachments already use the original
-		// CharacterGraphic coordinate space. Cancel that display-space shift for
-		// the hat socket without disturbing the head's rotation or scale.
+		// The legacy correction belongs to the exported head/body/feet artwork,
+		// while authored hat attachments already use the original CharacterGraphic
+		// coordinate space. Cancel that display-space shift for the hat socket
+		// without disturbing the head's rotation or scale.
 		var origin = globalToLocal(hatSocket.parent.localToGlobal(new Point()));
 		var basisX = globalToLocal(hatSocket.parent.localToGlobal(new Point(1, 0)));
 		var basisY = globalToLocal(hatSocket.parent.localToGlobal(new Point(0, 1)));
@@ -737,8 +738,8 @@ class CharacterView extends Sprite {
 		var determinant = a * d - b * c;
 		if (Math.abs(determinant) < 0.000001) return;
 		hatSocket.transform.matrix = new Matrix(1, 0, 0, 1,
-			c * LEGACY_ROOT_OFFSET_Y / determinant,
-			-a * LEGACY_ROOT_OFFSET_Y / determinant);
+			(-d * LEGACY_ROOT_OFFSET_X + c * LEGACY_ROOT_OFFSET_Y) / determinant,
+			(b * LEGACY_ROOT_OFFSET_X - a * LEGACY_ROOT_OFFSET_Y) / determinant);
 	}
 
 	private static function copyPartIds(ids:CharacterViewPartIds):CharacterViewPartIds {

@@ -25,7 +25,7 @@ OUTPUT_TOKENS = (
     "AssetCatalogSymbols",
     "linkageClassName",
     "soundFrameHandler",
-    "assets/svg-packs/timeline",
+    "pr2-timeline-svg-pack-v1",
     "assets/timeline-bitmap",
 )
 

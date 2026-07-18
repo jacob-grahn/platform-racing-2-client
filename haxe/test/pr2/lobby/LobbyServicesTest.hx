@@ -2216,6 +2216,8 @@ class LobbyServicesTest {
 		var listingQuestion = Std.downcast(DisplayUtil.findByName(lifecycleItem, "questionMark"), TextField);
 		assertNotNull(listingQuestion, "level listing info button restores the authored question mark");
 		assertEquals("?", listingQuestion.text, "level listing info button displays the original question mark");
+		assertEquals(0.5, listingQuestion.x, "level listing question mark keeps its corrected horizontal offset");
+		assertEquals(-3.2, listingQuestion.y, "level listing question mark keeps its corrected vertical offset");
 		assertEquals(true, lifecycleItem.coverShownForTests(), "rank-gated item shows access cover before cleanup");
 		LobbySocket.resetSent();
 		lifecycleItem.sendFillSlot(2);

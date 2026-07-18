@@ -806,8 +806,8 @@ private class LevelItemIconButton extends NativeControl {
 			question.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 12, over || down ? 0xFFFF00 : 0x000000,
 				false, null, null, null, null, TextFormatAlign.CENTER);
 			question.text = "?";
-			question.x = 1.5;
-			question.y = -0.2;
+			question.x = 0.5;
+			question.y = -3.2;
 			question.width = 7;
 			question.height = 10.7;
 			addChild(question);

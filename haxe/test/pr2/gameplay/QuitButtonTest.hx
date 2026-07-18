@@ -276,13 +276,14 @@ class QuitButtonTest {
 		assertEquals(1, game.cowboyModes.length, "cowboyMode adds the authored animation");
 		var mode = game.cowboyModes[0];
 		assertEquals(true, mode.parent == game, "cowboyMode attaches to the game page");
-		@:privateAccess assertEquals("assets/svg/effects/cowboy_01.svg", mode.art.currentAssetPath, "cowboyMode starts on exact composed XFL frame one");
+		@:privateAccess assertEquals("assets/effects/cowboy.lottie.json", mode.art.timeline.sourcePath, "cowboyMode uses semantic Lottie data");
+		@:privateAccess assertEquals(1, mode.art.currentFrame, "cowboyMode starts on authored frame one");
 
 		for (_ in 0...120) {
 			mode.advance();
 		}
 		assertEquals(82, mode.currentFrame, "cowboyMode stops on Flash frame 82");
-		@:privateAccess assertEquals("assets/svg/effects/cowboy_82.svg", mode.art.currentAssetPath, "cowboyMode stops on the authored empty frame 82");
+		@:privateAccess assertEquals(82, mode.art.currentFrame, "cowboyMode stops on the authored empty frame 82");
 
 		game.remove();
 		assertEquals(0, game.cowboyModes.length, "game removal clears cowboy animations");
@@ -296,8 +297,9 @@ class QuitButtonTest {
 		assertEquals(1, game.happyHours.length, "happyHour adds the authored animation");
 		var happy = game.happyHours[0];
 		assertEquals(true, happy.parent == game, "happyHour attaches to the game page");
-		@:privateAccess assertEquals("assets/svg/effects/happy_hour_01.svg", happy.art.currentAssetPath,
-			"happyHour starts on exact composed XFL frame one");
+		@:privateAccess assertEquals("assets/effects/happy_hour.lottie.json", happy.art.timeline.sourcePath,
+			"happyHour uses semantic Lottie data");
+		@:privateAccess assertEquals(1, happy.art.currentFrame, "happyHour starts on authored frame one");
 		@:privateAccess assertEquals(true, happy.art.width > 0, "happyHour renders its lossless XFL bitmap as source-derived vector pixels");
 
 		for (_ in 0...120) {

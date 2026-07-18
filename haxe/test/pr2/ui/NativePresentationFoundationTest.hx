@@ -1,5 +1,6 @@
 package pr2.ui;
 
+import openfl.display.Shape;
 import openfl.events.Event;
 import openfl.events.KeyboardEvent;
 import openfl.events.MouseEvent;
@@ -30,6 +31,7 @@ import pr2.ui.controls.GameSelect;
 import pr2.ui.controls.GameSlider;
 import pr2.ui.controls.GameTextInput;
 import pr2.ui.controls.GameTextArea;
+import pr2.ui.controls.SliderControlSkin;
 import pr2.ui.view.NativeView;
 import pr2.ui.view.StatusPopupView;
 
@@ -135,6 +137,7 @@ class NativePresentationFoundationTest {
 
 		var nativeBox = new GameCheckBox("Mute");
 		var flashBox = new FlCheckBox("Mute");
+		assertEquals(true, nativeBox.getBounds(nativeBox).right >= 100, "checkbox keeps a stable full-width HTML5 hit area");
 		assertEquals(cast StaticSvg.CheckBoxUp, cast @:privateAccess nativeBox.authoredAsset(), "checkbox starts on exact authored up icon");
 		nativeBox.dispatchEvent(new MouseEvent(MouseEvent.ROLL_OVER));
 		assertEquals(cast StaticSvg.CheckBoxOver, cast @:privateAccess nativeBox.authoredAsset(), "checkbox hover uses exact authored over icon");
@@ -183,6 +186,9 @@ class NativePresentationFoundationTest {
 		assertEquals(1, presses, "disposed button removes click callbacks");
 
 		var slider = new GameSlider(0, 10, 5, 1);
+		var fallbackTrack = new Shape();
+		new SliderControlSkin().draw(fallbackTrack.graphics, 80, 22, pr2.ui.controls.ControlState.Normal);
+		assertEquals(0.0, fallbackTrack.width, "slider omits the obsolete fallback track behind the authored SVG");
 		assertEquals("slider_track_up", slider.trackAssetForTests(), "slider starts with exact XFL track skin");
 		assertEquals("slider_thumb_up", slider.thumbAssetForTests(), "slider starts with exact XFL thumb skin");
 		@:privateAccess slider.thumb.dispatchEvent(new MouseEvent(MouseEvent.ROLL_OVER));
@@ -195,6 +201,7 @@ class NativePresentationFoundationTest {
 		assertEquals("slider_track_disabled", slider.trackAssetForTests(), "disabled slider uses exact XFL track skin");
 		assertEquals("slider_thumb_disabled", slider.thumbAssetForTests(), "disabled slider uses exact XFL thumb skin");
 		var select = new GameSelect<String>();
+		assertEquals(true, select.getBounds(select).right >= 100, "select keeps a stable component-sized HTML5 hit area");
 		assertEquals(cast StaticSvg.ComboBoxUp, cast @:privateAccess select.authoredAsset(), "select starts on exact authored ComboBox up skin");
 		select.addOption("One", "one");
 		select.addOption("Two", "two");

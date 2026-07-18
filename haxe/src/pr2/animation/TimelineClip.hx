@@ -79,7 +79,7 @@ class TimelineClip extends Sprite {
 			if (layerType == 2) {
 				var path = assets.get(Std.string(data.refId));
 				if (path == null) throw 'Missing Lottie asset ${data.refId} in $sourcePath';
-				view.addChild(SvgAsset.create(path));
+				view.addChild(SvgAsset.createWithText(path));
 			} else if (layerType == 5) {
 				var textData:Dynamic = Reflect.field(data, "x_pr2_text");
 				if (textData == null) throw 'Missing PR2 text data in $sourcePath';

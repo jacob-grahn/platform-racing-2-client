@@ -41,9 +41,10 @@ class SlashTest {
 
 	private static function testExactMineFrames():Void {
 		var animation = new NativeEffectAnimation("mine", MineExplosion.LIFETIME_FRAMES);
-		assertEquals("assets/svg/effects/mine_01.svg", animation.currentAssetPath, "mine explosion starts on exact composed XFL frame one");
+		assertEquals("assets/effects/mine.lottie.json", animation.timeline.sourcePath, "mine explosion uses semantic Lottie data");
+		assertEquals(1, animation.currentFrame, "mine explosion starts on authored frame one");
 		for (_ in 1...MineExplosion.LIFETIME_FRAMES) animation.dispatchEvent(new Event(Event.ENTER_FRAME));
-		assertEquals("assets/svg/effects/mine_14.svg", animation.currentAssetPath, "mine explosion reaches exact composed XFL stop frame");
+		assertEquals(14, animation.currentFrame, "mine explosion reaches its authored stop frame");
 		animation.dispose();
 	}
 
@@ -74,7 +75,8 @@ class SlashTest {
 		});
 
 		assertEquals(Slash.LIFETIME_FRAMES, slash.animation.totalFrames, "slash uses the six-frame native animation");
-		assertEquals("assets/svg/effects/slash_01.svg", slash.animation.currentAssetPath, "slash starts on exact composed XFL frame one");
+		assertEquals("assets/effects/slash.lottie.json", slash.animation.timeline.sourcePath, "slash uses semantic Lottie data");
+		assertEquals(1, slash.animation.currentFrame, "slash starts on authored frame one");
 		assertEquals(6, hits.length, "slash probes Flash's six block hit points");
 		assertEquals("30,0:29", hits[5], "slash passes reach as block damage force");
 		assertEquals("29,-9", playerHits[0], "slash hits local player with Flash recoil");

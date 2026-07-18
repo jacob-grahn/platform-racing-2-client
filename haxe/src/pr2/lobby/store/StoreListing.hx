@@ -15,6 +15,7 @@ import pr2.assets.NativeAssetIds.StaticSvg;
 import pr2.assets.NativeAssets;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.account.AccountCharacter;
+import pr2.net.ServerConfig;
 import pr2.runtime.EpicFlash;
 import pr2.util.DisplayUtil;
 
@@ -58,7 +59,7 @@ class StoreListing extends Sprite {
 		alpha = listing.available ? 1 : .33;
 		if (listing.imageUrl != "") {
 			var holder = Std.downcast(DisplayUtil.directChildByName(art, "picHolder"), Sprite);
-			if (holder != null) { loader = new Loader(); holder.addChild(loader); loader.load(new URLRequest(listing.imageUrl)); }
+			if (holder != null) { loader = new Loader(); holder.addChild(loader); loader.load(new URLRequest(ServerConfig.vaultImageUrl(listing.imageUrl))); }
 		}
 	}
 

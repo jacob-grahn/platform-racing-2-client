@@ -1,5 +1,6 @@
 package pr2.runtime;
 
+import pr2.animation.TimelineClip;
 #if sys
 import sys.io.File;
 #end
@@ -16,20 +17,33 @@ class SvgAssetTest {
 		var preparedOpacity = SvgAsset.prepare(opacitySource);
 		assertFalse(preparedOpacity.indexOf('<g opacity="0.5"') >= 0, "group opacity is removed after being baked into painted children");
 		assertTrue(preparedOpacity.indexOf('fill-opacity="0.25"') >= 0, "nested fill alpha includes its inherited group fade");
+		var gradientOpacitySource = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><defs><linearGradient id="fade"><stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="#ffffff" stop-opacity="0.5"/></linearGradient></defs><g opacity="0.25"><path fill="url(#fade)" d="M 0 0 L 10 0 L 10 10 Z"/></g></svg>';
+		var preparedGradientOpacity = SvgAsset.prepare(gradientOpacitySource);
+		assertTrue(preparedGradientOpacity.indexOf('stop-opacity="0.25"') >= 0,
+			"group alpha is baked into opaque gradient stops for the OpenFL SVG renderer");
+		assertTrue(preparedGradientOpacity.indexOf('stop-opacity="0.125"') >= 0,
+			"group alpha multiplies an authored gradient stop fade");
 		var shape = SvgAsset.createFromText(source);
 		assertTrue(shape.graphics != null, "expanded SVG renders into OpenFL graphics");
-		var timelinePath = "assets/svg/timeline/ui_shadowbg_95643069a8/t00_l000_f0000_r00.svg";
-		var timelineShape = SvgAsset.create(timelinePath);
-		assertTrue(timelineShape.graphics != null, "declared timeline SVG loads as an individual asset");
-		@:privateAccess assertTrue(SvgAsset.parsed.exists(timelinePath), "parsed timeline SVG is cached by asset path");
+		@:privateAccess assertEquals("effects", SvgAsset.packGroup("assets/svg/effects/mine_piece_01.svg"),
+			"top-level SVG assets select their category pack");
+		@:privateAccess assertEquals("character_hat", SvgAsset.packGroup("assets/svg/character/hat/001_classic/primary.svg"),
+			"character SVG assets select their slot pack");
+		var packedPath = "assets/svg/ui/shadow_bg.svg";
+		var packedShape = SvgAsset.create(packedPath);
+		assertTrue(packedShape.graphics != null, "production SVG renders through the stable asset-path API");
+		@:privateAccess assertTrue(SvgAsset.parsed.exists(packedPath), "parsed production SVG is cached by asset path");
 		#if sys
 		var muteBase = File.getContent("art/svg/login/mute_button_base.svg");
 		var muteWaves = File.getContent("art/svg/login/mute_button_waves.svg");
-		var fadedSlash = SvgAsset.prepare(File.getContent("art/svg/effects/slash_05.svg"));
-		var fadedLaser = SvgAsset.prepare(File.getContent("art/svg/effects/laser_15.svg"));
-		assertTrue(fadedSlash.indexOf('fill-opacity="0.0390625"') >= 0, "sword swoosh terminal frame bakes its authored alpha fade");
-		assertTrue(fadedLaser.indexOf('fill-opacity="0.140625"') >= 0 && fadedLaser.indexOf('fill-opacity="0.01953125"') >= 0,
-			"laser impact frame bakes both independently fading authored layers");
+		var fadedSlash = new TimelineClip("assets/effects/slash.lottie.json");
+		fadedSlash.gotoAndStop(5);
+		assertTrue(minVisibleAlpha(fadedSlash) <= 0.04, "sword swoosh terminal frame retains its authored Lottie alpha fade");
+		var fadedLaser = new TimelineClip("assets/effects/laser.lottie.json");
+		fadedLaser.gotoAndStop(15);
+		assertTrue(minVisibleAlpha(fadedLaser) <= 0.02, "laser impact retains independently fading authored Lottie layers");
+		fadedSlash.dispose();
+		fadedLaser.dispose();
 		assertFalse(muteBase.indexOf("MovieClips_Symbol_109") >= 0, "mute base excludes the authored wave paths");
 		assertTrue(muteWaves.indexOf('<use xlink:href="#MovieClips_Symbol_109_0_Layer0_0_1_STROKES"/>') >= 0,
 			"mute waves export retains the authored wave layer");
@@ -37,6 +51,15 @@ class SvgAssetTest {
 		assertFalse(muteWaves.indexOf('stroke-width="0.05"') >= 0, "mute waves use normalized hairline widths");
 		#end
 		trace('SvgAssetTest passed $assertions assertions');
+	}
+
+	private static function minVisibleAlpha(timeline:TimelineClip):Float {
+		var result = 1.0;
+		for (index in 0...timeline.numChildren) {
+			var child = timeline.getChildAt(index);
+			if (child.visible) result = Math.min(result, child.transform.colorTransform.alphaMultiplier);
+		}
+		return result;
 	}
 
 	private static function assertTrue(value:Bool, message:String):Void {

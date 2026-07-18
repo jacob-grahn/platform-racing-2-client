@@ -129,12 +129,12 @@ typedef CharacterRigDefinition = {
 
 /** Loader and validation boundary for neutral, generated character-rig data. */
 class CharacterRig {
-	public static inline var CLASSIC_ASSET:String = "assets/rigs/classic-standing.json";
+	public static inline var CLASSIC_ASSET:String = "character-rig.json";
 
 	public static function loadClassic():CharacterRigDefinition {
 		var content = Assets.getText(CLASSIC_ASSET);
 		#if sys
-		if (content == null) content = sys.io.File.getContent("art/rigs/classic-standing.json");
+		if (content == null) content = sys.io.File.getContent("art/rigs/character-rig.json");
 		#end
 		if (content == null) throw 'Missing character rig $CLASSIC_ASSET';
 		return parse(content);

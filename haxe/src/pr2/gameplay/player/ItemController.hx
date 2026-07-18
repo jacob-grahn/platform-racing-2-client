@@ -182,7 +182,9 @@ class ItemController {
 		var radians = angleDegrees * Math.PI / 180;
 		var shotX = owner.x + (angleDegrees == 180 ? -20 : 20);
 		var shotY = owner.y - 25;
-		var immediateBlock = owner.getBlockAtPixel(shotX, shotY);
+		// Flash's ShotEffect queries blocks directly: a Top Hat only changes the
+		// character's collision, not which block a laser damages.
+		var immediateBlock = owner.getBlockAtPixel(shotX, shotY, true);
 		if (immediateBlock != null) {
 			damageBlockFromItem(immediateBlock, Math.cos(radians) * LocalPlayerController.SHOT_EFFECT_DEFAULT_SPEED);
 			return;
@@ -206,7 +208,7 @@ class ItemController {
 			projectile.shotX += projectile.velX;
 			projectile.shotY += projectile.velY;
 			projectile.framesRemaining--;
-			var block = owner.getBlockAtPixel(projectile.shotX, projectile.shotY);
+			var block = owner.getBlockAtPixel(projectile.shotX, projectile.shotY, true);
 			if (block != null) {
 				damageBlockFromItem(block, projectile.damageForce);
 			} else if (projectile.framesRemaining > 0) {

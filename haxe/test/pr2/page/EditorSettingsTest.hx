@@ -778,13 +778,19 @@ class EditorSettingsTest {
 		assertEquals("Each game mode has a different goal and method of winning.", modeDesc.text, "mode menu description preserves XFL copy");
 		assertClose(-50, popup.dropdown.x, "mode menu dropdown x follows XFL matrix");
 		assertClose(23, popup.dropdown.y, "mode menu dropdown y follows XFL matrix");
-		assertEquals(5, popup.dropdown.length, "mode menu preserves the five authored choices");
+		assertEquals(6, popup.dropdown.length, "mode menu includes all authored modes plus Roguelike");
+		assertEquals(6, popup.dropdown.rowCount, "mode menu shows all game modes without introducing a scrollbar");
 		popup.dropdown.selectedIndex = 0;
 		assertEquals("Race", popup.dropdown.selectedOption.label, "mode menu authored choice order starts with Race");
 		popup.dropdown.selectedIndex = 1;
 		assertEquals("Objective", popup.dropdown.selectedOption.label, "mode menu authored choice order keeps Objective second");
 		popup.dropdown.selectedIndex = 3;
 		assertEquals("Alien Eggs", popup.dropdown.selectedOption.label, "mode menu preserves authored Alien Eggs label");
+		@:privateAccess popup.autoDismiss.armForTests();
+		popup.dropdown.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN, true));
+		popup.dropdown.dispatchEvent(new MouseEvent(MouseEvent.CLICK, true));
+		assertEquals(true, popup.dropdown.open, "mode menu dropdown survives capture and opens from a real click");
+		popup.dropdown.close();
 
 		popup.setSelectedMode("hat");
 		assertEquals("hat", editor.gameMode, "mode menu commits selected game mode");
@@ -794,8 +800,8 @@ class EditorSettingsTest {
 		assertEquals("egg", editor.gameMode, "mode menu normalizes legacy eggs mode");
 
 		popup.setSelectedMode("roguelike");
-		assertEquals("race", editor.gameMode, "mode menu falls back to Race for modes absent from the authored choices");
-		assertEquals(0, editor.badHats.length, "unsupported modes do not apply non-authored side effects");
+		assertEquals("roguelike", editor.gameMode, "mode menu commits the Roguelike game mode");
+		assertEquals(15, editor.badHats.length, "Roguelike applies its required all-hats restriction");
 
 		var focusResets = 0;
 		StageFocus.resetHook = function():Void focusResets++;
@@ -818,7 +824,8 @@ class EditorSettingsTest {
 		editor.setItems("Laser`Teleport");
 		var itemBlock = editor.blockLayer.addBlockAtStage(ObjectCodes.BLOCK_ITEM, BlockType.Item, 120, 120);
 		itemBlock.setOptions(Items.MINE + "-" + Items.TELEPORT + "-" + Items.SNAKE);
-		var popup = new EditorItemSettingsPopup(editor, new Sprite());
+		editor.openItemSettingsMenu(new Sprite());
+		var popup = editor.activeItemSettingsPopup;
 		var itemsBackground = directChild(popup.art, "background");
 		var itemsTitle = Std.downcast(directChild(popup.art, "title"), TextField);
 		var laserCheck = Std.downcast(directChild(popup.art, "check1"), pr2.ui.controls.GameCheckBox);
@@ -833,13 +840,22 @@ class EditorSettingsTest {
 		assertEquals("Ice Wave", iceCheck.label, "item menu preserves authored Ice Wave label");
 		assertClose(-102, iceCheck.x, "item menu Ice Wave x follows XFL matrix");
 		assertClose(81, iceCheck.y, "item menu Ice Wave y follows XFL matrix");
+		var itemsLocalBounds = popup.getBounds(popup);
+		var itemsPosition = EditorItemSettingsPopup.positionNear(new openfl.geom.Rectangle(), itemsLocalBounds, 550, 400);
+		assertEquals(true, itemsPosition.y + itemsLocalBounds.top >= 0, "item menu visible artwork is clamped below the top of the stage");
 
 		assertEquals(true, popup.isItemSelected(Items.LASER_GUN), "item menu loads allowed item");
 		assertEquals(false, popup.isItemSelected(Items.MINE), "item menu leaves disallowed item unchecked");
 		assertEquals(true, popup.isItemSelected(Items.TELEPORT), "item menu loads second allowed item");
 		assertEquals(false, popup.isItemSelected(Items.SNAKE), "item menu excludes post-Flash Snake from the authored choices");
+		var editorMouseDowns = @:privateAccess editor.mouseDownEventsForTests;
+		@:privateAccess popup.autoDismiss.armForTests();
+		laserCheck.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN, true));
+		assertEquals(popup, editor.activeItemSettingsPopup, "item menu checkbox survives the auto-dismiss capture listener");
+		laserCheck.dispatchEvent(new MouseEvent(MouseEvent.CLICK, true));
+		assertEquals(false, laserCheck.selected, "item menu checkbox receives a real bubbled mouse click");
+		assertEquals(editorMouseDowns, @:privateAccess editor.mouseDownEventsForTests, "item menu click is not consumed as level-canvas input");
 
-		popup.setItemSelected(Items.LASER_GUN, false);
 		popup.setItemSelected(Items.MINE, true);
 		popup.setItemSelected(Items.SNAKE, true);
 		popup.remove();

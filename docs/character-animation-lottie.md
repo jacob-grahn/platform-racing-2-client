@@ -4,13 +4,15 @@ All nine native character states use editable standard-Lottie transform
 documents as their motion source:
 
 - `stand`, `run`, `jump`, `superJump`, `bumped`, `crouch`, `crouchWalk`,
-  `swim`, and `frozen` live under `art/rigs/lottie/*.lottie.json`.
+  `swim`, and `frozen` live under
+  `art/intermediate/character-lottie/*.lottie.json`. This intermediate source
+  directory is outside the published runtime asset trees.
 
 The documents contain null layers rather than character artwork. The required
 layers are `characterRoot`, `heldItem`, `head`, `body`, `frontFoot`, and
 `backFoot`. Each slot is parented to `characterRoot`; the runtime attaches the
 player's selected and colored SVG artwork after the Lottie transforms have
-been compiled into `art/rigs/classic-standing.json`.
+been compiled into `art/rigs/character-rig.json`.
 The frozen state additionally exposes its authored `frozenOverlay` layer.
 
 Each document also carries a versioned `metadata.customProps.pr2` record. It
@@ -30,7 +32,7 @@ without loss.
 After editing a document, regenerate the runtime rig:
 
 ```sh
-python3 tools/generate_classic_standing_rig.py
+python3 tools/generate_character_rig.py
 ```
 
 Then run the focused character tests:
