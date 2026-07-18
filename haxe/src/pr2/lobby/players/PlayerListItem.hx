@@ -2,15 +2,13 @@ package pr2.lobby.players;
 
 import openfl.text.TextField;
 import pr2.display.Removable;
-import pr2.lobby.LobbyArt;
 import pr2.lobby.chat.HtmlNameMaker;
 import pr2.lobby.players.PlayerListSort.SortableRow;
 
 /**
 	Base for a single row in the players/guilds list, wrapping
-	`PlayersTabListItemGraphic`. The graphic's three dynamic-text fields were
-	exported without instance names, so they are recovered positionally
-	(left = name, middle = the rank/GP column, right = the hats/active column).
+	`PlayersTabListItemGraphic`. The three dynamic-text fields retain their XFL
+	instance names and coordinates in `PlayerListItemView`.
 	The name field gets link handling via `HtmlNameMaker`.
 **/
 class PlayerListItem extends Removable implements SortableRow {
@@ -24,10 +22,9 @@ class PlayerListItem extends Removable implements SortableRow {
 		super();
 		art = new PlayerListItemView();
 		addChild(art);
-		var fields = LobbyArt.textFields(art);
-		nameField = fields.length > 0 ? fields[0] : null;
-		midField = fields.length > 1 ? fields[1] : null;
-		rightField = fields.length > 2 ? fields[2] : null;
+		nameField = art.nameBox;
+		midField = art.rankBox;
+		rightField = art.hatBox;
 		htmlNameMaker = new HtmlNameMaker();
 		if (nameField != null) {
 			htmlNameMaker.listenForLink(nameField);

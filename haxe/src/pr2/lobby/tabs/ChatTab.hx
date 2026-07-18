@@ -59,9 +59,9 @@ class ChatTab extends Page {
 		art = new ChatView();
 		addChild(art);
 
-		roomBox = LobbyArt.text(art, "roomBox");
-		chatInput = LobbyArt.text(art, "chatInput");
-		textBox = LobbyArt.text(art, "textBox");
+		roomBox = art.roomBox;
+		chatInput = art.chatInput;
+		textBox = art.textBox;
 
 		if (roomBox != null) {
 			roomBox.addEventListener(KeyboardEvent.KEY_DOWN, roomBoxListenForEnter);
@@ -74,9 +74,9 @@ class ChatTab extends Page {
 			textBox.addEventListener(FocusEvent.FOCUS_OUT, lockToBottom);
 			nameMaker.listenForLink(textBox);
 		}
-		sendBinding = LobbyArt.bind(DisplayUtil.findByName(art, "send_bt"), clickSend);
-		joinBinding = LobbyArt.bind(DisplayUtil.findByName(art, "joinRoom_bt"), changeRoom);
-		infoButton = DisplayUtil.findByName(art, "infoButton");
+		sendBinding = LobbyArt.bind(DisplayUtil.directChildByName(art, "send_bt"), clickSend);
+		joinBinding = LobbyArt.bind(DisplayUtil.directChildByName(art, "joinRoom_bt"), changeRoom);
+		infoButton = DisplayUtil.directChildByName(art, "infoButton");
 		if (infoButton != null) {
 			infoButton.addEventListener(MouseEvent.MOUSE_OVER, overInfo);
 			infoButton.addEventListener(MouseEvent.MOUSE_OUT, outInfo);

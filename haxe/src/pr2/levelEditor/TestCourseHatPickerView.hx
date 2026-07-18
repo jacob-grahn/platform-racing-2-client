@@ -1,54 +1,53 @@
 package pr2.levelEditor;
 
 import openfl.display.Sprite;
-import openfl.text.TextField;
-import openfl.text.TextFormat;
-import openfl.text.TextFormatAlign;
-import pr2.assets.NativeAssetIds.FontAsset;
-import pr2.assets.NativeAssets;
-import pr2.ui.controls.GameButton;
+import openfl.filters.DropShadowFilter;
+import openfl.geom.Matrix;
+import pr2.character.CharacterRig;
+import pr2.character.CharacterRig.RigPartChannels;
+import pr2.runtime.SvgAsset;
 import pr2.ui.view.NativeView;
 
-/** Native hat selector with explicit left/right controls and live hat id. */
+/** Exact native composition of XFL `HatPickerGraphic`. */
 class TestCourseHatPickerView extends NativeView {
-	private final hatField:TextField;
-	private final epicRing:Sprite;
+	private final hat:Sprite;
 
 	public function new() {
 		super();
-		graphics.beginFill(0xF4F4F4, 0.94);
-		graphics.lineStyle(2, 0x666666);
-		graphics.drawRoundRect(-64, -25, 128, 50, 10, 10);
-		graphics.endFill();
-		button("left", "‹", -58, -12);
-		button("right", "›", 35, -12);
-		epicRing = new Sprite();
-		epicRing.graphics.lineStyle(3, 0x9D68D6);
-		epicRing.graphics.drawCircle(0, 0, 18);
-		addChild(epicRing);
-		hatField = new TextField();
-		hatField.name = "hat";
-		hatField.x = -22;
-		hatField.y = -10;
-		hatField.width = 44;
-		hatField.height = 22;
-		hatField.selectable = false;
-		hatField.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 12, 0x222222, true, null, null, null, null,
-			TextFormatAlign.CENTER);
-		addChild(hatField);
+		hat = new Sprite();
+		hat.name = "hat";
+		hat.transform.matrix = new Matrix(0.300888061523438, 0.0806121826171875, -0.0806121826171875, 0.300888061523438, 56, 20);
+		addChild(hat);
+		arrow("left", 10, -0.999984741210938);
+		arrow("right", 100, 1);
 	}
 
 	public function setHat(id:Int):Void {
-		hatField.text = "Hat " + id;
-		epicRing.visible = id == 16;
+		while (hat.numChildren > 0) hat.removeChildAt(0);
+		var channels = hatChannels(id);
+		var primary = SvgAsset.create(channels.primary);
+		primary.name = "colorMC";
+		hat.addChild(primary);
+		var fixed = SvgAsset.create(channels.fixed);
+		fixed.name = "fixed";
+		hat.addChild(fixed);
+		var secondary = SvgAsset.create(channels.secondary);
+		secondary.name = "colorMC2";
+		secondary.visible = id == 16;
+		hat.addChild(secondary);
 	}
 
-	private function button(name:String, label:String, x:Float, y:Float):Void {
-		var control = ownControl(new GameButton(label));
-		control.name = name;
-		control.x = x;
-		control.y = y;
-		control.setSize(23, 24);
-		addChild(control);
+	private function arrow(name:String, x:Float, scaleX:Float):Void {
+		var arrow = new EditorNativeGraphic("HatPickerArrow");
+		arrow.name = name;
+		arrow.x = x;
+		arrow.scaleX = scaleX;
+		arrow.filters = [new DropShadowFilter(3, 90, 0, 0.25, 2, 2, 1, 1)];
+		addChild(arrow);
+	}
+
+	private static function hatChannels(id:Int):RigPartChannels {
+		for (variant in CharacterRig.loadClassic().parts.hat.variants) if (variant.id == id) return variant;
+		throw 'Character rig has no supported hat $id';
 	}
 }

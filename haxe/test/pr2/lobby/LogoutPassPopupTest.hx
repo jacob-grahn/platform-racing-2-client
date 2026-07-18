@@ -6,10 +6,11 @@ import openfl.events.MouseEvent;
 import pr2.crypto.PR2Encryptor;
 import pr2.lobby.dialogs.LogoutPassPopup;
 import pr2.lobby.dialogs.MessagePopup;
+import pr2.lobby.dialogs.NativeFormView;
 import pr2.lobby.dialogs.Popup;
 import pr2.net.ServerConfig;
 import pr2.ui.controls.GameTextInput;
-import pr2.util.DisplayUtil;
+import pr2.util.TestDisplayUtil as DisplayUtil;
 
 class LogoutPassPopupTest {
 	private static inline var LOGIN_KEY:String = "VUovam5GKndSMHFSSy9kSA==";
@@ -38,7 +39,18 @@ class LogoutPassPopupTest {
 			return null;
 		};
 		var popup = new LogoutPassPopup();
+		var art = formView(popup);
+		assertEquals(-122.45, art.panels[0].x, "logout ShadowBG keeps its XFL X");
+		assertEquals(-79.15, art.panels[0].y, "logout ShadowBG keeps its XFL Y");
+		assertEquals(0.900650024414062, art.panels[0].scaleX, "logout ShadowBG keeps its XFL horizontal scale");
+		assertEquals(0.837631225585938, art.panels[0].scaleY, "logout ShadowBG keeps its XFL vertical scale");
 		assertEquals(true, input(popup).textField.displayAsPassword, "password field is masked");
+		assertEquals(-43.5, input(popup).x, "logout password input keeps its XFL X");
+		assertEquals(0.0, input(popup).y, "logout password input keeps its XFL Y");
+		assertEquals(129.998779296875, input(popup).controlWidth, "logout password input keeps its authored width");
+		assertEquals(-80.0, art.submitButton.x, "Log Out button keeps its XFL X");
+		assertEquals(7.0, art.cancelButton.x, "logout Cancel button keeps its XFL X");
+		assertEquals(40.0, art.submitButton.y, "logout buttons keep their XFL Y");
 		click(popup, "logout_bt");
 		assertEquals(0, uploads, "blank password does not upload");
 		assertEquals("Error: You must enter a password in order to log out.", lastMessageText(), "blank-password error copy");
@@ -96,6 +108,14 @@ class LogoutPassPopupTest {
 		var value = Std.downcast(DisplayUtil.findByName(popup, "passBox"), GameTextInput);
 		if (value == null) throw "passBox missing";
 		return value;
+	}
+
+	private static function formView(popup:LogoutPassPopup):NativeFormView {
+		for (index in 0...popup.numChildren) {
+			var view = Std.downcast(popup.getChildAt(index), NativeFormView);
+			if (view != null) return view;
+		}
+		throw "native logout form missing";
 	}
 
 	private static function click(popup:LogoutPassPopup, name:String):Void {

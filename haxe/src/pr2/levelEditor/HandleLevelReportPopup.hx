@@ -38,7 +38,7 @@ class HandleLevelReportPopup extends Popup {
 		this.level = level;
 		art = new HandleLevelReportView();
 		addChild(art);
-		var titleBox = LobbyArt.text(art, "titleBox");
+		var titleBox = LobbyArt.directText(art, "titleBox");
 		if (titleBox != null) {
 			htmlNameMaker.listenForLink(titleBox);
 			titleBox.htmlText = htmlNameMaker.makeLevel(field("title"), levelId()) + " by "
@@ -69,7 +69,7 @@ class HandleLevelReportPopup extends Popup {
 		popText += "Reported: " + shortDate(parseFloat(field("report_time"), 0)) + "<br/>";
 		popText += "^ By: " + ChatText.escapeString(field("reporter")) + "<br/>";
 		popText += "Reason: <i>" + ChatText.escapeString(field("reason")) + "</i>";
-		var target = DisplayUtil.findByName(art, "info_bt");
+		var target = DisplayUtil.directChildByName(art, "info_bt");
 		if (target != null) {
 			info = new HoverPopup(title, popText, target);
 			info.x += info.width + 23;
@@ -97,11 +97,11 @@ class HandleLevelReportPopup extends Popup {
 			reason.selectedIndex = 0;
 			reason.visible = !selectedOther;
 		}
-		var otherReason = DisplayUtil.findByName(art, "otherReasonBox");
+		var otherReason = DisplayUtil.directChildByName(art, "otherReasonBox");
 		if (otherReason != null) {
 			otherReason.visible = selectedOther;
 		}
-		var otherCancel = DisplayUtil.findByName(art, "other_cancel_bt");
+		var otherCancel = DisplayUtil.directChildByName(art, "other_cancel_bt");
 		if (otherCancel != null) {
 			otherCancel.visible = selectedOther;
 		}
@@ -181,16 +181,16 @@ class HandleLevelReportPopup extends Popup {
 	}
 
 	private function otherReasonText():String {
-		var field = LobbyArt.text(art, "otherReasonBox");
+		var field = LobbyArt.directText(art, "otherReasonBox");
 		return field == null ? "" : field.text;
 	}
 
 	private function reasonCombo():Null<GameSelect<String>> {
-		return Std.downcast(DisplayUtil.findByName(art, "reason"), GameSelect);
+		return Std.downcast(DisplayUtil.directChildByName(art, "reason"), GameSelect);
 	}
 
 	private function durationCombo():Null<GameSelect<String>> {
-		return Std.downcast(DisplayUtil.findByName(art, "duration"), GameSelect);
+		return Std.downcast(DisplayUtil.directChildByName(art, "duration"), GameSelect);
 	}
 
 	private static function selectedData(combo:Null<GameSelect<String>>, fallback:String):String {
@@ -206,18 +206,18 @@ class HandleLevelReportPopup extends Popup {
 	}
 
 	private function bind(name:String, handler:Void->Void):Void {
-		bindings.push(LobbyArt.bind(DisplayUtil.findByName(art, name), handler));
+		bindings.push(LobbyArt.bind(DisplayUtil.directChildByName(art, name), handler));
 	}
 
 	private function bindMouse(name:String, type:String, handler:MouseEvent->Void):Void {
-		var target = DisplayUtil.findByName(art, name);
+		var target = DisplayUtil.directChildByName(art, name);
 		if (target != null) {
 			target.addEventListener(type, handler);
 		}
 	}
 
 	private function unbindMouse(name:String, type:String, handler:MouseEvent->Void):Void {
-		var target = DisplayUtil.findByName(art, name);
+		var target = DisplayUtil.directChildByName(art, name);
 		if (target != null) {
 			target.removeEventListener(type, handler);
 		}

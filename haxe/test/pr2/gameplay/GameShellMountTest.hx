@@ -531,7 +531,7 @@ class GameShellMountTest {
 		// the wait-state handling the motion state would derive a "jumpAnim"; the
 		// countdown must show the idle stand pose instead (Flash mode="wait").
 		assertEquals(false, course.localCharacter.grounded, "start block leaves the player airborne at spawn");
-		assertEquals("standAnim", @:privateAccess course.localCharacter.display.activeStateName,
+		assertEquals("stand", course.localCharacter.display.currentState,
 			"local player shows the idle stand pose during the countdown, not a jump");
 		var camX = @:privateAccess course.camera.posX;
 		var camY = @:privateAccess course.camera.posY;

@@ -39,10 +39,10 @@ class StorePopup extends Popup {
 	public function new(?fixture:Dynamic) {
 		super();
 		art = new StorePopupView(); addChild(art);
-		holder = Std.downcast(DisplayUtil.findByName(art, "itemsHolder"), DisplayObjectContainer);
-		var coins = LobbyArt.text(art, "coinsLeftBox");
+		holder = Std.downcast(DisplayUtil.directChildByName(art, "itemsHolder"), DisplayObjectContainer);
+		var coins = LobbyArt.directText(art, "coinsLeftBox");
 		if (coins != null) { coins.visible = false; coins.addEventListener(TextEvent.LINK, needMore); }
-		var close = LobbyArt.bind(DisplayUtil.findByName(art, "close_bt"), startFadeOut); if (close != null) bindings.push(close);
+		var close = LobbyArt.bind(DisplayUtil.directChildByName(art, "close_bt"), startFadeOut); if (close != null) bindings.push(close);
 		if (holder != null) {
 			scroll = new CustomScrollBar();
 			scroll.x = 202;
@@ -75,14 +75,14 @@ class StorePopup extends Popup {
 		var info = Reflect.field(data, "info");
 		var user = info == null ? null : Reflect.field(info, "user");
 		userCoins = intField(user, "coins");
-		var coins = LobbyArt.text(art, "coinsLeftBox");
+		var coins = LobbyArt.directText(art, "coinsLeftBox");
 		if (coins != null) {
 			coins.htmlText = '<b><font color="#' + (userCoins == 0 ? "BB0000" : "006600") + '">You have ' + Data.formatNumber(userCoins) + ' Coins remaining.</font> <u><font color="#4E4EFE"><a href="event:clickNeedMore">Need more?</a></font></u></b>';
 			coins.visible = true;
 		}
 		var title = info == null ? null : Reflect.field(info, "title");
 		if (title != null) {
-			var box = LobbyArt.text(art, "titleBox");
+			var box = LobbyArt.directText(art, "titleBox");
 			if (box != null) {
 				box.text = "-- " + stringField(title, "title") + " --";
 				if (boolField(title, "flashing")) {
@@ -181,7 +181,7 @@ class StorePopup extends Popup {
 		asyncGuard.remove();
 		userCoins = 0;
 		saleFlash.remove();
-		var coins = LobbyArt.text(art, "coinsLeftBox"); if (coins != null) coins.removeEventListener(TextEvent.LINK, needMore);
+		var coins = LobbyArt.directText(art, "coinsLeftBox"); if (coins != null) coins.removeEventListener(TextEvent.LINK, needMore);
 		for (binding in bindings) LobbyArt.unbind(binding); bindings = [];
 		for (listing in listings) {
 			listing.removeEventListener(StoreListing.PURCHASE, purchase);

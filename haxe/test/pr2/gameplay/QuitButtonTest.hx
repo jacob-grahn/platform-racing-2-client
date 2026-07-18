@@ -12,7 +12,7 @@ import pr2.net.LobbySocket;
 import pr2.page.GamePage;
 import pr2.page.LobbyPage;
 import pr2.page.PageHolder;
-import pr2.util.DisplayUtil;
+import pr2.util.TestDisplayUtil as DisplayUtil;
 
 class QuitButtonTest {
 	private static var assertions:Int = 0;
@@ -70,11 +70,30 @@ class QuitButtonTest {
 
 	private static function testGlowControls():Void {
 		var quit = new QuitButton(function():Void {}, function():Bool return false);
+		assertEquals("assets/svg/effects/quit_background_01.svg", QuitButton.BACKGROUND_ASSET,
+			"quit shell uses the exact authored XFL background");
+		assertEquals("assets/svg/effects/quit_glow_01.svg", QuitButton.GLOW_ASSET,
+			"quit glow uses the exact authored XFL shape");
+		assertEquals("assets/ui/quit-glow.json", QuitButton.GLOW_DATA_ASSET,
+			"quit glow uses generated neutral XFL frame/filter data");
 		assertEquals(false, quit.glowActive, "glow starts off");
+		assertEquals(2, quit.glowFrameForTests(), "off label resolves to Flash frame two");
 		quit.startGlow();
 		assertEquals(true, quit.glowActive, "startGlow enters the on animation");
+		assertEquals(11, quit.glowFrameForTests(), "on label resolves to Flash frame eleven");
+		for (_ in 0...13) quit.advanceGlowForTests();
+		assertEquals(24, quit.glowFrameForTests(), "glow reaches authored peak frame 24");
+		assertEquals(25, Math.round(quit.glowBlurForTests()), "peak frame uses authored 25px glow blur");
+		assertEquals(2, quit.glowStrengthForTests(), "peak frame uses authored glow strength 2");
+		quit.advanceGlowForTests();
+		assertNear(23.0770111083984, quit.glowBlurForTests(), 0.0000001, "frame 25 retains exact source blur rather than an approximation");
+		assertNear(1.84, quit.glowStrengthForTests(), 0.0000001, "frame 25 retains exact source strength rather than deriving it from blur");
+		for (_ in 0...12) quit.advanceGlowForTests();
+		assertEquals(11, quit.glowFrameForTests(), "Flash frame 37 executes gotoAndPlay('on') without entering the blank off hold");
+		assertEquals(true, quit.glowVisibleForTests(), "the authored on loop remains visible at its restart frame");
 		quit.stopGlow();
 		assertEquals(false, quit.glowActive, "stopGlow returns to the off state");
+		assertEquals(2, quit.glowFrameForTests(), "stopGlow lands exactly on the off label");
 		quit.remove();
 	}
 
@@ -179,9 +198,18 @@ class QuitButtonTest {
 
 	private static function testGamePageLuxCommand():Void {
 		var popup = new LuxPopup(37, false);
+		assertEquals("assets/svg/effects/lux_popup_01.svg", LuxPopup.BACKGROUND_ASSET,
+			"LuxPopup uses the exact authored XFL background");
 		assertEquals("+37 Lux", popup.text, "LuxPopup writes the Flash gain label");
 		assertEquals(pr2.net.ServerConfig.getHost() + "/img/luna.jpg", popup.imageUrl, "LuxPopup uses the Flash luna portrait URL");
+		var exactBackground = DisplayUtil.findByName(popup, "exactBackground");
+		assertEquals(true, exactBackground != null, "LuxPopup renders the authored background and shadow");
+		var heading = Std.downcast(DisplayUtil.findByName(popup, "textBox"), openfl.text.TextField);
+		assertNear(100, heading.x, 0.001, "Lux label preserves authored x");
+		assertNear(7.95, heading.y, 0.001, "Lux label preserves authored y");
 		var close = Std.downcast(DisplayUtil.findByName(popup, "close_bt"), InteractiveObject);
+		assertNear(144, close.x, 0.001, "Lux close button preserves authored x");
+		assertNear(38.45, close.y, 0.001, "Lux close button preserves authored y");
 		close.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 		assertEquals(true, popup.fadeOutStarted, "LuxPopup close button fades it out");
 		popup.remove();
@@ -248,11 +276,13 @@ class QuitButtonTest {
 		assertEquals(1, game.cowboyModes.length, "cowboyMode adds the authored animation");
 		var mode = game.cowboyModes[0];
 		assertEquals(true, mode.parent == game, "cowboyMode attaches to the game page");
+		@:privateAccess assertEquals("assets/svg/effects/cowboy_01.svg", mode.art.currentAssetPath, "cowboyMode starts on exact composed XFL frame one");
 
 		for (_ in 0...120) {
 			mode.advance();
 		}
 		assertEquals(82, mode.currentFrame, "cowboyMode stops on Flash frame 82");
+		@:privateAccess assertEquals("assets/svg/effects/cowboy_82.svg", mode.art.currentAssetPath, "cowboyMode stops on the authored empty frame 82");
 
 		game.remove();
 		assertEquals(0, game.cowboyModes.length, "game removal clears cowboy animations");
@@ -266,6 +296,9 @@ class QuitButtonTest {
 		assertEquals(1, game.happyHours.length, "happyHour adds the authored animation");
 		var happy = game.happyHours[0];
 		assertEquals(true, happy.parent == game, "happyHour attaches to the game page");
+		@:privateAccess assertEquals("assets/svg/effects/happy_hour_01.svg", happy.art.currentAssetPath,
+			"happyHour starts on exact composed XFL frame one");
+		@:privateAccess assertEquals(true, happy.art.width > 0, "happyHour renders its lossless XFL bitmap as source-derived vector pixels");
 
 		for (_ in 0...120) {
 			happy.advance();
@@ -295,6 +328,13 @@ class QuitButtonTest {
 		assertions++;
 		if (expected != actual) {
 			throw '$message: expected $expected, got $actual';
+		}
+	}
+
+	private static function assertNear(expected:Float, actual:Float, tolerance:Float, message:String):Void {
+		assertions++;
+		if (Math.abs(expected - actual) > tolerance) {
+			throw '$message: expected $expected +/- $tolerance, got $actual';
 		}
 	}
 }

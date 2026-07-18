@@ -6,7 +6,7 @@ import pr2.gameplay.GameCommandShell.RemoteCharacterInit;
 import pr2.lobby.LobbyArt;
 import pr2.level.ServerLevelDecoder;
 import pr2.net.ServerLevelData;
-import pr2.util.DisplayUtil;
+import pr2.util.TestDisplayUtil as DisplayUtil;
 
 @:access(pr2.gameplay.Course)
 class SpectatePickerTest {
@@ -23,6 +23,16 @@ class SpectatePickerTest {
 		assertEquals(false, course.canSpectate, "spectating disabled at mount");
 		assertEquals(false, course.spectatePicker.isArtVisible(), "picker hidden at mount");
 		assertEquals("Free Scroll", course.spectatePicker.playerNameHtml(), "free-scroll label at mount");
+		@:privateAccess assertNear(138.8, course.spectatePicker.art.getChildByName("arrowRight").x, 0.001,
+			"right arrow preserves authored x");
+		@:privateAccess assertNear(0, course.spectatePicker.art.getChildByName("arrowLeft").x, 0.001,
+			"mirrored left arrow preserves authored registration");
+		@:privateAccess assertNear(6.45, course.spectatePicker.art.nameTop.x, 0.001,
+			"player name preserves nested XFL x transforms");
+		@:privateAccess assertNear(-0.05, course.spectatePicker.art.nameTop.y, 0.001,
+			"player name preserves nested XFL y transforms");
+		@:privateAccess assertEquals(2, course.spectatePicker.art.spectatingText.numChildren,
+			"spectating label preserves authored light/dark text layers");
 
 		course.createRemoteCharacter(remoteInit(1, "Rival", "1"));
 		course.createRemoteCharacter(remoteInit(2, "Mod", "2"));
@@ -118,5 +128,10 @@ class SpectatePickerTest {
 		if (expected != actual) {
 			throw '$message: expected $expected, got $actual';
 		}
+	}
+
+	private static function assertNear(expected:Float, actual:Float, tolerance:Float, message:String):Void {
+		assertions++;
+		if (Math.abs(expected - actual) > tolerance) throw '$message: expected $expected +/- $tolerance, got $actual';
 	}
 }

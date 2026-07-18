@@ -25,7 +25,7 @@ class ArrowBlockView extends Sprite {
 		renderFrame();
 	}
 
-	public function gotoAndPlay(frame:Int):Void {
+	public function animateFromFrame(frame:Int):Void {
 		currentFrame = Std.int(Math.max(1, Math.min(8, frame)));
 		renderFrame();
 		if (!isPlaying) {

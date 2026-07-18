@@ -5,10 +5,8 @@ import openfl.display.Sprite;
 import openfl.events.Event;
 import pr2.app.AppStage;
 import pr2.lobby.dialogs.AutoDismissController;
-import pr2.runtime.FlComponents;
 import pr2.ui.controls.GameTextInput;
 import pr2.ui.StageFocus;
-import pr2.util.DisplayUtil;
 
 class EditorValueSettingsPopup extends Sprite {
 	public final editor:LevelEditor;
@@ -71,15 +69,15 @@ class EditorValueSettingsPopup extends Sprite {
 	private function configure():Void {
 		var spec = specFor(settingId);
 		defaultVal = spec.defaultVal;
-		var titleBox = FlComponents.asTextField(DisplayUtil.findByName(art, "titleBox"));
-		var descBox = FlComponents.asTextField(DisplayUtil.findByName(art, "descBox"));
+		var titleBox = art.titleBox;
+		var descBox = art.descBox;
 		if (titleBox != null) {
 			titleBox.htmlText = "<b>-- " + spec.title + " --</b>";
 		}
 		if (descBox != null) {
 			descBox.htmlText = spec.desc;
 		}
-		valueInput = Std.downcast(DisplayUtil.findByName(art, "valueBox"), GameTextInput);
+		valueInput = art.valueInput;
 		if (valueInput != null) {
 			valueInput.text = spec.value;
 			valueInput.textField.maxChars = spec.maxChars;

@@ -24,6 +24,26 @@ run_step() {
 run_step deterministic env PR2_TEST_MODE=full PR2_TEST_GROUPS= haxe test/deterministic.hxml
 run_step protocol haxe test/protocol.hxml
 run_step html5-build haxelib run openfl build html5
+run_step character-default \
+  python3 tools/openfl_driver.py sequence test/sequences/openfl/character-default.json
+run_step character-colors \
+  python3 tools/openfl_driver.py sequence test/sequences/openfl/character-colors.json
+run_step character-mixed-parts \
+  python3 tools/openfl_driver.py sequence test/sequences/openfl/character-mixed-parts.json
+run_step character-tricky-parts \
+  python3 tools/openfl_driver.py sequence test/sequences/openfl/character-tricky-parts.json
+run_step character-all-hats \
+  python3 tools/openfl_driver.py sequence test/sequences/openfl/character-all-hats.json
+run_step character-fred-states \
+  python3 tools/openfl_driver.py sequence test/sequences/openfl/character-fred-states.json
+run_step character-attachments \
+  python3 tools/openfl_driver.py sequence test/sequences/openfl/character-attachments.json
+run_step character-djinn-ice \
+  python3 tools/openfl_driver.py sequence test/sequences/openfl/character-djinn-ice.json
+run_step character-all-parts \
+  python3 tools/openfl_driver.py sequence test/sequences/openfl/character-all-parts.json
+run_step character-all-items \
+  python3 tools/openfl_driver.py sequence test/sequences/openfl/character-all-items.json
 run_step browser-navigation \
   python3 tools/openfl_driver.py \
     --metrics-out test/output/browser-navigation-metrics.json \

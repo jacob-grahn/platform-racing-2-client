@@ -16,7 +16,7 @@ class EditorTeleportBlockOptionsPopup extends EditorBlockOptionsPopup {
 		picker.x -= 15;
 		picker.y += 30;
 		picker.setColor(EditorBlockOptions.teleportColor(block.options));
-		picker.addEventListener(Event.CHANGE, commitColor);
+		picker.addEventListener(Event.CLOSE, commitColor);
 		addChild(picker);
 	}
 
@@ -26,7 +26,7 @@ class EditorTeleportBlockOptionsPopup extends EditorBlockOptionsPopup {
 
 	override public function remove():Void {
 		commitColor();
-		picker.removeEventListener(Event.CHANGE, commitColor);
+		picker.removeEventListener(Event.CLOSE, commitColor);
 		picker.remove();
 		super.remove();
 	}

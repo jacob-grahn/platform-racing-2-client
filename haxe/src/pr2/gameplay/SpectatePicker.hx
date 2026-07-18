@@ -29,8 +29,8 @@ class SpectatePicker extends Sprite {
 		this.course = course;
 		art = new SpectatePickerView();
 		addChild(art);
-		leftBinding = LobbyArt.bind(DisplayUtil.findByName(art, "arrowLeft"), clickLeft);
-		rightBinding = LobbyArt.bind(DisplayUtil.findByName(art, "arrowRight"), clickRight);
+		leftBinding = LobbyArt.bind(DisplayUtil.directChildByName(art, "arrowLeft"), clickLeft);
+		rightBinding = LobbyArt.bind(DisplayUtil.directChildByName(art, "arrowRight"), clickRight);
 		var top = playerNameTop();
 		if (top != null) {
 			htmlNameMaker.listenForLink(top);

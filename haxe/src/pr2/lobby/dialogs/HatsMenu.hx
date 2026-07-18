@@ -20,7 +20,7 @@ class HatsMenu extends InfoPopup {
 		addChild(art);
 		var allowed = parseHats(hatsStr, gameMode);
 		for (hatId in LOWEST_HAT_ID...HIGHEST_HAT_ID + 1) {
-			var check = Std.downcast(DisplayUtil.findByName(art, "hat" + hatId), GameCheckBox);
+			var check = Std.downcast(DisplayUtil.directChildByName(art, "hat" + hatId), GameCheckBox);
 			if (check != null) {
 				check.selected = allowed.indexOf(hatId) >= 0;
 				check.enabled = false;

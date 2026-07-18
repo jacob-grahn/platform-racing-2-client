@@ -44,16 +44,16 @@ class PartInfoPopup extends Popup {
 		art = new StorePopupView();
 		art.y += 20;
 		addChild(art);
-		holder = Std.downcast(DisplayUtil.findByName(art, "itemsHolder"), DisplayObjectContainer);
-		var title = LobbyArt.text(art, "titleBox");
+		holder = Std.downcast(DisplayUtil.directChildByName(art, "itemsHolder"), DisplayObjectContainer);
+		var title = LobbyArt.directText(art, "titleBox");
 		if (title != null) {
 			title.text = "-- " + ucfirst(Parts.getPlural(type)) + " --";
 		}
-		var coinsBg = DisplayUtil.findByName(art, "coinsLeftBg");
-		var coins = LobbyArt.text(art, "coinsLeftBox");
+		var coinsBg = DisplayUtil.directChildByName(art, "coinsLeftBg");
+		var coins = LobbyArt.directText(art, "coinsLeftBox");
 		if (coinsBg != null) coinsBg.visible = false;
 		if (coins != null) coins.visible = false;
-		closeBinding = LobbyArt.bind(DisplayUtil.findByName(art, "close_bt"), startFadeOut);
+		closeBinding = LobbyArt.bind(DisplayUtil.directChildByName(art, "close_bt"), startFadeOut);
 		populateParts();
 		if (!epicFlash.isEmpty()) {
 			epicFlash.start();

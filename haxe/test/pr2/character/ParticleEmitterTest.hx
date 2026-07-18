@@ -112,6 +112,12 @@ class ParticleEmitterTest {
 		assertClose(15, particle.x, "physics particle randomizes initial x");
 		assertClose(15, particle.y, "physics particle randomizes initial y");
 		assertClose(1.5, particle.scaleX, "physics particle randomizes initial scale");
+		var graphicBounds = particle.graphic.getBounds(particle.graphic);
+		assertClose(-5.00030517578125, graphicBounds.x, "Djinn ice preserves authored left registration");
+		assertClose(-5.00030517578125, graphicBounds.y, "Djinn ice preserves authored top registration");
+		assertClose(10.0006103515625, graphicBounds.width, "Djinn ice preserves authored Symbol 1200 width");
+		assertClose(10.0006103515625, graphicBounds.height, "Djinn ice preserves authored Symbol 1200 height");
+		assertEquals(0x112233, particle.transform.colorTransform.color, "Djinn ice uses the selected Flash solid-color transform");
 		particle.tick(new Event(Event.ENTER_FRAME));
 		assertClose(18, particle.x, "physics particle applies velocity x");
 		assertClose(17, particle.y, "physics particle applies velocity y");

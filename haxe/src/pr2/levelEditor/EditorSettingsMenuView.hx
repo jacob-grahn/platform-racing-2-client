@@ -6,54 +6,94 @@ import openfl.text.TextFormatAlign;
 import pr2.assets.NativeAssetIds.FontAsset;
 import pr2.assets.NativeAssets;
 import pr2.gameplay.Modes;
+import pr2.runtime.SvgAsset;
 import pr2.ui.controls.GameSelect;
 import pr2.ui.controls.GameTextInput;
 import pr2.ui.view.NativeView;
 
 /** Native compact shell for mode, music, and scalar editor settings. */
 class EditorSettingsMenuView extends NativeView {
+	public var modeSelect(default, null):Null<GameSelect<String>>;
+	public var titleBox(default, null):Null<TextField>;
+	public var descBox(default, null):Null<TextField>;
+	public var valueInput(default, null):Null<GameTextInput>;
+
 	public function new(kind:String) {
 		super();
-		graphics.beginFill(0xF4F4F4, 0.98);
-		graphics.lineStyle(2, 0x666666);
-		graphics.drawRoundRect(-125, -48, 250, 96, 12, 12);
-		graphics.endFill();
 		if (kind == "mode") makeMode();
 		if (kind == "value") makeValue();
-		if (kind == "music") title("-- Course Music --");
+		if (kind == "music") makeMusic();
 	}
 
 	private function makeMode():Void {
-		title("-- Game Mode --");
-		var select = ownControl(new GameSelect<String>());
+		var background = SvgAsset.createNormalized("assets/svg/ui/shadow_bg.svg");
+		background.name = "background";
+		background.x = -116.5;
+		background.y = -59.3;
+		background.scaleX = 0.845672607421875;
+		background.scaleY = 0.628204345703125;
+		addChild(background);
+		var title = field("title", -54.95, -49, 108.9, 14.55, 12, true, TextFormatAlign.LEFT);
+		title.scaleX = 1.00047302246094;
+		title.text = "-- Game Mode --";
+		var desc = field("description", -103.5, -23, 206, 31.1, 12, false, TextFormatAlign.CENTER);
+		desc.multiline = true;
+		desc.wordWrap = true;
+		desc.text = "Each game mode has a different goal and method of winning.";
+		modeSelect = ownControl(new GameSelect<String>());
+		var select = modeSelect;
 		select.name = "modeSelect";
-		select.x = -100;
-		select.y = 8;
-		select.setSize(200, 24);
+		select.x = -50;
+		select.y = 23;
+		select.setSize(100, 22);
+		select.rowCount = 5;
 		select.addOption("Race", Modes.race);
-		select.addOption("Deathmatch", Modes.dm);
-		select.addOption("Eggs", Modes.egg);
 		select.addOption("Objective", Modes.obj);
+		select.addOption("Deathmatch", Modes.dm);
+		select.addOption("Alien Eggs", Modes.egg);
 		select.addOption("Hat Attack", Modes.hat);
-		select.addOption("Roguelike", Modes.roguelike);
 		addChild(select);
 	}
 
 	private function makeValue():Void {
-		field("titleBox", -112, -39, 224, 20, 14, true, TextFormatAlign.CENTER);
-		var desc = field("descBox", -112, -15, 170, 52, 9, false, TextFormatAlign.LEFT);
+		var background = SvgAsset.createNormalized("assets/svg/ui/shadow_bg.svg");
+		background.name = "background";
+		background.x = -114.95;
+		background.y = -72.75;
+		background.scaleX = 0.845291137695312;
+		background.scaleY = 0.628173828125;
+		addChild(background);
+		var title = field("titleBox", -113.45, -61, 226.85, 14.55, 12, true, TextFormatAlign.CENTER);
+		title.scaleX = 1.00047302246094;
+		titleBox = title;
+		descBox = field("descBox", -102.5, -35.05, 206, 31.1, 12, false, TextFormatAlign.CENTER);
+		var desc = descBox;
 		desc.multiline = true;
 		desc.wordWrap = true;
-		var input = ownControl(new GameTextInput());
+		valueInput = ownControl(new GameTextInput());
+		var input = valueInput;
 		input.name = "valueBox";
-		input.x = 64;
-		input.y = 2;
-		input.setSize(48, 24);
+		input.x = -39;
+		input.y = 10;
+		input.setSize(77.9998779296875, 22);
 		addChild(input);
 	}
 
-	private function title(value:String):Void {
-		field(null, -112, -38, 224, 21, 14, true, TextFormatAlign.CENTER).text = value;
+	private function makeMusic():Void {
+		var background = SvgAsset.createNormalized("assets/svg/ui/shadow_bg.svg");
+		background.name = "background";
+		background.x = -120;
+		background.y = -50;
+		background.scaleX = 0.882400512695312;
+		background.scaleY = 0.785186767578125;
+		addChild(background);
+		var title = field("title", -34.8, -39, 69.5, 14.55, 12, true, TextFormatAlign.LEFT);
+		title.scaleX = 1.00047302246094;
+		title.text = "-- Music --";
+		var desc = field("description", -109.5, 19, 219.9, 64.2, 12, false, TextFormatAlign.CENTER);
+		desc.multiline = true;
+		desc.wordWrap = true;
+		desc.text = "This song will play by default for players playing your course. Choose none for no song and random for a random one from the list.";
 	}
 
 	private function field(name:Null<String>, x:Float, y:Float, width:Float, height:Float, size:Int, bold:Bool,

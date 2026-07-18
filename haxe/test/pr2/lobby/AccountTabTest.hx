@@ -22,7 +22,7 @@ import pr2.lobby.dialogs.Popup;
 import pr2.lobby.level.CourseMenu;
 import pr2.lobby.tabs.AccountTab;
 import pr2.ui.GuildName;
-import pr2.util.DisplayUtil;
+import pr2.util.TestDisplayUtil as DisplayUtil;
 
 class AccountTabTest {
 	private static var assertions:Int = 0;
@@ -53,9 +53,9 @@ class AccountTabTest {
 		var character = new AccountCharacter();
 		assertEquals(1, character.scaleX, "Flash Character wrapper remains at scale 1");
 		assertEquals(1, character.display.scaleX, "CharacterGraphic container remains at scale 1");
-		var stand = character.display.getStateClip("standAnim");
-		assertEquals(0.149993896484375, stand.scaleX, "standAnim preserves its authored internal scaleX");
-		assertEquals(0.149993896484375, stand.scaleY, "standAnim preserves its authored internal scaleY");
+		var stand = character.display.getChildByName("rigRoot");
+		assertEquals(0.149993896484375, stand.scaleX, "native stand rig preserves its authored internal scaleX");
+		assertEquals(0.149993896484375, stand.scaleY, "native stand rig preserves its authored internal scaleY");
 		character.remove();
 	}
 
@@ -119,6 +119,18 @@ class AccountTabTest {
 		assertNotContains(fieldHtml(art, "rankBox"), "<b>", "account rank is not bold");
 		assertNotContains(fieldHtml(art, "hatBox"), "<b>", "account hats count is not bold");
 		assertNotContains(fieldHtml(art, "guildBox"), "<b>", "account empty guild value is not bold");
+		assertEquals(2.0, DisplayUtil.findByName(art, "nameBox").x, "account name keeps XFL X");
+		assertEquals(0.0, DisplayUtil.findByName(art, "nameBox").y, "account name keeps XFL Y");
+		assertEquals(2.0, DisplayUtil.findByName(art, "rankBox").x, "account rank keeps XFL X");
+		assertEquals(18.0, DisplayUtil.findByName(art, "rankBox").y, "account rank keeps XFL Y");
+		assertEquals(2.0, DisplayUtil.findByName(art, "hatBox").x, "account hats keep XFL X");
+		assertEquals(36.0, DisplayUtil.findByName(art, "hatBox").y, "account hats keep XFL Y");
+		assertEquals(2.0, DisplayUtil.findByName(art, "guildBox").x, "account guild keeps XFL X");
+		assertEquals(54.0, DisplayUtil.findByName(art, "guildBox").y, "account guild keeps XFL Y");
+		assertEquals(66.0, DisplayUtil.findByName(art, "rankTokenUp_bt").x, "rank-token up keeps XFL X");
+		assertEquals(101.0, DisplayUtil.findByName(art, "rankTokenDown_bt").x, "rank-token down keeps XFL X");
+		assertEquals(169.0, DisplayUtil.findByName(art, "loadouts_bt").x, "loadouts icon keeps XFL X");
+		assertEquals(2.0, DisplayUtil.findByName(art, "loadouts_bt").y, "loadouts icon keeps XFL Y");
 		tab.remove();
 	}
 

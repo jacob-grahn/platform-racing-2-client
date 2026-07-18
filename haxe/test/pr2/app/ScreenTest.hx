@@ -34,9 +34,6 @@ class ScreenTest {
 
 	private static function testSiteModeMatchesFlashDomainRules():Void {
 		assertStringEquals("kongregate", SiteMode.fromUrl("file:///tmp/pr2.swf"), "local defaults to kongregate");
-		assertStringEquals("bubbleBox", SiteMode.fromUrl("https://www.bubblebox.com/game.swf"), "bubblebox host");
-		assertStringEquals("bubbleBox", SiteMode.fromUrl("https://2games.com/pr2.swf"), "2games host");
-		assertStringEquals("armorGames", SiteMode.fromUrl("https://armorgames.com/pr2.swf"), "armor games host");
 		assertStringEquals("inXile", SiteMode.fromUrl("https://sparkworkz.com/pr2.swf"), "sparkworkz host");
 		assertStringEquals("inXile", SiteMode.fromUrl("https://inxile-entertainment.com/pr2.swf"), "inxile host");
 		assertStringEquals("pr2hub.com", SiteMode.domainFromUrl("https://www.pr2hub.com/client/pr2.swf"), "domain strips www");
@@ -44,8 +41,6 @@ class ScreenTest {
 
 	private static function testLoginPageAssetMatchesSiteMode():Void {
 		assertLoginPageArt("assets/svg/login/login_page_no_logo.svg", 868, 846, SiteMode.KONGREGATE, "kongregate uses unbranded login art");
-		assertLoginPageArt("assets/svg/login/login_page_no_logo.svg", 868, 846, SiteMode.BUBBLE_BOX, "bubblebox uses unbranded login art");
-		assertLoginPageArt("assets/svg/login/login_page_no_logo.svg", 868, 846, SiteMode.ARMOR_GAMES, "armorgames uses unbranded login art");
 		assertLoginPageArt("assets/svg/login/login_page_no_logo.svg", 868, 846, SiteMode.INXILE, "inxile uses unbranded login art");
 	}
 

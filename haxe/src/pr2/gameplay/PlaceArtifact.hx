@@ -2,24 +2,18 @@ package pr2.gameplay;
 
 import openfl.events.Event;
 import openfl.events.FocusEvent;
-import openfl.text.TextField;
-import openfl.text.TextFormat;
-import openfl.text.TextFormatAlign;
-import pr2.assets.NativeAssetIds.FontAsset;
-import pr2.assets.NativeAssets;
+import openfl.display.Shape;
 import pr2.lobby.dialogs.ConfirmPopup;
 import pr2.lobby.dialogs.Popup;
 import pr2.lobby.dialogs.UploadingPopup;
-import pr2.lobby.LobbyArt;
-import pr2.lobby.LobbyArt.Binding;
 import pr2.net.ServerConfig;
-import pr2.runtime.FlCheckBox;
-import pr2.runtime.FlComboBox;
-import pr2.runtime.FlTextInput;
 import pr2.gameplay.SpecialEvent.PlaceArtifactRequest;
 import pr2.ui.controls.GameButton;
+import pr2.ui.controls.GameCheckBox;
+import pr2.ui.controls.GameSelect;
+import pr2.ui.controls.GameTextInput;
 import pr2.ui.view.NativeView;
-import pr2.util.DisplayUtil;
+import pr2.runtime.SvgAsset;
 
 private typedef UploadFactory = String->Map<String, String>->String->(Dynamic->Void)->UploadingPopup;
 
@@ -28,21 +22,20 @@ private typedef UploadFactory = String->Map<String, String>->String->(Dynamic->V
 **/
 @:allow(pr2.gameplay.PlaceArtifactTest)
 class PlaceArtifact extends Popup {
+	public static inline final BACKGROUND_ASSET = "assets/svg/effects/place_artifact_01.svg";
 	public static var instance:Null<PlaceArtifact>;
 	private static var uploadFactory:UploadFactory = defaultUpload;
 	private static var nowSeconds:Void->Int = function():Int return Std.int(Date.now().getTime() / 1000);
 
 	public final request:PlaceArtifactRequest;
 	private var art:Null<PlaceArtifactView>;
-	private var monthSel:Null<FlComboBox>;
-	private var daySel:Null<FlComboBox>;
-	private var yearSel:Null<FlComboBox>;
-	private var hourBox:Null<FlTextInput>;
-	private var minBox:Null<FlTextInput>;
-	private var meridSel:Null<FlComboBox>;
-	private var nowCheck:Null<FlCheckBox>;
-	private var placeBinding:Null<Binding>;
-	private var cancelBinding:Null<Binding>;
+	private var monthSel:Null<GameSelect<Dynamic>>;
+	private var daySel:Null<GameSelect<Dynamic>>;
+	private var yearSel:Null<GameSelect<Dynamic>>;
+	private var hourBox:Null<GameTextInput>;
+	private var minBox:Null<GameTextInput>;
+	private var meridSel:Null<GameSelect<Dynamic>>;
+	private var nowCheck:Null<GameCheckBox>;
 	private var setTime:Int = 0;
 	private var overrideSched:Bool = false;
 	private var uploading:Null<UploadingPopup>;
@@ -62,21 +55,21 @@ class PlaceArtifact extends Popup {
 	}
 
 	private function wireControls():Void {
-		monthSel = Std.downcast(DisplayUtil.findByName(art, "monthSel"), FlComboBox);
-		daySel = Std.downcast(DisplayUtil.findByName(art, "daySel"), FlComboBox);
-		yearSel = Std.downcast(DisplayUtil.findByName(art, "yearSel"), FlComboBox);
-		hourBox = Std.downcast(DisplayUtil.findByName(art, "hourBox"), FlTextInput);
-		minBox = Std.downcast(DisplayUtil.findByName(art, "minBox"), FlTextInput);
-		meridSel = Std.downcast(DisplayUtil.findByName(art, "meridSel"), FlComboBox);
-		nowCheck = Std.downcast(DisplayUtil.findByName(art, "now_chk"), FlCheckBox);
+		monthSel = art.monthSelect;
+		daySel = art.daySelect;
+		yearSel = art.yearSelect;
+		hourBox = art.hourInput;
+		minBox = art.minuteInput;
+		meridSel = art.meridiemSelect;
+		nowCheck = art.nowCheckBox;
 
 		if (monthSel != null) monthSel.addEventListener(Event.CHANGE, selChange);
 		if (yearSel != null) yearSel.addEventListener(Event.CHANGE, selChange);
 		if (hourBox != null) hourBox.addEventListener(FocusEvent.FOCUS_OUT, validateText);
 		if (minBox != null) minBox.addEventListener(FocusEvent.FOCUS_OUT, validateText);
 		if (nowCheck != null) nowCheck.addEventListener(Event.CHANGE, checkNowBox);
-		placeBinding = LobbyArt.bind(DisplayUtil.findByName(art, "place_bt"), clickPlace);
-		cancelBinding = LobbyArt.bind(DisplayUtil.findByName(art, "cancel_bt"), clickCancel);
+		art.placeButton.onPress = clickPlace;
+		art.cancelButton.onPress = clickCancel;
 	}
 
 	private function populateOptions(first:Bool = false, ?date:Date):Void {
@@ -225,10 +218,8 @@ class PlaceArtifact extends Popup {
 		if (hourBox != null) hourBox.removeEventListener(FocusEvent.FOCUS_OUT, validateText);
 		if (minBox != null) minBox.removeEventListener(FocusEvent.FOCUS_OUT, validateText);
 		if (nowCheck != null) nowCheck.removeEventListener(Event.CHANGE, checkNowBox);
-		LobbyArt.unbind(placeBinding);
-		LobbyArt.unbind(cancelBinding);
 		if (uploading != null) {
-			uploading.remove();
+			uploading.startFadeOut();
 			uploading = null;
 		}
 		if (art != null) {
@@ -238,7 +229,7 @@ class PlaceArtifact extends Popup {
 		super.remove();
 	}
 
-	private static function selectedDataInt(combo:Null<FlComboBox>, fallback:Int):Int {
+	private static function selectedDataInt(combo:Null<GameSelect<Dynamic>>, fallback:Int):Int {
 		if (combo == null || combo.selectedItem == null) {
 			return fallback;
 		}
@@ -301,39 +292,47 @@ class PlaceArtifact extends Popup {
 }
 
 private class PlaceArtifactView extends NativeView {
+	public final exactBackground:Shape;
+	public final monthSelect:GameSelect<Dynamic>;
+	public final daySelect:GameSelect<Dynamic>;
+	public final yearSelect:GameSelect<Dynamic>;
+	public final hourInput:GameTextInput;
+	public final minuteInput:GameTextInput;
+	public final meridiemSelect:GameSelect<Dynamic>;
+	public final nowCheckBox:GameCheckBox;
+	public final placeButton:GameButton;
+	public final cancelButton:GameButton;
+
 	public function new() {
 		super();
-		graphics.beginFill(0xF4F4F4, 0.98);
-		graphics.lineStyle(2, 0x666666);
-		graphics.drawRoundRect(-190, -115, 380, 230, 14, 14);
-		graphics.endFill();
-		addLabel("-- Place Artifact --", -145, -98, 290, 22, 16, true, TextFormatAlign.CENTER);
-		addLabel("Choose when the artifact should appear:", -160, -67, 320, 18, 11, false, TextFormatAlign.CENTER);
-		var month = combo("monthSel", -166, -34, 105);
-		var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-		for (index in 0...months.length) month.addItem({label: months[index], data: index});
-		combo("daySel", -54, -34, 62);
-		combo("yearSel", 15, -34, 78);
-		var hour = input("hourBox", -89, 4, 45);
-		hour.maxChars = 2;
-		addLabel(":", -43, 7, 12, 18, 12, true, TextFormatAlign.CENTER);
-		var minute = input("minBox", -29, 4, 45);
-		minute.maxChars = 2;
-		var merid = combo("meridSel", 22, 4, 62);
-		merid.addItem({label: "AM", data: 0});
-		merid.addItem({label: "PM", data: 1});
-		var now = new FlCheckBox();
-		now.name = "now_chk";
-		now.x = 102;
-		now.y = 5;
-		now.label = "Now";
-		addChild(now);
-		button("place_bt", "Place", -94, 66);
-		button("cancel_bt", "Cancel", 10, 66);
+		exactBackground = SvgAsset.create(PlaceArtifact.BACKGROUND_ASSET);
+		exactBackground.name = "exactBackground";
+		addChild(exactBackground);
+		monthSelect = combo("monthSel", -37.5, -79.75, 70);
+		var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+		for (index in 0...months.length) monthSelect.addItem({label: months[index], data: index});
+		daySelect = combo("daySel", -109.5, -79.75, 60);
+		yearSelect = combo("yearSel", 44.5, -79.75, 65);
+		hourInput = input("hourBox", -62.5, -49.25, 30);
+		hourInput.maxChars = 2;
+		hourInput.restrict = "0-9";
+		minuteInput = input("minBox", -20.25, -49.25, 30);
+		minuteInput.maxChars = 2;
+		minuteInput.restrict = "0-9";
+		meridiemSelect = combo("meridSel", 17.5, -49.25, 50);
+		meridiemSelect.addItem({label: "AM", data: 0});
+		meridiemSelect.addItem({label: "PM", data: 1});
+		nowCheckBox = ownControl(new GameCheckBox("Place Now"));
+		nowCheckBox.name = "now_chk";
+		nowCheckBox.x = -27.65;
+		nowCheckBox.y = -22.25;
+		addChild(nowCheckBox);
+		placeButton = button("place_bt", "Place", -105, 78.75);
+		cancelButton = button("cancel_bt", "Cancel", 5, 78.75);
 	}
 
-	private function combo(name:String, x:Float, y:Float, width:Float):FlComboBox {
-		var control = new FlComboBox();
+	private function combo(name:String, x:Float, y:Float, width:Float):GameSelect<Dynamic> {
+		var control = ownControl(new GameSelect<Dynamic>());
 		control.name = name;
 		control.x = x;
 		control.y = y;
@@ -342,8 +341,8 @@ private class PlaceArtifactView extends NativeView {
 		return control;
 	}
 
-	private function input(name:String, x:Float, y:Float, width:Float):FlTextInput {
-		var control = new FlTextInput();
+	private function input(name:String, x:Float, y:Float, width:Float):GameTextInput {
+		var control = ownControl(new GameTextInput());
 		control.name = name;
 		control.x = x;
 		control.y = y;
@@ -352,24 +351,14 @@ private class PlaceArtifactView extends NativeView {
 		return control;
 	}
 
-	private function button(name:String, label:String, x:Float, y:Float):Void {
+	private function button(name:String, label:String, x:Float, y:Float):GameButton {
 		var control = ownControl(new GameButton(label));
 		control.name = name;
 		control.x = x;
 		control.y = y;
-		control.setSize(84, 24);
+		control.setSize(100, 22);
 		addChild(control);
+		return control;
 	}
 
-	private function addLabel(value:String, x:Float, y:Float, width:Float, height:Float, size:Int, bold:Bool, align:TextFormatAlign):Void {
-		var field = new TextField();
-		field.x = x;
-		field.y = y;
-		field.width = width;
-		field.height = height;
-		field.selectable = false;
-		field.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), size, 0x222222, bold, null, null, null, null, align);
-		field.text = value;
-		addChild(field);
-	}
 }

@@ -1,10 +1,5 @@
 package pr2.gameplay;
 
-import openfl.display.Bitmap;
-import openfl.display.BitmapData;
-import openfl.display.DisplayObject;
-import openfl.display.DisplayObjectContainer;
-import openfl.utils.Assets;
 
 class ItemDisplayTest {
 	private static var assertions:Int = 0;
@@ -38,12 +33,16 @@ class ItemDisplayTest {
 
 	private static function testAuthoredDisplayState():Void {
 		var display = new ItemDisplay();
+		@:privateAccess assertEquals("assets/svg/effects/item_display_01.svg", display.art.currentAssetPath,
+			"empty display uses exact authored XFL frame one");
 		assertEquals("None", display.itemName, "display starts empty");
 		assertEquals("None", display.labelText("holder1"), "dark label starts empty");
 		assertEquals("None", display.labelText("holder2"), "light label starts empty");
 		assertEquals(false, display.ammoVisible(1), "empty display hides ammo");
 
 		display.setItemCode(1);
+		@:privateAccess assertEquals("assets/svg/effects/item_display_36.svg", display.art.currentAssetPath,
+			"laser selects its exact authored label frame");
 		display.setAmmo(3);
 		assertEquals("Laser", display.itemName, "laser frame selected");
 		assertEquals("Laser", display.labelText("holder1"), "dark label updates");
@@ -59,22 +58,13 @@ class ItemDisplayTest {
 		assertEquals(3, ItemDisplay.clampAmmo(8), "ammo clamps to authored dots");
 		assertEquals(0, ItemDisplay.clampAmmo(-1), "ammo clamps at zero");
 
-		Assets.cache.setBitmapData("assets/blocks/mine_block.png", new BitmapData(30, 30, false, 0x6A6250));
 		display.setItemCode(2);
-		assertEquals(true, containsBitmap(@:privateAccess display.art), "mine HUD frame uses the exported MineBitmap");
-		Assets.cache.removeBitmapData("assets/blocks/mine_block.png");
+		@:privateAccess assertEquals("assets/svg/effects/item_display_11.svg", display.art.currentAssetPath,
+			"mine HUD uses its exact composed XFL label frame");
+		@:privateAccess display.art.advanceFrame();
+		@:privateAccess assertEquals("assets/svg/effects/item_display_12.svg", display.art.currentAssetPath,
+			"nested mine animation advances through authored frames");
 		display.remove();
-	}
-
-	private static function containsBitmap(root:DisplayObject):Bool {
-		if (Std.isOfType(root, Bitmap)) return true;
-		var container = Std.downcast(root, DisplayObjectContainer);
-		if (container != null) {
-			for (i in 0...container.numChildren) {
-				if (containsBitmap(container.getChildAt(i))) return true;
-			}
-		}
-		return false;
 	}
 
 	private static function assertEquals(expected:Dynamic, actual:Dynamic, message:String):Void {

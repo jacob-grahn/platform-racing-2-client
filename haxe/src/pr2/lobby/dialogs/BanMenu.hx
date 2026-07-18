@@ -1,11 +1,14 @@
 package pr2.lobby.dialogs;
 
 import openfl.display.Sprite;
+import openfl.display.DisplayObject;
+import openfl.display.Shape;
 import openfl.text.TextField;
 import openfl.text.TextFieldType;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
 import pr2.assets.NativeAssetIds.FontAsset;
+import pr2.assets.NativeAssetIds.StaticSvg;
 import pr2.assets.NativeAssets;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
@@ -15,11 +18,9 @@ import pr2.lobby.chat.ChatText;
 import pr2.lobby.tabs.ChatTab;
 import pr2.net.LobbySocket;
 import pr2.net.ServerConfig;
-import pr2.runtime.FlComboBox;
-import pr2.runtime.FlComponents;
 import pr2.ui.controls.GameButton;
+import pr2.ui.controls.GameSelect;
 import pr2.ui.view.NativeView;
-import pr2.util.DisplayUtil;
 
 typedef BanUploadFactory = String->Map<String, String>->String->(Dynamic->Void)->(String->Void)->Null<UploadingPopup>;
 
@@ -46,9 +47,7 @@ class BanMenu extends Sprite {
 		art = new BanMenuView();
 		addChild(art);
 
-		if (LobbySession.isTrialMod) {
-			restrictTrialModOptions();
-		} else {
+		if (!LobbySession.isTrialMod) {
 			addDuration("Three Days", 259200);
 			addDuration("One Week", 604800);
 			addDuration("Two Weeks", 1209600);
@@ -77,41 +76,8 @@ class BanMenu extends Sprite {
 		}
 	}
 
-	private function restrictTrialModOptions():Void {
-		var duration = combo("duration");
-		if (duration != null) {
-			var allowed:Array<Dynamic> = [];
-			for (i in 0...duration.length) {
-				var item = duration.dataProvider.getItemAt(i);
-				var seconds = Std.parseInt(Std.string(Reflect.field(item, "data")));
-				if (seconds != null && seconds <= 86400) {
-					allowed.push(item);
-				}
-			}
-			duration.removeAll();
-			for (item in allowed) {
-				duration.addItem({label: Reflect.field(item, "label"), data: Reflect.field(item, "data")});
-			}
-		}
-		var scope = combo("scope");
-		if (scope != null) {
-			var allowedScopes:Array<Dynamic> = [];
-			for (i in 0...scope.length) {
-				var item = scope.dataProvider.getItemAt(i);
-				if (Reflect.field(item, "data") != "game") {
-					allowedScopes.push(item);
-				}
-			}
-			scope.removeAll();
-			for (item in allowedScopes) {
-				scope.addItem({label: Reflect.field(item, "label"), data: Reflect.field(item, "data")});
-			}
-			scope.enabled = false;
-		}
-	}
-
 	private function bind(name:String, handler:Void->Void):Void {
-		bindings.push(LobbyArt.bind(DisplayUtil.findByName(art, name), handler));
+		bindings.push(LobbyArt.bind(art == null ? null : art.buttonNamed(name), handler));
 	}
 
 	private function viewPriors():Void {
@@ -210,16 +176,21 @@ class BanMenu extends Sprite {
 		return ChatTab.instance == null ? "" : ChatTab.instance.getChatRecord();
 	}
 
-	private function combo(name:String):Null<FlComboBox> {
-		return Std.downcast(DisplayUtil.findByName(art, name), FlComboBox);
+	private function combo(name:String):Null<GameSelect<Dynamic>> {
+		if (art == null) return null;
+		return switch (name) {
+			case "duration": art.durationSelect;
+			case "type": art.typeSelect;
+			case "scope": art.scopeSelect;
+			default: null;
+		};
 	}
 
 	private function reasonText():String {
-		var field = FlComponents.asTextField(DisplayUtil.findByName(art, "reason"));
-		return field == null ? "" : field.text;
+		return art == null ? "" : art.reasonInput.text;
 	}
 
-	private static function selectedData(combo:Null<FlComboBox>, fallback:String):String {
+	private static function selectedData(combo:Null<GameSelect<Dynamic>>, fallback:String):String {
 		if (combo == null || combo.selectedItem == null) {
 			return fallback;
 		}
@@ -227,7 +198,7 @@ class BanMenu extends Sprite {
 		return data == null ? fallback : Std.string(data);
 	}
 
-	private static function selectedDataInt(combo:Null<FlComboBox>, fallback:Int):Int {
+	private static function selectedDataInt(combo:Null<GameSelect<Dynamic>>, fallback:Int):Int {
 		var parsed = Std.parseInt(selectedData(combo, Std.string(fallback)));
 		return parsed == null ? fallback : parsed;
 	}
@@ -258,38 +229,65 @@ class BanMenu extends Sprite {
 }
 
 private class BanMenuView extends NativeView {
+	public final panel:DisplayObject;
+	public final durationSelect:GameSelect<Dynamic>;
+	public final typeSelect:GameSelect<Dynamic>;
+	public final scopeSelect:GameSelect<Dynamic>;
+	public final reasonInput:TextField;
+	private final buttons:Map<String, GameButton> = [];
+
+	public function buttonNamed(name:String):Null<GameButton> return buttons.get(name);
+
 	public function new() {
 		super();
 		name = "BanMenuGraphic";
-		graphics.beginFill(0xF2F2F2, 0.98);
-		graphics.lineStyle(1, 0x666666);
-		graphics.drawRoundRect(-180, -112, 360, 224, 11, 11);
-		graphics.endFill();
-		label("-- Moderator Actions --", -135, -99, 270, 20, 14, true, TextFormatAlign.CENTER);
-		button("warning1Button", "Warning 1", -164, -70, 76);
-		button("warning2Button", "Warning 2", -83, -70, 76);
-		button("warning3Button", "Warning 3", -2, -70, 76);
-		button("kickButton", "30m Kick", 79, -70, 76);
-		label("Duration", -164, -35, 66, 18, 10, false, TextFormatAlign.RIGHT);
-		var duration = combo("duration", -92, -38, 104);
-		duration.addItem({label: "30 Minutes", data: 1800});
-		duration.addItem({label: "12 Hours", data: 43200});
+		panel = NativeAssets.svg(StaticSvg.QuantityPanel);
+		panel.name = "panel";
+		panel.x = -86;
+		panel.y = -180;
+		panel.scaleX = 0.632369995117188;
+		panel.scaleY = 1.884765625;
+		addChild(panel);
+		var separator = new Shape();
+		separator.name = "separator";
+		separator.graphics.lineStyle(1, 0xCCCCCC);
+		separator.graphics.moveTo(-66.5, -29);
+		separator.graphics.lineTo(66.5, -29);
+		addChild(separator);
+		label("-- Mod --", "modTitle", -32.15, -172.1, 64.3, 17.05, 14, false, TextFormatAlign.CENTER);
+		button("warning1Button", "Warning 1", -50, -147, 100);
+		button("warning2Button", "Warning 2", -50, -121, 100);
+		button("warning3Button", "Warning 3", -50, -95, 100);
+		button("kickButton", "30 Minute Kick", -50, -69, 100);
+		label("-- Ban --", "banTitle", -84, -17.55, 168, 17.05, 14, false, TextFormatAlign.CENTER);
+		button("viewPriorsButton", "View Priors", -29, -2.5, 59.75, 14.55);
+		label("Length", null, -78, 108.75, 46, 14.55, 12, false, TextFormatAlign.RIGHT);
+		durationSelect = combo("duration", -24, 105.5, 100);
+		var duration = durationSelect;
+		duration.addItem({label: "Choose...", data: ""});
+		duration.addItem({label: "One Hour", data: 3600});
 		duration.addItem({label: "One Day", data: 86400});
-		label("Type", 18, -35, 38, 18, 10, false, TextFormatAlign.RIGHT);
-		var type = combo("type", 62, -38, 94);
-		type.addItem({label: "Account + IP", data: "both"});
-		type.addItem({label: "Account", data: "account"});
-		type.addItem({label: "IP", data: "ip"});
-		label("Scope", -164, -3, 66, 18, 10, false, TextFormatAlign.RIGHT);
-		var scope = combo("scope", -92, -6, 104);
+		label("Type", null, -78, 51.75, 46, 14.55, 12, false, TextFormatAlign.RIGHT);
+		typeSelect = combo("type", -24, 48.5, 100);
+		var type = typeSelect;
+		type.addItem({label: "Both", data: "both"});
+		type.addItem({label: "Account Only", data: "account"});
+		type.addItem({label: "IP Only", data: "ip"});
+		label("Scope", null, -78, 80.25, 46, 14.55, 12, false, TextFormatAlign.RIGHT);
+		scopeSelect = combo("scope", -24, 77, 100);
+		var scope = scopeSelect;
 		scope.addItem({label: "Social", data: "social"});
-		label("Reason", -164, 29, 66, 18, 10, false, TextFormatAlign.RIGHT);
-		var reason = new TextField();
+		scope.enabled = false;
+		label("Reason", null, -78, 23.25, 46, 14.55, 12, false, TextFormatAlign.RIGHT);
+		reasonInput = new TextField();
+		var reason = reasonInput;
 		reason.name = "reason";
-		reason.x = -92;
-		reason.y = 25;
-		reason.width = 248;
-		reason.height = 24;
+		reason.x = -24;
+		reason.y = 20;
+		reason.width = 100;
+		reason.height = 22;
+		reason.maxChars = 100;
+		reason.restrict = "^`";
 		reason.type = TextFieldType.INPUT;
 		reason.background = true;
 		reason.backgroundColor = 0xFFFFFF;
@@ -297,12 +295,11 @@ private class BanMenuView extends NativeView {
 		reason.borderColor = 0x777777;
 		reason.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 10, 0x222222);
 		addChild(reason);
-		button("banButton", "Ban", -147, 66, 78);
-		button("viewPriorsButton", "View Priors", -39, 66, 94);
+		button("banButton", "Ban", -50, 140, 100);
 	}
 
-	private function combo(name:String, x:Float, y:Float, width:Float):FlComboBox {
-		var control = new FlComboBox();
+	private function combo(name:String, x:Float, y:Float, width:Float):GameSelect<Dynamic> {
+		var control = ownControl(new GameSelect<Dynamic>());
 		control.name = name;
 		control.x = x;
 		control.y = y;
@@ -311,17 +308,19 @@ private class BanMenuView extends NativeView {
 		return control;
 	}
 
-	private function button(name:String, value:String, x:Float, y:Float, width:Float):Void {
+	private function button(name:String, value:String, x:Float, y:Float, width:Float, height:Float = 22):Void {
 		var control = ownControl(new GameButton(value));
 		control.name = name;
 		control.x = x;
 		control.y = y;
-		control.setSize(width, 24);
+		control.setSize(width, height);
 		addChild(control);
+		buttons.set(name, control);
 	}
 
-	private function label(value:String, x:Float, y:Float, width:Float, height:Float, size:Int, bold:Bool, align:TextFormatAlign):Void {
+	private function label(value:String, name:Null<String>, x:Float, y:Float, width:Float, height:Float, size:Int, bold:Bool, align:TextFormatAlign):Void {
 		var field = new TextField();
+		if (name != null) field.name = name;
 		field.x = x;
 		field.y = y;
 		field.width = width;

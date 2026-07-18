@@ -17,6 +17,7 @@ class ProgressPopupView extends NativeView {
 	public function new(messageText:String = "Uploading...") {
 		super();
 		var panel = NativeAssets.svg(StaticSvg.QuantityPanel);
+		panel.name = "background";
 		panel.x = -125;
 		panel.y = -52;
 		panel.scaleX = 0.919113159179688;
@@ -26,7 +27,7 @@ class ProgressPopupView extends NativeView {
 		message = new TextField();
 		message.name = "textBox";
 		message.x = -98;
-		message.y = -40.15;
+		message.y = -38.15;
 		message.width = 196;
 		message.height = 14.55;
 		message.selectable = false;
@@ -38,6 +39,7 @@ class ProgressPopupView extends NativeView {
 		closeButton.name = "close_bt";
 		closeButton.x = -50;
 		closeButton.y = 19;
+		closeButton.setSize(100, 22);
 		closeButton.onPress = function():Void if (onClose != null) onClose();
 		addChild(closeButton);
 	}

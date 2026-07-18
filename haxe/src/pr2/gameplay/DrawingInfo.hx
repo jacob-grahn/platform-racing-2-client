@@ -72,15 +72,16 @@ class DrawingInfo extends Removable {
 		layer.y = y;
 		layer.alpha = alpha;
 		for (row in 0...MAX_PLAYERS) {
-			var nameBox = createField("nameBox" + row, 2, 2 + row * 22, 84, color);
+			var nameBox = createField("nameBox" + row, 2, 2 + row * 22, 83.45, row == 3 ? 15 : 14.55, color, 1.0003662109375);
 			layer.addChild(nameBox);
-			var timeBox = createField("timeBox" + row, 93, 2 + row * 22, 129, color);
+			var timeBox = createField("timeBox" + row, 93, 2 + row * 22, row < 2 ? 128.9 : 128.95, 14.55, color, 1.00057983398438);
 			layer.addChild(timeBox);
 			var anim = new Sprite();
 			anim.name = "anim" + row;
 			anim.x = 91.1;
 			anim.y = row * 22;
-			var drawing = createField("drawingText", 2, 2, 64, color);
+			anim.scaleX = row >= 2 ? 1.00096130371094 : 1;
+			var drawing = createField("drawingText", 2, 2, 60.75, 14.55, color);
 			drawing.text = "drawing";
 			anim.addChild(drawing);
 			layer.addChild(anim);
@@ -88,13 +89,14 @@ class DrawingInfo extends Removable {
 		return layer;
 	}
 
-	private function createField(name:String, x:Float, y:Float, width:Float, color:Int):TextField {
+	private function createField(name:String, x:Float, y:Float, width:Float, height:Float, color:Int, scaleX:Float = 1):TextField {
 		var field = new TextField();
 		field.name = name;
 		field.x = x;
 		field.y = y;
 		field.width = width;
-		field.height = 15;
+		field.height = height;
+		field.scaleX = scaleX;
 		field.selectable = false;
 		field.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 12, color);
 		return field;
@@ -105,8 +107,8 @@ class DrawingInfo extends Removable {
 		var dots = drawingFrame < 4 ? "" : drawingFrame < 8 ? "." : drawingFrame < 12 ? ".." : "...";
 		for (layer in [info1, info2]) {
 			for (row in 0...MAX_PLAYERS) {
-				var anim = Std.downcast(DisplayUtil.findByName(layer, "anim" + row), DisplayObjectContainer);
-				var field = Std.downcast(DisplayUtil.findByName(anim, "drawingText"), TextField);
+				var anim = Std.downcast(DisplayUtil.directChildByName(layer, "anim" + row), DisplayObjectContainer);
+				var field = Std.downcast(DisplayUtil.directChildByName(anim, "drawingText"), TextField);
 				if (field != null) field.text = "drawing" + dots;
 			}
 		}
@@ -250,7 +252,7 @@ class DrawingInfo extends Removable {
 
 	private function bindLocalTimeHover(row:Int):Void {
 		unbindLocalTimeHover();
-		localTimeBox = LobbyArt.text(info1, "timeBox" + row);
+		localTimeBox = LobbyArt.directText(info1, "timeBox" + row);
 		if (localTimeBox != null) {
 			localTimeBox.addEventListener(MouseEvent.MOUSE_OVER, onMouseLoggedInPlayerTime);
 			localTimeBox.addEventListener(MouseEvent.MOUSE_OUT, onMouseLoggedInPlayerTime);
@@ -328,8 +330,8 @@ class DrawingInfo extends Removable {
 
 	private function findInBoth(name:String):{first:Null<DisplayObject>, second:Null<DisplayObject>} {
 		return {
-			first: DisplayUtil.findByName(info1, name),
-			second: DisplayUtil.findByName(info2, name)
+			first: DisplayUtil.directChildByName(info1, name),
+			second: DisplayUtil.directChildByName(info2, name)
 		};
 	}
 
@@ -338,14 +340,14 @@ class DrawingInfo extends Removable {
 	}
 
 	private static function setFieldText(container:Null<DisplayObjectContainer>, name:String, value:String):Void {
-		var field:Null<TextField> = LobbyArt.text(container, name);
+		var field:Null<TextField> = LobbyArt.directText(container, name);
 		if (field != null) {
 			field.text = value;
 		}
 	}
 
 	private static function fieldText(container:Null<DisplayObjectContainer>, name:String):String {
-		var field:Null<TextField> = LobbyArt.text(container, name);
+		var field:Null<TextField> = LobbyArt.directText(container, name);
 		return field == null ? "" : field.text;
 	}
 

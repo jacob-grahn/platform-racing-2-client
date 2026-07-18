@@ -423,9 +423,13 @@ class ColorPickerPopup extends Sprite {
 	}
 
 	private function makeHueArrow():DisplayObject {
+		var root = new Sprite();
+		root.name = "hueArrowRoot";
 		var arrow = NativeAssets.svg(StaticSvg.ColorHueArrow);
 		arrow.transform.matrix = new Matrix(0, 0.119796752929688, -0.120452880859375, 0, 4.5, -4.5);
-		return arrow;
+		arrow.name = "hueArrowArt";
+		root.addChild(arrow);
+		return root;
 	}
 
 	private function makeCrosshairs():DisplayObject {

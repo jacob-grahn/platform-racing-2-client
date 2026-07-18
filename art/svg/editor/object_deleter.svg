@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="550px" height="400px" viewBox="0 0 550 400" preserveAspectRatio="none" data-xfl-root="MovieClips/Symbol 1191">
+  <g data-xfl-symbol="MovieClips/Symbol 1191">
+    <g data-xfl-symbol="Graphics/Symbol 1190">
+      <g data-svg-leaf="graphics_symbol_1190_e3f164e47b/t00_l001_f0000_r00.svg">
+        <defs>
+          <radialGradient id="xfl1_Gradient_1" gradientUnits="userSpaceOnUse" cx="0" cy="0" r="14.712499999999999" fx="0" fy="0" gradientTransform="matrix( 1.0000000000000002, 0, 0, 1.0000000000000002, 15,15) " spreadMethod="pad">
+            <stop offset="0%" stop-color="#FE8181" />
+            <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0" />
+          </radialGradient>
+          <g id="xfl1_Layer0_0_FILL">
+            <path fill="url(#xfl1_Gradient_1)" stroke="none" d=" M 30 30 L 30 0 0 0 0 30 30 30 Z" />
+          </g>
+        </defs>
+        <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+          <use xlink:href="#xfl1_Layer0_0_FILL" />
+        </g>
+      </g>
+      <g data-svg-leaf="graphics_symbol_1190_e3f164e47b/t00_l000_f0000_r00.svg">
+        <defs>
+          <path id="xfl2_Layer0_0_1_STROKES" stroke="#FF0000" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" fill="none" d=" M 25 5 L 15 15 25 25 M 5 25 L 15 15 5 5" />
+        </defs>
+        <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+          <use xlink:href="#xfl2_Layer0_0_1_STROKES" />
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

@@ -8,6 +8,7 @@ import openfl.events.MouseEvent;
 import openfl.net.URLRequest;
 import openfl.net.URLVariables;
 import pr2.lobby.dialogs.ChooseLevelModModePopup;
+import pr2.lobby.dialogs.ChooseLevelModModeView;
 import pr2.lobby.dialogs.ConfirmPopup;
 import pr2.lobby.dialogs.LevelInfoPopup;
 import pr2.lobby.dialogs.LevelReportPopup;
@@ -16,7 +17,7 @@ import pr2.lobby.dialogs.Popup;
 import pr2.lobby.dialogs.SendMessagePopup;
 import pr2.net.ServerConfig;
 import pr2.net.SuperLoader;
-import pr2.util.DisplayUtil;
+import pr2.util.TestDisplayUtil as DisplayUtil;
 
 /**
 	Locks the first ported LevelInfoPopup boundary: level links open the authored
@@ -418,6 +419,16 @@ class LevelInfoPopupTest {
 
 		var modPopup = lastPopup(ChooseLevelModModePopup);
 		assertEquals(91, modPopup.levelId, "moderation popup receives level id");
+		var modView = childOfType(modPopup, ChooseLevelModModeView);
+		assertNotNull(modView, "moderation popup mounts the typed authored view");
+		assertEquals(-122.5, modView.panel.x, "moderation ShadowBG keeps its XFL X");
+		assertEquals(-68.75, modView.panel.y, "moderation ShadowBG keeps its XFL Y");
+		assertEquals("-- Moderate Level --", modView.title.text, "moderation title keeps exact XFL copy");
+		assertEquals(-107.95, modView.title.x, "moderation title accounts for its XFL left bound");
+		assertEquals(-97.8, modView.unpublishButton.x, "Unpublish button keeps its XFL X");
+		assertEquals(84.9899291992188, modView.unpublishButton.controlWidth, "moderation action buttons keep their authored width");
+		assertEquals(23.5989074707032, modView.restrictButton.controlHeight, "moderation action buttons keep their authored height");
+		assertEquals(27.0, modView.cancelButton.y, "moderation Cancel keeps its XFL Y");
 		click(modPopup, "unpublish_bt");
 		var confirm = lastPopup(ConfirmPopup);
 		click(confirm, "ok_bt");
@@ -473,6 +484,14 @@ class LevelInfoPopupTest {
 		}
 		LobbySession.group = 0;
 		restoreHooks();
+	}
+
+	private static function childOfType<T:openfl.display.DisplayObject>(container:openfl.display.DisplayObjectContainer, type:Class<T>):Null<T> {
+		for (index in 0...container.numChildren) {
+			var child = Std.downcast(container.getChildAt(index), type);
+			if (child != null) return child;
+		}
+		return null;
 	}
 
 	private static function restoreHooks():Void {

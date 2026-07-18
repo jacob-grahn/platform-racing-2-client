@@ -20,6 +20,7 @@ import pr2.generated.assets.AssetCatalog;
 import pr2.generated.assets.AssetTypes.FrameDef;
 import pr2.generated.assets.AssetTypes.SymbolAssetDef;
 import pr2.page.LoginFlashPopup;
+import pr2.ui.controls.GameButton;
 
 class PR2MovieClipRuntimeTest {
 	private static var assertions:Int = 0;
@@ -41,7 +42,6 @@ class PR2MovieClipRuntimeTest {
 		testGeneratedSoundFrameMetadata();
 		testTimelineEventSounds();
 		testBakedSymbolStubsUseSvgDirectly();
-		testGeneratedSiteLogoFrameScripts();
 		testGeneratedCharacterStateFrameScripts();
 		testGeneratedCharacterNestedStopFrameScripts();
 		testGeneratedQuitGlowFrameScripts();
@@ -121,32 +121,6 @@ class PR2MovieClipRuntimeTest {
 
 		assertThrows(function() clip.setFrameScript(-1, function() {}), "negative frame-script indexes are rejected");
 		assertThrows(function() clip.setFrameScript(4, function() {}), "frame-script indexes past totalFrames are rejected");
-	}
-
-	private static function testGeneratedSiteLogoFrameScripts():Void {
-		var armor = PR2MovieClip.fromLinkage("PR2_Graphics_1_Apr_2014_fla.ag_intro_mc_247", {maxNestedDepth: 6});
-		assertEquals(2, armor.currentFrame, "ArmorGames intro constructor jumps from frame 1 to frame 2");
-		armor.gotoAndPlay(218);
-		armor.dispatchEvent(new Event(Event.ENTER_FRAME));
-		assertEquals(219, armor.currentFrame, "ArmorGames intro reaches its authored stop frame");
-		armor.dispatchEvent(new Event(Event.ENTER_FRAME));
-		assertEquals(219, armor.currentFrame, "ArmorGames intro stop frame prevents looping");
-
-		assertLoopsFromFrame21("PR2_Graphics_1_Apr_2014_fla.bubbleSpin_12", "BubbleBox bubble spin");
-		assertLoopsFromFrame21("PR2_Graphics_1_Apr_2014_fla.bubbleShineSpin_17", "BubbleBox shine spin");
-
-		var logo = PR2MovieClip.fromLinkage("PR2_Graphics_1_Apr_2014_fla.bubblebox_logo_ro_254", {maxNestedDepth: 6});
-		logo.dispatchEvent(new Event(Event.ENTER_FRAME));
-		assertEquals(1, logo.currentFrame, "BubbleBox rollover logo stays stopped on frame 1");
-
-		var latest = PR2MovieClip.fromLinkage("PR2_Graphics_1_Apr_2014_fla.bubblxbox_play_latest_text_252", {maxNestedDepth: 6});
-		latest.dispatchEvent(new Event(Event.ENTER_FRAME));
-		assertEquals(1, latest.currentFrame, "BubbleBox latest text stays stopped on frame 1");
-		latest.gotoAndPlay(9);
-		latest.dispatchEvent(new Event(Event.ENTER_FRAME));
-		assertEquals(10, latest.currentFrame, "BubbleBox latest text reaches frame 10");
-		latest.dispatchEvent(new Event(Event.ENTER_FRAME));
-		assertEquals(10, latest.currentFrame, "BubbleBox latest text stops on frame 10");
 	}
 
 	private static function testGeneratedCharacterStateFrameScripts():Void {
@@ -232,15 +206,6 @@ class PR2MovieClipRuntimeTest {
 		assertStopsOnNextFrame("PointyStar", 15, 16, "pointy star effect");
 		assertStopsOnNextFrame("TeleportAnimation", 15, 16, "teleport effect");
 		assertStopsOnNextFrame("SlashAnimation", 5, 6, "slash effect");
-	}
-
-	private static function assertLoopsFromFrame21(linkage:String, label:String):Void {
-		var clip = PR2MovieClip.fromLinkage(linkage, {maxNestedDepth: 6});
-		clip.gotoAndPlay(20);
-		clip.dispatchEvent(new Event(Event.ENTER_FRAME));
-		assertEquals(1, clip.currentFrame, '$label loops frame 21 back to frame 1');
-		clip.dispatchEvent(new Event(Event.ENTER_FRAME));
-		assertEquals(2, clip.currentFrame, '$label continues playing after its authored loop');
 	}
 
 	private static function assertStopsOnNextFrame(linkage:String, startFrame:Int, stopFrame:Int, label:String):Void {
@@ -678,10 +643,91 @@ class PR2MovieClipRuntimeTest {
 	private static function testLoginPopupUsesAuthoredComponentsOnly():Void {
 		var popup = new LoginFlashPopup("LoginPopupGraphic");
 		assertEquals(1, popup.numChildren, "login popup contains only its authored graphic");
-		assertNotNull(popup.checkBox("rememberMe_chk"), "login popup exposes the authored checkbox state");
+		assertClose(0, popup.alpha, "login popup starts its authored fade-in at zero alpha");
+		popup.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertClose(0.15, popup.alpha, "login popup advances its authored fade-in by 0.15 per frame");
+		var nameBox = popup.input("nameBox");
+		var nameControl = Std.downcast(nameBox.parent, pr2.ui.controls.GameTextInput);
+		assertNotNull(nameControl, "login name field is hosted by the authored native TextInput primitive");
+		assertClose(-31, nameControl.x, "login name input keeps its XFL X position");
+		assertClose(-76.2, nameControl.y, "login name input keeps its XFL Y position");
+		assertClose(110.000610351562, nameControl.controlWidth, "login name input keeps its authored component width");
+		assertClose(22, nameControl.controlHeight, "login name input keeps its authored component height");
+		assertClose(5, nameBox.x, "login input text keeps fl.controls.TextInput horizontal padding");
+		assertClose(1, nameBox.y, "login input text keeps fl.controls.TextInput vertical bevel inset");
+		assertEquals(20, nameBox.maxChars, "login name input keeps its authored 20-character limit");
+		assertEquals(true, popup.input("passBox").displayAsPassword, "login password input keeps password display behavior");
+		var remember = popup.checkBox("rememberMe_chk");
+		assertNotNull(remember, "login popup exposes the authored checkbox state");
+		assertEquals("Remember Me", remember.label, "login checkbox keeps its authored label");
+		var combo = popup.comboBox("dropdown");
+		assertNotNull(combo, "login popup exposes its authored server dropdown");
+		assertClose(-51, combo.x, "server dropdown keeps its XFL X position");
+		assertClose(39.8, combo.y, "server dropdown keeps its XFL Y position");
+		var loginButton = Std.downcast(popup.child("login_bt"), GameButton);
+		assertNotNull(loginButton, "login popup exposes its authored login button");
+		assertEquals("Log In", loginButton.label, "login button keeps its authored label");
+		assertClose(-80, loginButton.x, "login button keeps its XFL X position");
+		assertClose(87.8, loginButton.y, "login button keeps its XFL Y position");
+		assertClose(22, loginButton.controlHeight, "login button keeps its authored component height");
+		assertClose(94.85, popup.child("reload_bt").x, "reload icon keeps its XFL X position");
+		assertClose(50.85, popup.child("reload_bt").y, "reload icon keeps its XFL Y position");
 		popup.setMessage("synthetic status must not be added");
 		assertEquals(1, popup.numChildren, "status updates do not add a synthetic text overlay");
 		popup.remove();
+
+		var serverPopup = new LoginFlashPopup("ServerSelectPopupGraphic");
+		var users = serverPopup.comboBox("userSelect");
+		var servers = serverPopup.comboBox("serverSelect");
+		assertNotNull(users, "server popup exposes the authored account dropdown");
+		assertNotNull(servers, "server popup exposes the authored server dropdown");
+		assertClose(-50, users.x, "account dropdown keeps its XFL X position");
+		assertClose(-31.7, users.y, "account dropdown keeps its XFL Y position");
+		assertClose(131.001281738281, users.controlWidth, "account dropdown keeps its authored component width");
+		assertEquals("Guest", users.prompt, "account dropdown keeps its authored initial prompt");
+		assertEquals(false, users.enabled, "account dropdown starts disabled as authored");
+		assertClose(-50, servers.x, "server dropdown keeps its XFL X position");
+		assertClose(0, servers.y, "server dropdown keeps its XFL Y position");
+		assertEquals("Loading...", servers.prompt, "server dropdown keeps its authored loading prompt");
+		assertEquals(false, servers.enabled, "server dropdown starts disabled as authored");
+		assertClose(99, serverPopup.child("reload_bt").x, "server reload button keeps its XFL X position");
+		assertClose(11.5, serverPopup.child("reload_bt").y, "server reload button keeps its XFL Y position");
+		var serverLogin = Std.downcast(serverPopup.child("login_bt"), GameButton);
+		assertEquals("Log In", serverLogin.label, "server popup login button keeps authored copy");
+		assertClose(-80, serverLogin.x, "server popup login button keeps XFL X");
+		assertClose(40, serverLogin.y, "server popup login button keeps XFL Y");
+		serverPopup.setComponentLabel("userSelect", "Saved User");
+		assertEquals("Saved User", users.prompt, "setting account prompt updates the ComboBox rather than silently doing nothing");
+		assertEquals(null, serverPopup.child("textBox"), "server popup does not invent a status field absent from XFL");
+		serverPopup.remove();
+
+		var connecting = new LoginFlashPopup("ConnectingPopupGraphic");
+		var connectingClose = Std.downcast(connecting.child("var_1"), GameButton);
+		assertNotNull(connectingClose, "connecting popup exposes its authored Close button");
+		assertEquals("Close", connectingClose.label, "connecting popup keeps the authored Close label");
+		assertClose(-48, connectingClose.x, "connecting Close button keeps its XFL X");
+		assertClose(10, connectingClose.y, "connecting Close button keeps its XFL Y");
+		assertClose(100, connectingClose.controlWidth, "connecting Close button keeps its authored width");
+		assertEquals(null, connecting.child("textBox"), "connecting popup does not invent mutable status text absent from XFL");
+		connecting.setMessage("synthetic status must remain hidden");
+		assertEquals(null, connecting.child("textBox"), "connecting network status follows its authored static timeline");
+		connecting.remove();
+
+		var holder = new Sprite();
+		var fading = new LoginFlashPopup("LoginPopupGraphic");
+		holder.addChild(fading);
+		var loaded = 0;
+		var removed = 0;
+		fading.addEventListener(LoginFlashPopup.LOADED, function(_:Event):Void loaded++);
+		fading.addEventListener(LoginFlashPopup.REMOVED, function(_:Event):Void removed++);
+		for (_ in 0...7) fading.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertEquals(1, loaded, "login popup dispatches Popup.LOADED after the exact 0.15 fade-in");
+		assertClose(1, fading.alpha, "login popup fade-in clamps at full alpha");
+		fading.startFadeOut();
+		assertEquals(true, fading.fadeOutStarted, "login popup records authored fade-out lifecycle state");
+		for (_ in 0...7) fading.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertEquals(true, removed > 0, "login popup dispatches Popup.REMOVED after fade-out");
+		assertEquals(0, holder.numChildren, "login popup removes itself only after the fade reaches zero");
 	}
 
 	private static function testStaticTextHonorsAuthoredAttributes():Void {
@@ -776,8 +822,6 @@ class PR2MovieClipRuntimeTest {
 
 		assertIntroTimeline("JiggminIntroGraphic", 249);
 		assertIntroTimeline("KongregateIntroGraphic", 153);
-		assertIntroTimeline("ArmorIntroGraphic", 218);
-		assertIntroTimeline("BubbleBoxIntroGraphic", 117);
 	}
 
 	private static function testTimelineCompositionPreservesPartSelection():Void {

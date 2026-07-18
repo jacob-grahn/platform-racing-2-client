@@ -32,13 +32,19 @@ class CursorEyedropper extends CustomCursor {
 	}
 
 	private function makeCursorGraphic():DisplayObject {
+		// Keep the linkage root separate from Symbol 1303. CustomCursor centers the
+		// root, while the authored child retains this registration transform.
+		var root = new Sprite();
+		root.name = "eyedropperRoot";
 		var art = new Sprite();
+		art.name = "eyedropperArt";
 		art.addChild(NativeAssets.svg(StaticSvg.EyedropperBack));
 		art.addChild(NativeAssets.svg(StaticSvg.EyedropperFront));
 		art.scaleX = art.scaleY = 0.681365966796875;
 		art.x = 6.4;
 		art.y = -8.4;
-		return art;
+		root.addChild(art);
+		return root;
 	}
 
 	override public function init():Void {

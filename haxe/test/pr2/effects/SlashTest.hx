@@ -11,9 +11,40 @@ class SlashTest {
 
 	public static function main():Void {
 		testRightSlashAnimationProbesSoundAndRemoval();
+		testExactMineFrames();
+		testExactMinePieceFrames();
+		testExactBlockPieceFrames();
 		if (pr2.DeterministicTestMode.finishSmokeSuite("SlashTest")) return;
 		testLeftSlashShooterFilteringAndScale();
 		trace('SlashTest passed $assertions assertions');
+	}
+
+	private static function testExactBlockPieceFrames():Void {
+		var brick = new BlockPiece("BrickPieceGraphic", BlockPiece.GRAVITY, BlockPiece.FRICTION, BlockPiece.FADE_RATE, 10, 10, 10, 0, 0,
+			function():Float return 0);
+		assertEquals(1, brick.selectedFrame, "brick piece random selection reaches authored frame one");
+		assertEquals("assets/svg/effects/brick_piece_01.svg", brick.visual.name, "brick piece uses the exact composed XFL frame");
+		brick.remove();
+		var crumble = new BlockPiece("CrumblePieceGraphic", BlockPiece.GRAVITY, BlockPiece.FRICTION, BlockPiece.FADE_RATE, 10, 10, 10, 0, 0,
+			function():Float return 0);
+		assertEquals("assets/svg/effects/crumble_piece_01.svg", crumble.visual.name, "crumble piece uses the exact composed XFL frame");
+		crumble.remove();
+	}
+
+	private static function testExactMinePieceFrames():Void {
+		var piece = new BlockPiece("MinePieceGraphic", BlockPiece.GRAVITY, BlockPiece.FRICTION, BlockPiece.FADE_RATE, 10, 10, 10, 0, 0,
+			function():Float return 0.999);
+		assertEquals(6, piece.selectedFrame, "mine piece random selection reaches authored frame six");
+		assertEquals("assets/svg/effects/mine_piece_06.svg", piece.visual.name, "mine piece uses the exact composed XFL frame without a manual transform");
+		piece.remove();
+	}
+
+	private static function testExactMineFrames():Void {
+		var animation = new NativeEffectAnimation("mine", MineExplosion.LIFETIME_FRAMES);
+		assertEquals("assets/svg/effects/mine_01.svg", animation.currentAssetPath, "mine explosion starts on exact composed XFL frame one");
+		for (_ in 1...MineExplosion.LIFETIME_FRAMES) animation.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertEquals("assets/svg/effects/mine_14.svg", animation.currentAssetPath, "mine explosion reaches exact composed XFL stop frame");
+		animation.dispose();
 	}
 
 	private static function testRightSlashAnimationProbesSoundAndRemoval():Void {
@@ -43,6 +74,7 @@ class SlashTest {
 		});
 
 		assertEquals(Slash.LIFETIME_FRAMES, slash.animation.totalFrames, "slash uses the six-frame native animation");
+		assertEquals("assets/svg/effects/slash_01.svg", slash.animation.currentAssetPath, "slash starts on exact composed XFL frame one");
 		assertEquals(6, hits.length, "slash probes Flash's six block hit points");
 		assertEquals("30,0:29", hits[5], "slash passes reach as block damage force");
 		assertEquals("29,-9", playerHits[0], "slash hits local player with Flash recoil");

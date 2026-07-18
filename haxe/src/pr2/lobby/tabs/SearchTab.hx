@@ -1,27 +1,24 @@
 package pr2.lobby.tabs;
 
-import openfl.display.DisplayObjectContainer;
 import openfl.events.Event;
 import openfl.events.KeyboardEvent;
 import openfl.text.TextField;
-import openfl.text.TextFieldType;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
 import openfl.ui.Keyboard;
-import pr2.lobby.LobbyArt;
 import pr2.lobby.Memory;
 import pr2.lobby.level.LevelListingPage;
 import pr2.lobby.search.SearchQuery;
 import pr2.net.LevelListClient;
 import pr2.net.LevelListClient.LevelListResult;
-import pr2.runtime.FlComboBox;
 import pr2.assets.NativeAssetIds.FontAsset;
 import pr2.assets.NativeAssets;
 import pr2.ui.controls.GameButton;
-import pr2.ui.view.NativeView;
+import pr2.ui.controls.GameSelect;
+import pr2.ui.controls.GameTextInput;
 import pr2.ui.StageFocus;
+import pr2.ui.view.NativeView;
 import pr2.util.AsyncRemovalGuard.AsyncRemovable;
-import pr2.util.DisplayUtil;
 
 typedef SearchFetchFactory = Map<String, String>->(LevelListResult->Void)->(String->Void)->AsyncRemovable;
 
@@ -32,7 +29,7 @@ typedef SearchFetchFactory = Map<String, String>->(LevelListResult->Void)->(Stri
 	direction dropdowns) and runs searches through `LevelListingPage`: the request
 	guards and POST parameters come from the pure `SearchQuery`, results POST to
 	`search_levels.php` and render in the shared three-column grid. The mode/order/
-	direction `FlComboBox` dropdowns supply `selectedItem.data`, and the search box
+	direction native dropdowns supply `selectedItem.data`, and the search box
 	text plus the three combo `selectedIndex` values are persisted to `Memory`
 	(`searchStr` / `searchModeIndex` / `searchOrderIndex` / `searchDirIndex`) and
 	restored on re-entry, mirroring the original. Seeded lookups
@@ -44,12 +41,9 @@ class SearchTab extends LevelListingPage {
 
 	private var art:SearchView;
 	private var searchBox:Null<TextField>;
-	private var searchButton:Null<openfl.display.DisplayObject>;
-	private var searchBinding:Null<LobbyArt.Binding>;
-
-	private var modeCb:Null<FlComboBox>;
-	private var orderCb:Null<FlComboBox>;
-	private var dirCb:Null<FlComboBox>;
+	private var modeCb:Null<GameSelect<Dynamic>>;
+	private var orderCb:Null<GameSelect<Dynamic>>;
+	private var dirCb:Null<GameSelect<Dynamic>>;
 
 	private var seededQuery:String;
 	private var seededMode:String;
@@ -72,16 +66,15 @@ class SearchTab extends LevelListingPage {
 		art.y = 8;
 		addToListingHolder(art);
 
-		searchBox = firstInputField(art);
-		searchButton = DisplayUtil.findByName(art, "search_bt");
-		searchBinding = LobbyArt.bind(searchButton, doSearch);
+		searchBox = art.searchBox;
+		art.searchButton.onPress = doSearch;
 		if (searchBox != null) {
 			searchBox.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		}
 
-		modeCb = Std.downcast(DisplayUtil.findByName(art, "mode_cb"), FlComboBox);
-		orderCb = Std.downcast(DisplayUtil.findByName(art, "order_cb"), FlComboBox);
-		dirCb = Std.downcast(DisplayUtil.findByName(art, "dir_cb"), FlComboBox);
+		modeCb = art.modeSelect;
+		orderCb = art.orderSelect;
+		dirCb = art.directionSelect;
 		addComboCloseListener(modeCb);
 		addComboCloseListener(orderCb);
 		addComboCloseListener(dirCb);
@@ -110,7 +103,7 @@ class SearchTab extends LevelListingPage {
 		}
 		var option = 0;
 		for (i in 0...modeCb.length) {
-			if (comboItemData(modeCb.dataProvider.getItemAt(i)) == s) {
+			if (comboItemData(modeCb.itemAt(i)) == s) {
 				option = i;
 				break;
 			}
@@ -164,12 +157,10 @@ class SearchTab extends LevelListingPage {
 		}
 	}
 
-	private function focusStage(_:Event):Void {
-		StageFocus.reset();
-	}
+	private function focusStage(_:Event):Void StageFocus.reset();
 
 	/** `selectedItem.data` for a combo, or the fallback when nothing is selected. */
-	private static function comboData(combo:Null<FlComboBox>, fallback:String):String {
+	private static function comboData(combo:Null<GameSelect<Dynamic>>, fallback:String):String {
 		if (combo == null) {
 			return fallback;
 		}
@@ -185,7 +176,7 @@ class SearchTab extends LevelListingPage {
 		return value == null ? "" : Std.string(value);
 	}
 
-	private static function selectIndex(combo:Null<FlComboBox>, index:Int):Void {
+	private static function selectIndex(combo:Null<GameSelect<Dynamic>>, index:Int):Void {
 		if (combo != null && index >= 0 && index < combo.length) {
 			combo.selectedIndex = index;
 		}
@@ -195,16 +186,12 @@ class SearchTab extends LevelListingPage {
 		Memory.set("coursePageNumsearch", n);
 	}
 
-	private function addComboCloseListener(combo:Null<FlComboBox>):Void {
-		if (combo != null) {
-			combo.addEventListener(Event.CLOSE, focusStage);
-		}
+	private function addComboCloseListener(combo:Null<GameSelect<Dynamic>>):Void {
+		if (combo != null) combo.addEventListener(Event.CLOSE, focusStage);
 	}
 
-	private function removeComboCloseListener(combo:Null<FlComboBox>):Void {
-		if (combo != null) {
-			combo.removeEventListener(Event.CLOSE, focusStage);
-		}
+	private function removeComboCloseListener(combo:Null<GameSelect<Dynamic>>):Void {
+		if (combo != null) combo.removeEventListener(Event.CLOSE, focusStage);
 	}
 
 	override private function onTeardown():Void {
@@ -224,16 +211,10 @@ class SearchTab extends LevelListingPage {
 			Memory.set("searchDirIndex", dirCb.selectedIndex);
 			removeComboCloseListener(dirCb);
 		}
-		LobbyArt.unbind(searchBinding);
 		if (art != null) {
 			art.dispose();
 			art = null;
 		}
-	}
-
-	/** Editable field of the SearchGraphic's `searchBox` TextInput component. */
-	private static function firstInputField(container:DisplayObjectContainer):Null<TextField> {
-		return LobbyArt.text(container, "searchBox");
 	}
 
 	private static function defaultSearch(params:Map<String, String>, onResult:LevelListResult->Void, onError:String->Void):AsyncRemovable {
@@ -245,47 +226,53 @@ class SearchTab extends LevelListingPage {
 	}
 }
 
-private class SearchView extends NativeView {
+class SearchView extends NativeView {
+	public final modeSelect:GameSelect<Dynamic>;
+	public final orderSelect:GameSelect<Dynamic>;
+	public final directionSelect:GameSelect<Dynamic>;
+	public final searchInput:GameTextInput;
+	public final searchBox:TextField;
+	public final searchButton:GameButton;
+
 	public function new() {
 		super();
-		label("Search By:", 0, 2, 62);
-		var mode = combo("mode_cb", 63, 0, 105);
+		label("Search By:", 35.85, 3, 54.95);
+		modeSelect = combo("mode_cb", 98.75, 0, 100 * 1.05279541015625);
+		var mode = modeSelect;
 		mode.addItem({label: "User Name", data: "user"});
 		mode.addItem({label: "Level Title", data: "title"});
 		mode.addItem({label: "Level ID", data: "id"});
-		label("Sort By:", 0, 34, 48);
-		var order = combo("order_cb", 49, 30, 94);
+		label("Sort By:", 4, 34, 41.55);
+		orderSelect = combo("order_cb", 52.8, 30, 100 * 0.901611328125);
+		var order = orderSelect;
 		order.addItem({label: "Date", data: "date"});
 		order.addItem({label: "Alphabetical", data: "alphabetical"});
 		order.addItem({label: "Rating", data: "rating"});
 		order.addItem({label: "Popularity", data: "popularity"});
-		var dir = combo("dir_cb", 149, 30, 98);
+		directionSelect = combo("dir_cb", 152.8, 30, 100 * 0.939773559570312);
+		var dir = directionSelect;
 		dir.addItem({label: "Descending", data: "desc"});
 		dir.addItem({label: "Ascending", data: "asc"});
-		var input = new TextField();
-		input.name = "searchBox";
-		input.x = 0;
-		input.y = 61;
-		input.width = 145;
-		input.height = 24;
-		input.type = TextFieldType.INPUT;
-		input.background = true;
-		input.backgroundColor = 0xFFFFFF;
-		input.border = true;
-		input.borderColor = 0x777777;
-		input.maxChars = 50;
-		input.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 11, 0x222222);
-		addChild(input);
-		var search = ownControl(new GameButton("Search"));
+		searchInput = ownControl(new GameTextInput());
+		searchInput.name = "searchInput";
+		searchInput.x = 10.85;
+		searchInput.y = 61;
+		searchInput.setSize(100 * 1.420166015625, 22);
+		searchInput.maxChars = 50;
+		searchBox = searchInput.textField;
+		searchBox.name = "searchBox";
+		addChild(searchInput);
+		searchButton = ownControl(new GameButton("Search"));
+		var search = searchButton;
 		search.name = "search_bt";
-		search.x = 151;
+		search.x = 160.8;
 		search.y = 61;
-		search.setSize(78, 24);
+		search.setSize(100 * 0.779525756835938, 22);
 		addChild(search);
 	}
 
-	private function combo(name:String, x:Float, y:Float, width:Float):FlComboBox {
-		var control = new FlComboBox();
+	private function combo(name:String, x:Float, y:Float, width:Float):GameSelect<Dynamic> {
+		var control = ownControl(new GameSelect<Dynamic>());
 		control.name = name;
 		control.x = x;
 		control.y = y;

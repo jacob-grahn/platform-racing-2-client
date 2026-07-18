@@ -37,10 +37,12 @@ class StatsSelect extends Sprite {
 		m = new Sprite();
 		addChild(m);
 		var label = new TextField();
+		label.name = "label";
 		label.x = 2;
 		label.y = 2;
-		label.width = 122;
-		label.height = 15;
+		label.width = 121.85;
+		label.height = 14.55;
+		label.scaleX = 0.999557495117188;
 		label.selectable = false;
 		label.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 12, 0, true);
 		label.text = "Points Remaining:";
@@ -49,8 +51,9 @@ class StatsSelect extends Sprite {
 		remainingBox.name = "textBox";
 		remainingBox.x = 130.05;
 		remainingBox.y = 2;
-		remainingBox.width = 38;
-		remainingBox.height = 15;
+		remainingBox.width = 37.85;
+		remainingBox.height = 14.5;
+		remainingBox.scaleX = 1.00167846679688;
 		remainingBox.selectable = false;
 		remainingBox.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 12, 0, true);
 		m.addChild(remainingBox);
@@ -119,6 +122,9 @@ class StatsSelect extends Sprite {
 	public function getStats():{speed:Int, acceleration:Int, jumping:Int} {
 		return {speed: speedSlider.value, acceleration: accelSlider.value, jumping: jumpnSlider.value};
 	}
+
+	@:allow(pr2.lobby.PointsRemainingTest)
+	private function pointsGraphic():Sprite return m;
 
 	public function remove():Void {
 		speedSlider.remove();

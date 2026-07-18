@@ -1,6 +1,8 @@
 package pr2.lobby.dialogs;
 
 import openfl.events.Event;
+import openfl.events.IEventDispatcher;
+import openfl.events.ProgressEvent;
 import openfl.net.URLRequest;
 import openfl.net.URLVariables;
 import pr2.net.FormPostClient;
@@ -33,6 +35,8 @@ class UploadingPopup extends Popup {
 	private var art:ProgressPopupView;
 	private var progressBar:ProgressBar;
 	private var asyncGuard:AsyncRemovalGuard = new AsyncRemovalGuard();
+	private var progressSource:Null<IEventDispatcher>;
+	private var progressListener:Null<ProgressEvent->Void>;
 
 	public function new(requestOrUrl:Dynamic = null, ?fieldsOrDataMode:Dynamic = null, dispText:String = "Uploading...", ?aemOrOnResult:Dynamic = true,
 			?onError:String->Void, ?autoEchoMessage:Bool) {
@@ -48,11 +52,21 @@ class UploadingPopup extends Popup {
 
 		if (options.request != null) {
 			prepareRequest(options.request);
-			requestFactory(options.request, asyncGuard.wrap(function(body:String):Void handleBody(body, options)),
-				asyncGuard.wrap(function(message:String):Void handleError(message, options)));
+			var onResult = asyncGuard.wrap(function(body:String):Void handleBody(body, options));
+			var onError = asyncGuard.wrap(function(message:String):Void handleError(message, options));
+			if (Reflect.compareMethods(requestFactory, defaultRequest)) {
+				bindProgressSource(FormPostClient.load(options.request, onResult, onError));
+			} else {
+				requestFactory(options.request, onResult, onError);
+			}
 		} else if (options.url != null) {
-			postFactory(options.url, options.fields, asyncGuard.wrap(function(body:String):Void handleBody(body, options)),
-				asyncGuard.wrap(function(message:String):Void handleError(message, options)));
+			var onResult = asyncGuard.wrap(function(body:String):Void handleBody(body, options));
+			var onError = asyncGuard.wrap(function(message:String):Void handleError(message, options));
+			if (Reflect.compareMethods(postFactory, defaultPost)) {
+				bindProgressSource(FormPostClient.post(options.url, options.fields, onResult, onError));
+			} else {
+				postFactory(options.url, options.fields, onResult, onError);
+			}
 		}
 	}
 
@@ -96,6 +110,24 @@ class UploadingPopup extends Popup {
 		dispatchEvent(new Event(ERROR));
 		startFadeOut();
 	}
+
+	private function bindProgressSource(source:IEventDispatcher):Void {
+		unbindProgressSource();
+		progressSource = source;
+		progressListener = function(event:ProgressEvent):Void {
+			if (progressBar != null && event.bytesTotal > 0) progressBar.setProgress(event.bytesLoaded / event.bytesTotal);
+		};
+		progressSource.addEventListener(ProgressEvent.PROGRESS, progressListener);
+	}
+
+	private function unbindProgressSource():Void {
+		if (progressSource != null && progressListener != null) progressSource.removeEventListener(ProgressEvent.PROGRESS, progressListener);
+		progressSource = null;
+		progressListener = null;
+	}
+
+	@:noCompletion public function bindProgressSourceForTests(source:IEventDispatcher):Void bindProgressSource(source);
+	@:noCompletion public function progressTargetForTests():Float return progressBar == null ? 0 : progressBar.targetWidthForTests();
 
 	private static function parseOptions(requestOrUrl:Dynamic, fieldsOrDataMode:Dynamic, dispText:String, aemOrOnResult:Dynamic,
 			onError:String->Void, autoEchoMessage:Null<Bool>):UploadOptions {
@@ -156,6 +188,7 @@ class UploadingPopup extends Popup {
 
 	override public function remove():Void {
 		asyncGuard.remove();
+		unbindProgressSource();
 		if (progressBar != null) {
 			progressBar.remove();
 			progressBar = null;

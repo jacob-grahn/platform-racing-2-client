@@ -6,7 +6,7 @@ import openfl.display.InteractiveObject;
 import openfl.display.Sprite;
 import openfl.events.MouseEvent;
 import openfl.text.TextField;
-import pr2.runtime.FlComponents;
+import pr2.ui.controls.GameTextInput;
 import pr2.util.DisplayUtil;
 
 /**
@@ -26,9 +26,38 @@ class LobbyArt {
 		or part symbol can carry its own empty `nameBox`, and a depth-first walk would
 		return that stray field instead of the one the caller means.
 	**/
-	public static function text(container:Null<DisplayObjectContainer>, name:String):Null<TextField> {
-		return FlComponents.asTextField(DisplayUtil.findByName(container, name));
+	public static function directText(container:Null<DisplayObjectContainer>, name:String):Null<TextField> {
+		var display = DisplayUtil.directChildByName(container, name);
+		var input = Std.downcast(display, GameTextInput);
+		if (input != null) return input.textField;
+		var area = Std.downcast(display, pr2.ui.controls.GameTextArea);
+		return area == null ? Std.downcast(display, TextField) : area.textField;
 	}
+
+	#if pr2_test
+	/** Test-only opaque-tree inspection; production presentation never uses it. */
+	public static function text(container:Null<DisplayObjectContainer>, name:String):Null<TextField> {
+		var display = findForTest(container, name);
+		var input = Std.downcast(display, GameTextInput);
+		if (input != null) return input.textField;
+		var area = Std.downcast(display, pr2.ui.controls.GameTextArea);
+		return area == null ? Std.downcast(display, TextField) : area.textField;
+	}
+
+	private static function findForTest(container:Null<DisplayObjectContainer>, name:String):Null<DisplayObject> {
+		if (container == null) return null;
+		for (i in 0...container.numChildren) {
+			var child = container.getChildAt(i);
+			if (child.name == name) return child;
+		}
+		for (i in 0...container.numChildren) {
+			var child = container.getChildAt(i);
+			var found = findForTest(Std.downcast(child, DisplayObjectContainer), name);
+			if (found != null) return found;
+		}
+		return null;
+	}
+	#end
 
 	/**
 		Collect every `TextField` under `container`, left-to-right by x. Used to

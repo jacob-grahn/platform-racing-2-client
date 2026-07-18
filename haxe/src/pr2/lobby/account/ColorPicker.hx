@@ -7,6 +7,8 @@ import openfl.events.MouseEvent;
 import openfl.geom.ColorTransform;
 import openfl.geom.Point;
 import pr2.app.AppStage;
+import pr2.assets.NativeAssetIds.StaticSvg;
+import pr2.assets.NativeAssets;
 
 /**
 	Colour picker for the part selectors. A 20x20 swatch shows the current colour;
@@ -22,7 +24,7 @@ class ColorPicker extends Sprite {
 		0x888888, 0x555555, 0x888888, 0x555555, 0x888888, 0x555555
 	];
 
-	private static inline var SWATCH:Float = 20;
+	private static inline var COLOR_WELL:Float = 36;
 
 	public var direction:String = RIGHT;
 
@@ -33,7 +35,12 @@ class ColorPicker extends Sprite {
 	public function new() {
 		super();
 		swatch = new Sprite();
+		swatch.scaleX = swatch.scaleY = 0.833328247070312;
 		addChild(swatch);
+		var skin = NativeAssets.svg(StaticSvg.ColorPickerSwatchSkin);
+		skin.name = "swatchSkin";
+		skin.scaleX = skin.scaleY = 1.36363220214844;
+		addChild(skin);
 		buttonMode = true;
 		useHandCursor = true;
 		mouseChildren = false;
@@ -55,9 +62,8 @@ class ColorPicker extends Sprite {
 
 	private function drawSwatch():Void {
 		swatch.graphics.clear();
-		swatch.graphics.lineStyle(1, 0x000000);
-		swatch.graphics.beginFill(0xFFFFFF);
-		swatch.graphics.drawRect(0, 0, SWATCH, SWATCH);
+		swatch.graphics.beginFill(0x808080);
+		swatch.graphics.drawRect(0, 0, COLOR_WELL, COLOR_WELL);
 		swatch.graphics.endFill();
 		swatch.transform.colorTransform = new ColorTransform(0, 0, 0, 1, (color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF, 0);
 	}

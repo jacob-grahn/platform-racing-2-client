@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="550px" height="400px" viewBox="0 0 550 400" preserveAspectRatio="none" data-xfl-root="UI/Pages/Levels/In-Game/Effects/Mine/Symbol 472">
+  <g data-xfl-symbol="UI/Pages/Levels/In-Game/Effects/Mine/Symbol 472">
+    <g data-xfl-symbol="Graphics/Symbol 468">
+      <g data-svg-leaf="graphics_symbol_468_0726229f42/t00_l002_f0000_r00.svg">
+        <defs>
+          <radialGradient id="xfl3_Gradient_1" gradientUnits="userSpaceOnUse" cx="0" cy="0" r="16.5625" fx="0" fy="0" gradientTransform="matrix( 1, 0, 0, 1, 2.35,-1.2) " spreadMethod="pad">
+            <stop offset="0%" stop-color="#83836B" />
+            <stop offset="100%" stop-color="#3D3C32" />
+          </radialGradient>
+          <g id="xfl3_Layer0_0_FILL">
+            <path fill="url(#xfl3_Gradient_1)" stroke="none" d=" M -10.95 2.2 L -6.7 7.6 10.15 6.15 11.15 -7.55 -2.6 -7 -10.95 2.2 Z" />
+          </g>
+        </defs>
+        <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+          <use xlink:href="#xfl3_Layer0_0_FILL" />
+        </g>
+      </g>
+      <g data-svg-leaf="graphics_symbol_468_0726229f42/t00_l001_f0000_r00.svg">
+        <defs>
+          <g id="xfl4_Layer0_0_FILL">
+            <path fill="#4A483E" stroke="none" d=" M 10.1 -4.75 L 7.8 -7.4 -3.3 -6.8 -8.35 1.45 -9.9 0.3 -4.75 6 2.9 6.8 8.8 2.5 3.95 6.7 8.6 5.65 10.1 -4.75 M 2.6 -5.8 Q 4 -5.55 2.7 -5.65 L 2.6 -5.8 M 2.45 -6.1 L 0.1 -4.3 -0.9 0.05 -3.15 -3.7 2.45 -6.1 M 4.6 -4.95 L 3.35 -2.5 2.1 -4.95 4.6 -4.95 M 1.75 -2 L 3.15 -2.35 6.35 -2.7 6.7 -0.7 Q 5.2 1.1 3.15 1.75 L 1.75 -2 M 7 -4.35 L 1.55 -6.8 Q 5.05 -7.05 7 -4.35 M 0.8 4.1 L 2.8 4.1 1.75 5.1 0.8 4.1 M 4.7 2.2 L 3.6 3.25 Q -0.75 3.85 -3.15 0.15 -3.95 -1.1 -3.8 -2.5 L -0.9 1.15 4.7 2.2 M 1.4 -0.95 L 2.9 1.8 -0.35 -1 1.4 -0.95 Z" />
+          </g>
+        </defs>
+        <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+          <use xlink:href="#xfl4_Layer0_0_FILL" />
+        </g>
+      </g>
+      <g data-svg-leaf="graphics_symbol_468_0726229f42/t00_l000_f0000_r00.svg">
+        <defs>
+          <g id="xfl5_Layer0_0_FILL">
+            <path fill="#FFFFFF" fill-opacity="0.25098039215686274" stroke="none" d=" M 0.05 0.95 L 2.2 3.15 1.75 -0.45 0.05 0.95 Z" />
+            <path fill="#000000" fill-opacity="0.25098039215686274" stroke="none" d=" M -1.1 -3 L -0.75 -0.3 -2.65 2.7 -0.5 2.1 2.2 3.5 0.05 0.95 1.75 -0.45 -1.1 -3 Z" />
+          </g>
+        </defs>
+        <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+          <use xlink:href="#xfl5_Layer0_0_FILL" />
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

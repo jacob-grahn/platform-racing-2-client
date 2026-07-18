@@ -1,11 +1,13 @@
 package pr2.page;
 
 import haxe.crypto.Md5;
+import openfl.display.DisplayObject;
 import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.events.MouseEvent;
 import openfl.events.TouchEvent;
 import openfl.geom.Point;
+import openfl.text.TextField;
 import openfl.ui.Keyboard;
 import pr2.app.AppStage;
 import pr2.lobby.account.ColorPicker;
@@ -21,6 +23,11 @@ import pr2.level.ServerLevelDecoder;
 import pr2.net.ServerConfig;
 import pr2.net.ServerLevelData;
 import pr2.levelEditor.LevelEditor;
+import pr2.levelEditor.LevelEditorMenuView;
+import pr2.levelEditor.GetLevelsPopup;
+import pr2.levelEditor.SaveLevelPopup;
+import pr2.levelEditor.TestCoursePage;
+import pr2.levelEditor.ChooseLevelsModeView;
 import pr2.levelEditor.EditorSideBarCatalog;
 import pr2.levelEditor.EditorBackgroundColorPickerButton;
 import pr2.levelEditor.EditorBrushColorPickerButton;
@@ -29,16 +36,24 @@ import pr2.levelEditor.EditorHatsSettingsPopup;
 import pr2.levelEditor.EditorItemSettingsPopup;
 import pr2.levelEditor.EditorModeSettingsPopup;
 import pr2.levelEditor.EditorMusicSettingsPopup;
+import pr2.levelEditor.EditorNativeGraphic;
 import pr2.levelEditor.EditorDrawableLayer;
 import pr2.levelEditor.EditorObjectLayer;
 import pr2.levelEditor.EditorSideBarEntry;
 import pr2.levelEditor.EditorTextObject;
 import pr2.levelEditor.EditorValueSettingsPopup;
-import pr2.levelEditor.TestCoursePage;
 import pr2.levelEditor.EditorBrushCursor;
+import pr2.levelEditor.BrushSizeButtonView;
+import pr2.levelEditor.BrushSizeMenuView;
+import pr2.levelEditor.EditorBrushSizePickerButton;
 import pr2.runtime.FontResolver;
 import pr2.ui.CustomCursor;
 import pr2.ui.StageFocus;
+import pr2.ui.controls.GameButton;
+import pr2.ui.controls.GameSelect;
+import pr2.lobby.dialogs.ConfirmPopup;
+import pr2.lobby.dialogs.Popup;
+import pr2.util.DisplayUtil;
 
 class EditorSettingsTest {
 	private static var assertions:Int = 0;
@@ -46,6 +61,12 @@ class EditorSettingsTest {
 	public static function main():Void {
 		testSideBarCatalog();
 		if (pr2.DeterministicTestMode.finishSmokeSuite("EditorSettingsTest")) return;
+		testChooseLevelsModeAuthoredLayout();
+		testLevelEditorMenuAuthoredLayout();
+		testLevelEditorMenuCommands();
+		testBlockOptionsButtonAuthoredStates();
+		testAuthoredEditorToolGraphics();
+		testBrushSizePickerAuthoredLayout();
 		testDefaultSetters();
 		testSettingButtonValuesRefresh();
 		testVariablesAndLevelVars();
@@ -79,6 +100,269 @@ class EditorSettingsTest {
 		testStatSliderHoldAccelerationAndSavePaths();
 		testRoguelikeTestCourseStartsWithZeroStats();
 		trace('EditorSettingsTest passed $assertions assertions');
+	}
+
+	private static function testLevelEditorMenuAuthoredLayout():Void {
+		var view = new LevelEditorMenuView();
+		assertNotNull(directChild(view, "background"), "editor menu mounts exact XFL background panels");
+		var glow = directChild(view, "selectedGlow");
+		assertNotNull(glow, "editor menu mounts exact XFL selected glow");
+		assertClose(-198.9, glow.x, "editor menu glow x follows XFL matrix");
+		assertClose(-180, glow.y, "editor menu glow y follows XFL matrix");
+		var layer00 = Std.downcast(directChild(view, "layer00Button"), GameButton);
+		var settings = Std.downcast(directChild(view, "settingsButton"), GameButton);
+		var save = Std.downcast(directChild(view, "saveButton"), GameButton);
+		assertEquals("Art 00", layer00.label, "editor menu preserves authored Art 00 label");
+		assertClose(-255, layer00.x, "editor menu Art 00 x follows XFL matrix");
+		assertClose(-191, layer00.y, "editor menu top rail y follows XFL matrix");
+		assertClose(49.9847412109375, layer00.controlWidth, "editor menu Art 00 width follows XFL component scale");
+		assertClose(137, settings.x, "editor menu settings x follows XFL matrix");
+		assertClose(54.9942016601562, settings.controlWidth, "editor menu settings width follows XFL component scale");
+		assertClose(-254.6, save.x, "editor menu save x follows XFL matrix");
+		assertClose(169, save.y, "editor menu bottom rail y follows XFL matrix");
+		var zoom:GameSelect<String> = Std.downcast(directChild(view, "zoomSelect"), GameSelect);
+		assertClose(30, zoom.x, "editor menu zoom x follows XFL matrix");
+		assertClose(169, zoom.y, "editor menu zoom y follows XFL matrix");
+		assertEquals(7, zoom.length, "editor menu preserves authored zoom option count");
+		assertEquals("25", zoom.itemAt(0), "editor menu preserves authored minimum zoom");
+		assertEquals("500", zoom.itemAt(6), "editor menu preserves authored maximum zoom");
+		view.dispose();
+	}
+
+	private static function testLevelEditorMenuCommands():Void {
+		var previousGroup = pr2.lobby.LobbySession.group;
+		pr2.lobby.LobbySession.group = 1;
+		var editor = new LevelEditor();
+		var holder = new pr2.page.PageHolder(editor);
+		var menu = editor.menu;
+		assertNotNull(menu, "initialized editor owns its command menu");
+		var blocksButton = Std.downcast(directChild(menu.art, "blocksButton"), GameButton);
+		var settingsButton = Std.downcast(directChild(menu.art, "settingsButton"), GameButton);
+		var bgButton = Std.downcast(directChild(menu.art, "bgButton"), GameButton);
+		var layer2Button = Std.downcast(directChild(menu.art, "layer2Button"), GameButton);
+		var layerButtons = [
+			{button: Std.downcast(directChild(menu.art, "layer00Button"), GameButton), layer: 5},
+			{button: Std.downcast(directChild(menu.art, "layer0Button"), GameButton), layer: 4},
+			{button: Std.downcast(directChild(menu.art, "layer1Button"), GameButton), layer: 1},
+			{button: layer2Button, layer: 2},
+			{button: Std.downcast(directChild(menu.art, "layer3Button"), GameButton), layer: 3},
+		];
+		var undoButton = Std.downcast(directChild(menu.art, "undoButton"), GameButton);
+		var redoButton = Std.downcast(directChild(menu.art, "redoButton"), GameButton);
+		var saveButton = Std.downcast(directChild(menu.art, "saveButton"), GameButton);
+		var loadButton = Std.downcast(directChild(menu.art, "loadButton"), GameButton);
+		var newButton = Std.downcast(directChild(menu.art, "newButton"), GameButton);
+		var testButton = Std.downcast(directChild(menu.art, "testButton"), GameButton);
+		assertEquals(menu.blocks, menu.sideBar, "menu initializes on the Blocks sidebar");
+		assertEquals("blocks", editor.focusedEditorLayer, "Blocks command focuses the block layer");
+
+		settingsButton.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		assertEquals(menu.settings, menu.sideBar, "Settings command swaps to settings sidebar");
+		assertEquals("", editor.focusedEditorLayer, "Settings command clears editor focus");
+		bgButton.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		assertEquals(menu.bg, menu.sideBar, "BG command swaps to backgrounds sidebar");
+		for (entry in layerButtons) {
+			entry.button.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+			assertEquals(editor.objectLayers[entry.layer - 1], editor.activeObjectLayer, 'Art ${entry.layer} command selects its object layer');
+		}
+		assertEquals(menu.stamps, menu.sideBar, "layer command swaps a non-art sidebar to stamps");
+		assertEquals("objects", editor.focusedEditorLayer, "layer command focuses its object layer");
+		blocksButton.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		assertEquals(menu.blocks, menu.sideBar, "Blocks command restores blocks sidebar");
+		var placed = editor.blockLayer.addBlockAtStage(ObjectCodes.BLOCK_BASIC1, null, 120, 120);
+		assertNotNull(placed, "menu undo fixture places a real block");
+		menu.updateUndoRedoState();
+		assertEquals(true, undoButton.enabled, "menu enables Undo when Flash saveArray has work");
+		undoButton.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		assertEquals(null, editor.blockLayer.getBlockAtStage(120, 120), "Undo command reverses the active block-layer action");
+		assertEquals(true, redoButton.enabled, "Undo command enables Redo");
+		redoButton.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		assertNotNull(editor.blockLayer.getBlockAtStage(120, 120), "Redo command restores the active block-layer action");
+
+		menu.art.zoomSelect.selectFromUser(6);
+		assertClose(5, editor.zoom, "500% command applies authored editor zoom");
+		assertClose(5, menu.tools.zoom, "zoom command synchronizes tools sidebar");
+
+		saveButton.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		assertTrue(Std.isOfType(Popup.getOpen()[Popup.getOpen().length - 1], SaveLevelPopup), "Save command opens real SaveLevelPopup");
+		Popup.getOpen()[Popup.getOpen().length - 1].remove();
+		loadButton.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		assertTrue(Std.isOfType(Popup.getOpen()[Popup.getOpen().length - 1], GetLevelsPopup), "Load command opens owned-level picker for regular editors");
+		Popup.getOpen()[Popup.getOpen().length - 1].remove();
+		newButton.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		assertTrue(Std.isOfType(Popup.getOpen()[Popup.getOpen().length - 1], ConfirmPopup), "New command owns a confirmation modal");
+		Popup.getOpen()[Popup.getOpen().length - 1].remove();
+		var exitButton = Std.downcast(directChild(menu.art, "exitButton"), GameButton);
+		exitButton.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		assertTrue(Std.isOfType(Popup.getOpen()[Popup.getOpen().length - 1], ConfirmPopup), "Exit command owns a confirmation modal");
+		Popup.getOpen()[Popup.getOpen().length - 1].remove();
+
+		menu.setReportsMode(true);
+		assertEquals(false, saveButton.enabled, "reports mode disables Save like Flash");
+		menu.setReportsMode(false);
+		assertEquals(true, saveButton.enabled, "leaving reports mode restores Save");
+		var disposedBlocksButton = blocksButton;
+		testButton.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		assertTrue(Std.isOfType(holder.getCurrentPage(), TestCoursePage), "Test command navigates through the real page holder");
+		assertEquals(false, disposedBlocksButton.hasEventListener(MouseEvent.CLICK), "page removal cleans command listeners");
+
+		pr2.lobby.LobbySession.group = 0;
+		var guest = new LevelEditor();
+		guest.initialize();
+		var guestSave = Std.downcast(directChild(guest.menu.art, "saveButton"), GameButton);
+		var guestLoad = Std.downcast(directChild(guest.menu.art, "loadButton"), GameButton);
+		assertEquals(false, guestSave.enabled, "guest editor disables Save");
+		assertEquals(false, guestLoad.enabled, "guest editor disables Load");
+		guest.remove();
+		pr2.lobby.LobbySession.group = previousGroup;
+	}
+
+	private static function testChooseLevelsModeAuthoredLayout():Void {
+		var view = new ChooseLevelsModeView();
+		var background = directChild(view, "background");
+		assertNotNull(background, "choose-level mode mounts the authored ShadowBG");
+		assertClose(-122.5, background.x, "choose-level ShadowBG x follows XFL matrix");
+		assertClose(-68.75, background.y, "choose-level ShadowBG y follows XFL matrix");
+		assertClose(0.900802612304688, background.scaleX, "choose-level ShadowBG x scale follows XFL matrix");
+		assertClose(0.719802856445312, background.scaleY, "choose-level ShadowBG y scale follows XFL matrix");
+
+		var title = Std.downcast(directChild(view, "title"), TextField);
+		var prompt = Std.downcast(directChild(view, "prompt"), TextField);
+		assertNotNull(title, "choose-level title field");
+		assertNotNull(prompt, "choose-level prompt field");
+		assertEquals("-- Choose Mode --", title.text, "choose-level title preserves XFL copy");
+		assertEquals("Which do you want to view?", prompt.text, "choose-level prompt preserves XFL copy");
+		assertClose(-107.95, title.x, "choose-level title x includes XFL text bounds");
+		assertClose(216.95, title.width, "choose-level title width follows XFL bounds");
+
+		var reports = Std.downcast(directChild(view, "reports_bt"), GameButton);
+		var mine = Std.downcast(directChild(view, "mine_bt"), GameButton);
+		var cancel = Std.downcast(directChild(view, "cancel_bt"), GameButton);
+		assertNotNull(reports, "choose-level report button");
+		assertNotNull(mine, "choose-level owned-level button");
+		assertNotNull(cancel, "choose-level cancel button");
+		assertEquals("Level Reports", reports.label, "choose-level report label follows component parameter");
+		assertEquals("My Levels", mine.label, "choose-level owned-level label follows component parameter");
+		assertClose(-97.8, reports.x, "choose-level report button x follows XFL matrix");
+		assertClose(11.95, mine.x, "choose-level owned-level button x follows XFL matrix");
+		assertClose(84.9899291992188, reports.controlWidth, "choose-level report width follows XFL component scale");
+		assertClose(-40, cancel.x, "choose-level cancel x follows XFL matrix");
+		assertClose(27, cancel.y, "choose-level cancel y follows XFL matrix");
+		view.dispose();
+	}
+
+	private static function testBlockOptionsButtonAuthoredStates():Void {
+		var button = assertAuthoredButtonStates("BlockOptionsButton", "block-options");
+		assertClose(14.35, button.width, "block-options preserves the exported authored bounds");
+		assertClose(14, button.height, "block-options preserves the authored hit-frame height");
+		button.dispose();
+	}
+
+	private static function testAuthoredEditorToolGraphics():Void {
+		for (kind in [
+			"BrushButtonGraphic",
+			"BrushGraphic",
+			"EraserButtonGraphic",
+			"HatsButtonGraphic",
+			"LandscapeGraphic",
+			"MusicNoteGraphic",
+			"ObjectDeleterButtonGraphic",
+			"TextToolButtonGraphic",
+			"TextToolCursorGraphic"
+		]) {
+			var graphic = new EditorNativeGraphic(kind);
+			assertEquals(1, graphic.numChildren, '$kind contains one exact composed XFL root');
+			assertEquals("authoredStatic", graphic.getChildAt(0).name, '$kind does not use a procedural glyph substitute');
+			assertTrue(graphic.width > 1 && graphic.height > 1, '$kind composed XFL art is visible');
+			graphic.dispose();
+		}
+		assertAuthoredButtonStates("DeleteButton", "delete").dispose();
+		assertAuthoredButtonStates("ResizeButton", "resize").dispose();
+		assertAuthoredButtonStates("EditTextButton", "edit-text").dispose();
+
+		var valueButton = new EditorNativeGraphic("ValueButtonGraphic");
+		assertEquals(2, valueButton.numChildren, "value button contains only the two authored XFL text fields");
+		assertEquals("title", valueButton.titleBox.text, "value button preserves the authored default title");
+		assertEquals("val", valueButton.valueBox.text, "value button preserves the authored default value");
+		assertClose(0.75, valueButton.titleBox.x, "value button title x follows XFL matrix");
+		assertClose(4, valueButton.titleBox.y, "value button title y follows XFL matrix");
+		assertClose(27.55, valueButton.titleBox.width, "value button title width follows XFL bounds");
+		assertClose(13.75, valueButton.valueBox.y, "value button value y follows XFL matrix");
+		assertEquals(0x666666, valueButton.titleBox.defaultTextFormat.color, "value button title color follows XFL");
+		assertEquals(0x024775, valueButton.valueBox.defaultTextFormat.color, "value button value color follows XFL");
+		assertEquals(false, valueButton.titleBox.defaultTextFormat.bold, "value button title is not procedurally bolded");
+		valueButton.dispose();
+
+		var itemButton = new EditorNativeGraphic("ItemButtonGraphic");
+		assertEquals(3, itemButton.numChildren, "item button preserves all three XFL ItemBitmap layers");
+		var itemPositions = [[3.0, 1.0], [9.0, 8.25], [15.0, 15.0]];
+		for (index in 0...itemPositions.length) {
+			var bitmap = Std.downcast(itemButton.getChildAt(index), openfl.display.Bitmap);
+			assertNotNull(bitmap, 'item button layer $index uses the authored bitmap');
+			assertEquals('authoredBitmap$index', bitmap.name, 'item button layer $index ordering');
+			assertClose(itemPositions[index][0], bitmap.x, 'item button layer $index x follows nested XFL matrices');
+			assertClose(itemPositions[index][1], bitmap.y, 'item button layer $index y follows nested XFL matrices');
+			assertClose(0.5, bitmap.scaleX, 'item button layer $index XFL scale');
+			assertEquals(false, bitmap.smoothing, 'item button layer $index preserves Flash bitmap sampling');
+		}
+		itemButton.dispose();
+	}
+
+	private static function assertAuthoredButtonStates(kind:String, label:String):EditorNativeGraphic {
+		var button = new EditorNativeGraphic(kind);
+		assertEquals("authoredHit", button.getChildAt(0).name, '$label uses the exact XFL hit frame');
+		assertEquals("authoredState0", button.getChildAt(button.numChildren - 1).name, '$label starts on the authored up frame');
+		button.dispatchEvent(new MouseEvent(MouseEvent.ROLL_OVER));
+		assertEquals("authoredState1", button.getChildAt(button.numChildren - 1).name, '$label hover uses XFL frame 2');
+		button.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN));
+		assertEquals("authoredState2", button.getChildAt(button.numChildren - 1).name, '$label press uses XFL frame 3');
+		button.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_UP));
+		assertEquals("authoredState1", button.getChildAt(button.numChildren - 1).name, '$label release restores hover frame');
+		button.dispatchEvent(new MouseEvent(MouseEvent.ROLL_OUT));
+		assertEquals("authoredState0", button.getChildAt(button.numChildren - 1).name, '$label rollout restores up frame');
+		return button;
+	}
+
+	private static function testBrushSizePickerAuthoredLayout():Void {
+		var buttonView = new BrushSizeButtonView();
+		var background = directChild(buttonView, "background");
+		assertNotNull(background, "size picker mounts the authored ColorPicker skin");
+		assertClose(1.36363220214844, background.scaleX, "size picker background x scale follows XFL");
+		assertClose(1.36363220214844, background.scaleY, "size picker background y scale follows XFL");
+		assertClose(15, buttonView.circle.x, "size picker circle x follows XFL");
+		assertClose(15, buttonView.circle.y, "size picker circle y follows XFL");
+		buttonView.dispose();
+
+		var menu = new BrushSizeMenuView();
+		var menuBackground = directChild(menu, "background");
+		var title = Std.downcast(directChild(menu, "title"), TextField);
+		assertNotNull(menuBackground, "size picker menu mounts authored ShadowBG");
+		assertClose(-96.9, menuBackground.x, "size picker menu background x follows XFL matrix");
+		assertClose(-61.4, menuBackground.y, "size picker menu background y follows XFL matrix");
+		assertEquals("-- Brush Size --", title.text, "size picker menu preserves authored title");
+		assertClose(-75, menu.slider.x, "size picker slider x follows XFL matrix");
+		assertClose(29, menu.slider.y, "size picker slider y follows XFL matrix");
+		assertClose(187.5, menu.slider.controlWidth, "size picker slider width follows XFL scale");
+		assertEquals(100.0, menu.slider.maximum, "size picker slider preserves authored maximum");
+		assertClose(-29, menu.textInput.x, "size picker input x follows XFL matrix");
+		assertClose(-13, menu.textInput.y, "size picker input y follows XFL matrix");
+		assertEquals(3, menu.textInput.maxChars, "size picker input preserves authored maxChars");
+		assertEquals("0-9", menu.textInput.textField.restrict, "size picker input preserves numeric restriction");
+		menu.dispose();
+
+		var editor = new LevelEditor();
+		editor.initialize();
+		var picker = new EditorBrushSizePickerButton();
+		editor.addChild(picker);
+		editor.setBrushSize(255);
+		picker.updateCircle();
+		assertClose(Math.sqrt(255) * 3, picker.previewSizeForTests(), "size picker preview does not apply a non-Flash clamp");
+		picker.remove();
+		editor.remove();
+	}
+
+	private static function directChild(container:Sprite, name:String):Null<DisplayObject> {
+		return DisplayUtil.directChildByName(container, name);
 	}
 
 	private static function testSideBarCatalog():Void {
@@ -386,6 +670,19 @@ class EditorSettingsTest {
 
 		var rankPopup = new EditorValueSettingsPopup(editor, new Sprite(), "rank");
 		assertEquals("0", rankPopup.value(), "rank popup opens with editor minimum rank");
+		var valueBackground = directChild(rankPopup.art, "background");
+		assertNotNull(valueBackground, "value menu mounts authored ShadowBG");
+		assertClose(-114.95, valueBackground.x, "value menu background x follows XFL matrix");
+		assertClose(-72.75, valueBackground.y, "value menu background y follows XFL matrix");
+		assertClose(-113.45, rankPopup.art.titleBox.x, "value menu title x follows XFL matrix");
+		assertClose(-61, rankPopup.art.titleBox.y, "value menu title y follows XFL matrix");
+		assertClose(1.00047302246094, rankPopup.art.titleBox.scaleX, "value menu title scale follows XFL matrix");
+		assertClose(226.957305145264, rankPopup.art.titleBox.width, "value menu displayed title width follows XFL bounds");
+		assertClose(-102.5, rankPopup.art.descBox.x, "value menu description x follows XFL matrix");
+		assertClose(206, rankPopup.art.descBox.width, "value menu description width follows XFL bounds");
+		assertClose(-39, rankPopup.art.valueInput.x, "value menu input x follows XFL matrix");
+		assertClose(10, rankPopup.art.valueInput.y, "value menu input y follows XFL matrix");
+		assertClose(77.9998779296875, rankPopup.art.valueInput.controlWidth, "value menu input width follows XFL scale");
 		rankPopup.setValue("42");
 		assertEquals("42", editor.minRank, "rank popup commits minimum rank");
 		assertEquals("42", editor.getLevelVars().get("min_level"), "rank popup export uses minimum rank");
@@ -435,9 +732,23 @@ class EditorSettingsTest {
 		var popup = new EditorMusicSettingsPopup(editor, new Sprite());
 
 		assertEquals("random", popup.selectedSongId(), "blank editor song opens as random");
+		var musicBackground = directChild(popup.art, "background");
+		var musicTitle = Std.downcast(directChild(popup.art, "title"), TextField);
+		var musicDesc = Std.downcast(directChild(popup.art, "description"), TextField);
+		assertNotNull(musicBackground, "music menu mounts authored ShadowBG");
+		assertClose(-120, musicBackground.x, "music menu background x follows XFL matrix");
+		assertClose(-50, musicBackground.y, "music menu background y follows XFL matrix");
+		assertEquals("-- Music --", musicTitle.text, "music menu preserves authored title");
+		assertEquals("This song will play by default for players playing your course. Choose none for no song and random for a random one from the list.",
+			musicDesc.text, "music menu preserves authored description");
+		assertClose(-100, popup.dropdown.x, "music selector is centered like Flash GameSound");
+		assertClose(-15, popup.dropdown.y, "music selector y follows Flash MusicMenu");
+		assertEquals(4, popup.dropdown.rowCount, "music selector preserves Flash GameSound rowCount");
+		assertEquals("random", popup.previewSongIdForTests(), "music menu previews its initial selection");
 
 		popup.setSelectedSongId("7");
 		assertEquals("7", editor.song, "music menu commits selected track");
+		assertEquals("7", popup.previewSongIdForTests(), "music menu previews the selected track");
 		assertEquals("7", editor.getLevelVars().get("song"), "committed music selection exports as level vars");
 
 		popup.setSelectedSongId("0");
@@ -451,6 +762,23 @@ class EditorSettingsTest {
 		var popup = new EditorModeSettingsPopup(editor, new Sprite());
 
 		assertEquals("objective", popup.selectedMode(), "mode menu loads editor game mode");
+		var modeBackground = directChild(popup.art, "background");
+		var modeTitle = Std.downcast(directChild(popup.art, "title"), TextField);
+		var modeDesc = Std.downcast(directChild(popup.art, "description"), TextField);
+		assertNotNull(modeBackground, "mode menu mounts authored ShadowBG");
+		assertClose(-116.5, modeBackground.x, "mode menu background x follows XFL matrix");
+		assertClose(-59.3, modeBackground.y, "mode menu background y follows XFL matrix");
+		assertEquals("-- Game Mode --", modeTitle.text, "mode menu title preserves XFL copy");
+		assertEquals("Each game mode has a different goal and method of winning.", modeDesc.text, "mode menu description preserves XFL copy");
+		assertClose(-50, popup.dropdown.x, "mode menu dropdown x follows XFL matrix");
+		assertClose(23, popup.dropdown.y, "mode menu dropdown y follows XFL matrix");
+		assertEquals(5, popup.dropdown.length, "mode menu preserves the five authored choices");
+		popup.dropdown.selectedIndex = 0;
+		assertEquals("Race", popup.dropdown.selectedOption.label, "mode menu authored choice order starts with Race");
+		popup.dropdown.selectedIndex = 1;
+		assertEquals("Objective", popup.dropdown.selectedOption.label, "mode menu authored choice order keeps Objective second");
+		popup.dropdown.selectedIndex = 3;
+		assertEquals("Alien Eggs", popup.dropdown.selectedOption.label, "mode menu preserves authored Alien Eggs label");
 
 		popup.setSelectedMode("hat");
 		assertEquals("hat", editor.gameMode, "mode menu commits selected game mode");
@@ -460,8 +788,8 @@ class EditorSettingsTest {
 		assertEquals("egg", editor.gameMode, "mode menu normalizes legacy eggs mode");
 
 		popup.setSelectedMode("roguelike");
-		assertEquals("roguelike", editor.gameMode, "mode menu commits roguelike mode");
-		assertEquals(15, editor.badHats.length, "roguelike mode disables every selectable hat");
+		assertEquals("race", editor.gameMode, "mode menu falls back to Race for modes absent from the authored choices");
+		assertEquals(0, editor.badHats.length, "unsupported modes do not apply non-authored side effects");
 
 		var focusResets = 0;
 		StageFocus.resetHook = function():Void focusResets++;
@@ -485,24 +813,38 @@ class EditorSettingsTest {
 		var itemBlock = editor.blockLayer.addBlockAtStage(ObjectCodes.BLOCK_ITEM, BlockType.Item, 120, 120);
 		itemBlock.setOptions(Items.MINE + "-" + Items.TELEPORT + "-" + Items.SNAKE);
 		var popup = new EditorItemSettingsPopup(editor, new Sprite());
+		var itemsBackground = directChild(popup.art, "background");
+		var itemsTitle = Std.downcast(directChild(popup.art, "title"), TextField);
+		var laserCheck = Std.downcast(directChild(popup.art, "check1"), pr2.ui.controls.GameCheckBox);
+		var iceCheck = Std.downcast(directChild(popup.art, "check9"), pr2.ui.controls.GameCheckBox);
+		assertNotNull(itemsBackground, "item menu mounts authored ShadowBG");
+		assertClose(-118.9, itemsBackground.x, "item menu background x follows XFL matrix");
+		assertClose(-61.4, itemsBackground.y, "item menu background y follows XFL matrix");
+		assertEquals("-- Items --", itemsTitle.text, "item menu preserves authored title");
+		assertEquals("Laser Gun", laserCheck.label, "item menu preserves authored Laser Gun label");
+		assertClose(-102, laserCheck.x, "item menu Laser Gun x follows XFL matrix");
+		assertClose(-19, laserCheck.y, "item menu Laser Gun y follows XFL matrix");
+		assertEquals("Ice Wave", iceCheck.label, "item menu preserves authored Ice Wave label");
+		assertClose(-102, iceCheck.x, "item menu Ice Wave x follows XFL matrix");
+		assertClose(81, iceCheck.y, "item menu Ice Wave y follows XFL matrix");
 
 		assertEquals(true, popup.isItemSelected(Items.LASER_GUN), "item menu loads allowed item");
 		assertEquals(false, popup.isItemSelected(Items.MINE), "item menu leaves disallowed item unchecked");
 		assertEquals(true, popup.isItemSelected(Items.TELEPORT), "item menu loads second allowed item");
-		assertEquals(false, popup.isItemSelected(Items.SNAKE), "item menu initially leaves Snake unchecked");
+		assertEquals(false, popup.isItemSelected(Items.SNAKE), "item menu excludes post-Flash Snake from the authored choices");
 
 		popup.setItemSelected(Items.LASER_GUN, false);
 		popup.setItemSelected(Items.MINE, true);
 		popup.setItemSelected(Items.SNAKE, true);
 		popup.remove();
 
-		assertArrayEquals([Items.MINE, Items.TELEPORT, Items.SNAKE], editor.allowedItems, "item menu commits selected items in code order");
-		assertEquals("2`4`10", editor.getLevelVars().get("items"), "committed item menu selection exports Snake as a numeric code");
-		assertEquals("", itemBlock.options, "item menu refresh clears item-block options matching new allowed items");
+		assertArrayEquals([Items.MINE, Items.TELEPORT], editor.allowedItems, "item menu commits only authored selected items in code order");
+		assertEquals("2`4", editor.getLevelVars().get("items"), "committed item menu exports authored numeric codes");
+		assertEquals("2-4-10", itemBlock.options, "item menu preserves item-block overrides that differ from authored allowed items");
 
 		var testCourse = new TestCoursePage(editor.getLevelVars());
 		testCourse.initialize();
-		assertArrayEquals([Items.MINE, Items.TELEPORT, Items.SNAKE], testCourse.course.allowedItemsForTests(),
+		assertArrayEquals([Items.MINE, Items.TELEPORT], testCourse.course.allowedItemsForTests(),
 			"test course receives item menu allowed-items semantics");
 		testCourse.remove();
 		editor.remove();
@@ -512,6 +854,20 @@ class EditorSettingsTest {
 		var editor = new LevelEditor();
 		editor.setBadHats("5,12");
 		var popup = new EditorHatsSettingsPopup(editor, new Sprite());
+		var hatsBackground = directChild(popup.art, "background");
+		var hatsTitle = Std.downcast(directChild(popup.art, "title"), TextField);
+		var expCheck = Std.downcast(directChild(popup.art, "hat2"), pr2.ui.controls.GameCheckBox);
+		var cheeseCheck = Std.downcast(directChild(popup.art, "hat16"), pr2.ui.controls.GameCheckBox);
+		assertNotNull(hatsBackground, "hats menu mounts authored ShadowBG");
+		assertClose(-145, hatsBackground.x, "hats menu background x follows XFL matrix");
+		assertClose(-85, hatsBackground.y, "hats menu background y follows XFL matrix");
+		assertEquals("-- Hats Allowed --", hatsTitle.text, "hats menu preserves authored title");
+		assertEquals("EXP", expCheck.label, "hats menu preserves authored EXP label");
+		assertClose(-130.85, expCheck.x, "hats menu EXP x follows XFL matrix");
+		assertClose(-48.8, expCheck.y, "hats menu EXP y follows XFL matrix");
+		assertEquals("Cheese", cheeseCheck.label, "hats menu preserves authored Cheese label");
+		assertClose(49.1, cheeseCheck.x, "hats menu Cheese x follows XFL matrix");
+		assertClose(51.2, cheeseCheck.y, "hats menu Cheese y follows XFL matrix");
 
 		assertEquals(false, popup.isHatAllowed(5), "hats menu loads existing cowboy ban");
 		assertEquals(false, popup.isHatAllowed(12), "hats menu loads existing thief ban");

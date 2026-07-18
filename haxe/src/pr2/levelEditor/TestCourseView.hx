@@ -1,14 +1,18 @@
 package pr2.levelEditor;
 
 import pr2.ui.controls.GameButton;
+import pr2.runtime.SvgAsset;
 import pr2.ui.view.NativeView;
 
 /** Native in-course overlay actions. */
 class TestCourseView extends NativeView {
 	public function new() {
 		super();
-		button("back_bt", "Back", -260, -187);
-		button("restart_bt", "Restart", 174, -187);
+		var background = SvgAsset.create("assets/svg/editor/test_course_background.svg");
+		background.name = "background";
+		addChild(background);
+		button("restart_bt", "Restart", 94, 169);
+		button("back_bt", "Back", 153, 169);
 	}
 
 	private function button(name:String, label:String, x:Float, y:Float):Void {
@@ -16,7 +20,7 @@ class TestCourseView extends NativeView {
 		control.name = name;
 		control.x = x;
 		control.y = y;
-		control.setSize(80, 25);
+		control.setSize(54, 22);
 		addChild(control);
 	}
 }

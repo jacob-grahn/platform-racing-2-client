@@ -2,7 +2,6 @@ package pr2.character;
 
 import openfl.display.Sprite;
 import openfl.events.Event;
-import pr2.runtime.PR2MovieClip;
 
 /**
 	B1 coverage for the ported `Character` base: animation state transitions (incl.
@@ -31,16 +30,15 @@ class CharacterBaseTest {
 	private static function testStateTransitions():Void {
 		var c = new Character();
 		assertEquals("stand", c.state, "constructor starts in stand");
-		assertTrue(c.display.getStateClip("standAnim").visible, "stand clip visible at start");
+		assertEquals("stand", c.display.currentState, "native stand state visible at start");
 
 		c.changeState("run");
 		assertEquals("run", c.state, "changeState updates state field");
-		assertTrue(c.display.getStateClip("runAnim").visible, "run clip becomes visible");
-		assertTrue(!c.display.getStateClip("standAnim").visible, "stand clip hidden after leaving");
+		assertEquals("run", c.display.currentState, "native run state becomes visible");
 
 		c.changeState("frozenSolid");
 		assertEquals("frozenSolid", c.state, "raw state names append Anim for the clip");
-		assertTrue(!c.display.getStateClip("runAnim").visible, "run clip hidden after leaving for frozen-solid");
+		assertEquals("frozen", c.display.currentState, "frozen-solid selects the native frozen state");
 	}
 
 	private static function testJumpSoundHook():Void {
@@ -71,7 +69,7 @@ class CharacterBaseTest {
 		assertEquals(-1, c.hat1Color2, "slot 1 epic colour preserved");
 		assertEquals(9, c.hat2, "slot 2 takes the second hat id");
 		assertEquals(1, c.hat3, "unfilled slots reset to the empty hat");
-		assertEquals(9, hatClip(c, "hat2").currentFrame, "slot 2 renders from the stacked hat array");
+		assertEquals(9, c.display.hatId(1), "slot 2 renders from the stacked hat array");
 
 		assertTrue(c.hasHatFlag(Character.CROWN), "crown id raises the crown flag");
 		assertTrue(c.hasHatFlag(Character.TOP), "top-hat id raises the top flag");
@@ -112,28 +110,10 @@ class CharacterBaseTest {
 		c.setItem(4);
 
 		assertEquals("Teleport", c.itemFrameName, "setItem resolves the held-item frame name");
-		assertEquals(21, weaponClip(c, "standAnim").currentFrame, "setItem applies the authored weapon frame");
+		assertEquals("Teleport", c.display.itemFrameName, "setItem applies the authored held item");
 
 		c.changeState("jump");
-		assertEquals(21, weaponClip(c, "jumpAnim").currentFrame, "held weapon survives animation changes");
-	}
-
-	private static function weaponClip(c:Character, stateName:String):PR2MovieClip {
-		var state = c.display.getStateClip(stateName);
-		assertTrue(state != null, '$stateName exists');
-		var weapon = Std.downcast(state.getChildByTimelineName("weapon"), PR2MovieClip);
-		assertTrue(weapon != null, '$stateName exposes weapon clip');
-		return weapon;
-	}
-
-	private static function hatClip(c:Character, hatName:String):PR2MovieClip {
-		var state = c.display.getStateClip("standAnim");
-		assertTrue(state != null, "stand state exists");
-		var head = Std.downcast(state.getChildByTimelineName("head"), PR2MovieClip);
-		assertTrue(head != null, "stand state exposes head clip");
-		var hat = Std.downcast(head.getChildByTimelineName(hatName), PR2MovieClip);
-		assertTrue(hat != null, 'head exposes $hatName clip');
-		return hat;
+		assertEquals("Teleport", c.display.itemFrameName, "held item survives animation changes");
 	}
 
 	private static function testJetPackFlameLifecycle():Void {
@@ -150,44 +130,26 @@ class CharacterBaseTest {
 		var index = 0;
 		c.setJetFlameRandomForTest(function() return values[index++]);
 
-		var jetPack = c.jetPackForState("standAnim");
-		assertTrue(jetPack != null, "Jet Pack weapon exposes the jetPack state clip");
-		assertEquals(1, jetPack.currentFrame, "Jet Pack starts on the off frame");
+		assertEquals(false, c.display.jetActive, "Jet Pack starts on the off frame");
 
 		c.beginJet();
 		assertEquals("engine:0.6:true", starts.join("|"), "beginJet starts Flash's looping EngineSound");
 		assertEquals(0, stops, "first beginJet has no existing EngineSound to stop");
-		assertEquals(6, jetPack.currentFrame, "beginJet switches the current Jet Pack to the on frame");
+		assertEquals(true, c.display.jetActive, "beginJet switches the current Jet Pack to the on frame");
 		c.dispatchEvent(new Event(Event.ENTER_FRAME));
-
-		var anim = Std.downcast(jetPack.getChildByTimelineName("anim"), PR2MovieClip);
-		assertTrue(anim != null, "Jet Pack on frame exposes the flame anim");
-		var fire1 = anim.getChildByTimelineName("fire1");
-		var fire2 = anim.getChildByTimelineName("fire2");
-		assertTrue(fire1 != null, "Jet Pack flame exposes fire1");
-		assertTrue(fire2 != null, "Jet Pack flame exposes fire2");
-		assertClose(0.55, fire1.scaleY, "jetPackTick jitters fire1 scaleY with Flash's 0.5-1.0 range");
-		assertClose(0.95, fire2.alpha, "jetPackTick jitters fire2 alpha with Flash's 0.5-1.0 range");
+		assertClose(0.55, c.display.jetFireScale, "jetPackTick records fire1 scaleY with Flash's 0.5-1.0 range");
+		assertClose(0.95, c.display.jetFireAlpha, "jetPackTick records fire2 alpha with Flash's 0.5-1.0 range");
 
 		c.changeState("run");
-		var runJetPack = c.jetPackForState("runAnim");
 		c.beginJet();
 		assertEquals("engine:0.6:true|engine:0.6:true", starts.join("|"), "beginJet restarts an existing EngineSound loop");
 		assertEquals(1, stops, "restarting Jet Pack stops the previous EngineSound loop");
 		c.dispatchEvent(new Event(Event.ENTER_FRAME));
-		assertEquals(6, runJetPack.currentFrame, "jetPackTick keeps the active state's Jet Pack on after state changes");
+		assertEquals(true, c.display.jetActive, "jetPackTick keeps the native Jet Pack on after state changes");
 
 		c.endJet();
 		assertEquals(2, stops, "endJet stops the active EngineSound loop");
-		var resetClips = 0;
-		for (stateName in CharacterDisplay.STATE_NAMES) {
-			var stateJetPack = c.jetPackForState(stateName);
-			if (stateJetPack != null) {
-				resetClips++;
-				assertEquals(1, stateJetPack.currentFrame, '$stateName Jet Pack returns to the off frame');
-			}
-		}
-		assertTrue(resetClips > 1, "endJet resets every authored Jet Pack state clip that exists");
+		assertEquals(false, c.display.jetActive, "endJet returns the stable Jet Pack item to its off frame");
 	}
 
 	private static function testBlockTouchProbes():Void {

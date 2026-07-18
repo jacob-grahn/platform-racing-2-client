@@ -1,14 +1,14 @@
 package pr2.gameplay;
 
 import openfl.display.DisplayObject;
-import openfl.display.Bitmap;
 import openfl.display.Shape;
 import openfl.display.Sprite;
+import openfl.events.Event;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
-import openfl.utils.Assets;
 import pr2.display.Removable;
 import pr2.runtime.FontResolver;
+import pr2.runtime.SvgAsset;
 import pr2.util.DisplayUtil;
 
 /**
@@ -34,6 +34,7 @@ class ItemDisplay extends Removable {
 		mouseEnabled = false;
 		art = new ItemDisplayView();
 		addChild(art);
+		addEventListener(Event.ENTER_FRAME, advanceItemArt);
 		darkLabel = createLabel(2, 55, 0x000000);
 		lightLabel = createLabel(3, 56, 0xFFFFFF);
 		addChild(darkLabel);
@@ -41,6 +42,10 @@ class ItemDisplay extends Removable {
 		snakeIcon = createSnakeIcon();
 		addChild(snakeIcon);
 		setItemCode(0);
+	}
+
+	private function advanceItemArt(_:Event):Void {
+		if (art != null) art.advanceFrame();
 	}
 
 	public function setItemCode(code:Int):Void {
@@ -63,7 +68,7 @@ class ItemDisplay extends Removable {
 	public function setAmmo(value:Int):Void {
 		ammo = clampAmmo(value);
 		for (index in 1...4) {
-			var dot = DisplayUtil.findByName(art, "a" + index);
+			var dot = DisplayUtil.directChildByName(art, "a" + index);
 			if (dot != null) {
 				dot.visible = index <= ammo;
 			}
@@ -100,7 +105,7 @@ class ItemDisplay extends Removable {
 	}
 
 	public function ammoVisible(index:Int):Bool {
-		var dot:Null<DisplayObject> = DisplayUtil.findByName(art, "a" + index);
+		var dot:Null<DisplayObject> = DisplayUtil.directChildByName(art, "a" + index);
 		return dot != null && dot.visible;
 	}
 
@@ -114,6 +119,7 @@ class ItemDisplay extends Removable {
 
 	override public function remove():Void {
 		if (isRemoved()) return;
+		removeEventListener(Event.ENTER_FRAME, advanceItemArt);
 		if (art != null) {
 			if (art.parent != null) art.parent.removeChild(art);
 			art = null;
@@ -146,80 +152,49 @@ class ItemDisplay extends Removable {
 }
 
 private class ItemDisplayView extends Sprite {
-	private final icon:Shape;
-	private var assetBitmap:Null<Bitmap>;
+	private var exactArt:Null<Shape>;
+	private var frameStart:Int = 1;
+	private var frameSpan:Int = 5;
+	private var frameOffset:Int = 0;
+	public var currentAssetPath(default, null):String = "";
 
 	public function new() {
 		super();
-		graphics.beginFill(0x292929, 0.86);
-		graphics.lineStyle(1, 0x111111);
-		graphics.drawRoundRect(0, 0, 106, 73, 9, 9);
-		graphics.endFill();
-		icon = new Shape();
-		icon.x = 18;
-		icon.y = 11;
-		addChild(icon);
+		redraw();
 		for (index in 1...4) {
-			var dot = new Shape();
+			var dot = SvgAsset.create('assets/svg/effects/item_ammo_${StringTools.lpad(Std.string(index), "0", 2)}.svg');
 			dot.name = "a" + index;
-			dot.x = 78 + index * 6;
-			dot.y = 8;
-			dot.graphics.beginFill(0xFFE15A);
-			dot.graphics.lineStyle(1, 0x8A7116);
-			dot.graphics.drawCircle(0, 0, 2.5);
-			dot.graphics.endFill();
 			addChild(dot);
 		}
 	}
 
 	public function showItem(name:String):Void {
-		if (assetBitmap != null) {
-			if (assetBitmap.parent != null) assetBitmap.parent.removeChild(assetBitmap);
-			assetBitmap = null;
-		}
-		icon.graphics.clear();
-		if (name == "None") return;
-		if (name == "Mine") {
-			try {
-				assetBitmap = new Bitmap(Assets.getBitmapData("assets/blocks/mine_block.png"));
-				assetBitmap.x = 20;
-				assetBitmap.y = 11;
-				addChild(assetBitmap);
-				return;
-			} catch (_:Dynamic) {}
-		}
-		var color = switch (name) {
-			case "Laser": 0xEF4242;
-			case "Mine": 0x424242;
-			case "Lightning": 0xF6D73B;
-			case "Teleport": 0x9B62E8;
-			case "Super Jump": 0x55B8F0;
-			case "Jet Pack": 0xE9853E;
-			case "Speed Burst": 0x55D589;
-			case "Sword": 0xC8D2DB;
-			case "Ice Wave": 0x8DE6F4;
-			default: 0xFFFFFF;
+		frameStart = switch (name) {
+			case "Jet Pack": 6;
+			case "Mine": 11;
+			case "Speed Burst": 16;
+			case "Super Jump": 21;
+			case "Teleport": 26;
+			case "Lightning": 31;
+			case "Laser": 36;
+			case "Sword": 41;
+			case "Ice Wave": 46;
+			default: 1;
 		};
-		icon.graphics.lineStyle(2, 0x222222);
-		icon.graphics.beginFill(color);
-		switch (name) {
-			case "Lightning":
-				icon.graphics.moveTo(25, 0);
-				icon.graphics.lineTo(8, 22);
-				icon.graphics.lineTo(21, 22);
-				icon.graphics.lineTo(12, 40);
-				icon.graphics.lineTo(38, 15);
-				icon.graphics.lineTo(24, 15);
-				icon.graphics.lineTo(25, 0);
-			case "Sword":
-				icon.graphics.moveTo(33, 1);
-				icon.graphics.lineTo(22, 31);
-				icon.graphics.lineTo(17, 26);
-				icon.graphics.lineTo(33, 1);
-				icon.graphics.drawRect(9, 29, 19, 4);
-			case "Mine": icon.graphics.drawCircle(23, 22, 16);
-			default: icon.graphics.drawRoundRect(3, 4, 42, 35, 9, 9);
-		}
-		icon.graphics.endFill();
+		frameSpan = name == "Ice Wave" ? 6 : 5;
+		frameOffset = 0;
+		redraw();
+	}
+
+	public function advanceFrame():Void {
+		frameOffset = (frameOffset + 1) % frameSpan;
+		redraw();
+	}
+
+	private function redraw():Void {
+		if (exactArt != null && exactArt.parent == this) removeChild(exactArt);
+		currentAssetPath = 'assets/svg/effects/item_display_${StringTools.lpad(Std.string(frameStart + frameOffset), "0", 2)}.svg';
+		exactArt = SvgAsset.create(currentAssetPath);
+		addChildAt(exactArt, 0);
 	}
 }

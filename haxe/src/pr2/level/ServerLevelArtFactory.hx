@@ -150,7 +150,9 @@ class ServerLevelArtFactory {
 
 	public static function addLayerText(container:Sprite, text:DecodedTextObject, layerScale:Float):Void {
 		var field = new TextField();
-		field.defaultTextFormat = new TextFormat(FontResolver.resolve("Verdana"), 18, text.color);
+		var format = new TextFormat(FontResolver.resolve("Verdana"), 18, text.color);
+		format.leading = 4;
+		field.defaultTextFormat = format;
 		field.selectable = false;
 		field.wordWrap = false;
 		field.multiline = true;
@@ -162,10 +164,17 @@ class ServerLevelArtFactory {
 		field.height = 24;
 		field.x = text.x * layerScale;
 		field.y = text.y * layerScale;
+		field.cacheAsBitmap = true;
 		container.addChild(field);
 	}
 
 	private static function parseTextObjectText(value:String):String {
-		return StringTools.replace(StringTools.replace(value, "|", ","), "<br>", "\n");
+		var parsed = StringTools.replace(value, "#96", "`");
+		parsed = StringTools.replace(parsed, "#38", "&");
+		parsed = StringTools.replace(parsed, "#44", ",");
+		parsed = StringTools.replace(parsed, "#59", ";");
+		parsed = StringTools.replace(parsed, "#43", "+");
+		parsed = StringTools.replace(parsed, "#45", "-");
+		return StringTools.replace(parsed, "#35", "#");
 	}
 }

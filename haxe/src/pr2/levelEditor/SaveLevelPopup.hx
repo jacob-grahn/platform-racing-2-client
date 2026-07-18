@@ -53,11 +53,11 @@ class SaveLevelPopup extends Popup {
 	}
 
 	private function countChars(?_:Event):Void {
-		var titleCount = LobbyArt.text(art, "titleCharsRemaining");
+		var titleCount = LobbyArt.directText(art, "titleCharsRemaining");
 		if (titleCount != null) {
 			titleCount.text = fieldText(titleField()).length + " / 50";
 		}
-		var noteCount = LobbyArt.text(art, "noteCharsRemaining");
+		var noteCount = LobbyArt.directText(art, "noteCharsRemaining");
 		if (noteCount != null) {
 			noteCount.text = fieldText(noteField()).length + " / 255";
 		}
@@ -112,26 +112,26 @@ class SaveLevelPopup extends Popup {
 	}
 
 	private function bind(name:String, handler:Void->Void):Void {
-		var binding = LobbyArt.bind(DisplayUtil.findByName(art, name), handler);
+		var binding = LobbyArt.bind(DisplayUtil.directChildByName(art, name), handler);
 		if (binding != null) {
 			bindings.push(binding);
 		}
 	}
 
 	private function titleField():Null<TextField> {
-		return LobbyArt.text(art, "titleBox");
+		return LobbyArt.directText(art, "titleBox");
 	}
 
 	private function noteField():Null<TextField> {
-		return LobbyArt.text(art, "noteBox");
+		return LobbyArt.directText(art, "noteBox");
 	}
 
 	private function publishCheck():Null<GameCheckBox> {
-		return Std.downcast(DisplayUtil.findByName(art, "publish_chk"), GameCheckBox);
+		return Std.downcast(DisplayUtil.directChildByName(art, "publish_chk"), GameCheckBox);
 	}
 
 	private function newestCheck():Null<GameCheckBox> {
-		return Std.downcast(DisplayUtil.findByName(art, "newest_chk"), GameCheckBox);
+		return Std.downcast(DisplayUtil.directChildByName(art, "newest_chk"), GameCheckBox);
 	}
 
 	private static function fieldText(field:Null<TextField>):String {

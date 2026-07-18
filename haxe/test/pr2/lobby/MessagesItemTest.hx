@@ -17,10 +17,12 @@ class MessagesItemTest {
 		testPrivateMessageBodyFormatting();
 		if (pr2.DeterministicTestMode.finishSmokeSuite("MessagesItemTest")) return;
 		testMessageTextStaysInsidePmPane();
+		testExactAuthoredLayout();
 		testFilterSettingAndTrustedHtml();
 		testMessageBodyLinksStayClickable();
 		testTimestampDisplayAndHover();
 		testActionButtonHoverWrappers();
+		testAuthoredActionButtonStates();
 		testReportConfirmationCopy();
 		trace('MessagesItemTest passed $assertions assertions');
 	}
@@ -54,6 +56,39 @@ class MessagesItemTest {
 		item.remove();
 	}
 
+	private static function testExactAuthoredLayout():Void {
+		var item = new MessagesItem(null, 11, "Sender", "1", "Body", true, 1700000000);
+		var name = @:privateAccess item.authoredChild("nameBox");
+		var body = @:privateAccess item.authoredChild("textBox");
+		var time = @:privateAccess item.authoredChild("timeBox");
+		var background = @:privateAccess item.authoredChild("bg");
+		var guild = @:privateAccess item.authoredChild("guildMsgIcon");
+		assertNotNull(name, "authored sender field exists");
+		assertNotNull(body, "authored message field exists");
+		assertNotNull(time, "authored date field exists");
+		assertNotNull(background, "authored TextArea background exists");
+		assertNotNull(guild, "authored everyone icon exists");
+		assertClose(2, name.x, "sender field keeps XFL X");
+		assertClose(6.95, name.y, "sender field keeps XFL Y");
+		assertClose(5, body.x, "message field keeps XFL X");
+		assertClose(29.95, body.y, "message field keeps XFL Y");
+		assertClose(52, time.x, "date field keeps XFL X");
+		assertClose(115.95, time.width, "date field keeps authored width");
+		assertClose(24, background.y, "TextArea skin keeps XFL Y");
+		assertClose(152 * 1.13815307617188, background.width, "TextArea skin keeps XFL horizontal scale");
+		assertClose(157.55, guild.x, "everyone icon keeps XFL X");
+		assertClose(8.2, guild.y, "everyone icon keeps XFL Y");
+		assertClose(0.037689208984375, guild.scaleX, "everyone icon keeps XFL horizontal scale");
+		assertClose(0.0379486083984375, guild.scaleY, "everyone icon keeps XFL vertical scale");
+		assertEquals(true, guild.visible, "guild messages show the authored everyone icon");
+		item.remove();
+
+		var privateItem = new MessagesItem(null, 12, "Sender", "1", "Body", false, 1700000000);
+		var privateGuild = @:privateAccess privateItem.authoredChild("guildMsgIcon");
+		assertEquals(false, privateGuild.visible, "private messages hide the authored everyone icon");
+		privateItem.remove();
+	}
+
 	private static function testActionButtonHoverWrappers():Void {
 		var item = new MessagesItem(null, 7, "Sender", "1", "Body", false, 1700000000);
 		var buttons = @:privateAccess item.actionButtons();
@@ -71,6 +106,31 @@ class MessagesItemTest {
 	private static function assertButton(button:HoverDelayPopup, title:String, content:String):Void {
 		assertEquals(title, button.title, '$title title');
 		assertEquals(content, button.content, '$title content');
+	}
+
+	private static function testAuthoredActionButtonStates():Void {
+		var item = new MessagesItem(null, 10, "Sender", "1", "Body", false, 1700000000);
+		var buttons = @:privateAccess item.actionButtons();
+		var report = buttons[0];
+		var delete = buttons[1];
+		var reply = buttons[2];
+		for (button in buttons) {
+			assertEquals(2, button.numChildren, "authored up state has backing and icon");
+			assertClose(-8, button.getChildAt(0).x, "authored up backing x");
+			button.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_OVER));
+			assertClose(-9, button.getChildAt(0).x, "authored over backing x");
+			assertClose(1.125, button.getChildAt(0).scaleX, "authored over backing scale");
+			button.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN));
+			assertEquals(1, button.numChildren, "authored down state hides the icon");
+			button.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_UP));
+			assertEquals(2, button.numChildren, "mouse up restores authored over icon");
+		}
+		assertClose(-2.25, report.getChildAt(1).x, "report over icon registration x");
+		assertClose(-8.6, report.getChildAt(1).y, "report over icon registration y");
+		assertClose(1.30987548828125, report.getChildAt(1).scaleX, "report over icon authored scale");
+		assertClose(0, delete.getChildAt(1).x, "delete over icon keeps XFL origin");
+		assertClose(0, reply.getChildAt(1).x, "reply over icon keeps XFL origin");
+		item.remove();
 	}
 
 	private static function testReportConfirmationCopy():Void {
@@ -149,5 +209,10 @@ class MessagesItemTest {
 	private static function assertNotNull(value:Dynamic, message:String):Void {
 		assertions++;
 		if (value == null) throw '$message: value was null';
+	}
+
+	private static function assertClose(expected:Float, actual:Float, message:String):Void {
+		assertions++;
+		if (Math.abs(expected - actual) > 0.000001) throw '$message: expected $expected, got $actual';
 	}
 }

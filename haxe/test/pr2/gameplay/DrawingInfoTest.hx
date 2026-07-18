@@ -1,7 +1,11 @@
 package pr2.gameplay;
 
+import openfl.display.DisplayObjectContainer;
+import openfl.events.Event;
+import openfl.text.TextField;
 import pr2.lobby.LobbySession;
 import pr2.net.CommandHandler;
+import pr2.util.DisplayUtil;
 
 class DrawingInfoTest {
 	private static var assertions:Int = 0;
@@ -18,6 +22,15 @@ class DrawingInfoTest {
 	private static function testPlayerDrawingRows():Void {
 		var commands = new CommandHandler();
 		var info = new DrawingInfo(commands);
+		@:privateAccess var shadow = info.info1;
+		var firstName = Std.downcast(DisplayUtil.directChildByName(shadow, "nameBox0"), TextField);
+		var firstTime = Std.downcast(DisplayUtil.directChildByName(shadow, "timeBox0"), TextField);
+		assertEquals(83.45 * 1.0003662109375, firstName.width, "name field retains exact transformed XFL width");
+		assertEquals(1.0003662109375, firstName.scaleX, "name field retains exact XFL horizontal matrix");
+		assertEquals(128.9 * 1.00057983398438, firstTime.width, "time field retains exact transformed XFL width");
+		var drawing = Std.downcast(DisplayUtil.directChildByName(Std.downcast(DisplayUtil.directChildByName(shadow, "anim0"), DisplayObjectContainer), "drawingText"), TextField);
+		@:privateAccess for (_ in 0...4) info.art.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertEquals("drawing.", drawing.text, "drawing timeline enters its exact frame-five label");
 		for (i in 0...4) {
 			assertEquals("", info.playerName(i), 'name $i starts empty');
 			assertEquals("", info.timeText(i), 'time $i starts empty');

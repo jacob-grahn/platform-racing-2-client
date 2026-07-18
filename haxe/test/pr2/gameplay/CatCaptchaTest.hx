@@ -27,6 +27,10 @@ class CatCaptchaTest {
 		CatCaptcha.imageFactory = function(id:Int):CaptchaAnswer return new FakeAnswer(id);
 
 		var popup = new CatCaptcha();
+		assertEquals("assets/svg/effects/cat_captcha_01.svg", CatCaptcha.PANEL_ASSET,
+			"captcha uses the exact authored XFL panel and title");
+		@:privateAccess assertEquals(true, popup.art.getChildByName("exactPanel").width > 440,
+			"authored captcha panel renders at source width");
 		assertEquals(2, countAnswers(popup), "challenge creates two answer images");
 		var first = answerAt(popup, 0);
 		var second = answerAt(popup, 1);
@@ -35,6 +39,11 @@ class CatCaptchaTest {
 		assertEquals(5.0, second.x, "second answer x");
 		assertEquals(-91.0, second.y, "second answer y");
 		popup.remove();
+
+		CatCaptcha.loadFactory = function(_, onError):Void onError();
+		var failed = new CatCaptcha();
+		assertEquals(true, failed.fadeOutStarted, "captcha challenge load error starts the Flash fade-out path");
+		failed.remove();
 	}
 
 	private static function testClickSubmitsAndFades():Void {

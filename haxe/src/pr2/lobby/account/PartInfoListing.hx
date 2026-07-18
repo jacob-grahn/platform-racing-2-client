@@ -40,12 +40,12 @@ class PartInfoListing extends Removable {
 		art = new PartInfoListingView();
 		addChild(art);
 		var root = art;
-		bg = DisplayUtil.findByName(root, "bg");
-		cover = DisplayUtil.findByName(root, "cover");
-		ownedBox = DisplayUtil.findByName(root, "ownedBox");
-		epicBox = LobbyArt.text(root, "epicBox");
-		var title = LobbyArt.text(root, "titleBox");
-		var desc = LobbyArt.text(root, "descBox");
+		bg = DisplayUtil.directChildByName(root, "bg");
+		cover = DisplayUtil.directChildByName(root, "cover");
+		ownedBox = DisplayUtil.directChildByName(root, "ownedBox");
+		epicBox = LobbyArt.directText(root, "epicBox");
+		var title = LobbyArt.directText(root, "titleBox");
+		var desc = LobbyArt.directText(root, "descBox");
 		if (title != null) {
 			title.text = name + " " + ucfirst(type);
 			title.mouseEnabled = false;

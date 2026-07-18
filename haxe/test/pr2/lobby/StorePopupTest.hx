@@ -1,6 +1,7 @@
 package pr2.lobby;
 
 import openfl.events.KeyboardEvent;
+import openfl.events.MouseEvent;
 import openfl.ui.Keyboard;
 import pr2.lobby.dialogs.MessagePopup;
 import pr2.lobby.dialogs.Popup;
@@ -10,6 +11,7 @@ import pr2.lobby.store.StoreListing;
 import pr2.lobby.store.StoreListingData;
 import pr2.lobby.store.StorePopup;
 import pr2.page.LobbyPage;
+import pr2.util.TestDisplayUtil as DisplayUtil;
 
 @:access(pr2.page.LobbyPage)
 @:access(pr2.lobby.store.StorePopup)
@@ -37,11 +39,39 @@ class StorePopupTest {
 		freeListing.remove();
 
 		var saleListing = new StoreListing(sale);
+		var listingBg = saleListing.displayChildForTests("bg");
+		var previewGuide = saleListing.displayChildForTests("previewGuide");
+		var listingCover = saleListing.displayChildForTests("cover");
+		assertClose(8, previewGuide.x, "store preview guide keeps XFL X");
+		assertClose(25, previewGuide.y, "store preview guide keeps XFL Y");
+		assertClose(174 * 0.6436767578125, previewGuide.width, "store preview guide keeps XFL width");
+		assertClose(350 * 0.17999267578125, previewGuide.height, "store preview guide keeps XFL height");
+		assertClose(10.05, saleListing.displayChildForTests("titleBox").x, "store title keeps XFL X");
+		assertClose(7, saleListing.displayChildForTests("titleBox").y, "store title keeps XFL Y");
+		assertClose(10, saleListing.displayChildForTests("descBox").x, "store description keeps XFL X");
+		assertClose(96, saleListing.displayChildForTests("descBox").y, "store description keeps XFL Y");
+		assertClose(8, saleListing.displayChildForTests("priceBG").x, "store price background keeps XFL X");
+		assertClose(70, saleListing.displayChildForTests("priceBG").y, "store price background keeps XFL Y");
+		assertClose(122 * 1.04917907714844, listingBg.width, "store hover background keeps XFL width");
+		assertClose(140 * 1.1142578125, listingBg.height, "store hover background keeps XFL height");
+		assertClose(122 * 1.04917907714844, listingCover.width, "store cover keeps XFL width");
+		assertClose(140 * 0.67132568359375, listingCover.height, "store cover keeps XFL height");
+		assertEquals(false, listingBg.visible, "store hover background starts hidden");
+		listingCover.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_OVER));
+		assertEquals(true, listingBg.visible, "available store cover reveals authored hover background");
+		listingCover.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_OUT));
+		assertEquals(false, listingBg.visible, "store hover background hides on pointer exit");
 		assertEquals(true, saleListing.displayChildForTests("saleBox").x > saleListing.displayChildForTests("coin").x,
 			"sale text sits after the coin icon");
 		assertEquals(true, saleListing.displayChildForTests("priceBG").width > saleListing.displayChildForTests("coin").x,
 			"sale price background expands past the coin icon");
 		saleListing.remove();
+
+		var unavailableListing = new StoreListing(listing({slug: "locked", price: 10, available: false}));
+		assertClose(0.33, unavailableListing.alpha, "unavailable store listings keep Flash dimming");
+		unavailableListing.displayChildForTests("cover").dispatchEvent(new MouseEvent(MouseEvent.MOUSE_OVER));
+		assertEquals(false, unavailableListing.displayChildForTests("bg").visible, "unavailable listings do not install hover behavior");
+		unavailableListing.remove();
 
 		var popup = new StorePopup({
 			info: {user: {coins: 1234567}, title: {title: "Vault Sale", flashing: true}},
@@ -59,6 +89,20 @@ class StorePopupTest {
 		assertEquals(true, LobbyArt.text(popup, "coinsLeftBox").visible, "coin balance becomes visible");
 		assertContains(LobbyArt.text(popup, "coinsLeftBox").htmlText, "1,234,567", "coin balance uses Flash number formatting");
 		assertEquals(true, popup.saleFlashHasItemsForTests(), "sale title/listing text registers with EpicFlash");
+		var panel = DisplayUtil.findByName(popup, "panel");
+		var coinsPanel = DisplayUtil.findByName(popup, "coinsLeftBg");
+		var holder = DisplayUtil.findByName(popup, "itemsHolder");
+		var close = DisplayUtil.findByName(popup, "close_bt");
+		assertClose(-225, panel.x, "store ShadowBG keeps XFL X");
+		assertClose(-175, panel.y, "store ShadowBG keeps XFL Y");
+		assertClose(1.65446472167969, panel.scaleX, "store ShadowBG keeps XFL horizontal scale");
+		assertClose(1.62315368652344, panel.scaleY, "store ShadowBG keeps XFL vertical scale");
+		assertClose(140, coinsPanel.y, "coins ShadowBG keeps XFL Y");
+		assertClose(0.183242797851562, coinsPanel.scaleY, "coins ShadowBG keeps XFL vertical scale");
+		assertClose(-213, holder.x, "store items holder keeps XFL X");
+		assertClose(-135, holder.y, "store items holder keeps XFL Y");
+		assertClose(-50, close.x, "store Close keeps XFL X");
+		assertClose(100.05, close.y, "store Close keeps XFL Y");
 		assertEquals(3, popup.listingsForTests()[0].randomCharactersForTests().length, "epic_everything listing renders three random characters");
 		var scroll = popup.scrollForTests();
 		assertNotNull(scroll, "store mounts authored CustomScrollBar");
@@ -104,6 +148,10 @@ class StorePopupTest {
 
 	private static function assertContains(haystack:String, needle:String, message:String):Void {
 		assertions++; if (haystack == null || haystack.indexOf(needle) < 0) throw '$message: expected to find $needle in $haystack';
+	}
+
+	private static function assertClose(expected:Float, actual:Float, message:String):Void {
+		assertions++; if (Math.abs(expected - actual) > 0.000001) throw '$message: expected $expected, got $actual';
 	}
 
 	private static function testPurchaseUploadCallbacks():Void {

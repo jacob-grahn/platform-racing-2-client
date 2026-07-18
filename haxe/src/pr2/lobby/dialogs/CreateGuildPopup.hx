@@ -11,6 +11,7 @@ import pr2.net.FormPostClient;
 import pr2.net.ServerConfig;
 import pr2.net.TextLoader;
 import pr2.ui.controls.GameTextInput;
+import pr2.ui.controls.GameTextArea;
 import pr2.ui.EmblemLoader;
 import pr2.util.AsyncRemovalGuard;
 import pr2.util.DisplayUtil;
@@ -42,9 +43,9 @@ class CreateGuildPopup extends Popup {
 		setVisible("transfer_bg", false);
 		setVisible("transfer_bt", false);
 		setVisible("deleteEmblem_bt", false);
-		bindings.push(LobbyArt.bind(DisplayUtil.findByName(art, "cancel_bt"), clickCancel));
-		bindings.push(LobbyArt.bind(DisplayUtil.findByName(art, "confirm_bt"), clickConfirm));
-		bindings.push(LobbyArt.bind(DisplayUtil.findByName(art, "changeEmblem_bt"), clickChangeEmblem));
+		bindings.push(LobbyArt.bind(DisplayUtil.directChildByName(art, "cancel_bt"), clickCancel));
+		bindings.push(LobbyArt.bind(DisplayUtil.directChildByName(art, "confirm_bt"), clickConfirm));
+		bindings.push(LobbyArt.bind(DisplayUtil.directChildByName(art, "changeEmblem_bt"), clickChangeEmblem));
 
 		emblem = new EmblemLoader(100, 50, ServerConfig.emblemUploadUrl(), ServerConfig.emblemsUrl());
 		emblem.x = -43;
@@ -59,7 +60,7 @@ class CreateGuildPopup extends Popup {
 			if (LobbySession.guildId == guildId && LobbySession.guildOwner) {
 				setVisible("transfer_bg", true);
 				setVisible("transfer_bt", true);
-				transferBinding = LobbyArt.bind(DisplayUtil.findByName(art, "transfer_bt"), clickTransfer);
+				transferBinding = LobbyArt.bind(DisplayUtil.directChildByName(art, "transfer_bt"), clickTransfer);
 			}
 		}
 	}
@@ -94,7 +95,7 @@ class CreateGuildPopup extends Popup {
 		}
 		if (nextEmblem != "" && nextEmblem != DEFAULT_EMBLEM && guildId != 0) {
 			setVisible("deleteEmblem_bt", true);
-			deleteBinding = LobbyArt.bind(DisplayUtil.findByName(art, "deleteEmblem_bt"), clickDeleteEmblem);
+			deleteBinding = LobbyArt.bind(DisplayUtil.directChildByName(art, "deleteEmblem_bt"), clickDeleteEmblem);
 		}
 		loading = false;
 	}
@@ -114,7 +115,7 @@ class CreateGuildPopup extends Popup {
 			return;
 		}
 		loading = true;
-		var confirm = DisplayUtil.findByName(art, "confirm_bt");
+		var confirm = DisplayUtil.directChildByName(art, "confirm_bt");
 		if (confirm != null) {
 			confirm.alpha = 0.33;
 		}
@@ -146,7 +147,7 @@ class CreateGuildPopup extends Popup {
 
 	private function saveError(_:String):Void {
 		loading = false;
-		var confirm = DisplayUtil.findByName(art, "confirm_bt");
+		var confirm = DisplayUtil.directChildByName(art, "confirm_bt");
 		if (confirm != null) {
 			confirm.alpha = 1;
 		}
@@ -172,13 +173,18 @@ class CreateGuildPopup extends Popup {
 	}
 
 	private function setVisible(name:String, visible:Bool):Void {
-		var target = DisplayUtil.findByName(art, name);
+		var target = DisplayUtil.directChildByName(art, name);
 		if (target != null) {
 			target.visible = visible;
 		}
 	}
 
 	private function setText(name:String, value:String):Void {
+		var area = textArea(name);
+		if (area != null) {
+			area.text = value;
+			return;
+		}
 		var field = textField(name);
 		if (field != null) {
 			field.text = value;
@@ -191,6 +197,8 @@ class CreateGuildPopup extends Popup {
 	}
 
 	private function textValue(name:String):String {
+		var area = textArea(name);
+		if (area != null) return area.text;
 		var input = textInput(name);
 		if (input != null) return input.text;
 		var field = textField(name);
@@ -198,11 +206,15 @@ class CreateGuildPopup extends Popup {
 	}
 
 	private function textField(name:String):Null<TextField> {
-		return LobbyArt.text(art, name);
+		return LobbyArt.directText(art, name);
 	}
 
 	private function textInput(name:String):Null<GameTextInput> {
-		return Std.downcast(DisplayUtil.findByName(art, name), GameTextInput);
+		return Std.downcast(DisplayUtil.directChildByName(art, name), GameTextInput);
+	}
+
+	private function textArea(name:String):Null<GameTextArea> {
+		return Std.downcast(DisplayUtil.directChildByName(art, name), GameTextArea);
 	}
 
 	private static function intAny(ret:Dynamic, names:Array<String>):Int {

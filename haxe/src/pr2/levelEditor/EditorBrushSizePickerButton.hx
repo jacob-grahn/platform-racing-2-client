@@ -13,7 +13,7 @@ class EditorBrushSizePickerButton extends EditorSideBarEntry {
 		art.mouseEnabled = false;
 		art.mouseChildren = false;
 		addChild(art);
-		circle = Std.downcast(DisplayUtil.findByName(art, "circle"), DisplayObject);
+		circle = Std.downcast(DisplayUtil.directChildByName(art, "circle"), DisplayObject);
 		updateCircle();
 	}
 
@@ -38,7 +38,7 @@ class EditorBrushSizePickerButton extends EditorSideBarEntry {
 		}
 		var editor = LevelEditor.editor;
 		var size = editor == null ? EditorDrawableLayer.DEFAULT_BRUSH_SIZE : editor.brushSize;
-		var previewSize = Math.min(Math.sqrt(size) * 3, 28);
+		var previewSize = Math.sqrt(size) * 3;
 		circle.width = previewSize;
 		circle.height = previewSize;
 	}

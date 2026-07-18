@@ -143,8 +143,8 @@ def parse_point(element):
 
 
 # Filter element types we carry through to the runtime. Other Animate filters
-# (Bevel, gradient glow/bevel, adjust color, convolution) are not used by the
-# PR2 library and have no OpenFL mapping here, so they are skipped.
+# (Bevel, gradient glow/bevel, adjust color, convolution) have no typed OpenFL
+# mapping here; parse_unsupported_filters retains them as deterministic raw data.
 SUPPORTED_FILTERS = ("BlurFilter", "GlowFilter", "DropShadowFilter")
 FILTER_FLOAT_ATTRS = ("blurX", "blurY", "strength", "alpha", "angle", "distance")
 FILTER_INT_ATTRS = ("quality",)
@@ -181,6 +181,21 @@ def parse_filter(element):
     return record
 
 
+def parse_raw_element(element):
+    """Deterministic JSON form for unsupported XFL metadata that must not be discarded."""
+    record = {
+        "type": local_name(element.tag),
+        "attrs": {key: value for key, value in sorted(element.attrib.items())},
+    }
+    text = (element.text or "").strip()
+    if text:
+        record["text"] = text
+    children = [parse_raw_element(child) for child in list(element)]
+    if children:
+        record["children"] = children
+    return compact_record(record)
+
+
 def filter_is_noop(record):
     """A filter that produces no visible output, so it can be dropped instead of
     paying for a per-frame raster + GPU texture upload.
@@ -211,6 +226,13 @@ def parse_filters(element):
             continue
         filters.append(record)
     return filters
+
+
+def parse_unsupported_filters(element):
+    wrapper = first_direct_child(element, "filters")
+    if wrapper is None:
+        return []
+    return [parse_raw_element(child) for child in list(wrapper) if local_name(child.tag) not in SUPPORTED_FILTERS]
 
 
 def parse_color_transform(element):
@@ -388,6 +410,10 @@ def parse_common_display_attrs(element):
     filters = parse_filters(element)
     if filters:
         record["filters"] = filters
+
+    unsupported_filters = parse_unsupported_filters(element)
+    if unsupported_filters:
+        record["unsupportedFilters"] = unsupported_filters
 
     return compact_record(record)
 
@@ -635,6 +661,9 @@ def parse_frame(frame):
             "labelType": attrs.get("labelType"),
             "keyMode": maybe_int(attrs.get("keyMode")),
             "motionTweenScale": parse_bool(attrs.get("motionTweenScale")),
+            "tweenType": attrs.get("tweenType"),
+            "acceleration": maybe_float(attrs.get("acceleration")),
+            "hasCustomEase": parse_bool(attrs.get("hasCustomEase")),
             "soundName": attrs.get("soundName"),
             "soundEffect": attrs.get("soundEffect"),
             "soundSync": attrs.get("soundSync"),
@@ -650,6 +679,20 @@ def parse_frame(frame):
         record["elements"] = display_elements
     if sound_envelope:
         record["soundEnvelope"] = sound_envelope
+
+    known_attrs = {
+        "index", "duration", "name", "labelType", "keyMode", "motionTweenScale",
+        "tweenType", "acceleration", "hasCustomEase", "soundName", "soundEffect",
+        "soundSync", "soundLoopMode", "soundLoop", "inPoint44", "outPoint44",
+    }
+    unsupported_attrs = {key: value for key, value in sorted(attrs.items()) if key not in known_attrs}
+    unsupported_children = [
+        parse_raw_element(child)
+        for child in list(frame)
+        if local_name(child.tag) not in ("elements", "SoundEnvelope")
+    ]
+    if unsupported_attrs or unsupported_children:
+        record["unsupported"] = compact_record({"attrs": unsupported_attrs, "children": unsupported_children})
     return record
 
 
@@ -867,8 +910,15 @@ def parse_symbol_linkages(xfl_dir, symbol_includes):
             continue
 
         root = parse_xml(path)
-        attrs = root.attrib
-        record = {
+        records.append(parse_symbol_record(root, href))
+
+    return records
+
+
+def parse_symbol_record(root, href=None):
+    attrs = root.attrib
+    return compact_record(
+        {
             "href": href,
             "type": local_name(root.tag),
             "name": attrs.get("name"),
@@ -882,9 +932,7 @@ def parse_symbol_linkages(xfl_dir, symbol_includes):
             "scaleGridBottom": maybe_float(attrs.get("scaleGridBottom")),
             "timelines": parse_timelines(root),
         }
-        records.append(compact_record(record))
-
-    return records
+    )
 
 
 def build_metadata(xfl_dir):

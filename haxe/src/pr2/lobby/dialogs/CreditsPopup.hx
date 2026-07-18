@@ -43,7 +43,7 @@ class CreditsPopup extends Popup {
 		updateMusicNav();
 		if (artNav != null) artNav.addEventListener(TextEvent.LINK, clickArtNav);
 		if (musicNav != null) musicNav.addEventListener(TextEvent.LINK, clickMusicNav);
-		closeBinding = LobbyArt.bind(DisplayUtil.findByName(art, "close_bt"), function():Void startFadeOut());
+		closeBinding = LobbyArt.bind(DisplayUtil.directChildByName(art, "close_bt"), function():Void startFadeOut());
 	}
 
 	private function clickArtNav(event:TextEvent):Void {
@@ -77,7 +77,7 @@ class CreditsPopup extends Popup {
 	}
 
 	private function findText(name:String):Null<TextField> {
-		return Std.downcast(DisplayUtil.findByName(art, name), TextField);
+		return Std.downcast(DisplayUtil.directChildByName(art, name), TextField);
 	}
 
 	private function setText(name:String, value:String):Void {
@@ -86,7 +86,7 @@ class CreditsPopup extends Popup {
 	}
 
 	private function setPageVisible(name:String, visible:Bool):Void {
-		var page = DisplayUtil.findByName(art, name);
+		var page = DisplayUtil.directChildByName(art, name);
 		if (page != null) page.visible = visible;
 	}
 

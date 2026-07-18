@@ -75,9 +75,11 @@ class CourseParticleEffects {
 	}
 
 	private function djinnTargetPart(request:DjinnEmitterRequest):Null<DisplayObject> {
-		var stateName = request.target.state == null ? "standAnim" : request.target.state + "Anim";
-		var stateClip = request.target.display.getStateClip(stateName);
-		return stateClip == null ? null : stateClip.getChildByTimelineName(request.slot);
+		return request.target.display.effectTarget(switch (request.slot) {
+			case "foot1": "frontFoot";
+			case "foot2": "backFoot";
+			default: request.slot;
+		});
 	}
 
 	private function djinnParams(request:DjinnEmitterRequest):PhysicsParticleParams {

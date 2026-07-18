@@ -23,6 +23,8 @@ class ColorPickerTest {
 		testPopupOrientationAndDirection();
 		testPopupTextPaletteAndCancel();
 		testPopupSpectrumAndHue();
+		testAuthoredPickerArtRegistration();
+		testExactPopupShell();
 		testCursorEyedropperSamplingAndExclusions();
 		testPopupRestoresPriorCustomCursor();
 		trace('ColorPickerTest passed $assertions assertions');
@@ -73,6 +75,9 @@ class ColorPickerTest {
 		resetRecents();
 		var picker = new ColorPicker();
 		assertEquals(0x0000FF, picker.getColor(), "default Flash picker color");
+		assertClose(30, picker.width, "picker swatch keeps ColorPickerGraphic width");
+		assertClose(30, picker.height, "picker swatch keeps ColorPickerGraphic height");
+		assertEquals("swatchSkin", picker.getChildAt(1).name, "picker uses authored ColorPicker over-skin asset");
 		var changes = 0;
 		var opens = 0;
 		var closes = 0;
@@ -164,6 +169,54 @@ class ColorPickerTest {
 		@:privateAccess popup.dragHueSlider(mouseEventAt(@:privateAccess popup.hueSlider, 1, 30));
 		assertEquals(180, Math.round(@:privateAccess popup.hue), "hue slider maps midpoint to 180 degrees");
 		assertEquals(0x00FFFF, popup.getColor(), "hue slider updates color");
+		popup.remove();
+	}
+
+	private static function testAuthoredPickerArtRegistration():Void {
+		var popup = new ColorPickerPopup(0xFF0000);
+		var crosshairs = Std.downcast(@:privateAccess popup.crosshairs, Sprite);
+		assertEquals(2, crosshairs.numChildren, "crosshairs preserve both authored Symbol 1202 layers");
+		assertClose(0, crosshairs.getChildAt(0).transform.matrix.tx, "crosshairs keep the XFL origin");
+		assertClose(0, crosshairs.getChildAt(1).transform.matrix.ty, "crosshairs front keeps the XFL origin");
+		var hueRoot = Std.downcast(@:privateAccess popup.hueArrow, Sprite);
+		var hueMatrix = hueRoot.getChildByName("hueArrowArt").transform.matrix;
+		assertClose(0, hueMatrix.a, "hue arrow authored matrix a");
+		assertClose(0.119796752929688, hueMatrix.b, "hue arrow authored matrix b");
+		assertClose(-0.120452880859375, hueMatrix.c, "hue arrow authored matrix c");
+		assertClose(4.5, hueMatrix.tx, "hue arrow authored registration x");
+		assertClose(-4.5, hueMatrix.ty, "hue arrow authored registration y");
+		assertEquals(60.0, @:privateAccess popup.hueArrow.y, "zero-degree hue uses the authored bottom endpoint");
+		popup.setColor(0x0000FF);
+		assertEquals(20.0, @:privateAccess popup.hueArrow.y, "240-degree hue tracks the authored slider range");
+		popup.remove();
+
+		var eyedropper = new CursorEyedropper(new Bitmap(new BitmapData(1, 1, false, 0)));
+		var root = Std.downcast(eyedropper.getChildByName("eyedropperRoot"), Sprite);
+		var art = Std.downcast(root.getChildByName("eyedropperArt"), Sprite);
+		assertClose(6.4, art.x, "eyedropper retains the authored child registration x after root centering");
+		assertClose(-8.4, art.y, "eyedropper retains the authored child registration y after root centering");
+		assertClose(0.681365966796875, art.scaleX, "eyedropper retains the authored child scale");
+		assertEquals(2, art.numChildren, "eyedropper preserves both authored Symbol 1302 layers");
+		eyedropper.remove();
+	}
+
+	private static function testExactPopupShell():Void {
+		var popup = new ColorPickerPopup(0x123456);
+		var art = @:privateAccess popup.art;
+		assertClose(0, art.panel.x, "color picker ShadowBG keeps XFL X");
+		assertClose(0, art.panel.y, "color picker ShadowBG keeps XFL Y");
+		assertClose(0.919113159179688, art.panel.scaleX, "color picker ShadowBG keeps XFL horizontal scale");
+		assertClose(1.36125183105469, art.panel.scaleY, "color picker ShadowBG keeps XFL vertical scale");
+		assertClose(115, art.textInput.x, "color input keeps XFL X");
+		assertClose(150, art.textInput.y, "color input keeps XFL Y");
+		assertClose(100 * 1.19999694824219, art.textInput.controlWidth, "color input keeps authored horizontal scale");
+		assertClose(22, art.textInput.controlHeight, "color input keeps authored height");
+		assertClose(74, art.okButton.x, "OK keeps XFL X");
+		assertClose(225, art.okButton.y, "OK keeps XFL Y");
+		assertClose(100 * 0.750152587890625, art.okButton.controlWidth, "OK keeps authored horizontal scale");
+		assertClose(162, art.cancelButton.x, "Cancel keeps XFL X");
+		assertClose(225, art.cancelButton.y, "Cancel keeps XFL Y");
+		assertClose(100 * 0.750152587890625, art.cancelButton.controlWidth, "Cancel keeps authored horizontal scale");
 		popup.remove();
 	}
 

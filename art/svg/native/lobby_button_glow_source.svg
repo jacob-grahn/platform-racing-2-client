@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="95px" height="27px" viewBox="0 0 95 27" preserveAspectRatio="none" data-xfl-root="MovieClips/Symbol 1077">
+  <g data-xfl-symbol="MovieClips/Symbol 1077">
+    <g data-svg-leaf="movieclips_symbol_1077_064b7cc2b7/t00_l000_f0000_r00.svg">
+      <defs>
+        <g id="xfl1_Layer0_0_FILL">
+          <path fill="#FFFFFF" stroke="none" d=" M 95 23.4 L 95 3.55 Q 95 0 88.1 0 L 6.9 0 Q 0 0 0 3.55 L 0 23.4 Q 0 27 6.9 27 L 88.1 27 Q 95 27 95 23.4 Z" />
+        </g>
+      </defs>
+      <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+        <use xlink:href="#xfl1_Layer0_0_FILL" />
+      </g>
+    </g>
+  </g>
+</svg>

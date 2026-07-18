@@ -5,9 +5,9 @@ import openfl.text.TextField;
 import openfl.text.TextFormat;
 import pr2.Constants;
 import pr2.app.DebugSignal;
-import pr2.character.CharacterDisplay;
+import pr2.character.CharacterView;
 
-/** Side-by-side, motionless comparison of stand frame 1 with explicit caches off/on. */
+/** Side-by-side, motionless native-rig smoke preview retained at the old debug route. */
 class CharacterPartCachePreview extends Sprite {
 	private static inline var PANEL_WIDTH:Float = 245;
 	private static inline var ANCHOR_Y:Float = 250;
@@ -18,8 +18,8 @@ class CharacterPartCachePreview extends Sprite {
 		graphics.drawRect(0, 0, Constants.STAGE_WIDTH, Constants.STAGE_HEIGHT);
 		graphics.endFill();
 
-		addPanel(20, "UNCACHED", false);
-		addPanel(285, "EXPLICIT PART CACHE", true);
+		addPanel(20, "NATIVE CLASSIC", false);
+		addPanel(285, "NATIVE MIXED PARTS", true);
 		DebugSignal.set("character-part-cache", "ready");
 	}
 
@@ -48,11 +48,8 @@ class CharacterPartCachePreview extends Sprite {
 		label.x = anchorX - label.width / 2;
 		addChild(label);
 
-		var character = new CharacterDisplay(
-			{hat: 5, head: 1, body: 1, feet: 1},
-			{primary: 0x3399FF, secondary: 0xFFD24A},
-			cached
-		);
+		var character = new CharacterView(0x3399FF, 0xFFD24A, null, "stand",
+			cached ? {head: 37, body: 28, feet: 40} : {head: 1, body: 1, feet: 1}, cached ? [6, 5, 1, 1] : [5, 1, 1, 1]);
 		character.x = anchorX;
 		character.y = ANCHOR_Y;
 		character.scaleX = character.scaleY = 3;

@@ -22,7 +22,7 @@ class EditorItemSettingsPopup extends Sprite {
 		art = new ChecklistMenuView("items");
 		addChild(art);
 		for (itemId in Items.getAllCodes()) {
-			var check:Null<GameCheckBox> = Std.downcast(DisplayUtil.findByName(art, "check" + itemId), GameCheckBox);
+			var check:Null<GameCheckBox> = Std.downcast(DisplayUtil.directChildByName(art, "check" + itemId), GameCheckBox);
 			if (check != null) {
 				check.selected = editor.allowedItems.indexOf(itemId) >= 0;
 				checks.set(itemId, check);

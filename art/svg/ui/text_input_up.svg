@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="550px" height="400px" viewBox="0 0 550 400" preserveAspectRatio="none" data-xfl-root="Components/Component Assets/TextInputSkins/TextInput_upSkin">
+  <g data-xfl-symbol="Components/Component Assets/TextInputSkins/TextInput_upSkin">
+    <g data-svg-leaf="components_component_assets_textinputskins_textinput_upskin_2ab47de342/t00_l000_f0000_r00.svg">
+      <defs>
+        <g id="xfl1_Layer0_0_FILL">
+          <path fill="#C9CBCC" stroke="none" d=" M 1 22 L 1 21 1 1 0 1 0 22 1 22 M 151 0 L 151 1 151 21 151 22 152 22 152 0 151 0 Z" />
+          <path fill="#D3D5D6" stroke="none" d=" M 151 22 L 151 21 1 21 1 22 151 22 Z" />
+          <path fill="#FFFFFF" stroke="none" d=" M 151 21 L 151 1 1 1 1 21 151 21 Z" />
+          <path fill="#6D6F70" stroke="none" d=" M 151 1 L 151 0 0 0 0 1 1 1 151 1 Z" />
+        </g>
+      </defs>
+      <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+        <use xlink:href="#xfl1_Layer0_0_FILL" />
+      </g>
+    </g>
+  </g>
+</svg>

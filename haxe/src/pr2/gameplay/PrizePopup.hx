@@ -145,7 +145,7 @@ class PrizePopup extends Popup {
 		titleText = type == "cancel" ? "-- " + prizeName + " --" : "--- " + prizeName + "! ---";
 		setText(textField(art, "titleBox"), titleText);
 
-		closeBinding = LobbyArt.bind(DisplayUtil.findByName(art, "close_bt"), function():Void startFadeOut());
+		closeBinding = LobbyArt.bind(DisplayUtil.directChildByName(art, "close_bt"), function():Void startFadeOut());
 		addChild(art);
 		PrizePopup.instance = this;
 	}
@@ -172,7 +172,7 @@ class PrizePopup extends Popup {
 			}
 			field.autoSize = openfl.text.TextFieldAutoSize.LEFT;
 			flavorText = field.text;
-			var bg = DisplayUtil.findByName(art, "flavorBg");
+			var bg = DisplayUtil.directChildByName(art, "flavorBg");
 			if (bg != null) {
 				bg.height = field.height + 15;
 			}
@@ -191,15 +191,15 @@ class PrizePopup extends Popup {
 	// --- authored-art helpers -------------------------------------------------
 
 	private function container(name:String):Null<DisplayObjectContainer> {
-		return Std.downcast(DisplayUtil.findByName(art, name), DisplayObjectContainer);
+		return Std.downcast(DisplayUtil.directChildByName(art, name), DisplayObjectContainer);
 	}
 
 	private function child(parent:Null<DisplayObjectContainer>, name:String):Null<DisplayObject> {
-		return parent == null ? null : DisplayUtil.findByName(parent, name);
+		return parent == null ? null : DisplayUtil.directChildByName(parent, name);
 	}
 
 	private function textField(parent:Null<DisplayObjectContainer>, name:String):Null<TextField> {
-		return LobbyArt.text(parent, name);
+		return LobbyArt.directText(parent, name);
 	}
 
 	private function setText(field:Null<TextField>, value:String):Void {
@@ -209,7 +209,7 @@ class PrizePopup extends Popup {
 	}
 
 	private function setVisible(name:String, visible:Bool):Void {
-		var d = DisplayUtil.findByName(art, name);
+		var d = DisplayUtil.directChildByName(art, name);
 		if (d != null) {
 			d.visible = visible;
 		}
@@ -223,14 +223,14 @@ class PrizePopup extends Popup {
 	}
 
 	private function moveY(name:String, y:Float):Void {
-		var d = DisplayUtil.findByName(art, name);
+		var d = DisplayUtil.directChildByName(art, name);
 		if (d != null) {
 			d.y = y;
 		}
 	}
 
 	private function setHeight(name:String, height:Float):Void {
-		var d = DisplayUtil.findByName(art, name);
+		var d = DisplayUtil.directChildByName(art, name);
 		if (d != null) {
 			d.height = height;
 		}
@@ -239,11 +239,11 @@ class PrizePopup extends Popup {
 	private function gotoChild(target:Null<DisplayObject>, frame:Int):Void {
 		var clip = Std.downcast(target, PrizePartSymbol);
 		if (clip != null) {
-			clip.gotoAndStop(frame);
+			clip.setPartFrame(frame);
 			return;
 		}
 		var channel = Std.downcast(target, PrizePartSymbolChannel);
-		if (channel != null) channel.gotoAndStop(frame);
+		if (channel != null) channel.setPartFrame(frame);
 	}
 
 	/** Mirrors `Data.aOrAn`: "an" before a vowel, otherwise "a". */

@@ -100,9 +100,9 @@ class PhysicsParticle extends Sprite {
 
 	private function makeGraphic(name:String):DisplayObject {
 		if (name != "DjinnIceGraphic") throw 'Unsupported native particle graphic $name';
-		var ice = NativeAssets.svg(StaticSvg.DjinnIce);
-		ice.scaleX = ice.scaleY = 0.100006103515625;
-		return ice;
+		// The source-derived SVG already contains Symbol 1200's authored 0.100006
+		// instance matrix. Applying it again shrinks the 10x10 particle to 1x1.
+		return NativeAssets.svg(StaticSvg.DjinnIce);
 	}
 
 	private function randRange(min:Null<Float>, max:Null<Float>):Float {

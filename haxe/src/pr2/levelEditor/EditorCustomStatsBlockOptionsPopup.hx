@@ -6,7 +6,6 @@ import pr2.lobby.account.StatSlider;
 import pr2.lobby.dialogs.HoverPopup;
 import pr2.page.EditorBlockOptions;
 import pr2.ui.controls.GameCheckBox;
-import pr2.util.DisplayUtil;
 
 class EditorCustomStatsBlockOptionsPopup extends EditorBlockOptionsPopup {
 	private var speedSlider:StatSlider;
@@ -20,7 +19,7 @@ class EditorCustomStatsBlockOptionsPopup extends EditorBlockOptionsPopup {
 		speedSlider = makeSlider("Speed", "speedSlider", -62.75, -40);
 		accelSlider = makeSlider("Acceleration", "accelSlider", -62.75, 0);
 		jumpnSlider = makeSlider("Jumping", "jumpnSlider", -62.75, 40);
-		resetCheck = Std.downcast(DisplayUtil.findByName(art, "resetChk"), GameCheckBox);
+		resetCheck = Std.downcast(art.childNamed("resetChk"), GameCheckBox);
 		if (resetCheck != null) {
 			resetCheck.addEventListener(Event.CHANGE, onResetClick);
 			resetCheck.addEventListener(MouseEvent.MOUSE_OVER, onResetMouse);

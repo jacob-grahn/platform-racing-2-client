@@ -5,40 +5,49 @@ import openfl.text.TextField;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
 import pr2.assets.NativeAssetIds.FontAsset;
+import pr2.assets.NativeAssetIds.StaticSvg;
 import pr2.assets.NativeAssets;
 import pr2.ui.controls.GameButton;
 import pr2.ui.view.NativeView;
 
-/** Native catalog shell shared by the Vault and part-information browser. */
+/** Exact native composition of the authored StorePopupGraphic shell. */
 class StorePopupView extends NativeView {
+	public final panel:Sprite;
+	public final coinsPanel:Sprite;
+
 	public function new() {
 		super();
-		graphics.beginFill(0xF4F4F4, 0.98);
-		graphics.lineStyle(2, 0x666666);
-		graphics.drawRoundRect(-215, -150, 430, 300, 14, 14);
-		graphics.endFill();
-		field("titleBox", -170, -137, 340, 24, 17, true, TextFormatAlign.CENTER);
-		var coinsBg = new Sprite();
-		coinsBg.name = "coinsLeftBg";
-		coinsBg.graphics.beginFill(0xE7E7E7);
-		coinsBg.graphics.drawRoundRect(-190, -108, 380, 25, 7, 7);
-		coinsBg.graphics.endFill();
-		addChild(coinsBg);
-		field("coinsLeftBox", -185, -105, 370, 20, 10, false, TextFormatAlign.CENTER);
+		panel = panelAt("panel", -225, -175, 1.65446472167969, 1.62315368652344);
+		coinsPanel = panelAt("coinsLeftBg", -225, 140, 1.65446472167969, 0.183242797851562);
+		field("titleBox", -211.75, -162.05, 423.75, 14.55, 12, true, TextFormatAlign.CENTER, 0x000000);
+		field("coinsLeftBox", -222.75, 149.5, 445.75, 14.55, 12, true, TextFormatAlign.CENTER, 0xBB0000);
 		var holder = new Sprite();
 		holder.name = "itemsHolder";
-		holder.x = -202;
-		holder.y = -74;
+		holder.x = -213;
+		holder.y = -135;
 		addChild(holder);
 		var close = ownControl(new GameButton("Close"));
 		close.name = "close_bt";
-		close.x = -44;
-		close.y = 116;
-		close.setSize(88, 24);
+		close.x = -50;
+		close.y = 100.05;
+		close.setSize(100, 22);
 		addChild(close);
 	}
 
-	private function field(name:String, x:Float, y:Float, width:Float, height:Float, size:Int, bold:Bool, align:TextFormatAlign):Void {
+	private function panelAt(name:String, x:Float, y:Float, scaleX:Float, scaleY:Float):Sprite {
+		var holder = new Sprite();
+		holder.name = name;
+		holder.x = x;
+		holder.y = y;
+		holder.scaleX = scaleX;
+		holder.scaleY = scaleY;
+		holder.addChild(NativeAssets.svg(StaticSvg.QuantityPanel));
+		addChild(holder);
+		return holder;
+	}
+
+	private function field(name:String, x:Float, y:Float, width:Float, height:Float, size:Int, bold:Bool, align:TextFormatAlign,
+		color:Int):Void {
 		var text = new TextField();
 		text.name = name;
 		text.x = x;
@@ -46,7 +55,7 @@ class StorePopupView extends NativeView {
 		text.width = width;
 		text.height = height;
 		text.selectable = false;
-		text.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), size, 0x222222, bold, null, null, null, null, align);
+		text.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), size, color, bold, null, null, null, null, align);
 		addChild(text);
 	}
 }

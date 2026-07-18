@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="550px" height="400px" viewBox="0 0 550 400" preserveAspectRatio="none" data-xfl-root="UI/Pages/Levels/In-Game/Effects/LaserShot">
+  <g data-xfl-symbol="UI/Pages/Levels/In-Game/Effects/LaserShot">
+    <g transform="matrix(1 0 0 1 -21.6 0)">
+      <g data-xfl-symbol="MovieClips/Symbol 1005">
+        <g data-svg-leaf="movieclips_symbol_1005_29f39da321/t00_l000_f0000_r00.svg">
+          <defs>
+            <radialGradient id="xfl2_Gradient_1" gradientUnits="userSpaceOnUse" cx="0" cy="0" r="36.6" fx="0" fy="0" gradientTransform="matrix( 1, 0, 0, 0.2957650273224044, 21.6,0) " spreadMethod="pad">
+              <stop offset="0%" stop-color="#FFFFFF" />
+              <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0" />
+            </radialGradient>
+            <g id="xfl2_Layer0_0_FILL">
+              <path fill="url(#xfl2_Gradient_1)" stroke="none" d=" M 11.2 7.45 Q 21.6 4.35 21.6 0 21.6 -4.35 11.2 -7.4 0.8 -10.5 -13.9 -10.5 L -21.65 -10.25 -21.65 10.3 -13.9 10.5 Q 0.8 10.5 11.2 7.45 Z" />
+            </g>
+          </defs>
+          <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+            <use xlink:href="#xfl2_Layer0_0_FILL" />
+          </g>
+        </g>
+      </g>
+    </g>
+    <g data-xfl-symbol="Graphics/Symbol 1006">
+      <g data-svg-leaf="graphics_symbol_1006_eebdbd0862/t00_l001_f0000_r00.svg">
+        <defs>
+          <path id="xfl3_Layer0_0_1_STROKES" stroke="#FDFD02" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" fill="none" d=" M -40 0 L 0 0" />
+        </defs>
+        <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+          <use xlink:href="#xfl3_Layer0_0_1_STROKES" />
+        </g>
+      </g>
+      <g data-svg-leaf="graphics_symbol_1006_eebdbd0862/t00_l000_f0000_r00.svg">
+        <defs>
+          <linearGradient id="xfl4_Gradient_1" gradientUnits="userSpaceOnUse" x1="-41" y1="0" x2="1" y2="0" spreadMethod="pad">
+            <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0" />
+            <stop offset="100%" stop-color="#FFFFFF" />
+          </linearGradient>
+          <path id="xfl4_Layer0_0_1_STROKES" stroke="url(#xfl4_Gradient_1)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" fill="none" d=" M -40 0 L 0 0" />
+        </defs>
+        <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+          <use xlink:href="#xfl4_Layer0_0_1_STROKES" />
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

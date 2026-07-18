@@ -6,10 +6,11 @@ import openfl.events.MouseEvent;
 import pr2.crypto.PR2Encryptor;
 import pr2.lobby.dialogs.ChangePasswordPopup;
 import pr2.lobby.dialogs.MessagePopup;
+import pr2.lobby.dialogs.NativeFormView;
 import pr2.lobby.dialogs.Popup;
 import pr2.net.ServerConfig;
 import pr2.ui.controls.GameTextInput;
-import pr2.util.DisplayUtil;
+import pr2.util.TestDisplayUtil as DisplayUtil;
 
 class ChangePasswordPopupTest {
 	private static inline var LOGIN_KEY:String = "VUovam5GKndSMHFSSy9kSA==";
@@ -43,9 +44,20 @@ class ChangePasswordPopupTest {
 		};
 
 		var popup = new ChangePasswordPopup();
+		var art = formView(popup);
+		assertEquals(-145.0, art.panels[0].x, "change-password ShadowBG keeps its XFL X");
+		assertEquals(-88.25, art.panels[0].y, "change-password ShadowBG keeps its XFL Y");
+		assertEquals(1.06626892089844, art.panels[0].scaleX, "change-password ShadowBG keeps its XFL horizontal scale");
+		assertEquals(0.9222412109375, art.panels[0].scaleY, "change-password ShadowBG keeps its XFL vertical scale");
 		assertPasswordInput(popup, "currentPassBox");
 		assertPasswordInput(popup, "newPassBox1");
 		assertPasswordInput(popup, "newPassBox2");
+		assertEquals(20.2, input(popup, "currentPassBox").x, "current password input keeps its XFL X");
+		assertEquals(-43.0, input(popup, "currentPassBox").y, "current password input keeps its XFL Y");
+		assertEquals(110.000610351562, input(popup, "newPassBox2").controlWidth, "password inputs keep the authored width");
+		assertEquals(-80.0, art.submitButton.x, "change-password OK button keeps its XFL X");
+		assertEquals(7.0, art.cancelButton.x, "change-password Cancel button keeps its XFL X");
+		assertEquals(52.0, art.submitButton.y, "change-password buttons keep their XFL Y");
 		input(popup, "currentPassBox").text = "old";
 		input(popup, "newPassBox1").text = "new";
 		input(popup, "newPassBox2").text = "different";
@@ -98,6 +110,14 @@ class ChangePasswordPopupTest {
 		var value = Std.downcast(DisplayUtil.findByName(popup, name), GameTextInput);
 		if (value == null) throw name + " missing";
 		return value;
+	}
+
+	private static function formView(popup:ChangePasswordPopup):NativeFormView {
+		for (index in 0...popup.numChildren) {
+			var view = Std.downcast(popup.getChildAt(index), NativeFormView);
+			if (view != null) return view;
+		}
+		throw "native change-password form missing";
 	}
 
 	private static function click(popup:ChangePasswordPopup, name:String):Void {

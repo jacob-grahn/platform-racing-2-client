@@ -190,7 +190,7 @@ class EditorSideBar extends Sprite {
 
 	override public function getChildByName(name:String):DisplayObject {
 		var direct = super.getChildByName(name);
-		return direct != null ? direct : DisplayUtil.findByName(scroll, name);
+		return direct != null ? direct : DisplayUtil.directChildByName(scroll, name);
 	}
 
 	public function scrollHolderForTests():Sprite {

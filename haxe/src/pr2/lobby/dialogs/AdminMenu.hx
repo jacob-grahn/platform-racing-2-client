@@ -2,6 +2,7 @@ package pr2.lobby.dialogs;
 
 import openfl.display.Sprite;
 import pr2.net.LobbySocket;
+import pr2.lobby.dialogs.ModerationMenuView.ModerationMenuLayout;
 
 class AdminMenu extends Sprite {
 	private var art:Null<ModerationMenuView>;
@@ -13,11 +14,11 @@ class AdminMenu extends Sprite {
 		super();
 		userName = name;
 		target = popup;
-		art = new ModerationMenuView("-- Administrator --", [
-			{name: "tempMod_bt", label: "Temporary", press: clickTemp},
-			{name: "trialMod_bt", label: "Trial", press: clickTrial},
-			{name: "permaMod_bt", label: "Permanent", press: clickPerma},
-			{name: "demote_bt", label: "Demote", press: clickDemote}
+		art = new ModerationMenuView(Admin, "-- Admin --", [
+			{name: "tempMod_bt", label: "Temp Mod", press: clickTemp},
+			{name: "trialMod_bt", label: "Trial Mod", press: clickTrial},
+			{name: "permaMod_bt", label: "Mod", press: clickPerma},
+			{name: "demote_bt", label: "De-Mod", press: clickDemote}
 		]);
 		addChild(art);
 	}

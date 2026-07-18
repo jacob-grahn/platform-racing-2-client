@@ -5,47 +5,49 @@ import openfl.text.TextField;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
 import pr2.assets.NativeAssetIds.FontAsset;
+import pr2.assets.NativeAssetIds.StaticSvg;
 import pr2.assets.NativeAssets;
 import pr2.ui.controls.GameButton;
 import pr2.ui.view.NativeView;
 
-/** Native part detail card with description, ownership, and Equip action. */
+/** Exact native composition of the authored PartPopupGraphic shell. */
 class PartPopupView extends NativeView {
+	public final panel:Sprite;
+
 	public function new() {
 		super();
-		graphics.beginFill(0xF4F4F4, 0.98);
-		graphics.lineStyle(2, 0x666666);
-		graphics.drawRoundRect(-190, -155, 380, 310, 14, 14);
-		graphics.endFill();
-		field("titleBox", -165, -142, 330, 24, 16, true, TextFormatAlign.CENTER);
-		var desc = field("descBox", -18, -102, 168, 72, 11, false, TextFormatAlign.LEFT);
-		desc.multiline = true;
-		desc.wordWrap = true;
-		var obtain = field("obtainBox", -165, 48, 330, 48, 10, false, TextFormatAlign.LEFT);
+		panel = new Sprite();
+		panel.name = "panel";
+		panel.x = -198.95;
+		panel.y = -98.65;
+		panel.scaleX = 1.47056579589844;
+		panel.scaleY = 1.04719543457031;
+		panel.addChild(NativeAssets.svg(StaticSvg.QuantityPanel));
+		addChild(panel);
+		field("titleBox", -175.95, -85, 354.95, 14.55, 12, true, TextFormatAlign.CENTER, 0x000000);
+		field("descBox", -180.95, -66.45, 364.95, 14.5, 10, false, TextFormatAlign.CENTER, 0x666666);
+		field("ownedBox", -46.3, -43.75, 144.95, 14.55, 11, false, TextFormatAlign.LEFT, 0x000000);
+		field("epicBox", -46.3, -25.2, 230.3, 13.35, 11, false, TextFormatAlign.LEFT, 0x000000);
+		var obtain = field("obtainBox", -46.3, -7.85, 221.3, 47.65, 11, false, TextFormatAlign.LEFT, 0x000000);
 		obtain.multiline = true;
 		obtain.wordWrap = true;
-		field("ownedBox", -165, 101, 200, 20, 10, true, TextFormatAlign.LEFT);
-		field("epicBox", -165, 122, 220, 20, 10, true, TextFormatAlign.LEFT);
-		button("equip_bt", "Equip", 67, 112, 78).enabled = false;
-		button("close_bt", "Close", 67, 82, 78);
-		var previewGuide = new Sprite();
-		previewGuide.graphics.beginFill(0xE8EBEF);
-		previewGuide.graphics.drawCircle(-92, -35, 58);
-		previewGuide.graphics.endFill();
-		addChildAt(previewGuide, 0);
+		button("equip_bt", "Equip", -103, false);
+		button("close_bt", "Close", 7, true);
 	}
 
-	private function button(name:String, value:String, x:Float, y:Float, width:Float):GameButton {
+	private function button(name:String, value:String, x:Float, enabled:Bool):GameButton {
 		var control = ownControl(new GameButton(value));
 		control.name = name;
 		control.x = x;
-		control.y = y;
-		control.setSize(width, 24);
+		control.y = 61.5;
+		control.setSize(100, 22);
+		control.enabled = enabled;
 		addChild(control);
 		return control;
 	}
 
-	private function field(name:String, x:Float, y:Float, width:Float, height:Float, size:Int, bold:Bool, align:TextFormatAlign):TextField {
+	private function field(name:String, x:Float, y:Float, width:Float, height:Float, size:Int, bold:Bool, align:TextFormatAlign,
+		color:Int):TextField {
 		var text = new TextField();
 		text.name = name;
 		text.x = x;
@@ -53,7 +55,7 @@ class PartPopupView extends NativeView {
 		text.width = width;
 		text.height = height;
 		text.selectable = false;
-		text.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), size, 0x222222, bold, null, null, null, null, align);
+		text.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), size, color, bold, null, null, null, null, align);
 		addChild(text);
 		return text;
 	}

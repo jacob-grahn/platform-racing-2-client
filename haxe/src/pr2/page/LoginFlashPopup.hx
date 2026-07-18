@@ -1,7 +1,6 @@
 package pr2.page;
 
 import openfl.display.DisplayObject;
-import openfl.display.DisplayObjectContainer;
 import openfl.display.InteractiveObject;
 import openfl.display.Sprite;
 import openfl.events.Event;
@@ -13,18 +12,23 @@ import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
 import pr2.Constants;
 import pr2.assets.NativeAssetIds.FontAsset;
+import pr2.assets.NativeAssetIds.StaticSvg;
 import pr2.assets.NativeAssets;
-import pr2.runtime.FlCheckBox;
-import pr2.runtime.FlComponents;
-import pr2.runtime.FlComboBox;
 import pr2.ui.controls.GameButton;
+import pr2.ui.controls.GameCheckBox;
+import pr2.ui.controls.GameSelect;
+import pr2.ui.controls.GameTextInput;
+import pr2.ui.controls.NativeControl;
 import pr2.ui.view.NativeView;
-import pr2.util.DisplayUtil;
+import pr2.runtime.SvgAsset;
 
 class LoginFlashPopup extends Sprite {
+	public static inline var LOADED:String = "loaded";
+	public static inline var REMOVED:String = "removed";
+	public var fadeOutStarted(default, null):Bool = false;
 	private var art:LoginPopupView;
 	private var buttonHandlers:Array<{target:DisplayObject, handler:MouseEvent->Void}> = [];
-	private var comboHandlers:Array<{target:FlComboBox, handler:Event->Void}> = [];
+	private var comboHandlers:Array<{target:GameSelect<Dynamic>, handler:Event->Void}> = [];
 	private var keyHandlers:Array<{target:TextField, handler:KeyboardEvent->Void}> = [];
 
 	public function new(linkage:String) {
@@ -37,31 +41,55 @@ class LoginFlashPopup extends Sprite {
 		art.x = Constants.STAGE_WIDTH / 2;
 		art.y = Constants.STAGE_HEIGHT / 2;
 		addChild(art);
+		alpha = 0;
+		addEventListener(Event.ENTER_FRAME, fadeIn);
+	}
+
+	private function fadeIn(_:Event):Void {
+		alpha += 0.15;
+		if (alpha >= 1) {
+			alpha = 1;
+			removeEventListener(Event.ENTER_FRAME, fadeIn);
+			dispatchEvent(new Event(LOADED));
+		}
+	}
+
+	public function startFadeOut():Void {
+		if (fadeOutStarted) return;
+		fadeOutStarted = true;
+		removeEventListener(Event.ENTER_FRAME, fadeIn);
+		addEventListener(Event.ENTER_FRAME, fadeOut);
+	}
+
+	private function fadeOut(_:Event):Void {
+		alpha -= 0.15;
+		if (alpha <= 0) {
+			remove();
+			dispatchEvent(new Event(REMOVED));
+		}
 	}
 
 	public function child(name:String):Null<DisplayObject> {
-		return DisplayUtil.findByName(art, name);
+		return art.child(name);
 	}
 
 	public function input(name:String):TextField {
-		// nameBox/passBox/etc. are authored as fl.controls.TextInput components, so
-		// unwrap the FlTextInput/FlTextArea sprite to its inner editable field.
-		var field = FlComponents.asTextField(child(name));
+		var field = Std.downcast(child(name), TextField);
 		if (field == null) {
 			throw 'Login popup missing TextInput $name';
 		}
 		return field;
 	}
 
-	public function comboBox(name:String):Null<FlComboBox> {
-		return Std.downcast(child(name), FlComboBox);
+	public function comboBox(name:String):Null<GameSelect<Dynamic>> {
+		return Std.downcast(child(name), GameSelect);
 	}
 
-	public function checkBox(name:String):Null<FlCheckBox> {
-		return Std.downcast(child(name), FlCheckBox);
+	public function checkBox(name:String):Null<GameCheckBox> {
+		return Std.downcast(child(name), GameCheckBox);
 	}
 
-	public function bindComboBox(name:String, changeHandler:FlComboBox->Void):Void {
+	public function bindComboBox(name:String, changeHandler:GameSelect<Dynamic>->Void):Void {
 		var target = comboBox(name);
 		if (target == null) {
 			return;
@@ -115,25 +143,24 @@ class LoginFlashPopup extends Sprite {
 	}
 
 	public function setComponentLabel(name:String, value:String):Void {
-		var target = Std.downcast(child(name), DisplayObjectContainer);
-		if (target == null) {
+		var button = Std.downcast(child(name), GameButton);
+		if (button != null) {
+			button.label = value;
 			return;
 		}
-		var text = firstTextField(target);
-		if (text != null) {
-			text.text = value;
-		}
+		var select = Std.downcast(child(name), GameSelect);
+		if (select != null) select.prompt = value;
 	}
 
 	public function setText(name:String, value:String):Void {
-		var text = FlComponents.asTextField(child(name));
+		var text = Std.downcast(child(name), TextField);
 		if (text != null) {
 			text.text = value;
 		}
 	}
 
 	public function setHtmlText(name:String, value:String):Void {
-		var text = FlComponents.asTextField(child(name));
+		var text = Std.downcast(child(name), TextField);
 		if (text != null) {
 			text.htmlText = value;
 		}
@@ -147,6 +174,8 @@ class LoginFlashPopup extends Sprite {
 	}
 
 	public function remove():Void {
+		removeEventListener(Event.ENTER_FRAME, fadeIn);
+		removeEventListener(Event.ENTER_FRAME, fadeOut);
 		for (entry in buttonHandlers) {
 			entry.target.removeEventListener(MouseEvent.CLICK, entry.handler);
 		}
@@ -160,32 +189,18 @@ class LoginFlashPopup extends Sprite {
 		}
 		keyHandlers = [];
 		art.dispose();
+		if (parent != null) parent.removeChild(this);
 	}
 
-	private function firstTextField(container:DisplayObjectContainer):Null<TextField> {
-		for (i in 0...container.numChildren) {
-			var display = container.getChildAt(i);
-			var text = Std.downcast(display, TextField);
-			if (text != null) {
-				return text;
-			}
-			var childContainer = Std.downcast(display, DisplayObjectContainer);
-			if (childContainer != null) {
-				var found = firstTextField(childContainer);
-				if (found != null) {
-					return found;
-				}
-			}
-		}
-		return null;
-	}
 }
 
 private class LoginPopupView extends NativeView {
+	private final named:Map<String, DisplayObject> = [];
+
+	public function child(name:String):Null<DisplayObject> return named.get(name);
+
 	public function new(linkage:String) {
 		super();
-		graphics.beginFill(0xF4F4F4, 0.98);
-		graphics.lineStyle(2, 0x666666);
 		if (linkage == "ServerSelectPopupGraphic") buildServerSelect();
 		else if (linkage == "ConnectingPopupGraphic") buildConnecting();
 		else if (linkage == "LoginPopupGraphic") buildCredentials();
@@ -193,85 +208,135 @@ private class LoginPopupView extends NativeView {
 	}
 
 	private function buildCredentials():Void {
-		graphics.drawRoundRect(-155, -112, 310, 224, 14, 14);
-		graphics.endFill();
-		label("-- Login --", null, -110, -96, 220, 24, 17, true, TextFormatAlign.CENTER);
-		label("name:", null, -128, -55, 70, 20, 11, false, TextFormatAlign.RIGHT);
-		input("nameBox", -51, -58, 165, false);
-		label("password:", null, -128, -22, 70, 20, 11, false, TextFormatAlign.RIGHT);
-		input("passBox", -51, -25, 165, true);
-		var combo = combo("dropdown", -51, 8, 165);
-		combo.rowCount = 6;
-		var remember = new FlCheckBox();
+		var background = NativeAssets.svg(StaticSvg.QuantityPanel);
+		background.x = -111;
+		background.y = -121.5;
+		background.scaleX = 0.8162841796875;
+		background.scaleY = 1.27224731445312;
+		addChild(background);
+		label("-- Login --", null, -43, -109.45, 86, 17.05, 14, true, TextFormatAlign.CENTER);
+		label("name:", null, -74.3, -74.25, 39.1, 14.55, 12, false, TextFormatAlign.LEFT);
+		input("nameBox", -31, -76.2, 110.000610351562, false, 20);
+		label("pass:", null, -68.3, -46.25, 32.5, 14.55, 12, false, TextFormatAlign.LEFT);
+		input("passBox", -31, -48.2, 110.000610351562, true);
+		forgotPasswordLink();
+		var remember = ownControl(new GameCheckBox("Remember Me", false));
 		remember.name = "rememberMe_chk";
-		remember.label = "Remember me";
-		remember.x = -51;
-		remember.y = 38;
+		remember.x = -17;
+		remember.y = 0.15;
+		remember.setSize(108.000183105469, 22);
 		addChild(remember);
-		button("forgotPass", "Forgot?", -132, 72, 65);
-		button("reload_bt", "Reload", -61, 72, 60);
-		button("login_bt", "Login", 5, 72, 60);
-		button("cancel_bt", "Cancel", 71, 72, 60);
+		named.set(remember.name, remember);
+		label("server:", null, -98, 43.8, 43.2, 14.55, 12, false, TextFormatAlign.LEFT);
+		combo("dropdown", -51, 39.8, 130.998229980469);
+		reloadButton();
+		button("login_bt", "Log In", -80, 87.8, 74.0005493164062, 22);
+		button("cancel_bt", "Cancel", 7, 87.8, 74.0005493164062, 22);
 	}
 
 	private function buildServerSelect():Void {
-		graphics.drawRoundRect(-160, -105, 320, 210, 14, 14);
-		graphics.endFill();
-		label("-- Choose Server --", null, -115, -90, 230, 24, 17, true, TextFormatAlign.CENTER);
-		label("Account:", null, -130, -50, 70, 18, 11, false, TextFormatAlign.RIGHT);
-		combo("userSelect", -53, -53, 166);
-		button("user_del_bt", "×", 118, -53, 27);
-		label("Server:", null, -130, -15, 70, 18, 11, false, TextFormatAlign.RIGHT);
-		combo("serverSelect", -53, -18, 166);
-		button("reload_bt", "Reload", 118, -18, 27);
-		label("", "textBox", -125, 18, 250, 18, 10, false, TextFormatAlign.CENTER);
-		button("login_bt", "Connect", -102, 57, 90);
-		button("cancel_bt", "Cancel", 12, 57, 90);
+		var background = NativeAssets.svg(StaticSvg.QuantityPanel);
+		background.x = -118;
+		background.y = -75;
+		background.scaleX = 0.867523193359375;
+		background.scaleY = 0.785446166992188;
+		addChild(background);
+		label("-- Login --", null, -43, -64.15, 86, 17.05, 14, true, TextFormatAlign.CENTER);
+		label("user:", null, -97.95, -27.7, 31.6, 14.55, 12, false, TextFormatAlign.RIGHT);
+		var users = combo("userSelect", -50, -31.7, 131.001281738281);
+		users.prompt = "Guest";
+		users.enabled = false;
+		iconButton("user_del_bt", LoginIconKind.Minus, 99, -20.2);
+		label("server:", null, -97.95, 4, 43.2, 14.55, 12, false, TextFormatAlign.LEFT);
+		var servers = combo("serverSelect", -50, 0, 131.001281738281);
+		servers.prompt = "Loading...";
+		servers.enabled = false;
+		reloadButtonAt(99, 11.5, "reload_bt");
+		button("login_bt", "Log In", -80, 40, 74.0005493164062, 22);
+		button("cancel_bt", "Cancel", 7, 40, 74.0005493164062, 22);
 	}
 
 	private function buildConnecting():Void {
-		graphics.drawRoundRect(-125, -65, 250, 130, 14, 14);
-		graphics.endFill();
-		label("Connecting...", null, -95, -45, 190, 23, 16, true, TextFormatAlign.CENTER);
-		label("", "textBox", -105, -13, 210, 22, 11, false, TextFormatAlign.CENTER);
-		button("var_1", "Cancel", -42, 25, 84);
+		var background = NativeAssets.svg(StaticSvg.QuantityPanel);
+		background.x = -81;
+		background.y = -48;
+		background.scaleX = 0.604461669921875;
+		background.scaleY = 0.505264282226562;
+		addChild(background);
+		label("Connecting...", null, -37, -28.2, 79.6, 14.55, 12, false, TextFormatAlign.LEFT);
+		button("var_1", "Close", -48, 10, 100, 22);
 	}
 
-	private function input(name:String, x:Float, y:Float, width:Float, password:Bool):Void {
-		var field = new TextField();
-		field.name = name;
-		field.x = x;
-		field.y = y;
-		field.width = width;
-		field.height = 24;
-		field.type = TextFieldType.INPUT;
-		field.selectable = true;
-		field.displayAsPassword = password;
-		field.background = true;
-		field.backgroundColor = 0xFFFFFF;
-		field.border = true;
-		field.borderColor = 0x777777;
-		field.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 11, 0x222222);
-		addChild(field);
+	private function input(name:String, x:Float, y:Float, width:Float, password:Bool, maxChars:Int = 0):Void {
+		var control = ownControl(new GameTextInput());
+		control.name = name + "_control";
+		control.x = x;
+		control.y = y;
+		control.setSize(width, 22);
+		control.maxChars = maxChars;
+		control.displayAsPassword = password;
+		control.textField.name = name;
+		addChild(control);
+		named.set(name, control.textField);
 	}
 
-	private function combo(name:String, x:Float, y:Float, width:Float):FlComboBox {
-		var control = new FlComboBox();
+	private function combo(name:String, x:Float, y:Float, width:Float):GameSelect<Dynamic> {
+		var control = ownControl(new GameSelect<Dynamic>());
 		control.name = name;
 		control.x = x;
 		control.y = y;
 		control.setSize(width, 22);
 		addChild(control);
+		named.set(name, control);
 		return control;
 	}
 
-	private function button(name:String, value:String, x:Float, y:Float, width:Float):Void {
+	private function button(name:String, value:String, x:Float, y:Float, width:Float, height:Float = 24):Void {
 		var control = ownControl(new GameButton(value));
 		control.name = name;
 		control.x = x;
 		control.y = y;
-		control.setSize(width, 24);
+		control.setSize(width, height);
 		addChild(control);
+		named.set(name, control);
+	}
+
+	private function forgotPasswordLink():Void {
+		var control = new Sprite();
+		control.name = "forgotPass";
+		control.x = -34;
+		control.y = -24.25;
+		control.buttonMode = true;
+		control.useHandCursor = true;
+		var field = new TextField();
+		field.mouseEnabled = false;
+		field.selectable = false;
+		field.x = 1.964111328125;
+		field.y = 1.964111328125;
+		field.width = 111.069;
+		field.height = 13;
+		field.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 10, 0x4E4EFE);
+		field.text = "Forget your password?";
+		control.addChild(field);
+		addChild(control);
+		named.set(control.name, control);
+	}
+
+	private function reloadButton():Void {
+		reloadButtonAt(94.85, 50.85, "reload_bt");
+	}
+
+	private function reloadButtonAt(x:Float, y:Float, name:String):Void {
+		iconButton(name, LoginIconKind.Reload, x, y);
+	}
+
+	private function iconButton(name:String, kind:LoginIconKind, x:Float, y:Float):Void {
+		var control = ownControl(new LoginIconButton(kind));
+		control.name = name;
+		control.x = x;
+		control.y = y;
+		addChild(control);
+		named.set(name, control);
 	}
 
 	private function label(value:String, name:Null<String>, x:Float, y:Float, width:Float, height:Float, size:Int, bold:Bool,
@@ -286,5 +351,38 @@ private class LoginPopupView extends NativeView {
 		field.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), size, 0x222222, bold, null, null, null, null, align);
 		field.text = value;
 		addChild(field);
+		if (name != null) named.set(name, field);
+	}
+}
+
+private enum abstract LoginIconKind(Int) {
+	var Reload = 0;
+	var Minus = 1;
+}
+
+private class LoginIconButton extends NativeControl {
+	private var kind:Null<LoginIconKind>;
+
+	public function new(kind:LoginIconKind) {
+		super(18, 18);
+		this.kind = kind;
+		mouseChildren = false;
+		redraw();
+	}
+
+	override public function redraw():Void {
+		graphics.clear();
+		while (numChildren > 0) removeChildAt(0);
+		if (kind == null) return;
+		addChild(NativeAssets.svg(authoredAsset()));
+	}
+
+	private function authoredAsset():StaticSvg {
+		var down = state() == Pressed;
+		var over = state() == Hovered || state() == Focused;
+		return switch (kind) {
+			case Reload: down ? StaticSvg.ReloadButtonDown : over ? StaticSvg.ReloadButtonOver : StaticSvg.ReloadButtonUp;
+			case Minus: down ? StaticSvg.MinusButtonDown : over ? StaticSvg.MinusButtonOver : StaticSvg.MinusButtonUp;
+		}
 	}
 }

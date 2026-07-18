@@ -10,8 +10,7 @@ import pr2.net.ServerConfig;
 	Port of Flash `dialogs.SendMessagePopup`: compose and send a private (or guild)
 	message. Validates that a name and body are present, POSTs through
 	`UploadingPopup`, and fades out on success. The character counter and the
-	rich-formatting hover are wired; the `PMRFCodesPopup` (codes reference) is
-	pending, so the codes button only shows its tooltip.
+	rich-formatting hover and the `PMRFCodesPopup` codes reference are wired.
 **/
 class SendMessagePopup extends Popup {
 	private var art:SendMessageView;

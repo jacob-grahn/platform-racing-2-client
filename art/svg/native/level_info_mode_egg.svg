@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="550px" height="400px" viewBox="0 0 550 400" preserveAspectRatio="none" data-xfl-root="MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 1312">
+  <g data-xfl-symbol="MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 1312">
+    <g data-svg-leaf="movieclips_pr2_graphics_1_apr_2014_fla_symbol_1312_53a6126aa3/t00_l000_f0002_r00.svg">
+      <defs>
+        <g id="xfl1_Layer0_0_FILL">
+          <path fill="#77FFC8" stroke="none" d=" M 54.45 37.1 Q 57.15 33 56.9 30.1 57.9 21.95 48.4 9.9 38.65 -2.4 32.5 -2.4 25.7 -2.4 21.4 3.95 16.85 10.75 16.85 22.5 16.85 38.7 27 43.45 30.35 45.05 34.65 45.3 L 39.6 45.25 Q 49.15 45.25 54.45 37.1 M 51.2 23.45 Q 52.5 27.5 52.8 29.5 53.1 31.5 49.1 36.7 45.05 41.9 37.25 41.9 32.05 41.9 27.85 38.6 20.4 32.85 20.4 18.65 20.4 10.15 23.8 5.15 26.8 0.85 30.8 0.85 34.35 0.85 38.65 4.1 43.9 8.05 47.8 15.45 49.9 19.4 51.2 23.45 Z" />
+        </g>
+      </defs>
+      <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+        <use xlink:href="#xfl1_Layer0_0_FILL" />
+      </g>
+    </g>
+  </g>
+</svg>

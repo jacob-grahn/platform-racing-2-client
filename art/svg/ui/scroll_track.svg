@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="550px" height="400px" viewBox="0 0 550 400" preserveAspectRatio="none" data-xfl-root="Components/Component Assets/ScrollBarSkins/ScrollTrack_skin">
+  <g data-xfl-symbol="Components/Component Assets/ScrollBarSkins/ScrollTrack_skin">
+    <g data-svg-leaf="components_component_assets_scrollbarskins_scrolltrack_skin_1c49414a50/t00_l000_f0000_r00.svg">
+      <defs>
+        <linearGradient id="xfl1_Gradient_1" gradientUnits="userSpaceOnUse" x1="660" y1="759.975" x2="674" y2="759.725" spreadMethod="pad">
+          <stop offset="0%" stop-color="#94999B" />
+          <stop offset="100%" stop-color="#E7E7E7" />
+        </linearGradient>
+        <g id="xfl1_Layer0_0_MEMBER_0_FILL">
+          <path fill="#585F63" stroke="none" d=" M 674 679 L 673 679 673 827 674 827 674 679 Z" />
+        </g>
+        <g id="xfl1_Layer0_0_MEMBER_1_FILL">
+          <path fill="url(#xfl1_Gradient_1)" stroke="none" d=" M 673 679 L 660 679 660 827 673 827 673 679 Z" />
+        </g>
+        <g id="xfl1_Layer0_0_MEMBER_2_FILL">
+          <path fill="#585F63" stroke="none" d=" M 660 679 L 659 679 659 827 660 827 660 679 Z" />
+        </g>
+      </defs>
+      <g transform="matrix( 1, 0, 0, 1, -659,-679) ">
+        <use xlink:href="#xfl1_Layer0_0_MEMBER_0_FILL" />
+      </g>
+      <g transform="matrix( 1, 0, 0, 1, -659,-679) ">
+        <use xlink:href="#xfl1_Layer0_0_MEMBER_1_FILL" />
+      </g>
+      <g transform="matrix( 1, 0, 0, 1, -659,-679) ">
+        <use xlink:href="#xfl1_Layer0_0_MEMBER_2_FILL" />
+      </g>
+    </g>
+  </g>
+</svg>

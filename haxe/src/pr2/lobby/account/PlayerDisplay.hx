@@ -12,7 +12,6 @@ import pr2.lobby.LobbyArt.Binding;
 import pr2.lobby.dialogs.HoverDelayPopup;
 import pr2.lobby.dialogs.HoverPopup;
 import pr2.net.CommandHandler;
-import pr2.runtime.PR2MovieClip;
 
 /**
 	Port of Flash `player_profile.PlayerDisplay`: the hat/head/body/feet part
@@ -183,10 +182,6 @@ class PlayerDisplay extends Sprite {
 		clearInfoHover();
 		LobbyArt.unbind(randomBinding);
 		if (randomGraphic != null) {
-			var clip = Std.downcast(randomGraphic, PR2MovieClip);
-			if (clip != null) {
-				clip.dispose();
-			}
 			randomGraphic = null;
 		}
 		if (randomButton != null) {

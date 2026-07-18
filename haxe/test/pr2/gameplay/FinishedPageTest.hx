@@ -4,6 +4,7 @@ import openfl.events.Event;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.dialogs.Popup;
 import pr2.ui.RatingSelect;
+import pr2.util.TestDisplayUtil as DisplayUtil;
 
 /**
 	Covers the finished-race popup the way Flash `gameplay.FinishedPage`,
@@ -27,6 +28,15 @@ class FinishedPageTest {
 
 	private static function testAwardsAndExpTotal():Void {
 		var page = new FinishedPage(12345);
+		assertEquals("assets/svg/effects/finished_page_01.svg", FinishedPageView.SHELL_ASSET,
+			"finished page uses the exact authored XFL shell and static copy");
+		assertEquals(true, DisplayUtil.findByName(page, "exactShell").width > 280,
+			"authored finished-page shell renders");
+		assertNear(-127.95, LobbyArt.text(page, "bonus1").x, 0.001, "award column preserves authored x");
+		assertNear(-100.5, LobbyArt.text(page, "bonus1").y, 0.001, "first award preserves authored y");
+		assertNear(50.25, LobbyArt.text(page, "exp1").x, 0.001, "experience column preserves authored x");
+		assertNear(-111, DisplayUtil.findByName(page, "close_bt").x, 0.001, "close button preserves authored x");
+		assertNear(8, DisplayUtil.findByName(page, "return_bt").x, 0.001, "return button preserves authored x");
 
 		page.award("First Place", "+50");
 		page.award("Speed Bonus", "+20");
@@ -64,6 +74,15 @@ class FinishedPageTest {
 
 	private static function testExpGainAnimation():Void {
 		var exp = new ExpGain();
+		assertEquals("assets/svg/effects/exp_progress_track_01.svg", ExpGain.TRACK_ASSET,
+			"experience bar uses exact authored XFL track");
+		assertEquals("assets/svg/effects/exp_progress_fill_01.svg", ExpGain.FILL_ASSET,
+			"experience bar uses exact authored XFL fill");
+		assertEquals(1, Math.round(exp.fillWidthForTests()), "experience fill starts at Flash's one-pixel width");
+		var geometry = exp.textGeometryForTests();
+		assertEquals(-9275, Math.round(geometry[0] * 100), "experience text preserves authored x");
+		assertEquals(1395, Math.round(geometry[1] * 100), "experience text preserves authored y");
+		assertEquals(18545, Math.round(geometry[2] * 100), "experience text preserves authored width");
 		exp.start(0, 90, 100);
 		// expStep = 90/45 = 2 per frame; readout uses floor(expStart).
 		exp.dispatchEvent(new Event(Event.ENTER_FRAME));
@@ -72,6 +91,7 @@ class FinishedPageTest {
 			exp.dispatchEvent(new Event(Event.ENTER_FRAME));
 		}
 		assertEquals("90 / 100", LobbyArt.text(exp, "textBox").text, "settles at expEnd after 45 frames");
+		assertEquals(180, Math.round(exp.fillWidthForTests()), "fill settles at 200 times the authored rank ratio");
 		exp.remove();
 	}
 
@@ -115,5 +135,10 @@ class FinishedPageTest {
 		if (expected != actual) {
 			throw '$message: expected $expected, got $actual';
 		}
+	}
+
+	private static function assertNear(expected:Float, actual:Float, tolerance:Float, message:String):Void {
+		assertions++;
+		if (Math.abs(expected - actual) > tolerance) throw '$message: expected $expected +/- $tolerance, got $actual';
 	}
 }

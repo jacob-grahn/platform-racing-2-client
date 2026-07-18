@@ -52,8 +52,10 @@ class Popup extends Removable {
 
 	private function layoutForStage():Void {
 		if (AppStage.stage == null) return;
-		var stageW = AppStage.stage.stageWidth;
-		var stageH = AppStage.stage.stageHeight;
+		layoutForSize(AppStage.stage.stageWidth, AppStage.stage.stageHeight);
+	}
+
+	private function layoutForSize(stageW:Float, stageH:Float):Void {
 		var density = Math.max(1, Math.min(stageW / 550, stageH / 400));
 		scaleX = scaleY = density;
 		x = stageW / 2;
@@ -84,6 +86,7 @@ class Popup extends Removable {
 	}
 
 	public function startFadeOut():Void {
+		if (fadeOutStarted || isRemoved()) return;
 		fadeOutStarted = true;
 		removeEventListener(Event.ENTER_FRAME, fadeIn);
 		addEventListener(Event.ENTER_FRAME, fadeOut);
@@ -99,7 +102,12 @@ class Popup extends Removable {
 		if (AppStage.stage != null) AppStage.stage.removeEventListener(Event.RESIZE, onStageResize);
 		removeEventListener(Event.ENTER_FRAME, fadeIn);
 		removeEventListener(Event.ENTER_FRAME, fadeOut);
-		StageFocus.reset();
+		var parentPopup = openPopups.length == 0 ? null : openPopups[openPopups.length - 1];
+		if (parentPopup != null) StageFocus.focus(parentPopup); else StageFocus.reset();
 		super.remove();
 	}
+
+	@:noCompletion public function layoutForSizeForTests(width:Float, height:Float):Void layoutForSize(width, height);
+	@:noCompletion public function overlayForTests():Null<Shape> return overlay;
+	@:noCompletion public function isTopmostForTests():Bool return openPopups.length > 0 && openPopups[openPopups.length - 1] == this;
 }

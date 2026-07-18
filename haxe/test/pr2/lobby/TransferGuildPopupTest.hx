@@ -5,11 +5,12 @@ import openfl.events.KeyboardEvent;
 import openfl.events.MouseEvent;
 import pr2.crypto.PR2Encryptor;
 import pr2.lobby.dialogs.MessagePopup;
+import pr2.lobby.dialogs.NativeFormView;
 import pr2.lobby.dialogs.Popup;
 import pr2.lobby.dialogs.TransferGuildPopup;
 import pr2.net.ServerConfig;
 import pr2.ui.controls.GameTextInput;
-import pr2.util.DisplayUtil;
+import pr2.util.TestDisplayUtil as DisplayUtil;
 
 class TransferGuildPopupTest {
 	private static inline var ACCOUNT_CHANGE_KEY:String = "KVhFJSVLNigvKkdhV0RaSw==";
@@ -37,6 +38,18 @@ class TransferGuildPopupTest {
 			return null;
 		};
 		var popup = new TransferGuildPopup();
+		var art = formView(popup);
+		assertEquals(2, art.panels.length, "transfer-guild keeps the two authored ShadowBG instances");
+		assertEquals(-116.0, art.panels[0].y, "transfer form ShadowBG keeps its XFL Y");
+		assertEquals(0.92236328125, art.panels[0].scaleY, "transfer form ShadowBG keeps its XFL vertical scale");
+		assertEquals(65.7, art.panels[1].y, "transfer description ShadowBG keeps its XFL Y");
+		assertEquals(0.26177978515625, art.panels[1].scaleY, "transfer description ShadowBG keeps its XFL vertical scale");
+		assertEquals(4.0, input(popup, "emailBox").x, "transfer inputs keep their XFL X");
+		assertEquals(-70.75, input(popup, "emailBox").y, "transfer email keeps its XFL Y");
+		assertEquals(100, input(popup, "emailBox").maxChars, "transfer email keeps its authored maximum length");
+		assertEquals(20, input(popup, "nameBox").maxChars, "new owner keeps its authored maximum length");
+		assertEquals(true, input(popup, "passBox").displayAsPassword, "transfer password field keeps masking");
+		assertEquals(24.25, art.submitButton.y, "transfer buttons keep their XFL Y");
 		input(popup, "emailBox").text = "owner@example.test";
 		click(popup, "ok_bt");
 		assertEquals(0, uploads, "missing fields do not upload");
@@ -88,6 +101,14 @@ class TransferGuildPopupTest {
 		var value = Std.downcast(DisplayUtil.findByName(popup, name), GameTextInput);
 		if (value == null) throw name + " missing";
 		return value;
+	}
+
+	private static function formView(popup:TransferGuildPopup):NativeFormView {
+		for (index in 0...popup.numChildren) {
+			var view = Std.downcast(popup.getChildAt(index), NativeFormView);
+			if (view != null) return view;
+		}
+		throw "native transfer-guild form missing";
 	}
 
 	private static function click(popup:TransferGuildPopup, name:String):Void {

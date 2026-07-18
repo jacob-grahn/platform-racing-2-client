@@ -4,8 +4,6 @@ import StringTools;
 
 class SiteMode {
 	public static inline var KONGREGATE:String = "kongregate";
-	public static inline var BUBBLE_BOX:String = "bubbleBox";
-	public static inline var ARMOR_GAMES:String = "armorGames";
 	public static inline var INXILE:String = "inXile";
 
 	public static function fromUrl(url:Null<String>):String {
@@ -16,12 +14,6 @@ class SiteMode {
 		var site = domain == null || domain == "" ? "local" : domain.toLowerCase();
 		if (site.indexOf("www.") == 0) {
 			site = site.substr(4);
-		}
-		if (site.indexOf("bubblebox.com") != -1 || site.indexOf("2games.com") != -1) {
-			return BUBBLE_BOX;
-		}
-		if (site.indexOf("armorgames.com") != -1) {
-			return ARMOR_GAMES;
 		}
 		if (site.indexOf("sparkworkz.com") != -1 || site.indexOf("inxile-entertainment.com") != -1) {
 			return INXILE;

@@ -1,19 +1,17 @@
 package pr2.page;
 
-import openfl.events.KeyboardEvent;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
-import openfl.ui.Keyboard;
 import pr2.assets.NativeAssetIds.FontAsset;
 import pr2.assets.NativeAssetIds.StaticSvg;
 import pr2.assets.NativeAssets;
 import pr2.ui.controls.GameButton;
 import pr2.ui.controls.GameTextInput;
-import pr2.ui.view.NativeView;
+import pr2.ui.view.NativePopupView;
 
 /** Explicit native composition of CreateAccountPopupGraphic. */
-class CreateAccountView extends NativeView {
+class CreateAccountView extends NativePopupView {
 	public final nameInput:GameTextInput;
 	public final passwordInput:GameTextInput;
 	public final confirmationInput:GameTextInput;
@@ -33,14 +31,14 @@ class CreateAccountView extends NativeView {
 		addChild(panel);
 
 		addLabel("-- Create Account --", -78, -118.25, 156, 17.05, 14, true, TextFormatAlign.CENTER);
-		addLabel("name:", -90, -83, 41, 14.55, 12, false, TextFormatAlign.RIGHT);
-		addLabel("pass:", -90, -55, 41, 14.55, 12, false, TextFormatAlign.RIGHT);
-		addLabel("confirm pass:", -91, -27, 82, 14.55, 12, false, TextFormatAlign.RIGHT);
-		addLabel("email (optional):", -110, 1.75, 101, 14.55, 12, false, TextFormatAlign.RIGHT);
-		addLabel("The only time your email will ever be\nused is if you forget your password\nand need to recover it.", -97.1, 39, 188, 40.45, 10, false, TextFormatAlign.LEFT, 0x666666);
+		addLabel("name:", -48.1, -83, 39.1, 14.55, 12, false, TextFormatAlign.LEFT);
+		addLabel("pass:", -41.45, -55, 32.5, 14.55, 12, false, TextFormatAlign.LEFT);
+		addLabel("confirm pass:", -90.55, -27, 81.55, 14.55, 12, false, TextFormatAlign.LEFT);
+		addLabel("email (optional):", -109.8, 1.75, 100.95, 14.55, 12, false, TextFormatAlign.LEFT);
+		addLabel("The only time your email will ever be \nused is if you forget your password \nand need to recover it.", -97.1, 39, 187.7, 40.45, 10, false, TextFormatAlign.LEFT, 0x666666);
 
 		nameInput = addInput("nameBox", name, 2, -85, false);
-		nameInput.textField.maxChars = 20;
+		nameInput.maxChars = 20;
 		passwordInput = addInput("passBox1", password, 2, -57, true);
 		confirmationInput = addInput("passBox2", confirmation, 2, -29, true);
 		emailInput = addInput("emailBox", email, 2, -1, false);
@@ -67,9 +65,8 @@ class CreateAccountView extends NativeView {
 		input.name = name;
 		input.x = x;
 		input.y = y;
-		input.setSize(121, 22);
+		input.setSize(110.000610351562, 22);
 		input.textField.displayAsPassword = password;
-		listen(input.textField, KeyboardEvent.KEY_DOWN, onInputKey);
 		addChild(input);
 		return input;
 	}
@@ -87,10 +84,6 @@ class CreateAccountView extends NativeView {
 		field.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), size, color, bold, null, null, null, null, align);
 		field.text = value;
 		addChild(field);
-	}
-
-	private function onInputKey(event:KeyboardEvent):Void {
-		if (event.keyCode == Keyboard.ENTER && onSubmit != null) onSubmit();
 	}
 
 	override public function dispose():Void {

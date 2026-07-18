@@ -11,33 +11,40 @@ import pr2.ui.view.NativeView;
 
 /** Native composition of ChooseLevelModModePopupGraphic. */
 class ChooseLevelModModeView extends NativeView {
+	public final panel:openfl.display.Shape;
+	public final title:TextField;
+	public final prompt:TextField;
+	public final unpublishButton:GameButton;
+	public final restrictButton:GameButton;
+	public final cancelButton:GameButton;
 	public var onUnpublish:Null<Void->Void>;
 	public var onRestrict:Null<Void->Void>;
 	public var onCancel:Null<Void->Void>;
 
 	public function new() {
 		super();
-		var panel = NativeAssets.svg(StaticSvg.QuantityPanel);
+		panel = NativeAssets.svg(StaticSvg.QuantityPanel);
 		panel.x = -122.5;
 		panel.y = -68.75;
 		panel.scaleX = 0.900802612304688;
 		panel.scaleY = 0.719802856445312;
 		addChild(panel);
-		addLabel("-- Moderate Level --", -68.3, -58.2, 137, 18, 14, true, TextFormatAlign.CENTER);
-		addLabel("Do what to this level?", -90.3, -33.2, 181, 16, 11, false, TextFormatAlign.CENTER);
-		addButton("Unpublish", "unpublish_bt", -97.8, -7.5, onUnpublishPress);
-		addButton("Restrict", "restrict_bt", 11.95, -7.5, onRestrictPress);
-		addButton("Cancel", "cancel_bt", -40, 27, onCancelPress, 80);
+		title = addLabel("-- Moderate Level --", -107.95, -58.2, 216.95, 17.05, 14, true, TextFormatAlign.CENTER);
+		prompt = addLabel("Do what to this level?", -107.95, -33.2, 216.95, 14.55, 12, false, TextFormatAlign.CENTER);
+		unpublishButton = addButton("Unpublish", "unpublish_bt", -97.8, -7.5, onUnpublishPress, 84.9899291992188, 23.5989074707032);
+		restrictButton = addButton("Restrict", "restrict_bt", 11.95, -7.5, onRestrictPress, 84.9899291992188, 23.5989074707032);
+		cancelButton = addButton("Cancel", "cancel_bt", -40, 27, onCancelPress, 79.9972534179688, 23.699951171875);
 	}
 
-	private function addButton(label:String, name:String, x:Float, y:Float, press:Void->Void, width:Float = 85):Void {
+	private function addButton(label:String, name:String, x:Float, y:Float, press:Void->Void, width:Float, height:Float):GameButton {
 		var button = ownControl(new GameButton(label));
 		button.name = name;
 		button.x = x;
 		button.y = y;
-		button.setSize(width, 22);
+		button.setSize(width, height);
 		button.onPress = press;
 		addChild(button);
+		return button;
 	}
 
 	private function onUnpublishPress():Void if (onUnpublish != null) onUnpublish();
@@ -45,7 +52,7 @@ class ChooseLevelModModeView extends NativeView {
 	private function onCancelPress():Void if (onCancel != null) onCancel();
 
 	private function addLabel(value:String, x:Float, y:Float, width:Float, height:Float, size:Int, bold:Bool,
-		align:TextFormatAlign):Void {
+		align:TextFormatAlign):TextField {
 		var field = new TextField();
 		field.x = x;
 		field.y = y;
@@ -55,6 +62,7 @@ class ChooseLevelModModeView extends NativeView {
 		field.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), size, 0, bold, null, null, null, null, align);
 		field.text = value;
 		addChild(field);
+		return field;
 	}
 
 	override public function dispose():Void {

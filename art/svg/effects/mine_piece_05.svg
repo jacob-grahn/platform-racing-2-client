@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="550px" height="400px" viewBox="0 0 550 400" preserveAspectRatio="none" data-xfl-root="UI/Pages/Levels/In-Game/Effects/Mine/Symbol 472">
+  <g data-xfl-symbol="UI/Pages/Levels/In-Game/Effects/Mine/Symbol 472">
+    <g data-svg-leaf="ui_pages_levels_in_game_effects_mine_symbol_472_df88e60ae7/t00_l002_f0004_r00.svg">
+      <defs>
+        <g id="xfl9_Layer0_0_FILL">
+          <path fill="#FFFF00" stroke="none" d=" M -0.5 2.25 L -1.1 1 -1.35 1.75 -0.5 2.25 M 0.55 0.05 L 1.25 0.05 Q 0.6 -1.1 0.55 -1.75 L 0.55 0.05 M 0.95 1.85 L 0.75 1.8 0.7 2.3 0.85 2.25 1 2 0.95 1.85 Z" />
+          <path fill="#FF6600" stroke="none" d=" M -1.1 1 L -2.65 0.7 -2.7 2.8 -0.55 2.95 -0.5 2.25 -1.35 1.75 -1.1 1 M -0.2 -2.6 L -2 -2.75 -2.35 -0.05 -1.45 0.35 Q 0 0.25 -0.2 -2.6 M 1.35 1 L 0.75 1.8 0.95 1.85 1 2 0.85 2.25 0.7 2.3 0.55 2.95 2.7 0.85 1.35 1 M 1.95 -1.85 Q 1.4 -2.55 0.55 -2.55 L 0.55 -1.75 Q 0.6 -1.1 1.25 0.05 L 2.55 -0.15 Q 2.55 -1.15 1.95 -1.85 Z" />
+          <path fill="#FFFFFF" stroke="none" d=" M 0.55 -2.55 Q 0.5 -5 0.05 -3.85 L -0.2 -2.6 Q 0 0.25 -1.45 0.35 L -2.35 -0.05 Q -5.1 -0.5 -3.6 0.25 L -2.65 0.7 -1.1 1 -0.5 2.25 -0.55 2.95 -0.4 6.35 0.55 2.95 0.7 2.3 0.75 1.8 1.35 1 2.7 0.85 6.35 0.3 2.55 -0.15 1.25 0.05 0.55 0.05 0.55 -1.75 0.55 -2.55 Z" />
+        </g>
+      </defs>
+      <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+        <use xlink:href="#xfl9_Layer0_0_FILL" />
+      </g>
+    </g>
+  </g>
+</svg>

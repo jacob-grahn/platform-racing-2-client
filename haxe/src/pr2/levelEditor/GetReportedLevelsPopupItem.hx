@@ -76,14 +76,14 @@ class GetReportedLevelsPopupItem extends SelectableButton {
 	}
 
 	private function setText(name:String, value:String):Void {
-		var text = LobbyArt.text(art, name);
+		var text = LobbyArt.directText(art, name);
 		if (text != null) {
 			text.text = value;
 		}
 	}
 
 	private function fieldText(name:String):String {
-		var text = LobbyArt.text(art, name);
+		var text = LobbyArt.directText(art, name);
 		return text == null ? "" : text.text;
 	}
 

@@ -1,30 +1,20 @@
 package pr2.effects;
 
-import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.Event;
+import pr2.runtime.SvgAsset;
 
 /** Native travel beam and 18-frame impact sequence for LaserShotGraphic. */
 class LaserShotView extends Sprite {
 	public static inline var TRAVEL_BEAM_NAME:String = "laserTravelBeam";
 	public var currentFrame(default, null):Int = 2;
+	public var currentAssetPath(default, null):String;
 	private var playingHit:Bool = false;
-	private final impact:Shape;
+	private var art:Sprite;
 
 	public function new() {
 		super();
-		var beam = new Shape();
-		beam.name = TRAVEL_BEAM_NAME;
-		beam.graphics.lineStyle(5, 0xFFFF00, 0.45);
-		beam.graphics.moveTo(-40, 0);
-		beam.graphics.lineTo(0, 0);
-		beam.graphics.lineStyle(2, 0xFFFFFF, 1);
-		beam.graphics.moveTo(-40, 0);
-		beam.graphics.lineTo(0, 0);
-		addChild(beam);
-		impact = new Shape();
-		impact.visible = false;
-		addChild(impact);
+		renderFrame();
 		addEventListener(Event.ENTER_FRAME, advance);
 	}
 
@@ -32,28 +22,22 @@ class LaserShotView extends Sprite {
 		if (playingHit) return;
 		playingHit = true;
 		currentFrame = 3;
-		getChildByName(TRAVEL_BEAM_NAME).visible = false;
-		redrawImpact();
+		renderFrame();
 	}
 
 	private function advance(_:Event):Void {
 		if (!playingHit || currentFrame >= 18) return;
 		currentFrame++;
-		redrawImpact();
+		renderFrame();
 	}
 
-	private function redrawImpact():Void {
-		impact.visible = true;
-		impact.graphics.clear();
-		var progress = (currentFrame - 3) / 15;
-		var fade = 1 - progress;
-		var radius = 4 + progress * 24;
-		impact.graphics.beginFill(0xFFFF00, fade * 0.8);
-		impact.graphics.drawCircle(0, 0, radius);
-		impact.graphics.endFill();
-		impact.graphics.beginFill(0xFFFFFF, fade);
-		impact.graphics.drawCircle(0, 0, radius * 0.45);
-		impact.graphics.endFill();
+	private function renderFrame():Void {
+		if (art != null && art.parent == this) removeChild(art);
+		currentAssetPath = 'assets/svg/effects/laser_${StringTools.lpad(Std.string(currentFrame), "0", 2)}.svg';
+		art = new Sprite();
+		art.name = playingHit ? "laserImpact" : TRAVEL_BEAM_NAME;
+		art.addChild(SvgAsset.create(currentAssetPath));
+		addChild(art);
 	}
 
 	public function dispose():Void {

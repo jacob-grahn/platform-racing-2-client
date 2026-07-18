@@ -35,13 +35,13 @@ class Guilds extends PlayersListHolder {
 	override public function initialize():Void {
 		graphic = new PlayersTabListView(true);
 		addChild(graphic);
-		var listHolder = Std.downcast(DisplayUtil.findByName(graphic, "listHolder"), DisplayObjectContainer);
+		var listHolder = Std.downcast(DisplayUtil.directChildByName(graphic, "listHolder"), DisplayObjectContainer);
 		if (listHolder != null) {
 			attachHolder(listHolder);
 		}
-		nameButton = Std.downcast(DisplayUtil.findByName(graphic, "name_bt"), DisplayObjectContainer);
-		activeButton = Std.downcast(DisplayUtil.findByName(graphic, "active_bt"), DisplayObjectContainer);
-		gpButton = Std.downcast(DisplayUtil.findByName(graphic, "gp_bt"), DisplayObjectContainer);
+		nameButton = Std.downcast(DisplayUtil.directChildByName(graphic, "name_bt"), DisplayObjectContainer);
+		activeButton = Std.downcast(DisplayUtil.directChildByName(graphic, "active_bt"), DisplayObjectContainer);
+		gpButton = Std.downcast(DisplayUtil.directChildByName(graphic, "gp_bt"), DisplayObjectContainer);
 		if (nameButton != null) {
 			nameButton.addEventListener(MouseEvent.CLICK, clickName);
 		}

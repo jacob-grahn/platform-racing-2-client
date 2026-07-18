@@ -1,16 +1,16 @@
 package pr2.lobby.dialogs;
 
 import openfl.text.TextField;
-import openfl.text.TextFormat;
-import pr2.assets.NativeAssetIds.FontAsset;
 import pr2.assets.NativeAssetIds.StaticSvg;
 import pr2.assets.NativeAssets;
 import pr2.ui.controls.GameButton;
+import pr2.ui.controls.GameTextArea;
 import pr2.ui.view.NativeView;
 
 /** Explicit native composition of MessagePopupGraphic. */
 class MessageDialogView extends NativeView {
 	public final message:TextField;
+	public final messageArea:GameTextArea;
 	public final okButton:GameButton;
 	public var onClose:Null<Void->Void>;
 
@@ -23,18 +23,15 @@ class MessageDialogView extends NativeView {
 		panel.scaleY = 0.785232543945312;
 		addChild(panel);
 
-		message = new TextField();
+		messageArea = ownControl(new GameTextArea(309.109497070313, 147.65));
+		messageArea.name = "textBox_control";
+		messageArea.x = -155;
+		messageArea.y = -65;
+		messageArea.editable = false;
+		message = messageArea.textField;
 		message.name = "textBox";
-		message.x = -155;
-		message.y = -65;
-		message.width = 309.109497070313;
-		message.height = 147.65;
-		message.multiline = true;
-		message.wordWrap = true;
-		message.selectable = true;
-		message.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 12, 0);
-		message.htmlText = value;
-		addChild(message);
+		messageArea.htmlText = value;
+		addChild(messageArea);
 
 		okButton = ownControl(new GameButton("OK"));
 		okButton.name = "ok_bt";

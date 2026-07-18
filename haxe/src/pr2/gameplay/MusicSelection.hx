@@ -1,41 +1,43 @@
 package pr2.gameplay;
 
 import openfl.events.Event;
+import openfl.display.Shape;
 import openfl.display.Sprite;
 import pr2.audio.GameMusic;
 import pr2.audio.MusicCatalog;
 import pr2.audio.MusicCatalog.MusicTrack;
 import pr2.display.Removable;
 import pr2.lobby.account.Settings;
-import pr2.runtime.FlComboBox;
 import pr2.ui.StageFocus;
+import pr2.ui.controls.GameSelect;
+import pr2.runtime.SvgAsset;
 
 /**
 	Port of Flash `gameplay.MusicSelection` and its `ui.GameSound` dropdown.
 **/
 class MusicSelection extends Removable {
+	public static inline final BACKGROUND_ASSET = "assets/svg/effects/music_selection_01.svg";
+
 	private var art:Null<Sprite>;
 	private var music:Null<GameMusic>;
 	private var songs:Array<MusicTrack>;
 
-	public final dropdown:FlComboBox;
+	public final dropdown:GameSelect<MusicTrack>;
+	public final exactBackground:Shape;
 
 	public function new(?music:GameMusic) {
 		super();
 		art = new Sprite();
-		art.graphics.beginFill(0xECECEC, 0.94);
-		art.graphics.lineStyle(1, 0x777777);
-		art.graphics.drawRoundRect(0, 0, 214, 36, 8, 8);
-		art.graphics.endFill();
+		exactBackground = SvgAsset.create(BACKGROUND_ASSET);
+		art.addChild(exactBackground);
 		addChild(art);
 
 		this.music = music == null ? new GameMusic() : music;
 		songs = MusicCatalog.enabled(Settings.disabledSongs());
-		dropdown = new FlComboBox();
+		dropdown = new GameSelect<MusicTrack>();
 		dropdown.x = 7;
 		dropdown.y = 7;
 		dropdown.setSize(200, 22);
-		dropdown.rowCount = 4;
 		for (song in songs) dropdown.addItem(song);
 		dropdown.selectedIndex = 0;
 		dropdown.addEventListener(Event.CHANGE, changeSong);
@@ -61,12 +63,12 @@ class MusicSelection extends Removable {
 	}
 
 	public function selectedSongId():String {
-		var selected:MusicTrack = cast dropdown.selectedItem;
+		var selected = dropdown.selectedItem;
 		return selected == null ? "" : selected.id;
 	}
 
 	private function changeSong(_:Event):Void {
-		var selected:MusicTrack = cast dropdown.selectedItem;
+		var selected = dropdown.selectedItem;
 		if (selected != null) music.setSong(selected);
 		StageFocus.reset();
 	}
@@ -74,6 +76,7 @@ class MusicSelection extends Removable {
 	override public function remove():Void {
 		if (isRemoved()) return;
 		dropdown.removeEventListener(Event.CHANGE, changeSong);
+		dropdown.dispose();
 		if (dropdown.parent == this) removeChild(dropdown);
 		if (music != null) {
 			music.remove();

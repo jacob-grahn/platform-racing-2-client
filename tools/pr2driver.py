@@ -27,7 +27,8 @@ Sequence script format:
 Key names: left right up down space
 """
 
-import subprocess, sys, os, time, tempfile, shutil, textwrap, contextlib
+import subprocess, sys, os, time, tempfile, shutil, textwrap, contextlib, plistlib
+from PIL import Image
 
 from pr2_sequence import load_sequence as load_pr2_sequence
 
@@ -69,6 +70,9 @@ def _stage_to_screen(sx, sy):
     wx, wy, _, _ = _win_rect()
     return wx + sx, wy + TITLE_H + sy
 
+def _window_id():
+    return _run_swift_output(_SWIFT_WIN_ID)
+
 # ---------------------------------------------------------------------------
 # Swift one-liners compiled on the fly
 # ---------------------------------------------------------------------------
@@ -76,7 +80,6 @@ def _stage_to_screen(sx, sy):
 _SWIFT_WIN_RECT = textwrap.dedent("""\
     import CoreGraphics
     import Foundation
-
     let options = CGWindowListOption(arrayLiteral: .optionOnScreenOnly, .excludeDesktopElements)
     let windows = CGWindowListCopyWindowInfo(options, kCGNullWindowID)! as NSArray
     for case let window as NSDictionary in windows {
@@ -95,18 +98,72 @@ _SWIFT_WIN_RECT = textwrap.dedent("""\
     exit(1)
 """)
 
-_SWIFT_CLICK = textwrap.dedent("""\
+_SWIFT_WIN_ID = textwrap.dedent("""\
     import CoreGraphics
     import Foundation
+
+    let options = CGWindowListOption(arrayLiteral: .optionOnScreenOnly, .excludeDesktopElements)
+    let windows = CGWindowListCopyWindowInfo(options, kCGNullWindowID)! as NSArray
+    for case let window as NSDictionary in windows {
+        let owner = window[kCGWindowOwnerName as String] as? String ?? ""
+        let layer = window[kCGWindowLayer as String] as? Int ?? -1
+        guard owner == "Flash Player", layer == 0 else { continue }
+        guard let number = window[kCGWindowNumber as String] as? Int else { continue }
+        print(number)
+        exit(0)
+    }
+    exit(1)
+""")
+
+_SWIFT_CLICK = textwrap.dedent("""\
+    import AppKit
+    import ApplicationServices
+    import CoreGraphics
+    import Foundation
+    @_silgen_name("GetProcessForPID")
+    func PR2GetProcessForPID(_ pid: pid_t, _ psn: UnsafeMutablePointer<ProcessSerialNumber>) -> OSStatus
+    @_silgen_name("SetFrontProcessWithOptions")
+    func PR2SetFrontProcessWithOptions(_ psn: UnsafePointer<ProcessSerialNumber>, _ options: UInt32) -> OSStatus
     let x = Double(CommandLine.arguments[1])!
     let y = Double(CommandLine.arguments[2])!
     let p = CGPoint(x: x, y: y)
-    let src = CGEventSource(stateID: .hidSystemState)
-    CGEvent(mouseEventSource: src, mouseType: .mouseMoved, mouseCursorPosition: p, mouseButton: .left)?.post(tap: .cghidEventTap)
-    usleep(60_000)
-    CGEvent(mouseEventSource: src, mouseType: .leftMouseDown, mouseCursorPosition: p, mouseButton: .left)?.post(tap: .cghidEventTap)
-    usleep(60_000)
-    CGEvent(mouseEventSource: src, mouseType: .leftMouseUp, mouseCursorPosition: p, mouseButton: .left)?.post(tap: .cghidEventTap)
+    let app = NSRunningApplication.runningApplications(withBundleIdentifier: "com.macromedia.Flash Player.app").first!
+    var psn = ProcessSerialNumber()
+    let processResult = PR2GetProcessForPID(app.processIdentifier, &psn)
+    let frontResult = processResult == noErr
+        ? PR2SetFrontProcessWithOptions(&psn, 2)
+        : processResult
+    usleep(300_000)
+    guard frontResult == noErr else {
+        fputs("Unable to make Flash Player frontmost before click (process=\\(processResult), front=\\(frontResult), active=\\(app.isActive)).\\n", stderr)
+        exit(2)
+    }
+    let frontWindows = CGWindowListCopyWindowInfo([.optionOnScreenOnly, .excludeDesktopElements], kCGNullWindowID)! as NSArray
+    for case let window as NSDictionary in frontWindows {
+        if (window[kCGWindowLayer as String] as? Int ?? -1) == 0 {
+            let owner = window[kCGWindowOwnerName as String] as? String ?? ""
+            if owner != "Flash Player" {
+                fputs("Frontmost normal window is \\(owner), not Flash Player.\\n", stderr)
+            }
+            break
+        }
+    }
+    CGWarpMouseCursorPosition(p)
+    CGAssociateMouseAndMouseCursorPosition(1)
+    usleep(100_000)
+    let source = CGEventSource(stateID: .hidSystemState)
+    let down = CGEvent(mouseEventSource: source, mouseType: .leftMouseDown, mouseCursorPosition: p, mouseButton: .left)!
+    down.setIntegerValueField(.mouseEventButtonNumber, value: 0)
+    down.setIntegerValueField(.mouseEventClickState, value: 1)
+    down.setDoubleValueField(.mouseEventPressure, value: 1)
+    down.post(tap: .cghidEventTap)
+    usleep(80_000)
+    let up = CGEvent(mouseEventSource: source, mouseType: .leftMouseUp, mouseCursorPosition: p, mouseButton: .left)!
+    up.setIntegerValueField(.mouseEventButtonNumber, value: 0)
+    up.setIntegerValueField(.mouseEventClickState, value: 1)
+    up.setDoubleValueField(.mouseEventPressure, value: 0)
+    up.post(tap: .cghidEventTap)
+    usleep(100_000)
 """)
 
 _SWIFT_TYPE = textwrap.dedent("""\
@@ -191,14 +248,24 @@ def cmd_launch():
     subprocess.run(["killall", PROC_NAME], capture_output=True)
     time.sleep(1)
     if APP_PATH:
-        subprocess.run(["open", APP_PATH], check=True)
+        launched = subprocess.run(["open", APP_PATH], capture_output=True)
+        if launched.returncode != 0 and APP_PATH.endswith(".app"):
+            info_path = os.path.join(APP_PATH, "Contents", "Info.plist")
+            with open(info_path, "rb") as info_file:
+                executable = plistlib.load(info_file)["CFBundleExecutable"]
+            executable_path = os.path.join(APP_PATH, "Contents", "MacOS", executable)
+            subprocess.Popen([executable_path], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        elif launched.returncode != 0:
+            launched.check_returncode()
     else:
         subprocess.run(["open", "-a", APP_NAME], check=True)
     print("Waiting for window...", end="", flush=True)
     for _ in range(30):
         time.sleep(0.5)
         try:
-            _win_rect(); print(" ready."); return
+            _win_rect()
+            print(" ready.")
+            return
         except Exception:
             print(".", end="", flush=True)
     print("\nTimeout waiting for Flash Player window.")
@@ -212,21 +279,22 @@ def cmd_shot(out_path):
     out_path = out_path.replace("{target}", "flash")
     out_dir = os.path.dirname(os.path.abspath(out_path))
     os.makedirs(out_dir, exist_ok=True)
-    wx, wy, ww, wh = _win_rect()
-    # Crop to the SWF stage only (exclude title bar)
-    sx, sy = wx, wy + TITLE_H
+    _, _, ww, wh = _win_rect()
+    # Capture by window ID so an edge-pinned projector and multi-display
+    # coordinates cannot make screencapture reject the evidence rectangle.
     sw, sh = ww, wh - TITLE_H
     fmt = "png" if out_path.lower().endswith(".png") else "jpeg"
     raw = out_path + ".raw.png"
     subprocess.run(
-        ["screencapture", "-x", "-R", f"{sx},{sy},{sw},{sh}", raw],
+        ["screencapture", "-x", "-o", "-l", _window_id(), raw],
         check=True
     )
-    # Downscale to logical resolution (screencapture is 2x on Retina)
-    subprocess.run(
-        ["sips", "-Z", str(sw), "-s", "format", fmt, raw, "--out", out_path],
-        check=True, capture_output=True
-    )
+    with Image.open(raw) as image:
+        scale = image.width / ww
+        title_pixels = round(TITLE_H * scale)
+        stage = image.crop((0, title_pixels, image.width, image.height))
+        stage = stage.resize((sw, sh), Image.Resampling.LANCZOS)
+        stage.save(out_path, format=fmt.upper())
     os.unlink(raw)
     print(f"Shot saved: {out_path}")
 

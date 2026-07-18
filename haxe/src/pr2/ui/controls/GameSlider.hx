@@ -3,7 +3,10 @@ package pr2.ui.controls;
 import openfl.events.Event;
 import openfl.events.KeyboardEvent;
 import openfl.events.MouseEvent;
+import openfl.display.Sprite;
+import openfl.geom.Rectangle;
 import openfl.ui.Keyboard;
+import pr2.runtime.SvgAsset;
 
 class GameSlider extends NativeControl {
 	public var minimum(default, null):Float;
@@ -12,8 +15,11 @@ class GameSlider extends NativeControl {
 	public var value(default, set):Float;
 	public var onChange:Null<Float->Void>;
 	public var onRelease:Null<Void->Void>;
-	private final thumb:openfl.display.Sprite;
+	private final track:Sprite;
+	private final thumb:Sprite;
 	private var dragging:Bool = false;
+	private var thumbHovered:Bool = false;
+	private var thumbPressed:Bool = false;
 
 	public function new(minimum:Float = 0, maximum:Float = 10, value:Float = 0, step:Float = 1, ?skin:ControlSkin) {
 		if (maximum < minimum || step <= 0) throw "Invalid slider range";
@@ -21,9 +27,19 @@ class GameSlider extends NativeControl {
 		this.minimum = minimum;
 		this.maximum = maximum;
 		this.step = step;
-		thumb = new openfl.display.Sprite();
-		thumb.mouseEnabled = false;
+		graphics.clear();
+		track = new Sprite();
+		track.mouseEnabled = false;
+		track.mouseChildren = false;
+		track.scale9Grid = new Rectangle(2.25, 0, 75.75, 3);
+		addChild(track);
+		thumb = new Sprite();
+		thumb.mouseChildren = false;
 		addChild(thumb);
+		thumb.addEventListener(MouseEvent.ROLL_OVER, thumbOver);
+		thumb.addEventListener(MouseEvent.ROLL_OUT, thumbOut);
+		thumb.addEventListener(MouseEvent.MOUSE_DOWN, thumbDown);
+		drawTrack();
 		this.value = value;
 		addEventListener(KeyboardEvent.KEY_DOWN, adjustFromKey);
 		addEventListener(MouseEvent.MOUSE_DOWN, beginDrag);
@@ -37,12 +53,23 @@ class GameSlider extends NativeControl {
 		if (value != before) { if (onChange != null) onChange(value); dispatchEvent(new Event(Event.CHANGE)); }
 	}
 
-	override public function setSize(width:Float, height:Float):Void { super.setSize(width, height); drawThumb(); }
-	override public function enabledChanged(value:Bool):Void drawThumb();
+	override public function setSize(width:Float, height:Float):Void { super.setSize(width, height); graphics.clear(); drawTrack(); drawThumb(); }
+	override public function enabledChanged(value:Bool):Void {
+		graphics.clear();
+		if (!value) {
+			thumbHovered = false;
+			thumbPressed = false;
+		}
+		drawTrack();
+		drawThumb();
+	}
 	override public function dispose():Void {
 		removeEventListener(KeyboardEvent.KEY_DOWN, adjustFromKey);
 		removeEventListener(MouseEvent.MOUSE_DOWN, beginDrag);
 		removeEventListener(MouseEvent.CLICK, selectFromMouse);
+		thumb.removeEventListener(MouseEvent.ROLL_OVER, thumbOver);
+		thumb.removeEventListener(MouseEvent.ROLL_OUT, thumbOut);
+		thumb.removeEventListener(MouseEvent.MOUSE_DOWN, thumbDown);
 		removeStageDragListeners();
 		onChange = null;
 		onRelease = null;
@@ -70,6 +97,8 @@ class GameSlider extends NativeControl {
 	private function endDrag(_:MouseEvent):Void {
 		if (!dragging) return;
 		dragging = false;
+		thumbPressed = false;
+		drawThumb();
 		removeStageDragListeners();
 		if (onRelease != null) onRelease();
 	}
@@ -85,14 +114,29 @@ class GameSlider extends NativeControl {
 	private function drawThumb():Void {
 		if (thumb == null) return;
 		var ratio = maximum == minimum ? 0 : (value - minimum) / (maximum - minimum);
-		thumb.graphics.clear();
-		thumb.graphics.lineStyle(1, enabled ? 0x555555 : 0x999999);
-		thumb.graphics.beginFill(enabled ? 0xEEEEEE : 0xCCCCCC);
-		thumb.graphics.drawRoundRect(-5, -7, 10, 14, 3, 3);
-		thumb.graphics.endFill();
+		while (thumb.numChildren > 0) thumb.removeChildAt(0);
+		var path = !enabled ? "assets/svg/ui/slider_thumb_disabled.svg" : (thumbPressed ? "assets/svg/ui/slider_thumb_down.svg" : (thumbHovered ?
+			"assets/svg/ui/slider_thumb_over.svg" : "assets/svg/ui/slider_thumb_up.svg"));
+		thumb.addChild(SvgAsset.create(path));
 		thumb.x = 5 + ratio * Math.max(1, controlWidth - 10);
-		thumb.y = Math.floor(controlHeight / 2);
+		thumb.y = (controlHeight - 13) / 2;
 	}
+
+	private function drawTrack():Void {
+		if (track == null) return;
+		while (track.numChildren > 0) track.removeChildAt(0);
+		track.addChild(SvgAsset.create(enabled ? "assets/svg/ui/slider_track_up.svg" : "assets/svg/ui/slider_track_disabled.svg"));
+		track.width = controlWidth;
+		track.y = (controlHeight - 3) / 2;
+	}
+
+	private function thumbOver(_:MouseEvent):Void { if (enabled) { thumbHovered = true; drawThumb(); } }
+	private function thumbOut(_:MouseEvent):Void { if (!thumbPressed) { thumbHovered = false; drawThumb(); } }
+	private function thumbDown(_:MouseEvent):Void { if (enabled) { thumbPressed = true; drawThumb(); } }
+
+	@:noCompletion public function thumbAssetForTests():String return !enabled ? "slider_thumb_disabled" : (thumbPressed ? "slider_thumb_down" :
+		(thumbHovered ? "slider_thumb_over" : "slider_thumb_up"));
+	@:noCompletion public function trackAssetForTests():String return enabled ? "slider_track_up" : "slider_track_disabled";
 
 	@:noCompletion public function setValueFromPositionForTests(localX:Float):Void setValueFromPosition(localX);
 	private function adjustFromKey(event:KeyboardEvent):Void {

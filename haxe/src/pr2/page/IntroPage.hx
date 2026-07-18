@@ -29,16 +29,7 @@ import StringTools;
 class IntroPage extends Page {
 	// Intro identifiers, matching menu.IntroPage.
 	static inline var JIGG_INTRO = 1;
-	static inline var ARMOR_INTRO = 2;
-	static inline var BUBBOX_INTRO = 3;
 	static inline var KONG_INTRO = 4;
-
-	// 1-based frame where each intro's frame script stops and signals
-	// completion, matching the original addFrameScript calls:
-	//   JiggminIntroGraphic: addFrameScript(230, frame231)
-	//   KongregateIntroGraphic: addFrameScript(152, frame153)
-	static inline var JIGG_COMPLETE_FRAME = 231;
-	static inline var KONG_COMPLETE_FRAME = 153;
 
 	// The Jiggmin wordmark is a 300x87 bitmap (the original `JiggminLogo`),
 	// bundled with the block assets.
@@ -53,16 +44,20 @@ class IntroPage extends Page {
 	private var listeningStage:Null<Stage>;
 	private var ended:Bool = false;
 	private var siteMode:String;
+	private final initialFrame:Null<Int>;
+	private final includePixelEffect:Bool;
 
 	/**
 		@param siteMode which host the client thinks it is, picking the intro
 			sequence (defaults to the kongregate Jiggmin+Kongregate sequence).
-		@param only optional single intro name ("jiggmin", "kongregate",
-			"armor", "bubblebox") to play just one intro; used for testing.
+		@param only optional single intro name ("jiggmin" or "kongregate")
+			to play just one intro; used for testing.
 	**/
-	public function new(?siteMode:String, ?only:String) {
+	public function new(?siteMode:String, ?only:String, ?initialFrame:Int, includePixelEffect:Bool = true) {
 		super();
 		this.siteMode = siteMode == null ? "kongregate" : siteMode;
+		this.initialFrame = initialFrame;
+		this.includePixelEffect = includePixelEffect;
 
 		// The original Jiggmin intro played over a full-screen black backdrop
 		// (Symbol 26). Reproduce it here so the window background never shows
@@ -104,8 +99,6 @@ class IntroPage extends Page {
 			var mode = this.siteMode;
 			toPlay = switch (mode) {
 				case "inXile": [JIGG_INTRO];
-				case "bubbleBox": [JIGG_INTRO, BUBBOX_INTRO];
-				case "armorGames": [JIGG_INTRO, ARMOR_INTRO];
 				default: [JIGG_INTRO, KONG_INTRO]; // kongregate
 			};
 		}
@@ -154,15 +147,11 @@ class IntroPage extends Page {
 		var intro:Null<IntroAnimationView> = null;
 
 		switch (type) {
-			case JIGG_INTRO:
-				intro = new IntroAnimationView("jiggmin", 249, JIGG_COMPLETE_FRAME);
-				injectJiggminLogo(intro);
+		case JIGG_INTRO:
+			intro = new IntroAnimationView("jiggmin");
+			if (includePixelEffect) injectJiggminLogo(intro);
 			case KONG_INTRO:
-				intro = new IntroAnimationView("kongregate", 153, KONG_COMPLETE_FRAME);
-			case ARMOR_INTRO:
-				intro = new IntroAnimationView("armor", 218, 218);
-			case BUBBOX_INTRO:
-				intro = new IntroAnimationView("bubblebox", 117, 117);
+				intro = new IntroAnimationView("kongregate");
 		}
 
 		if (intro == null) {
@@ -180,6 +169,12 @@ class IntroPage extends Page {
 		} else {
 			addChild(intro);
 		}
+		if (initialFrame != null) intro.timeline.gotoAndStop(initialFrame);
+		#if js
+		untyped Browser.window.__pr2SeekIntroForTests = function(frame:Int):Void {
+			if (currentIntro != null) currentIntro.timeline.gotoAndStop(frame);
+		};
+		#end
 	}
 
 	/**
@@ -202,8 +197,6 @@ class IntroPage extends Page {
 		// copy of the logo pixels, so clone rather than handing it the shared
 		// cached asset bitmap (SegPixel mutates and disposes its source).
 		var effect = new PixelEffect1(bitmapData.clone());
-		effect.x = 125;
-		effect.y = 155;
 		intro.logoHolder.addChild(effect);
 	}
 
@@ -216,6 +209,9 @@ class IntroPage extends Page {
 		currentIntro.removeEventListener(Event.COMPLETE, onComplete);
 		currentIntro.dispose();
 		currentIntro = null;
+		#if js
+		untyped Browser.window.__pr2SeekIntroForTests = null;
+		#end
 	}
 
 	private function onComplete(event:Event):Void {
@@ -240,8 +236,6 @@ class IntroPage extends Page {
 		return switch (StringTools.trim(name).toLowerCase()) {
 			case "jiggmin" | "jigg": JIGG_INTRO;
 			case "kongregate" | "kong": KONG_INTRO;
-			case "armor" | "armorgames": ARMOR_INTRO;
-			case "bubblebox" | "bubbox": BUBBOX_INTRO;
 			default: null;
 		}
 	}
@@ -250,8 +244,6 @@ class IntroPage extends Page {
 		return switch (type) {
 			case JIGG_INTRO: "jiggmin";
 			case KONG_INTRO: "kongregate";
-			case ARMOR_INTRO: "armor";
-			case BUBBOX_INTRO: "bubblebox";
 			default: "unknown";
 		}
 	}

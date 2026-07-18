@@ -74,9 +74,9 @@ class AccountTab extends Page {
 	override public function initialize():Void {
 		art = new AccountInfoView();
 		addChild(art);
-		rankUp = DisplayUtil.findByName(art, "rankTokenUp_bt");
-		rankDown = DisplayUtil.findByName(art, "rankTokenDown_bt");
-		loadouts = DisplayUtil.findByName(art, "loadouts_bt");
+		rankUp = DisplayUtil.directChildByName(art, "rankTokenUp_bt");
+		rankDown = DisplayUtil.directChildByName(art, "rankTokenDown_bt");
+		loadouts = DisplayUtil.directChildByName(art, "loadouts_bt");
 		upBinding = LobbyArt.bind(rankUp, useRankToken);
 		downBinding = LobbyArt.bind(rankDown, unuseRankToken);
 		loadoutsBinding = LobbyArt.bind(loadouts, openLoadouts);
@@ -224,8 +224,8 @@ class AccountTab extends Page {
 		if (rankDown != null) rankDown.visible = rankTokensUsed > 0;
 		setButtonText(rankUp, unused);
 		setButtonText(rankDown, rankTokensUsed);
-		if (rankUp != null) rankUp.x = 65;
-		if (rankDown != null) rankDown.x = unused > 0 ? 95 : 65;
+		if (rankUp != null) rankUp.x = 66;
+		if (rankDown != null) rankDown.x = unused > 0 ? 101 : 66;
 	}
 
 	private function openLoadouts():Void {
@@ -304,7 +304,7 @@ class AccountTab extends Page {
 	}
 
 	private function setHtml(name:String, value:String):Void {
-		var field = LobbyArt.text(art, name);
+		var field = LobbyArt.directText(art, name);
 		if (field != null) field.htmlText = value;
 	}
 
@@ -315,7 +315,7 @@ class AccountTab extends Page {
 			return;
 		}
 		var container = Std.downcast(button, openfl.display.DisplayObjectContainer);
-		var field = LobbyArt.text(container, "textBox");
+		var field = LobbyArt.directText(container, "textBox");
 		if (field != null) field.text = Std.string(value);
 	}
 

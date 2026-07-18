@@ -7,7 +7,8 @@ import pr2.lobby.dialogs.MessagePopup;
 import pr2.lobby.dialogs.Popup;
 import pr2.net.ServerConfig;
 import pr2.ui.controls.GameTextInput;
-import pr2.util.DisplayUtil;
+import pr2.ui.controls.GameTextArea;
+import pr2.util.TestDisplayUtil as DisplayUtil;
 
 class CreateGuildPopupTest {
 	private static var assertions:Int = 0;
@@ -26,6 +27,8 @@ class CreateGuildPopupTest {
 
 		testCreateUpdatesAccount();
 		if (pr2.DeterministicTestMode.finishSmokeSuite("CreateGuildPopupTest")) return;
+		testExactAuthoredLayout();
+		testSaveErrorRestoresConfirm();
 		testEditLoadsDeletesAndPosts();
 		testModEditDoesNotUpdateAccount();
 		testTransferGate();
@@ -76,6 +79,64 @@ class CreateGuildPopupTest {
 		assertEquals(true, LobbySession.guildOwner, "create marks owner");
 		assertEquals(1, accountChanges, "create dispatches account change");
 		LobbySession.offAccountChange(listener);
+		closeAll();
+	}
+
+	private static function testExactAuthoredLayout():Void {
+		closeAll();
+		LobbySession.guildId = 0;
+		var popup = new CreateGuildPopup();
+		var panel = DisplayUtil.findByName(popup, "panel");
+		var transferPanel = DisplayUtil.findByName(popup, "transfer_bg");
+		var name = Std.downcast(DisplayUtil.findByName(popup, "nameBox"), GameTextInput);
+		var prose = Std.downcast(DisplayUtil.findByName(popup, "proseBox"), GameTextArea);
+		var emblemBacking = DisplayUtil.findByName(popup, "emblemBacking");
+		var change = DisplayUtil.findByName(popup, "changeEmblem_bt");
+		var remove = DisplayUtil.findByName(popup, "deleteEmblem_bt");
+		var transfer = DisplayUtil.findByName(popup, "transfer_bt");
+		var confirm = DisplayUtil.findByName(popup, "confirm_bt");
+		var cancel = DisplayUtil.findByName(popup, "cancel_bt");
+		assertClose(-135.2, panel.x, "main ShadowBG keeps XFL X");
+		assertClose(-108.8, panel.y, "main ShadowBG keeps XFL Y");
+		assertClose(0.994140625, panel.scaleX, "main ShadowBG keeps XFL horizontal scale");
+		assertClose(1.26116943359375, panel.scaleY, "main ShadowBG keeps XFL vertical scale");
+		assertClose(-138.8, transferPanel.y, "transfer ShadowBG keeps XFL Y");
+		assertClose(0.15704345703125, transferPanel.scaleY, "transfer ShadowBG keeps XFL vertical scale");
+		assertEquals(false, transferPanel.visible, "create mode hides transfer strip");
+		assertClose(-44, name.x, "guild name input keeps XFL X");
+		assertClose(-60, name.y, "guild name input keeps XFL Y");
+		assertClose(100 * 1.49998474121094, name.controlWidth, "guild name input keeps authored scale");
+		assertEquals(20, name.maxChars, "guild name input keeps authored maximum");
+		assertClose(-44, prose.x, "guild prose area keeps XFL X");
+		assertClose(32, prose.y, "guild prose area keeps XFL Y");
+		assertClose(240, prose.controlWidth, "guild prose area keeps authored scale");
+		assertClose(100, prose.controlHeight, "guild prose area keeps authored height");
+		assertEquals(100, prose.maxChars, "guild prose area keeps authored maximum");
+		assertClose(-43, emblemBacking.x, "emblem backing visible bounds keep XFL X");
+		assertClose(-27, emblemBacking.y, "emblem backing visible bounds keep XFL Y");
+		assertClose(60, change.x, "change link keeps XFL X");
+		assertClose(8, change.y, "change link keeps XFL Y");
+		assertClose(60, remove.x, "delete link keeps XFL X");
+		assertClose(-7.85, remove.y, "delete link keeps XFL Y");
+		assertClose(-36.85, transfer.x, "transfer link keeps XFL X");
+		assertClose(-131.85, transfer.y, "transfer link keeps XFL Y");
+		assertClose(-114, confirm.x, "confirm button keeps XFL X");
+		assertClose(95, confirm.y, "confirm button keeps XFL Y");
+		assertClose(15, cancel.x, "cancel button keeps XFL X");
+		assertClose(95, cancel.y, "cancel button keeps XFL Y");
+		closeAll();
+	}
+
+	private static function testSaveErrorRestoresConfirm():Void {
+		closeAll();
+		CreateGuildPopup.saveFactory = function(url:String, fields:Map<String, String>, onResult:Dynamic->Void, onError:String->Void):Void {
+			onError("nope");
+		};
+		var popup = new CreateGuildPopup();
+		click(popup, "confirm_bt");
+		assertClose(1, DisplayUtil.findByName(popup, "confirm_bt").alpha, "save error restores confirm alpha");
+		click(popup, "confirm_bt");
+		assertClose(1, DisplayUtil.findByName(popup, "confirm_bt").alpha, "save error permits a retry");
 		closeAll();
 	}
 
@@ -222,5 +283,10 @@ class CreateGuildPopupTest {
 	private static function assertEquals(expected:Dynamic, actual:Dynamic, message:String):Void {
 		assertions++;
 		if (expected != actual) throw '$message: expected $expected, got $actual';
+	}
+
+	private static function assertClose(expected:Float, actual:Float, message:String):Void {
+		assertions++;
+		if (Math.abs(expected - actual) > 0.000001) throw '$message: expected $expected, got $actual';
 	}
 }

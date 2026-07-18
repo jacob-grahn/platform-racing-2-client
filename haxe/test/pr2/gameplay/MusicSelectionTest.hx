@@ -22,6 +22,13 @@ class MusicSelectionTest {
 	private static function testLevelSongSelection():Void {
 		var music = new RecordingGameMusic();
 		var selection = new MusicSelection(music);
+		assertEquals("assets/svg/effects/music_selection_01.svg", MusicSelection.BACKGROUND_ASSET,
+			"music selection uses the exact authored XFL background");
+		var bounds = selection.exactBackground.getBounds(selection.exactBackground);
+		assertNear(214.02, bounds.width, 0.1, "authored background preserves XFL horizontal scale");
+		assertNear(35.0, bounds.height, 0.1, "authored background preserves XFL vertical scale");
+		assertNear(7.0, selection.dropdown.x, 0.001, "dropdown preserves Flash x position");
+		assertNear(7.0, selection.dropdown.y, 0.001, "dropdown preserves Flash y position");
 		selection.setSong("3", 0);
 		assertEquals("3", selection.selectedSongId(), "known level song is selected");
 		assertEquals("3", music.lastSongId, "known level song starts playing");
@@ -66,6 +73,11 @@ class MusicSelectionTest {
 	private static function assertEquals(expected:Dynamic, actual:Dynamic, message:String):Void {
 		assertions++;
 		if (expected != actual) throw '$message: expected $expected, got $actual';
+	}
+
+	private static function assertNear(expected:Float, actual:Float, tolerance:Float, message:String):Void {
+		assertions++;
+		if (Math.abs(expected - actual) > tolerance) throw '$message: expected $expected +/- $tolerance, got $actual';
 	}
 }
 

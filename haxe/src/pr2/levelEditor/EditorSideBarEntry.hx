@@ -10,9 +10,6 @@ import openfl.geom.ColorTransform;
 import pr2.assets.NativeAssetIds.StaticSvg;
 import pr2.assets.NativeAssets;
 import pr2.lobby.dialogs.HoverDelayPopup;
-import pr2.runtime.FlComponents;
-import pr2.runtime.PR2MovieClip;
-import pr2.util.DisplayUtil;
 
 class EditorSideBarEntry extends HoverDelayPopup {
 	public final id:String;
@@ -36,7 +33,6 @@ class EditorSideBarEntry extends HoverDelayPopup {
 		addChild(chrome);
 		if (icon != null) {
 			var iconDisplay:DisplayObject = cast icon;
-			freezeTimelines(iconDisplay);
 			var interactiveIcon = Std.downcast(iconDisplay, InteractiveObject);
 			if (interactiveIcon != null) {
 				interactiveIcon.mouseEnabled = false;
@@ -58,32 +54,21 @@ class EditorSideBarEntry extends HoverDelayPopup {
 	}
 
 	public function setDisplayedValue(value:String):Void {
-		var container = Std.downcast(icon, DisplayObjectContainer);
-		if (container == null) {
-			return;
-		}
-		var valueBox = FlComponents.asTextField(DisplayUtil.findByName(container, "valueBox"));
-		if (valueBox != null) {
-			valueBox.text = value;
+		var nativeIcon = Std.downcast(icon, EditorNativeGraphic);
+		if (nativeIcon != null && nativeIcon.valueBox != null) {
+			nativeIcon.valueBox.text = value;
 		}
 	}
 
 	public function displayedValueForTests():String {
-		var container = Std.downcast(icon, DisplayObjectContainer);
-		if (container == null) {
-			return "";
-		}
-		var valueBox = FlComponents.asTextField(DisplayUtil.findByName(container, "valueBox"));
-		return valueBox == null ? "" : valueBox.text;
+		var nativeIcon = Std.downcast(icon, EditorNativeGraphic);
+		return nativeIcon == null || nativeIcon.valueBox == null ? "" : nativeIcon.valueBox.text;
 	}
 
 	override public function remove():Void {
 		removeEventListener(MouseEvent.MOUSE_OVER, overIcon);
 		removeEventListener(MouseEvent.MOUSE_OUT, outIcon);
 		if (chrome != null && chrome.parent == this) removeChild(chrome);
-		if (Std.isOfType(icon, PR2MovieClip)) {
-			cast(icon, PR2MovieClip).dispose();
-		}
 		super.remove();
 		chrome = null;
 		icon = null;
@@ -141,17 +126,4 @@ class EditorSideBarEntry extends HoverDelayPopup {
 		}
 	}
 
-	private static function freezeTimelines(display:DisplayObject):Void {
-		var clip = Std.downcast(display, PR2MovieClip);
-		if (clip != null) {
-			clip.stopAll();
-			return;
-		}
-		var container = Std.downcast(display, DisplayObjectContainer);
-		if (container != null) {
-			for (i in 0...container.numChildren) {
-				freezeTimelines(container.getChildAt(i));
-			}
-		}
-	}
 }

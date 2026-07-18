@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="550px" height="400px" viewBox="0 0 550 400" preserveAspectRatio="none" data-xfl-root="MovieClips/Symbol 1196">
+  <g data-xfl-symbol="MovieClips/Symbol 1196">
+    <g transform="matrix(2.4799957275 0 0 0.3399963379 347.2 38.05)">
+      <g data-xfl-symbol="Graphics/Symbol 1032">
+        <g data-svg-leaf="graphics_symbol_1032_dfd600290d/t00_l000_f0000_r00.svg">
+          <defs>
+            <g id="xfl1_Layer0_0_FILL">
+              <path fill="#CCCCCC" stroke="none" d=" M -40 -59 L -40 -109 -140 -109 -140 -59 -40 -59 Z" />
+            </g>
+          </defs>
+          <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+            <use xlink:href="#xfl1_Layer0_0_FILL" />
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

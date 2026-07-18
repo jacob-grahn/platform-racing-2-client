@@ -1,54 +1,70 @@
 package pr2.lobby;
 
-import openfl.text.TextField;
-import openfl.text.TextFormat;
-import openfl.text.TextFormatAlign;
-import pr2.assets.NativeAssetIds.FontAsset;
-import pr2.assets.NativeAssets;
+import openfl.geom.Rectangle;
+import pr2.lobby.LobbySpecialButton.LobbySpecialButtonKind;
 import pr2.ui.controls.GameButton;
 import pr2.ui.view.NativeView;
 
-/** Native lobby footer with the same named action targets as the Flash strip. */
+/** Exact two production frames of XFL `UI/Pages/Lobby/LobbyBottom`. */
 class LobbyBottomButtonsView extends NativeView {
-	private final siteLabel:TextField;
+	public final logoutButton:GameButton;
+	public final levelEditorButton:GameButton;
+	public final moreGamesButton:LobbySpecialButton;
+	public final optionsButton:GameButton;
+	public final vaultButton:LobbySpecialButton;
+	public final creditsButton:GameButton;
+	public var member(default, null):Bool;
 
 	public function new(member:Bool) {
 		super();
-		y = 374;
-		graphics.beginFill(0xE7E7E7, 0.96);
-		graphics.lineStyle(1, 0x777777);
-		graphics.drawRoundRect(7, 0, 536, 38, 8, 8);
-		graphics.endFill();
-		var specs = [
-			{name: "logoutButton", label: "Log Out"},
-			{name: "levelEditorButton", label: "Level Editor"},
-			{name: "moreGamesButton", label: "More Games"},
-			{name: "optionsButton", label: "Options"},
-			{name: "vaultButton", label: "Vault"},
-			{name: "creditsButton", label: "Credits"}
-		];
-		for (index in 0...specs.length) {
-			var spec = specs[index];
-			var button = ownControl(new GameButton(spec.label));
-			button.name = spec.name;
-			button.x = 15 + index * 86;
-			button.y = 7;
-			button.setSize(78, 24);
-			addChild(button);
-		}
-		siteLabel = new TextField();
-		siteLabel.x = 375;
-		siteLabel.y = -15;
-		siteLabel.width = 160;
-		siteLabel.height = 14;
-		siteLabel.selectable = false;
-		siteLabel.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 9, 0x555555, false, null, null, null, null,
-			TextFormatAlign.RIGHT);
-		addChild(siteLabel);
+		scrollRect = new Rectangle(0, 0, 550, 400);
+		creditsButton = classic("creditsButton", "Credits");
+		moreGamesButton = special("moreGamesButton", Kong);
+		optionsButton = classic("optionsButton", "Options");
+		levelEditorButton = classic("levelEditorButton", "Level Editor");
+		logoutButton = classic("logoutButton", "Logout");
+		vaultButton = special("vaultButton", Vault);
 		setMemberVariant(member);
 	}
 
 	public function setMemberVariant(member:Bool):Void {
-		siteLabel.text = member ? "Kongregate member" : "Sponsored guest";
+		this.member = member;
+		if (member) {
+			// XFL label `kongregateSite`, frame 21.
+			place(creditsButton, 246.9, 435, 111 * 0.581741333007812, 22);
+			place(moreGamesButton, 363.45, 430, 111 * 0.960159301757812, 22 * 1.272705078125);
+			place(optionsButton, 423, 369, 111 * 0.580245971679688, 22);
+			place(levelEditorButton, 285, 369, 111 * 0.739898681640625, 22);
+			place(logoutButton, 363, 369, 111 * 0.559982299804688, 22);
+			place(vaultButton, 206, 366, 111 * 0.740097045898438, 22 * 1.272705078125);
+		} else {
+			// XFL label `sponsoredSite`, frame 11.
+			place(creditsButton, 207, 369, 111 * 0.581741333007812, 22);
+			place(moreGamesButton, 334.15, 421, 111 * 0.960159301757812, 22 * 1.272705078125);
+			place(optionsButton, 423, 369, 111 * 0.581741333007812, 22);
+			place(levelEditorButton, 272, 369, 111 * 0.814407348632812, 22);
+			place(logoutButton, 361, 369, 111 * 0.546981811523438, 22);
+			place(vaultButton, 255, 421, 111 * 0.740097045898438, 22 * 1.272705078125);
+		}
+	}
+
+	private function classic(name:String, label:String):GameButton {
+		var button = ownControl(new GameButton(label));
+		button.name = name;
+		addChild(button);
+		return button;
+	}
+
+	private function special(name:String, kind:LobbySpecialButtonKind):LobbySpecialButton {
+		var button = ownControl(new LobbySpecialButton(kind));
+		button.name = name;
+		addChild(button);
+		return button;
+	}
+
+	private static function place(button:GameButton, x:Float, y:Float, width:Float, height:Float):Void {
+		button.x = x;
+		button.y = y;
+		button.setSize(width, height);
 	}
 }

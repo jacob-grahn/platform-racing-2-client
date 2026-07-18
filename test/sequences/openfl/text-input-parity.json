@@ -1,14 +1,14 @@
 {
   "query": "screen=login",
   "steps": [
-    {"time": 8.0, "action": "click", "x": 275, "y": 239},
+    {"time": 8.0, "action": "click-display-object", "name": "loginButton"},
     {"time": 8.3, "action": "shot", "out": "test/output/openfl-text-input-login-empty.png"},
-    {"time": 8.4, "action": "click", "x": 275, "y": 135},
+    {"time": 8.4, "action": "click-display-object", "name": "nameBox"},
     {"time": 8.5, "action": "typeText", "text": "Tester"},
     {"time": 8.6, "action": "shot", "out": "test/output/openfl-text-input-login-short-focused.png"},
     {"time": 8.7, "action": "typeText", "text": "-long-value-that-scrolls-through-the-authored-field"},
     {"time": 8.8, "action": "shot", "out": "test/output/openfl-text-input-login-long-focused.png"},
-    {"time": 8.9, "action": "click", "x": 275, "y": 163},
+    {"time": 8.9, "action": "click-display-object", "name": "passBox"},
     {"time": 9.0, "action": "typeText", "text": "password"},
     {"time": 9.1, "action": "shot", "out": "test/output/openfl-text-input-login-password.png"}
   ]

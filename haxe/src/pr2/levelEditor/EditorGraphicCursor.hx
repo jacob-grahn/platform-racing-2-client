@@ -2,7 +2,6 @@ package pr2.levelEditor;
 
 import openfl.display.DisplayObject;
 import openfl.events.Event;
-import pr2.runtime.PR2MovieClip;
 
 class EditorGraphicCursor extends EditorToolCursor {
 	private var graphic:Null<DisplayObject>;
@@ -27,10 +26,6 @@ class EditorGraphicCursor extends EditorToolCursor {
 
 	override public function remove():Void {
 		removeEventListener(Event.ENTER_FRAME, updateObjectLayerScale);
-		var clip = Std.downcast(graphic, PR2MovieClip);
-		if (clip != null) {
-			clip.dispose();
-		}
 		graphic = null;
 		super.remove();
 	}

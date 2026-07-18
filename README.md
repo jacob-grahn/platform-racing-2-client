@@ -77,11 +77,20 @@ tools/test_all.sh
 Per-stage logs are written to `test/output/test-all/`; parity screenshots are
 written to `test/output/`.
 
-Capture the representative character parity cases (default, recolored, mixed
-parts, and cheese-hat/Fred-body placement) after an HTML5 build:
+Capture the maintained character parity matrix (default transitions/both
+facings, recolors, mixed parts/items, tricky silhouettes, all hats, Fred in all
+states, effect attachments, and live Djinn ice pixels) after an HTML5 build:
 
 ```sh
-for case in default colors mixed-parts tricky-parts; do python3 tools/openfl_driver.py sequence test/sequences/openfl/character-$case.json; done
+for case in default colors mixed-parts tricky-parts all-hats fred-states attachments djinn-ice; do python3 tools/openfl_driver.py sequence test/sequences/openfl/character-$case.json; done
+```
+
+The exhaustive paged matrices render all 141 standard parts and all 38 authored
+held-item frames without fitting hundreds of characters into one unreadable image:
+
+```sh
+python3 tools/openfl_driver.py sequence test/sequences/openfl/character-all-parts.json
+python3 tools/openfl_driver.py sequence test/sequences/openfl/character-all-items.json
 ```
 
 Local server/API overrides can live in ignored shell env files. On sys targets,
@@ -123,20 +132,23 @@ Adobe Animate is only a migration tool for regenerating source assets.
 
 Current foundation:
 
-- Generated asset metadata is available under `pr2.generated.assets` from the
-  extracted XFL source.
-- `AssetLibrary` and `PR2MovieClip` run generated timelines with nested clips,
-  labels, frame scripts, transforms, visibility, and named children.
+- Production presentation is made from typed native views, controls, rigs, and
+  explicitly referenced SVG/bitmap/audio assets. The HTML5 bundle does not
+  include the XFL symbol catalog, `PR2MovieClip`, or the `Fl*` compatibility
+  controls.
+- Generated XFL catalogs and the old timeline player remain archival migration
+  inputs only. Production code cannot import them; the post-build compatibility
+  gate checks both Haxe source and the minified JavaScript bundle.
 - The `?screen=campaign&localLevel=<name>` sandbox can run synthetic levels
   without login/lobby/server flow and exposes deterministic debug state for
   movement checks.
 
-### De-Flash Architecture Goal
+### Native Presentation Architecture
 
-The migration replaces runtime linkage lookup and recursive instance-name
-discovery with explicitly constructed, typed views:
+Runtime linkage lookup has been replaced by explicitly constructed, typed
+views. New production presentation code follows this shape:
 
-Current:
+Legacy migration input:
 
 ```haxe
 art = PR2MovieClip.fromLinkage("SomePopupGraphic");
@@ -144,7 +156,7 @@ nameBox = LobbyArt.text(art, "nameBox");
 button = DisplayUtil.findByName(art, "ok_bt");
 ```
 
-Target:
+Production:
 
 ```haxe
 class ConfirmDialogView extends Sprite {
@@ -212,7 +224,21 @@ If your installed macOS SDK suffix differs, check it with:
 xcodebuild -showsdks
 ```
 
-## Generated Haxe Assets
+### One-way legacy asset migration
+
+The XFL tree under `flash/platform-racing-2-xfl/` is the visual and behavioral
+specification, not a production runtime dependency. Migration tools read XFL
+and Animate exports and commit neutral SVG, bitmap, audio, rig, or layout data.
+Native Haxe code then references only those committed outputs. Data never flows
+from the generated symbol catalog back into the production build.
+
+Verify that boundary after an HTML5 build:
+
+```sh
+python3 tools/check_no_compat_runtime.py
+```
+
+## Archival Generated Haxe Assets
 
 Extract XFL metadata summary:
 
@@ -220,7 +246,7 @@ Extract XFL metadata summary:
 python3 tools/xfl_metadata.py --summary
 ```
 
-Regenerate the Haxe asset catalog:
+Regenerate the archival Haxe asset catalog for parity investigations:
 
 ```sh
 python3 tools/generate_haxe_assets.py
@@ -229,7 +255,7 @@ python3 tools/generate_haxe_assets.py
 Compile-check the generated package:
 
 ```sh
-haxe -cp haxe/src --macro 'include("pr2.generated.assets")' --no-output
+haxe -cp haxe/src -cp haxe/legacy --macro 'include("pr2.generated.assets")' --no-output
 ```
 
 ## Vector Art Inventory
@@ -322,6 +348,24 @@ Check Inkscape availability:
 ```
 
 ## Harness Helpers
+
+### Archival Flash side-by-side workflow
+
+The production build is native-only, but the checked-in Flash projector, SWF,
+AS3, and XFL remain the comparison specification. Both clients consume the same
+timed parity sequence; comparison-only catalog/runtime code must stay outside
+`haxe/src`.
+
+```sh
+python3 tools/test_archival_parity_workflow.py
+tools/test_dont_move_jv.sh flash flash/platform-racing-2.app
+tools/test_dont_move_jv.sh port
+python3 tools/compare_screenshots.py test/output/dmjv-flash/10-complete.png test/output/dmjv-openfl/10-complete.png --diff test/output/dmjv-diff.png --metrics test/output/dmjv-metrics.json --threshold-percent 100 --threshold-rms 255
+```
+
+For a single XFL symbol, use `tools/compare_symbol_render.py`; for a native-only
+flow, use the OpenFL sequences below. Generated legacy catalogs live under
+`haxe/legacy` and are excluded from `project.xml` and production boundary scans.
 
 Capture an OpenFL screenshot after launching the app:
 

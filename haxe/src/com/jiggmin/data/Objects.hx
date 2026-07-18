@@ -90,7 +90,10 @@ class Objects {
 				backgroundDisplay(code);
 			case ObjectCodes.TextCode: textObjectTextBox();
 			case ObjectCodes.BLOCK_MINION_EGG:
-				var egg = SvgAsset.createFitted("assets/svg/blocks/egg_overlay.svg", TILE_SIZE, TILE_SIZE);
+				// EggBlockGraphic is already authored in tile-local coordinates. Keep
+				// its XFL registration and asymmetric matrices instead of normalizing
+				// and stretching its visible bounds to a square.
+				var egg = SvgAsset.create("assets/svg/blocks/egg_overlay.svg");
 				egg.name = "EggBlockGraphic";
 				egg;
 			case code if (code >= ObjectCodes.BLOCK_BASIC1 && code <= ObjectCodes.BLOCK_TELEPORT):
@@ -108,8 +111,11 @@ class Objects {
 				// preserve their authored geometry instead of fitting to a measured box.
 				SvgAsset.createNormalized(assetPath);
 			} else {
-				var size = stampSize(code);
-				SvgAsset.createFitted(assetPath, size.width, size.height);
+				// The native-composed SVGs retain the XFL symbol's registration point,
+				// visible bounds, and nested instance matrices.  Normalizing or fitting
+				// them would shift artwork whose authored bounds extend above/left of
+				// (0, 0), and would replace exact XFL geometry with measured scaling.
+				SvgAsset.create(assetPath);
 			};
 			vector.name = linkage;
 			return vector;
@@ -133,28 +139,20 @@ class Objects {
 		return background;
 	}
 
-	private static function stampSize(code:Int):{width:Float, height:Float} {
-		return switch (code) {
-			case ObjectCodes.STAMP_TREE: {width: 228, height: 172.75};
-			case ObjectCodes.STAMP_TREE2: {width: 188, height: 249.25};
-			case ObjectCodes.STAMP_TREE3: {width: 194, height: 236.5};
-			case ObjectCodes.STAMP_PETRIFIED_TREE: {width: 77.25, height: 101.75};
-			case ObjectCodes.STAMP_ROCK: {width: 87.25, height: 91};
-			case ObjectCodes.STAMP_ROCK2: {width: 125.75, height: 118.5};
-			case ObjectCodes.STAMP_SPIRE: {width: 114, height: 319.75};
-			case ObjectCodes.STAMP_SPIRE2: {width: 294.25, height: 268.5};
-			default: {width: 30, height: 30};
-		}
-	}
-
 	private static function textObjectTextBox():Null<DisplayObject> {
 		var textBox = new TextField();
 		textBox.name = "textBox";
-		textBox.defaultTextFormat = new TextFormat(FontResolver.resolve("Verdana"), 18);
+		var format = new TextFormat(FontResolver.resolve("Verdana"), 18);
+		format.leading = 4;
+		textBox.defaultTextFormat = format;
 		textBox.x = 2;
-		textBox.y = 0;
+		textBox.y = 2;
+		textBox.scaleY = 1.00286865234375;
 		textBox.width = 76;
 		textBox.height = 29.2;
+		textBox.selectable = false;
+		textBox.wordWrap = false;
+		textBox.multiline = true;
 		return textBox;
 	}
 
@@ -175,9 +173,9 @@ class Objects {
 	}
 
 	private static function addBlockBitmap(holder:Sprite, code:Int):Void {
-		var assetPath = ServerLevelRenderer.blockAssetPath(code);
-		if (assetPath != "" && Assets.exists(assetPath, AssetType.IMAGE)) {
-			var bitmap = new Bitmap(Assets.getBitmapData(assetPath));
+		var data = ServerLevelRenderer.blockBitmapData(code);
+		if (data != null) {
+			var bitmap = new Bitmap(data);
 			bitmap.name = blockBitmapName(code);
 			bitmap.smoothing = false;
 			bitmap.width = TILE_SIZE;
@@ -185,10 +183,7 @@ class Objects {
 			holder.addChild(bitmap);
 			return;
 		}
-		holder.graphics.lineStyle(1, 0x444444);
-		holder.graphics.beginFill(0xCCCCCC);
-		holder.graphics.drawRect(0, 0, TILE_SIZE, TILE_SIZE);
-		holder.graphics.endFill();
+		throw 'Missing authored block bitmap for code $code';
 	}
 
 	private static function addArrowGraphic(holder:Sprite, code:Int):Void {

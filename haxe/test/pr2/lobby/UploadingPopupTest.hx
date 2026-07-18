@@ -1,6 +1,8 @@
 package pr2.lobby;
 
 import openfl.events.Event;
+import openfl.events.EventDispatcher;
+import openfl.events.ProgressEvent;
 import openfl.net.URLRequest;
 import openfl.net.URLRequestMethod;
 import openfl.net.URLVariables;
@@ -16,10 +18,24 @@ class UploadingPopupTest {
 		if (pr2.DeterministicTestMode.finishSmokeSuite("UploadingPopupTest")) return;
 		testFlashUrlRequestConstructor();
 		testCallbackCanOwnMessages();
+		testIntermediateUploadProgress();
 		SuperLoader.resetHooks();
 		LobbySession.token = "";
 		closeAll();
 		trace('UploadingPopupTest passed $assertions assertions');
+	}
+
+	private static function testIntermediateUploadProgress():Void {
+		var popup = new UploadingPopup();
+		var source = new EventDispatcher();
+		popup.bindProgressSourceForTests(source);
+		source.dispatchEvent(new ProgressEvent(ProgressEvent.PROGRESS, false, false, 25, 100));
+		assertEquals(49.0, popup.progressTargetForTests(), "upload progress consumes intermediate byte ratio");
+		source.dispatchEvent(new ProgressEvent(ProgressEvent.PROGRESS, false, false, 75, 100));
+		assertEquals(147.0, popup.progressTargetForTests(), "upload progress advances before completion");
+		popup.remove();
+		source.dispatchEvent(new ProgressEvent(ProgressEvent.PROGRESS, false, false, 100, 100));
+		assertEquals(0.0, popup.progressTargetForTests(), "removed upload popup detaches progress source");
 	}
 
 	private static function testCallbackCanOwnMessages():Void {

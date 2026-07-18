@@ -1,0 +1,344 @@
+{
+  "format": "pr2-filter-animation",
+  "version": 1,
+  "source": "MovieClips/Symbol 931",
+  "frameRate": 27,
+  "labels": {
+    "off": 2,
+    "on": 11
+  },
+  "endFrameScript": {
+    "frame": 37,
+    "action": "gotoAndPlay",
+    "target": "on"
+  },
+  "frames": [
+    {
+      "visible": false
+    },
+    {
+      "visible": false
+    },
+    {
+      "visible": false
+    },
+    {
+      "visible": false
+    },
+    {
+      "visible": false
+    },
+    {
+      "visible": false
+    },
+    {
+      "visible": false
+    },
+    {
+      "visible": false
+    },
+    {
+      "visible": false
+    },
+    {
+      "visible": false
+    },
+    {
+      "visible": true,
+      "glow": {
+        "color": 16776960,
+        "alpha": 1.0,
+        "blurX": 0.0,
+        "blurY": 0.0,
+        "strength": 0.0,
+        "quality": 1
+      }
+    },
+    {
+      "visible": true,
+      "glow": {
+        "color": 16776960,
+        "alpha": 1.0,
+        "blurX": 1.92298889160156,
+        "blurY": 1.92298889160156,
+        "strength": 0.15,
+        "quality": 1
+      }
+    },
+    {
+      "visible": true,
+      "glow": {
+        "color": 16776960,
+        "alpha": 1.0,
+        "blurX": 3.84597778320312,
+        "blurY": 3.84597778320312,
+        "strength": 0.3,
+        "quality": 1
+      }
+    },
+    {
+      "visible": true,
+      "glow": {
+        "color": 16776960,
+        "alpha": 1.0,
+        "blurX": 5.76934814453125,
+        "blurY": 5.76934814453125,
+        "strength": 0.46,
+        "quality": 1
+      }
+    },
+    {
+      "visible": true,
+      "glow": {
+        "color": 16776960,
+        "alpha": 1.0,
+        "blurX": 7.69233703613281,
+        "blurY": 7.69233703613281,
+        "strength": 0.61,
+        "quality": 1
+      }
+    },
+    {
+      "visible": true,
+      "glow": {
+        "color": 16776960,
+        "alpha": 1.0,
+        "blurX": 9.61532592773438,
+        "blurY": 9.61532592773438,
+        "strength": 0.76,
+        "quality": 1
+      }
+    },
+    {
+      "visible": true,
+      "glow": {
+        "color": 16776960,
+        "alpha": 1.0,
+        "blurX": 11.5383148193359,
+        "blurY": 11.5383148193359,
+        "strength": 0.92,
+        "quality": 1
+      }
+    },
+    {
+      "visible": true,
+      "glow": {
+        "color": 16776960,
+        "alpha": 1.0,
+        "blurX": 13.4616851806641,
+        "blurY": 13.4616851806641,
+        "strength": 1.07,
+        "quality": 1
+      }
+    },
+    {
+      "visible": true,
+      "glow": {
+        "color": 16776960,
+        "alpha": 1.0,
+        "blurX": 15.3846740722656,
+        "blurY": 15.3846740722656,
+        "strength": 1.23,
+        "quality": 1
+      }
+    },
+    {
+      "visible": true,
+      "glow": {
+        "color": 16776960,
+        "alpha": 1.0,
+        "blurX": 17.3076629638672,
+        "blurY": 17.3076629638672,
+        "strength": 1.38,
+        "quality": 1
+      }
+    },
+    {
+      "visible": true,
+      "glow": {
+        "color": 16776960,
+        "alpha": 1.0,
+        "blurX": 19.2306518554688,
+        "blurY": 19.2306518554688,
+        "strength": 1.53,
+        "quality": 1
+      }
+    },
+    {
+      "visible": true,
+      "glow": {
+        "color": 16776960,
+        "alpha": 1.0,
+        "blurX": 21.1540222167969,
+        "blurY": 21.1540222167969,
+        "strength": 1.69,
+        "quality": 1
+      }
+    },
+    {
+      "visible": true,
+      "glow": {
+        "color": 16776960,
+        "alpha": 1.0,
+        "blurX": 23.0770111083984,
+        "blurY": 23.0770111083984,
+        "strength": 1.84,
+        "quality": 1
+      }
+    },
+    {
+      "visible": true,
+      "glow": {
+        "color": 16776960,
+        "alpha": 1.0,
+        "blurX": 25.0,
+        "blurY": 25.0,
+        "strength": 2.0,
+        "quality": 1
+      }
+    },
+    {
+      "visible": true,
+      "glow": {
+        "color": 16776960,
+        "alpha": 1.0,
+        "blurX": 23.0770111083984,
+        "blurY": 23.0770111083984,
+        "strength": 1.84,
+        "quality": 1
+      }
+    },
+    {
+      "visible": true,
+      "glow": {
+        "color": 16776960,
+        "alpha": 1.0,
+        "blurX": 21.1540222167969,
+        "blurY": 21.1540222167969,
+        "strength": 1.69,
+        "quality": 1
+      }
+    },
+    {
+      "visible": true,
+      "glow": {
+        "color": 16776960,
+        "alpha": 1.0,
+        "blurX": 19.2306518554688,
+        "blurY": 19.2306518554688,
+        "strength": 1.53,
+        "quality": 1
+      }
+    },
+    {
+      "visible": true,
+      "glow": {
+        "color": 16776960,
+        "alpha": 1.0,
+        "blurX": 17.3076629638672,
+        "blurY": 17.3076629638672,
+        "strength": 1.38,
+        "quality": 1
+      }
+    },
+    {
+      "visible": true,
+      "glow": {
+        "color": 16776960,
+        "alpha": 1.0,
+        "blurX": 15.3846740722656,
+        "blurY": 15.3846740722656,
+        "strength": 1.23,
+        "quality": 1
+      }
+    },
+    {
+      "visible": true,
+      "glow": {
+        "color": 16776960,
+        "alpha": 1.0,
+        "blurX": 13.4616851806641,
+        "blurY": 13.4616851806641,
+        "strength": 1.07,
+        "quality": 1
+      }
+    },
+    {
+      "visible": true,
+      "glow": {
+        "color": 16776960,
+        "alpha": 1.0,
+        "blurX": 11.5383148193359,
+        "blurY": 11.5383148193359,
+        "strength": 0.92,
+        "quality": 1
+      }
+    },
+    {
+      "visible": true,
+      "glow": {
+        "color": 16776960,
+        "alpha": 1.0,
+        "blurX": 9.61532592773438,
+        "blurY": 9.61532592773438,
+        "strength": 0.76,
+        "quality": 1
+      }
+    },
+    {
+      "visible": true,
+      "glow": {
+        "color": 16776960,
+        "alpha": 1.0,
+        "blurX": 7.69233703613281,
+        "blurY": 7.69233703613281,
+        "strength": 0.61,
+        "quality": 1
+      }
+    },
+    {
+      "visible": true,
+      "glow": {
+        "color": 16776960,
+        "alpha": 1.0,
+        "blurX": 5.76934814453125,
+        "blurY": 5.76934814453125,
+        "strength": 0.46,
+        "quality": 1
+      }
+    },
+    {
+      "visible": true,
+      "glow": {
+        "color": 16776960,
+        "alpha": 1.0,
+        "blurX": 3.84597778320312,
+        "blurY": 3.84597778320312,
+        "strength": 0.3,
+        "quality": 1
+      }
+    },
+    {
+      "visible": true,
+      "glow": {
+        "color": 16776960,
+        "alpha": 1.0,
+        "blurX": 1.92298889160156,
+        "blurY": 1.92298889160156,
+        "strength": 0.15,
+        "quality": 1
+      }
+    },
+    {
+      "visible": true,
+      "glow": {
+        "color": 16776960,
+        "alpha": 1.0,
+        "blurX": 0.0,
+        "blurY": 0.0,
+        "strength": 0.0,
+        "quality": 1
+      }
+    }
+  ]
+}

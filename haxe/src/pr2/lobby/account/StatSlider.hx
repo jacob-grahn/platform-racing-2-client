@@ -6,6 +6,7 @@ import openfl.display.InteractiveObject;
 import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.events.MouseEvent;
+import openfl.geom.Matrix;
 import openfl.text.TextField;
 import openfl.text.TextFieldType;
 import openfl.text.TextFormat;
@@ -46,25 +47,29 @@ class StatSlider extends Sprite {
 	public function new(statName:String, ss:StatsSelect) {
 		super();
 		this.target = ss;
-		var nameBox = makeTextField(statName, false, 1.85, 0, 81, 14.55);
+		var nameBox = makeTextField(statName, false, 1.85, 2, 81, 14.55);
+		nameBox.name = "nameBox";
 		addChild(nameBox);
-		textBox = makeTextField("100", true, 93, 0, 33.95, 14.5);
+		textBox = makeTextField("100", true, 93, 2, 33.95, 14.5);
+		textBox.name = "textBox";
 		textBox.scaleX = 1.00131225585938;
 		textBox.restrict = "0123456789";
 		textBox.addEventListener(Event.CHANGE, onTextChange);
 		addChild(textBox);
 
 		slider = new GameSlider(0, 100, 0, 1);
+		slider.name = "slider";
 		slider.y = 20;
 		slider.setSize(STAT_SLIDER_TRACK_WIDTH, 16);
 		slider.addEventListener(Event.CHANGE, onSliderChange);
 		slider.onRelease = onSliderThumbRelease;
 		addChild(slider);
 
-		decButton = new StatArrowButton(false);
-		decButton.x = -8.7;
-		decButton.y = 7;
-		incButton = new StatArrowButton(true);
+		decButton = new StatArrowButton();
+		decButton.name = "decBtn";
+		decButton.transform.matrix = new Matrix(-1, 0, 0, -1, -8.7, 23);
+		incButton = new StatArrowButton();
+		incButton.name = "incBtn";
 		incButton.x = 133.3;
 		incButton.y = 7;
 		addChild(decButton);
@@ -265,12 +270,10 @@ class StatSlider extends Sprite {
 }
 
 private class StatArrowButton extends NativeControl {
-	private final pointsRight:Bool;
 	private var visual:Null<openfl.display.Shape>;
 
-	public function new(pointsRight:Bool) {
+	public function new() {
 		super(10, 16);
-		this.pointsRight = pointsRight;
 		redraw();
 	}
 
@@ -283,10 +286,6 @@ private class StatArrowButton extends NativeControl {
 			case Pressed: StaticSvg.ArrowButtonDown;
 			case Normal | Selected: StaticSvg.ArrowButtonUp;
 		});
-		if (!pointsRight) {
-			visual.scaleX = -1;
-			visual.x = 10;
-		}
 		addChild(visual);
 	}
 }

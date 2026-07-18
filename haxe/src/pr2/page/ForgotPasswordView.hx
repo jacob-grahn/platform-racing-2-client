@@ -10,10 +10,10 @@ import pr2.assets.NativeAssetIds.StaticSvg;
 import pr2.assets.NativeAssets;
 import pr2.ui.controls.GameButton;
 import pr2.ui.controls.GameTextInput;
-import pr2.ui.view.NativeView;
+import pr2.ui.view.NativePopupView;
 
 /** Explicit native composition of ForgotPassPopupGraphic. */
-class ForgotPasswordView extends NativeView {
+class ForgotPasswordView extends NativePopupView {
 	public final nameInput:GameTextInput;
 	public final emailInput:GameTextInput;
 	public final submitButton:GameButton;
@@ -30,17 +30,17 @@ class ForgotPasswordView extends NativeView {
 		panel.scaleY = 1.14141845703125;
 		addChild(panel);
 
-		addLabel("-- Forgot Password --", -85.5, -97.25, 170, 17.05, 14, true, TextFormatAlign.CENTER);
-		addLabel("name:", -83.9, -62, 41, 14.55, 12, false, TextFormatAlign.RIGHT);
-		addLabel("email:", -83.9, -34, 40.95, 14.55, 12, false, TextFormatAlign.RIGHT);
-		addLabel("If you entered an email address\nwhen you registered, then you can\nhave a new password sent to that\nemail address.", -83, 0, 166, 54.6, 10, false, TextFormatAlign.CENTER, 0x444444);
+		addLabel("-- Forgot Password --", -85.5, -95.25, 170, 17.05, 14, true, TextFormatAlign.CENTER);
+		addLabel("name:", -83.9, -60, 41, 14.55, 12, false, TextFormatAlign.RIGHT);
+		addLabel("email:", -83.9, -32, 40.95, 14.55, 12, false, TextFormatAlign.RIGHT);
+		addLabel("If you entered an email address \nwhen you registered, then you \ncan have a new password sent \nto that email address.", -83, 2, 166, 54.6, 10, false, TextFormatAlign.CENTER, 0x444444);
 
 		nameInput = ownControl(new GameTextInput(prefilledName));
 		nameInput.name = "nameBox";
 		nameInput.x = -36;
 		nameInput.y = -62;
 		nameInput.setSize(120, 22);
-		nameInput.textField.maxChars = 20;
+		nameInput.maxChars = 20;
 		listen(nameInput.textField, KeyboardEvent.KEY_DOWN, onInputKey);
 		addChild(nameInput);
 

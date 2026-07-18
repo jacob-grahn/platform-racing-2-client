@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="550px" height="400px" viewBox="0 0 550 400" preserveAspectRatio="none" data-xfl-root="MovieClips/Symbol 901">
+  <g data-xfl-symbol="MovieClips/Symbol 901">
+    <g transform="matrix(0.9856262207 0.1656494141 -0.1656494141 0.9856262207 220.4 -268.9)" data-xfl-instance="var_152">
+      <g opacity="0.2109375">
+        <g data-xfl-symbol="Parts/Feet/footMC">
+          <g data-xfl-symbol="Graphics/Symbol 229" />
+          <g data-xfl-symbol="Graphics/Symbol 265" />
+        </g>
+      </g>
+    </g>
+    <g transform="matrix(0.929107666 -0.3667602539 0.3667602539 0.929107666 -250.5 -190.7)" data-xfl-instance="var_165">
+      <g opacity="0.2109375">
+        <g data-xfl-symbol="Parts/Feet/footMC">
+          <g data-xfl-symbol="Graphics/Symbol 229" />
+          <g data-xfl-symbol="Graphics/Symbol 265" />
+        </g>
+      </g>
+    </g>
+    <g transform="matrix(7.1195526123 0 0 3.2604980469 0.2 -232.15)">
+      <g opacity="0.05078125">
+        <g data-xfl-symbol="MovieClips/Symbol 900" />
+      </g>
+    </g>
+  </g>
+</svg>

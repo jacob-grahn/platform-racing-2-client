@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="550px" height="400px" viewBox="0 0 550 400" preserveAspectRatio="none" data-xfl-root="VerifiedIcon">
+  <g data-xfl-symbol="VerifiedIcon">
+    <g data-svg-leaf="verifiedicon_0f893a1165/t00_l001_f0000_r00.svg">
+      <defs>
+        <g id="xfl1_Layer0_0_MEMBER_0_FILL">
+          <path fill="#1D9BF0" stroke="none" d=" M 12.2 0.6 Q 11.3 0 10.25 0 8 0 6.9 2.2 5.85 1.85 4.8 2.05 3.75 2.25 3 3 1.35 4.65 2.2 6.95 0 8 0 10.25 0 12.55 2.2 13.6 1.35 15.95 3 17.5 4.55 19.1 6.9 18.35 8 20.5 10.25 20.5 12.5 20.5 13.55 18.35 15.9 19.1 17.5 17.5 19.05 15.95 18.3 13.6 20.5 12.5 20.5 10.25 20.5 8.05 18.3 6.95 19.05 4.65 17.5 3 15.9 1.45 13.55 2.2 13.05 1.2 12.2 0.6 M 13.5 6.35 L 14.95 7.7 8.75 14.5 5.05 10.75 6.45 9.3 8.7 11.6 13.5 6.35 Z" />
+        </g>
+      </defs>
+      <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+        <use xlink:href="#xfl1_Layer0_0_MEMBER_0_FILL" />
+      </g>
+    </g>
+    <g data-svg-leaf="verifiedicon_0f893a1165/t00_l000_f0000_r00.svg">
+      <defs>
+        <g id="xfl2_Layer0_0_FILL">
+          <path fill="#151515" fill-opacity="0" stroke="none" d=" M 22 -1 L -1 -1 -1 22 22 22 22 -1 Z" />
+        </g>
+      </defs>
+      <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+        <use xlink:href="#xfl2_Layer0_0_FILL" />
+      </g>
+    </g>
+  </g>
+</svg>

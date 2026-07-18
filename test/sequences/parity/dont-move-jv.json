@@ -7,8 +7,9 @@
     { "time": 6.5,   "action": "click", "x": 275, "y": 200, "_note": "skip Jiggmin intro anim if present (harmless empty click otherwise)" },
 
     { "time": 8.5,   "action": "click", "x": 275, "y": 230, "_note": "main menu: Log In" },
+    { "time": 10.0,  "action": "click", "x": 275, "y": 230, "_note": "repeat Log In after a slow Jiggmin skip; harmless on the already-open login form" },
 
-    { "time": 9.5,   "action": "click", "x": 376, "y": 178, "_note": "'-' delete saved user (drops a remembered session so both clients show the name/pass form); no-op on the fresh form" },
+    { "time": 10.5,  "action": "click", "x": 376, "y": 178, "_note": "'-' delete saved user (drops a remembered session so both clients show the name/pass form); no-op on the fresh form" },
     { "time": 10.5,  "action": "click", "x": 213, "y": 253, "_note": "confirm OK on the delete-account dialog; harmless stray click on empty dialog area when no confirm appeared" },
 
     { "time": 11.5,  "action": "click",    "x": 290, "y": 135, "_note": "focus name field" },

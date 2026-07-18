@@ -83,6 +83,7 @@ KEY_DEFINITIONS = {
     "up": {"key": "ArrowUp", "code": "ArrowUp", "windowsVirtualKeyCode": 38},
     "down": {"key": "ArrowDown", "code": "ArrowDown", "windowsVirtualKeyCode": 40},
     "space": {"key": " ", "code": "Space", "windowsVirtualKeyCode": 32, "text": " "},
+    "enter": {"key": "Enter", "code": "Enter", "windowsVirtualKeyCode": 13, "text": "\r"},
     "a": {"key": "a", "code": "KeyA", "windowsVirtualKeyCode": 65, "text": "a"},
     "d": {"key": "d", "code": "KeyD", "windowsVirtualKeyCode": 68, "text": "d"},
     "w": {"key": "w", "code": "KeyW", "windowsVirtualKeyCode": 87, "text": "w"},
@@ -176,12 +177,13 @@ def capture_shot(out_path, root, delay, browser_path, query="", use_gpu=False):
     os.makedirs(os.path.dirname(os.path.abspath(out_path)), exist_ok=True)
     virtual_time_ms = max(0, int(delay * 1000))
 
-    with serve(root) as url:
+    with tempfile.TemporaryDirectory(prefix="pr2-openfl-shot-") as profile, serve(root) as url:
         url = append_query(url, query)
         command = [
             browser,
             "--headless=new",
             *browser_harness_flags(),
+            f"--user-data-dir={profile}",
             "--js-flags=--expose-gc",
             *gpu_flags(use_gpu),
             "--hide-scrollbars",
@@ -560,7 +562,7 @@ def sequence_uses_console_trace(steps):
 # silently dropped, which makes sequences flaky. Gate the sequence clock on the
 # screen-independent ready signal `Main` sets once it is running (see Main.hx),
 # so step `time` offsets are relative to app boot rather than browser launch.
-APP_READY_TIMEOUT = 60.0
+APP_READY_TIMEOUT = float(os.environ.get("PR2_APP_READY_TIMEOUT", "60"))
 
 
 def wait_for_app_ready(devtools, timeout=APP_READY_TIMEOUT):
@@ -571,10 +573,20 @@ def wait_for_app_ready(devtools, timeout=APP_READY_TIMEOUT):
         error = devtools.evaluate('document.body.getAttribute("data-pr2-error") || ""')
         if error:
             raise SystemExit(f"App failed to boot before sequence: {error}")
+        boot_error = devtools.evaluate('window.__pr2BootError || ""')
+        if boot_error:
+            raise SystemExit(f"JavaScript failed before the app booted: {boot_error}")
         time.sleep(0.1)
+    state = devtools.evaluate(
+        "JSON.stringify({readyState:document.readyState,"
+        "lime:typeof window.lime,canvasCount:document.querySelectorAll('canvas').length,"
+        "resources:performance.getEntriesByType('resource').length,"
+        "bootError:window.__pr2BootError||'',"
+        "bodyText:(document.body.innerText||'').slice(0,240)})"
+    )
     raise SystemExit(
         f"Timed out after {timeout:.0f}s waiting for data-pr2-app-ready; "
-        "the OpenFL build may have failed to boot past the preloader."
+        f"the OpenFL build may have failed to boot past the preloader. Browser state: {state}"
     )
 
 
@@ -900,11 +912,38 @@ def click_display_object(devtools, name, index=0, timeout=5.0, click_count=1, op
             print(f"click-display-object: {name}[{index}] unavailable (optional)")
             return
         raise SystemExit(f"Display object {name}[{index}] unavailable: {target}")
-    dispatch_click(devtools, float(target["x"]), float(target["y"]), click_count)
+    canvas_metrics = json.loads(devtools.evaluate(
+        """
+(() => {
+  const canvas = document.querySelector("#openfl-content canvas") || document.querySelector("canvas");
+  const stage = window.__pr2Stage;
+  if (!canvas || !stage) return JSON.stringify({ok: false});
+  const rect = canvas.getBoundingClientRect();
+  return JSON.stringify({
+    ok: true,
+    left: rect.left,
+    top: rect.top,
+    width: rect.width,
+    height: rect.height,
+    stageWidth: Number(stage.stageWidth || 550),
+    stageHeight: Number(stage.stageHeight || 400)
+  });
+})()
+"""
+    ))
+    click_x = float(target["x"])
+    click_y = float(target["y"])
+    if canvas_metrics.get("ok"):
+        click_x = canvas_metrics["left"] + click_x * canvas_metrics["width"] / canvas_metrics["stageWidth"]
+        click_y = canvas_metrics["top"] + click_y * canvas_metrics["height"] / canvas_metrics["stageHeight"]
+    hit_element = devtools.evaluate(
+        f"(() => {{ const e = document.elementFromPoint({click_x}, {click_y}); return e ? `${{e.tagName}}#${{e.id || ''}}` : 'none'; }})()"
+    )
+    dispatch_click(devtools, click_x, click_y, click_count)
     print(
         f"click-display-object: {name}[{index}] "
-        f"at {target['x']:.1f},{target['y']:.1f} "
-        f"size={target.get('width', 0):.1f}x{target.get('height', 0):.1f}"
+        f"at stage={target['x']:.1f},{target['y']:.1f} css={click_x:.1f},{click_y:.1f} "
+        f"size={target.get('width', 0):.1f}x{target.get('height', 0):.1f} element={hit_element}"
     )
 
 

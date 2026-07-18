@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="550px" height="400px" viewBox="0 0 550 400" preserveAspectRatio="none" data-xfl-root="MovieClips/Symbol 1068">
+  <g data-xfl-symbol="MovieClips/Symbol 1068">
+    <g data-svg-leaf="movieclips_symbol_1068_602908bc59/t00_l000_f0000_r00.svg">
+      <defs>
+        <linearGradient id="xfl1_Gradient_1" gradientUnits="userSpaceOnUse" x1="27.6" y1="-0.25" x2="27.6" y2="11.25" spreadMethod="pad">
+          <stop offset="0%" stop-color="#50CD18" />
+          <stop offset="100%" stop-color="#248E58" />
+        </linearGradient>
+        <g id="xfl1_Layer0_0_FILL">
+          <path fill="url(#xfl1_Gradient_1)" stroke="none" d=" M 55.2 11 L 55.2 0 0 0 0 11 55.2 11 Z" />
+        </g>
+      </defs>
+      <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+        <use xlink:href="#xfl1_Layer0_0_FILL" />
+      </g>
+    </g>
+  </g>
+</svg>

@@ -5,6 +5,7 @@
 	<app main="Main" path="export" file="PlatformRacing2" />
 
 	<source path="haxe/src" />
+	<source path="haxe/legacy" if="pr2_legacy_preview" />
 	<assets path="assets" rename="assets" exclude="fonts|blocks|login" if="html5" />
 	<assets path="assets" rename="assets" exclude="fonts|blocks|login" unless="html5" />
 
@@ -20,66 +21,23 @@
 	<!-- Animate-exported vectors are rendered directly by openfl/svg. Keeping the
 	     source SVGs here also prevents derived PNG/WebP copies from entering export/. -->
 	<assets path="art/svg" rename="assets/svg" include="*.svg" exclude="timeline|character" />
-	<assets path="art/svg-packs/timeline" rename="assets/svg-packs/timeline" include="*.json" />
-	<assets path="art/png/timeline" rename="assets/timeline-bitmap" include="*.png" />
-	<!-- Native presentation slices reference only the leaf art they own, without
-	     loading the generated XFL symbol catalog. -->
-	<asset path="art/svg/timeline/ui_shadowbg_95643069a8/t00_l000_f0000_r00.svg" rename="assets/svg/timeline/ui_shadowbg_95643069a8/t00_l000_f0000_r00.svg" />
-	<asset path="art/svg/timeline/graphics_symbol_917_14a7be666e/t00_l000_f0000_r00.svg" rename="assets/svg/timeline/graphics_symbol_917_14a7be666e/t00_l000_f0000_r00.svg" />
-	<asset path="art/svg/timeline/graphics_symbol_917_14a7be666e/t00_l001_f0000_r00.svg" rename="assets/svg/timeline/graphics_symbol_917_14a7be666e/t00_l001_f0000_r00.svg" />
-	<asset path="art/svg/timeline/graphics_symbol_917_14a7be666e/t00_l002_f0000_r00.svg" rename="assets/svg/timeline/graphics_symbol_917_14a7be666e/t00_l002_f0000_r00.svg" />
-	<asset path="art/svg/timeline/ui_popups_outside_levels_bg_d14a954e12/t00_l000_f0000_r00.svg" rename="assets/svg/timeline/ui_popups_outside_levels_bg_d14a954e12/t00_l000_f0000_r00.svg" />
-	<asset path="art/svg/timeline/ui_pages_levels_in_game_effects_speedburst_speedburststar_64db9149b6/t00_l000_f0000_r00.svg" rename="assets/svg/timeline/ui_pages_levels_in_game_effects_speedburst_speedburststar_64db9149b6/t00_l000_f0000_r00.svg" />
-	<asset path="art/svg/timeline/movieclips_symbol_1064_2f2dcafe56/t00_l001_f0005_r00.svg" rename="assets/svg/timeline/movieclips_symbol_1064_2f2dcafe56/t00_l001_f0005_r00.svg" />
-	<asset path="art/svg/timeline/graphics_symbol_1179_688a9ff27c/t00_l000_f0000_r00.svg" rename="assets/svg/timeline/graphics_symbol_1179_688a9ff27c/t00_l000_f0000_r00.svg" />
-	<asset path="art/svg/timeline/graphics_symbol_1180_178f938050/t00_l000_f0000_r00.svg" rename="assets/svg/timeline/graphics_symbol_1180_178f938050/t00_l000_f0000_r00.svg" />
-	<asset path="art/svg/timeline/graphics_symbol_1181_8da2d701eb/t00_l000_f0000_r00.svg" rename="assets/svg/timeline/graphics_symbol_1181_8da2d701eb/t00_l000_f0000_r00.svg" />
-	<asset path="art/svg/timeline/graphics_symbol_1182_fe505e771a/t00_l000_f0000_r00.svg" rename="assets/svg/timeline/graphics_symbol_1182_fe505e771a/t00_l000_f0000_r00.svg" />
-	<asset path="art/svg/timeline/components_component_assets_scrollbarskins_scrollarrowdown_upski_5a4fa47e32/t00_l001_f0000_r00.svg" rename="assets/svg/timeline/components_component_assets_scrollbarskins_scrollarrowdown_upski_5a4fa47e32/t00_l001_f0000_r00.svg" />
-	<asset path="art/svg/timeline/components_component_assets_scrollbarskins_scrollarrowup_upskin_03aeb6088e/t00_l001_f0000_r00.svg" rename="assets/svg/timeline/components_component_assets_scrollbarskins_scrollarrowup_upskin_03aeb6088e/t00_l001_f0000_r00.svg" />
-	<asset path="art/svg/timeline/components_component_assets_scrollbarskins_scrollthumb_upskin_114bd98aac/t00_l000_f0000_r00.svg" rename="assets/svg/timeline/components_component_assets_scrollbarskins_scrollthumb_upskin_114bd98aac/t00_l000_f0000_r00.svg" />
-	<asset path="art/svg/timeline/components_component_assets_scrollbarskins_scrollbar_thumbicon_9dca80a08b/t00_l000_f0000_r00.svg" rename="assets/svg/timeline/components_component_assets_scrollbarskins_scrollbar_thumbicon_9dca80a08b/t00_l000_f0000_r00.svg" />
-	<asset path="art/svg/timeline/components_component_assets_scrollbarskins_scrolltrack_skin_1c49414a50/t00_l000_f0000_r00.svg" rename="assets/svg/timeline/components_component_assets_scrollbarskins_scrolltrack_skin_1c49414a50/t00_l000_f0000_r00.svg" />
-	<asset path="art/svg/timeline/movieclips_pr2_graphics_1_apr_2014_fla_symbol_1224_f93a5fd6a6/t00_l002_f0000_r00.svg" rename="assets/svg/timeline/movieclips_pr2_graphics_1_apr_2014_fla_symbol_1224_f93a5fd6a6/t00_l002_f0000_r00.svg" />
-	<asset path="art/svg/timeline/movieclips_pr2_graphics_1_apr_2014_fla_symbol_1224_f93a5fd6a6/t00_l002_f0005_r00.svg" rename="assets/svg/timeline/movieclips_pr2_graphics_1_apr_2014_fla_symbol_1224_f93a5fd6a6/t00_l002_f0005_r00.svg" />
-	<asset path="art/svg/timeline/graphics_symbol_1223_06a8b36222/t00_l000_f0000_r00.svg" rename="assets/svg/timeline/graphics_symbol_1223_06a8b36222/t00_l000_f0000_r00.svg" />
-	<asset path="art/svg/timeline/graphics_symbol_26_97e4207de0/t00_l000_f0000_r00.svg" rename="assets/svg/timeline/graphics_symbol_26_97e4207de0/t00_l000_f0000_r00.svg" />
-	<asset path="art/svg/timeline/movieclips_symbol_466_f7c8128c42/t00_l000_f0000_r00.svg" rename="assets/svg/timeline/movieclips_symbol_466_f7c8128c42/t00_l000_f0000_r00.svg" />
-	<asset path="art/svg/timeline/movieclips_symbol_466_f7c8128c42/t00_l000_f0001_r00.svg" rename="assets/svg/timeline/movieclips_symbol_466_f7c8128c42/t00_l000_f0001_r00.svg" />
-	<asset path="art/svg/timeline/movieclips_symbol_466_f7c8128c42/t00_l000_f0002_r00.svg" rename="assets/svg/timeline/movieclips_symbol_466_f7c8128c42/t00_l000_f0002_r00.svg" />
-	<asset path="art/svg/timeline/movieclips_symbol_466_f7c8128c42/t00_l000_f0003_r00.svg" rename="assets/svg/timeline/movieclips_symbol_466_f7c8128c42/t00_l000_f0003_r00.svg" />
-	<asset path="art/svg/timeline/movieclips_symbol_466_f7c8128c42/t00_l000_f0004_r00.svg" rename="assets/svg/timeline/movieclips_symbol_466_f7c8128c42/t00_l000_f0004_r00.svg" />
-	<asset path="art/svg/timeline/movieclips_symbol_479_b6e029f803/t00_l000_f0000_r00.svg" rename="assets/svg/timeline/movieclips_symbol_479_b6e029f803/t00_l000_f0000_r00.svg" />
-	<asset path="art/svg/timeline/movieclips_symbol_444_3790021d8e/t00_l000_f0000_r00.svg" rename="assets/svg/timeline/movieclips_symbol_444_3790021d8e/t00_l000_f0000_r00.svg" />
-	<asset path="art/svg/timeline/graphics_symbol_1202_46813a28a7/t00_l000_f0000_r00.svg" rename="assets/svg/timeline/graphics_symbol_1202_46813a28a7/t00_l000_f0000_r00.svg" />
-	<asset path="art/svg/timeline/graphics_symbol_1202_46813a28a7/t00_l001_f0000_r00.svg" rename="assets/svg/timeline/graphics_symbol_1202_46813a28a7/t00_l001_f0000_r00.svg" />
-	<asset path="art/svg/timeline/movieclips_symbol_1205_4f15bd94d1/t00_l000_f0000_r00.svg" rename="assets/svg/timeline/movieclips_symbol_1205_4f15bd94d1/t00_l000_f0000_r00.svg" />
-	<asset path="art/svg/timeline/graphics_symbol_1302_1e8ab2a882/t00_l000_f0000_r00.svg" rename="assets/svg/timeline/graphics_symbol_1302_1e8ab2a882/t00_l000_f0000_r00.svg" />
-	<asset path="art/svg/timeline/graphics_symbol_1302_1e8ab2a882/t00_l001_f0000_r00.svg" rename="assets/svg/timeline/graphics_symbol_1302_1e8ab2a882/t00_l001_f0000_r00.svg" />
-	<asset path="art/svg/timeline/movieclips_symbol_1143_9c6d19f4d6/t00_l000_f0000_r00.svg" rename="assets/svg/timeline/movieclips_symbol_1143_9c6d19f4d6/t00_l000_f0000_r00.svg" />
-	<asset path="art/svg/timeline/movieclips_symbol_1317_6df1c05aab/t00_l000_f0000_r00.svg" rename="assets/svg/timeline/movieclips_symbol_1317_6df1c05aab/t00_l000_f0000_r00.svg" />
-	<asset path="art/svg/timeline/graphics_symbol_1318_f224abe82c/t00_l000_f0000_r00.svg" rename="assets/svg/timeline/graphics_symbol_1318_f224abe82c/t00_l000_f0000_r00.svg" />
-	<asset path="art/svg/timeline/graphics_symbol_1319_43210b7a4e/t00_l000_f0000_r00.svg" rename="assets/svg/timeline/graphics_symbol_1319_43210b7a4e/t00_l000_f0000_r00.svg" />
-	<asset path="art/svg/timeline/graphics_symbol_1358_089008a498/t00_l000_f0000_r00.svg" rename="assets/svg/timeline/graphics_symbol_1358_089008a498/t00_l000_f0000_r00.svg" />
-	<asset path="art/svg/timeline/graphics_symbol_1359_7eddacc142/t00_l000_f0000_r00.svg" rename="assets/svg/timeline/graphics_symbol_1359_7eddacc142/t00_l000_f0000_r00.svg" />
-	<asset path="art/svg/timeline/movieclips_symbol_1356_2c2f6687f3/t00_l000_f0000_r00.svg" rename="assets/svg/timeline/movieclips_symbol_1356_2c2f6687f3/t00_l000_f0000_r00.svg" />
-	<asset path="art/svg/timeline/graphics_symbol_467_0feff9edef/t00_l001_f0000_r00.svg" rename="assets/svg/timeline/graphics_symbol_467_0feff9edef/t00_l001_f0000_r00.svg" />
-	<asset path="art/svg/timeline/graphics_symbol_467_0feff9edef/t00_l002_f0000_r00.svg" rename="assets/svg/timeline/graphics_symbol_467_0feff9edef/t00_l002_f0000_r00.svg" />
-	<asset path="art/svg/timeline/graphics_symbol_468_0726229f42/t00_l000_f0000_r00.svg" rename="assets/svg/timeline/graphics_symbol_468_0726229f42/t00_l000_f0000_r00.svg" />
-	<asset path="art/svg/timeline/graphics_symbol_468_0726229f42/t00_l001_f0000_r00.svg" rename="assets/svg/timeline/graphics_symbol_468_0726229f42/t00_l001_f0000_r00.svg" />
-	<asset path="art/svg/timeline/graphics_symbol_468_0726229f42/t00_l002_f0000_r00.svg" rename="assets/svg/timeline/graphics_symbol_468_0726229f42/t00_l002_f0000_r00.svg" />
-	<asset path="art/svg/timeline/graphics_symbol_469_82d3467630/t00_l000_f0000_r00.svg" rename="assets/svg/timeline/graphics_symbol_469_82d3467630/t00_l000_f0000_r00.svg" />
-	<asset path="art/svg/timeline/graphics_symbol_469_82d3467630/t00_l001_f0000_r00.svg" rename="assets/svg/timeline/graphics_symbol_469_82d3467630/t00_l001_f0000_r00.svg" />
-	<asset path="art/svg/timeline/ui_pages_levels_in_game_effects_mine_symbol_472_df88e60ae7/t00_l002_f0003_r00.svg" rename="assets/svg/timeline/ui_pages_levels_in_game_effects_mine_symbol_472_df88e60ae7/t00_l002_f0003_r00.svg" />
-	<asset path="art/svg/timeline/ui_pages_levels_in_game_effects_mine_symbol_472_df88e60ae7/t00_l002_f0004_r00.svg" rename="assets/svg/timeline/ui_pages_levels_in_game_effects_mine_symbol_472_df88e60ae7/t00_l002_f0004_r00.svg" />
-	<asset path="art/svg/timeline/graphics_symbol_414_f06c3a9f70/t00_l000_f0000_r00.svg" rename="assets/svg/timeline/graphics_symbol_414_f06c3a9f70/t00_l000_f0000_r00.svg" />
+	<assets path="art/rigs" rename="assets/rigs" include="*.json" />
+	<assets path="art/intro" rename="assets/intro" include="*.json" />
+	<assets path="art/ui" rename="assets/ui" include="*.json" />
+	<assets path="art/svg/character/head" rename="assets/svg/character/head" include="*.svg" />
+	<assets path="art/svg/character/body" rename="assets/svg/character/body" include="*.svg" />
+	<assets path="art/svg/character/feet" rename="assets/svg/character/feet" include="*.svg" />
+	<assets path="art/svg/character/hat" rename="assets/svg/character/hat" include="*.svg" />
+	<assets path="art/svg/character/item" rename="assets/svg/character/item" include="*.svg" />
+	<assets path="art/svg/character/frozen" rename="assets/svg/character/frozen" include="*.svg" />
 	<asset path="assets/bitmaps/mine.jpg" />
 	<template path="templates/html5/template/index.html" rename="index.html" if="html5" />
 
 	<haxelib name="openfl" />
 	<haxelib name="svg" />
 	<postbuild command="python3 tools/prune_html5_fonts.py" if="html5" />
-	<postbuild command="python3 tools/minify_html5_js.py" if="html5" />
+	<postbuild command="python3 tools/minify_html5_js.py" if="html5" unless="debug" />
+	<postbuild command="python3 tools/check_no_compat_runtime.py" if="html5" />
 	<postbuild command="python3 tools/cache_bust_html5_js.py" if="html5" />
 
 	<!-- Flatten static, render-safe display subtrees into one cached GPU quad

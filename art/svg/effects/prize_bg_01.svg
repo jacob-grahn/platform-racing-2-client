@@ -1,0 +1,150 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="550px" height="400px" viewBox="0 0 550 400" preserveAspectRatio="none" data-xfl-root="UI/Pages/Levels/In-Game/PrizePopup">
+  <g data-xfl-symbol="UI/Pages/Levels/In-Game/PrizePopup">
+    <g transform="matrix(0.6356811523 0 0 0.3301391602 95.4 49.95)" data-xfl-instance="flavorBg">
+      <g data-xfl-symbol="UI/ShadowBG">
+        <g transform="matrix(1 0 0 1 -3 -1)">
+          <g data-xfl-symbol="MovieClips/Symbol 179" />
+        </g>
+      </g>
+    </g>
+    <g transform="matrix(0.6356811523 0 0 0.9473724365 95.4 -138.1)" data-xfl-instance="bg">
+      <g data-xfl-symbol="UI/ShadowBG">
+        <g transform="matrix(1 0 0 1 -3 -1)">
+          <g data-xfl-symbol="MovieClips/Symbol 179">
+            <g data-svg-leaf="movieclips_symbol_179_8814694710/t00_l000_f0000_r00.svg">
+              <defs>
+                <g id="xfl1_Layer0_0_FILL">
+                  <path fill="#FFFFFF" stroke="none" d=" M 275 5 Q 275 3.3 273.85 2.15 272.65 1 271 1 L 7 1 Q 5.3 1 4.15 2.15 3 3.3 3 5 L 3 192 275 192 275 5 Z" />
+                </g>
+              </defs>
+              <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+                <use xlink:href="#xfl1_Layer0_0_FILL" />
+              </g>
+            </g>
+          </g>
+        </g>
+        <g data-svg-leaf="ui_shadowbg_95643069a8/t00_l000_f0000_r00.svg">
+          <defs>
+            <g id="xfl2_Layer0_0_FILL">
+              <path fill="#FFFFFF" fill-opacity="0.9019607843137255" stroke="none" d=" M 272 4 Q 272 2.3 270.85 1.15 269.65 0 268 0 L 4 0 Q 2.3 0 1.15 1.15 0 2.3 0 4 L 0 191 272 191 272 4 Z" />
+            </g>
+          </defs>
+          <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+            <use xlink:href="#xfl2_Layer0_0_FILL" />
+          </g>
+        </g>
+      </g>
+    </g>
+    <g transform="matrix(0.3404846191 0.1142578125 -0.1142578125 0.3404846191 169.25 -67.3)" data-xfl-instance="head">
+      <g data-xfl-symbol="Parts/Heads/headsMC">
+        <g transform="matrix(0.9996948242 -0.0000152588 0 0.9999847412 0 0)" data-xfl-instance="colorMC">
+          <g data-xfl-symbol="Parts/Heads/headColorMC">
+            <g transform="matrix(1 0 0 1 25.45 52.75)">
+              <g data-xfl-symbol="MovieClips/Symbol 727" />
+            </g>
+          </g>
+        </g>
+        <g data-xfl-symbol="Graphics/Symbol 766" />
+        <g transform="matrix(1 0 0 1 23.05 50.65)">
+          <g data-xfl-symbol="MovieClips/Symbol 768" />
+        </g>
+        <g data-xfl-instance="colorMC2">
+          <g data-xfl-symbol="Parts/Heads/headColorMC2">
+            <g data-xfl-symbol="Graphics/Symbol 766" />
+            <g transform="matrix(1 0 0 1 23.05 50.65)">
+              <g data-xfl-symbol="MovieClips/Symbol 768" />
+            </g>
+          </g>
+        </g>
+        <g data-xfl-symbol="Graphics/Symbol 806" />
+        <g transform="matrix(0.9839172363 -0.1753082275 0.1753082275 0.9839172363 45.2 78.25)" data-xfl-instance="hat1">
+          <g data-xfl-symbol="Parts/Hats/hatsMC">
+            <g transform="matrix(0.9999847412 0 0 0.9999847412 0 0)" data-xfl-instance="colorMC">
+              <g data-xfl-symbol="MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667" />
+            </g>
+            <g data-xfl-instance="colorMC2">
+              <g data-xfl-symbol="MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684" />
+            </g>
+          </g>
+        </g>
+        <g transform="matrix(0.9733734131 -0.2247314453 0.2247314453 0.9733734131 38 60.6)" data-xfl-instance="hat2">
+          <g data-xfl-symbol="Parts/Hats/hatsMC">
+            <g transform="matrix(0.9999847412 0 0 0.9999847412 0 0)" data-xfl-instance="colorMC">
+              <g data-xfl-symbol="MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667" />
+            </g>
+            <g data-xfl-instance="colorMC2">
+              <g data-xfl-symbol="MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684" />
+            </g>
+          </g>
+        </g>
+        <g transform="matrix(0.9602813721 -0.2753753662 0.2753753662 0.9602813721 26 48.4)" data-xfl-instance="hat3">
+          <g data-xfl-symbol="Parts/Hats/hatsMC">
+            <g transform="matrix(0.9999847412 0 0 0.9999847412 0 0)" data-xfl-instance="colorMC">
+              <g data-xfl-symbol="MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667" />
+            </g>
+            <g data-xfl-instance="colorMC2">
+              <g data-xfl-symbol="MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684" />
+            </g>
+          </g>
+        </g>
+        <g transform="matrix(0.9445800781 -0.3252410889 0.3252410889 0.9445800781 18.85 34.5)" data-xfl-instance="hat4">
+          <g data-xfl-symbol="Parts/Hats/hatsMC">
+            <g transform="matrix(0.9999847412 0 0 0.9999847412 0 0)" data-xfl-instance="colorMC">
+              <g data-xfl-symbol="MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667" />
+            </g>
+            <g data-xfl-instance="colorMC2">
+              <g data-xfl-symbol="MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684" />
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+    <g transform="matrix(0.3776397705 0 0 0.3776397705 168.65 -60.4)" data-xfl-instance="body">
+      <g data-xfl-symbol="Parts/Bodies/bodyMC">
+        <g data-xfl-instance="colorMC">
+          <g data-xfl-symbol="MovieClips/Symbol 585">
+            <g data-xfl-symbol="Graphics/Symbol 553" />
+          </g>
+        </g>
+        <g data-xfl-symbol="MovieClips/Symbol 587" />
+        <g data-xfl-instance="colorMC2">
+          <g data-xfl-symbol="MovieClips/Symbol 621">
+            <g data-xfl-symbol="MovieClips/Symbol 587" />
+          </g>
+        </g>
+        <g data-xfl-symbol="MovieClips/Symbol 623" />
+        <g transform="matrix(1 0 0 1 25 39.6)">
+          <g data-xfl-symbol="MovieClips/Symbol 625" />
+        </g>
+      </g>
+    </g>
+    <g transform="matrix(0.8004455566 0 0 0.8004455566 158.3 -38.55)" data-xfl-instance="foot">
+      <g data-xfl-symbol="Parts/Feet/footMC">
+        <g data-xfl-instance="colorMC">
+          <g data-xfl-symbol="MovieClips/Symbol 228" />
+        </g>
+        <g data-xfl-symbol="Graphics/Symbol 229" />
+        <g data-xfl-instance="colorMC2">
+          <g data-xfl-symbol="MovieClips/Symbol 264">
+            <g data-xfl-symbol="Graphics/Symbol 229" />
+          </g>
+        </g>
+        <g data-xfl-symbol="Graphics/Symbol 265" />
+      </g>
+    </g>
+    <g transform="matrix(0.5381164551 0 0 0.5381164551 184.15 -10.75)" data-xfl-instance="hat">
+      <g data-xfl-symbol="Parts/Hats/hatsMC">
+        <g transform="matrix(0.9999847412 0 0 0.9999847412 0 0)" data-xfl-instance="colorMC">
+          <g data-xfl-symbol="MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667" />
+        </g>
+        <g data-xfl-instance="colorMC2">
+          <g data-xfl-symbol="MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684" />
+        </g>
+      </g>
+    </g>
+    <g transform="matrix(1 0 0 1 115.4 -70)" data-xfl-instance="exp">
+      <g data-xfl-symbol="MovieClips/Symbol 948" />
+    </g>
+  </g>
+</svg>

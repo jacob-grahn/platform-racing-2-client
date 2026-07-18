@@ -130,14 +130,14 @@ class LobbyPage extends Page {
 	}
 
 	private function bind(art:DisplayObjectContainer, name:String, handler:Void->Void):Void {
-		var binding = LobbyArt.bind(DisplayUtil.findByName(art, name), handler);
+		var binding = LobbyArt.bind(DisplayUtil.directChildByName(art, name), handler);
 		if (binding != null) {
 			bindings.push(binding);
 		}
 	}
 
 	private function bindHover(art:DisplayObjectContainer, name:String, over:DisplayObject->Void, out:Void->Void):Void {
-		var target = DisplayUtil.findByName(art, name);
+		var target = DisplayUtil.directChildByName(art, name);
 		if (target == null) return;
 		var onOver = function(_:MouseEvent):Void over(target);
 		var onOut = function(_:MouseEvent):Void out();

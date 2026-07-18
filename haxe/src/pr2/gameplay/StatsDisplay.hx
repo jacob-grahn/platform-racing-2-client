@@ -6,10 +6,9 @@ import openfl.events.MouseEvent;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
-import pr2.assets.NativeAssetIds.FontAsset;
-import pr2.assets.NativeAssets;
 import pr2.display.Removable;
 import pr2.lobby.dialogs.HoverPopup;
+import pr2.runtime.SvgAsset;
 
 /**
 	Port of Flash `gameplay.StatsDisplay`.
@@ -21,6 +20,7 @@ import pr2.lobby.dialogs.HoverPopup;
 **/
 class StatsDisplay extends Removable {
 	static inline var HOVER_DELAY_MS:Int = 250;
+	public static inline final BACKGROUND_ASSET = "assets/svg/effects/stats_display_01.svg";
 
 	private var art:Null<Sprite>;
 	private var speedBox:Null<TextField>;
@@ -28,22 +28,17 @@ class StatsDisplay extends Removable {
 	private var jumpBox:Null<TextField>;
 	private var pop:Null<HoverPopup>;
 	private var hoverTimer:Null<haxe.Timer>;
+	public final exactBackground:Shape;
 
 	public function new() {
 		super();
 		art = new Sprite();
-		var background = new Shape();
-		background.graphics.beginFill(0xF3F3F3, 0.94);
-		background.graphics.lineStyle(1, 0x888888);
-		background.graphics.drawRoundRect(0, 0, 57, 18, 5, 5);
-		background.graphics.moveTo(19, 5.25);
-		background.graphics.lineTo(19, 13.25);
-		background.graphics.moveTo(38.25, 5.25);
-		background.graphics.lineTo(38.25, 13.25);
-		art.addChild(background);
-		speedBox = createStatBox("speedBox", 2.4);
-		accelBox = createStatBox("accelBox", 20.25);
-		jumpBox = createStatBox("jumpBox", 38.35);
+		exactBackground = SvgAsset.create(BACKGROUND_ASSET);
+		exactBackground.name = "exactBackground";
+		art.addChild(exactBackground);
+		speedBox = createStatBox("speedBox", 2.4, 15.5);
+		accelBox = createStatBox("accelBox", 20.25, 15.7);
+		jumpBox = createStatBox("jumpBox", 38.35, 15.3);
 		art.addChild(speedBox);
 		art.addChild(accelBox);
 		art.addChild(jumpBox);
@@ -54,15 +49,15 @@ class StatsDisplay extends Removable {
 		setStats(0, 0, 0);
 	}
 
-	private function createStatBox(name:String, x:Float):TextField {
+	private function createStatBox(name:String, x:Float, width:Float):TextField {
 		var field = new TextField();
 		field.name = name;
 		field.x = x;
 		field.y = 3.75;
-		field.width = 16;
-		field.height = 10;
+		field.width = width;
+		field.height = 9.75;
 		field.selectable = false;
-		field.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 8, 0, false, null, null, null, null,
+		field.defaultTextFormat = new TextFormat("Verdana", 8, 0, false, null, null, null, null,
 			TextFormatAlign.CENTER);
 		return field;
 	}

@@ -1,0 +1,5014 @@
+{
+  "symbols": {
+    "UI/Popups (outside levels)/Credits/CreditsPopup": [
+      {
+        "kind": "symbol",
+        "matrix": {
+          "a": 1.95262145996094,
+          "b": 0,
+          "c": 0,
+          "d": 1.83905029296875,
+          "tx": -263.1,
+          "ty": -175.15
+        },
+        "name": null,
+        "symbol": "UI/ShadowBG"
+      },
+      {
+        "kind": "button",
+        "label": "Close",
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -50.0,
+          "ty": 143.0
+        },
+        "name": "close_bt"
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 152.1,
+          "ty": 14.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "http://jiggmin.com"
+            },
+            "text": "Jiggmin"
+          }
+        ],
+        "selectable": false,
+        "width": 51.65
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 45.5,
+          "ty": 14.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#254489",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank"
+            },
+            "text": "Everything Else"
+          }
+        ],
+        "selectable": false,
+        "width": 76.7
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 64.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 67.5,
+          "ty": 14.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      },
+      {
+        "dynamic": true,
+        "height": 10.95,
+        "kind": "text",
+        "left": -60.55,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 138.55,
+          "ty": 2.0
+        },
+        "multiline": false,
+        "name": "art_nav_bts",
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "center",
+              "bitmapSize": "180",
+              "face": "Verdana-Italic",
+              "fillColor": "#234287",
+              "lineHeight": "10.95",
+              "rotation": "true",
+              "size": "9",
+              "target": "_blank"
+            },
+            "text": "(<- back) (next ->)"
+          }
+        ],
+        "selectable": false,
+        "width": 116.0
+      },
+      {
+        "kind": "symbol",
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 105.4,
+          "ty": -130.85
+        },
+        "name": "artPg1",
+        "symbol": "UI/Popups (outside levels)/Credits/artPg1"
+      },
+      {
+        "kind": "symbol",
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 117.5,
+          "ty": -130.85
+        },
+        "name": "artPg2",
+        "symbol": "UI/Popups (outside levels)/Credits/artPg2"
+      },
+      {
+        "kind": "symbol",
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 117.5,
+          "ty": -130.85
+        },
+        "name": "artPg3",
+        "symbol": "UI/Popups (outside levels)/Credits/artPg3"
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 179.85,
+          "ty": 67.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "http://jiggmin.com"
+            },
+            "text": "Jiggmin"
+          }
+        ],
+        "selectable": false,
+        "width": 51.65
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 179.85,
+          "ty": 81.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://jiggmin2.com"
+            },
+            "text": "bls1999"
+          }
+        ],
+        "selectable": false,
+        "width": 51.65
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 65.8,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 93.0,
+          "ty": 67.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "center",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 65.8,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 93.0,
+          "ty": 81.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "center",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 35.55,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -4.95,
+          "ty": 67.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "Game/Dev 2008 – 2015"
+          }
+        ],
+        "selectable": false,
+        "width": 120.3
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 31.8,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -1.2,
+          "ty": 81.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "Dev 2019 – 2026"
+          }
+        ],
+        "selectable": false,
+        "width": 120.3
+      },
+      {
+        "dynamic": false,
+        "height": 23.9,
+        "kind": "text",
+        "left": 61.3,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -3.75,
+          "ty": 99.5
+        },
+        "multiline": true,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "center",
+              "bitmapSize": "180",
+              "face": "Verdana-Italic",
+              "lineHeight": "10.95",
+              "rotation": "true",
+              "size": "9"
+            },
+            "text": "Interested in contributing to PR2?\r"
+          },
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "center",
+              "bitmapSize": "180",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "10.95",
+              "rotation": "true",
+              "size": "9",
+              "target": "_blank",
+              "url": "https://github.com/jacob-grahn/platform-racing-2-client"
+            },
+            "text": "Client"
+          },
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "center",
+              "bitmapSize": "180",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "10.95",
+              "rotation": "true",
+              "size": "9",
+              "target": "_blank"
+            },
+            "text": " | "
+          },
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "center",
+              "bitmapSize": "180",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "10.95",
+              "rotation": "true",
+              "size": "9",
+              "target": "_blank",
+              "url": "https://github.com/jacob-grahn/platform-racing-2-server"
+            },
+            "text": "Server"
+          }
+        ],
+        "selectable": false,
+        "width": 152.5
+      },
+      {
+        "dynamic": true,
+        "height": 9.75,
+        "kind": "text",
+        "left": -67.1,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 127.65,
+          "ty": 145.0
+        },
+        "multiline": true,
+        "name": "versionBox",
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "120",
+              "face": "Verdana",
+              "fillColor": "#666666",
+              "lineHeight": "7.3",
+              "rotation": "true",
+              "size": "6"
+            },
+            "text": "PR2 v156.0"
+          }
+        ],
+        "selectable": false,
+        "width": 179.25
+      },
+      {
+        "dynamic": true,
+        "height": 9.75,
+        "kind": "text",
+        "left": -79.15,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 139.7,
+          "ty": 153.25
+        },
+        "multiline": true,
+        "name": "buildBox",
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "120",
+              "face": "Verdana",
+              "fillColor": "#666666",
+              "lineHeight": "7.3",
+              "rotation": "true",
+              "size": "6"
+            },
+            "text": "Build: 22-apr-2019-v155"
+          }
+        ],
+        "selectable": false,
+        "width": 179.15
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 9.45,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -226.9,
+          "ty": 103.65
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "PR2 Menu Music"
+          }
+        ],
+        "selectable": false,
+        "width": 80.55
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -109.1,
+          "ty": 103.65
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "http://jiggmin.com"
+            },
+            "text": "Jiggmin"
+          }
+        ],
+        "selectable": false,
+        "width": 51.65
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 64.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -193.7,
+          "ty": 103.65
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      },
+      {
+        "dynamic": true,
+        "height": 10.95,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -150.25,
+          "ty": 89.15
+        },
+        "multiline": false,
+        "name": "music_nav_bt",
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "center",
+              "bitmapSize": "180",
+              "face": "Verdana-Italic",
+              "fillColor": "#234287",
+              "lineHeight": "10.95",
+              "rotation": "true",
+              "size": "9",
+              "target": "_blank"
+            },
+            "text": "(more ->)"
+          }
+        ],
+        "selectable": false,
+        "width": 56.0
+      },
+      {
+        "kind": "symbol",
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -133.5,
+          "ty": -130.85
+        },
+        "name": "musicPg1",
+        "symbol": "UI/Popups (outside levels)/Credits/musicPg1"
+      },
+      {
+        "kind": "symbol",
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -109.3,
+          "ty": -130.85
+        },
+        "name": "musicPg2",
+        "symbol": "UI/Popups (outside levels)/Credits/musicPg2"
+      },
+      {
+        "dynamic": false,
+        "height": 17.05,
+        "kind": "text",
+        "left": 101.0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 7.0,
+          "ty": -153.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "center",
+              "bitmapSize": "280",
+              "face": "Verdana-Bold",
+              "lineHeight": "17.05",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "14"
+            },
+            "text": "-- Art --"
+          }
+        ],
+        "selectable": false,
+        "width": 61.0
+      },
+      {
+        "dynamic": false,
+        "height": 17.05,
+        "kind": "text",
+        "left": -3.3,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -158.9,
+          "ty": -153.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "center",
+              "bitmapSize": "280",
+              "face": "Verdana-Bold",
+              "lineHeight": "17.05",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "14"
+            },
+            "text": "-- Music --"
+          }
+        ],
+        "selectable": false,
+        "width": 80.9
+      },
+      {
+        "dynamic": false,
+        "height": 17.05,
+        "kind": "text",
+        "left": 24.0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 40.05,
+          "ty": 45.95
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "center",
+              "bitmapSize": "280",
+              "face": "Verdana-Bold",
+              "lineHeight": "17.05",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "14"
+            },
+            "text": "-- Programming --"
+          }
+        ],
+        "selectable": false,
+        "width": 146.0
+      }
+    ],
+    "UI/Popups (outside levels)/Credits/artPg1": [
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0.15,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -92.9,
+          "ty": 2.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#254489",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "Happy/Sad Blocks"
+          }
+        ],
+        "selectable": false,
+        "width": 109.6
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 8.2,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -32.05,
+          "ty": 31.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#254489",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://web.archive.org/web/20130203132906/http://www.jiggmin.com:80/threads/92731-%C2%ADJigg-Hat"
+            },
+            "text": "Jigg Hat"
+          }
+        ],
+        "selectable": false,
+        "width": 40.7
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 8.5,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -34.2,
+          "ty": 45.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#254489",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "Taco Set"
+          }
+        ],
+        "selectable": false,
+        "width": 42.55
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 12.75,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -60.25,
+          "ty": 60.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#254489",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "Reindeer Set"
+          }
+        ],
+        "selectable": false,
+        "width": 64.35
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -49.55,
+          "ty": 74.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#254489",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "Crocodile Set"
+          }
+        ],
+        "selectable": false,
+        "width": 66.4
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -34.25,
+          "ty": 89.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#254489",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://web.archive.org/web/20150323161345/http://jiggmin.com/threads/108086-Gecko-Parts"
+            },
+            "text": "Gecko Set"
+          }
+        ],
+        "selectable": false,
+        "width": 51.1
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 64.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -37.85,
+          "ty": 2.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 46.75,
+          "ty": 2.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#244388",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "Jacob K."
+          }
+        ],
+        "selectable": false,
+        "width": 41.75
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 64.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -37.85,
+          "ty": 31.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 64.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -37.85,
+          "ty": 45.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 46.75,
+          "ty": 45.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#244388",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "Tacchi"
+          }
+        ],
+        "selectable": false,
+        "width": 30.25
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 64.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -37.85,
+          "ty": 60.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 64.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -37.85,
+          "ty": 74.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 64.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -37.85,
+          "ty": 89.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 46.75,
+          "ty": 31.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#244388",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "Tommy 8"
+          }
+        ],
+        "selectable": false,
+        "width": 46.0
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 46.75,
+          "ty": 60.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#244388",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "Ktost"
+          }
+        ],
+        "selectable": false,
+        "width": 25.9
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 46.75,
+          "ty": 74.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#244388",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "Ktost"
+          }
+        ],
+        "selectable": false,
+        "width": 25.9
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 46.75,
+          "ty": 89.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#244388",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "Mr.Black"
+          }
+        ],
+        "selectable": false,
+        "width": 41.3
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 11.7,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -32.05,
+          "ty": 16.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#254489",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "Cat Set"
+          }
+        ],
+        "selectable": false,
+        "width": 37.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 64.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -37.85,
+          "ty": 16.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 46.75,
+          "ty": 16.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#244388",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "Mfdom"
+          }
+        ],
+        "selectable": false,
+        "width": 33.8
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -20.25,
+          "ty": 103.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#254489",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://jiggmin2.com/forums/showthread.php?tid=1450"
+            },
+            "text": "Bat Set"
+          }
+        ],
+        "selectable": false,
+        "width": 37.1
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 46.75,
+          "ty": 103.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://jiggmin2.com/forums/member.php?action=profile&uid=1409"
+            },
+            "text": "Dexterity"
+          }
+        ],
+        "selectable": false,
+        "width": 57.9
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 64.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -37.85,
+          "ty": 103.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 64.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -37.85,
+          "ty": 118.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -21.9,
+          "ty": 118.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#254489",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://jiggmin2.com/forums/showthread.php?tid=1511"
+            },
+            "text": "Sea Set"
+          }
+        ],
+        "selectable": false,
+        "width": 38.75
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 46.75,
+          "ty": 118.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://jiggmin2.com/forums/member.php?action=profile&uid=560"
+            },
+            "text": "Magyar"
+          }
+        ],
+        "selectable": false,
+        "width": 57.9
+      }
+    ],
+    "UI/Popups (outside levels)/Credits/artPg2": [
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -40.8,
+          "ty": 16.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://jiggmin2.com/forums/showthread.php?tid=1449"
+            },
+            "text": "Brew Set"
+          }
+        ],
+        "selectable": false,
+        "width": 45.55
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 64.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -49.95,
+          "ty": 16.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 34.65,
+          "ty": 16.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://jiggmin2.com/forums/member.php?action=profile&uid=77"
+            },
+            "text": "Northadox"
+          }
+        ],
+        "selectable": false,
+        "width": 63.25
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 12.15,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -67.95,
+          "ty": 2.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#254489",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://jiggmin2.com/forums/showthread.php?tid=1511"
+            },
+            "text": "Jellyfish Hat"
+          }
+        ],
+        "selectable": false,
+        "width": 60.55
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 64.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -49.95,
+          "ty": 2.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 34.65,
+          "ty": 2.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://jiggmin2.com/forums/member.php?action=profile&uid=560"
+            },
+            "text": "Magyar"
+          }
+        ],
+        "selectable": false,
+        "width": 57.9
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": -28.7,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -71.95,
+          "ty": 31.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#254489",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank"
+            },
+            "text": "Jack-o'-Lantern Head"
+          }
+        ],
+        "selectable": false,
+        "width": 105.4
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 34.65,
+          "ty": 31.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://jiggmin2.com/forums/member.php?action=profile&uid=180"
+            },
+            "text": "Zelante"
+          }
+        ],
+        "selectable": false,
+        "width": 51.65
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 64.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -49.95,
+          "ty": 31.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 6.8,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -71.95,
+          "ty": 45.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#254489",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://jiggmin2.com/forums/showthread.php?tid=2140"
+            },
+            "text": "Christmas Set"
+          }
+        ],
+        "selectable": false,
+        "width": 69.9
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 34.65,
+          "ty": 45.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://jiggmin2.com/forums/member.php?action=profile&uid=724"
+            },
+            "text": "platform guy"
+          }
+        ],
+        "selectable": false,
+        "width": 65.45
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 64.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -49.95,
+          "ty": 45.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 34.65,
+          "ty": 60.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://jiggmin2.com/forums/member.php?action=profile&uid=724"
+            },
+            "text": "platform guy"
+          }
+        ],
+        "selectable": false,
+        "width": 65.95
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 7.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -71.95,
+          "ty": 60.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#254489",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://jiggmin2.com/forums/showthread.php?tid=2140"
+            },
+            "text": "Snowman Set"
+          }
+        ],
+        "selectable": false,
+        "width": 69.1
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 64.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -49.95,
+          "ty": 60.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 34.65,
+          "ty": 74.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://jiggmin2.com/forums/member.php?action=profile&uid=458"
+            },
+            "text": "~JBG~"
+          }
+        ],
+        "selectable": false,
+        "width": 39.9
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 19.8,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -71.95,
+          "ty": 74.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#254489",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://www.youtube.com/watch?v=SWdV0wTsRUg"
+            },
+            "text": "Cheese Hat"
+          }
+        ],
+        "selectable": false,
+        "width": 56.9
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 64.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -49.95,
+          "ty": 74.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 34.65,
+          "ty": 89.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://jiggmin2.com/forums/member.php?action=profile&uid=458"
+            },
+            "text": "~JBG~"
+          }
+        ],
+        "selectable": false,
+        "width": 39.9
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 8.5,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -71.95,
+          "ty": 89.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#254489",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://jiggmin2.com/forums/showthread.php?tid=2835"
+            },
+            "text": "Blobfish Head"
+          }
+        ],
+        "selectable": false,
+        "width": 68.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 64.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -49.95,
+          "ty": 89.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 34.65,
+          "ty": 103.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://jiggmin2.com/forums/member.php?action=profile&uid=458"
+            },
+            "text": "~JBG~"
+          }
+        ],
+        "selectable": false,
+        "width": 39.9
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 23.5,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -71.95,
+          "ty": 103.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#254489",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank"
+            },
+            "text": "Turkey Set"
+          }
+        ],
+        "selectable": false,
+        "width": 53.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 64.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -49.95,
+          "ty": 103.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 34.65,
+          "ty": 118.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://jiggmin2.com/forums/member.php?action=profile&uid=458"
+            },
+            "text": "~JBG~"
+          }
+        ],
+        "selectable": false,
+        "width": 39.9
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": -16.25,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -71.95,
+          "ty": 118.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#254489",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank"
+            },
+            "text": "Block Options Icon"
+          }
+        ],
+        "selectable": false,
+        "width": 92.95
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 64.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -49.95,
+          "ty": 118.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      }
+    ],
+    "UI/Popups (outside levels)/Credits/artPg3": [
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": -25.1,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -67.95,
+          "ty": 2.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#254489",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank"
+            },
+            "text": "Custom Stats Block"
+          }
+        ],
+        "selectable": false,
+        "width": 97.8
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 64.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -49.95,
+          "ty": 2.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 34.65,
+          "ty": 2.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://jiggmin2.com/forums/member.php?action=profile&uid=458"
+            },
+            "text": "~JBG~"
+          }
+        ],
+        "selectable": false,
+        "width": 57.9
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 32.4,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -67.95,
+          "ty": 16.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#254489",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank"
+            },
+            "text": "Dog Set"
+          }
+        ],
+        "selectable": false,
+        "width": 40.3
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 64.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -49.95,
+          "ty": 16.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 34.65,
+          "ty": 16.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://jiggmin2.com/forums/member.php?action=profile&uid=458"
+            },
+            "text": "~JBG~"
+          }
+        ],
+        "selectable": false,
+        "width": 57.9
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 6.8,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -67.95,
+          "ty": 31.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#254489",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://jiggmin2.com/forums/showthread.php?tid=3645"
+            },
+            "text": "Gladiator Set"
+          }
+        ],
+        "selectable": false,
+        "width": 65.9
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 64.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -49.95,
+          "ty": 31.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 34.65,
+          "ty": 31.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://jiggmin2.com/forums/member.php?action=profile&uid=458"
+            },
+            "text": "~JBG~"
+          }
+        ],
+        "selectable": false,
+        "width": 57.9
+      }
+    ],
+    "UI/Popups (outside levels)/Credits/musicPg1": [
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -119.5,
+          "ty": 2.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://www.discogs.com/release/169199"
+            },
+            "text": "Orbital Trance"
+          }
+        ],
+        "selectable": false,
+        "width": 116.4
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 64.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -59.9,
+          "ty": 2.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 24.7,
+          "ty": 2.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://www.discogs.com/artist/20846-Space-Planet"
+            },
+            "text": "Space Planet"
+          }
+        ],
+        "selectable": false,
+        "width": 87.1
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -72.25,
+          "ty": 16.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://www.youtube.com/watch?v=s_0AozQ1UsM"
+            },
+            "text": "Code"
+          }
+        ],
+        "selectable": false,
+        "width": 69.15
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 24.7,
+          "ty": 16.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://stefanomaccarelli.com/"
+            },
+            "text": "Stefano Maccarelli"
+          }
+        ],
+        "selectable": false,
+        "width": 97.75
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 64.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -59.9,
+          "ty": 16.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -92.45,
+          "ty": 31.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://www.newgrounds.com/audio/listen/32772"
+            },
+            "text": "Paradise on E"
+          }
+        ],
+        "selectable": false,
+        "width": 89.35
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 24.7,
+          "ty": 31.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://apimusic.newgrounds.com/"
+            },
+            "text": "API"
+          }
+        ],
+        "selectable": false,
+        "width": 24.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 64.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -59.9,
+          "ty": 31.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": -42.95,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -79.5,
+          "ty": 45.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://www.newgrounds.com/audio/listen/102483"
+            },
+            "text": "Crying Soul (FL Mix)"
+          }
+        ],
+        "selectable": false,
+        "width": 119.35
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 24.7,
+          "ty": 45.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://pyroific.newgrounds.com/"
+            },
+            "text": "Pyroific"
+          }
+        ],
+        "selectable": false,
+        "width": 48.9
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 64.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -59.9,
+          "ty": 45.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -66.4,
+          "ty": 60.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://www.newgrounds.com/audio/listen/44613"
+            },
+            "text": "My Vision"
+          }
+        ],
+        "selectable": false,
+        "width": 63.3
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 24.7,
+          "ty": 60.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "http://davidorr.net/"
+            },
+            "text": "David Orr"
+          }
+        ],
+        "selectable": false,
+        "width": 59.8
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 64.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -59.9,
+          "ty": 60.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -82.6,
+          "ty": 74.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://www.newgrounds.com/audio/listen/59342"
+            },
+            "text": "Switchblade"
+          }
+        ],
+        "selectable": false,
+        "width": 79.45
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 24.7,
+          "ty": 74.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://myspace.com/detectivejabsco"
+            },
+            "text": "Detective Jabsco"
+          }
+        ],
+        "selectable": false,
+        "width": 85.55
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 64.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -59.9,
+          "ty": 74.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -69.3,
+          "ty": 89.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://www.newgrounds.com/audio/listen/74690"
+            },
+            "text": "The Wires"
+          }
+        ],
+        "selectable": false,
+        "width": 66.15
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 24.7,
+          "ty": 89.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://cheez-r-us.newgrounds.com/audio"
+            },
+            "text": "Cheez-R-Us"
+          }
+        ],
+        "selectable": false,
+        "width": 77.65
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 64.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -59.9,
+          "ty": 89.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -102.1,
+          "ty": 103.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://www.newgrounds.com/audio/listen/108133"
+            },
+            "text": "Before Mydnite"
+          }
+        ],
+        "selectable": false,
+        "width": 98.95
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 24.7,
+          "ty": 103.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://f-777.newgrounds.com/"
+            },
+            "text": "F-777"
+          }
+        ],
+        "selectable": false,
+        "width": 39.95
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 64.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -59.9,
+          "ty": 103.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -65.45,
+          "ty": 118.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://www.newgrounds.com/audio/listen/51265"
+            },
+            "text": "Broked It"
+          }
+        ],
+        "selectable": false,
+        "width": 62.35
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 24.7,
+          "ty": 118.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://switch.newgrounds.com/"
+            },
+            "text": "SWiTCH"
+          }
+        ],
+        "selectable": false,
+        "width": 53.6
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 64.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -59.9,
+          "ty": 118.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -44.45,
+          "ty": 132.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://www.newgrounds.com/audio/listen/83720"
+            },
+            "text": "Hello?"
+          }
+        ],
+        "selectable": false,
+        "width": 41.35
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 24.7,
+          "ty": 132.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://tmm43.newgrounds.com/"
+            },
+            "text": "TMM43"
+          }
+        ],
+        "selectable": false,
+        "width": 48.0
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 64.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -59.9,
+          "ty": 132.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -77.4,
+          "ty": 147.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://www.newgrounds.com/audio/listen/98624"
+            },
+            "text": "Pyrokinesis"
+          }
+        ],
+        "selectable": false,
+        "width": 74.25
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 24.7,
+          "ty": 147.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://billtog.newgrounds.com/"
+            },
+            "text": "Sean Tucker"
+          }
+        ],
+        "selectable": false,
+        "width": 69.85
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 64.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -59.9,
+          "ty": 147.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -115.2,
+          "ty": 161.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://www.newgrounds.com/audio/listen/109884"
+            },
+            "text": "Flowerz 'n' Herbz"
+          }
+        ],
+        "selectable": false,
+        "width": 112.1
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 24.7,
+          "ty": 161.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://brunzolaitis.newgrounds.com/"
+            },
+            "text": "Brunzolaitis"
+          }
+        ],
+        "selectable": false,
+        "width": 76.95
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 64.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -59.9,
+          "ty": 161.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -104.6,
+          "ty": 176.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://www.newgrounds.com/audio/listen/128701"
+            },
+            "text": "Instrumental #4"
+          }
+        ],
+        "selectable": false,
+        "width": 101.5
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 24.7,
+          "ty": 176.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://reasoner.newgrounds.com/"
+            },
+            "text": "Reasoner"
+          }
+        ],
+        "selectable": false,
+        "width": 62.0
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 64.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -59.9,
+          "ty": 176.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 52.0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -100.8,
+          "ty": 190.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "Prismatic"
+          }
+        ],
+        "selectable": false,
+        "width": 45.4
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 64.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -60.15,
+          "ty": 190.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 24.45,
+          "ty": 190.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://www.youtube.com/user/Colorfulnova"
+            },
+            "text": "Lunanova"
+          }
+        ],
+        "selectable": false,
+        "width": 64.4
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 64.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -60.15,
+          "ty": 205.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 43.55,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -109.95,
+          "ty": 205.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "We Are Loud"
+          }
+        ],
+        "selectable": false,
+        "width": 63.05
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 24.45,
+          "ty": 205.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://dynamedion.com/home/"
+            },
+            "text": "Dynamedion"
+          }
+        ],
+        "selectable": false,
+        "width": 76.9
+      }
+    ],
+    "UI/Popups (outside levels)/Credits/musicPg2": [
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 53.45,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -124.75,
+          "ty": 2.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "Toodaloo"
+          }
+        ],
+        "selectable": false,
+        "width": 43.95
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 64.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -84.1,
+          "ty": 2.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 0.5,
+          "ty": 2.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://soundcloud.com/jonathan-mack-lofi"
+            },
+            "text": "mustangman"
+          }
+        ],
+        "selectable": false,
+        "width": 67.05
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 29.05,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -117.3,
+          "ty": 16.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://musescore.com/user/293816/scores/6137011"
+            },
+            "text": "Night Shade"
+          }
+        ],
+        "selectable": false,
+        "width": 60.95
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 0.5,
+          "ty": 16.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://musescore.com/user/293816"
+            },
+            "text": "Goliathe"
+          }
+        ],
+        "selectable": false,
+        "width": 51.65
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 64.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -84.1,
+          "ty": 16.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 47.15,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -117.3,
+          "ty": 31.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://soundcloud.com/majicke/blizzard"
+            },
+            "text": "Blizzard!"
+          }
+        ],
+        "selectable": false,
+        "width": 42.85
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 0.5,
+          "ty": 31.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://www.youtube.com/user/Colorfulnova"
+            },
+            "text": "Majicke"
+          }
+        ],
+        "selectable": false,
+        "width": 51.65
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 64.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -84.1,
+          "ty": 31.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": -23.65,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -117.3,
+          "ty": 45.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://youtu.be/z29_MiiyOtE"
+            },
+            "text": "Pasture (Instrumental)"
+          }
+        ],
+        "selectable": false,
+        "width": 113.65
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 0.5,
+          "ty": 45.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://open.spotify.com/artist/35EsioXPOMMzLpzHrvHCn3?si=B_Au9TWcSZS_ESUyuxb95w"
+            },
+            "text": "Damon Bass"
+          }
+        ],
+        "selectable": false,
+        "width": 63.05
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 64.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -84.1,
+          "ty": 45.5
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 15.5,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -117.3,
+          "ty": 60.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "alignment": "right",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://soundcloud.com/adulock77/sunset-raiders-pr2-version"
+            },
+            "text": "Sunset Raiders"
+          }
+        ],
+        "selectable": false,
+        "width": 74.5
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 0,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": 0.5,
+          "ty": 60.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "fillColor": "#234287",
+              "lineHeight": "12.15",
+              "rotation": "true",
+              "size": "10",
+              "target": "_blank",
+              "url": "https://soundcloud.com/adulock77"
+            },
+            "text": "Adulock Van Liovick"
+          }
+        ],
+        "selectable": false,
+        "width": 102.05
+      },
+      {
+        "dynamic": false,
+        "height": 12.15,
+        "kind": "text",
+        "left": 64.6,
+        "matrix": {
+          "a": 1,
+          "b": 0,
+          "c": 0,
+          "d": 1,
+          "tx": -84.1,
+          "ty": 60.0
+        },
+        "multiline": false,
+        "name": null,
+        "runs": [
+          {
+            "attrs": {
+              "aliasText": "false",
+              "bitmapSize": "200",
+              "face": "Verdana",
+              "letterSpacing": "-0.05",
+              "lineHeight": "12.15",
+              "lineSpacing": "0",
+              "rotation": "true",
+              "size": "10"
+            },
+            "text": "by"
+          }
+        ],
+        "selectable": false,
+        "width": 12.2
+      }
+    ]
+  }
+}

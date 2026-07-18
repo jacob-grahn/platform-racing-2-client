@@ -1,10 +1,9 @@
 package pr2.ui;
 
-import openfl.display.GradientType;
+import openfl.display.DisplayObject;
 import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.MouseEvent;
-import openfl.geom.Matrix;
 import openfl.geom.Point;
 import openfl.geom.Rectangle;
 import pr2.assets.NativeAssetIds.StaticSvg;
@@ -13,6 +12,7 @@ import pr2.gameplay.MiniMap;
 import pr2.lobby.dialogs.ConfirmPopup;
 import pr2.lobby.dialogs.UploadingPopup;
 import pr2.net.ServerConfig;
+import pr2.runtime.SvgAsset;
 
 /**
 	Native port of Flash `ui.RatingSelect`: the 1-5 star level-rating control on
@@ -130,29 +130,29 @@ class RatingSelect extends Sprite {
 }
 
 /** Explicit rendering of the original `RatingSelectGraphic` masked meter. */
-private class RatingStarMeter extends Sprite {
+class RatingStarMeter extends Sprite {
 	public static inline var WIDTH:Float = 55.2;
 	private static inline var HEIGHT:Float = 11;
 	public var fillWidth(default, null):Float = 0;
-	private var background:Shape;
-	private var fill:Shape;
+	private var background:DisplayObject;
+	private var fill:DisplayObject;
+	private var starMask:DisplayObject;
 
 	public function new() {
 		super();
-		background = new Shape();
-		background.graphics.beginGradientFill(GradientType.LINEAR, [0x8C8C8C, 0x474E29], [1, 1], [0, 255], verticalGradient());
-		// Both gradient layers are children of the five-star mask in the XFL.
-		// Drawing a solid rectangle here leaves an opaque olive strip around the
-		// stars on the finished-race popup.
-		for (index in 0...5) drawStar(background, 5.5 + 11.05 * index, 5.35);
-		background.graphics.endFill();
-		addChild(background);
-
-		fill = new Shape();
-		fill.graphics.beginGradientFill(GradientType.LINEAR, [0x50CD18, 0x248E58], [1, 1], [0, 255], verticalGradient());
-		for (index in 0...5) drawStar(fill, 5.5 + 11.05 * index, 5.35);
-		fill.graphics.endFill();
-		addChild(fill);
+		var content = new Sprite();
+		content.name = "maskedContent";
+		background = SvgAsset.create("assets/svg/ui/rating_stars_background.svg");
+		background.name = "background";
+		fill = SvgAsset.create("assets/svg/ui/rating_stars_fill.svg");
+		fill.name = "bar";
+		content.addChild(background);
+		content.addChild(fill);
+		addChild(content);
+		starMask = SvgAsset.create("assets/svg/ui/rating_stars_mask.svg");
+		starMask.name = "starMask";
+		addChild(starMask);
+		content.mask = starMask;
 		displayRating(3);
 	}
 
@@ -162,33 +162,7 @@ private class RatingStarMeter extends Sprite {
 	}
 
 	public function backgroundHeight():Float {
-		return background.getBounds(background).height;
+		return starMask.getBounds(starMask).height;
 	}
 
-	private static function verticalGradient():Matrix {
-		var matrix = new Matrix();
-		matrix.createGradientBox(WIDTH, HEIGHT, Math.PI / 2, 0, 0);
-		return matrix;
-	}
-
-	private static function drawStar(shape:Shape, cx:Float, cy:Float):Void {
-		shape.graphics.moveTo(cx + 1.05, cy - 1);
-		shape.graphics.lineTo(cx - 0.05, cy - 5.35);
-		shape.graphics.lineTo(cx - 1.1, cy - 1);
-		shape.graphics.lineTo(cx - 5.5, cy - 1.25);
-		shape.graphics.lineTo(cx - 5.5, cy - 1.2);
-		shape.graphics.lineTo(cx - 4.6, cy - 0.9);
-		shape.graphics.lineTo(cx - 1.95, cy + 1.1);
-		shape.graphics.lineTo(cx - 3.55, cy + 5.3);
-		shape.graphics.lineTo(cx - 0.1, cy + 2.45);
-		shape.graphics.lineTo(cx - 0.05, cy + 2.5);
-		shape.graphics.lineTo(cx + 3.4, cy + 5.35);
-		shape.graphics.lineTo(cx + 1.7, cy + 1.2);
-		shape.graphics.lineTo(cx + 5.5, cy - 1.25);
-		shape.graphics.lineTo(cx + 5.5, cy - 1.3);
-		shape.graphics.lineTo(cx + 4.7, cy - 1.25);
-		shape.graphics.lineTo(cx + 2.05, cy - 1);
-		shape.graphics.lineTo(cx + 1.2, cy - 0.95);
-		shape.graphics.lineTo(cx + 1.05, cy - 1);
-	}
 }

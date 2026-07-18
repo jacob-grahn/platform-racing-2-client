@@ -12,6 +12,7 @@ DEFAULT_XFL = Path("flash/platform-racing-2-xfl")
 ROOT = Path(__file__).resolve().parents[1]
 PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
 RECOVERY_TARGETS = {
+	"Images/bitmap7.png",
     "Images/bitmap19.jpg",
     "Images/bitmap97.jpg",
     "Images/bitmap371.png",
@@ -21,7 +22,10 @@ RECOVERY_TARGETS = {
 }
 # Animate's imported source JPEG can differ from its recompressed bin payload.
 PRESERVE_IMPORTED = {"Images/bitmap379.jpg"}
-NATIVE_TARGETS = {"Images/bitmap19.jpg": ROOT / "assets/bitmaps/mine.jpg"}
+NATIVE_TARGETS = {
+	"Images/bitmap7.png": ROOT / "assets/bitmaps/options_item.png",
+	"Images/bitmap19.jpg": ROOT / "assets/bitmaps/mine.jpg",
+}
 
 
 def png_chunk(kind, data):
@@ -47,13 +51,13 @@ def encode_argb_png(width, height, stride, pixels):
     )
 
 
-def decode_raw_bitmap(payload):
+def decode_raw_bitmap_pixels(payload):
     if payload[:2] != b"\x03\x05":
         raise ValueError("unsupported XFL bitmap type (expected 32-bit bitmap)")
     stride, width = struct.unpack_from("<HH", payload, 2)
     height = struct.unpack_from("<I", payload, 6)[0]
     has_alpha, compressed = payload[24:26]
-    if not has_alpha or not compressed:
+    if not compressed:
         raise ValueError("unsupported XFL bitmap flags")
 
     position = 26
@@ -70,7 +74,17 @@ def decode_raw_bitmap(payload):
         compressed_data.extend(payload[position : position + size])
         position += size
 
-    pixels = zlib.decompress(compressed_data)
+    pixels = bytearray(zlib.decompress(compressed_data))
+    if len(pixels) != stride * height:
+        raise ValueError("invalid XFL bitmap pixel payload")
+    if not has_alpha:
+        for offset in range(0, len(pixels), 4):
+            pixels[offset] = 255
+    return width, height, stride, bytes(pixels)
+
+
+def decode_raw_bitmap(payload):
+    width, height, stride, pixels = decode_raw_bitmap_pixels(payload)
     return encode_argb_png(width, height, stride, pixels)
 
 

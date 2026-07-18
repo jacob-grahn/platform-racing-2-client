@@ -1,17 +1,16 @@
 package pr2.lobby.dialogs;
 
 import openfl.text.TextField;
-import openfl.text.TextFieldType;
-import openfl.text.TextFormat;
-import pr2.assets.NativeAssetIds.FontAsset;
 import pr2.assets.NativeAssetIds.StaticSvg;
 import pr2.assets.NativeAssets;
+import pr2.ui.controls.GameTextArea;
 import pr2.ui.view.LoadingView;
 import pr2.ui.view.NativeView;
 
 /** Native composition of the chat-room list info panel. */
 class ChatRoomInfoView extends NativeView {
 	public final textBox:TextField;
+	public final textArea:GameTextArea;
 	public final loadingGraphic:LoadingView;
 
 	public function new() {
@@ -22,17 +21,13 @@ class ChatRoomInfoView extends NativeView {
 		panel.scaleX = 0.808746337890625;
 		panel.scaleY = 0.785232543945312;
 		addChild(panel);
-		textBox = new TextField();
+		textArea = ownControl(new GameTextArea(197.100830078125, 128));
+		textArea.name = "textBox_control";
+		textArea.x = -98;
+		textArea.y = -65;
+		addChild(textArea);
+		textBox = textArea.textField;
 		textBox.name = "textBox";
-		textBox.x = -98;
-		textBox.y = -65;
-		textBox.width = 197;
-		textBox.height = 128;
-		textBox.multiline = true;
-		textBox.wordWrap = true;
-		textBox.selectable = true;
-		textBox.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 11, 0);
-		addChild(textBox);
 		loadingGraphic = new LoadingView();
 		loadingGraphic.name = "loadingGraphic";
 		addChild(loadingGraphic);

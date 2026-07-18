@@ -331,7 +331,19 @@ class CampaignTestScreen extends Sprite {
 		return ChatText.trimWhitespace(message == null ? "" : message).toLowerCase() == "/debug";
 	}
 
+	public static function isRaceChatFixtureCommand(message:String):Bool {
+		return ChatText.trimWhitespace(message == null ? "" : message).toLowerCase() == "/chatfixture";
+	}
+
 	public function handleRaceChatLine(message:String):Bool {
+		if (isRaceChatFixtureCommand(message)) {
+			if (course != null && course.raceChat != null) {
+				for (i in 0...8) {
+					course.raceChat.receiveChatMessage(i == 7 ? "ClickablePlayer" : 'Player$i', i == 7 ? "1,0" : "0", 'fixture line $i');
+				}
+			}
+			return true;
+		}
 		if (!isDebugChatCommand(message)) {
 			return false;
 		}

@@ -6,6 +6,7 @@ import openfl.events.Event;
 import pr2.app.AppStage;
 import pr2.audio.MusicCatalog;
 import pr2.audio.MusicCatalog.MusicTrack;
+import pr2.audio.GameMusic;
 import pr2.lobby.dialogs.AutoDismissController;
 import pr2.ui.controls.GameSelect;
 import pr2.ui.StageFocus;
@@ -15,6 +16,7 @@ class EditorMusicSettingsPopup extends Sprite {
 	public final art:EditorSettingsMenuView;
 	public final dropdown:GameSelect<MusicTrack>;
 	private final songs:Array<MusicTrack>;
+	private final preview:GameMusic;
 	private var autoDismiss:Null<AutoDismissController>;
 	private var removed:Bool = false;
 
@@ -23,15 +25,18 @@ class EditorMusicSettingsPopup extends Sprite {
 		this.editor = editor;
 		art = new EditorSettingsMenuView("music");
 		addChild(art);
+		preview = new GameMusic();
 		songs = MusicCatalog.enabled([], true);
 		dropdown = new GameSelect<MusicTrack>();
 		dropdown.x = -100;
 		dropdown.y = -15;
 		dropdown.setSize(200, 22);
+		dropdown.rowCount = 4;
 		for (song in songs) {
 			dropdown.addOption(song.label, song);
 		}
 		selectSong(editor.song == "" ? "random" : editor.song);
+		if (dropdown.selectedOption != null) preview.setSong(dropdown.selectedOption.value);
 		dropdown.addEventListener(Event.CHANGE, changeSong);
 		addChild(dropdown);
 		mountNear(target);
@@ -42,6 +47,8 @@ class EditorMusicSettingsPopup extends Sprite {
 		var selected = dropdown.selectedOption == null ? null : dropdown.selectedOption.value;
 		return selected == null ? "" : selected.id;
 	}
+
+	public function previewSongIdForTests():String return preview.selected.id;
 
 	public function setSelectedSongId(songId:String):Void {
 		selectSong(songId);
@@ -59,6 +66,7 @@ class EditorMusicSettingsPopup extends Sprite {
 		}
 		dropdown.removeEventListener(Event.CHANGE, changeSong);
 		dropdown.dispose();
+		preview.remove();
 		if (dropdown.parent == this) {
 			removeChild(dropdown);
 		}
@@ -83,6 +91,7 @@ class EditorMusicSettingsPopup extends Sprite {
 		var selected = dropdown.selectedOption == null ? null : dropdown.selectedOption.value;
 		if (selected != null) {
 			editor.setSong(selected.id);
+			preview.setSong(selected);
 		}
 			StageFocus.reset();
 	}

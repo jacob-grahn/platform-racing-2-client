@@ -54,7 +54,7 @@ class GuildPopup extends Popup {
 		guildId = id;
 
 		art = new GuildView();
-		closeBinding = LobbyArt.bind(DisplayUtil.findByName(art, "close_bt"), clickClose);
+		closeBinding = LobbyArt.bind(DisplayUtil.directChildByName(art, "close_bt"), clickClose);
 		addChild(art);
 
 		if (autoLoad) {
@@ -82,7 +82,7 @@ class GuildPopup extends Popup {
 
 		var isMember = LobbySession.guildId != 0 && LobbySession.guildId == guildId;
 		art.setMember(isMember);
-		titleBox = LobbyArt.text(art, "titleBox");
+		titleBox = LobbyArt.directText(art, "titleBox");
 		setText("titleBox", "-- " + guildName + " --");
 		setText("gpTodayBox", "GP Today: " + NumberFormat.withCommas(intAny(ret, ["gp_today", "gpToday"])));
 		setText("gpTotalBox", "GP Total: " + NumberFormat.withCommas(intAny(ret, ["gp_total", "gpTotal"])));
@@ -90,18 +90,18 @@ class GuildPopup extends Popup {
 		setText("guildProse", strField(ret, "note"));
 		addEmblem(strField(ret, "emblem"));
 
-		var loading = DisplayUtil.findByName(art, "loadingGraphic");
+		var loading = DisplayUtil.directChildByName(art, "loadingGraphic");
 		if (loading != null) loading.visible = false;
 		setVisible("edit_bt", LobbySession.group >= 2 && !LobbySession.isTrialMod);
 		setVisible("delete_bt", LobbySession.group == 3 && !LobbySession.isTrialMod);
 		if (LobbySession.group >= 2 && !LobbySession.isTrialMod) {
-			editBinding = LobbyArt.bind(DisplayUtil.findByName(art, "edit_bt"), clickEdit);
+			editBinding = LobbyArt.bind(DisplayUtil.directChildByName(art, "edit_bt"), clickEdit);
 			if (LobbySession.group == 3) {
-				deleteBinding = LobbyArt.bind(DisplayUtil.findByName(art, "delete_bt"), clickDelete);
+				deleteBinding = LobbyArt.bind(DisplayUtil.directChildByName(art, "delete_bt"), clickDelete);
 			}
 		}
 
-		var holder = Std.downcast(DisplayUtil.findByName(art, "membersHolder"), DisplayObjectContainer);
+		var holder = Std.downcast(DisplayUtil.directChildByName(art, "membersHolder"), DisplayObjectContainer);
 		if (holder != null) {
 			for (member in members) {
 				var row = new GuildMemberName(member, ownerId != 0 && ownerId == intAny(member, ["user_id", "userId"]));
@@ -116,9 +116,9 @@ class GuildPopup extends Popup {
 			scroll.init(holder, 100, 100);
 		}
 
-		closeBinding = replaceBinding(closeBinding, DisplayUtil.findByName(art, "close_bt"), clickClose);
+		closeBinding = replaceBinding(closeBinding, DisplayUtil.directChildByName(art, "close_bt"), clickClose);
 		if (isMember) {
-			messageBinding = LobbyArt.bind(DisplayUtil.findByName(art, "messageButton"), clickMessage);
+			messageBinding = LobbyArt.bind(DisplayUtil.directChildByName(art, "messageButton"), clickMessage);
 		}
 		if (AppStage.stage != null) {
 			AppStage.stage.addEventListener(KeyboardEvent.KEY_DOWN, toggleGuildIdShown);
@@ -169,12 +169,12 @@ class GuildPopup extends Popup {
 	}
 
 	private function setText(name:String, value:String):Void {
-		var field = LobbyArt.text(art, name);
+		var field = LobbyArt.directText(art, name);
 		if (field != null) field.text = value;
 	}
 
 	private function setVisible(name:String, value:Bool):Void {
-		var target = DisplayUtil.findByName(art, name);
+		var target = DisplayUtil.directChildByName(art, name);
 		if (target != null) target.visible = value;
 	}
 

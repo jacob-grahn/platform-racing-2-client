@@ -2,6 +2,7 @@ package pr2.lobby.dialogs;
 
 import openfl.display.Sprite;
 import pr2.net.LobbySocket;
+import pr2.lobby.dialogs.ModerationMenuView.ModerationMenuLayout;
 
 /**
 	Port of Flash `dialogs.TempModMenu`: temporary moderators can issue warning
@@ -16,11 +17,11 @@ class TempModMenu extends Sprite {
 		super();
 		userName = name;
 		target = popup;
-		art = new ModerationMenuView("-- Temporary Moderator --", [
+		art = new ModerationMenuView(TempMod, "-- Mod --", [
 			{name: "warning1Button", label: "Warning 1", press: function():Void warnUser(1)},
 			{name: "warning2Button", label: "Warning 2", press: function():Void warnUser(2)},
 			{name: "warning3Button", label: "Warning 3", press: function():Void warnUser(3)},
-			{name: "kickButton", label: "30m Kick", press: clickKick}
+			{name: "kickButton", label: "30 Minute Kick", press: clickKick}
 		]);
 		addChild(art);
 	}

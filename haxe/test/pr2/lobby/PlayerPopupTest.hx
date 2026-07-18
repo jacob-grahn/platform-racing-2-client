@@ -12,12 +12,12 @@ import pr2.lobby.dialogs.Popup;
 import pr2.lobby.dialogs.ModerationMenuView;
 import pr2.net.LobbySocket;
 import pr2.net.ServerConfig;
-import pr2.runtime.FlComboBox;
+import pr2.ui.controls.GameSelect;
 import pr2.runtime.FlComponents;
 import pr2.runtime.PR2MovieClip;
 import pr2.ui.controls.GameButton;
 import pr2.ui.GuildName;
-import pr2.util.DisplayUtil;
+import pr2.util.TestDisplayUtil as DisplayUtil;
 
 /**
 	Verifies that clicking a chat name brings up the player info popup the way the
@@ -475,9 +475,9 @@ class PlayerPopupTest {
 		return null;
 	}
 
-	private static function combo(container:DisplayObjectContainer, name:String):FlComboBox {
-		var combo = Std.downcast(DisplayUtil.findByName(container, name), FlComboBox);
-		if (combo == null) throw name + " is not an FlComboBox";
+	private static function combo(container:DisplayObjectContainer, name:String):GameSelect<Dynamic> {
+		var combo = Std.downcast(DisplayUtil.findByName(container, name), GameSelect);
+		if (combo == null) throw name + " is not a GameSelect";
 		return combo;
 	}
 
@@ -488,17 +488,18 @@ class PlayerPopupTest {
 		return {popup: popup, menu: menu, art: banMenu(menu)};
 	}
 
-	private static function assertTrialDurations(duration:FlComboBox):Void {
+	private static function assertTrialDurations(duration:GameSelect<Dynamic>):Void {
 		for (i in 0...duration.length) {
-			var seconds = Std.parseInt(Std.string(Reflect.field(duration.dataProvider.getItemAt(i), "data")));
-			assertEquals(true, seconds != null && seconds <= 86400, "trial moderator duration stays at one day or less");
+			var seconds = Std.parseInt(Std.string(Reflect.field(duration.itemAt(i), "data")));
+			assertEquals(true, i == 0 ? seconds == null : seconds != null && seconds <= 86400,
+				"trial moderator retains Choose plus authored durations at one day or less");
 		}
 	}
 
-	private static function assertTrialScope(scope:FlComboBox):Void {
+	private static function assertTrialScope(scope:GameSelect<Dynamic>):Void {
 		assertEquals(false, scope.enabled, "trial moderators cannot change ban scope");
 		for (i in 0...scope.length) {
-			assertEquals(false, Reflect.field(scope.dataProvider.getItemAt(i), "data") == "game", "trial moderators do not get game bans");
+			assertEquals(false, Reflect.field(scope.itemAt(i), "data") == "game", "trial moderators do not get game bans");
 		}
 	}
 

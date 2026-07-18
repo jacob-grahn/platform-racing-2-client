@@ -10,11 +10,12 @@ import pr2.effects.NativeEffectAnimation;
 import pr2.effects.PhysicsEffect;
 import pr2.level.ServerLevel.DecodedBlock;
 import pr2.level.ServerLevel;
+import pr2.level.ObjectCodes;
 import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
-import pr2.runtime.PR2MovieClip;
 import pr2.util.FlashRandom;
 import pr2.util.DisplayUtil;
+import pr2.runtime.SvgAsset;
 
 typedef EggState = {
 	final id:Int;
@@ -44,6 +45,9 @@ typedef EggAttackVisual = {
 	var shooterId:Int;
 	var hitPlayer:Bool;
 	var hitBlock:Bool;
+	var angle:Float;
+	var baseAngle:Float;
+	var rot:Int;
 	var display:Sprite;
 }
 
@@ -257,7 +261,7 @@ class EggRound {
 	private function beginSquash(egg:EggState):Void {
 		egg.removing = true;
 		egg.removeFrames = SQUASH_REMOVE_FRAMES;
-		egg.display.gotoAndPlay("squash");
+		egg.display.playSquash();
 	}
 
 	private function stepRemovingEgg(id:Int, egg:EggState):Void {
@@ -396,10 +400,7 @@ class EggRound {
 				var rot = parsePartInt(parts, 4);
 				var shooterId = parsePartInt(parts, 5);
 				for (angle in [base, base + 30, base - 30]) {
-					var shot = addAttackVisual("IceWaveGraphic", x, y, 1, 1, Math.cos(angle * Math.PI / 180) * 5,
-						Math.sin(angle * Math.PI / 180) * 5, 75, true, "IceWave", shooterId);
-					shot.display.rotation = angle - rot;
-					addIceWaveCore(shot.display);
+					addIceWaveVisual(x, y, angle, rot, shooterId, base, 75);
 				}
 			default:
 		}
@@ -428,6 +429,9 @@ class EggRound {
 			shooterId: shooterId,
 			hitPlayer: false,
 			hitBlock: false,
+			angle: 0,
+			baseAngle: 0,
+			rot: 0,
 			display: display
 		};
 		attackVisuals.push(visual);
@@ -437,6 +441,8 @@ class EggRound {
 	private function stepAttackVisuals(level:ServerLevel, courseRotation:Int, ?playerX:Float, ?playerY:Float, playerCrouching:Bool,
 			playerRemoved:Bool):Void {
 		var remaining:Array<EggAttackVisual> = [];
+		var spawned:Array<EggAttackVisual> = [];
+		var activeIceCount = iceWaveCount(attackVisuals);
 		for (visual in attackVisuals) {
 			visual.posX += visual.velX;
 			visual.posY += visual.velY;
@@ -451,11 +457,17 @@ class EggRound {
 					visual.hitPlayer = true;
 					onIcePlayerHit(visual.shooterId);
 				}
-				if (!visual.hitBlock) {
-					var block = PhysicsEffect.blockFromPos(level, Std.int(visual.posX), Std.int(visual.posY), courseRotation);
-					if (block != null) {
-						visual.hitBlock = true;
-						onIceBlockHit(block);
+				var block = PhysicsEffect.blockFromPos(level, Std.int(visual.posX), Std.int(visual.posY), courseRotation);
+				if (block != null && block.code != ObjectCodes.BLOCK_ICE) {
+					onIceBlockHit(block);
+					if (activeIceCount < 10 && visual.life > 10) {
+						for (childAngle in iceBranchAngles(visual.angle, visual.baseAngle)) {
+							spawned.push(createIceWaveVisual(visual.display.x, visual.display.y, childAngle, visual.rot,
+								visual.shooterId, visual.baseAngle, Std.int(visual.life / 2)));
+							activeIceCount++;
+						}
+						visual.life -= 5;
+						skipIcePastSpawn(visual);
 					}
 				}
 			} else if (visual.effectType == "Laser" && !visual.hitBlock) {
@@ -476,16 +488,68 @@ class EggRound {
 				remaining.push(visual);
 			}
 		}
-		attackVisuals = remaining;
+		attackVisuals = remaining.concat(spawned);
+	}
+
+	private function addIceWaveVisual(x:Float, y:Float, angle:Float, rot:Int, shooterId:Int, baseAngle:Float, life:Int):EggAttackVisual {
+		var visual = createIceWaveVisual(x, y, angle, rot, shooterId, baseAngle, life);
+		attackVisuals.push(visual);
+		return visual;
+	}
+
+	private function createIceWaveVisual(x:Float, y:Float, angle:Float, rot:Int, shooterId:Int, baseAngle:Float, life:Int):EggAttackVisual {
+		var display = new Sprite();
+		display.x = x;
+		display.y = y;
+		display.rotation = angle - rot;
+		addIceWaveCore(display);
+		if (displayLayer != null) displayLayer.addChild(display);
+		var radians = angle * Math.PI / 180;
+		var visual:EggAttackVisual = {
+			posX: x,
+			posY: y,
+			velX: Math.cos(radians) * 5,
+			velY: Math.sin(radians) * 5,
+			life: life,
+			alphaJitter: true,
+			effectType: "IceWave",
+			shooterId: shooterId,
+			hitPlayer: false,
+			hitBlock: false,
+			angle: angle,
+			baseAngle: baseAngle,
+			rot: rot,
+			display: display
+		};
+		skipIcePastSpawn(visual);
+		return visual;
+	}
+
+	private static function skipIcePastSpawn(visual:EggAttackVisual):Void {
+		visual.posX += Math.cos(visual.angle * Math.PI / 180) * 30;
+		visual.posY += Math.sin(visual.angle * Math.PI / 180) * 30;
+	}
+
+	private static function iceWaveCount(visuals:Array<EggAttackVisual>):Int {
+		var count = 0;
+		for (visual in visuals) if (visual.effectType == "IceWave") count++;
+		return count;
+	}
+
+	public static function iceBranchAngles(angle:Float, baseAngle:Float):Array<Float> {
+		var minimum = baseAngle - 60;
+		var maximum = baseAngle + 60;
+		var angles:Array<Float> = [];
+		for (candidate in [angle + 30, angle - 30]) {
+			var limited = Math.max(minimum, Math.min(maximum, candidate));
+			if (limited != angle) angles.push(limited);
+		}
+		return angles;
 	}
 
 	private static function addIceWaveCore(display:Sprite):Void {
-		var core = new Shape();
+		var core = SvgAsset.create("assets/svg/effects/ice_wave_01.svg");
 		core.name = "iceWaveCore";
-		core.graphics.lineStyle(1, 0x8ACBFF, 1);
-		core.graphics.beginFill(0xDCEAF3, 0.92);
-		core.graphics.drawEllipse(-51, -8, 65, 16);
-		core.graphics.endFill();
 		display.addChild(core);
 	}
 
@@ -497,8 +561,6 @@ class EggRound {
 	}
 
 	private static function removeAttackVisual(visual:EggAttackVisual):Void {
-		var legacy = Std.downcast(visual.display, PR2MovieClip);
-		if (legacy != null) legacy.dispose();
 		var nativeEffect = Std.downcast(visual.display, NativeEffectAnimation);
 		if (nativeEffect != null) nativeEffect.dispose();
 		var laser = Std.downcast(visual.display, LaserShotView);

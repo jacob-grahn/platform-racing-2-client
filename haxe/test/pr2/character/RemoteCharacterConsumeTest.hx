@@ -78,14 +78,14 @@ class RemoteCharacterConsumeTest {
 		assertEquals("frontBackground", parents.join(","), "parent hook receives queued parent");
 		assertEquals("true", [for (v in sparkles) Std.string(v)].join(","), "sparkle hook receives true");
 		assertEquals("true", [for (v in jets) Std.string(v)].join(","), "jet hook receives true");
-		assertEquals(6, remote.jetPackForState("runAnim").currentFrame, "remote jet var switches active Jet Pack flame on");
+		assertEquals(true, remote.display.jetActive, "remote jet var switches active Jet Pack flame on");
 
 		handler.dispatch("p1", ["0", "0"]);
 		handler.dispatch("var1", ["jet", "0"]);
 		for (_ in 0...5) {
 			remote.stepFrame();
 		}
-		assertEquals(1, remote.jetPackForState("runAnim").currentFrame, "remote jet var switches Jet Pack flame off");
+		assertEquals(false, remote.display.jetActive, "remote jet var switches Jet Pack flame off");
 	}
 
 	private static function testCatchupClampAndBlockTouches():Void {
@@ -173,11 +173,10 @@ class RemoteCharacterConsumeTest {
 		var remote = new RemoteCharacter(5, null, "Runner", 1, 1, 1, 1, "0", new CommandHandler());
 		remote.setVar(["state", "run"]);
 		remote.stepFrame();
-		var run = remote.display.getStateClip("runAnim");
-		assertTrue(run != null && run.totalFrames > 1, "run animation has authored timeline frames");
-		var firstFrame = run.currentFrame;
+		assertTrue(remote.display.frameCount > 1, "run animation has authored rig frames");
+		var firstFrame = remote.display.currentFrame;
 		remote.stepFrame();
-		assertTrue(run.currentFrame != firstFrame, "remote run animation advances without another network state update");
+		assertTrue(remote.display.currentFrame != firstFrame, "remote run animation advances without another network state update");
 		remote.remove();
 	}
 

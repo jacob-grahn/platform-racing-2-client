@@ -176,7 +176,7 @@ class RemoteCharacter extends Character {
 			applyQueuedUpdate(updateQueue.shift());
 			if (updateQueue.length > catchupRate) {
 				// Flash recursively consumes excess network frames here, but the
-				// CharacterGraphic timeline still advances only once per stage frame.
+				// The neutral character rig still advances only once per stage frame.
 				go(null, false);
 			}
 		} else {

@@ -16,7 +16,7 @@ class ItemMenu extends InfoPopup {
 		addChild(art);
 		var selected = parseItems(itemsStr);
 		for (itemId in Items.getAllCodes()) {
-			var check:Null<GameCheckBox> = Std.downcast(DisplayUtil.findByName(art, "check" + itemId), GameCheckBox);
+			var check:Null<GameCheckBox> = Std.downcast(DisplayUtil.directChildByName(art, "check" + itemId), GameCheckBox);
 			if (check != null) {
 				check.selected = selected.indexOf(itemId) >= 0;
 				check.enabled = false;

@@ -17,7 +17,7 @@ import pr2.net.ServerLevelData;
 import pr2.page.GamePage;
 import pr2.page.LobbyPage;
 import pr2.page.PageHolder;
-import pr2.util.DisplayUtil;
+import pr2.util.TestDisplayUtil as DisplayUtil;
 
 /**
 	Deterministic transcript of one full real-server race session, from the

@@ -2,83 +2,105 @@ package pr2.lobby.tabs;
 
 import openfl.display.Sprite;
 import openfl.text.TextField;
-import openfl.text.TextFieldType;
 import openfl.text.TextFormat;
-import openfl.text.TextFormatAlign;
 import pr2.assets.NativeAssetIds.FontAsset;
 import pr2.assets.NativeAssets;
 import pr2.ui.controls.GameButton;
+import pr2.ui.controls.GameTextArea;
+import pr2.ui.controls.GameTextInput;
 import pr2.ui.view.NativeView;
 
-/** Native lobby chat surface with named room, transcript, input, and actions. */
+/** Exact native composition of XFL `ChatGraphic` (`MovieClips/Symbol 1217`). */
 class ChatView extends NativeView {
+	public final roomInput:GameTextInput;
+	public final chatInputControl:GameTextInput;
+	public final transcriptArea:GameTextArea;
+	public final roomBox:TextField;
+	public final chatInput:TextField;
+	public final textBox:TextField;
+
 	public function new() {
 		super();
-		graphics.beginFill(0xF0F0F0, 0.96);
-		graphics.lineStyle(1, 0x777777);
-		graphics.drawRoundRect(8, 8, 266, 342, 12, 12);
-		graphics.endFill();
-		label("Chat Room", null, 20, 18, 75, 18, 11, true, TextFormatAlign.LEFT);
-		input("roomBox", 91, 15, 103, 22, false);
-		button("joinRoom_bt", "Join", 199, 15, 48);
-		var info = new Sprite();
-		info.name = "infoButton";
-		info.x = 255;
-		info.y = 26;
-		info.buttonMode = true;
-		info.graphics.beginFill(0x5B83B2);
-		info.graphics.drawCircle(0, 0, 9);
-		info.graphics.endFill();
-		var iText = label("i", null, -5, -8, 10, 16, 11, true, TextFormatAlign.CENTER);
-		info.addChild(iText);
+		transcriptArea = ownControl(new GameTextArea(100 * 1.87985229492188, 22 * 6.88603210449219));
+		transcriptArea.name = "textArea";
+		transcriptArea.x = 0;
+		transcriptArea.y = 25;
+		transcriptArea.editable = false;
+		transcriptArea.wordWrap = true;
+		textBox = transcriptArea.textField;
+		textBox.name = "textBox";
+		addChild(transcriptArea);
+
+		roomInput = ownControl(new GameTextInput());
+		roomInput.name = "roomInput";
+		roomInput.setSize(100 * 1.0001220703125, 22);
+		roomInput.maxChars = 16;
+		roomInput.restrict = "^`";
+		roomBox = roomInput.textField;
+		roomBox.name = "roomBox";
+		addChild(roomInput);
+
+		addButton("joinRoom_bt", "Join Room", 103, 0, 100 * 0.660003662109375);
+		var info = new InfoButton();
+		info.x = 175;
+		info.y = 6;
 		addChild(info);
-		var transcript = input("textBox", 20, 48, 242, 240, true);
-		transcript.type = TextFieldType.DYNAMIC;
-		transcript.selectable = true;
-		input("chatInput", 20, 301, 181, 26, false);
-		button("send_bt", "Send", 207, 301, 55);
+
+		chatInputControl = ownControl(new GameTextInput());
+		chatInputControl.name = "chatInputControl";
+		chatInputControl.x = 0;
+		chatInputControl.y = 331;
+		chatInputControl.setSize(100 * 1.45013427734375, 22);
+		chatInputControl.maxChars = 150;
+		chatInputControl.restrict = "^`";
+		chatInput = chatInputControl.textField;
+		chatInput.name = "chatInput";
+		addChild(chatInputControl);
+		addButton("send_bt", "Send", 148, 331, 100 * 0.400009155273438);
+
+		addRule("No swearing.", 0, 356, 65.55);
+		addRule("No flooding.", 70, 356, 60.5);
+		addRule("Be nice :)", 136, 356, 49.15);
 	}
 
-	private function input(name:String, x:Float, y:Float, width:Float, height:Float, multiline:Bool):TextField {
-		var field = new TextField();
-		field.name = name;
-		field.x = x;
-		field.y = y;
-		field.width = width;
-		field.height = height;
-		field.type = TextFieldType.INPUT;
-		field.multiline = multiline;
-		field.wordWrap = multiline;
-		field.background = true;
-		field.backgroundColor = 0xFFFFFF;
-		field.border = true;
-		field.borderColor = 0x888888;
-		field.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 11, 0x222222);
-		addChild(field);
-		return field;
-	}
-
-	private function button(name:String, label:String, x:Float, y:Float, width:Float):Void {
+	private function addButton(name:String, label:String, x:Float, y:Float, width:Float):Void {
 		var control = ownControl(new GameButton(label));
 		control.name = name;
 		control.x = x;
 		control.y = y;
-		control.setSize(width, 24);
+		control.setSize(width, 22);
 		addChild(control);
 	}
 
-	private function label(value:String, name:Null<String>, x:Float, y:Float, width:Float, height:Float, size:Int, bold:Bool,
-		align:TextFormatAlign):TextField {
+	private function addRule(value:String, x:Float, y:Float, width:Float):Void {
 		var field = new TextField();
-		if (name != null) field.name = name;
 		field.x = x;
 		field.y = y;
 		field.width = width;
-		field.height = height;
+		field.height = 12.15;
 		field.selectable = false;
-		field.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), size, 0x222222, bold, null, null, null, null, align);
+		field.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 10, 0x666666);
 		field.text = value;
 		addChild(field);
-		return field;
+	}
+}
+
+private class InfoButton extends Sprite {
+	public function new() {
+		super();
+		name = "infoButton";
+		buttonMode = useHandCursor = true;
+		graphics.beginFill(0xFFFFFF, 0);
+		graphics.drawRect(0, 0, 15, 16);
+		graphics.endFill();
+		var text = new TextField();
+		text.x = 2.1;
+		text.y = -0.2;
+		text.width = 6.1;
+		text.height = 10.65;
+		text.selectable = false;
+		text.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 12, 0x000000);
+		text.text = "?";
+		addChild(text);
 	}
 }

@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="550px" height="400px" viewBox="0 0 550 400" preserveAspectRatio="none" data-xfl-root="Buttons/MinusButton">
+  <g data-xfl-symbol="Buttons/MinusButton">
+    <g transform="matrix(1.125 0 0 1.125 -9 -9)">
+      <g data-xfl-symbol="MovieClips/Symbol 1317">
+        <g data-svg-leaf="movieclips_symbol_1317_6df1c05aab/t00_l000_f0000_r00.svg">
+          <defs>
+            <linearGradient id="xfl1_Gradient_1" gradientUnits="userSpaceOnUse" x1="8" y1="0" x2="8" y2="16" spreadMethod="pad">
+              <stop offset="0%" stop-color="#999999" />
+              <stop offset="100%" stop-color="#333333" />
+            </linearGradient>
+            <g id="xfl1_Layer0_0_FILL">
+              <path fill="#FFFFFF" stroke="none" d=" M 16 8 Q 16 4.7 13.65 2.3 11.3 0 8 0 4.7 0 2.3 2.3 0 4.7 0 8 0 11.3 2.3 13.65 4.7 16 8 16 11.3 16 13.65 13.65 16 11.3 16 8 Z" />
+            </g>
+            <path id="xfl1_Layer0_0_1_STROKES" stroke="url(#xfl1_Gradient_1)" stroke-width="0" stroke-linejoin="round" stroke-linecap="round" fill="none" d=" M 13.65 2.3 Q 16 4.7 16 8 16 11.3 13.65 13.65 11.3 16 8 16 4.7 16 2.3 13.65 0 11.3 0 8 0 4.7 2.3 2.3 4.7 0 8 0 11.3 0 13.65 2.3 Z" />
+          </defs>
+          <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+            <use xlink:href="#xfl1_Layer0_0_FILL" />
+            <use xlink:href="#xfl1_Layer0_0_1_STROKES" />
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

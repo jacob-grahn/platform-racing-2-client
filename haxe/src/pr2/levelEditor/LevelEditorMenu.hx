@@ -8,6 +8,7 @@ import pr2.lobby.dialogs.ConfirmPopup;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
 import pr2.ui.controls.GameSelect;
+import pr2.ui.controls.GameButton;
 import pr2.util.DisplayUtil;
 
 class LevelEditorMenu extends Sprite {
@@ -56,20 +57,21 @@ class LevelEditorMenu extends Sprite {
 		if (zoomSelect != null) {
 			zoomSelect.addEventListener(Event.CHANGE, chooseZoom);
 			zoomSelect.selectedIndex = 3;
-		} else {
-			Reflect.setProperty(find("zoomSelect"), "selectedIndex", 3);
 		}
 		editor.setZoom(1);
 		updateUndoRedoState();
 		if (pr2.lobby.LobbySession.group <= 0) {
-			Reflect.setProperty(find("saveButton"), "enabled", false);
-			Reflect.setProperty(find("loadButton"), "enabled", false);
+			setButtonEnabled("saveButton", false);
+			setButtonEnabled("loadButton", false);
 		}
 		reset();
 	}
 
 	public function setReportsMode(on:Bool = false):Void {
-		Reflect.setProperty(find("saveButton"), "enabled", !on);
+		// Reports mode may be applied immediately after init. Do not let that
+		// second state pass re-enable Save for guests, whose Flash menu keeps both
+		// persistence commands disabled.
+		setButtonEnabled("saveButton", !on && LobbySession.group > 0);
 		editor.setReportsMode(on);
 	}
 
@@ -102,8 +104,13 @@ class LevelEditorMenu extends Sprite {
 		art.dispose();
 	}
 
-	private function find(name:String):Dynamic {
-		return pr2.util.DisplayUtil.findByName(art, name);
+	private function find(name:String):Null<DisplayObject> {
+		return pr2.util.DisplayUtil.directChildByName(art, name);
+	}
+
+	private function setButtonEnabled(name:String, enabled:Bool):Void {
+		var button = Std.downcast(find(name), GameButton);
+		if (button != null) button.enabled = enabled;
 	}
 
 	private function zoomCombo():Null<GameSelect<String>> {
@@ -111,7 +118,7 @@ class LevelEditorMenu extends Sprite {
 	}
 
 	private function bind(name:String, handler:Void->Void):Void {
-		var binding = LobbyArt.bind(DisplayUtil.findByName(art, name), handler);
+		var binding = LobbyArt.bind(DisplayUtil.directChildByName(art, name), handler);
 		if (binding != null) {
 			bindings.push(binding);
 		}
@@ -208,23 +215,23 @@ class LevelEditorMenu extends Sprite {
 
 	public function updateUndoRedoState():Void {
 		if (editor.blockLayer != null && editor.focusedEditorLayer == "blocks") {
-			Reflect.setProperty(find("undoButton"), "enabled", editor.blockLayer.saveArray.length > 0);
-			Reflect.setProperty(find("redoButton"), "enabled", editor.blockLayer.redoArray.length > 0);
+			setButtonEnabled("undoButton", editor.blockLayer.saveArray.length > 0);
+			setButtonEnabled("redoButton", editor.blockLayer.redoArray.length > 0);
 			return;
 		}
 		if (editor.focusedEditorLayer == "draw" && editor.activeDrawLayer != null) {
-			Reflect.setProperty(find("undoButton"), "enabled", editor.activeDrawLayer.saveArray.length > 0);
-			Reflect.setProperty(find("redoButton"), "enabled", editor.activeDrawLayer.redoArray.length > 0);
+			setButtonEnabled("undoButton", editor.activeDrawLayer.saveArray.length > 0);
+			setButtonEnabled("redoButton", editor.activeDrawLayer.redoArray.length > 0);
 			return;
 		}
 		var activeLayer = editor.focusedEditorLayer == "objects" ? editor.activeObjectLayer : null;
-		Reflect.setProperty(find("undoButton"), "enabled", activeLayer != null && activeLayer.saveArray.length > 0);
-		Reflect.setProperty(find("redoButton"), "enabled", activeLayer != null && activeLayer.redoArray.length > 0);
+		setButtonEnabled("undoButton", activeLayer != null && activeLayer.saveArray.length > 0);
+		setButtonEnabled("redoButton", activeLayer != null && activeLayer.redoArray.length > 0);
 	}
 
 	private function setUndoRedoEnabled(undo:Bool, redo:Bool):Void {
-		Reflect.setProperty(find("undoButton"), "enabled", undo);
-		Reflect.setProperty(find("redoButton"), "enabled", redo);
+		setButtonEnabled("undoButton", undo);
+		setButtonEnabled("redoButton", redo);
 	}
 
 	public function updateBackgroundColor():Void {

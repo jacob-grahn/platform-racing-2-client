@@ -16,7 +16,7 @@ class ItemMenuTest {
 
 	private static function testAllAndBlankParsing():Void {
 		var allMenu = new ItemMenu("all", new Sprite());
-		for (itemId in Items.getAllCodes()) {
+		for (itemId in classicItemCodes()) {
 			assertEquals(true, allMenu.isItemSelected(itemId), 'all selects item $itemId');
 			assertEquals(false, allMenu.isItemEnabled(itemId), 'all disables item $itemId');
 		}
@@ -27,7 +27,7 @@ class ItemMenuTest {
 		nullMenu.remove();
 
 		var blankMenu = new ItemMenu("", new Sprite());
-		for (itemId in Items.getAllCodes()) {
+		for (itemId in classicItemCodes()) {
 			assertEquals(false, blankMenu.isItemSelected(itemId), 'blank leaves item $itemId unchecked');
 			assertEquals(false, blankMenu.isItemEnabled(itemId), 'blank disables item $itemId');
 		}
@@ -43,6 +43,11 @@ class ItemMenuTest {
 		assertEquals(false, menu.isItemSelected(Items.TELEPORT), "unmentioned item remains unchecked");
 		assertEquals(false, menu.isItemSelected(10), "two-character numeric text is parsed as a name and ignored");
 		menu.remove();
+	}
+
+	private static function classicItemCodes():Array<Int> {
+		return [Items.LASER_GUN, Items.MINE, Items.LIGHTNING, Items.TELEPORT, Items.SUPER_JUMP, Items.JET_PACK, Items.SPEED_BURST, Items.SWORD,
+			Items.ICE_WAVE];
 	}
 
 	private static function assertEquals(expected:Dynamic, actual:Dynamic, message:String):Void {

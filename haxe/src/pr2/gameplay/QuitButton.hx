@@ -1,5 +1,6 @@
 package pr2.gameplay;
 
+import haxe.Json;
 import openfl.display.InteractiveObject;
 import openfl.display.Shape;
 import openfl.events.Event;
@@ -7,8 +8,10 @@ import openfl.events.KeyboardEvent;
 import openfl.events.MouseEvent;
 import openfl.filters.GlowFilter;
 import openfl.ui.Keyboard;
+import openfl.utils.Assets;
 import pr2.lobby.dialogs.ConfirmPopup;
 import pr2.ui.controls.GameButton;
+import pr2.runtime.SvgAsset;
 
 /**
 	Port of Flash `gameplay.QuitButton`.
@@ -19,10 +22,14 @@ import pr2.ui.controls.GameButton;
 	same start/stop calls used by `Game.finish`.
 **/
 class QuitButton extends openfl.display.Sprite {
+	public static inline final BACKGROUND_ASSET = "assets/svg/effects/quit_background_01.svg";
+	public static inline final GLOW_ASSET = "assets/svg/effects/quit_glow_01.svg";
+	public static inline final GLOW_DATA_ASSET = "assets/ui/quit-glow.json";
+	private static var parsedGlowData:Dynamic;
 	private var art:Null<openfl.display.Sprite>;
 	private var button:Null<GameButton>;
 	private var glow:Null<Shape>;
-	private var glowFrame:Int = 0;
+	private var glowFrame:Int = 2;
 	public var glowActive(default, null):Bool = false;
 	private var quit:Null<Void->Void>;
 	private var isDonePlaying:Null<Void->Bool>;
@@ -34,17 +41,12 @@ class QuitButton extends openfl.display.Sprite {
 
 		art = new openfl.display.Sprite();
 		addChild(art);
-		var background = new Shape();
-		background.graphics.beginFill(0xD8D8D8, 0.9);
-		background.graphics.drawRoundRect(146, 162, 66, 35, 8, 8);
-		background.graphics.endFill();
+		var background = SvgAsset.create(BACKGROUND_ASSET);
 		art.addChild(background);
-		glow = new Shape();
+		glow = SvgAsset.create(GLOW_ASSET);
 		glow.name = "glow";
-		glow.graphics.beginFill(0xFFFF66, 0.75);
-		glow.graphics.drawRoundRect(149, 165, 60, 29, 7, 7);
-		glow.graphics.endFill();
-		glow.filters = [new GlowFilter(0xFFFF33, 0.9, 12, 12, 2)];
+		glow.x = 153;
+		glow.y = 169;
 		art.addChild(glow);
 		button = new GameButton("Quit");
 		button.name = "quit_bt";
@@ -62,22 +64,64 @@ class QuitButton extends openfl.display.Sprite {
 	public function startGlow():Void {
 		if (glow == null || glowActive) return;
 		glowActive = true;
-		glowFrame = 0;
+		glowFrame = glowData().labels.on;
 		glow.addEventListener(Event.ENTER_FRAME, animateGlow);
-		animateGlow(null);
+		applyGlowFrame();
 	}
 
 	public function stopGlow():Void {
 		glowActive = false;
 		if (glow != null) {
 			glow.removeEventListener(Event.ENTER_FRAME, animateGlow);
-			glow.alpha = 0;
+			glowFrame = glowData().labels.off;
+			applyGlowFrame();
 		}
 	}
 
 	private function animateGlow(_:Null<Event>):Void {
 		glowFrame++;
-		if (glow != null) glow.alpha = 0.45 + 0.4 * Math.sin(glowFrame * Math.PI / 15);
+		var data = glowData();
+		if (glowFrame >= data.endFrameScript.frame) glowFrame = Reflect.field(data.labels, data.endFrameScript.target);
+		applyGlowFrame();
+	}
+
+	private function applyGlowFrame():Void {
+		if (glow == null) return;
+		var frame:Dynamic = glowData().frames[glowFrame - 1];
+		glow.visible = frame.visible;
+		if (!glow.visible) {
+			glow.filters = [];
+			return;
+		}
+		if (frame.glow == null) {
+			glow.filters = [];
+			return;
+		}
+		var filter:Dynamic = frame.glow;
+		glow.filters = [new GlowFilter(filter.color, filter.alpha, filter.blurX, filter.blurY, filter.strength, filter.quality)];
+	}
+
+	private static function glowData():Dynamic {
+		if (parsedGlowData != null) return parsedGlowData;
+		var content = Assets.getText(GLOW_DATA_ASSET);
+		#if sys
+		if (content == null) content = sys.io.File.getContent("art/ui/quit-glow.json");
+		#end
+		if (content == null) throw 'Missing authored Quit glow data $GLOW_DATA_ASSET';
+		parsedGlowData = Json.parse(content);
+		return parsedGlowData;
+	}
+
+	public function glowFrameForTests():Int return glowFrame;
+	public function advanceGlowForTests():Void animateGlow(null);
+	public function glowVisibleForTests():Bool return glow != null && glow.visible;
+	public function glowBlurForTests():Float {
+		if (glow == null || glow.filters.length == 0) return 0;
+		return Std.downcast(glow.filters[0], GlowFilter).blurX;
+	}
+	public function glowStrengthForTests():Float {
+		if (glow == null || glow.filters.length == 0) return 0;
+		return Std.downcast(glow.filters[0], GlowFilter).strength;
 	}
 
 	private function invokeMouseQuit(_:MouseEvent):Void {

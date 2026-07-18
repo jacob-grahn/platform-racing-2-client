@@ -1,12 +1,11 @@
 package pr2.gameplay;
 
 import openfl.display.Loader;
+import openfl.display.Shape;
 import openfl.net.URLRequest;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
-import pr2.assets.NativeAssetIds.FontAsset;
-import pr2.assets.NativeAssets;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
 import pr2.lobby.dialogs.Popup;
@@ -14,9 +13,12 @@ import pr2.net.ServerConfig;
 import pr2.ui.controls.GameButton;
 import pr2.ui.view.NativeView;
 import pr2.util.DisplayUtil;
+import pr2.runtime.SvgAsset;
 
 /** Port of Flash `gameplay.LuxPopup`, shown by the in-race `setLuxGain` command. */
 class LuxPopup extends Popup {
+	public static inline final BACKGROUND_ASSET = "assets/svg/effects/lux_popup_01.svg";
+
 	private var art:Null<LuxPopupView>;
 	private var loader:Null<Loader>;
 	private var closeBinding:Null<Binding>;
@@ -40,11 +42,11 @@ class LuxPopup extends Popup {
 		}
 
 		text = "+" + numLux + " Lux";
-		var field = Std.downcast(DisplayUtil.findByName(art, "textBox"), TextField);
+		var field = Std.downcast(DisplayUtil.directChildByName(art, "textBox"), TextField);
 		if (field != null) {
 			field.text = text;
 		}
-		closeBinding = LobbyArt.bind(DisplayUtil.findByName(art, "close_bt"), function():Void startFadeOut());
+		closeBinding = LobbyArt.bind(DisplayUtil.directChildByName(art, "close_bt"), function():Void startFadeOut());
 		addChild(art);
 	}
 
@@ -68,37 +70,28 @@ class LuxPopup extends Popup {
 }
 
 private class LuxPopupView extends NativeView {
+	public final exactBackground:Shape;
+
 	public function new() {
 		super();
-		graphics.beginFill(0xF3F3F3, 0.98);
-		graphics.lineStyle(2, 0x6A6A6A);
-		graphics.drawRoundRect(-130, -82, 260, 164, 14, 14);
-		graphics.endFill();
+		exactBackground = SvgAsset.create(LuxPopup.BACKGROUND_ASSET);
+		exactBackground.name = "exactBackground";
+		addChild(exactBackground);
 		var heading = new TextField();
-		heading.x = -110;
-		heading.y = -65;
-		heading.width = 200;
-		heading.height = 34;
+		heading.x = 100;
+		heading.y = 7.95;
+		heading.width = 161.95;
+		heading.height = 14.55;
 		heading.selectable = false;
-		heading.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 20, 0x6748A0, true, null, null, null, null,
+		heading.defaultTextFormat = new TextFormat("Verdana", 12, 0x000000, false, null, null, null, null,
 			TextFormatAlign.CENTER);
 		heading.name = "textBox";
 		addChild(heading);
-		var note = new TextField();
-		note.x = -112;
-		note.y = -20;
-		note.width = 205;
-		note.height = 36;
-		note.selectable = false;
-		note.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 11, 0x444444, false, null, null, null, null,
-			TextFormatAlign.CENTER);
-		note.text = "Luna has awarded you Lux!";
-		addChild(note);
 		var close = ownControl(new GameButton("Close"));
 		close.name = "close_bt";
-		close.x = -42;
-		close.y = 43;
-		close.setSize(84, 24);
+		close.x = 144;
+		close.y = 38.45;
+		close.setSize(72, 22);
 		addChild(close);
 	}
 }

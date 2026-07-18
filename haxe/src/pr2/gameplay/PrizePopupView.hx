@@ -1,68 +1,67 @@
 package pr2.gameplay;
 
+import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
-import pr2.assets.NativeAssetIds.FontAsset;
-import pr2.assets.NativeAssets;
+import pr2.character.CharacterRig;
+import pr2.character.CharacterRig.CharacterRigDefinition;
+import pr2.character.CharacterRig.RigPartChannels;
+import pr2.character.CharacterRig.RigPartKind;
+import pr2.runtime.SvgAsset;
 import pr2.ui.controls.GameButton;
 import pr2.ui.view.NativeView;
 
-/** Native prize announcement shell and explicit part preview states. */
+/** Exact XFL prize shell with native dynamic fields and source-derived part channels. */
 class PrizePopupView extends NativeView {
+	public static inline final BG_ASSET = "assets/svg/effects/prize_bg_01.svg";
+	public static inline final FLAVOR_BG_ASSET = "assets/svg/effects/prize_flavor_bg_01.svg";
+
 	public function new() {
 		super();
-		var bg = new Sprite();
-		bg.name = "bg";
-		bg.graphics.beginFill(0xF4F4F4, 0.98);
-		bg.graphics.lineStyle(2, 0x666666);
-		bg.graphics.drawRoundRect(-190, -150, 380, 300, 14, 14);
-		bg.graphics.endFill();
-		addChild(bg);
-		field("titleBox", -160, -134, 320, 25, 16, true, TextFormatAlign.CENTER);
-		field("textBox", -160, -102, 320, 40, 11, false, TextFormatAlign.CENTER);
-		part("hat", -75, -35);
-		part("head", -75, -35);
-		part("body", -75, -35);
-		part("foot", -75, -35);
-		var exp = new Sprite();
-		exp.name = "exp";
-		exp.x = -145;
-		exp.y = -25;
-		fieldOn(exp, "textBox", 0, 0, 290, 55, 12, true, TextFormatAlign.CENTER);
-		addChild(exp);
-		var flavorBg = new Sprite();
+		var flavorBg = SvgAsset.create(FLAVOR_BG_ASSET);
 		flavorBg.name = "flavorBg";
-		flavorBg.x = -160;
-		flavorBg.y = 66;
-		flavorBg.graphics.beginFill(0xE8EBEF);
-		flavorBg.graphics.drawRoundRect(0, 0, 320, 38, 8, 8);
-		flavorBg.graphics.endFill();
 		addChild(flavorBg);
-		field("flavor", -150, 73, 300, 28, 10, false, TextFormatAlign.CENTER);
+		field("flavor", 103.95, 60, 152, 51.95, 10, false);
+		var bg = SvgAsset.create(BG_ASSET);
+		bg.name = "bg";
+		addChild(bg);
 		var close = ownControl(new GameButton("Close"));
 		close.name = "close_bt";
-		close.x = -42;
-		close.y = 114;
-		close.setSize(84, 24);
+		close.x = 144;
+		close.y = 8.45;
+		close.setSize(72, 22);
 		addChild(close);
+		field("titleBox", 101, -87, 162, 14.55, 12, true);
+		field("textBox", 101, -129.05, 161.95, 38.05, 12, false);
+		part("head", "head", 169.25, -67.3, 0.340484619140625, 0.1142578125, true);
+		part("body", "body", 168.65, -60.4, 0.377639770507812, 0, false);
+		part("foot", "feet", 158.3, -38.55, 0.800445556640625, 0, false);
+		part("hat", "hat", 184.15, -10.75, 0.538116455078125, 0, false);
+		var exp = new Sprite();
+		exp.name = "exp";
+		exp.x = 115.4;
+		exp.y = -70;
+		fieldOn(exp, "textBox", -1.05, 11.95, 125, 68.75, 10, false);
+		addChild(exp);
 	}
 
-	private function part(name:String, x:Float, y:Float):Void {
-		var symbol = new PrizePartSymbol(name == "head");
+	private function part(name:String, kind:String, x:Float, y:Float, a:Float, b:Float, withHats:Bool):Void {
+		var symbol = new PrizePartSymbol(kind, withHats);
 		symbol.name = name;
 		symbol.x = x;
 		symbol.y = y;
+		symbol.scaleX = symbol.scaleY = Math.sqrt(a * a + b * b);
+		symbol.rotation = Math.atan2(b, a) * 180 / Math.PI;
 		addChild(symbol);
 	}
 
-	private function field(name:String, x:Float, y:Float, width:Float, height:Float, size:Int, bold:Bool, align:TextFormatAlign):TextField {
-		return fieldOn(this, name, x, y, width, height, size, bold, align);
+	private function field(name:String, x:Float, y:Float, width:Float, height:Float, size:Int, bold:Bool):TextField {
+		return fieldOn(this, name, x, y, width, height, size, bold);
 	}
 
-	private function fieldOn(parent:Sprite, name:String, x:Float, y:Float, width:Float, height:Float, size:Int, bold:Bool,
-		align:TextFormatAlign):TextField {
+	private function fieldOn(parent:Sprite, name:String, x:Float, y:Float, width:Float, height:Float, size:Int, bold:Bool):TextField {
 		var text = new TextField();
 		text.name = name;
 		text.x = x;
@@ -70,19 +69,23 @@ class PrizePopupView extends NativeView {
 		text.width = width;
 		text.height = height;
 		text.selectable = false;
-		text.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), size, 0x222222, bold, null, null, null, null, align);
+		text.defaultTextFormat = new TextFormat("Verdana", size, 0x000000, bold, null, null, null, null, TextFormatAlign.CENTER);
 		parent.addChild(text);
 		return text;
 	}
 }
 
 class PrizePartSymbol extends Sprite {
+	private static var cachedRig:Null<CharacterRigDefinition>;
 	public var currentFrame(default, null):Int = 1;
 	public final colorMC:PrizePartSymbolChannel;
 	public final colorMC2:PrizePartSymbolChannel;
+	private final kind:String;
+	private var fixed:Null<Shape>;
 
-	public function new(withHats:Bool = false) {
+	public function new(kind:String, withHats:Bool = false) {
 		super();
+		this.kind = kind;
 		colorMC = new PrizePartSymbolChannel();
 		colorMC.name = "colorMC";
 		addChild(colorMC);
@@ -96,28 +99,52 @@ class PrizePartSymbol extends Sprite {
 				addChild(hat);
 			}
 		}
-		gotoAndStop(1);
+		setPartFrame(1);
 	}
 
-	public function gotoAndStop(frame:Int):Void {
+	public function setPartFrame(frame:Int):Void {
 		currentFrame = frame;
-		graphics.clear();
-		graphics.beginFill(0xB7C4D5);
-		graphics.lineStyle(2, 0x4F5966);
-		graphics.drawRoundRect(0, 0, 150, 95, 22, 22);
-		graphics.endFill();
-		colorMC.gotoAndStop(frame);
-		colorMC2.gotoAndStop(frame);
+		var variant = findVariant(partKind(), frame);
+		if (fixed != null && fixed.parent == this) removeChild(fixed);
+		fixed = SvgAsset.create(variant.fixed);
+		addChildAt(fixed, 0);
+		colorMC.setAsset(variant.primary, frame);
+		colorMC2.setAsset(variant.secondary, frame);
+	}
+
+	private function partKind():RigPartKind {
+		var rig = classicRig();
+		return switch (kind) {
+			case "hat": rig.parts.hat;
+			case "head": rig.parts.head;
+			case "body": rig.parts.body;
+			default: rig.parts.feet;
+		};
+	}
+
+	private static function classicRig():CharacterRigDefinition {
+		if (cachedRig == null) cachedRig = CharacterRig.loadClassic();
+		return cachedRig;
+	}
+
+	private static function findVariant(kind:RigPartKind, id:Int):RigPartChannels {
+		for (variant in kind.variants) if (variant.id == id) return variant;
+		return kind.variants[0];
 	}
 }
 
 class PrizePartSymbolChannel extends Sprite {
 	public var currentFrame(default, null):Int = 1;
-	public function new() {
-		super();
-		graphics.beginFill(0xFFFFFF, 0.5);
-		graphics.drawCircle(75, 47, 24);
-		graphics.endFill();
+	private var art:Null<Shape>;
+
+	public function new() super();
+
+	public function setAsset(asset:String, frame:Int):Void {
+		currentFrame = frame;
+		if (art != null && art.parent == this) removeChild(art);
+		art = SvgAsset.create(asset);
+		addChild(art);
 	}
-	public function gotoAndStop(frame:Int):Void currentFrame = frame;
+
+	public function setPartFrame(frame:Int):Void currentFrame = frame;
 }

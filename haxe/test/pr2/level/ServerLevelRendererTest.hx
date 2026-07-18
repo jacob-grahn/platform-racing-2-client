@@ -285,7 +285,7 @@ class ServerLevelRendererTest {
 			new DecodedDrawAction("c", [0xFF0000]),
 			new DecodedDrawAction("t", [3]),
 			new DecodedDrawAction("d", [10020, 10050, 10, 10])
-		], [new DecodedArtObject(4, 10, 20)], [new DecodedTextObject("hello|world", 15, 25, 0x00FF00)], 1);
+		], [new DecodedArtObject(4, 10, 20)], [new DecodedTextObject("hello#44world", 15, 25, 0x00FF00)], 1);
 		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [block], [art]), block, 180, 280, true, 3);
 		var artLayer = worldLayer(renderer, 1);
 		assertEquals(0, renderer.drawnArtItemCount(), "incremental art starts before drawing art");
@@ -476,6 +476,32 @@ class ServerLevelRendererTest {
 	}
 
 	private static function testArrowAnimation():Void {
+		var authored = new ArrowBlockView();
+		var authoredLayer = Std.downcast(authored.getChildAt(0), Sprite);
+		var authoredArt = authoredLayer.getChildAt(0);
+		var authoredBounds = authored.getBounds(authored);
+		assertWithin(0.4915222168, authoredBounds.x + authoredBounds.width / 2, 0.01, "arrow preserves XFL registration x");
+		assertWithin(0, authoredBounds.y + authoredBounds.height / 2, 0.05, "arrow preserves centered XFL registration y");
+		// OpenFL expands SVG strokes after the instance transform, so the 3px XFL
+		// outline remains 3px around the scaled 15x22 fill.
+		assertTrue(authoredBounds.width > 17 && authoredBounds.width < 19, "arrow preserves authored visible width");
+		assertTrue(authoredBounds.height > 24 && authoredBounds.height < 26, "arrow preserves authored visible height");
+		var multipliers = [1.0, 0.671875, 0.328125, 0.0, 0.25, 0.5, 0.75, 1.0];
+		var offsets = [0.0, 85.0, 170.0, 255.0, 191.0, 128.0, 64.0, 0.0];
+		for (frame in 1...9) {
+			authored.animateFromFrame(frame);
+			authored.stop();
+			var color = authoredArt.transform.colorTransform;
+			var index = frame - 1;
+			assertEquals(multipliers[index], color.redMultiplier, 'arrow frame $frame red multiplier follows XFL');
+			assertEquals(multipliers[index], color.greenMultiplier, 'arrow frame $frame green multiplier follows XFL');
+			assertEquals(multipliers[index], color.blueMultiplier, 'arrow frame $frame blue multiplier follows XFL');
+			assertEquals(offsets[index], color.redOffset, 'arrow frame $frame red offset follows XFL');
+			assertEquals(offsets[index], color.greenOffset, 'arrow frame $frame green offset follows XFL');
+			assertEquals(0.0, color.blueOffset, 'arrow frame $frame blue offset follows XFL');
+		}
+		authored.dispose();
+
 		var arrow = new DecodedBlock(ObjectCodes.BLOCK_ARROW_RIGHT, 10020, 10050);
 		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [arrow]), arrow);
 		assertEquals(1, renderer.arrowFrameAt(arrow.x, arrow.y), "arrow timeline starts stopped on frame 1");
@@ -493,7 +519,14 @@ class ServerLevelRendererTest {
 		renderer.animateArrow(arrow.x, arrow.y);
 		assertEquals(2, renderer.arrowFrameAt(arrow.x, arrow.y), "arrow activation starts one frame brighter");
 
-		for (_ in 0...7) {
+		for (_ in 0...4) {
+			timeline.dispatchEvent(new Event(Event.ENTER_FRAME));
+		}
+		assertEquals(6, renderer.arrowFrameAt(arrow.x, arrow.y), "arrow timeline reaches the fading half");
+		renderer.animateArrow(arrow.x, arrow.y);
+		assertEquals(5, renderer.arrowFrameAt(arrow.x, arrow.y), "repeat activation steps a fading arrow back toward its bright center");
+
+		for (_ in 0...4) {
 			timeline.dispatchEvent(new Event(Event.ENTER_FRAME));
 		}
 		assertEquals(1, renderer.arrowFrameAt(arrow.x, arrow.y), "arrow overlay returns to its stopped first frame");
@@ -643,6 +676,20 @@ class ServerLevelRendererTest {
 		assertWithin(259.125, object.height, 0.03, "placed bitmap stamp keeps its authored height after object and layer scaling");
 		assertClose(2.0, text.scaleX, "placed text multiplies text scaleX by layer scale");
 		assertClose(2.5, text.scaleY, "placed text multiplies text scaleY by layer scale");
+		assertEquals(FontResolver.resolve("Verdana"), text.defaultTextFormat.font, "placed text preserves the authored font mapping");
+		assertEquals(18.0, text.defaultTextFormat.size, "placed text preserves the authored font size");
+		assertEquals(4, text.defaultTextFormat.leading, "placed text preserves the authored line height");
+		assertEquals(false, text.selectable, "placed text remains nonselectable");
+		assertEquals(false, text.wordWrap, "placed text preserves no-wrap behavior");
+		assertEquals(true, text.multiline, "placed text preserves multiline behavior");
+		assertEquals(true, text.cacheAsBitmap, "placed text preserves Flash bitmap caching");
+
+		var escapedContainer = new Sprite();
+		ServerLevelRenderer.addLayerText(escapedContainer,
+			new DecodedTextObject("#96#38#44#59#43#45#35", 0, 0, 0x123456), 1);
+		var escaped = Std.downcast(escapedContainer.getChildAt(0), TextField);
+		assertEquals("`&,;+-#", escaped.text, "placed text decodes the complete Flash TextObject escape table in source order");
+		assertEquals(0x123456, escaped.textColor, "placed text applies the serialized color");
 	}
 
 	private static function testArtLayerDepthAndParallax():Void {

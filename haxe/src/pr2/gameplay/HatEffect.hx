@@ -51,7 +51,7 @@ class HatEffect {
 		this.commandHandler = commandHandler != null ? commandHandler : CommandHandler.commandHandler;
 
 		display = new HatEffectView();
-		display.gotoAndStop(num);
+		display.setHatId(num);
 		display.x = x;
 		display.y = y;
 		display.rotation = rot;

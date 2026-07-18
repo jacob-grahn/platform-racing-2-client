@@ -1,13 +1,13 @@
 package pr2.lobby.account;
 
 import openfl.display.Sprite;
-import pr2.character.CharacterDisplay;
+import pr2.character.CharacterView;
 
 /**
 	Editable customize-preview character, the slice of Flash `character.Character`
 	the Account tab drives: a single visible hat plus head/body/feet, each with a
 	primary colour and an optional epic (secondary) colour. Wraps the shared
-	`CharacterDisplay` and re-applies appearance on every change, exactly like the
+	`CharacterView` and re-applies appearance on every change, exactly like the
 	original `applyAppearance` round-trip.
 
 	`-1` for an epic colour means the part is not epic (no second colour); the
@@ -32,7 +32,7 @@ class AccountCharacter extends Sprite {
 	public var bodyColor2:Int = -1;
 	public var feetColor2:Int = -1;
 
-	public final display:CharacterDisplay;
+	public final display:CharacterView;
 
 	public function new(hatId:Int = 1, headId:Int = 1, bodyId:Int = 1, feetId:Int = 1) {
 		super();
@@ -40,10 +40,9 @@ class AccountCharacter extends Sprite {
 		this.head = headId;
 		this.body = bodyId;
 		this.feet = feetId;
-		display = new CharacterDisplay({hat: hatId, head: headId, body: bodyId, feet: feetId}, {primary: 0, secondary: -1});
-		// CharacterDisplay instantiates the exported CharacterGraphic. Its state
-		// children already retain their authored ~0.15 matrices, so the wrapper
-		// itself remains at scale 1 exactly like Flash's Character instance.
+		display = new CharacterView(0, -1, null, "stand", {head: headId, body: bodyId, feet: feetId}, [hatId, 1, 1, 1]);
+		// The neutral rig retains the authored ~0.15 root matrix, so the wrapper
+		// remains at scale 1 exactly like Flash's Character instance.
 		addChild(display);
 		// Flash's customize/account preview is a live Character MovieClip, so the
 		// standing idle plays continuously. Drive it from the stage clock; the
@@ -109,12 +108,18 @@ class AccountCharacter extends Sprite {
 	}
 
 	private function applyAppearance():Void {
-		display.setAppearance({hat: hat1, head: head, body: body, feet: feet}, {
-			hats: [{primary: hat1Color, secondary: hat1Color2}],
+		display.setAppearance({head: head, body: body, feet: feet}, {
 			head: {primary: headColor, secondary: headColor2},
 			body: {primary: bodyColor, secondary: bodyColor2},
 			feet: {primary: feetColor, secondary: feetColor2}
 		});
+		display.setHatIds([hat1, 1, 1, 1]);
+		display.setHatSlotColors([
+			{primary: hat1Color, secondary: hat1Color2},
+			{primary: 0, secondary: -1},
+			{primary: 0, secondary: -1},
+			{primary: 0, secondary: -1}
+		]);
 	}
 
 	/**

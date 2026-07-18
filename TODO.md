@@ -7,29 +7,25 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 #### De-Flash The Haxe/OpenFL Architecture
 
-The application, networking, data, and gameplay layers are already largely
-ordinary Haxe/OpenFL code, but the presentation layer still interprets the
-Animate/XFL object model at runtime. `PR2MovieClip`, the generated asset catalog,
-the `Fl*` controls, linkage-class strings, frame labels, and recursive
-instance-name lookup collectively act as a small Flash compatibility runtime.
-Replace that runtime incrementally with typed Haxe views, PR2-specific controls,
-explicit animation state, and neutral art data. Keep OpenFL as the renderer and
-keep the AS3/XFL client as the parity specification throughout the migration.
-This is strictly a code-structure and asset-pipeline change: the finished client
-must be visually and functionally indistinguishable from the current port. Do
-not redesign screens, controls, animations, timing, sound, or user flows as part
-of this work. Use the existing deterministic domain tests and screenshot/parity
-sequences as regression gates, extending them where a migrated feature does not
-yet have enough coverage to prove that its observable behavior is unchanged.
+The production presentation layer has been migrated away from the Animate/XFL
+compatibility runtime, but removal of the runtime did not prove visual or
+behavioral parity. The current phase is a systematic audit of every migrated
+production root against `flash/**/*.as` and
+`flash/platform-racing-2-xfl/`. Treat the legacy client as the specification,
+not merely as an implementation reference.
 
-This must be a strangler migration, not a second port running in parallel: each
-item should replace a production flow behind the existing deterministic and
-screenshot coverage, and the compatibility path should remain available for
-unmigrated symbols until it has no production callers.
+Do not mark an audit complete because a native view exists, a linkage is absent,
+or the happy path works. Completion requires evidence for the observable parts
+that apply: exact layout and registration points, artwork and colors, masks and
+filters, layer order, text/font metrics, mouse and keyboard interaction, focus,
+disabled/loading/error states, animation frames and timing, sound cues, modal
+stacking and fades, teardown, and the resulting navigation or network action.
+Add focused deterministic tests plus an HTML5 screenshot or replay sequence that
+compares the migrated flow with the AS3/XFL reference.
 
-The presentation layer will move incrementally from reflective Flash timeline
-access to concrete, typed Haxe views. For example, current code commonly loads
-an authored symbol and discovers its controls by string name:
+The migration replaced reflective Flash timeline access with concrete, typed
+Haxe views. The historical pattern loaded an authored symbol and discovered its
+controls by string name:
 
 ```haxe
 art = PR2MovieClip.fromLinkage("SomePopupGraphic");
@@ -37,8 +33,8 @@ nameBox = LobbyArt.text(art, "nameBox");
 button = DisplayUtil.findByName(art, "ok_bt");
 ```
 
-The target is an ordinary Haxe view whose structure is explicit and checked by
-the compiler:
+The current pattern is an ordinary Haxe view whose structure is explicit and
+checked by the compiler:
 
 ```haxe
 class ConfirmDialogView extends Sprite {
@@ -53,15 +49,13 @@ class ConfirmDialogView extends Sprite {
 }
 ```
 
-This is a code-structure and asset-pipeline migration only. Layout, artwork,
-animation, sound, timing, behavior, and user flows must remain unchanged, with
-the deterministic and screenshot/parity tests acting as regression gates. See
-`TODO.md` for the incremental migration plan and
-`docs/deflash-symbol-inventory.md` for the generated production boundary.
-`tools/deflash-boundary-allowlist.json` records the maximum legacy dependencies
-of the current migration adapters. `./test.sh` checks both generated inventories
-and rejects a new `PR2MovieClip`, `Fl*`, or generated-timeline dependency; the
-allowlist may shrink as views are migrated, but should not grow.
+The original change was intended to affect only code structure and the asset
+pipeline. Layout, artwork, animation, sound, timing, behavior, and user flows
+must still match. `docs/deflash-symbol-inventory.md` records the generated
+production boundary, while `tools/deflash-boundary-allowlist.json` preserves the
+historical maximum legacy dependencies for regression detection. `./test.sh`
+must continue rejecting new production `PR2MovieClip`, `Fl*`, or generated-XFL
+timeline dependencies while the audit uses archival tooling outside production.
 
 Campaign payload reference:
 
@@ -73,269 +67,31 @@ Campaign payload reference:
   `validateSaveString`; `data` is backtick-delimited with read mode in
   `data[0]` and the relative-coordinate block string in `data[1]`.
 
-##### Migrate Production Features
+##### Audit Migrated Production Features
 
-- Replace static timeline symbols with direct SVG/bitmap assets or explicit
-  OpenFL display compositions. Start with modal overlays, HUD decorations,
-  block overlays, and other leaf visuals that have no named interactive
-  children or authored animation.
-- Replace button-like and state-only timelines with typed enums and native
-  controls. Migrate shared UI helpers such as tabs, rating stars, navigation,
-  arrows, progress bars, and scroll bars before converting the screens that use
-  them.
-- Migrate routine dialogs and forms to concrete typed views, grouped by shared
-  behavior rather than by catalog order. Each migrated dialog must retain its
-  loading, error, disabled, focus, keyboard, and teardown paths—not only its
-  successful click path.
-- Migrate lobby pages, listings, account/customization views, and level-browser
-  UI after their shared controls and row/list primitives are native. Remove
-  `LobbyArt`/`DisplayUtil.findByName` access as each view becomes typed.
-- Migrate level-editor menus, option popups, cursors, stamps, and block-setting
-  controls. Preserve live editing, save/load, report/moderation, and test-course
-  flows, and run the focused level-editor and UI parity coverage for each batch.
-- Replace gameplay effects and animated HUD elements with explicit native
-  clips. Move every linkage-specific frame script currently installed inside
-  `PR2MovieClip` into the owning typed effect/view and characterize its exact
-  looping, stopping, sound, and completion behavior in tests.
-- Rebuild the intro as an explicit composed animation with native sound cues
-  after the common animation primitives are stable. Preserve site-mode branches,
-  skip/play interactions, timing, labels that affect behavior, and final page
-  transition parity.
+Audit the shared primitives first because a single mismatch can affect many
+roots. Each item needs comparison evidence, not only a unit test of the native
+API.
 
-###### Production root checklist (complete — 0 remaining)
+###### Production root parity audits
 
-This is the current migration boundary from
-`docs/deflash-symbol-inventory.md`. Each checkbox represents one unique root
-linkage, even when that linkage has multiple production call sites. Complete an
-item only when the root no longer appears in the generated inventory and its
-visual and functional behavior is covered by the relevant focused tests.
+This is the former migration boundary from
+`docs/deflash-symbol-inventory.md`. Each unchecked item is a new audit of one
+unique migrated root, including every production call site. Complete an item
+only after its native replacement has been compared with the AS3 owner and XFL
+symbol and the applicable visual, behavioral, timing, sound, failure, and
+teardown paths are covered by focused tests and screenshot/replay evidence.
 
-**Character**
+##### Compatibility-Runtime Removal Audits
 
-- [x] `CharacterGraphic`
-- [x] `DjinnIceGraphic`
-
-**Gameplay UI and visuals**
-
-- [x] `CatCaptchaPopupGraphic`
-- [x] `CountdownGraphic`
-- [x] `CowboyMode`
-- [x] `DrawingInfoGraphic`
-- [x] `EggGraphic`
-- [x] `ExpGainGraphic`
-- [x] `FinishedPageGraphic`
-- [x] `HappyHour`
-- [x] `HatGraphic`
-- [x] `IceWaveGraphic`
-- [x] `ItemDisplayGraphic`
-- [x] `LaserShotGraphic`
-- [x] `LuxPopupGraphic`
-- [x] `MusicSelectionGraphic`
-- [x] `PlaceArtifactGraphic`
-- [x] `PrizePopupGraphic`
-- [x] `QuitButtonGraphic`
-- [x] `RaceChatGraphic`
-- [x] `SlashAnimation`
-- [x] `SpectatePickerGraphic`
-- [x] `StatsDisplayGraphic`
-
-**Gameplay effects**
-
-- [x] `BrickPieceGraphic`
-- [x] `CrumblePieceGraphic`
-- [x] `MineExplodeAnimation`
-- [x] `MinePieceGraphic`
-- [x] `TeleportAnimation`
-
-**Intro page**
-
-- [x] `ArmorIntroGraphic`
-- [x] `BubbleBoxIntroGraphic`
-- [x] `IntroPageGraphic`
-- [x] `JiggminIntroGraphic`
-- [x] `KongregateIntroGraphic`
-
-**Level editor**
-
-- [x] `BlockOptionsButton`
-- [x] `BrushButtonGraphic`
-- [x] `BrushGraphic`
-- [x] `ChooseLevelsModePopupGraphic`
-- [x] `ConnectingPopupGraphic`
-- [x] `CustomStatsBlockOptionsGraphic`
-- [x] `DeleteButton`
-- [x] `EditTextButton`
-- [x] `EggBlockGraphic`
-- [x] `EraserButtonGraphic`
-- [x] `GetLevelsPopupGraphic`
-- [x] `GetLevelsPopupItemGraphic`
-- [x] `GetReportedLevelsPopupItemGraphic`
-- [x] `HandleLevelReportPopupGraphic`
-- [x] `HatPickerGraphic`
-- [x] `HatsButtonGraphic`
-- [x] `HatsMenuGraphic`
-- [x] `ItemBlockOptionsGraphic`
-- [x] `ItemButtonGraphic`
-- [x] `ItemMenuGraphic`
-- [x] `LandscapeGraphic`
-- [x] `LevelEditorMenuGraphic`
-- [x] `ModeMenuGraphic`
-- [x] `MusicMenuGraphic`
-- [x] `MusicNoteGraphic`
-- [x] `ObjectDeleterButtonGraphic`
-- [x] `ResizeButton`
-- [x] `SaveLevelPopupGraphic`
-- [x] `SizePickerGraphic`
-- [x] `SizePickerMenuGraphic`
-- [x] `StatBlockOptionsGraphic`
-- [x] `TeleportBlockOptionsGraphic`
-- [x] `TestCourseGraphic`
-- [x] `TextToolButtonGraphic`
-- [x] `TextToolCursorGraphic`
-- [x] `UploadingPopupGraphic`
-- [x] `ValueButtonGraphic`
-- [x] `ValueMenuGraphic`
-
-**Level objects and rendering**
-
-- [x] `ArrowBlockGraphic`
-- [x] `BG1`
-- [x] `BG2`
-- [x] `BG3`
-- [x] `BG4`
-- [x] `BG5`
-- [x] `BG6`
-- [x] `BG7`
-- [x] `Building1`
-- [x] `Cactus`
-- [x] `PetrifiedTree`
-- [x] `Rock`
-- [x] `Rock2`
-- [x] `Spire`
-- [x] `Spire2`
-- [x] `TextObjectGraphic`
-- [x] `Tree`
-- [x] `Tree2`
-- [x] `Tree3`
-
-**Lobby account and customization**
-
-- [x] `ColorPickerCrosshairsGraphic`
-- [x] `ColorPickerHueArrowGraphic`
-- [x] `ColorPickerPopupGraphic`
-- [x] `CursorEyedropperGraphic`
-- [x] `PartInfoListingGraphic`
-- [x] `PartPopupGraphic`
-- [x] `PointsRemainingGraphic`
-- [x] `PresetListingGraphic`
-- [x] `StatSliderGraphic`
-- [x] `StorePopupGraphic`
-
-**Lobby dialogs**
-
-- [x] `AdminMenuGraphic`
-- [x] `BanMenuGraphic`
-- [x] `ChangePasswordPopupGraphic`
-- [x] `ChatRoomInfoPopupGraphic`
-- [x] `ChooseLevelModModePopupGraphic`
-- [x] `CreateGuildPopupGraphic`
-- [x] `CreditsPopupGraphic`
-- [x] `DeleteMessageButtonGraphic`
-- [x] `ExternalLinkPopupGraphic`
-- [x] `GuildMemberNameGraphic`
-- [x] `GuildPopupGraphic`
-- [x] `LevelInfoPopupGraphic`
-- [x] `LevelReportPopupGraphic`
-- [x] `LogoutPassPopupGraphic`
-- [x] `MessagePopupGraphic`
-- [x] `MessagesItemGraphic`
-- [x] `OptionsArtQualityMenuGraphic`
-- [x] `OptionsPopupGraphic`
-- [x] `OptionsSongsMenuGraphic`
-- [x] `PlayerGuestPopupGraphic`
-- [x] `PlayerPopupGraphic`
-- [x] `PMRFCodesPopupGraphic`
-- [x] `ReplyMessageButtonGraphic`
-- [x] `ReportMessageButtonGraphic`
-- [x] `SendMessagePopupGraphic`
-- [x] `SetEmailPopupGraphic`
-- [x] `TempModMenuGraphic`
-- [x] `TransferGuildPopupGraphic`
-
-**Lobby level browser**
-
-- [x] `CourseMenuGraphic`
-- [x] `LevelItemGraphic`
-- [x] `LoadingGraphic`
-- [x] `SlotGraphic`
-
-**Lobby messages and players**
-
-- [x] `UnreadNotifGraphic`
-- [x] `PlayersTabListGraphic`
-- [x] `PlayersTabListItemGraphic`
-
-**Lobby shell and store**
-
-- [x] `HalfSquareBG`
-- [x] `LobbyBottomButtonsGraphic`
-- [x] `LobbyGraphic`
-- [x] `StoreListingGraphic`
-
-**Lobby tabs**
-
-- [x] `AccountInfoGraphic`
-- [x] `ChatGraphic`
-- [x] `MessagesGraphic`
-- [x] `SearchGraphic`
-
-**Login page**
-
-- [x] `ConfirmPopupGraphic`
-- [x] `CreateAccountPopupGraphic`
-- [x] `ForgotPassPopupGraphic`
-- [x] `LoggingInPopupGraphic`
-- [x] `LoginPopupGraphic`
-- [x] `ServerSelectPopupGraphic`
-
-**Shared UI**
-
-- [x] `GpNotificationGraphic`
-
-##### Native Character Rig
-
-- Specify a PR2 character-rig format with typed animation states, a stable
-  attachment hierarchy, interchangeable head/body/feet/hat parts, primary and
-  secondary tint channels, held-item/weapon sockets, and explicit frame timing.
-  Initially generate this neutral format from XFL so artwork is not manually
-  re-authored during the runtime migration.
-- Implement a native `CharacterView` that consumes the rig without
-  `PR2MovieClip`, numeric part timelines, or recursive named-child discovery.
-  Keep gameplay state and physics outside the renderer and make animation
-  advancement deterministic from the gameplay clock.
-- Port character states and part/color combinations in parity-tested batches,
-  including standing, running, jumping, super-jumping, crouching, swimming,
-  frozen/bumped states, multiple hats, Fred-body placement, epic colors, held
-  items, weapon actions, and particle/effect attachment points.
-- Switch gameplay, lobby previews, editor previews, and player listings to the
-  same native character implementation. Delete the old character timeline path
-  only after all consumers and the existing character screenshot matrix pass.
-
-##### Remove The Compatibility Runtime
-
-- Change asset generation to emit only assets and neutral data still consumed
-  by native views. Stop packaging unreachable XFL symbol metadata and remove
-  catalog partitions as their final production consumers disappear.
-- Remove the `Fl*` controls, `FlComponentFactory`, recursive timeline-name
-  access, linkage factories, runtime frame scripts, timeline sound dispatch,
-  flattening analyzers, and `PR2MovieClip` in dependency order. Keep preview or
-  archival XFL tooling outside the production build if it remains useful for
-  parity investigation.
-- Add a final build-time check that production source and output contain no
-  `PR2MovieClip`, `Fl*`, linkage-class, frame-script, or generated XFL timeline
-  dependencies. Run the related domain suites and representative screenshot
-  sequences, audit HTML5 payload/performance, and update `README.md` to describe
-  the native architecture and one-way legacy asset migration workflow.
+- [ ] Re-run representative end-to-end flows against both archival Flash and the
+  native client before declaring the de-flash goal complete; dependency removal
+  alone is not an acceptance criterion.
+  - Audit note: Focused deterministic tests cover native behavior only; there is no current
+    dual-client evidence bundle for intros, login, lobby, gameplay/effects, editor, and
+    character flows, so retain this final acceptance audit. The machine-checked matrix in
+    `docs/deflash-dual-client-acceptance.json` records the missing shared replays/evidence and
+    the current macOS Flash synthetic-click blocker without treating native-only proof as parity.
 
 
 #### Build Size And HTML5 Payload

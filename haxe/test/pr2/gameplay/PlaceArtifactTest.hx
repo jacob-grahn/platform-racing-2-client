@@ -7,7 +7,7 @@ import pr2.gameplay.SpecialEvent.PlaceArtifactRequest;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.dialogs.ConfirmPopup;
 import pr2.lobby.dialogs.Popup;
-import pr2.util.DisplayUtil;
+import pr2.util.TestDisplayUtil as DisplayUtil;
 
 class PlaceArtifactTest {
 	private static var assertions:Int = 0;
@@ -26,6 +26,16 @@ class PlaceArtifactTest {
 
 	private static function testInitialTimeSelection():Void {
 		var popup = popupAt(new Date(2026, 5, 7, 0, 4, 0));
+		assertEquals("assets/svg/effects/place_artifact_01.svg", PlaceArtifact.BACKGROUND_ASSET,
+			"artifact popup uses exact authored XFL background and copy");
+		@:privateAccess assertEquals(true, popup.art.exactBackground.width > 200,
+			"authored artifact popup art renders");
+		assertNear(-37.5, popup.monthSel.x, 0.001, "month selector preserves authored x");
+		assertNear(-109.5, popup.daySel.x, 0.001, "day selector preserves authored x");
+		assertNear(44.5, popup.yearSel.x, 0.001, "year selector preserves authored x");
+		assertNear(-62.5, popup.hourBox.x, 0.001, "hour input preserves authored x");
+		assertEquals("0-9", popup.hourBox.restrict, "hour input preserves numeric restriction");
+		assertEquals("Place Now", popup.nowCheck.label, "checkbox preserves authored label");
 		assertEquals(5, popup.monthSel.selectedIndex, "initial month selected from current date");
 		assertEquals(6, popup.daySel.selectedIndex, "initial day selected from current date");
 		assertEquals("12", popup.hourBox.text, "midnight displays as 12");
@@ -158,6 +168,11 @@ class PlaceArtifactTest {
 		if (haystack.indexOf(needle) < 0) {
 			throw '$message: expected "$haystack" to contain "$needle"';
 		}
+	}
+
+	private static function assertNear(expected:Float, actual:Float, tolerance:Float, message:String):Void {
+		assertions++;
+		if (Math.abs(expected - actual) > tolerance) throw '$message: expected $expected +/- $tolerance, got $actual';
 	}
 
 	private static function lastConfirm():ConfirmPopup {

@@ -1,64 +1,88 @@
 package pr2.levelEditor;
 
+import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
 import pr2.assets.NativeAssetIds.FontAsset;
 import pr2.assets.NativeAssets;
+import pr2.runtime.SvgAsset;
 import pr2.ui.controls.GameButton;
+import pr2.ui.view.LoadingView;
 import pr2.ui.view.NativeView;
 
-/** Native level-list popup shared by personal levels, reports, and loadouts. */
+/** Exact native composition of XFL `GetLevelsPopupGraphic`. */
 class GetLevelsView extends NativeView {
+	private var loading:Null<LoadingView>;
 	public function new() {
 		super();
-		graphics.beginFill(0xF4F4F4, 0.98);
-		graphics.lineStyle(2, 0x666666);
-		graphics.drawRoundRect(-150, -135, 300, 270, 14, 14);
-		graphics.endFill();
-		field("titleBox", -125, -122, 250, 23, 16, true, TextFormatAlign.CENTER);
+		var background = SvgAsset.createNormalized("assets/svg/ui/shadow_bg.svg");
+		background.name = "background";
+		background.x = -147;
+		background.y = -129;
+		background.scaleX = 1.08087158203125;
+		background.scaleY = 1.3455810546875;
+		addChild(background);
+
+		var listSkin = SvgAsset.create("assets/svg/ui/text_area_up.svg");
+		listSkin.name = "listSkin";
+		listSkin.x = -131;
+		listSkin.y = -86;
+		listSkin.scaleX = 1.64472961425781;
+		listSkin.scaleY = 7.27272033691406;
+		addChild(listSkin);
+
 		var holder = new Sprite();
 		holder.name = "levelsHolder";
-		holder.x = -119;
+		holder.x = -130;
 		holder.y = -85;
 		addChild(holder);
-		button("load_bt", "Load", -119, 99, 70);
-		button("delete_bt", "Delete", -39, 99, 70);
-		button("cancel_bt", "Cancel", 41, 99, 78);
-		var loading = new Sprite();
+		var listMask = new Shape();
+		listMask.name = "levelsMask";
+		listMask.graphics.beginFill(0);
+		listMask.graphics.drawRect(-130, -85, 248, 158);
+		listMask.graphics.endFill();
+		addChild(listMask);
+		holder.mask = listMask;
+
+		loading = new LoadingView();
 		loading.name = "loadingGraphic";
-		loading.graphics.beginFill(0xFFFFFF, 0.9);
-		loading.graphics.drawRect(-120, -86, 240, 160);
-		loading.graphics.endFill();
-		fieldOn(loading, null, -70, -8, 140, 20, 11, true, TextFormatAlign.CENTER).text = "Loading levels...";
+		loading.y = 0.05;
 		addChild(loading);
+
+		var title = field("titleBox", -84.15, -117, 162.85, 17.05, 14, true, TextFormatAlign.CENTER);
+		title.text = "-- Load --";
+		button("cancel_bt", "Cancel", 58, 89);
+		button("load_bt", "Load", -131, 89);
+		button("delete_bt", "Delete", -37, 89);
 	}
 
-	private function button(name:String, label:String, x:Float, y:Float, width:Float):Void {
+	override public function dispose():Void {
+		if (loading != null) loading.dispose();
+		loading = null;
+		super.dispose();
+	}
+
+	private function button(name:String, label:String, x:Float, y:Float):Void {
 		var control = ownControl(new GameButton(label));
 		control.name = name;
 		control.x = x;
 		control.y = y;
-		control.setSize(width, 24);
+		control.setSize(76, 22);
 		addChild(control);
 	}
 
 	private function field(name:String, x:Float, y:Float, width:Float, height:Float, size:Int, bold:Bool, align:TextFormatAlign):TextField {
-		return fieldOn(this, name, x, y, width, height, size, bold, align);
-	}
-
-	private function fieldOn(parent:Sprite, name:Null<String>, x:Float, y:Float, width:Float, height:Float, size:Int, bold:Bool,
-		align:TextFormatAlign):TextField {
 		var text = new TextField();
-		if (name != null) text.name = name;
+		text.name = name;
 		text.x = x;
 		text.y = y;
 		text.width = width;
 		text.height = height;
 		text.selectable = false;
 		text.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), size, 0x222222, bold, null, null, null, null, align);
-		parent.addChild(text);
+		addChild(text);
 		return text;
 	}
 }

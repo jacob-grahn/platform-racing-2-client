@@ -92,15 +92,15 @@ class PlayerPopup extends Popup {
 
 		this.userName = name;
 		art = new PlayerView();
-		nameBox = LobbyArt.text(art, "nameBox");
+		nameBox = LobbyArt.directText(art, "nameBox");
 		if (nameBox != null) {
 			nameBox.text = "-- " + name + " --";
 		}
-		playerInfo = Std.downcast(DisplayUtil.findByName(art, "playerInfo"), DisplayObjectContainer);
+		playerInfo = Std.downcast(DisplayUtil.directChildByName(art, "playerInfo"), DisplayObjectContainer);
 		if (playerInfo != null) {
 			playerInfo.visible = false;
 		}
-		bindClick(DisplayUtil.findByName(art, "close_bt"), clickClose);
+		bindClick(DisplayUtil.directChildByName(art, "close_bt"), clickClose);
 		addChild(art);
 
 		// `autoLoad` is only disabled by tests, which feed `applyReturnData` directly.
@@ -206,7 +206,7 @@ class PlayerPopup extends Popup {
 		setupModMenus(group);
 
 		playerInfo.visible = true;
-		var loading = DisplayUtil.findByName(art, "loadingGraphic");
+		var loading = DisplayUtil.directChildByName(art, "loadingGraphic");
 		if (loading != null) {
 			loading.visible = false;
 		}
@@ -250,8 +250,8 @@ class PlayerPopup extends Popup {
 	}
 
 	private function setupIcons(ret:Dynamic):Void {
-		var verified = DisplayUtil.findByName(playerInfo, "verifiedIcon");
-		var hof = DisplayUtil.findByName(playerInfo, "hofIcon");
+		var verified = DisplayUtil.directChildByName(playerInfo, "verifiedIcon");
+		var hof = DisplayUtil.directChildByName(playerInfo, "hofIcon");
 		var showVerified = Dyn.bool(ret, "verified");
 		var showHof = Dyn.bool(ret, "hof");
 		if (verified != null) {
@@ -277,7 +277,7 @@ class PlayerPopup extends Popup {
 
 	private function setupGuild(ret:Dynamic):Void {
 		var guildId = Dyn.int(ret, "guildId");
-		var guildBox = LobbyArt.text(playerInfo, "guildBox");
+		var guildBox = LobbyArt.directText(playerInfo, "guildBox");
 		if (guildBox == null) {
 			return;
 		}
@@ -313,14 +313,14 @@ class PlayerPopup extends Popup {
 	}
 
 	private function setupSocialButtons(ret:Dynamic, group:Int):Void {
-		var message = DisplayUtil.findByName(playerInfo, "messageButton");
+		var message = DisplayUtil.directChildByName(playerInfo, "messageButton");
 		bindSendPmHover(message);
 		bindClick(message, function():Void {
 			clearSendPmHover();
 			startFadeOut();
 			new SendMessagePopup(userName);
 		});
-		bindClick(DisplayUtil.findByName(playerInfo, "levelsButton"), clickViewLevels);
+		bindClick(DisplayUtil.directChildByName(playerInfo, "levelsButton"), clickViewLevels);
 
 		// Guild owners can invite guildless players or kick their own members.
 		var guildId = Dyn.int(ret, "guildId");
@@ -330,12 +330,12 @@ class PlayerPopup extends Popup {
 		if (LobbySession.guildOwner) {
 			if (guildId == 0) {
 				setVisible("inviteButton", true);
-				bindClick(DisplayUtil.findByName(playerInfo, "inviteButton"), function():Void handleGuildUrl(ServerConfig.guildInviteUrl()));
+				bindClick(DisplayUtil.directChildByName(playerInfo, "inviteButton"), function():Void handleGuildUrl(ServerConfig.guildInviteUrl()));
 			}
 			if (guildId != 0 && guildId == LobbySession.guildId) {
 				setVisible("kickButton", true);
 				setVisible("kickBg", true);
-				bindClick(DisplayUtil.findByName(playerInfo, "kickButton"), function():Void handleGuildUrl(ServerConfig.guildKickUrl()));
+				bindClick(DisplayUtil.directChildByName(playerInfo, "kickButton"), function():Void handleGuildUrl(ServerConfig.guildKickUrl()));
 			}
 		}
 
@@ -407,7 +407,7 @@ class PlayerPopup extends Popup {
 	// --- Supplement (hover) box ----------------------------------------------
 
 	private function showRankSupplement():Void {
-		var supplBg = DisplayUtil.findByName(playerInfo, "supplBg");
+		var supplBg = DisplayUtil.directChildByName(playerInfo, "supplBg");
 		if (supplBg != null) supplBg.visible = true;
 		setText("supplText", "");
 		if (expGain != null && expGain.parent == null) {
@@ -416,13 +416,13 @@ class PlayerPopup extends Popup {
 	}
 
 	private function showDateSupplement(time:Float):Void {
-		var supplBg = DisplayUtil.findByName(playerInfo, "supplBg");
+		var supplBg = DisplayUtil.directChildByName(playerInfo, "supplBg");
 		if (supplBg != null) supplBg.visible = true;
 		setText("supplText", getDateTimeStr(time));
 	}
 
 	private function hideSupplement():Void {
-		var supplBg = DisplayUtil.findByName(playerInfo, "supplBg");
+		var supplBg = DisplayUtil.directChildByName(playerInfo, "supplBg");
 		if (supplBg != null) supplBg.visible = false;
 		if (expGain != null && expGain.parent == playerInfo) {
 			playerInfo.removeChild(expGain);
@@ -436,7 +436,7 @@ class PlayerPopup extends Popup {
 		}
 		expGain = new ExpGain();
 		expGain.x = playerInfo.x;
-		var supplBg = DisplayUtil.findByName(playerInfo, "supplBg");
+		var supplBg = DisplayUtil.directChildByName(playerInfo, "supplBg");
 		expGain.y = (supplBg == null ? 0 : supplBg.y) + 3;
 		expGain.start(expPoints, expPoints, expToRank);
 	}
@@ -531,21 +531,21 @@ class PlayerPopup extends Popup {
 	// --- Small helpers -------------------------------------------------------
 
 	private function setText(name:String, value:String):Void {
-		var field = LobbyArt.text(playerInfo, name);
+		var field = LobbyArt.directText(playerInfo, name);
 		if (field != null) {
 			field.text = value;
 		}
 	}
 
 	private function setVisible(name:String, value:Bool):Void {
-		var target = DisplayUtil.findByName(playerInfo, name);
+		var target = DisplayUtil.directChildByName(playerInfo, name);
 		if (target != null) {
 			target.visible = value;
 		}
 	}
 
 	private function flButton(name:String):Null<GameButton> {
-		return Std.downcast(DisplayUtil.findByName(playerInfo, name), GameButton);
+		return Std.downcast(DisplayUtil.directChildByName(playerInfo, name), GameButton);
 	}
 
 	private function bindClick(target:Null<DisplayObject>, handler:Void->Void):Void {
@@ -564,7 +564,7 @@ class PlayerPopup extends Popup {
 	}
 
 	private function bindHover(fieldName:String, over:Void->Void, out:Void->Void):Void {
-		var field = LobbyArt.text(playerInfo, fieldName);
+		var field = LobbyArt.directText(playerInfo, fieldName);
 		if (field == null) {
 			return;
 		}

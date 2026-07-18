@@ -85,7 +85,7 @@ class GetLevelsPopupItem extends SelectableButton {
 	}
 
 	private function setText(name:String, value:String):Void {
-		var text = LobbyArt.text(art, name);
+		var text = LobbyArt.directText(art, name);
 		if (text != null) {
 			text.text = value;
 		}
@@ -100,12 +100,12 @@ class GetLevelsPopupItem extends SelectableButton {
 	}
 
 	public function titleTextForTests():String {
-		var text = LobbyArt.text(art, "titleBox");
+		var text = LobbyArt.directText(art, "titleBox");
 		return text == null ? "" : text.text;
 	}
 
 	public function statusTextForTests():String {
-		var text = LobbyArt.text(art, "statusBox");
+		var text = LobbyArt.directText(art, "statusBox");
 		return text == null ? "" : text.text;
 	}
 

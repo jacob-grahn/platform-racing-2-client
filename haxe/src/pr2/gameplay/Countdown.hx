@@ -2,13 +2,9 @@ package pr2.gameplay;
 
 import openfl.display.Sprite;
 import openfl.events.Event;
-import openfl.text.TextField;
-import openfl.text.TextFormat;
-import openfl.text.TextFormatAlign;
 import openfl.utils.Assets;
 import pr2.audio.SoundEffects;
-import pr2.assets.NativeAssetIds.FontAsset;
-import pr2.assets.NativeAssets;
+import pr2.effects.NativeEffectAnimation;
 import pr2.lobby.account.Settings;
 
 typedef CountdownEffectPlayer = String->Float->Void;
@@ -31,8 +27,7 @@ class Countdown extends Sprite {
 	static inline var READY_SOUND:String = "assets/audio/sfx/countdown_ready.mp3";
 	static inline var GO_SOUND:String = "assets/audio/sfx/countdown_go.mp3";
 
-	private var art:Null<Sprite>;
-	private var text:Null<TextField>;
+	private var art:Null<NativeEffectAnimation>;
 	private var frame:Int = 1;
 	private var onFinish:Null<Void->Void>;
 	private var onPlayEffect:Null<CountdownEffectPlayer>;
@@ -47,49 +42,27 @@ class Countdown extends Sprite {
 		this.onPlayEffect = onPlayEffect;
 		mouseEnabled = false;
 		mouseChildren = false;
-		art = new Sprite();
-		text = new TextField();
-		text.x = -120;
-		text.y = -70;
-		text.width = 240;
-		text.height = 140;
-		text.selectable = false;
-		text.mouseEnabled = false;
-		text.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 92, 0xFFFFFF, true, null, null, null, null,
-			TextFormatAlign.CENTER);
-		text.filters = [new openfl.filters.GlowFilter(0x000000, 0.9, 8, 8, 2)];
-		art.addChild(text);
+		art = new NativeEffectAnimation("countdown", 62);
 		art.addEventListener(Event.ENTER_FRAME, onEnterFrame);
-		applyVisual();
 		addChild(art);
 	}
 
 	/** Step the countdown one frame. Production lets PR2MovieClip auto-play, so
 		this is only needed to drive the timeline deterministically (tests). */
 	public function advance():Void {
-		advanceOneFrame();
+		if (art == null) return;
+		art.advanceOneFrame();
+		processCurrentFrame();
 	}
 
-	private function onEnterFrame(_:Event):Void advanceOneFrame();
+	private function onEnterFrame(_:Event):Void processCurrentFrame();
 
-	private function advanceOneFrame():Void {
+	private function processCurrentFrame():Void {
 		if (art == null) return;
-		frame++;
+		frame = art.currentFrame;
 		if (frame == 9 || frame == 24 || frame == 39) handleCount();
 		if (frame == 54) handleFinish();
-		applyVisual();
 		if (frame >= 62) handleEnd();
-	}
-
-	private function applyVisual():Void {
-		if (text == null) return;
-		var phase = frame <= 15 ? 0 : frame <= 30 ? 1 : frame <= 45 ? 2 : 3;
-		var local = frame - phase * 15;
-		text.text = phase == 0 ? "3" : phase == 1 ? "2" : phase == 2 ? "1" : "Go!";
-		var progress = Math.min(1, local / 9);
-		var scale = 1 + 8 * (1 - progress) * (1 - progress);
-		text.scaleX = text.scaleY = scale;
-		text.alpha = local > 12 ? Math.max(0, (15 - local) / 3) : 1;
 	}
 
 	private function handleCount():Void {
@@ -124,10 +97,10 @@ class Countdown extends Sprite {
 	public function remove():Void {
 		if (art != null) {
 			art.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
+			art.dispose();
 			if (art.parent != null) art.parent.removeChild(art);
 			art = null;
 		}
-		text = null;
 		if (parent != null) {
 			parent.removeChild(this);
 		}

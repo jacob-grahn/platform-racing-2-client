@@ -8,36 +8,38 @@ import pr2.assets.NativeAssetIds.FontAsset;
 import pr2.assets.NativeAssets;
 import pr2.ui.view.NativeView;
 
-/** Native catalog tile for a character part. */
+/** Exact native composition of the authored PartInfoListingGraphic shell. */
 class PartInfoListingView extends NativeView {
 	public function new() {
 		super();
-		var bg = new Sprite();
-		bg.name = "bg";
-		bg.graphics.beginFill(0xE3E2C3);
-		bg.graphics.lineStyle(1, 0x9A987F);
-		bg.graphics.drawRoundRect(0, 0, 122, 145, 8, 8);
-		bg.graphics.endFill();
+		var bg = rect("bg", 0, 0, 122 * 1.04917907714844, 140 * 1.1142578125, 0xC3E2E7, 1);
 		addChild(bg);
-		field("titleBox", 7, 5, 108, 18, 10, true, TextFormatAlign.CENTER);
-		var owned = field("ownedBox", 8, 24, 48, 18, 9, true, TextFormatAlign.LEFT);
+		var previewGuide = rect("previewGuide", 8, 21.5, 174 * 0.6436767578125, 350 * 0.200057983398438, 0xFFFFFF, 0.501960784313725);
+		addChild(previewGuide);
+		field("titleBox", 10.05, 5, 109, 14.55, 12, 0x000000, TextFormatAlign.LEFT);
+		var owned = field("ownedBox", 10, 25.55, 42, 12.15, 10, 0x006600, TextFormatAlign.LEFT);
 		owned.text = "Owned!";
-		owned.textColor = 0x286828;
-		var epic = field("epicBox", 60, 75, 60, 18, 8, true, TextFormatAlign.CENTER);
+		var epic = field("epicBox", 62.05, 77.35, 55.95, 12.15, 10, 0x006600, TextFormatAlign.RIGHT);
 		epic.text = "Purchased!";
-		epic.textColor = 0x713E92;
-		var desc = field("descBox", 7, 96, 108, 42, 9, false, TextFormatAlign.LEFT);
+		var desc = field("descBox", 10, 96, 108, 65.65, 10, 0x000000, TextFormatAlign.LEFT);
 		desc.multiline = true;
 		desc.wordWrap = true;
-		var cover = new Sprite();
-		cover.name = "cover";
-		cover.graphics.beginFill(0x000000, 0);
-		cover.graphics.drawRect(0, 0, 122, 145);
-		cover.graphics.endFill();
+		var cover = rect("cover", 0, 0, 122 * 1.04917907714844, 140 * 0.67132568359375, 0, 0);
 		addChild(cover);
 	}
 
-	private function field(name:String, x:Float, y:Float, width:Float, height:Float, size:Int, bold:Bool, align:TextFormatAlign):TextField {
+	private function rect(name:String, x:Float, y:Float, width:Float, height:Float, color:Int, alpha:Float):Sprite {
+		var sprite = new Sprite();
+		sprite.name = name;
+		sprite.x = x;
+		sprite.y = y;
+		sprite.graphics.beginFill(color, alpha);
+		sprite.graphics.drawRect(0, 0, width, height);
+		sprite.graphics.endFill();
+		return sprite;
+	}
+
+	private function field(name:String, x:Float, y:Float, width:Float, height:Float, size:Int, color:Int, align:TextFormatAlign):TextField {
 		var text = new TextField();
 		text.name = name;
 		text.x = x;
@@ -45,7 +47,7 @@ class PartInfoListingView extends NativeView {
 		text.width = width;
 		text.height = height;
 		text.selectable = false;
-		text.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), size, 0x222222, bold, null, null, null, null, align);
+		text.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), size, color, false, null, null, null, null, align);
 		addChild(text);
 		return text;
 	}

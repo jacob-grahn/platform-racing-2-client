@@ -21,10 +21,15 @@ class CountdownTest {
 
 		assertEquals(0, countdown.counts, "no counts before playing");
 		assertEquals(false, countdown.finished, "not finished before playing");
+		@:privateAccess assertEquals("assets/svg/effects/countdown_01.svg", countdown.art.currentAssetPath,
+			"countdown starts on exact composed XFL frame one");
+		for (_ in 0...8) countdown.advance();
+		@:privateAccess assertEquals("assets/svg/effects/countdown_09.svg", countdown.art.currentAssetPath,
+			"first ready cue uses exact composed XFL frame nine");
 
 		// Drive the authored 62-frame timeline to completion. Frame scripts at
 		// 9/24/39 tick "count" and 54 fires "finish"; 62 self-removes.
-		var guard = 0;
+		var guard = 8;
 		while (countdown.parent != null && guard < 200) {
 			countdown.advance();
 			guard++;

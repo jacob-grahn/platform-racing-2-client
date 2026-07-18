@@ -8,7 +8,6 @@ import pr2.gameplay.Modes;
 import pr2.lobby.dialogs.AutoDismissController;
 import pr2.ui.controls.GameSelect;
 import pr2.ui.StageFocus;
-import pr2.util.DisplayUtil;
 
 class EditorModeSettingsPopup extends Sprite {
 	public final editor:LevelEditor;
@@ -23,7 +22,7 @@ class EditorModeSettingsPopup extends Sprite {
 		this.editor = editor;
 		art = new EditorSettingsMenuView("mode");
 		addChild(art);
-		dropdown = Std.downcast(DisplayUtil.findByName(art, "modeSelect"), GameSelect);
+		dropdown = art.modeSelect;
 		if (dropdown != null) {
 			selectMode(editor.gameMode);
 			dropdown.addEventListener(Event.OPEN, openDropdown);

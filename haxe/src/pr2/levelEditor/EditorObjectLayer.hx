@@ -8,7 +8,6 @@ import openfl.geom.Rectangle;
 import pr2.level.ServerLevel.DecodedArtLayer;
 import pr2.level.ServerLevel.DecodedArtObject;
 import pr2.level.ServerLevel.DecodedTextObject;
-import pr2.runtime.PR2MovieClip;
 
 class EditorObjectLayer extends Sprite {
 	public final layerNum:Int;
@@ -557,11 +556,6 @@ class EditorObjectLayer extends Sprite {
 		var display = Objects.getFromCode(placed.code);
 		if (display != null) {
 			holder.addChild(display);
-		} else {
-			holder.graphics.lineStyle(1, 0x666666);
-			holder.graphics.beginFill(0xEEEEEE, 0.5);
-			holder.graphics.drawRect(0, 0, size.width, size.height);
-			holder.graphics.endFill();
 		}
 		return holder;
 	}
@@ -574,10 +568,6 @@ class EditorObjectLayer extends Sprite {
 		// Bitmap exports retain high-resolution source bounds but are scaled to
 		// the authored Flash size. Placement centers the displayed footprint.
 		var size = new StampSize(Math.max(1, Math.abs(display.width)), Math.max(1, Math.abs(display.height)));
-		var clip = Std.downcast(display, PR2MovieClip);
-		if (clip != null) {
-			clip.dispose();
-		}
 		return size;
 	}
 }

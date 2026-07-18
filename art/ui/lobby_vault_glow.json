@@ -1,0 +1,101 @@
+{
+  "assets": [
+    {
+      "id": "glow-source",
+      "p": "lobby_button_glow_source.svg",
+      "u": "assets/svg/native/"
+    }
+  ],
+  "fr": 27,
+  "h": 400,
+  "ip": 0,
+  "layers": [
+    {
+      "ddd": 0,
+      "ind": 1,
+      "ip": 0,
+      "ks": {
+        "a": {
+          "a": 0,
+          "k": [
+            0,
+            0
+          ]
+        },
+        "o": {
+          "a": 0,
+          "k": 100
+        },
+        "p": {
+          "a": 0,
+          "k": [
+            0,
+            0
+          ]
+        },
+        "r": {
+          "a": 0,
+          "k": 0
+        },
+        "s": {
+          "a": 0,
+          "k": [
+            77.8945922851562,
+            103.70330810546899
+          ]
+        }
+      },
+      "nm": "authoredGlow",
+      "op": 1,
+      "refId": "glow-source",
+      "st": 0,
+      "ty": 2,
+      "x_pr2_color": {
+        "a": 0,
+        "k": [
+          1,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    }
+  ],
+  "metadata": {
+    "customProps": {
+      "pr2": {
+        "layers": {
+          "1": {
+            "glow": {
+              "a": 1,
+              "k": [
+                {
+                  "s": [
+                    16776960,
+                    1.0,
+                    0.0,
+                    0.0,
+                    1.0
+                  ],
+                  "t": 0
+                }
+              ]
+            },
+            "glowInner": false,
+            "glowKnockout": true,
+            "glowQuality": 3
+          }
+        },
+        "loop": false
+      }
+    }
+  },
+  "nm": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 1085",
+  "op": 1,
+  "v": "5.12.2",
+  "w": 550
+}

@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="550px" height="400px" viewBox="0 0 550 400" preserveAspectRatio="none" data-xfl-root="Components/Component Assets/CellRendererSkins/CellRenderer_selectedOverSkin">
+  <g data-xfl-symbol="Components/Component Assets/CellRendererSkins/CellRenderer_selectedOverSkin">
+    <g data-svg-leaf="components_component_assets_cellrendererskins_cellrenderer_selec_dda13f0211/t00_l002_f0000_r00.svg">
+      <defs>
+        <g id="xfl1_Layer0_0_FILL">
+          <path fill="#DAF1FF" stroke="none" d=" M 151.95 22 L 151.95 0 -0.05 0 -0.05 22 151.95 22 Z" />
+        </g>
+      </defs>
+      <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+        <use xlink:href="#xfl1_Layer0_0_FILL" />
+      </g>
+    </g>
+    <g data-svg-leaf="components_component_assets_cellrendererskins_cellrenderer_selec_dda13f0211/t00_l001_f0000_r00.svg">
+      <defs>
+        <linearGradient id="xfl2_Gradient_1" gradientUnits="userSpaceOnUse" x1="8.5" y1="20.9" x2="8.5" y2="7.999999999999999" spreadMethod="pad">
+          <stop offset="0%" stop-color="#0075BF" />
+          <stop offset="99.2156862745098%" stop-color="#009DFF" />
+        </linearGradient>
+        <linearGradient id="xfl2_Gradient_2" gradientUnits="userSpaceOnUse" x1="63.5" y1="22.6125" x2="63.5" y2="-0.11250000000000071" spreadMethod="pad">
+          <stop offset="0%" stop-color="#EEEEEE" stop-opacity="0.6509803921568628" />
+          <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.7411764705882353" />
+        </linearGradient>
+        <g id="xfl2_Layer0_0_FILL">
+          <path fill="url(#xfl2_Gradient_1)" stroke="none" d=" M 152 22 L 152 0 0 0 0 22 152 22 M 151 1 L 151 21 1 21 1 1 151 1 Z" />
+          <path fill="url(#xfl2_Gradient_2)" stroke="none" d=" M 151 21 L 151 1 1 1 1 21 151 21 Z" />
+        </g>
+      </defs>
+      <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+        <use xlink:href="#xfl2_Layer0_0_FILL" />
+      </g>
+    </g>
+    <g data-svg-leaf="components_component_assets_cellrendererskins_cellrenderer_selec_dda13f0211/t00_l000_f0000_r00.svg">
+      <defs>
+        <linearGradient id="xfl3_Gradient_1" gradientUnits="userSpaceOnUse" x1="63.5" y1="12.450000000000001" x2="63.5" y2="0.8499999999999996" spreadMethod="pad">
+          <stop offset="0%" stop-color="#EEEEEE" stop-opacity="0" />
+          <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.2980392156862745" />
+        </linearGradient>
+        <g id="xfl3_Layer0_0_FILL">
+          <path fill="url(#xfl3_Gradient_1)" stroke="none" d=" M 151 12 L 151 1 1 1 1 12 151 12 Z" />
+        </g>
+      </defs>
+      <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+        <use xlink:href="#xfl3_Layer0_0_FILL" />
+      </g>
+    </g>
+  </g>
+</svg>

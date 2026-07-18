@@ -4,8 +4,6 @@ import com.jiggmin.data.Objects;
 import openfl.display.DisplayObject;
 import pr2.level.ObjectCodes;
 import pr2.levelEditor.EditorBlockLayer;
-import pr2.runtime.FlComponents;
-import pr2.util.DisplayUtil;
 
 /**
 	Builds the visual content used by level-editor sidebar entries.
@@ -117,13 +115,11 @@ class EditorSideBarIconFactory {
 
 	private static function valueButton(title:String, value:String):EditorNativeGraphic {
 		var clip = linkage("ValueButtonGraphic");
-		var titleBox = FlComponents.asTextField(DisplayUtil.findByName(clip, "titleBox"));
-		if (titleBox != null) {
-			titleBox.text = title;
+		if (clip.titleBox != null) {
+			clip.titleBox.text = title;
 		}
-		var valueBox = FlComponents.asTextField(DisplayUtil.findByName(clip, "valueBox"));
-		if (valueBox != null) {
-			valueBox.text = value;
+		if (clip.valueBox != null) {
+			clip.valueBox.text = value;
 		}
 		return clip;
 	}

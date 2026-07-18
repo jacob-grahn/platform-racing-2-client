@@ -37,7 +37,6 @@ import pr2.effects.BlockPiece;
 import pr2.effects.MineAppear;
 import pr2.effects.MineExplosion;
 import pr2.effects.TeleportPop;
-import pr2.runtime.PR2MovieClip;
 import pr2.runtime.FontResolver;
 
 typedef ArtRenderOptions = {
@@ -539,9 +538,9 @@ class ServerLevelRenderer extends Sprite {
 			return;
 		}
 		if (arrow.currentFrame < 5) {
-			arrow.gotoAndPlay(arrow.currentFrame + 1);
+			arrow.animateFromFrame(arrow.currentFrame + 1);
 		} else if (arrow.currentFrame > 5) {
-			arrow.gotoAndPlay(arrow.currentFrame - 1);
+			arrow.animateFromFrame(arrow.currentFrame - 1);
 		}
 	}
 
@@ -859,6 +858,22 @@ class ServerLevelRenderer extends Sprite {
 				"assets/blocks/basic2.png";
 			default: "";
 		}
+	}
+
+	/** Loads an authored block bitmap; eval uses transparent bounds because it cannot decode PNG bytes. */
+	public static function blockBitmapData(code:Int):Null<BitmapData> {
+		var path = blockAssetPath(code);
+		if (path == "") return null;
+		var data = Assets.getBitmapData(path);
+		#if eval
+		if (data == null) data = new BitmapData(TILE_SIZE, TILE_SIZE, true, 0);
+		#elseif sys
+		if (data == null && sys.FileSystem.exists(path)) {
+			var image = lime.graphics.Image.fromBytes(sys.io.File.getBytes(path));
+			if (image != null) data = BitmapData.fromImage(image);
+		}
+		#end
+		return data;
 	}
 
 	/** Animate-exported vector used by the editor preview. */
@@ -1280,10 +1295,6 @@ class ServerLevelRenderer extends Sprite {
 				i--;
 				continue;
 			}
-			var clip = Std.downcast(child, PR2MovieClip);
-			if (clip != null) {
-				clip.dispose();
-			}
 			var childContainer = Std.downcast(child, Sprite);
 			if (childContainer != null) {
 				disposeAnimatedChildren(childContainer);
@@ -1314,7 +1325,11 @@ class ServerLevelRenderer extends Sprite {
 		artBackgroundTintScale = backgroundCode == 204 || backgroundCode == BG5_CODE ? 0 : 1;
 		var assetPath = artBackgroundAssetPath(level.artBackgroundCode);
 		if (assetPath != "" && Assets.exists(assetPath, AssetType.TEXT)) {
-			addArtBackgroundChild(pr2.runtime.SvgAsset.createFitted(assetPath, Constants.STAGE_WIDTH, Constants.STAGE_HEIGHT), 0);
+			// These SVGs are strict XFL compositions in the original 550x400
+			// coordinate space. BitmapData.draw(bg) in Flash preserved that space
+			// and clipped it to the stage; fitting visible bounds changes both the
+			// registration and scale of backgrounds whose art does not fill it.
+			addArtBackgroundChild(pr2.runtime.SvgAsset.create(assetPath), 0);
 		}
 		if (backgroundCode == BG5_CODE) {
 			var grid = createBg5CircleGrid();

@@ -29,7 +29,7 @@ import pr2.net.LobbySocket;
 import pr2.net.ServerLevelData;
 import pr2.lobby.account.Settings;
 import pr2.runtime.PR2MovieClip;
-import pr2.util.DisplayUtil;
+import pr2.util.TestDisplayUtil as DisplayUtil;
 
 @:access(pr2.gameplay.Course)
 @:access(pr2.level.ServerLevelRenderer)
@@ -544,6 +544,7 @@ class CharacterLifecycleTest {
 		assertEquals(2, laserClip.currentFrame, "local laser item starts stopped on idle frame 2");
 		assertTrue(laserClip.getChildByName(LaserShotView.TRAVEL_BEAM_NAME) != null,
 			"local laser item has a guaranteed visible travel beam");
+		assertEquals("assets/svg/effects/laser_02.svg", laserClip.currentAssetPath, "laser travel uses exact composed XFL stop frame");
 		var laserCameraOffset = laser.levelRenderer.cameraOffset();
 		assertEquals(laserCameraOffset.x, laser.effectBackground.transform.matrix.tx,
 			"attack effect layer follows the editor/world camera x offset");
@@ -555,6 +556,7 @@ class CharacterLifecycleTest {
 		for (_ in 0...20) {
 			laserClip.dispatchEvent(new Event(Event.ENTER_FRAME));
 		}
+		assertEquals("assets/svg/effects/laser_18.svg", laserClip.currentAssetPath, "laser impact reaches exact composed XFL stop frame");
 		assertEquals(18, laserClip.currentFrame, "local laser item hit animation stops on authored frame 18");
 		laser.remove();
 
@@ -900,6 +902,8 @@ class CharacterLifecycleTest {
 		assertTrue(egg != null, "visual test egg spawned");
 		var display = egg.display;
 		assertEquals(3, index, "egg visual randomization consumes Flash's three color randoms");
+		assertEquals("assets/svg/effects/egg_01.svg", display.currentAssetPath, "egg starts on exact composed XFL frame one");
+		@:privateAccess assertTrue(display.exactArt.width > 0, "egg renders the exact source frame after named-channel tinting");
 
 		var footColor = Std.int(Math.floor(0.10 * 0xFFFFFF));
 		var baseColor = Std.int(Math.floor(0.20 * 0xFFFFFF));
@@ -1035,6 +1039,10 @@ class CharacterLifecycleTest {
 		assertEquals(1, countLooseHats(course), "loose hat is registered");
 		assertTrue(handler.hasCommand("removeHat1"), "loose hat registers remote remove command");
 		assertTrue(hat.display.parent == course.characterLayer, "loose hat display mounts to character layer");
+		assertEquals("assets/svg/character/hat/005_cowboy/primary.svg", hat.display.colorMC.getChildAt(0).name,
+			"loose cowboy hat uses its exact authored primary channel");
+		assertEquals("assets/svg/character/hat/005_cowboy/static.svg", hat.display.fixedArt.getChildAt(0).name,
+			"loose cowboy hat preserves its exact authored untinted channel");
 
 		handler.dispatch("maybeReturnHatToStart", ["1"]);
 		var returned = course.looseHats.get(1);

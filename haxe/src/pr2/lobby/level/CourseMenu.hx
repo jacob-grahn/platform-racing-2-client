@@ -53,8 +53,8 @@ class CourseMenu extends AutoDismissPopup {
 		// recover it as the single top-level dynamic text on the clip.
 		textBox = art.countdown;
 
-		playButton = DisplayUtil.findByName(art, "play_bt");
-		cancelButton = DisplayUtil.findByName(art, "cancel_bt");
+		playButton = DisplayUtil.directChildByName(art, "play_bt");
+		cancelButton = DisplayUtil.directChildByName(art, "cancel_bt");
 		playBinding = LobbyArt.bind(playButton, clickPlay);
 		cancelBinding = LobbyArt.bind(cancelButton, closeMenu);
 

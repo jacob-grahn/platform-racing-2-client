@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="550px" height="400px" viewBox="0 0 550 400" preserveAspectRatio="none" data-xfl-root="MovieClips/Symbol 901">
+  <g data-xfl-symbol="MovieClips/Symbol 901">
+    <g transform="matrix(0.9498443604 -0.3096466064 0.3096466064 0.9498443604 20.8 -33.1)" data-xfl-instance="var_152">
+      <g data-xfl-symbol="Parts/Feet/footMC">
+        <g data-xfl-symbol="Graphics/Symbol 229" />
+        <g data-xfl-symbol="Graphics/Symbol 265" />
+      </g>
+    </g>
+    <g transform="matrix(0.9990997314 -0.0398101807 0.0398101807 0.9990997314 27.5 -159.85)" data-xfl-instance="egg">
+      <g data-xfl-symbol="MovieClips/Symbol 316">
+        <g transform="matrix(1 0 0 1 -74 -18.75)" data-xfl-instance="dots">
+          <g data-xfl-symbol="MovieClips/Symbol 314">
+            <g data-svg-leaf="movieclips_symbol_314_63d9f8bb58/t00_l000_f0000_r00.svg">
+              <defs>
+                <g id="xfl22_Layer0_0_FILL">
+                  <path fill="#00FF99" stroke="none" d=" M 47.65 117.3 Q 47.65 109.8 42.35 104.55 37.05 99.25 29.55 99.25 22.05 99.25 16.75 104.55 11.45 109.8 11.45 117.3 11.45 124.8 16.75 130.1 22.05 135.35 29.55 135.35 37.05 135.35 42.35 130.1 47.65 124.8 47.65 117.3 M 75.05 76.05 Q 79 71.35 79 64.7 79 58.05 75.05 53.4 71.1 48.7 65.5 48.7 59.9 48.7 55.95 53.4 52 58.05 52 64.7 52 71.35 55.95 76.05 59.9 80.7 65.5 80.7 71.1 80.7 75.05 76.05 M 19.75 35 Q 16.35 30.75 11.55 30.75 6.75 30.75 3.4 35 0 39.25 0 45.25 0 51.25 3.4 55.5 6.75 59.75 11.55 59.75 16.35 59.75 19.75 55.5 23.1 51.25 23.1 45.25 23.1 39.25 19.75 35 M 63.35 2.45 Q 61.35 0 58.55 0 55.75 0 53.8 2.45 51.8 4.85 51.8 8.3 51.8 11.75 53.8 14.2 55.75 16.6 58.55 16.6 61.35 16.6 63.35 14.2 65.3 11.75 65.3 8.3 65.3 4.85 63.35 2.45 M 114.55 -77.9 Q 116.8 -79.65 116.8 -82 116.8 -84.4 114.55 -86.05 112.25 -87.75 109 -87.75 105.75 -87.75 103.55 -86.05 101.25 -84.4 101.25 -82 101.25 -79.65 103.55 -77.9 105.75 -76.25 109 -76.25 112.25 -76.25 114.55 -77.9 M 160.75 -52.05 Q 160.75 -54.7 158.75 -56.5 156.75 -58.35 153.9 -58.35 151.05 -58.35 149 -56.5 147 -54.7 147 -52.05 147 -49.45 149 -47.6 151.05 -45.8 153.9 -45.8 156.75 -45.8 158.75 -47.6 160.75 -49.45 160.75 -52.05 Z" />
+                </g>
+              </defs>
+              <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+                <use xlink:href="#xfl22_Layer0_0_FILL" />
+              </g>
+            </g>
+          </g>
+        </g>
+        <g data-xfl-symbol="Graphics/Symbol 315" />
+      </g>
+    </g>
+    <g transform="matrix(1 0 0 1 -42.1 -35.7)" data-xfl-instance="var_165">
+      <g data-xfl-symbol="Parts/Feet/footMC">
+        <g data-xfl-symbol="Graphics/Symbol 229" />
+        <g data-xfl-symbol="Graphics/Symbol 265" />
+      </g>
+    </g>
+  </g>
+</svg>

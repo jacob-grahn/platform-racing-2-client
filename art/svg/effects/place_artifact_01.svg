@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="550px" height="400px" viewBox="0 0 550 400" preserveAspectRatio="none" data-xfl-root="UI/Pages/Levels/In-Game/PlaceArtifact">
+  <g data-xfl-symbol="UI/Pages/Levels/In-Game/PlaceArtifact">
+    <g transform="matrix(0.9190979004 0 0 1.193572998 -125 -114)">
+      <g data-xfl-symbol="UI/ShadowBG">
+        <g transform="matrix(1 0 0 1 -3 -1)">
+          <g data-xfl-symbol="MovieClips/Symbol 179">
+            <g data-svg-leaf="movieclips_symbol_179_8814694710/t00_l000_f0000_r00.svg">
+              <defs>
+                <g id="xfl1_Layer0_0_FILL">
+                  <path fill="#FFFFFF" stroke="none" d=" M 275 5 Q 275 3.3 273.85 2.15 272.65 1 271 1 L 7 1 Q 5.3 1 4.15 2.15 3 3.3 3 5 L 3 192 275 192 275 5 Z" />
+                </g>
+              </defs>
+              <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+                <use xlink:href="#xfl1_Layer0_0_FILL" />
+              </g>
+            </g>
+          </g>
+        </g>
+        <g data-svg-leaf="ui_shadowbg_95643069a8/t00_l000_f0000_r00.svg">
+          <defs>
+            <g id="xfl2_Layer0_0_FILL">
+              <path fill="#FFFFFF" fill-opacity="0.9019607843137255" stroke="none" d=" M 272 4 Q 272 2.3 270.85 1.15 269.65 0 268 0 L 4 0 Q 2.3 0 1.15 1.15 0 2.3 0 4 L 0 191 272 191 272 4 Z" />
+            </g>
+          </defs>
+          <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+            <use xlink:href="#xfl2_Layer0_0_FILL" />
+          </g>
+        </g>
+      </g>
+    </g>
+    <g transform="matrix(1 0 0 1 -66.4 3.4)">
+      <text x="-41.6" y="11.931" fill="#333333" font-family="Verdana" font-size="11.931" letter-spacing="0">The next artifact will be placed in the location you chose. Choose a time for it to take effect. This level will become the Level of the Week.</text>
+    </g>
+    <g transform="matrix(1 0 0 1 -74.15 -105.25)">
+      <text x="11.15" y="11.931" fill="#333333" font-family="Verdana-Bold" font-size="11.931" letter-spacing="0">-- Place Artifact --</text>
+    </g>
+    <g transform="matrix(1 0 0 1 -98.35 -46.25)">
+      <text x="68.9" y="11.931" fill="#333333" font-family="Verdana" font-size="11.931" letter-spacing="0">:</text>
+    </g>
+    <g transform="matrix(1 0 0 1 -113.35 -19.25)">
+      <text x="60.35" y="11.931" fill="#333333" font-family="Verdana" font-size="11.931" letter-spacing="0">OR:</text>
+    </g>
+    <g transform="matrix(1 0 0 1 -114.9 -76.3)">
+      <text x="68.9" y="11.931" fill="#333333" font-family="Verdana" font-size="11.931" letter-spacing="0">/</text>
+    </g>
+    <g transform="matrix(1 0 0 1 -33.05 -76.3)">
+      <text x="68.9" y="11.931" fill="#333333" font-family="Verdana" font-size="11.931" letter-spacing="0">/</text>
+    </g>
+  </g>
+</svg>

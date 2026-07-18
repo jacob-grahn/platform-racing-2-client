@@ -14,12 +14,10 @@ class SvgAssetTest {
 		assertFalse(prepared.indexOf("<use") >= 0, "SVG use references are expanded");
 		var shape = SvgAsset.createFromText(source);
 		assertTrue(shape.graphics != null, "expanded SVG renders into OpenFL graphics");
-		@:privateAccess assertEquals("graphics", SvgAsset.timelinePackGroup("assets/svg/timeline/graphics_symbol_1/t00.svg"),
-			"graphics timeline assets select the graphics pack");
-		@:privateAccess assertEquals("movieclips", SvgAsset.timelinePackGroup("assets/svg/timeline/movieclips_symbol_1/t00.svg"),
-			"movie clip timeline assets select the movieclips pack");
-		@:privateAccess assertEquals("misc", SvgAsset.timelinePackGroup("assets/svg/timeline/trophyicon_1/t00.svg"),
-			"root symbols select the miscellaneous pack");
+		var timelinePath = "assets/svg/timeline/ui_shadowbg_95643069a8/t00_l000_f0000_r00.svg";
+		var timelineShape = SvgAsset.create(timelinePath);
+		assertTrue(timelineShape.graphics != null, "declared timeline SVG loads as an individual asset");
+		@:privateAccess assertTrue(SvgAsset.parsed.exists(timelinePath), "parsed timeline SVG is cached by asset path");
 		#if sys
 		var muteBase = File.getContent("art/svg/login/mute_button_base.svg");
 		var muteWaves = File.getContent("art/svg/login/mute_button_waves.svg");

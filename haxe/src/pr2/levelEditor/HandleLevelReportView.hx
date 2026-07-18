@@ -1,79 +1,105 @@
 package pr2.levelEditor;
 
-import openfl.display.Sprite;
 import openfl.text.TextField;
-import openfl.text.TextFieldType;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
 import pr2.assets.NativeAssetIds.FontAsset;
 import pr2.assets.NativeAssets;
+import pr2.runtime.SvgAsset;
 import pr2.ui.controls.GameButton;
 import pr2.ui.controls.GameSelect;
+import pr2.ui.controls.GameTextInput;
 import pr2.ui.view.NativeView;
 
-/** Native reported-level moderation form. */
+/** Exact native composition of XFL `HandleLevelReportPopupGraphic`. */
 class HandleLevelReportView extends NativeView {
 	public function new() {
 		super();
-		graphics.beginFill(0xF4F4F4, 0.98);
-		graphics.lineStyle(2, 0x666666);
-		graphics.drawRoundRect(-205, -140, 410, 280, 14, 14);
-		graphics.endFill();
-		field("titleBox", -175, -125, 350, 42, 12, true, TextFormatAlign.CENTER);
-		field(null, -165, -70, 74, 18, 10, true, TextFormatAlign.RIGHT).text = "Ban length";
-		var duration = ownControl(new GameSelect<String>());
-		duration.name = "duration";
-		duration.x = -82;
-		duration.y = -74;
-		duration.setSize(145, 23);
-		duration.addOption("Choose...", "0");
-		duration.addOption("1 hour", "3600");
-		duration.addOption("1 day", "86400");
-		duration.addOption("1 week", "604800");
-		addChild(duration);
-		field(null, -165, -35, 74, 18, 10, true, TextFormatAlign.RIGHT).text = "Reason";
+		var background = SvgAsset.createNormalized("assets/svg/ui/shadow_bg.svg");
+		background.name = "background";
+		background.x = -150;
+		background.y = -135;
+		background.scaleX = 1.10301208496094;
+		background.scaleY = 1.41368103027344;
+		addChild(background);
+
+		field("heading", -68.35, -118, 216, 17.05, 14, true, TextFormatAlign.CENTER).text = "-- Handle Report --";
+		var title = field("titleBox", -153.05, -88, 286, 12.15, 10, false, TextFormatAlign.CENTER);
+		title.multiline = true;
+		title.text = "Newbieland 2 by Jiggmin";
+		field("detailsLabel", -92.05, -76.15, 146, 12.15, 10, false, TextFormatAlign.CENTER, true).text = "Report details:";
+		var info = new EditorNativeGraphic("ReportInfoButton");
+		info.name = "info_bt";
+		info.x = 32.95;
+		info.y = -75.3;
+		info.scaleX = info.scaleY = 0.999984741210938;
+		addChild(info);
+
+		field("banLabel", -136.85, -54, 176, 12.15, 10, true, TextFormatAlign.CENTER).text = "Unpublish Level and Ban User";
+		field("reasonHelp", -44.5, -33.85, 276, 12.15, 10, false, TextFormatAlign.CENTER, true).text =
+			"All reasons start with \"Inappropriate Level -- \"";
 		var reason = ownControl(new GameSelect<String>());
 		reason.name = "reason";
-		reason.x = -82;
-		reason.y = -39;
-		reason.setSize(230, 23);
-		reason.addOption("Choose...", "");
-		reason.addOption("Vulgar Language", "Vulgar Language");
-		reason.addOption("Inappropriate Content", "Inappropriate Content");
-		reason.addOption("Other...", "");
+		reason.x = -87.5;
+		reason.y = -20;
+		reason.setSize(175, 22);
+		reason.rowCount = 5;
+		for (option in ["Reason...", "Vulgar Language", "Harassment", "Sensitive Imagery", "Scamming", "Copying (w/o attrib)",
+			"Republished Removed Level", "Other..."]) reason.addOption(option, option == "Reason..." || option == "Other..." ? "" : option);
 		addChild(reason);
-		var other = field("otherReasonBox", -82, -39, 230, 25, 10, false, TextFormatAlign.LEFT);
-		other.type = TextFieldType.INPUT;
-		other.selectable = true;
-		other.background = true;
-		other.backgroundColor = 0xFFFFFF;
-		other.border = true;
-		button("other_cancel_bt", "Back", 153, -39, 43);
-		button("info_bt", "Info", -175, 13, 58);
-		button("ban_bt", "Ban + Unpublish", -106, 75, 112);
-		button("archive_bt", "Archive", 13, 75, 78);
-		button("cancel_bt", "Cancel", 98, 75, 78);
+		var other = ownControl(new GameTextInput());
+		other.name = "otherReasonBox";
+		other.x = -94;
+		other.y = -20;
+		other.setSize(145, 22);
+		addChild(other);
+		var otherCancel = new EditorNativeGraphic("CancelTextButton");
+		otherCancel.name = "other_cancel_bt";
+		otherCancel.x = 58.5;
+		otherCancel.y = -16.5;
+		addChild(otherCancel);
+
+		var duration = ownControl(new GameSelect<String>());
+		duration.name = "duration";
+		duration.x = -102.5;
+		duration.y = 13.8;
+		duration.setSize(90, 22);
+		duration.rowCount = 5;
+		var durationOptions = [
+			["Duration...", "0"], ["One Hour", "3600"], ["One Day", "86400"], ["Three Days", "259200"], ["One Week", "604800"],
+			["Two Weeks", "1209600"], ["One Month", "2592000"], ["Six Months", "15768000"], ["One Year", "31536000"]
+		];
+		for (option in durationOptions) duration.addOption(option[0], option[1]);
+		addChild(duration);
+		button("ban_bt", "Ban", 10, 13.8, 90, 23);
+
+		graphics.lineStyle(1, 0x999999);
+		graphics.moveTo(-125, 55);
+		graphics.lineTo(125, 55);
+		field("orLabel", -75.05, 67.5, 21, 12.15, 10, true, TextFormatAlign.CENTER).text = "OR";
+		button("archive_bt", "Archive", -100, 90, 90, 23);
+		button("cancel_bt", "Cancel", 10, 90, 90, 23);
 	}
 
-	private function button(name:String, label:String, x:Float, y:Float, width:Float):Void {
+	private function button(name:String, label:String, x:Float, y:Float, width:Float, height:Float):Void {
 		var control = ownControl(new GameButton(label));
 		control.name = name;
 		control.x = x;
 		control.y = y;
-		control.setSize(width, 24);
+		control.setSize(width, height);
 		addChild(control);
 	}
 
-	private function field(name:Null<String>, x:Float, y:Float, width:Float, height:Float, size:Int, bold:Bool,
-		align:TextFormatAlign):TextField {
+	private function field(name:String, x:Float, y:Float, width:Float, height:Float, size:Int, bold:Bool, align:TextFormatAlign,
+		italic:Bool = false):TextField {
 		var text = new TextField();
-		if (name != null) text.name = name;
+		text.name = name;
 		text.x = x;
 		text.y = y;
 		text.width = width;
 		text.height = height;
 		text.selectable = false;
-		text.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), size, 0x222222, bold, null, null, null, null, align);
+		text.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), size, 0x222222, bold, italic, null, null, null, align);
 		addChild(text);
 		return text;
 	}

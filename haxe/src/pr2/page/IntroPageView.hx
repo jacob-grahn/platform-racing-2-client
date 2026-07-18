@@ -19,13 +19,14 @@ class IntroPageView extends NativeView {
 		addChild(introHolder);
 		var skip = new TextField();
 		skip.name = "skipPrompt";
-		skip.x = 365;
-		skip.y = 366;
-		skip.width = 170;
-		skip.height = 20;
+		skip.x = 5;
+		skip.y = 381.15;
+		skip.width = 138.3;
+		skip.height = 18.55;
 		skip.selectable = false;
-		skip.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 10, 0xB8B8B8, false, null, null, null, null,
-			TextFormatAlign.RIGHT);
+		var format = new TextFormat(NativeAssets.font(FontAsset.Interface), 12, 0x999999, false, null, null, null, null, TextFormatAlign.LEFT);
+		format.letterSpacing = -0.05;
+		skip.defaultTextFormat = format;
 		skip.text = "Click anywhere to skip";
 		addChild(skip);
 	}

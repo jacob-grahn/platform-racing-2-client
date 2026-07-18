@@ -1,9 +1,7 @@
 package pr2.lobby.dialogs;
 
-import openfl.events.KeyboardEvent;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
-import openfl.ui.Keyboard;
 import pr2.assets.NativeAssetIds.FontAsset;
 import pr2.assets.NativeAssetIds.StaticSvg;
 import pr2.assets.NativeAssets;
@@ -44,7 +42,6 @@ class ConfirmDialogView extends NativeView {
 		confirmButton.name = "ok_bt";
 		confirmButton.x = -124;
 		confirmButton.y = 43;
-		confirmButton.tabIndex = 1;
 		confirmButton.onPress = function():Void if (onConfirm != null) onConfirm();
 		addChild(confirmButton);
 
@@ -52,20 +49,13 @@ class ConfirmDialogView extends NativeView {
 		cancelButton.name = "cancel_bt";
 		cancelButton.x = 22;
 		cancelButton.y = 43;
-		cancelButton.tabIndex = 2;
 		cancelButton.onPress = function():Void if (onCancel != null) onCancel();
 		addChild(cancelButton);
-		listen(this, KeyboardEvent.KEY_DOWN, onKeyDown);
 	}
 
 	override public function dispose():Void {
 		onConfirm = null;
 		onCancel = null;
 		super.dispose();
-	}
-
-	private function onKeyDown(event:KeyboardEvent):Void {
-		if (event.keyCode == Keyboard.ESCAPE && onCancel != null) onCancel();
-		if ((event.keyCode == Keyboard.ENTER || event.keyCode == Keyboard.SPACE) && onConfirm != null) onConfirm();
 	}
 }

@@ -19,7 +19,9 @@ import pr2.lobby.LobbyLeft;
 import pr2.lobby.LobbyRight;
 import pr2.lobby.players.Guilds;
 import pr2.lobby.players.PlayerListSort;
+import pr2.lobby.players.PlayerListItemView;
 import pr2.lobby.players.PlayersTabList;
+import pr2.lobby.players.PlayersTabListView;
 import pr2.lobby.players.PlayersUserListLoader;
 import pr2.lobby.players.SocialAction;
 import pr2.lobby.players.SocialAction.SocialActionPlan;
@@ -74,9 +76,8 @@ import pr2.page.Page;
 import pr2.page.PageHolder;
 import pr2.lobby.account.Settings;
 import pr2.lobby.account.StatSlider;
-import pr2.runtime.FlCheckBox;
 import pr2.ui.controls.GameCheckBox;
-import pr2.runtime.FlComboBox;
+import pr2.ui.controls.GameSelect;
 import pr2.ui.controls.GameButton;
 import pr2.ui.controls.GameSelect;
 import pr2.ui.CustomScrollBar;
@@ -84,7 +85,7 @@ import pr2.ui.PageNavigation;
 import pr2.ui.StageFocus;
 import pr2.ui.TabLayout;
 import pr2.ui.TabsHolder;
-import pr2.util.DisplayUtil;
+import pr2.util.TestDisplayUtil as DisplayUtil;
 
 /**
 	Deterministic coverage for the shared lobby services and tab logic that don't
@@ -105,6 +106,7 @@ class LobbyServicesTest {
 		testPageNavigationPositions();
 		testPlayerSortStateMachine();
 		testPlayerSortOrdering();
+		testPlayerListSourceComposition();
 		testPlayersTabListSortsOnInterval();
 		testPlayerAndGuildListsIgnoreLateLoadsAfterRemove();
 		testPaneTabLabels();
@@ -543,7 +545,7 @@ class LobbyServicesTest {
 		var sizeMenu = editor.activeBrushSizeMenu;
 		var sizeSlider = @:privateAccess sizeMenu.slider;
 		var sliderBounds = sizeSlider.getBounds(sizeMenu);
-		assertNear(0, Std.int(sliderBounds.x + sliderBounds.width / 2), 4, "brush size slider stays centered in its popup");
+		assertNear(19, Std.int(sliderBounds.x + sliderBounds.width / 2), 4, "brush size slider follows the authored XFL placement");
 		var popupBounds = sizeMenu.getBounds(editor);
 		var popupX = popupBounds.x + popupBounds.width / 2;
 		var popupY = popupBounds.y + popupBounds.height / 2;
@@ -552,7 +554,7 @@ class LobbyServicesTest {
 		var sizeEntry = Std.downcast(editor.menu.sideBar.getChildByName("sizeEntry"), EditorBrushSizePickerButton);
 		editor.setBrushSize(255);
 		sizeEntry.updateCircle();
-		assertEquals(true, sizeEntry.previewSizeForTests() < 29, "maximum Flash brush size stays inside its button preview");
+		assertNear(48, Std.int(sizeEntry.previewSizeForTests()), 1, "maximum brush preview preserves Flash's unclamped sqrt(size) scaling");
 		editor.setBrushSize(12);
 		sizeEntry.updateCircle();
 		@:privateAccess sizeMenu.autoDismiss.armForTests();
@@ -893,6 +895,9 @@ class LobbyServicesTest {
 		assertEquals(true, connectingPopup != null,
 			"confirmed exit opens the connecting popup");
 		assertEquals(true, connectingPopup.connectionAttempted, "editor exit starts the Flash lobby reconnection handshake");
+		assertEquals(1.0, connectingPopup.art.alpha, "embedded connecting art does not apply a second popup fade");
+		assertEquals("Close", connectingPopup.art.closeButton.label, "editor reconnect uses the authored Connecting Close button");
+		assertEquals(-48.0, connectingPopup.art.closeButton.x, "editor reconnect Close button keeps its XFL X");
 		editor.remove();
 		LobbySession.clear();
 		closeAllPopups();
@@ -1225,9 +1230,31 @@ class LobbyServicesTest {
 		DisplayUtil.findByName(reports.art, "delete_bt").dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 		handle = Std.downcast(Popup.getOpen()[Popup.getOpen().length - 1], HandleLevelReportPopup);
 		var duration = Std.downcast(DisplayUtil.findByName(handle.art, "duration"), GameSelect);
-		duration.selectedIndex = 2;
 		var reason = Std.downcast(DisplayUtil.findByName(handle.art, "reason"), GameSelect);
+		var otherReason = DisplayUtil.findByName(handle.art, "otherReasonBox");
+		var otherCancel = DisplayUtil.findByName(handle.art, "other_cancel_bt");
+		reason.selectedIndex = reason.length - 1;
+		reason.dispatchEvent(new Event(Event.CHANGE));
+		assertEquals(false, reason.visible, "Other reason swaps the authored combo for text input");
+		assertEquals(true, otherReason.visible, "Other reason text input becomes visible");
+		assertEquals(true, otherCancel.visible, "Other reason cancel control becomes visible");
+		otherCancel.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		assertEquals(true, reason.visible, "Other reason cancel restores the combo");
+		assertEquals(false, otherReason.visible, "Other reason cancel hides the text input");
+		DisplayUtil.findByName(handle.art, "ban_bt").dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		var validation = Std.downcast(Popup.getOpen()[Popup.getOpen().length - 1], pr2.lobby.dialogs.MessagePopup);
+		assertNotNull(validation, "blank report reason opens validation message");
+		assertEquals(true, LobbyArt.text(validation, "textBox").text.indexOf("enter a reason") >= 0,
+			"blank report reason uses Flash validation copy");
+		validation.remove();
 		reason.selectedIndex = 1;
+		DisplayUtil.findByName(handle.art, "ban_bt").dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		validation = Std.downcast(Popup.getOpen()[Popup.getOpen().length - 1], pr2.lobby.dialogs.MessagePopup);
+		assertNotNull(validation, "missing report ban duration opens validation message");
+		assertEquals(true, LobbyArt.text(validation, "textBox").text.indexOf("ban length") >= 0,
+			"missing report duration uses Flash validation copy");
+		validation.remove();
+		duration.selectedIndex = 2;
 		DisplayUtil.findByName(handle.art, "ban_bt").dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 		confirm = lastConfirmPopup();
 		assertNotNull(confirm, "ban opens confirmation");
@@ -1995,6 +2022,32 @@ class LobbyServicesTest {
 		list.remove();
 	}
 
+	private static function testPlayerListSourceComposition():Void {
+		var row = new PlayerListItemView();
+		assertEquals("nameBox", row.nameBox.name, "player row preserves the authored name field");
+		assertEquals(2, row.nameBox.x, "player row name x");
+		assertEquals(106, row.rankBox.x, "player row rank x");
+		assertEquals(146, row.hatBox.x, "player row hat x");
+		assertEquals(0, row.graphics.readGraphicsData().length, "player row has no invented background artwork");
+
+		var players = new PlayersTabListView(false);
+		assertEquals(174, players.width, "players list authored width");
+		assertEquals(350, players.height, "players list authored height");
+		assertEquals(17, players.listHolder.y, "players list holder registration");
+		assertEquals(333, Std.int(players.listHolder.scrollRect.height), "players list authored mask height");
+		assertNotNull(players.getChildByName("name_bt"), "players list has Name header");
+		assertNotNull(players.getChildByName("rank_bt"), "players list has Rank header");
+		assertNotNull(players.getChildByName("hats_bt"), "players list has Hats header");
+		players.dispose();
+
+		var guilds = new PlayersTabListView(true);
+		assertNotNull(guilds.getChildByName("gp_bt"), "guild list has GP header");
+		assertNotNull(guilds.getChildByName("active_bt"), "guild list has Active header");
+		assertEquals(null, guilds.getChildByName("rank_bt"), "guild frame omits player Rank header");
+		guilds.dispose();
+		row.dispose();
+	}
+
 	private static function testPlayerAndGuildListsIgnoreLateLoadsAfterRemove():Void {
 		var previousUserFetch = PlayersUserListLoader.fetchFactory;
 		var previousGuildFetch = Guilds.fetchFactory;
@@ -2721,7 +2774,7 @@ class LobbyServicesTest {
 		page.initialize();
 		Reflect.callMethod(page, Reflect.field(page, "openCredentialDialog"), []);
 		var popup:Dynamic = Reflect.field(page, "activePopup");
-		var combo = Std.downcast(DisplayUtil.findByName(popup, "dropdown"), FlComboBox);
+		var combo = Std.downcast(DisplayUtil.findByName(popup, "dropdown"), GameSelect);
 		assertNotNull(combo, "login credential popup has server dropdown");
 		Reflect.callMethod(page, Reflect.field(page, "loadServers"), []);
 		assertEquals("Loading...", combo.prompt, "server dropdown shows loading prompt during reload");
@@ -2750,9 +2803,9 @@ class LobbyServicesTest {
 			server(6, 9006, 42, 10, "open", "Own Guild")
 		]));
 		var popup:Dynamic = Reflect.field(page, "activePopup");
-		var combo = Std.downcast(DisplayUtil.findByName(popup, "dropdown"), FlComboBox);
+		var combo = Std.downcast(DisplayUtil.findByName(popup, "dropdown"), GameSelect);
 		assertEquals(3, combo.length, "guild selection keeps public and private servers");
-		var first:Dynamic = combo.dataProvider.getItemAt(0);
+		var first:Dynamic = combo.itemAt(0);
 		assertEquals("* Own Guild (10 online)", Reflect.field(first, "label"), "own guild server is sorted first");
 		var selected:ServerInfo = Reflect.field(combo.selectedItem, "server");
 		assertEquals(6, selected.serverId, "own open guild server is selected by default");

@@ -25,7 +25,7 @@ import pr2.net.FormPostClient;
 import pr2.net.SavedAccounts;
 import pr2.net.ServerInfo;
 import pr2.net.ServerStatusClient;
-import pr2.runtime.FlComboBox;
+import pr2.ui.controls.GameSelect;
 import pr2.audio.AudioManager;
 import pr2.lobby.LobbySession;
 import pr2.lobby.dialogs.ConfirmDialogView;
@@ -122,7 +122,7 @@ class LoginPage extends Page {
 
 	override public function remove():Void {
 		accountGeneration.cancel();
-		closePopup();
+		closePopup(true);
 		closeSocketProbe();
 		stopServerTimers();
 
@@ -156,6 +156,14 @@ class LoginPage extends Page {
 
 	private function addMenuButton(label:String, clickHandler:Void->Void):Void {
 		var button = new LoginPageMenuButton(label, clickHandler);
+		button.name = switch label {
+			case "Log In": "loginButton";
+			case "Play as Guest": "guestButton";
+			case "Create Account": "createAccountButton";
+			case "Instructions": "instructionsButton";
+			case "Credits": "creditsButton";
+			default: "loginMenuButton";
+		};
 		button.x = MENU_X;
 		button.y = MENU_Y + buttons.length * MENU_SPACING;
 		buttons.push(button);
@@ -183,7 +191,7 @@ class LoginPage extends Page {
 		var passInput = popup.input("passBox");
 		var rememberCheck = popup.checkBox("rememberMe_chk");
 		populateServerCombo(popup.comboBox("dropdown"));
-		popup.bindComboBox("dropdown", function(combo:FlComboBox):Void {
+		popup.bindComboBox("dropdown", function(combo:GameSelect<Dynamic>):Void {
 			selectServerFromCombo(combo);
 		});
 		popup.bindButton("reload_bt", function():Void {
@@ -192,12 +200,12 @@ class LoginPage extends Page {
 		popup.bindButton("forgotPass", function():Void {
 			openForgotPasswordDialog(nameInput.text);
 		});
-		popup.bindButton("cancel_bt", returnToAccounts ? function():Void openServerSelectPopup(false, false) : closePopup);
+		popup.bindButton("cancel_bt", returnToAccounts ? function():Void openServerSelectPopup(false, false) : function():Void closePopup());
 		var submit = function():Void {
 			if (selectedServer() == null) {
 				return;
 			}
-			var userName = StringTools.trim(nameInput.text);
+			var userName = nameInput.text;
 			var userPass = passInput.text;
 			closePopup();
 			openConnectingPopup(userName, userPass, rememberCheck != null && rememberCheck.selected);
@@ -232,7 +240,7 @@ class LoginPage extends Page {
 		};
 
 		popup.onSubmit = submit;
-		popup.onCancel = closePopup;
+		popup.onCancel = function():Void closePopup();
 	}
 
 	private function openLoginMessage(message:String, ?afterClose:Void->Void):Void {
@@ -316,7 +324,7 @@ class LoginPage extends Page {
 			accountCombo.enabled = true;
 			selectedName = Reflect.field(accountCombo.selectedItem, "label");
 			selectedToken = Reflect.field(accountCombo.selectedItem, "token");
-			popup.bindComboBox("userSelect", function(combo:FlComboBox):Void {
+			popup.bindComboBox("userSelect", function(combo:GameSelect<Dynamic>):Void {
 				selectedName = Reflect.field(combo.selectedItem, "label");
 				selectedToken = Reflect.field(combo.selectedItem, "token");
 				if (selectedToken == "") openCredentialDialog(true);
@@ -330,13 +338,13 @@ class LoginPage extends Page {
 				userDeleteInteractive.mouseEnabled = !(guestLogin || createdAccount);
 			}
 		}
-		popup.bindComboBox("serverSelect", function(combo:FlComboBox):Void {
+			popup.bindComboBox("serverSelect", function(combo:GameSelect<Dynamic>):Void {
 			selectServerFromCombo(combo);
 		});
 		popup.bindButton("reload_bt", function():Void {
 			startServerReload(popup);
 		});
-		popup.bindButton("cancel_bt", closePopup);
+		popup.bindButton("cancel_bt", function():Void closePopup());
 		if (!guestLogin && !createdAccount) popup.bindButton("user_del_bt", function():Void {
 			if (selectedToken == "") return;
 			var name = selectedName;
@@ -445,11 +453,6 @@ class LoginPage extends Page {
 
 	private function openLoggingInView():StatusPopupView {
 		closePopup();
-		loggingOverlay = new Shape();
-		loggingOverlay.graphics.beginFill(0x000000, 0.55);
-		loggingOverlay.graphics.drawRect(0, 0, Constants.STAGE_WIDTH, Constants.STAGE_HEIGHT);
-		loggingOverlay.graphics.endFill();
-		addChild(loggingOverlay);
 		var view = new StatusPopupView("Logging In...");
 		view.x = Constants.STAGE_WIDTH / 2;
 		view.y = Constants.STAGE_HEIGHT / 2;
@@ -495,11 +498,6 @@ class LoginPage extends Page {
 
 	private function mountForgotPasswordView(prefilledName:String):ForgotPasswordView {
 		closePopup();
-		forgotOverlay = new Shape();
-		forgotOverlay.graphics.beginFill(0x000000, 0.55);
-		forgotOverlay.graphics.drawRect(0, 0, Constants.STAGE_WIDTH, Constants.STAGE_HEIGHT);
-		forgotOverlay.graphics.endFill();
-		addChild(forgotOverlay);
 		var view = new ForgotPasswordView(prefilledName);
 		view.x = Constants.STAGE_WIDTH / 2;
 		view.y = Constants.STAGE_HEIGHT / 2;
@@ -510,11 +508,6 @@ class LoginPage extends Page {
 
 	private function mountCreateAccountView(name:String, password:String, confirmation:String, email:String):CreateAccountView {
 		closePopup();
-		createAccountOverlay = new Shape();
-		createAccountOverlay.graphics.beginFill(0x000000, 0.55);
-		createAccountOverlay.graphics.drawRect(0, 0, Constants.STAGE_WIDTH, Constants.STAGE_HEIGHT);
-		createAccountOverlay.graphics.endFill();
-		addChild(createAccountOverlay);
 		var view = new CreateAccountView(name, password, confirmation, email);
 		view.x = Constants.STAGE_WIDTH / 2;
 		view.y = Constants.STAGE_HEIGHT / 2;
@@ -523,13 +516,11 @@ class LoginPage extends Page {
 		return view;
 	}
 
-	private function closePopup():Void {
+	private function closePopup(immediate:Bool = false):Void {
 		if (activePopup != null) {
-			activePopup.remove();
-			if (activePopup.parent != null) {
-				activePopup.parent.removeChild(activePopup);
-			}
+			var popup = activePopup;
 			activePopup = null;
+			if (immediate) popup.remove(); else popup.startFadeOut();
 		}
 		if (activeConfirm != null) {
 			activeConfirm.dispose();
@@ -540,8 +531,9 @@ class LoginPage extends Page {
 			confirmOverlay = null;
 		}
 		if (activeLogging != null) {
-			activeLogging.dispose();
+			var logging = activeLogging;
 			activeLogging = null;
+			if (immediate) logging.dispose(); else logging.startFadeOut();
 		}
 		if (loggingOverlay != null) {
 			if (loggingOverlay.parent != null) loggingOverlay.parent.removeChild(loggingOverlay);
@@ -564,16 +556,18 @@ class LoginPage extends Page {
 			messageOverlay = null;
 		}
 		if (activeForgot != null) {
-			activeForgot.dispose();
+			var forgot = activeForgot;
 			activeForgot = null;
+			if (immediate) forgot.dispose(); else forgot.startFadeOut();
 		}
 		if (forgotOverlay != null) {
 			if (forgotOverlay.parent != null) forgotOverlay.parent.removeChild(forgotOverlay);
 			forgotOverlay = null;
 		}
 		if (activeCreateAccount != null) {
-			activeCreateAccount.dispose();
+			var create = activeCreateAccount;
 			activeCreateAccount = null;
+			if (immediate) create.dispose(); else create.startFadeOut();
 		}
 		if (createAccountOverlay != null) {
 			if (createAccountOverlay.parent != null) createAccountOverlay.parent.removeChild(createAccountOverlay);
@@ -656,7 +650,7 @@ class LoginPage extends Page {
 		return ServerStatusClient.preferredIndex(servers, LobbySession.guildId);
 	}
 
-	private function selectServerFromCombo(combo:FlComboBox):Void {
+	private function selectServerFromCombo(combo:GameSelect<Dynamic>):Void {
 		if (combo.selectedIndex < 0 || combo.selectedIndex >= servers.length) {
 			return;
 		}
@@ -664,7 +658,7 @@ class LoginPage extends Page {
 		updateActiveServerCombos();
 	}
 
-	private function populateServerCombo(combo:Null<FlComboBox>):Void {
+	private function populateServerCombo(combo:Null<GameSelect<Dynamic>>):Void {
 		if (combo == null) {
 			return;
 		}

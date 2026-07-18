@@ -2,7 +2,7 @@ package pr2.ui;
 
 import openfl.display.Sprite;
 import openfl.events.MouseEvent;
-import pr2.runtime.PR2MovieClip;
+import pr2.levelEditor.LevelListItemView;
 
 class SelectableButtonTest {
 	private static var assertions:Int = 0;
@@ -15,7 +15,7 @@ class SelectableButtonTest {
 
 	private static function testHoverAndSelectedFrameState():Void {
 		var holder = new Sprite();
-		var art = PR2MovieClip.fromLinkage("GetLevelsPopupItemGraphic", {maxNestedDepth: 4});
+		var art = new LevelListItemView();
 		var button = new SelectableButton(art);
 		holder.addChild(button);
 		button.addChild(art);

@@ -6,31 +6,37 @@ import openfl.text.TextFormatAlign;
 import pr2.assets.NativeAssetIds.FontAsset;
 import pr2.assets.NativeAssets;
 import pr2.ui.view.NativeView;
+import pr2.ui.SelectableButton.SelectableView;
+import pr2.runtime.SvgAsset;
+import openfl.display.DisplayObject;
 
 /** Native selectable row for personal or reported levels. */
-class LevelListItemView extends NativeView {
+class LevelListItemView extends NativeView implements SelectableView {
 	public var currentFrame(default, null):Int = 1;
 	private final reported:Bool;
+	private var authoredBackground:Null<DisplayObject>;
 
 	public function new(reported:Bool = false) {
 		super();
 		this.reported = reported;
-		field("titleBox", 7, 0, 150, 18, 10, false, TextFormatAlign.LEFT);
-		field(reported ? "timeBox" : "statusBox", 160, 0, 72, 18, 9, false, TextFormatAlign.RIGHT);
-		gotoAndStop("up");
+		field("titleBox", 2, reported ? 2.5 : 2, 158.95, reported ? 14.55 : 14.5, 12, false, TextFormatAlign.LEFT,
+			"Title goes here");
+		field(reported ? "timeBox" : "statusBox", 171, reported ? 2.5 : 2, reported ? 78.05 : 72, reported ? 14.55 : 14.5, 12, false,
+			reported ? TextFormatAlign.RIGHT : TextFormatAlign.LEFT, reported ? "14/Jun/2020" : "Unpublished");
+		setInteractionState("up");
 	}
 
-	public function gotoAndStop(frame:Dynamic):Void {
-		var state = Std.string(frame);
-		currentFrame = state == "over" ? 2 : state == "selected" ? 3 : 1;
-		graphics.clear();
-		graphics.beginFill(state == "selected" ? 0xDCEBFF : state == "over" ? 0xE8F2FF : 0xF7F7F7);
-		graphics.lineStyle(1, state == "selected" ? 0x4B78B5 : 0xAAAAAA);
-		graphics.drawRoundRect(0, 0, 236, 18, 4, 4);
-		graphics.endFill();
+	public function setInteractionState(state:String):Void {
+		currentFrame = state == "over" ? 6 : state == "selected" ? 11 : 1;
+		if (authoredBackground != null && authoredBackground.parent == this) removeChild(authoredBackground);
+		var path = state == "selected" ? "assets/svg/editor/level_list_selected.svg" : state == "over" ? "assets/svg/editor/level_list_over.svg" :
+			"assets/svg/editor/level_list_up.svg";
+		authoredBackground = SvgAsset.create(path);
+		authoredBackground.name = "authoredBackground";
+		addChildAt(authoredBackground, 0);
 	}
 
-	private function field(name:String, x:Float, y:Float, width:Float, height:Float, size:Int, bold:Bool, align:TextFormatAlign):Void {
+	private function field(name:String, x:Float, y:Float, width:Float, height:Float, size:Int, bold:Bool, align:TextFormatAlign, value:String):Void {
 		var text = new TextField();
 		text.name = name;
 		text.x = x;
@@ -38,7 +44,8 @@ class LevelListItemView extends NativeView {
 		text.width = width;
 		text.height = height;
 		text.selectable = false;
-		text.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), size, 0x222222, bold, null, null, null, null, align);
+		text.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), size, 0x333333, bold, null, null, null, null, align);
+		text.text = value;
 		addChild(text);
 	}
 }

@@ -11,6 +11,7 @@ import openfl.text.TextField;
 import openfl.text.TextFieldAutoSize;
 import openfl.text.TextFormat;
 import pr2.assets.NativeAssetIds.FontAsset;
+import pr2.assets.NativeAssetIds.StaticSvg;
 import pr2.assets.NativeAssets;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.account.AccountCharacter;
@@ -30,10 +31,10 @@ class StoreListing extends Sprite {
 	public function new(listing:StoreListingData, ?saleFlash:EpicFlash) {
 		super(); this.listing = listing;
 		art = createArt(); addChild(art);
-		var title = LobbyArt.text(art, "titleBox");
+		var title = LobbyArt.directText(art, "titleBox");
 		if (title != null) title.text = listing.title;
 		layoutPrice();
-		var sale = LobbyArt.text(art, "saleBox");
+		var sale = LobbyArt.directText(art, "saleBox");
 		if (listing.saleMultiplier() < 1 && saleFlash != null && title != null) {
 			saleFlash.addItem(title);
 		}
@@ -42,12 +43,12 @@ class StoreListing extends Sprite {
 			generateRandomCharacter(65);
 			generateRandomCharacter(100);
 		}
-		desc = LobbyArt.text(art, "descBox");
+		desc = LobbyArt.directText(art, "descBox");
 		if (desc != null) {
 			desc.htmlText = listing.description + " " + (listing.available ? link(PURCHASE, listing.price == 0 ? "use" : "buy") + " / " : "") + link(INFO, "more info");
 			desc.addEventListener(TextEvent.LINK, textLink);
 		}
-		cover = Std.downcast(DisplayUtil.findByName(art, "cover"), Sprite);
+		cover = Std.downcast(DisplayUtil.directChildByName(art, "cover"), Sprite);
 		if (cover != null && listing.available) {
 			cover.buttonMode = cover.useHandCursor = true;
 			cover.addEventListener(MouseEvent.CLICK, click);
@@ -56,58 +57,58 @@ class StoreListing extends Sprite {
 		}
 		alpha = listing.available ? 1 : .33;
 		if (listing.imageUrl != "") {
-			var holder = Std.downcast(DisplayUtil.findByName(art, "picHolder"), Sprite);
+			var holder = Std.downcast(DisplayUtil.directChildByName(art, "picHolder"), Sprite);
 			if (holder != null) { loader = new Loader(); holder.addChild(loader); loader.load(new URLRequest(listing.imageUrl)); }
 		}
 	}
 
 	private function createArt():Sprite {
 		var root = new Sprite();
-		var cover = new Sprite();
-		cover.name = "cover";
-		cover.graphics.beginFill(0xFFFFFF, 0.001);
-		cover.graphics.drawRoundRect(0, 0, 220, 118, 8, 8);
-		cover.graphics.endFill();
-		root.addChild(cover);
-		var hover = new Sprite();
-		hover.name = "bg";
-		hover.graphics.beginFill(0xDCEBFF, 0.45);
-		hover.graphics.lineStyle(1, 0x6B91C2);
-		hover.graphics.drawRoundRect(0, 0, 220, 118, 8, 8);
-		hover.graphics.endFill();
-		hover.visible = false;
-		root.addChild(hover);
+		var bg = rectangle("bg", 0, 0, 122 * 1.04917907714844, 140 * 1.1142578125, 0xC3E2E7, 1);
+		bg.visible = false;
+		root.addChild(bg);
+		root.addChild(rectangle("previewGuide", 8, 25, 174 * 0.6436767578125, 350 * 0.17999267578125, 0xFFFFFF, 0.501960784313725));
 		var pic = new Sprite();
 		pic.name = "picHolder";
 		pic.x = 8;
-		pic.y = 8;
+		pic.y = 25;
 		root.addChild(pic);
-		var priceBG = new Sprite();
+		var priceBG = NativeAssets.svg(StaticSvg.StorePriceBackground);
 		priceBG.name = "priceBG";
-		priceBG.x = 112;
-		priceBG.y = 7;
-		priceBG.graphics.beginFill(0xFFF3B0, 0.9);
-		priceBG.graphics.drawRoundRect(0, 0, 96, 20, 6, 6);
-		priceBG.graphics.endFill();
+		priceBG.x = 8;
+		priceBG.y = 70;
+		priceBG.scaleX = 2.88955688476563;
 		root.addChild(priceBG);
-		root.addChild(createField("titleBox", 72, 31, 136, 18, 13, true));
-		root.addChild(createField("descBox", 72, 55, 136, 55, 10, false));
-		root.addChild(createField("priceBox", 117, 9, 35, 16, 11, true));
-		root.addChild(createField("saleBox", 170, 9, 50, 16, 10, false));
-		var coin = new Sprite();
+		root.addChild(createField("titleBox", 10.05, 7, 109, 14.55, 12, false));
+		root.addChild(createField("descBox", 10, 96, 107, 57.95, 10, false));
+		root.addChild(createField("priceBox", 13, 72, 6.55, 12.15, 10, false));
+		root.addChild(createField("saleBox", 52, 72, 55.75, 12.05, 10, false, 0x339900));
+		var coin = NativeAssets.svg(StaticSvg.StoreCoin);
 		coin.name = "coin";
-		coin.x = 154;
-		coin.y = 11;
-		coin.graphics.beginFill(0xF4C542);
-		coin.graphics.lineStyle(1, 0x8A6913);
-		coin.graphics.drawCircle(5, 5, 5);
-		coin.graphics.endFill();
+		coin.x = 30;
+		coin.y = 72;
 		root.addChild(coin);
+		var cover = new Sprite();
+		cover.name = "cover";
+		cover.graphics.beginFill(0, 0);
+		cover.graphics.drawRect(0, 0, 122 * 1.04917907714844, 140 * 0.67132568359375);
+		cover.graphics.endFill();
 		root.addChild(cover);
 		return root;
 	}
 
-	private function createField(name:String, x:Float, y:Float, width:Float, height:Float, size:Int, bold:Bool):TextField {
+	private function rectangle(name:String, x:Float, y:Float, width:Float, height:Float, color:Int, alpha:Float):Sprite {
+		var sprite = new Sprite();
+		sprite.name = name;
+		sprite.x = x;
+		sprite.y = y;
+		sprite.graphics.beginFill(color, alpha);
+		sprite.graphics.drawRect(0, 0, width, height);
+		sprite.graphics.endFill();
+		return sprite;
+	}
+
+	private function createField(name:String, x:Float, y:Float, width:Float, height:Float, size:Int, bold:Bool, color:Int = 0):TextField {
 		var field = new TextField();
 		field.name = name;
 		field.x = x;
@@ -117,22 +118,22 @@ class StoreListing extends Sprite {
 		field.multiline = true;
 		field.wordWrap = true;
 		field.selectable = false;
-		field.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), size, 0, bold);
+		field.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), size, color, bold);
 		return field;
 	}
 
-	private function setText(name:String, value:String):Void { var field = LobbyArt.text(art, name); if (field != null) field.text = value; }
+	private function setText(name:String, value:String):Void { var field = LobbyArt.directText(art, name); if (field != null) field.text = value; }
 	private static function link(event:String, label:String):String return '<u><font color="#4E4EFE"><a href="event:$event">$label</a></font></u>';
 	private function textLink(e:TextEvent):Void dispatchEvent(new Event(e.text));
 	private function click(_:MouseEvent):Void dispatchEvent(new Event(PURCHASE));
-	private function hover(e:MouseEvent):Void { var bg = DisplayUtil.findByName(art, "bg"); if (bg != null) bg.visible = e.type == MouseEvent.MOUSE_OVER; }
+	private function hover(e:MouseEvent):Void { var bg = DisplayUtil.directChildByName(art, "bg"); if (bg != null) bg.visible = e.type == MouseEvent.MOUSE_OVER; }
 
 	public function randomCharactersForTests():Array<AccountCharacter> {
 		return randomCharacters.copy();
 	}
 
 	public function displayChildForTests(name:String):Null<DisplayObject> {
-		return DisplayUtil.findByName(art, name);
+		return DisplayUtil.directChildByName(art, name);
 	}
 
 	public function remove():Void {
@@ -163,10 +164,10 @@ class StoreListing extends Sprite {
 	}
 
 	private function layoutPrice():Void {
-		var priceBox = LobbyArt.text(art, "priceBox");
-		var saleBox = LobbyArt.text(art, "saleBox");
-		var coin = DisplayUtil.findByName(art, "coin");
-		var priceBG = DisplayUtil.findByName(art, "priceBG");
+		var priceBox = LobbyArt.directText(art, "priceBox");
+		var saleBox = LobbyArt.directText(art, "saleBox");
+		var coin = DisplayUtil.directChildByName(art, "coin");
+		var priceBG = DisplayUtil.directChildByName(art, "priceBG");
 		if (priceBox != null) priceBox.autoSize = TextFieldAutoSize.LEFT;
 		if (saleBox != null) saleBox.autoSize = TextFieldAutoSize.LEFT;
 		if (listing.price == 0) {

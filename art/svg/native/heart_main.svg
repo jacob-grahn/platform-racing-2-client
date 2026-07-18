@@ -1,0 +1,42 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="none" x="0px" y="0px" width="550px" height="400px" viewBox="0 0 550 400">
+<defs>
+<radialGradient id="Gradient_1" gradientUnits="userSpaceOnUse" cx="0" cy="0" r="53.25" fx="0" fy="0" gradientTransform="matrix( 1, 0, 0, 1, 50,38) " spreadMethod="pad">
+<stop  offset="0%" stop-color="#F4DFDF" stop-opacity="0.9803921568627451"/>
+
+<stop  offset="100%" stop-color="#782121" stop-opacity="0.3333333333333333"/>
+</radialGradient>
+
+<linearGradient id="Gradient_2" gradientUnits="userSpaceOnUse" x1="50" y1="-1.3500000000000014" x2="50" y2="77.35" spreadMethod="pad">
+<stop  offset="0%" stop-color="#FFFFFF" stop-opacity="0.5019607843137255"/>
+
+<stop  offset="99.2156862745098%" stop-color="#000000"/>
+</linearGradient>
+
+<g id="Layer0_0_FILL">
+<path fill="url(#Gradient_1)" stroke="none" d="
+M 100 25
+Q 100 14.65 92.7 7.3 85.35 0 75 0 64.65 0 57.35 7.3 50.1 14.55 50 24.7
+L 50 25.35 50 24.7
+Q 49.9 14.55 42.7 7.3 35.35 0 25 0 14.65 0 7.35 7.3 0 14.65 0 25
+L 0.05 26.05
+Q 19.8 55.15 50 76 79.15 58.2 100 26.05
+L 100 25 Z"/>
+</g>
+
+<path id="Layer0_0_1_STROKES" stroke="url(#Gradient_2)" stroke-width="1" stroke-linejoin="round" stroke-linecap="round" fill="none" d="
+M 50 24.7
+Q 50.1 14.55 57.35 7.3 64.65 0 75 0 85.35 0 92.7 7.3 100 14.65 100 25
+L 100 26.05
+Q 79.15 58.2 50 76 19.8 55.15 0.05 26.05
+L 0 25
+Q 0 14.65 7.35 7.3 14.65 0 25 0 35.35 0 42.7 7.3 49.9 14.55 50 24.7
+L 50 25.35"/>
+</defs>
+
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<use xlink:href="#Layer0_0_FILL"/>
+
+<use xlink:href="#Layer0_0_1_STROKES"/>
+</g>
+</svg>

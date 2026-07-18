@@ -2,11 +2,10 @@ package pr2.character;
 
 import openfl.display.Sprite;
 import openfl.events.Event;
-import pr2.character.CharacterAppearance.CharacterPartIds;
+import pr2.character.CharacterPartIds;
 import pr2.gameplay.Items;
 import pr2.gameplay.RotationMath;
 import pr2.gameplay.RotationMath.RotatedPoint;
-import pr2.runtime.PR2MovieClip;
 
 /** A `(x, y)` block-touch probe point in stage space (see `blockTouchProbes`). */
 typedef BlockTouchProbe = {
@@ -66,8 +65,8 @@ typedef CharacterSoundRequest = {
 	- The appearance model: head/body/feet ids + per-part primary/epic colours, and
 	  the four-slot hat stack (`hat1`..`hat4`) with the special-hat flag bookkeeping
 	  (`resetHats`/`setHats`/`getHighestHat`). Visible assembly is delegated to the
-	  existing `CharacterDisplay`, which owns the atlas/`CharacterGraphic` rendering.
-	- The animation state machine (`changeState`), driving `CharacterDisplay.setState`
+	  native `CharacterView`, which consumes the neutral generated rig.
+	- The animation state machine (`changeState`), driving `CharacterView.setState`
 	  and the jump-sound hook (the original plays `JumpSound` on entering `jump`).
 	- Position/geometry helpers: `getPos`/`setPos`/`rotate`/`updateSegs`, plus the
 	  block-touch *classification* (`blockTouchProbes`) that B4's `processBlockTouches`
@@ -99,7 +98,7 @@ class Character extends Sprite {
 		return dateString(Date.now());
 	};
 
-	public final display:CharacterDisplay;
+	public final display:CharacterView;
 	public var dateControlsReversed(default, null):Bool = false;
 
 	// ---- appearance: hats ------------------------------------------------
@@ -186,7 +185,7 @@ class Character extends Sprite {
 		dateControlsReversed = dateStringNow() == "Apr 1";
 		reversedControls = dateControlsReversed;
 
-		display = new CharacterDisplay(currentPartIds(), {primary: 0, secondary: -1});
+		display = new CharacterView(0, -1, null, "stand", {head: head, body: body, feet: feet}, hatIds);
 		addChild(display);
 		addEventListener(Event.ADDED, onAdded);
 		addEventListener(Event.REMOVED, onRemoved);
@@ -364,12 +363,13 @@ class Character extends Sprite {
 	}
 
 	private function applyAppearance():Void {
-		display.setAppearance(currentPartIds(), {
-			hats: [for (slot in 0...4) {primary: hatColors[slot], secondary: hatColors2[slot]}],
+		display.setAppearance({head: head, body: body, feet: feet}, {
 			head: {primary: headColor, secondary: headColor2},
 			body: {primary: bodyColor, secondary: bodyColor2},
 			feet: {primary: feetColor, secondary: feetColor2}
 		});
+		display.setHatIds(hatIds);
+		display.setHatSlotColors([for (slot in 0...4) {primary: hatColors[slot], secondary: hatColors2[slot]}]);
 		applyItem();
 		updateDjinnEffects();
 	}
@@ -535,7 +535,7 @@ class Character extends Sprite {
 			onPlayJumpSound(x, y);
 		}
 		state = s;
-		display.setState(s + "Anim");
+		display.setState(s);
 		updateDjinnEffects();
 	}
 
@@ -610,28 +610,12 @@ class Character extends Sprite {
 	public function endJet():Void {
 		removeEventListener(Event.ENTER_FRAME, jetPackTick);
 		stopJetSound();
-		for (stateName in CharacterDisplay.STATE_NAMES) {
-			var jetPack = jetPackForState(stateName);
-			if (jetPack != null) {
-				jetPack.gotoAndStop("off");
-			}
-		}
+		display.setJetActive(false);
 	}
 
 	@:allow(pr2.character.CharacterBaseTest)
 	private function setJetFlameRandomForTest(random:Void->Float):Void {
 		jetFlameRandom = random == null ? Math.random : random;
-	}
-
-	@:allow(pr2.character.CharacterBaseTest)
-	@:allow(pr2.character.RemoteCharacterConsumeTest)
-	private function jetPackForState(stateName:String):Null<PR2MovieClip> {
-		var stateClip = display.getStateClip(stateName);
-		if (stateClip == null) {
-			return null;
-		}
-		var weapon = Std.downcast(stateClip.getChildByTimelineName("weapon"), PR2MovieClip);
-		return weapon == null ? null : Std.downcast(weapon.getChildByTimelineName("jetPack"), PR2MovieClip);
 	}
 
 	// ---- removal lifecycle -----------------------------------------------
@@ -818,30 +802,12 @@ class Character extends Sprite {
 	}
 
 	private function jetPackTick(_:Event):Void {
-		var jetPack = setCurrentJetPackFrame("on");
-		if (jetPack == null) {
-			return;
-		}
-		var anim = Std.downcast(jetPack.getChildByTimelineName("anim"), PR2MovieClip);
-		if (anim == null) {
-			return;
-		}
-		var fire1 = anim.getChildByTimelineName("fire1");
-		var fire2 = anim.getChildByTimelineName("fire2");
-		if (fire1 != null) {
-			fire1.scaleY = jetFlameRandom() * 0.5 + 0.5;
-		}
-		if (fire2 != null) {
-			fire2.alpha = jetFlameRandom() * 0.5 + 0.5;
-		}
+		if (!setCurrentJetPackFrame("on")) return;
+		display.setJetFlame(jetFlameRandom() * 0.5 + 0.5, jetFlameRandom() * 0.5 + 0.5);
 	}
 
-	private function setCurrentJetPackFrame(frame:String):Null<PR2MovieClip> {
-		var jetPack = state == null ? null : jetPackForState(state + "Anim");
-		if (jetPack != null) {
-			jetPack.gotoAndStop(frame);
-		}
-		return jetPack;
+	private function setCurrentJetPackFrame(frame:String):Bool {
+		return state != null && display.setJetActive(frame == "on");
 	}
 
 	// ---- helpers ---------------------------------------------------------

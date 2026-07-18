@@ -2,11 +2,13 @@ package pr2.data;
 
 import com.jiggmin.data.Objects;
 import openfl.display.DisplayObject;
+import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.text.TextField;
 import pr2.level.ObjectCodes;
 import pr2.level.ServerLevel.DecodedArtObject;
 import pr2.level.ServerLevelRenderer;
+import pr2.runtime.FontResolver;
 import pr2.runtime.PR2MovieClip;
 
 class ObjectsCompatTest {
@@ -33,6 +35,20 @@ class ObjectsCompatTest {
 		assertNamedDisplay("Spire", ObjectCodes.STAMP_SPIRE, "spire stamp");
 		assertNamedDisplay("Spire2", ObjectCodes.STAMP_SPIRE2, "spire2 stamp");
 		assertNativeMatchesArchival("Building1", ObjectCodes.STAMP_BUILDING1, "building stamp");
+
+		var exactCompositions = [
+			ObjectCodes.STAMP_TREE,
+			ObjectCodes.STAMP_TREE2,
+			ObjectCodes.STAMP_TREE3,
+			ObjectCodes.STAMP_PETRIFIED_TREE,
+			ObjectCodes.STAMP_ROCK,
+			ObjectCodes.STAMP_ROCK2,
+			ObjectCodes.STAMP_SPIRE,
+			ObjectCodes.STAMP_SPIRE2
+		];
+		for (code in exactCompositions) {
+			assertTrue(Std.isOfType(Objects.getFromCode(code), Shape), 'stamp $code preserves the composed XFL coordinate space');
+		}
 	}
 
 	private static function testBlockMappings():Void {
@@ -85,6 +101,10 @@ class ObjectsCompatTest {
 		var egg = Objects.getFromCode(ObjectCodes.BLOCK_MINION_EGG);
 		assertNotNull(egg, "minion egg returns authored graphic");
 		assertEquals("EggBlockGraphic", egg.name, "minion egg linkage");
+		assertEquals(1.0, egg.scaleX, "minion egg factory preserves XFL horizontal scale");
+		assertEquals(1.0, egg.scaleY, "minion egg factory preserves XFL vertical scale");
+		var eggBounds = egg.getBounds(egg);
+		assertTrue(eggBounds.x > 1 && eggBounds.x < 3, "minion egg factory preserves XFL registration inset");
 		var teleport = Std.downcast(Objects.getFromCode(ObjectCodes.BLOCK_TELEPORT), Sprite);
 		assertEquals("teleportColor", teleport.getChildAt(0).name, "teleport block includes color backing");
 	}
@@ -101,6 +121,17 @@ class ObjectsCompatTest {
 		var textBox = Std.downcast(Objects.getFromCode(ObjectCodes.TextCode), TextField);
 		assertNotNull(textBox, "text object returns nested textBox");
 		assertEquals("textBox", textBox.name, "text object text field name");
+		assertEquals(2.0, textBox.x, "text object preserves authored x registration");
+		assertEquals(2.0, textBox.y, "text object preserves authored y registration");
+		assertEquals(1.00286865234375, textBox.scaleY, "text object preserves authored vertical matrix scale");
+		assertEquals(76.0, textBox.width, "text object preserves authored width");
+		assertNear(29.2 * 1.00286865234375, textBox.height, "text object preserves authored height and matrix scale");
+		assertEquals(false, textBox.selectable, "text object preserves authored selection behavior");
+		assertEquals(false, textBox.wordWrap, "text object preserves authored no-wrap behavior");
+		assertEquals(true, textBox.multiline, "text object preserves authored multiline behavior");
+		assertEquals(FontResolver.resolve("Verdana"), textBox.defaultTextFormat.font, "text object preserves authored font mapping");
+		assertEquals(18.0, textBox.defaultTextFormat.size, "text object preserves authored font size");
+		assertEquals(4, textBox.defaultTextFormat.leading, "text object preserves authored rounded 21.9 line height");
 	}
 
 	private static function testUnknownCodeReturnsNull():Void {

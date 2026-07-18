@@ -1,15 +1,16 @@
 package pr2.gameplay;
 
 import openfl.display.DisplayObject;
+import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.Event;
+import openfl.filters.DropShadowFilter;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
-import pr2.assets.NativeAssetIds.FontAsset;
-import pr2.assets.NativeAssets;
 import pr2.display.Removable;
 import pr2.lobby.NumberFormat;
+import pr2.runtime.SvgAsset;
 
 /**
 	Port of Flash `gameplay.ExpGain`: the experience-gain bar shown on the
@@ -22,6 +23,8 @@ import pr2.lobby.NumberFormat;
 	`textBox` readout.
 **/
 class ExpGain extends Removable {
+	public static inline final TRACK_ASSET = "assets/svg/effects/exp_progress_track_01.svg";
+	public static inline final FILL_ASSET = "assets/svg/effects/exp_progress_fill_01.svg";
 	private static inline var STEPS:Float = 45;
 	private static inline var BAR_WIDTH:Float = 200;
 
@@ -61,6 +64,9 @@ class ExpGain extends Removable {
 		}
 	}
 
+	public function fillWidthForTests():Float return fill == null ? 0 : fill.width;
+	public function textGeometryForTests():Array<Float> return textBox == null ? [] : [textBox.x, textBox.y, textBox.width, textBox.height];
+
 	private function go(_:Event):Void {
 		expStart += expStep;
 		if (expStart >= expEnd) {
@@ -89,37 +95,28 @@ class ExpGain extends Removable {
 }
 
 private class ExpGainView extends Sprite {
-	public final fill:Sprite;
+	public final fill:Shape;
 	public final textBox:TextField;
 
 	public function new() {
 		super();
 		name = "ExpGainGraphic";
-		graphics.beginFill(0x2E2E2E, 0.92);
-		graphics.lineStyle(1, 0x111111);
-		graphics.drawRoundRect(0, 0, 204, 31, 7, 7);
-		graphics.endFill();
 		var track = new Sprite();
-		track.x = 2;
-		track.y = 2;
-		track.graphics.beginFill(0x6C6C6C);
-		track.graphics.drawRoundRect(0, 0, 200, 12, 5, 5);
-		track.graphics.endFill();
+		track.x = -100;
+		track.filters = [new DropShadowFilter(2, 45, 0x000000, 1, 2, 2, 0.5, 1)];
+		track.addChild(SvgAsset.create(ExpGain.TRACK_ASSET));
 		addChild(track);
-		fill = new Sprite();
+		fill = SvgAsset.create(ExpGain.FILL_ASSET);
 		fill.name = "bar";
-		fill.graphics.beginFill(0xE8C348);
-		fill.graphics.drawRoundRect(0, 0, 200, 12, 5, 5);
-		fill.graphics.endFill();
 		track.addChild(fill);
 		textBox = new TextField();
 		textBox.name = "textBox";
-		textBox.x = 4;
-		textBox.y = 14;
-		textBox.width = 196;
-		textBox.height = 16;
+		textBox.x = -92.75;
+		textBox.y = 13.95;
+		textBox.width = 185.45;
+		textBox.height = 12.15;
 		textBox.selectable = false;
-		textBox.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 10, 0xFFFFFF, false, null, null, null, null,
+		textBox.defaultTextFormat = new TextFormat("Verdana", 10, 0x666666, false, null, null, null, null,
 			TextFormatAlign.CENTER);
 		addChild(textBox);
 	}

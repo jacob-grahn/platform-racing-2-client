@@ -12,7 +12,9 @@ import openfl.display.Sprite;
 import openfl.display.StageAlign;
 import openfl.display.StageScaleMode;
 import openfl.events.Event;
+import openfl.events.MouseEvent;
 import openfl.geom.Point;
+import openfl.geom.Rectangle;
 import pr2.Constants;
 import pr2.app.FatalErrorReporter;
 import pr2.app.QueryParams;
@@ -38,6 +40,7 @@ import pr2.page.SymbolPreview;
 import pr2.page.PopupPreview;
 import pr2.ui.GpNotification;
 import pr2.ui.MuteButton;
+import pr2.ui.controls.NativeControl;
 import pr2.util.AsyncRemovalGuard.AsyncRemovable;
 
 /**
@@ -75,6 +78,7 @@ class Main extends Sprite {
 
 		try {
 			var query = currentQuery();
+			installClickProbe(query);
 			// pr2hub.com sends no CORS headers; `?apiHost=/api` points level
 			// fetches at a same-origin dev proxy (tools/dev_proxy.py). On
 			// sys targets, PR2_API_HOST can provide the same local override.
@@ -93,6 +97,23 @@ class Main extends Sprite {
 		} catch (error:Dynamic) {
 			reportFatalError(error);
 		}
+	}
+
+	private function installClickProbe(query:Null<String>):Void {
+		#if js
+		if (QueryParams.get(query, "debugClicks") != "1") return;
+		stage.addEventListener(MouseEvent.CLICK, function(event:MouseEvent):Void {
+			var target = Std.downcast(event.target, DisplayObject);
+			Browser.document.body.setAttribute("data-pr2-last-click-target", target == null ? "unknown" : target.name);
+			var path:Array<String> = [];
+			var current = target;
+			while (current != null) {
+				path.push(current.name);
+				current = current.parent;
+			}
+			Browser.document.body.setAttribute("data-pr2-last-click-path", path.join("/"));
+		}, true, 1000);
+		#end
 	}
 
 	// Screen-independent boot signal for the OpenFL driver/harness. Once `Main`
@@ -122,7 +143,13 @@ class Main extends Sprite {
 			return Json.stringify({ok: false, count: matches.length});
 		}
 		var target = matches[index];
-		var bounds = target.getBounds(target);
+		var nativeControl = Std.downcast(target, NativeControl);
+		var sprite = Std.downcast(target, Sprite);
+		var bounds = nativeControl != null
+			? new Rectangle(0, 0, nativeControl.controlWidth, nativeControl.controlHeight)
+			: sprite != null && sprite.hitArea != null
+			? sprite.hitArea.getBounds(target)
+			: target.getBounds(target);
 		var center = StringTools.endsWith(name, "Entry")
 			? target.localToGlobal(new Point(15, 15))
 			: target.localToGlobal(new Point(bounds.left + bounds.width / 2, bounds.top + bounds.height / 2));
@@ -172,6 +199,9 @@ class Main extends Sprite {
 	// not part of the real game chrome and would corrupt visual diffs, so they
 	// skip it.
 	private function addGlobalChrome(screen:Screen, query:Null<String>):Void {
+		if (QueryParams.get(query, "chrome") == "0") {
+			return;
+		}
 		if (screen == Lobby && mobileLobbyRequested(query)) {
 			return;
 		}
@@ -220,13 +250,18 @@ class Main extends Sprite {
 			);
 			case Login: new PageHolder(new LoginPage(siteMode), true);
 			case Lobby: buildLobby(query);
-			case Intro: new PageHolder(new IntroPage(siteMode, QueryParams.get(query, "intro")), true);
+			case Intro: new PageHolder(new IntroPage(
+				siteMode,
+				QueryParams.get(query, "intro"),
+				Std.parseInt(QueryParams.get(query, "introFrame")),
+				QueryParams.get(query, "introPixelEffect") != "0"
+			), true);
 			case Symbol: new SymbolPreview(
 				QueryParams.get(query, "symbol"),
 				parseScale(QueryParams.get(query, "scale")),
 				parseColor(QueryParams.get(query, "bg"))
 			);
-			case CustomizeCharacter: new CustomizeCharacterScreen();
+			case CustomizeCharacter: new CustomizeCharacterScreen(QueryParams.get(query, "characterCase"));
 			case CharacterPartCache: new CharacterPartCachePreview();
 			case PopupPreview: new PopupPreview(QueryParams.get(query, "popup"));
 		};

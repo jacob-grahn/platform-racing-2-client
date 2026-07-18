@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="550px" height="400px" viewBox="0 0 550 400" preserveAspectRatio="none" data-xfl-root="Components/Component Assets/ComboBoxSkins/ComboBox_downSkin">
+  <g data-xfl-symbol="Components/Component Assets/ComboBoxSkins/ComboBox_downSkin">
+    <g data-svg-leaf="components_component_assets_comboboxskins_combobox_downskin_732f4a6226/t00_l003_f0000_r00.svg">
+      <defs>
+        <linearGradient id="xfl1_Gradient_1" gradientUnits="userSpaceOnUse" x1="137" y1="22" x2="137" y2="0" spreadMethod="pad">
+          <stop offset="0%" stop-color="#0075BF" />
+          <stop offset="99.2156862745098%" stop-color="#009DFF" />
+        </linearGradient>
+        <linearGradient id="xfl1_Gradient_2" gradientUnits="userSpaceOnUse" x1="125.9" y1="21.1875" x2="125.9" y2="0.8125" spreadMethod="pad">
+          <stop offset="0%" stop-color="#0075C0" />
+          <stop offset="99.2156862745098%" stop-color="#009DFF" />
+        </linearGradient>
+        <linearGradient id="xfl1_Gradient_3" gradientUnits="userSpaceOnUse" x1="11" y1="22" x2="11" y2="0" spreadMethod="pad">
+          <stop offset="0%" stop-color="#EEEEEE" stop-opacity="0.6509803921568628" />
+          <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.7411764705882353" />
+        </linearGradient>
+        <g id="xfl1_Layer0_0_FILL">
+          <path fill="url(#xfl1_Gradient_1)" stroke="none" d=" M 148 3.4 Q 147.7 0 144 0 L 4 0 Q 2 0 1 1 0.4462890625 1.5490234375 0.2 2.4 0 3.098828125 0 4 L 0 18 Q 0 22 4 22 L 144 22 Q 147.7 22 148 18.6 148 18.3 148 18 L 148 4 Q 148 3.7 148 3.4 M 144.15 1 Q 147 1.076171875 147 4 L 147 18 Q 147 20.923828125 144.15 21 L 126 21 125 21 3.9 21 Q 1 20.95 1 18 L 1 3.85 Q 1.062109375 1.0490234375 3.9 1 L 125 1 126 1 144.15 1 Z" />
+          <path fill="url(#xfl1_Gradient_2)" stroke="none" d=" M 125 1 L 125 21 126 21 126 1 125 1 Z" />
+          <path fill="url(#xfl1_Gradient_3)" stroke="none" d=" M 147 4 Q 147 1.076171875 144.15 1 L 126 1 126 21 144.15 21 Q 147 20.923828125 147 18 L 147 4 Z" />
+        </g>
+      </defs>
+      <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+        <use xlink:href="#xfl1_Layer0_0_FILL" />
+      </g>
+    </g>
+    <g data-svg-leaf="components_component_assets_comboboxskins_combobox_downskin_732f4a6226/t00_l002_f0000_r00.svg">
+      <defs>
+        <linearGradient id="xfl2_Gradient_1" gradientUnits="userSpaceOnUse" x1="11" y1="22" x2="11" y2="0" spreadMethod="pad">
+          <stop offset="0%" stop-color="#99D7FE" />
+          <stop offset="100%" stop-color="#D9F0FE" />
+        </linearGradient>
+        <g id="xfl2_Layer0_0_FILL">
+          <path fill="url(#xfl2_Gradient_1)" stroke="none" d=" M 125 21 L 125 1 3.85 1 Q 1.0619140625 1.0619140625 1 3.85 L 1 18.15 Q 1.069921875 20.93828125 3.85 21 L 125 21 Z" />
+        </g>
+      </defs>
+      <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+        <use xlink:href="#xfl2_Layer0_0_FILL" />
+      </g>
+    </g>
+    <g data-svg-leaf="components_component_assets_comboboxskins_combobox_downskin_732f4a6226/t00_l001_f0000_r00.svg">
+      <defs>
+        <linearGradient id="xfl3_Gradient_1" gradientUnits="userSpaceOnUse" x1="61.5" y1="12" x2="61.5" y2="1.5" spreadMethod="pad">
+          <stop offset="0%" stop-color="#CCCCCC" stop-opacity="0" />
+          <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.2980392156862745" />
+        </linearGradient>
+        <linearGradient id="xfl3_Gradient_2" gradientUnits="userSpaceOnUse" x1="61.5" y1="12.3" x2="61.5" y2="1.1999999999999993" spreadMethod="pad">
+          <stop offset="0%" stop-color="#CCCCCC" stop-opacity="0" />
+          <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.2980392156862745" />
+        </linearGradient>
+        <g id="xfl3_Layer0_0_FILL">
+          <path fill="url(#xfl3_Gradient_1)" stroke="none" d=" M 126 12 L 147 12 147 4 Q 146.95 1 144 1 L 126 1 126 12 Z" />
+          <path fill="url(#xfl3_Gradient_2)" stroke="none" d=" M 125 12 L 125 1 4 1 Q 1 1 1 4 L 1 12 125 12 Z" />
+        </g>
+      </defs>
+      <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+        <use xlink:href="#xfl3_Layer0_0_FILL" />
+      </g>
+    </g>
+    <g data-svg-leaf="components_component_assets_comboboxskins_combobox_downskin_732f4a6226/t00_l000_f0000_r00.svg">
+      <defs>
+        <g id="xfl4_Layer0_0_FILL">
+          <path fill="#000000" stroke="none" d=" M 134 12 L 135 12 135 13 136 13 136 12 137 12 137 11 138 11 138 10 139 10 139 9 132 9 132 10 133 10 133 11 134 11 134 12 Z" />
+        </g>
+      </defs>
+      <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+        <use xlink:href="#xfl4_Layer0_0_FILL" />
+      </g>
+    </g>
+  </g>
+</svg>

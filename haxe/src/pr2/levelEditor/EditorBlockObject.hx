@@ -321,7 +321,9 @@ class EditorBlockObject extends Sprite {
 	private static function createDisplay(code:Int, options:String):Sprite {
 		var holder = new Sprite();
 		if (code == ObjectCodes.BLOCK_MINION_EGG) {
-			var eggBlock = SvgAsset.createFitted("assets/svg/blocks/egg_overlay.svg", LevelEditor.segSize, LevelEditor.segSize);
+			// The XFL symbol is authored directly in the 30px block coordinate
+			// space; preserve its registration and non-uniform foot/egg matrices.
+			var eggBlock = SvgAsset.create("assets/svg/blocks/egg_overlay.svg");
 			eggBlock.name = "EggBlockGraphic";
 			holder.addChild(eggBlock);
 			return holder;
@@ -331,26 +333,22 @@ class EditorBlockObject extends Sprite {
 			teleportBackground.name = "teleportColor";
 			holder.addChild(teleportBackground);
 		}
-		var assetPath = ServerLevelRenderer.blockAssetPath(code);
-		if (assetPath != "" && Assets.exists(assetPath, AssetType.IMAGE)) {
-			var bitmap = new Bitmap(Assets.getBitmapData(assetPath));
+		var data = ServerLevelRenderer.blockBitmapData(code);
+		if (data != null) {
+			var bitmap = new Bitmap(data);
 			bitmap.width = LevelEditor.segSize;
 			bitmap.height = LevelEditor.segSize;
 			bitmap.smoothing = false;
 			holder.addChild(bitmap);
-		} else {
-			holder.graphics.lineStyle(1, 0x444444);
-			holder.graphics.beginFill(0xCCCCCC);
-			holder.graphics.drawRect(0, 0, LevelEditor.segSize, LevelEditor.segSize);
-			holder.graphics.endFill();
-		}
+		} else throw 'Missing authored block bitmap for code $code';
 		var rotation = ServerLevelRenderer.arrowOverlayRotation(code);
-		if (rotation != null && Assets.exists(ServerLevelRenderer.arrowOverlayAssetPath(), AssetType.TEXT)) {
-			var arrow = SvgAsset.createFitted(ServerLevelRenderer.arrowOverlayAssetPath(), LevelEditor.segSize, LevelEditor.segSize);
-			arrow.x = LevelEditor.segSize / 2;
-			arrow.y = LevelEditor.segSize / 2;
-			arrow.rotation = rotation;
-			holder.addChild(arrow);
+		if (rotation != null) {
+			var pivot = new Sprite();
+			pivot.addChild(new pr2.level.ArrowBlockView());
+			pivot.x = LevelEditor.segSize / 2;
+			pivot.y = LevelEditor.segSize / 2;
+			pivot.rotation = rotation;
+			holder.addChild(pivot);
 		}
 		return holder;
 	}

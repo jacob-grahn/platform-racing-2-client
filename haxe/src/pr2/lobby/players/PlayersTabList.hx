@@ -30,13 +30,13 @@ class PlayersTabList extends PlayersListHolder {
 	override public function initialize():Void {
 		graphic = new PlayersTabListView(false);
 		addChild(graphic);
-		var listHolder = Std.downcast(DisplayUtil.findByName(graphic, "listHolder"), DisplayObjectContainer);
+		var listHolder = Std.downcast(DisplayUtil.directChildByName(graphic, "listHolder"), DisplayObjectContainer);
 		if (listHolder != null) {
 			attachHolder(listHolder);
 		}
-		nameButton = Std.downcast(DisplayUtil.findByName(graphic, "name_bt"), DisplayObjectContainer);
-		rankButton = Std.downcast(DisplayUtil.findByName(graphic, "rank_bt"), DisplayObjectContainer);
-		hatsButton = Std.downcast(DisplayUtil.findByName(graphic, "hats_bt"), DisplayObjectContainer);
+		nameButton = Std.downcast(DisplayUtil.directChildByName(graphic, "name_bt"), DisplayObjectContainer);
+		rankButton = Std.downcast(DisplayUtil.directChildByName(graphic, "rank_bt"), DisplayObjectContainer);
+		hatsButton = Std.downcast(DisplayUtil.directChildByName(graphic, "hats_bt"), DisplayObjectContainer);
 		if (nameButton != null) {
 			nameButton.addEventListener(MouseEvent.CLICK, clickName);
 		}

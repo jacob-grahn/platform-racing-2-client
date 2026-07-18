@@ -5,11 +5,12 @@ import openfl.events.KeyboardEvent;
 import openfl.events.MouseEvent;
 import pr2.crypto.PR2Encryptor;
 import pr2.lobby.dialogs.MessagePopup;
+import pr2.lobby.dialogs.NativeFormView;
 import pr2.lobby.dialogs.Popup;
 import pr2.lobby.dialogs.SetEmailPopup;
 import pr2.net.ServerConfig;
 import pr2.ui.controls.GameTextInput;
-import pr2.util.DisplayUtil;
+import pr2.util.TestDisplayUtil as DisplayUtil;
 
 class SetEmailPopupTest {
 	private static inline var ACCOUNT_CHANGE_KEY:String = "KVhFJSVLNigvKkdhV0RaSw==";
@@ -38,6 +39,17 @@ class SetEmailPopupTest {
 		};
 
 		var popup = new SetEmailPopup();
+		var art = formView(popup);
+		assertEquals(-145.0, art.panels[0].x, "set-email ShadowBG keeps its XFL X");
+		assertEquals(-88.25, art.panels[0].y, "set-email ShadowBG keeps its XFL Y");
+		assertEquals(0.92236328125, art.panels[0].scaleY, "set-email ShadowBG keeps its XFL vertical scale");
+		assertEquals(1.2, input(popup, "passBox").x, "set-email inputs keep their XFL X");
+		assertEquals(-43.0, input(popup, "passBox").y, "set-email password keeps its XFL Y");
+		assertEquals(100, input(popup, "email1Box").maxChars, "set-email fields keep the authored maximum length");
+		assertEquals(true, input(popup, "passBox").displayAsPassword, "set-email password field keeps masking");
+		assertEquals(-80.0, art.submitButton.x, "set-email OK button keeps its XFL X");
+		assertEquals(7.0, art.cancelButton.x, "set-email Cancel button keeps its XFL X");
+		assertEquals(52.0, art.submitButton.y, "set-email buttons keep their XFL Y");
 		input(popup, "passBox").text = "pass";
 		click(popup, "ok_bt");
 		assertEquals(0, uploads, "blank email does not upload");
@@ -87,6 +99,14 @@ class SetEmailPopupTest {
 		var value = Std.downcast(DisplayUtil.findByName(popup, name), GameTextInput);
 		if (value == null) throw name + " missing";
 		return value;
+	}
+
+	private static function formView(popup:SetEmailPopup):NativeFormView {
+		for (index in 0...popup.numChildren) {
+			var view = Std.downcast(popup.getChildAt(index), NativeFormView);
+			if (view != null) return view;
+		}
+		throw "native set-email form missing";
 	}
 
 	private static function click(popup:SetEmailPopup, name:String):Void {

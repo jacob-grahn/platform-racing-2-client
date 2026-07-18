@@ -1,6 +1,8 @@
 package pr2.lobby.dialogs;
 
 import openfl.text.TextField;
+import openfl.display.DisplayObject;
+import openfl.display.Graphics;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
 import pr2.assets.NativeAssetIds.FontAsset;
@@ -8,68 +10,73 @@ import pr2.assets.NativeAssetIds.StaticSvg;
 import pr2.assets.NativeAssets;
 import pr2.ui.controls.GameButton;
 import pr2.ui.controls.GameTextInput;
+import pr2.ui.controls.GameTextArea;
+import pr2.ui.controls.ControlSkin;
+import pr2.ui.controls.ControlState;
 import pr2.ui.view.NativeView;
 
 /** Native composition of SendMessagePopupGraphic. */
 class SendMessageView extends NativeView {
 	public final nameInput:GameTextInput;
-	public final messageInput:GameTextInput;
+	public final messageInput:GameTextArea;
 	public final charsRemaining:TextField;
 	public final codesButton:GameButton;
+	public final panel:DisplayObject;
+	public final warning:TextField;
+	public final toLabel:TextField;
+	public final sendButton:GameButton;
+	public final cancelButton:GameButton;
 	public var onSend:Null<Void->Void>;
 	public var onCancel:Null<Void->Void>;
 	public var onCodes:Null<Void->Void>;
 
 	public function new(name:String, message:String) {
 		super();
-		var panel = NativeAssets.svg(StaticSvg.QuantityPanel);
-		panel.x = -150;
-		panel.y = -145;
-		panel.scaleX = 1.1;
-		panel.scaleY = 1.5;
+		panel = NativeAssets.svg(StaticSvg.QuantityPanel);
+		panel.x = -166.5;
+		panel.y = -109.9;
+		panel.scaleX = 1.2242431640625;
+		panel.scaleY = 1.0732421875;
 		addChild(panel);
-		addLabel("-- Send Message --", -110, -131, 220, 18, 14, true, TextFormatAlign.CENTER);
-		addLabel("to:", -126, -94, 38, 16, 11, false, TextFormatAlign.RIGHT);
+		toLabel = addLabel("To:", -72, -97.25, 18.95, 14.55, 12, false, TextFormatAlign.LEFT);
 		nameInput = ownControl(new GameTextInput(name));
-		nameInput.x = -82;
-		nameInput.y = -98;
-		nameInput.setSize(190, 22);
+		nameInput.x = -44;
+		nameInput.y = -100;
+		nameInput.setSize(197.996520996094, 22);
 		nameInput.textField.name = "nameBox";
 		addChild(nameInput);
-		addLabel("message:", -126, -59, 68, 16, 11, false, TextFormatAlign.RIGHT);
-		messageInput = ownControl(new GameTextInput(message));
-		messageInput.x = -52;
-		messageInput.y = -63;
-		messageInput.setSize(160, 96);
+		messageInput = ownControl(new GameTextArea(309.109497070313, 50.0082397460936));
+		messageInput.text = message;
+		messageInput.x = -155;
+		messageInput.y = -68;
 		messageInput.textField.name = "textBox";
-		messageInput.textField.multiline = true;
-		messageInput.textField.wordWrap = true;
-		messageInput.textField.maxChars = 1000;
+		messageInput.maxChars = 1000;
+		messageInput.wordWrap = true;
 		addChild(messageInput);
 
-		charsRemaining = addLabel("0 / 1000", 24, 38, 84, 16, 10, false, TextFormatAlign.RIGHT, 0x555555);
+		warning = addLabel("NEVER give your password to ANYONE.", -152.25, 39, 197.2, 12.15, 10, false, TextFormatAlign.LEFT);
+		charsRemaining = addLabel("1000 / 1000", 85.55, 39.5, 65.5, 12.75, 10, false, TextFormatAlign.RIGHT);
 		charsRemaining.name = "messageCharsRemaining";
-		codesButton = ownControl(new GameButton("Formatting Codes"));
+		codesButton = ownControl(new SendMessageInfoButton());
 		codesButton.name = "codes_bt";
-		codesButton.x = -126;
-		codesButton.y = 62;
-		codesButton.setSize(112, 22);
+		codesButton.x = -154.25;
+		codesButton.y = 66.45;
 		codesButton.onPress = function():Void if (onCodes != null) onCodes();
 		addChild(codesButton);
-		var send = ownControl(new GameButton("Send"));
-		send.name = "send_bt";
-		send.x = -4;
-		send.y = 62;
-		send.setSize(54, 22);
-		send.onPress = function():Void if (onSend != null) onSend();
-		addChild(send);
-		var cancel = ownControl(new GameButton("Cancel"));
-		cancel.name = "cancel_bt";
-		cancel.x = 56;
-		cancel.y = 62;
-		cancel.setSize(54, 22);
-		cancel.onPress = function():Void if (onCancel != null) onCancel();
-		addChild(cancel);
+		sendButton = ownControl(new GameButton("Send"));
+		sendButton.name = "send_bt";
+		sendButton.x = -115;
+		sendButton.y = 60;
+		sendButton.setSize(100, 22);
+		sendButton.onPress = function():Void if (onSend != null) onSend();
+		addChild(sendButton);
+		cancelButton = ownControl(new GameButton("Cancel"));
+		cancelButton.name = "cancel_bt";
+		cancelButton.x = 15;
+		cancelButton.y = 60;
+		cancelButton.setSize(100, 22);
+		cancelButton.onPress = function():Void if (onCancel != null) onCancel();
+		addChild(cancelButton);
 	}
 
 	private function addLabel(value:String, x:Float, y:Float, width:Float, height:Float, size:Int, bold:Bool, align:TextFormatAlign,
@@ -91,5 +98,36 @@ class SendMessageView extends NativeView {
 		onCancel = null;
 		onCodes = null;
 		super.dispose();
+	}
+}
+
+private class SendMessageInfoButton extends GameButton {
+	public function new() {
+		super("?", new SendMessageInfoSkin());
+		setSize(10, 10);
+	}
+
+	override public function redraw():Void {
+		super.redraw();
+		if (labelField == null) return;
+		var format = new TextFormat(NativeAssets.font(FontAsset.Interface), 12, hovered || pressed ? 0xFFFF00 : 0, false, null, null, null, null,
+			TextFormatAlign.CENTER);
+		labelField.defaultTextFormat = format;
+		labelField.setTextFormat(format);
+		labelField.x = 1.5;
+		labelField.y = -0.2;
+		labelField.width = 7;
+		labelField.height = 10.7;
+	}
+}
+
+private class SendMessageInfoSkin implements ControlSkin {
+	public function new() {}
+	public function draw(graphics:Graphics, width:Float, height:Float, state:ControlState):Void {
+		graphics.clear();
+		graphics.lineStyle(0, 0x666666);
+		graphics.beginFill(state == Hovered || state == Pressed ? 0x43A398 : 0xAFAC94);
+		graphics.drawCircle(5, 5, 5);
+		graphics.endFill();
 	}
 }

@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="550px" height="400px" viewBox="0 0 550 400" preserveAspectRatio="none" data-xfl-root="UI/Popups (outside levels)/BG">
+  <g data-xfl-symbol="UI/Popups (outside levels)/BG">
+    <g data-svg-leaf="ui_popups_outside_levels_bg_d14a954e12/t00_l000_f0000_r00.svg">
+      <defs>
+        <linearGradient id="xfl1_Gradient_1" gradientUnits="userSpaceOnUse" x1="-0.4750000000000014" y1="50.15" x2="100.775" y2="50.15" spreadMethod="pad">
+          <stop offset="0%" stop-color="#9D9D9D" stop-opacity="0.4" />
+          <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.6470588235294118" />
+        </linearGradient>
+        <linearGradient id="xfl1_Gradient_2" gradientUnits="userSpaceOnUse" x1="-0.4750000000000014" y1="50.15" x2="100.775" y2="50.15" spreadMethod="pad">
+          <stop offset="0%" stop-color="#333333" />
+          <stop offset="100%" stop-color="#999999" />
+        </linearGradient>
+        <g id="xfl1_Layer0_0_FILL">
+          <path fill="url(#xfl1_Gradient_1)" stroke="none" d=" M 95.8 -0.45 L 4.55 -0.45 Q -0.45 -0.45 -0.45 4.55 L -0.45 95.8 Q -0.45 100.8 4.55 100.8 L 95.8 100.8 Q 100.8 100.8 100.8 95.8 L 100.8 4.55 Q 100.8 -0.45 95.8 -0.45 Z" />
+        </g>
+        <path id="xfl1_Layer0_0_1_STROKES" stroke="url(#xfl1_Gradient_2)" stroke-width="0" stroke-linejoin="round" stroke-linecap="round" fill="none" d=" M 0.005554962158203114 95.05616683959961 L 0.005554962158203114 4.93258972167969 Q 0.005554962158203114 -0.005688476562497158 4.9438331604003904 -0.005688476562497158 L 95.06741027832031 -0.005688476562497158 Q 100.0056884765625 -0.005688476562497158 100.0056884765625 4.93258972167969 L 100.0056884765625 95.05616683959961 Q 100.0056884765625 99.9944450378418 95.06741027832031 99.9944450378418 L 4.9438331604003904 99.9944450378418 Q 0.005554962158203114 99.9944450378418 0.005554962158203114 95.05616683959961 Z" />
+      </defs>
+      <g transform="matrix( 0, -0.9876556396484375, 0.9876556396484375, 0, 0.45,99.55) ">
+        <use xlink:href="#xfl1_Layer0_0_FILL" />
+        <use xlink:href="#xfl1_Layer0_0_1_STROKES" transform="matrix( 0, 1.0124969482421875, -1.0124969482421875, 0, 100.75,-0.45) " />
+      </g>
+    </g>
+  </g>
+</svg>

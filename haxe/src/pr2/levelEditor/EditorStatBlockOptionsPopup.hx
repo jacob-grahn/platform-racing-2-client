@@ -3,10 +3,8 @@ package pr2.levelEditor;
 import openfl.text.TextField;
 import pr2.level.BlockType;
 import pr2.page.EditorBlockOptions;
-import pr2.runtime.FlComponents;
 import openfl.events.Event;
 import pr2.ui.controls.GameSlider;
-import pr2.util.DisplayUtil;
 
 class EditorStatBlockOptionsPopup extends EditorBlockOptionsPopup {
 	private var slider:Null<GameSlider>;
@@ -14,10 +12,10 @@ class EditorStatBlockOptionsPopup extends EditorBlockOptionsPopup {
 
 	public function new(editor:LevelEditor, block:EditorBlockObject) {
 		super(editor, block, "StatBlockOptionsGraphic");
-		slider = Std.downcast(DisplayUtil.findByName(art, "slider"), GameSlider);
-		statBox = FlComponents.asTextField(DisplayUtil.findByName(art, "statBox"));
-		var titleBox = FlComponents.asTextField(DisplayUtil.findByName(art, "titleBox"));
-		var descBox = FlComponents.asTextField(DisplayUtil.findByName(art, "descBox"));
+		slider = Std.downcast(art.childNamed("slider"), GameSlider);
+		statBox = Std.downcast(art.childNamed("statBox"), TextField);
+		var titleBox = Std.downcast(art.childNamed("titleBox"), TextField);
+		var descBox = Std.downcast(art.childNamed("descBox"), TextField);
 		var happy = block.type == BlockType.Happy;
 		if (titleBox != null) {
 			titleBox.text = happy ? "-- Happy Block --" : "-- Sad Block --";

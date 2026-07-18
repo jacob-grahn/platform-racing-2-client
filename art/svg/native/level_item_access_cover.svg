@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="550px" height="400px" viewBox="0 0 550 400" preserveAspectRatio="none" data-xfl-root="Graphics/Symbol 1313">
+  <g data-xfl-symbol="Graphics/Symbol 1313">
+    <g data-svg-leaf="graphics_symbol_1313_107231fc48/t00_l001_f0000_r00.svg">
+      <defs>
+        <linearGradient id="xfl1_Gradient_1" gradientUnits="userSpaceOnUse" x1="43" y1="-2.5" x2="43" y2="64.5" spreadMethod="pad">
+          <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.7529411764705882" />
+          <stop offset="100%" stop-color="#BBBBBB" stop-opacity="0.5019607843137255" />
+        </linearGradient>
+        <linearGradient id="xfl1_Gradient_2" gradientUnits="userSpaceOnUse" x1="50.5" y1="63.5" x2="50.5" y2="-1.5" spreadMethod="pad">
+          <stop offset="0%" stop-color="#000000" />
+          <stop offset="100%" stop-color="#999999" />
+        </linearGradient>
+        <g id="xfl1_Layer0_0_FILL">
+          <path fill="url(#xfl1_Gradient_1)" stroke="none" d=" M 98 -2 L 3 -2 Q -2 -2 -2 3 L -2 59 Q -2 64 3 64 L 98 64 Q 103 64 103 59 L 103 3 Q 103 -2 98 -2 Z" />
+        </g>
+        <path id="xfl1_Layer0_0_1_STROKES" stroke="url(#xfl1_Gradient_2)" stroke-width="0" stroke-linejoin="round" stroke-linecap="round" fill="none" d=" M 3 -2 L 98 -2 Q 103 -2 103 3 L 103 59 Q 103 64 98 64 L 3 64 Q -2 64 -2 59 L -2 3 Q -2 -2 3 -2 Z" />
+      </defs>
+      <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+        <use xlink:href="#xfl1_Layer0_0_FILL" />
+        <use xlink:href="#xfl1_Layer0_0_1_STROKES" />
+      </g>
+    </g>
+    <g data-svg-leaf="graphics_symbol_1313_107231fc48/t00_l000_f0000_r00.svg">
+      <defs>
+        <g id="xfl2_Layer0_0_FILL">
+          <path fill="#FFFFFF" fill-opacity="0.5019607843137255" stroke="none" d=" M 102 36 L 102 19 0 19 0 36 102 36 Z" />
+        </g>
+      </defs>
+      <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+        <use xlink:href="#xfl2_Layer0_0_FILL" />
+      </g>
+    </g>
+  </g>
+</svg>

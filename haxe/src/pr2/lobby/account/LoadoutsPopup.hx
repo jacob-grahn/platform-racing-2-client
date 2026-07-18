@@ -36,17 +36,17 @@ class LoadoutsPopup extends Popup {
 		art = new GetLevelsView();
 		addChild(art);
 
-		var title = LobbyArt.text(art, "titleBox");
+		var title = LobbyArt.directText(art, "titleBox");
 		if (title != null) title.text = "-- Loadouts --";
-		var loading = DisplayUtil.findByName(art, "loadingGraphic");
+		var loading = DisplayUtil.directChildByName(art, "loadingGraphic");
 		if (loading != null && loading.parent != null) loading.parent.removeChild(loading);
-		holder = Std.downcast(DisplayUtil.findByName(art, "levelsHolder"), DisplayObjectContainer);
-		loadButton = Std.downcast(DisplayUtil.findByName(art, "load_bt"), GameButton);
-		saveButton = Std.downcast(DisplayUtil.findByName(art, "delete_bt"), GameButton);
+		holder = Std.downcast(DisplayUtil.directChildByName(art, "levelsHolder"), DisplayObjectContainer);
+		loadButton = Std.downcast(DisplayUtil.directChildByName(art, "load_bt"), GameButton);
+		saveButton = Std.downcast(DisplayUtil.directChildByName(art, "delete_bt"), GameButton);
 		if (saveButton != null) saveButton.label = "Save";
 
 		for (preset in Presets.getPresets()) addListing(preset);
-		cancelBinding = LobbyArt.bind(DisplayUtil.findByName(art, "cancel_bt"), startFadeOut);
+		cancelBinding = LobbyArt.bind(DisplayUtil.directChildByName(art, "cancel_bt"), startFadeOut);
 		loadBinding = LobbyArt.bind(loadButton, applySelected);
 		saveBinding = LobbyArt.bind(saveButton, saveSelected);
 		if (holder != null) holder.addEventListener(MouseEvent.MOUSE_WHEEL, onWheel);
@@ -121,6 +121,13 @@ class LoadoutsPopup extends Popup {
 		return previews;
 	}
 
+	public function listingArtForTests():Array<Sprite> {
+		return [for (listing in listings) listing.artForTests()];
+	}
+
+	public function listingFillForTests(index:Int):Int return listings[index].fillForTests();
+	public function selectListingForTests(index:Int):Void select(listings[index]);
+
 	private function onWheel(e:MouseEvent):Void {
 		if (holder == null) return;
 		var minY = Math.min(0, 158 - listings.length * 68);
@@ -154,6 +161,8 @@ private class LoadoutListing extends Sprite {
 	private var art:Null<Sprite>;
 	private var preview:Null<AccountCharacter>;
 	private var selected:Bool = false;
+	private var currentFill:Int = 0x333333;
+	private var background:Sprite;
 
 	public function new(preset:Preset, playerDisplay:Null<PlayerDisplay>) {
 		super();
@@ -162,11 +171,14 @@ private class LoadoutListing extends Sprite {
 		doubleClickEnabled = true;
 		buttonMode = true;
 		art = new Sprite();
-		art.addChild(createText("loadoutNum", 10, 25, 24, 16));
-		art.addChild(createText("loadoutSpeed", 92, 7, 116, 12));
-		art.addChild(createText("loadoutAccel", 92, 27, 116, 12));
-		art.addChild(createText("loadoutJump", 92, 47, 116, 12));
-		redraw(0xF0F0F0, 0x777777);
+		background = new Sprite();
+		background.name = "stateBackground";
+		art.addChild(background);
+		art.addChild(createText("loadoutNum", 10, 25, 23.5, 16, 19.45));
+		art.addChild(createText("loadoutSpeed", 92, 7, 116, 12, 14.55));
+		art.addChild(createText("loadoutAccel", 92, 27, 116, 12, 14.55));
+		art.addChild(createText("loadoutJump", 92, 47, 116, 12, 14.55));
+		redraw(0x333333, 0.101960784313725);
 		setText("loadoutSpeed", "Speed: " + preset.speed);
 		setText("loadoutAccel", "Acceleration: " + preset.acceleration);
 		setText("loadoutJump", "Jumping: " + preset.jumping);
@@ -189,46 +201,49 @@ private class LoadoutListing extends Sprite {
 	}
 
 	private function setText(name:String, value:String):Void {
-		var field = LobbyArt.text(art, name);
+		var field = LobbyArt.directText(art, name);
 		if (field != null) field.text = value;
 	}
 
-	private function createText(name:String, x:Float, y:Float, width:Float, size:Int):TextField {
+	private function createText(name:String, x:Float, y:Float, width:Float, size:Int, height:Float):TextField {
 		var field = new TextField();
 		field.name = name;
 		field.x = x;
 		field.y = y;
 		field.width = width;
-		field.height = size + 5;
+		field.height = height;
 		field.selectable = false;
 		field.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), size, 0, name == "loadoutNum");
 		return field;
 	}
 
-	private function redraw(fill:Int, border:Int):Void {
+	private function redraw(fill:Int, alpha:Float = 1):Void {
 		if (art == null) return;
-		art.graphics.clear();
-		art.graphics.beginFill(fill);
-		art.graphics.lineStyle(1, border);
-		art.graphics.drawRoundRect(0, 0, 218, 70, 8, 8);
-		art.graphics.endFill();
+		currentFill = fill;
+		background.graphics.clear();
+		background.graphics.beginFill(fill, alpha);
+		background.graphics.drawRect(0, 1, 248, 67);
+		background.graphics.endFill();
 	}
 
 	public function setSelected(value:Bool):Void {
 		selected = value;
-		redraw(value ? 0xDCEBFF : 0xF0F0F0, value ? 0x4B78B5 : 0x777777);
+		redraw(value ? 0x42D75F : 0x333333, value ? 1 : 0.101960784313725);
 	}
 
 	public function previewForTests():Null<AccountCharacter> {
 		return preview;
 	}
 
+	public function artForTests():Sprite return art;
+	public function fillForTests():Int return currentFill;
+
 	private function onOver(_:MouseEvent):Void {
-		if (!selected) redraw(0xE8F2FF, 0x6B91C2);
+		if (!selected) redraw(0xCCCCCC);
 	}
 
 	private function onOut(_:MouseEvent):Void {
-		if (!selected) redraw(0xF0F0F0, 0x777777);
+		if (!selected) redraw(0x333333, 0.101960784313725);
 	}
 
 	public function remove():Void {

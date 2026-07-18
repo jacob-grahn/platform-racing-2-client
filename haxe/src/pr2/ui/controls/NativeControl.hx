@@ -14,8 +14,8 @@ class NativeControl extends Sprite {
 	public var skin:ControlSkin;
 
 	private var _enabled:Bool = true;
-	private var hovered:Bool = false;
-	private var pressed:Bool = false;
+	public var hovered(default, null):Bool = false;
+	public var pressed(default, null):Bool = false;
 
 	public function new(width:Float, height:Float, ?skin:ControlSkin) {
 		super();
@@ -87,6 +87,10 @@ class NativeControl extends Sprite {
 
 	private function set_enabled(value:Bool):Bool {
 		_enabled = value;
+		if (!value) {
+			hovered = false;
+			pressed = false;
+		}
 		mouseEnabled = value && !disposed;
 		mouseChildren = value && !disposed;
 		buttonMode = value && !disposed;

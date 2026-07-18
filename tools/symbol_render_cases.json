@@ -36,6 +36,254 @@
       "scale": 2,
       "thresholdPercent": 2,
       "thresholdRms": 1
+    },
+    {
+      "name": "character-classic-standing-native",
+      "symbol": "native-character:classic-standing",
+      "referenceSymbol": "legacy-character:classic-standing",
+      "scale": 4,
+      "thresholdPercent": 36,
+      "thresholdRms": 20
+    },
+    {
+      "name": "character-classic-run-native",
+      "symbol": "native-character:classic-run",
+      "referenceSymbol": "legacy-character:classic-run",
+      "scale": 4,
+      "thresholdPercent": 28,
+      "thresholdRms": 52
+    },
+    {
+      "name": "character-classic-jump-native",
+      "symbol": "native-character:classic-jump",
+      "referenceSymbol": "legacy-character:classic-jump",
+      "scale": 4,
+      "thresholdPercent": 33,
+      "thresholdRms": 48
+    },
+    {
+      "name": "character-classic-super-jump-native",
+      "symbol": "native-character:classic-super-jump",
+      "referenceSymbol": "legacy-character:classic-super-jump",
+      "scale": 4,
+      "thresholdPercent": 40,
+      "thresholdRms": 31
+    },
+    {
+      "name": "character-classic-bumped-native",
+      "symbol": "native-character:classic-bumped",
+      "referenceSymbol": "legacy-character:classic-bumped",
+      "scale": 4,
+      "thresholdPercent": 40,
+      "thresholdRms": 43
+    },
+    {
+      "name": "character-classic-crouch-native",
+      "symbol": "native-character:classic-crouch",
+      "referenceSymbol": "legacy-character:classic-crouch",
+      "scale": 4,
+      "thresholdPercent": 54,
+      "thresholdRms": 51
+    },
+    {
+      "name": "character-classic-crouch-walk-native",
+      "symbol": "native-character:classic-crouch-walk",
+      "referenceSymbol": "legacy-character:classic-crouch-walk",
+      "scale": 4,
+      "thresholdPercent": 53,
+      "thresholdRms": 52
+    },
+    {
+      "name": "character-classic-swim-native",
+      "symbol": "native-character:classic-swim",
+      "referenceSymbol": "legacy-character:classic-swim",
+      "scale": 4,
+      "thresholdPercent": 51,
+      "thresholdRms": 64
+    },
+    {
+      "name": "character-classic-frozen-native",
+      "symbol": "native-character:classic-frozen",
+      "referenceSymbol": "legacy-character:classic-frozen",
+      "scale": 4,
+      "thresholdPercent": 46,
+      "thresholdRms": 39
+    },
+    {
+      "name": "character-standard-appearance-standing-native",
+      "symbol": "native-character:standard-a-standing",
+      "referenceSymbol": "legacy-character:standard-a-standing",
+      "scale": 4,
+      "thresholdPercent": 32,
+      "thresholdRms": 31
+    },
+    {
+      "name": "character-standard-appearance-run-native",
+      "symbol": "native-character:standard-a-run",
+      "referenceSymbol": "legacy-character:standard-a-run",
+      "scale": 4,
+      "thresholdPercent": 31,
+      "thresholdRms": 65
+    },
+    {
+      "name": "character-standard-appearance-crouch-native",
+      "symbol": "native-character:standard-a-crouch",
+      "referenceSymbol": "legacy-character:standard-a-crouch",
+      "scale": 4,
+      "thresholdPercent": 50,
+      "thresholdRms": 63
+    },
+    {
+      "name": "character-hat-stack-standing-native",
+      "symbol": "native-character:hat-stack-standing",
+      "referenceSymbol": "legacy-character:hat-stack-standing",
+      "scale": 4,
+      "thresholdPercent": 52,
+      "thresholdRms": 89
+    },
+    {
+      "name": "character-hat-stack-run-native",
+      "symbol": "native-character:hat-stack-run",
+      "referenceSymbol": "legacy-character:hat-stack-run",
+      "scale": 4,
+      "thresholdPercent": 32,
+      "thresholdRms": 74
+    },
+    {
+      "name": "character-hat-stack-crouch-native",
+      "symbol": "native-character:hat-stack-crouch",
+      "referenceSymbol": "legacy-character:hat-stack-crouch",
+      "scale": 4,
+      "thresholdPercent": 76,
+      "thresholdRms": 116
+    },
+    {
+      "name": "character-hat-stack-frozen-native",
+      "symbol": "native-character:hat-stack-frozen",
+      "referenceSymbol": "legacy-character:hat-stack-frozen",
+      "scale": 4,
+      "thresholdPercent": 53,
+      "thresholdRms": 79
+    },
+    {
+      "name": "character-fred-stack-standing-native",
+      "symbol": "native-character:fred-stack-standing",
+      "referenceSymbol": "legacy-character:fred-stack-standing",
+      "scale": 4,
+      "thresholdPercent": 45,
+      "thresholdRms": 59
+    },
+    {
+      "name": "character-fred-stack-run-native",
+      "symbol": "native-character:fred-stack-run",
+      "referenceSymbol": "legacy-character:fred-stack-run",
+      "scale": 4,
+      "thresholdPercent": 42,
+      "thresholdRms": 51
+    },
+    {
+      "name": "character-fred-stack-crouch-native",
+      "symbol": "native-character:fred-stack-crouch",
+      "referenceSymbol": "legacy-character:fred-stack-crouch",
+      "scale": 4,
+      "thresholdPercent": 46,
+      "thresholdRms": 56
+    },
+    {
+      "name": "character-fred-stack-frozen-native",
+      "symbol": "native-character:fred-stack-frozen",
+      "referenceSymbol": "legacy-character:fred-stack-frozen",
+      "scale": 4,
+      "thresholdPercent": 51,
+      "thresholdRms": 65
+    },
+    {
+      "name": "character-item-laser-native",
+      "symbol": "native-character:item-laser",
+      "referenceSymbol": "legacy-character:item-laser",
+      "scale": 4,
+      "thresholdPercent": 43,
+      "thresholdRms": 67
+    },
+    {
+      "name": "character-item-mine-native",
+      "symbol": "native-character:item-mine",
+      "referenceSymbol": "legacy-character:item-mine",
+      "scale": 4,
+      "thresholdPercent": 60,
+      "thresholdRms": 100
+    },
+    {
+      "name": "character-item-lightning-native",
+      "symbol": "native-character:item-lightning",
+      "referenceSymbol": "legacy-character:item-lightning",
+      "scale": 4,
+      "thresholdPercent": 50,
+      "thresholdRms": 63
+    },
+    {
+      "name": "character-item-teleport-native",
+      "symbol": "native-character:item-teleport",
+      "referenceSymbol": "legacy-character:item-teleport",
+      "scale": 4,
+      "thresholdPercent": 53,
+      "thresholdRms": 67
+    },
+    {
+      "name": "character-item-super-jump-native",
+      "symbol": "native-character:item-super-jump",
+      "referenceSymbol": "legacy-character:item-super-jump",
+      "scale": 4,
+      "thresholdPercent": 54,
+      "thresholdRms": 69
+    },
+    {
+      "name": "character-item-jet-pack-native",
+      "symbol": "native-character:item-jet-pack",
+      "referenceSymbol": "legacy-character:item-jet-pack",
+      "scale": 4,
+      "thresholdPercent": 62,
+      "thresholdRms": 100
+    },
+    {
+      "name": "character-item-speed-burst-native",
+      "symbol": "native-character:item-speed-burst",
+      "referenceSymbol": "legacy-character:item-speed-burst",
+      "scale": 4,
+      "thresholdPercent": 54,
+      "thresholdRms": 66
+    },
+    {
+      "name": "character-item-sword-native",
+      "symbol": "native-character:item-sword",
+      "referenceSymbol": "legacy-character:item-sword",
+      "scale": 4,
+      "thresholdPercent": 58,
+      "thresholdRms": 80
+    },
+    {
+      "name": "character-item-ice-wave-native",
+      "symbol": "native-character:item-ice-wave",
+      "referenceSymbol": "legacy-character:item-ice-wave",
+      "scale": 4,
+      "thresholdPercent": 48,
+      "thresholdRms": 54
+    },
+    {
+      "name": "character-action-laser-mid-recoil-native",
+      "symbol": "native-character:action-laser-8",
+      "referenceSymbol": "legacy-character:action-laser-8",
+      "scale": 4,
+      "thresholdPercent": 56,
+      "thresholdRms": 74
+    },
+    {
+      "name": "character-action-sword-mid-swing-native",
+      "symbol": "native-character:action-sword-7",
+      "referenceSymbol": "legacy-character:action-sword-7",
+      "scale": 4,
+      "thresholdPercent": 40,
+      "thresholdRms": 56
     }
   ]
 }

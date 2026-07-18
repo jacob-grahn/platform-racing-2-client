@@ -29,7 +29,7 @@ class ChooseLevelsModePopup extends Popup {
 	}
 
 	private function bind(name:String, handler:Void->Void):Void {
-		var binding = LobbyArt.bind(DisplayUtil.findByName(art, name), handler);
+		var binding = LobbyArt.bind(DisplayUtil.directChildByName(art, name), handler);
 		if (binding != null) {
 			bindings.push(binding);
 		}

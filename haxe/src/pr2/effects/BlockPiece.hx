@@ -4,8 +4,6 @@ import openfl.display.DisplayObject;
 import openfl.display.Bitmap;
 import openfl.display.Sprite;
 import openfl.events.Event;
-import pr2.assets.NativeAssetIds.StaticSvg;
-import pr2.assets.NativeAssets;
 
 /**
 	Ports `effects/BlockPiece.as`: an authored block fragment with randomized
@@ -53,12 +51,11 @@ class BlockPiece extends Sprite {
 	private function createAuthoredVisual(linkage:String, nextRandom:Void->Float):DisplayObject {
 		return switch (linkage) {
 			case "BrickPieceGraphic":
-				var frames:Array<StaticSvg> = [StaticSvg.BrickPiece1, StaticSvg.BrickPiece2, StaticSvg.BrickPiece3, StaticSvg.BrickPiece4, StaticSvg.BrickPiece5];
-				selectedFrame = Std.int(nextRandom() * frames.length) + 1;
-				NativeAssets.svg(frames[selectedFrame - 1]);
+				selectedFrame = Std.int(nextRandom() * 5) + 1;
+				exactFrame("brick_piece", selectedFrame);
 			case "CrumblePieceGraphic":
 				selectedFrame = 1;
-				NativeAssets.svg(StaticSvg.CrumblePiece);
+				exactFrame("crumble_piece", selectedFrame);
 			case "MinePieceGraphic":
 				selectedFrame = Std.int(nextRandom() * 6) + 1;
 				makeMinePiece(selectedFrame);
@@ -67,27 +64,16 @@ class BlockPiece extends Sprite {
 		}
 	}
 
-	private function makeMinePiece(frame:Int):DisplayObject {
-		return switch (frame) {
-			case 1: stack([StaticSvg.MinePiece1Back, StaticSvg.MinePiece1Front]);
-			case 2: stack([StaticSvg.MinePiece2Back, StaticSvg.MinePiece2Middle, StaticSvg.MinePiece2Front]);
-			case 3: stack([StaticSvg.MinePiece3Back, StaticSvg.MinePiece3Front]);
-			case 4: NativeAssets.svg(StaticSvg.MinePiece4);
-			case 5: NativeAssets.svg(StaticSvg.MinePiece5);
-			case 6:
-				var art = NativeAssets.svg(StaticSvg.MinePiece6);
-				art.scaleX = art.scaleY = 0.050994873046875;
-				art.x = -2.4;
-				art.y = -2.35;
-				art;
-			default: throw 'Invalid mine piece frame $frame';
-		}
+	private function exactFrame(kind:String, frame:Int):DisplayObject {
+		var path = 'assets/svg/effects/${kind}_${StringTools.lpad(Std.string(frame), "0", 2)}.svg';
+		var art = pr2.runtime.SvgAsset.create(path);
+		art.name = path;
+		return art;
 	}
 
-	private function stack(ids:Array<StaticSvg>):Sprite {
-		var holder = new Sprite();
-		for (id in ids) holder.addChild(NativeAssets.svg(id));
-		return holder;
+	private function makeMinePiece(frame:Int):DisplayObject {
+		if (frame < 1 || frame > 6) throw 'Invalid mine piece frame $frame';
+		return exactFrame("mine_piece", frame);
 	}
 
 	private function tick(_:Event):Void {

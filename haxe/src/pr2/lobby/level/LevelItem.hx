@@ -11,6 +11,7 @@ import openfl.text.TextField;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
 import pr2.assets.NativeAssetIds.FontAsset;
+import pr2.assets.NativeAssetIds.StaticSvg;
 import pr2.assets.NativeAssets;
 import pr2.crypto.PR2Encryptor;
 import pr2.lobby.LobbyArt;
@@ -28,6 +29,8 @@ import pr2.net.LobbySocket;
 import pr2.net.ServerConfig;
 import pr2.ui.controls.GameButton;
 import pr2.ui.controls.GameTextInput;
+import pr2.ui.controls.NativeControl;
+import pr2.ui.RatingSelect.RatingStarMeter;
 import pr2.ui.view.NativeView;
 import pr2.util.AsyncRemovalGuard;
 import pr2.util.DisplayUtil;
@@ -68,8 +71,8 @@ class LevelItem extends Sprite {
 	private var minusButton:Null<DisplayObject>;
 	private var accessCover:Null<LevelAccessCoverView>;
 	private var coverText:Null<TextField>;
-	private var passButton:Null<DisplayObject>;
-	private var passBox:Null<DisplayObject>;
+	private var passButton:Null<GameButton>;
+	private var passBox:Null<GameTextInput>;
 	private var passField:Null<TextField>;
 
 	private var infoBinding:Null<LobbyArt.Binding>;
@@ -93,38 +96,32 @@ class LevelItem extends Sprite {
 		addChild(art);
 		htmlNameMaker = new HtmlNameMaker();
 
-		// Title / author are exported without instance names; recover by y order.
-		var fields = LobbyArt.directTextFields(art);
-		if (fields.length > 0) {
-			fields[0].text = info.title;
-		}
-		if (fields.length > 1) {
-			fields[1].htmlText = "by " + htmlNameMaker.makeName(info.userName, info.userGroup);
-			htmlNameMaker.listenForLink(fields[1]);
-		}
+		art.titleBox.text = info.title;
+		art.authorBox.htmlText = "by " + htmlNameMaker.makeName(info.userName, info.userGroup);
+		htmlNameMaker.listenForLink(art.authorBox);
 
 		setRatingBar(info.rating);
 		setBackgroundFrame(info.type);
 
-		infoButton = DisplayUtil.findByName(art, "infoButton");
+		infoButton = DisplayUtil.directChildByName(art, "infoButton");
 		infoBinding = LobbyArt.bind(infoButton, clickInfo);
 		if (infoButton != null) {
 			infoButton.addEventListener(MouseEvent.MOUSE_OVER, overInfo);
 			infoButton.addEventListener(MouseEvent.MOUSE_OUT, outInfo);
 		}
 
-		plusButton = DisplayUtil.findByName(art, "plusButton");
-		minusButton = DisplayUtil.findByName(art, "minusButton");
+		plusButton = DisplayUtil.directChildByName(art, "plusButton");
+		minusButton = DisplayUtil.directChildByName(art, "minusButton");
 		setupFavoriteButtons();
 
 		accessCover = art.accessCover;
 		if (accessCover != null) {
-			coverText = LobbyArt.text(accessCover, "textBox");
-			passButton = DisplayUtil.findByName(accessCover, "passButton");
+			coverText = LobbyArt.directText(accessCover, "textBox");
+			passButton = Std.downcast(DisplayUtil.directChildByName(accessCover, "passButton"), GameButton);
 			// `passBox` is an fl.controls.TextInput component: keep the display object
 			// itself for attach/detach (its inner field's parent is the wrapper, not
 			// the cover) and the inner TextField for reading/writing the entered text.
-			passBox = DisplayUtil.findByName(accessCover, "passBox");
+			passBox = Std.downcast(DisplayUtil.directChildByName(accessCover, "passBox"), GameTextInput);
 			passField = accessCover.input.textField;
 			// Start with the cover detached; testAccess re-attaches it if gated.
 			detachCover();
@@ -140,13 +137,7 @@ class LevelItem extends Sprite {
 	}
 
 	private function setRatingBar(rating:Float):Void {
-		var stars = Std.downcast(DisplayUtil.findByName(art, "ratingStars"), DisplayObjectContainer);
-		if (stars != null) {
-			var bar = DisplayUtil.findByName(stars, "bar");
-			if (bar != null) {
-				bar.scaleX = rating / 5;
-			}
-		}
+		art.ratingStars.displayRating(rating);
 	}
 
 	private function setBackgroundFrame(type:String):Void {
@@ -409,7 +400,7 @@ class LevelItem extends Sprite {
 	// ---- slots -----------------------------------------------------------
 
 	private function addSlots():Void {
-		var holder = Std.downcast(DisplayUtil.findByName(art, "slotsHolder"), DisplayObjectContainer);
+		var holder = Std.downcast(DisplayUtil.directChildByName(art, "slotsHolder"), DisplayObjectContainer);
 		if (holder == null) {
 			return;
 		}
@@ -549,32 +540,12 @@ class LevelItem extends Sprite {
 		setControlEnabled(passBox, enabled);
 	}
 
-	private static function setControlEnabled(control:Null<DisplayObject>, enabled:Bool):Void {
-		if (control == null) {
-			return;
-		}
-		try {
-			Reflect.setProperty(control, "enabled", enabled);
-		} catch (_:Dynamic) {
-			var interactive = Std.downcast(control, openfl.display.InteractiveObject);
-			if (interactive != null) {
-				interactive.mouseEnabled = enabled;
-			}
-		}
+	private static function setControlEnabled(control:Null<pr2.ui.controls.NativeControl>, enabled:Bool):Void {
+		if (control != null) control.enabled = enabled;
 	}
 
-	private static function controlEnabled(control:Null<DisplayObject>):Bool {
-		if (control == null) {
-			return false;
-		}
-		try {
-			var value:Dynamic = Reflect.getProperty(control, "enabled");
-			if (value != null) {
-				return value == true;
-			}
-		} catch (_:Dynamic) {}
-		var interactive = Std.downcast(control, openfl.display.InteractiveObject);
-		return interactive == null || interactive.mouseEnabled;
+	private static function controlEnabled(control:Null<pr2.ui.controls.NativeControl>):Bool {
+		return control != null && control.enabled;
 	}
 
 	public function remove():Void {
@@ -686,59 +657,67 @@ class LevelItem extends Sprite {
 private class LevelItemView extends NativeView {
 	public final background:LevelItemBackground;
 	public final accessCover:LevelAccessCoverView;
+	public final titleBox:TextField;
+	public final authorBox:TextField;
+	public final ratingStars:RatingStarMeter;
 
 	public function new() {
 		super();
 		background = new LevelItemBackground();
 		background.name = "bg";
+		background.x = 12.5;
+		background.y = 40.25;
 		addChild(background);
-		field(8, 5, 205, 19, 12, true, TextFormatAlign.LEFT);
-		field(8, 24, 205, 17, 10, false, TextFormatAlign.LEFT);
-		var rating = new Sprite();
-		rating.name = "ratingStars";
-		rating.x = 8;
-		rating.y = 44;
-		rating.graphics.beginFill(0x666666, 0.45);
-		rating.graphics.drawRoundRect(0, 0, 92, 8, 4, 4);
-		rating.graphics.endFill();
-		var bar = new Sprite();
-		bar.name = "bar";
-		bar.graphics.beginFill(0xF1CB45);
-		bar.graphics.drawRoundRect(0, 0, 92, 8, 4, 4);
-		bar.graphics.endFill();
-		rating.addChild(bar);
-		addChild(rating);
-		button("infoButton", "?", 218, 5, 25);
-		button("plusButton", "+", 218, 34, 25);
-		button("minusButton", "−", 218, 34, 25);
+		titleBox = field("titleBox", 2, 1, 97.95, 14.55, 12, false, TextFormatAlign.CENTER, 0x325638);
+		authorBox = field("authorBox", 2, 15, 97, 12.05, 10, false, TextFormatAlign.CENTER, 0x698D70);
+		ratingStars = new RatingStarMeter();
+		ratingStars.name = "ratingStars";
+		ratingStars.x = 46.05;
+		ratingStars.y = 95.85;
+		addChild(ratingStars);
+		iconButton("infoButton", LevelItemButtonKind.Info, 27, 96, 1);
+		iconButton("plusButton", LevelItemButtonKind.Plus, 13.5, 101, 0.744949340820312);
+		iconButton("minusButton", LevelItemButtonKind.Minus, 13.5, 101, 0.744949340820312);
 		var holder = new Sprite();
 		holder.name = "slotsHolder";
-		holder.x = 8;
-		holder.y = 61;
+		holder.x = 1;
+		holder.y = 29;
 		addChild(holder);
 		accessCover = new LevelAccessCoverView();
 		accessCover.name = "accessCover";
+		accessCover.y = 30;
 		addChild(accessCover);
 	}
 
-	private function button(name:String, label:String, x:Float, y:Float, width:Float):Void {
-		var control = ownControl(new GameButton(label));
+	private function iconButton(name:String, kind:LevelItemButtonKind, x:Float, y:Float, scale:Float):Void {
+		var control = ownControl(new LevelItemIconButton(kind));
 		control.name = name;
 		control.x = x;
 		control.y = y;
-		control.setSize(width, 24);
+		control.scaleX = control.scaleY = scale;
+		if (kind != LevelItemButtonKind.Info) {
+			var transform = control.transform.colorTransform;
+			transform.redMultiplier = transform.greenMultiplier = transform.blueMultiplier = 0.75;
+			transform.redOffset = 47;
+			transform.greenOffset = 47;
+			transform.blueOffset = 55;
+			control.transform.colorTransform = transform;
+		}
 		addChild(control);
 	}
 
-	private function field(x:Float, y:Float, width:Float, height:Float, size:Int, bold:Bool, align:TextFormatAlign):Void {
+	private function field(name:String, x:Float, y:Float, width:Float, height:Float, size:Int, bold:Bool, align:TextFormatAlign,
+		color:Int):TextField {
 		var text = new TextField();
+		text.name = name;
 		text.x = x;
 		text.y = y;
 		text.width = width;
 		text.height = height;
 		text.selectable = false;
-		text.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), size, 0x222222, bold, null, null, null, null, align);
+		text.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), size, color, bold, null, null, null, null, align);
 		addChild(text);
+		return text;
 	}
 }
 
@@ -749,18 +728,11 @@ private class LevelItemBackground extends Sprite {
 	}
 
 	public function render(frame:Int):Void {
-		var color = switch (frame) {
-			case 2: 0xDDE8F3;
-			case 3: 0xE8DFF2;
-			case 4: 0xE2F0DE;
-			case 5: 0xF2E5D7;
-			default: 0xEEEEEE;
-		};
-		graphics.clear();
-		graphics.beginFill(color, 0.97);
-		graphics.lineStyle(1, 0x777777);
-		graphics.drawRoundRect(0, 0, 251, 137, 10, 10);
-		graphics.endFill();
+		while (numChildren > 0) removeChildAt(0);
+		var assets = [StaticSvg.LevelInfoModeRace, StaticSvg.LevelInfoModeDeathmatch, StaticSvg.LevelInfoModeEgg, StaticSvg.LevelInfoModeObjective,
+			StaticSvg.LevelInfoModeHat];
+		var index = frame < 1 || frame > assets.length ? 0 : frame - 1;
+		addChild(NativeAssets.svg(assets[index]));
 	}
 }
 
@@ -769,33 +741,60 @@ private class LevelAccessCoverView extends NativeView {
 
 	public function new() {
 		super();
-		graphics.beginFill(0xF7F7F7, 0.96);
-		graphics.lineStyle(1, 0x777777);
-		graphics.drawRoundRect(3, 3, 245, 131, 9, 9);
-		graphics.endFill();
+		addChild(NativeAssets.svg(StaticSvg.LevelItemAccessCover));
 		var message = new TextField();
 		message.name = "textBox";
-		message.x = 14;
-		message.y = 18;
-		message.width = 222;
-		message.height = 50;
+		message.x = 0;
+		message.y = 21.95;
+		message.width = 99.95;
+		message.height = 12.15;
 		message.multiline = true;
 		message.wordWrap = true;
 		message.selectable = false;
-		message.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 11, 0x333333, false, null, null, null, null,
+		message.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 10, 0x000000, false, null, null, null, null,
 			TextFormatAlign.CENTER);
 		addChild(message);
 		input = ownControl(new GameTextInput());
 		input.name = "passBox";
-		input.x = 44;
-		input.y = 79;
-		input.setSize(105, 23);
+		input.x = 3;
+		input.y = 40;
+		input.setSize(51, 20);
 		addChild(input);
 		var submit = ownControl(new GameButton("Enter"));
 		submit.name = "passButton";
-		submit.x = 155;
-		submit.y = 79;
-		submit.setSize(54, 23);
+		submit.x = 58;
+		submit.y = 39;
+		submit.setSize(42, 22);
 		addChild(submit);
+	}
+}
+
+private enum abstract LevelItemButtonKind(Int) {
+	var Info = 0;
+	var Plus = 1;
+	var Minus = 2;
+}
+
+private class LevelItemIconButton extends NativeControl {
+	private var kind:Null<LevelItemButtonKind>;
+
+	public function new(kind:LevelItemButtonKind) {
+		super(18, 18);
+		this.kind = kind;
+		mouseChildren = false;
+		redraw();
+	}
+
+	override public function redraw():Void {
+		while (numChildren > 0) removeChildAt(0);
+		if (kind == null) return;
+		var down = state() == Pressed;
+		var over = state() == Hovered || state() == Focused;
+		var asset = switch (kind) {
+			case Info: down ? StaticSvg.LevelItemInfoDown : over ? StaticSvg.LevelItemInfoOver : StaticSvg.LevelItemInfoUp;
+			case Plus: down ? StaticSvg.LevelItemPlusDown : over ? StaticSvg.LevelItemPlusOver : StaticSvg.LevelItemPlusUp;
+			case Minus: down ? StaticSvg.MinusButtonDown : over ? StaticSvg.MinusButtonOver : StaticSvg.MinusButtonUp;
+		};
+		addChild(NativeAssets.svg(asset));
 	}
 }

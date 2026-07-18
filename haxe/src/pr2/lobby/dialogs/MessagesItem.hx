@@ -66,9 +66,9 @@ class MessagesItem extends Sprite {
 
 		art = new MessagesItemView();
 		htmlNameMaker = new HtmlNameMaker();
-		var nameBox = LobbyArt.text(art, "nameBox");
-		var textBox = LobbyArt.text(art, "textBox");
-		timeBox = LobbyArt.text(art, "timeBox");
+		var nameBox = LobbyArt.directText(art, "nameBox");
+		var textBox = LobbyArt.directText(art, "textBox");
+		timeBox = LobbyArt.directText(art, "timeBox");
 
 		if (nameBox != null) {
 			nameBox.htmlText = htmlNameMaker.makeName(name, group);
@@ -84,7 +84,7 @@ class MessagesItem extends Sprite {
 			textBox.htmlText = html;
 			htmlNameMaker.listenForLink(textBox);
 			fitBodyTextField(textBox);
-			var bg = Std.downcast(DisplayUtil.findByName(art, "bg"), DisplayObject);
+			var bg = Std.downcast(DisplayUtil.directChildByName(art, "bg"), DisplayObject);
 			if (bg != null) {
 				resizeMessageBackground(bg, textBox.height + 6);
 			}
@@ -93,7 +93,7 @@ class MessagesItem extends Sprite {
 				timeBox.y = textBox.height + 32;
 			}
 		}
-		var guildIcon = DisplayUtil.findByName(art, "guildMsgIcon");
+		var guildIcon = DisplayUtil.directChildByName(art, "guildMsgIcon");
 		if (guildIcon != null) {
 			guildIcon.visible = guildMessage;
 		}
@@ -219,7 +219,7 @@ class MessagesItem extends Sprite {
 
 	@:allow(pr2.lobby.MessagesItemTest)
 	private function bodyTextField():Null<TextField> {
-		return LobbyArt.text(art, "textBox");
+		return LobbyArt.directText(art, "textBox");
 	}
 
 	@:allow(pr2.lobby.MessagesItemTest)
@@ -256,7 +256,12 @@ class MessagesItem extends Sprite {
 
 	@:allow(pr2.lobby.MessagesItemTest)
 	private function messageBackgroundIsNineSlice():Bool {
-		return Std.downcast(DisplayUtil.findByName(art, "bg"), MessageBackground) != null;
+		return Std.downcast(DisplayUtil.directChildByName(art, "bg"), MessageBackground) != null;
+	}
+
+	@:allow(pr2.lobby.MessagesItemTest)
+	private function authoredChild(name:String):Null<DisplayObject> {
+		return DisplayUtil.directChildByName(art, name);
 	}
 
 	public function remove():Void {
@@ -285,20 +290,19 @@ class MessagesItem extends Sprite {
 private class MessagesItemView extends Sprite {
 	public function new() {
 		super();
-		var bg = new MessageBackground(205, 70);
+		var bg = new MessageBackground(152 * 1.13815307617188, 22 * 2.68182373046875);
 		bg.name = "bg";
+		bg.y = 24;
 		addChild(bg);
-		addText("nameBox", 8, 5, 155, 18, 12, true, TextFormatAlign.LEFT);
-		addText("textBox", 8, 23, 159.5, 20, 11, false, TextFormatAlign.LEFT);
-		addText("timeBox", 104, 53, 93, 16, 9, false, TextFormatAlign.RIGHT);
-		var guild = new Sprite();
+		addText("nameBox", 2, 6.95, 156.95, 14.55, 12, false, TextFormatAlign.LEFT);
+		addText("textBox", 5, 29.95, 159.5, 291.7, 12, false, TextFormatAlign.LEFT);
+		addText("timeBox", 52, 88.75, 115.95, 14.5, 10, false, TextFormatAlign.RIGHT);
+		var guild = NativeAssets.svg(StaticSvg.EveryoneIcon);
 		guild.name = "guildMsgIcon";
-		guild.x = 183;
-		guild.y = 13;
-		guild.graphics.beginFill(0xF2C84B);
-		guild.graphics.lineStyle(1, 0x8C6A13);
-		guild.graphics.drawCircle(0, 0, 7);
-		guild.graphics.endFill();
+		guild.x = 157.55;
+		guild.y = 8.2;
+		guild.scaleX = 0.037689208984375;
+		guild.scaleY = 0.0379486083984375;
 		addChild(guild);
 	}
 
@@ -331,9 +335,18 @@ private class MessageBackground extends Sprite {
 	public function setTargetSize(width:Float, height:Float):Void {
 		targetWidth = width;
 		graphics.clear();
-		graphics.beginFill(0xFFFFFF, 0.94);
-		graphics.lineStyle(1, 0x8B8B8B);
-		graphics.drawRoundRect(0, 0, width, height, 8, 8);
+		graphics.beginFill(0xFFFFFF);
+		graphics.drawRect(1, 1, Math.max(0, width - 2), Math.max(0, height - 2));
+		graphics.endFill();
+		graphics.beginFill(0x6D6F70);
+		graphics.drawRect(0, 0, width, 1);
+		graphics.endFill();
+		graphics.beginFill(0xC9CBCC);
+		graphics.drawRect(0, 1, 1, Math.max(0, height - 1));
+		graphics.drawRect(Math.max(0, width - 1), 0, 1, height);
+		graphics.endFill();
+		graphics.beginFill(0xD3D5D6);
+		graphics.drawRect(1, Math.max(0, height - 1), Math.max(0, width - 2), 1);
 		graphics.endFill();
 	}
 }

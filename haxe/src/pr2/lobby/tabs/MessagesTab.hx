@@ -52,7 +52,7 @@ class MessagesTab extends Page implements Paginated {
 
 	override public function initialize():Void {
 		art = new MessagesView();
-		holder = Std.downcast(DisplayUtil.findByName(art, "var_295"), DisplayObjectContainer);
+		holder = Std.downcast(DisplayUtil.directChildByName(art, "var_295"), DisplayObjectContainer);
 
 		scrollBar = new CustomScrollBar();
 		scrollBar.x = 176;
@@ -64,8 +64,8 @@ class MessagesTab extends Page implements Paginated {
 		pageNavigation = new PageNavigation(this, "minimal", 1, 99, 110);
 		pageNavigation.x = 33;
 
-		sendBinding = LobbyArt.bind(DisplayUtil.findByName(art, "sendMessage_bt"), clickSend);
-		deleteAllBinding = LobbyArt.bind(DisplayUtil.findByName(art, "deleteAll_bt"), clickDeleteAll);
+		sendBinding = LobbyArt.bind(DisplayUtil.directChildByName(art, "sendMessage_bt"), clickSend);
+		deleteAllBinding = LobbyArt.bind(DisplayUtil.directChildByName(art, "deleteAll_bt"), clickDeleteAll);
 		addChild(art);
 
 		loading = new LoadingView();

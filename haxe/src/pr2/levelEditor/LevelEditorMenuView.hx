@@ -1,6 +1,7 @@
 package pr2.levelEditor;
 
 import openfl.display.Sprite;
+import pr2.runtime.SvgAsset;
 import pr2.ui.controls.GameButton;
 import pr2.ui.controls.GameSelect;
 import pr2.ui.view.NativeView;
@@ -11,32 +12,39 @@ class LevelEditorMenuView extends NativeView {
 
 	public function new() {
 		super();
-		graphics.beginFill(0xE8EAED, 0.98);
-		graphics.lineStyle(1, 0x555555);
-		graphics.drawRoundRect(4, 4, 542, 66, 10, 10);
-		graphics.endFill();
-		var top = [
-			{name: "blocksButton", label: "Blocks"}, {name: "settingsButton", label: "Settings"}, {name: "bgButton", label: "BG"},
-			{name: "undoButton", label: "Undo"}, {name: "redoButton", label: "Redo"}, {name: "saveButton", label: "Save"},
-			{name: "loadButton", label: "Load"}, {name: "testButton", label: "Test"}, {name: "newButton", label: "New"},
-			{name: "exitButton", label: "Exit"}
-		];
-		for (i in 0...top.length) button(top[i].name, top[i].label, 10 + i * 49, 10, 46);
-		var layers = ["layer00Button", "layer0Button", "layer1Button", "layer2Button", "layer3Button"];
-		for (i in 0...layers.length) button(layers[i], i < 2 ? "BG " + i : "L" + (i - 1), 10 + i * 43, 40, 40);
+		var background = SvgAsset.create("assets/svg/editor/level_editor_menu_background.svg");
+		background.name = "background";
+		addChild(background);
+		var glow = SvgAsset.create("assets/svg/editor/level_editor_menu_glow.svg");
+		glow.name = "selectedGlow";
+		glow.x = -198.9;
+		glow.y = -180;
+		addChild(glow);
+
+		// Exact component matrices from LevelEditorMenu.xml. Flash's components
+		// have a 100x22 authored size; the XFL `a` values scale their width only.
+		button("layer00Button", "Art 00", -255, -191, 49.9847412109375);
+		button("layer0Button", "Art 0", -199, -191, 49.9847412109375);
+		button("blocksButton", "Blocks", -143, -191, 49.9862670898438);
+		button("layer1Button", "Art 1", -87, -191, 49.9847412109375);
+		button("layer2Button", "Art 2", -31, -191, 49.9847412109375);
+		button("layer3Button", "Art 3", 25, -191, 49.9847412109375);
+		button("bgButton", "BG", 81, -191, 49.993896484375);
+		button("settingsButton", "Settings", 137, -191, 54.9942016601562);
+		button("saveButton", "Save", -254.6, 169, 46.1044311523438);
+		button("loadButton", "Load", -202.6, 169, 46.1044311523438);
+		button("testButton", "Test", -150.9, 169, 46.1044311523438);
+		button("newButton", "New", -98.4, 169, 46.1044311523438);
+		button("exitButton", "Exit", -47, 169, 46.09375);
 		zoomSelect = ownControl(new GameSelect<String>());
 		zoomSelect.name = "zoomSelect";
-		zoomSelect.x = 236;
-		zoomSelect.y = 40;
-		zoomSelect.setSize(96, 22);
-		for (value in ["25", "50", "75", "100", "125", "150", "200"]) zoomSelect.addOption(value + "%", value);
+		zoomSelect.x = 30;
+		zoomSelect.y = 169;
+		zoomSelect.setSize(60.009765625, 22);
+		for (value in ["25", "50", "75", "100", "150", "250", "500"]) zoomSelect.addOption(value + "%", value);
 		addChild(zoomSelect);
-		var glow = new Sprite();
-		glow.name = "selectedGlow";
-		glow.graphics.lineStyle(2, 0xE0B62E);
-		glow.graphics.drawRoundRect(-24, 0, 48, 26, 7, 7);
-		glow.y = 9;
-		addChild(glow);
+		button("undoButton", "Undo", 94.65, 169, 46.09375);
+		button("redoButton", "Redo", 146.15, 169, 46.09375);
 	}
 
 	private function button(name:String, label:String, x:Float, y:Float, width:Float):Void {
@@ -44,8 +52,7 @@ class LevelEditorMenuView extends NativeView {
 		control.name = name;
 		control.x = x;
 		control.y = y;
-		control.setSize(width, 24);
-		control.labelField.textColor = 0x555555;
+		control.setSize(width, 22);
 		addChild(control);
 	}
 }

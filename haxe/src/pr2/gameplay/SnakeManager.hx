@@ -8,6 +8,7 @@ import openfl.utils.AssetType;
 import openfl.utils.Assets;
 import pr2.gameplay.player.LocalPlayerController;
 import pr2.level.ServerLevelRenderer;
+import pr2.level.ObjectCodes;
 import pr2.level.WorldLevel;
 import pr2.net.LobbySocket;
 
@@ -302,18 +303,13 @@ class SnakeManager {
 		var display = new Sprite();
 		display.x = worldPixelX(tileX);
 		display.y = worldPixelY(tileY);
-		if (Assets.exists(TRAIL_ASSET, AssetType.IMAGE)) {
-			var bitmap = new Bitmap(Assets.getBitmapData(TRAIL_ASSET));
+		var data = ServerLevelRenderer.blockBitmapData(ObjectCodes.BLOCK_VANISH);
+		if (data != null) {
+			var bitmap = new Bitmap(data);
 			bitmap.width = ServerLevelRenderer.TILE_SIZE;
 			bitmap.height = ServerLevelRenderer.TILE_SIZE;
 			display.addChild(bitmap);
-		} else {
-			var fallback = new Shape();
-			fallback.graphics.beginFill(0x38B84A);
-			fallback.graphics.drawRect(0, 0, ServerLevelRenderer.TILE_SIZE, ServerLevelRenderer.TILE_SIZE);
-			fallback.graphics.endFill();
-			display.addChild(fallback);
-		}
+		} else throw "Missing authored vanish block bitmap for Snake trail";
 		var eyes = new Shape();
 		display.addChild(eyes);
 		renderer.worldEffectLayer().addChild(display);

@@ -37,8 +37,8 @@ class FinishedPage extends Popup {
 		this.onClose = onClose;
 
 		art = new FinishedPageView();
-		returnBinding = LobbyArt.bind(DisplayUtil.findByName(art, "return_bt"), clickReturn);
-		closeBinding = LobbyArt.bind(DisplayUtil.findByName(art, "close_bt"), function():Void startFadeOut());
+		returnBinding = LobbyArt.bind(DisplayUtil.directChildByName(art, "return_bt"), clickReturn);
+		closeBinding = LobbyArt.bind(DisplayUtil.directChildByName(art, "close_bt"), function():Void startFadeOut());
 		addChild(art);
 
 		stars = new RatingSelect(courseID);
@@ -57,11 +57,11 @@ class FinishedPage extends Popup {
 		if (art == null || curAwardLine > 5) {
 			return;
 		}
-		var bonusField = LobbyArt.text(art, "bonus" + curAwardLine);
+		var bonusField = LobbyArt.directText(art, "bonus" + curAwardLine);
 		if (bonusField != null) {
 			bonusField.text = bonus;
 		}
-		var expField = LobbyArt.text(art, "exp" + curAwardLine);
+		var expField = LobbyArt.directText(art, "exp" + curAwardLine);
 		if (expField != null) {
 			expField.text = exp;
 		}
@@ -71,7 +71,7 @@ class FinishedPage extends Popup {
 	/** Fill the total and animate the exp bar, matching `FinishedPage.setExpGain`. */
 	public function setExpGain(expOld:Int, expNew:Int, expToRank:Int):Void {
 		if (art != null) {
-			var total = LobbyArt.text(art, "expTotal");
+			var total = LobbyArt.directText(art, "expTotal");
 			if (total != null) {
 				total.text = "+ " + (expNew - expOld);
 			}

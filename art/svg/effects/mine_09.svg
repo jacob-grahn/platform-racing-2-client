@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="550px" height="400px" viewBox="0 0 550 400" preserveAspectRatio="none" data-xfl-root="UI/Pages/Levels/In-Game/Effects/Mine/Symbol 976">
+  <g data-xfl-symbol="UI/Pages/Levels/In-Game/Effects/Mine/Symbol 976">
+    <g transform="matrix(0.3802032471 0 0 0.3802032471 -95.25 -95.1)">
+      <g opacity="0">
+        <g data-xfl-symbol="MovieClips/Symbol 973">
+          <g data-svg-leaf="movieclips_symbol_973_54cff30894/t00_l000_f0000_r00.svg">
+            <defs>
+              <radialGradient id="xfl17_Gradient_1" gradientUnits="userSpaceOnUse" cx="0" cy="0" r="252.02499999999998" fx="0" fy="0" gradientTransform="matrix( 1.0000000000000002, 0, 0, 1.0000000000000002, 250,250) " spreadMethod="pad">
+                <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0" />
+                <stop offset="91.76470588235294%" stop-color="#FFFF15" />
+                <stop offset="100%" stop-color="#FFFF00" stop-opacity="0.7529411764705882" />
+              </radialGradient>
+              <g id="xfl17_Layer0_0_FILL">
+                <path fill="url(#xfl17_Gradient_1)" stroke="none" d=" M 500 250 Q 500 146.45 426.7 73.15 353.55 0 250 0 146.4 0 73.15 73.15 0 146.45 0 250 0 353.55 73.15 426.7 146.4 500 250 500 353.55 500 426.7 426.7 500 353.55 500 250 Z" />
+              </g>
+            </defs>
+            <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+              <use xlink:href="#xfl17_Layer0_0_FILL" />
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+    <g transform="matrix(1.0092163086 0 0 0.015335083 -252.4 -3.8)">
+      <g opacity="0.62890625">
+        <g data-xfl-symbol="MovieClips/Symbol 975">
+          <g data-svg-leaf="movieclips_symbol_975_24a50e8309/t00_l000_f0000_r00.svg">
+            <defs>
+              <g id="xfl18_Layer0_0_FILL">
+                <path fill="#FFFFFF" stroke="none" d=" M 327.8 327.8 Q 400 255.55 500 250 400 244.45 327.8 172.2 255.55 100 250 0 244.45 100 172.2 172.2 100 244.45 0 250 100 255.55 172.2 327.8 244.45 400 250 500 255.55 400 327.8 327.8 Z" />
+              </g>
+            </defs>
+            <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+              <use xlink:href="#xfl18_Layer0_0_FILL" />
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

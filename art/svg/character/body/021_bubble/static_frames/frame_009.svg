@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="550px" height="400px" viewBox="0 0 550 400" preserveAspectRatio="none" data-xfl-root="MovieClips/Symbol 621 frame 21 / MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 606 frame 9 / static">
+  <g transform="translate(-33.5 -72.6)">
+    <g transform="matrix(0.833450317382812 -0.09869384765625 0.09869384765625 0.833450317382812 39.25 75.45)">
+      <g data-xfl-symbol="MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 606">
+        <g transform="matrix(0.6719970703 0 0 0.6719970703 40.15 -36.15)" data-xfl-instance="bubble2">
+          <g data-xfl-symbol="MovieClips/Symbol 256">
+            <g data-svg-leaf="movieclips_symbol_256_6162f854df/t00_l000_f0000_r00.svg">
+              <defs>
+                <g id="xfl25_Layer0_0_FILL">
+                  <path fill="#FFFFFF" stroke="none" d=" M -21.45 -28.45 Q -20.45 -31.1 -21.65 -32.3 -22.85 -33.45 -25.45 -32.5 -28.05 -31.6 -30.55 -29.1 -33.05 -26.55 -34.05 -23.9 -34.95 -21.35 -33.75 -20.15 -32.6 -18.95 -30 -19.9 -27.35 -20.85 -24.85 -23.35 -22.35 -25.85 -21.45 -28.45 Z" />
+                </g>
+              </defs>
+              <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+                <use xlink:href="#xfl25_Layer0_0_FILL" />
+              </g>
+            </g>
+          </g>
+        </g>
+        <g transform="matrix(0.6719970703 0 0 0.6719970703 11.4 53.3)" data-xfl-instance="bubble3">
+          <g data-xfl-symbol="MovieClips/Symbol 256">
+            <g data-svg-leaf="movieclips_symbol_256_6162f854df/t00_l000_f0000_r00.svg">
+              <defs>
+                <g id="xfl26_Layer0_0_FILL">
+                  <path fill="#FFFFFF" stroke="none" d=" M -21.45 -28.45 Q -20.45 -31.1 -21.65 -32.3 -22.85 -33.45 -25.45 -32.5 -28.05 -31.6 -30.55 -29.1 -33.05 -26.55 -34.05 -23.9 -34.95 -21.35 -33.75 -20.15 -32.6 -18.95 -30 -19.9 -27.35 -20.85 -24.85 -23.35 -22.35 -25.85 -21.45 -28.45 Z" />
+                </g>
+              </defs>
+              <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+                <use xlink:href="#xfl26_Layer0_0_FILL" />
+              </g>
+            </g>
+          </g>
+        </g>
+        <g transform="matrix(0.6719970703 0 0 0.6719970703 -51.7 -16.95)" data-xfl-instance="bubble1">
+          <g data-xfl-symbol="MovieClips/Symbol 256">
+            <g data-svg-leaf="movieclips_symbol_256_6162f854df/t00_l000_f0000_r00.svg">
+              <defs>
+                <g id="xfl27_Layer0_0_FILL">
+                  <path fill="#FFFFFF" stroke="none" d=" M -21.45 -28.45 Q -20.45 -31.1 -21.65 -32.3 -22.85 -33.45 -25.45 -32.5 -28.05 -31.6 -30.55 -29.1 -33.05 -26.55 -34.05 -23.9 -34.95 -21.35 -33.75 -20.15 -32.6 -18.95 -30 -19.9 -27.35 -20.85 -24.85 -23.35 -22.35 -25.85 -21.45 -28.45 Z" />
+                </g>
+              </defs>
+              <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+                <use xlink:href="#xfl27_Layer0_0_FILL" />
+              </g>
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

@@ -6,11 +6,15 @@ import openfl.events.Event;
 import openfl.events.KeyboardEvent;
 import openfl.events.MouseEvent;
 import openfl.text.TextField;
+import openfl.text.TextFieldType;
 import openfl.text.TextFormat;
 import pr2.assets.NativeAssetIds.FontAsset;
 import pr2.assets.NativeAssets;
 import openfl.ui.Keyboard;
 import pr2.lobby.LobbyArt;
+import pr2.lobby.LobbyPopups;
+import pr2.lobby.chat.ArtifactHintClient;
+import pr2.lobby.chat.ChatLog;
 import pr2.lobby.chat.ChatText;
 import pr2.lobby.chat.HtmlNameMaker;
 import pr2.net.LobbySocket;
@@ -33,6 +37,8 @@ class RaceChat extends Sprite {
 	private var sendHandler:Null<String->Bool>;
 	private var stageListenersActive:Bool = false;
 	private var ownerStage:Null<Stage>;
+	private var artifactHintGeneration:Int = 0;
+	private var removed:Bool = false;
 
 	public function new(?sendHandler:String->Bool) {
 		super();
@@ -67,12 +73,14 @@ class RaceChat extends Sprite {
 		if (sendHandler != null && sendHandler(cleaned)) {
 			return true;
 		}
-		LobbySocket.write("chat`" + cleaned);
+		routeSend(cleaned);
 		return true;
 	}
 
 	public function receiveSystemMessage(message:String):Void {
-		displayMessage("<i><font color='#3E8697'>" + ChatText.escapeString(message) + "</font></i><br/>");
+		// The command channel is trusted HTML in the Flash client. In particular,
+		// server-authored links must remain clickable here.
+		displayMessage("<i><font color='#3E8697'>" + message + "</font></i><br/>");
 	}
 
 	public function receiveChatMessage(userName:String, group:String, messageText:String, fred:Bool = false, filterSwears:Bool = true):Void {
@@ -106,7 +114,46 @@ class RaceChat extends Sprite {
 		return stage != null && chatInput != null && stage.focus == chatInput;
 	}
 
+	/** Flash ignores the global race-chat Enter shortcut while a PM TextArea is
+		editing. Native popups use multiline input TextFields for the same role. */
+	public static function isMultilineInputTarget(target:Dynamic):Bool {
+		var field = Std.downcast(target, TextField);
+		return field != null && field.type == TextFieldType.INPUT && field.multiline;
+	}
+
+	public function transcriptScroll():Array<Int> {
+		return topText == null || bgText == null
+			? []
+			: [topText.scrollV, topText.maxScrollV, bgText.scrollV, bgText.maxScrollV];
+	}
+
+	/** Exact XFL metrics, exposed for deterministic parity coverage. */
+	public function authoredGeometry():Array<Float> {
+		if (art == null) return [];
+		return [
+			art.chatInput.x,
+			art.chatInput.y,
+			art.chatInput.width,
+			art.chatInput.height,
+			art.topText.x,
+			art.topText.y,
+			art.topText.width,
+			art.topText.height,
+			art.bgText.x + art.bgText.parent.x,
+			art.bgText.y + art.bgText.parent.y,
+			art.chatInput.scaleY,
+			art.topText.scaleY,
+			art.bgText.scaleY,
+			art.bgText.parent.scaleY,
+			art.getChildIndex(art.chatInput),
+			art.getChildIndex(art.bgText.parent),
+			art.getChildIndex(art.topText.parent)
+		];
+	}
+
 	public function remove():Void {
+		removed = true;
+		artifactHintGeneration++;
 		removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		removeEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
 		removeStageListeners();
@@ -159,7 +206,7 @@ class RaceChat extends Sprite {
 	}
 
 	private function focusOrSend(event:KeyboardEvent):Void {
-		if (event.keyCode != Keyboard.ENTER || chatInput == null || stage == null) {
+		if (event.keyCode != Keyboard.ENTER || chatInput == null || stage == null || isMultilineInputTarget(event.target)) {
 			return;
 		}
 		if (event.target != this && event.target != chatInput) {
@@ -175,6 +222,36 @@ class RaceChat extends Sprite {
 		if (stage != null) {
 			stage.focus = stage;
 		}
+	}
+
+	private function routeSend(message:String):Void {
+		switch (ChatLog.classifySend(message)) {
+			case WriteChat(text):
+				LobbySocket.write("chat`" + text);
+			case ViewPlayer(name):
+				LobbyPopups.showPlayer(name);
+			case OpenGuild(name):
+				LobbyPopups.showGuildByName(name);
+			case SendPm(target):
+				LobbyPopups.sendMessage(target);
+			case OpenLevel(query):
+				LobbyPopups.showLevel(query);
+			case ArtifactHint:
+				loadArtifactHint();
+			case Ignore:
+		}
+	}
+
+	private function loadArtifactHint():Void {
+		var generation = ++artifactHintGeneration;
+		ArtifactHintClient.load(function(data):Void {
+			if (removed || generation != artifactHintGeneration) {
+				return;
+			}
+			for (message in ArtifactHintClient.fredMessages(data, htmlNameMaker)) {
+				receiveChatMessage("Fred the G. Cactus", "3,*", message, true);
+			}
+		}, function(_:String):Void {});
 	}
 
 	private function showMessages():Void {
@@ -194,41 +271,58 @@ class RaceChat extends Sprite {
 }
 
 private class RaceChatView extends Sprite {
+	public static inline final OUTPUT_X:Float = 2;
+	public static inline final OUTPUT_Y:Float = 2;
+	public static inline final OUTPUT_WIDTH:Float = 141;
+	public static inline final OUTPUT_HEIGHT:Float = 116.05;
+	public static inline final INPUT_X:Float = 45;
+	public static inline final INPUT_Y:Float = 129.7;
+	public static inline final INPUT_WIDTH:Float = 100;
+	public static inline final INPUT_HEIGHT:Float = 14.55;
+
 	public final chatInput:TextField;
 	public final topText:TextField;
 	public final bgText:TextField;
 
 	public function new() {
 		super();
-		graphics.beginFill(0xFFFFFF, 0.78);
-		graphics.lineStyle(1, 0x555555);
-		graphics.drawRoundRect(0, 0, 310, 156, 8, 8);
-		graphics.endFill();
-		bgText = makeOutput("textBox2", 7, 6, 296, 119, 0xFFFFFF);
-		bgText.x += 1;
-		bgText.y += 1;
+		// RaceChatGraphic is intentionally transparent. Its authored XFL contains
+		// two offset transcript fields, the input border, and the two-color Chat:
+		// label; the level remains visible behind it.
+		bgText = makeOutput("textBox2", OUTPUT_X, OUTPUT_Y, OUTPUT_WIDTH, 116, 0x808080);
 		var bg = new Sprite();
 		bg.name = "bg";
+		bg.x = 1;
+		bg.y = 1;
+		bg.scaleY = 1.00079345703125;
 		bg.addChild(bgText);
-		addChild(bg);
-		topText = makeOutput("textBox1", 7, 6, 296, 119, 0x222222);
+		topText = makeOutput("textBox1", OUTPUT_X, OUTPUT_Y, OUTPUT_WIDTH, OUTPUT_HEIGHT, 0x000000);
 		var top = new Sprite();
 		top.name = "top";
 		top.addChild(topText);
-		addChild(top);
+
+		var whiteLabel = makeLabel(5, 130.9, 0xFFFFFF);
+		var blackLabel = makeLabel(4, 129.9, 0x000000);
+
 		chatInput = new TextField();
 		chatInput.name = "chatInput";
-		chatInput.x = 7;
-		chatInput.y = 129;
-		chatInput.width = 296;
-		chatInput.height = 21;
+		chatInput.x = INPUT_X;
+		chatInput.y = INPUT_Y;
+		chatInput.width = INPUT_WIDTH;
+		chatInput.height = INPUT_HEIGHT;
 		chatInput.type = openfl.text.TextFieldType.INPUT;
-		chatInput.background = true;
-		chatInput.backgroundColor = 0xFFFFFF;
 		chatInput.border = true;
-		chatInput.borderColor = 0x777777;
-		chatInput.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 11, 0x111111);
+		chatInput.maxChars = 100;
+		chatInput.scaleY = 0.999664306640625;
+		chatInput.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 12, 0x000000);
+
+		// Animate lists layers from top to bottom. Add them in reverse display-list
+		// order so the XFL's transcript/color-shadow layering remains exact.
+		addChild(whiteLabel);
 		addChild(chatInput);
+		addChild(blackLabel);
+		addChild(bg);
+		addChild(top);
 	}
 
 	private static function makeOutput(name:String, x:Float, y:Float, width:Float, height:Float, color:Int):TextField {
@@ -238,10 +332,26 @@ private class RaceChatView extends Sprite {
 		field.y = y;
 		field.width = width;
 		field.height = height;
+		field.scaleY = 0.999664306640625;
 		field.multiline = true;
-		field.wordWrap = true;
+		field.wordWrap = false;
 		field.selectable = false;
-		field.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 11, color);
+		field.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 12, color);
+		return field;
+	}
+
+	private static function makeLabel(x:Float, y:Float, color:Int):TextField {
+		var field = new TextField();
+		field.x = x;
+		field.y = y;
+		field.width = 33.4;
+		field.height = 14.55;
+		field.scaleY = 0.999664306640625;
+		field.selectable = false;
+		field.mouseEnabled = false;
+		field.alpha = 0.498039215686275;
+		field.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 12, color);
+		field.text = "Chat:";
 		return field;
 	}
 

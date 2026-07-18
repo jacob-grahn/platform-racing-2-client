@@ -179,7 +179,7 @@ class TestCoursePage extends Page {
 	}
 
 	private function bind(name:String, handler:Void->Void):Void {
-		var target = art == null ? null : DisplayUtil.findByName(art, name);
+		var target = art == null ? null : DisplayUtil.directChildByName(art, name);
 		var binding = LobbyArt.bind(target, handler);
 		if (binding != null) {
 			bindings.push(binding);

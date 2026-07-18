@@ -1,7 +1,6 @@
 package pr2.runtime;
 
 import format.SVG;
-import haxe.Json;
 import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.geom.Rectangle;
@@ -9,10 +8,7 @@ import openfl.utils.Assets;
 
 /** Loads Animate-exported SVG text and renders it as OpenFL vector graphics. */
 class SvgAsset {
-	private static inline var TIMELINE_PREFIX = "assets/svg/timeline/";
-	private static inline var TIMELINE_PACK_PREFIX = "assets/svg-packs/timeline/";
 	private static final parsed:Map<String, SVG> = new Map();
-	private static final timelinePackEntries:Map<String, Dynamic> = new Map();
 
 	public static function create(assetPath:String):Shape {
 		var shape = new Shape();
@@ -23,6 +19,17 @@ class SvgAsset {
 	public static function createFromText(content:String):Shape {
 		var shape = new Shape();
 		new SVG(prepare(content)).render(shape.graphics);
+		return shape;
+	}
+
+	/** Applies Flash-style solid color channels to named XFL instance groups before rendering. */
+	public static function createTinted(assetPath:String, tints:Map<String, Int>, hidden:Array<String>):Shape {
+		var document = Xml.parse(prepare(loadText(assetPath)));
+		var root = document.firstElement();
+		if (root == null) throw 'Invalid SVG asset $assetPath';
+		applyNamedTints(root, tints, hidden, null);
+		var shape = new Shape();
+		new SVG(document.toString()).render(shape.graphics);
 		return shape;
 	}
 
@@ -68,52 +75,26 @@ class SvgAsset {
 		try {
 			content = Assets.getText(assetPath);
 		} catch (_:Dynamic) {
-			// Packed timeline entries deliberately have no individual OpenFL asset.
+			// Direct `<asset>` SVG entries are classified as binary by OpenFL.
+			// Fall through to getBytes before the sys-only source-tree fallback.
+		}
+		if (content == null) {
+			try {
+				var bytes = Assets.getBytes(assetPath);
+				if (bytes != null) content = bytes.toString();
+			} catch (_:Dynamic) {
+				// Packed timeline entries deliberately have no individual OpenFL asset.
+			}
 		}
 		#if sys
 		if (content == null && StringTools.startsWith(assetPath, "assets/svg/")) {
 			content = sys.io.File.getContent("art/svg/" + assetPath.substr("assets/svg/".length));
 		}
 		#end
-		if (content == null && StringTools.startsWith(assetPath, TIMELINE_PREFIX)) {
-			content = loadTimelinePackEntry(assetPath);
-		}
 		if (content == null) {
 			throw 'Missing SVG asset $assetPath';
 		}
 		return content;
-	}
-
-	private static function loadTimelinePackEntry(assetPath:String):Null<String> {
-		var group = timelinePackGroup(assetPath);
-		var entries = timelinePackEntries.get(group);
-		if (entries == null) {
-			var packPath = TIMELINE_PACK_PREFIX + group + ".json";
-			var packText = Assets.getText(packPath);
-			if (packText == null) {
-				throw 'Missing timeline SVG pack $packPath';
-			}
-			var pack:Dynamic = Json.parse(packText);
-			entries = Reflect.field(pack, "entries");
-			if (entries == null) {
-				throw 'Invalid timeline SVG pack $packPath';
-			}
-			timelinePackEntries.set(group, entries);
-		}
-		var content:Dynamic = Reflect.field(entries, assetPath);
-		return content == null ? null : Std.string(content);
-	}
-
-	private static function timelinePackGroup(assetPath:String):String {
-		var relative = assetPath.substr(TIMELINE_PREFIX.length);
-		var slash = relative.indexOf("/");
-		var slug = slash < 0 ? relative : relative.substr(0, slash);
-		for (group in ["buttons", "components", "graphics", "images", "movieclips", "parts", "ui"]) {
-			if (StringTools.startsWith(slug, group + "_")) {
-				return group;
-			}
-		}
-		return "misc";
 	}
 
 	/** openfl/svg does not implement SVG <use>; Animate relies on it heavily. */
@@ -201,5 +182,23 @@ class SvgAsset {
 	private static inline function localName(name:String):String {
 		var colon = name.indexOf(":");
 		return colon < 0 ? name : name.substr(colon + 1);
+	}
+
+	private static function applyNamedTints(node:Xml, tints:Map<String, Int>, hidden:Array<String>, inherited:Null<Int>):Bool {
+		if (node.nodeType != Xml.Element) return true;
+		var instance = node.get("data-xfl-instance");
+		if (instance != null && hidden.indexOf(instance) >= 0) return false;
+		var color = inherited;
+		if (instance != null && tints.exists(instance)) color = tints.get(instance);
+		if (color != null) {
+			var encoded = "#" + StringTools.hex(color, 6);
+			for (attribute in ["fill", "stroke", "stop-color", "flood-color"]) {
+				var value = node.get(attribute);
+				if (value != null && StringTools.startsWith(value, "#")) node.set(attribute, encoded);
+			}
+		}
+		var children = [for (child in node) child];
+		for (child in children) if (!applyNamedTints(child, tints, hidden, color)) node.removeChild(child);
+		return true;
 	}
 }

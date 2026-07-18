@@ -2,7 +2,6 @@ package pr2.levelEditor;
 
 import openfl.display.Sprite;
 import openfl.events.Event;
-import openfl.geom.Point;
 import pr2.lobby.dialogs.AutoDismissController;
 import pr2.ui.controls.GameSlider;
 import pr2.ui.controls.GameTextInput;
@@ -23,9 +22,14 @@ class EditorBrushSizePickerMenu extends Sprite {
 		this.target = target;
 		art = new BrushSizeMenuView();
 		addChild(art);
-		var origin = editor.globalToLocal(target.localToGlobal(new Point(0, 0)));
-		x = origin.x - 85;
-		y = origin.y - 35;
+		var targetBounds = target.getBounds(editor);
+		var popupWidth = width;
+		var popupHeight = height;
+		var popupX = targetBounds.left > popupWidth ? targetBounds.left - popupWidth - 7 : targetBounds.right + 7;
+		var popupY = Math.max(0, targetBounds.top);
+		if (popupY + popupHeight > 400) popupY = 400 - popupHeight;
+		x = Math.round(popupX);
+		y = Math.round(popupY);
 		slider = art.slider;
 		textInput = art.textInput;
 		if (slider != null) {

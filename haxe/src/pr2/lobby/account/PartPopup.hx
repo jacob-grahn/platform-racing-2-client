@@ -51,13 +51,13 @@ class PartPopup extends Popup {
 
 		art = new PartPopupView();
 		addChild(art);
-		var title = LobbyArt.text(art, "titleBox");
-		var descBox = LobbyArt.text(art, "descBox");
+		var title = LobbyArt.directText(art, "titleBox");
+		var descBox = LobbyArt.directText(art, "descBox");
 		if (title != null) title.text = "-- " + partName + " " + ucfirst(partType) + " --";
 		if (descBox != null) descBox.htmlText = partDesc;
 		dynamicObtain();
 		showPart();
-		closeBinding = LobbyArt.bind(DisplayUtil.findByName(art, "close_bt"), startFadeOut);
+		closeBinding = LobbyArt.bind(DisplayUtil.directChildByName(art, "close_bt"), startFadeOut);
 	}
 
 	public function targetForTests():Null<PartPreview> {
@@ -69,17 +69,17 @@ class PartPopup extends Popup {
 	}
 
 	public function obtainHtmlForTests():String {
-		var obtainBox = LobbyArt.text(art, "obtainBox");
+		var obtainBox = LobbyArt.directText(art, "obtainBox");
 		return obtainBox == null ? "" : obtainBox.htmlText;
 	}
 
 	public function epicTextForTests():String {
-		var epicBox = LobbyArt.text(art, "epicBox");
+		var epicBox = LobbyArt.directText(art, "epicBox");
 		return epicBox == null ? "" : epicBox.text;
 	}
 
 	public function ownedTextForTests():String {
-		var ownedBox = LobbyArt.text(art, "ownedBox");
+		var ownedBox = LobbyArt.directText(art, "ownedBox");
 		return ownedBox == null ? "" : ownedBox.text;
 	}
 
@@ -166,7 +166,7 @@ class PartPopup extends Popup {
 				default:
 			}
 		}
-		var obtainBox = LobbyArt.text(art, "obtainBox");
+		var obtainBox = LobbyArt.directText(art, "obtainBox");
 		if (obtainBox != null) {
 			obtainBox.htmlText = "How to obtain: " + obtain;
 			nameMaker.listenForLink(obtainBox);
@@ -182,8 +182,8 @@ class PartPopup extends Popup {
 	}
 
 	private function showPart():Void {
-		var ownedBox = LobbyArt.text(art, "ownedBox");
-		var epicBox = LobbyArt.text(art, "epicBox");
+		var ownedBox = LobbyArt.directText(art, "ownedBox");
+		var epicBox = LobbyArt.directText(art, "epicBox");
 		if (ownedBox != null) {
 			ownedBox.text = "You don't own this part.";
 		}
@@ -202,7 +202,7 @@ class PartPopup extends Popup {
 				target.showEpic();
 				epicFlash.addItem(target.epicTarget);
 			}
-			equipButton = Std.downcast(DisplayUtil.findByName(art, "equip_bt"), GameButton);
+			equipButton = Std.downcast(DisplayUtil.directChildByName(art, "equip_bt"), GameButton);
 			if (equipButton != null) {
 				equipButton.enabled = true;
 				equipButton.addEventListener(MouseEvent.CLICK, equipPart, false, 0, true);
@@ -234,7 +234,8 @@ class PartPopup extends Popup {
 		fredScaleDivisor:Float):Null<PartPreview> {
 		if (["HAT", "HEAD", "BODY", "FEET"].indexOf(type) == -1) return null;
 		var target = new PartPreview(type, id, has);
-		target.x = type == "HAT" || type == "HEAD" ? 59 : 55;
+		var detail = Std.isOfType(root, PartPopupView);
+		target.x = detail ? -130 : (type == "HAT" || type == "HEAD" ? 59 : 55);
 		target.y = 30;
 		target.scaleX = target.scaleY = fredScaleDivisor <= 0 ? 1 : 2 / fredScaleDivisor;
 		if (id == 29 && type == "BODY") {
@@ -253,6 +254,8 @@ class PartPopup extends Popup {
 		if (id != 35 || (type != "BODY" && type != "FEET")) {
 			return null;
 		}
+		// Flash uses authored empty frame 33 as a spacer for the opposite Djinn
+		// part; the neutral rig records that empty frame explicitly.
 		var bodyId = type == "BODY" ? 35 : 33;
 		var feetId = type == "FEET" ? 35 : 33;
 		var character = new AccountCharacter(1, 31, bodyId, feetId);

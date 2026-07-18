@@ -29,16 +29,14 @@ class ServerLevelBlockFactory {
 			container.addChild(background);
 		}
 
-		var assetPath = ServerLevelRenderer.blockAssetPath(block.code);
-		if (assetPath != "" && Assets.exists(assetPath, AssetType.IMAGE)) {
-			var bitmap = new Bitmap(Assets.getBitmapData(assetPath));
+		var data = ServerLevelRenderer.blockBitmapData(block.code);
+		if (data != null) {
+			var bitmap = new Bitmap(data);
 			bitmap.smoothing = false;
 			bitmap.width = ServerLevelRenderer.TILE_SIZE;
 			bitmap.height = ServerLevelRenderer.TILE_SIZE;
 			container.addChild(bitmap);
-		} else {
-			drawFallbackBlock(container, block.code);
-		}
+		} else throw 'Missing authored block bitmap for code ${block.code}';
 
 		var arrowRotation = ServerLevelRenderer.arrowOverlayRotation(block.code);
 		if (arrowRotation != null) {
@@ -59,16 +57,14 @@ class ServerLevelBlockFactory {
 	public function createIceOverlay():Sprite {
 		var overlay = new Sprite();
 		overlay.name = ServerLevelRenderer.ICE_OVERLAY_NAME;
-		var assetPath = ServerLevelRenderer.blockAssetPath(ObjectCodes.BLOCK_ICE);
-		if (assetPath != "" && Assets.exists(assetPath, AssetType.IMAGE)) {
-			var bitmap = new Bitmap(Assets.getBitmapData(assetPath));
+		var data = ServerLevelRenderer.blockBitmapData(ObjectCodes.BLOCK_ICE);
+		if (data != null) {
+			var bitmap = new Bitmap(data);
 			bitmap.smoothing = false;
 			bitmap.width = ServerLevelRenderer.TILE_SIZE;
 			bitmap.height = ServerLevelRenderer.TILE_SIZE;
 			overlay.addChild(bitmap);
-		} else {
-			drawFallbackBlock(overlay, ObjectCodes.BLOCK_ICE);
-		}
+		} else throw "Missing authored ice block bitmap";
 		return overlay;
 	}
 
@@ -95,23 +91,6 @@ class ServerLevelBlockFactory {
 			case 1: 0;
 			case 0: 180;
 			default: 0;
-		}
-	}
-
-	public static function drawFallbackBlock(container:Sprite, code:Int):Void {
-		var shape = new Shape();
-		shape.graphics.beginFill(fallbackFill(code), 0.9);
-		shape.graphics.drawRect(0, 0, ServerLevelRenderer.TILE_SIZE, ServerLevelRenderer.TILE_SIZE);
-		shape.graphics.endFill();
-		shape.graphics.lineStyle(1, 0x111111, 0.55);
-		shape.graphics.drawRect(0.5, 0.5, ServerLevelRenderer.TILE_SIZE - 1, ServerLevelRenderer.TILE_SIZE - 1);
-		container.addChild(shape);
-	}
-
-	public static function fallbackFill(code:Int):Int {
-		return switch (code) {
-			case ObjectCodes.BLOCK_ARROW_DOWN | ObjectCodes.BLOCK_ARROW_UP | ObjectCodes.BLOCK_ARROW_LEFT | ObjectCodes.BLOCK_ARROW_RIGHT: 0xD0D0D0;
-			default: 0x888888;
 		}
 	}
 

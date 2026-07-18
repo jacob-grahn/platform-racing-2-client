@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="550px" height="400px" viewBox="0 0 550 400" preserveAspectRatio="none" data-xfl-root="MovieClips/Symbol 1351">
+  <g data-xfl-symbol="MovieClips/Symbol 1351">
+    <g data-svg-leaf="movieclips_symbol_1351_0578afd30c/t00_l001_f0015_r00.svg">
+      <defs>
+        <linearGradient id="xfl1_Gradient_1" gradientUnits="userSpaceOnUse" x1="0.5" y1="1.5" x2="98.5" y2="1.5" spreadMethod="pad">
+          <stop offset="0%" stop-color="#E6A81A" stop-opacity="0.7607843137254902" />
+          <stop offset="100%" stop-color="#DFF042" stop-opacity="0.6705882352941176" />
+        </linearGradient>
+        <g id="xfl1_Layer0_0_FILL">
+          <path fill="url(#xfl1_Gradient_1)" stroke="none" d=" M 100 14 L 100 0 0 0 0 14 100 14 Z" />
+        </g>
+        <path id="xfl1_Layer0_0_1_STROKES" stroke="#A6A6A6" stroke-width="1" stroke-linejoin="round" stroke-linecap="round" fill="none" d=" M 100 0 L 100 14 0 14" />
+        <path id="xfl1_Layer0_0_2_STROKES" stroke="#FFFFFF" stroke-width="1" stroke-linejoin="round" stroke-linecap="round" fill="none" d=" M 0 14 L 0 0 100 0" />
+      </defs>
+      <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+        <use xlink:href="#xfl1_Layer0_0_FILL" />
+        <use xlink:href="#xfl1_Layer0_0_1_STROKES" />
+        <use xlink:href="#xfl1_Layer0_0_2_STROKES" />
+      </g>
+    </g>
+  </g>
+</svg>

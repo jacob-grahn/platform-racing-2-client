@@ -10,6 +10,8 @@ import pr2.lobby.LobbyArt.Binding;
 import pr2.net.FormPostClient;
 import pr2.net.ServerConfig;
 import pr2.util.DisplayUtil;
+import pr2.ui.controls.GameButton;
+import pr2.ui.CustomScrollBar;
 import pr2.levelEditor.EditorPersistenceTypes.GetLevelsPostFactory;
 import pr2.levelEditor.EditorPersistenceTypes.GetLevelsLoadFactory;
 
@@ -21,14 +23,21 @@ class GetReportedLevelsPopup extends Popup {
 	public final listings:Array<GetReportedLevelsPopupItem> = [];
 	public var selected(default, null):Null<GetReportedLevelsPopupItem>;
 	private var bindings:Array<Binding> = [];
+	private var scroll:Null<CustomScrollBar>;
 
 	public function new() {
 		super();
 		art = new GetLevelsView();
 		addChild(art);
+		scroll = new CustomScrollBar();
+		scroll.x = 119;
+		scroll.y = -86;
+		art.addChild(scroll);
+		var holder = levelsHolder();
+		if (holder != null) scroll.init(holder, 160, 158);
 		setText("titleBox", "-- Reported Levels --");
-		var handle = DisplayUtil.findByName(art, "delete_bt");
-		Reflect.setProperty(handle, "label", "Handle");
+		var handle = Std.downcast(DisplayUtil.directChildByName(art, "delete_bt"), GameButton);
+		if (handle != null) handle.label = "Handle";
 		bind("cancel_bt", function():Void startFadeOut());
 		bind("load_bt", clickLoad);
 		bind("delete_bt", clickHandle);
@@ -66,7 +75,7 @@ class GetReportedLevelsPopup extends Popup {
 	}
 
 	private function addListing(listing:GetReportedLevelsPopupItem):Void {
-		listing.y = listings.length * 18;
+		listing.y = listings.length * 25;
 		var holder = levelsHolder();
 		if (holder != null) {
 			holder.addChild(listing);
@@ -90,30 +99,35 @@ class GetReportedLevelsPopup extends Popup {
 	}
 
 	private function updateButtons():Void {
-		Reflect.setProperty(DisplayUtil.findByName(art, "load_bt"), "enabled", selected != null);
-		Reflect.setProperty(DisplayUtil.findByName(art, "delete_bt"), "enabled", selected != null);
+		setButtonEnabled("load_bt", selected != null);
+		setButtonEnabled("delete_bt", selected != null);
+	}
+
+	private function setButtonEnabled(name:String, enabled:Bool):Void {
+		var button = Std.downcast(DisplayUtil.directChildByName(art, name), GameButton);
+		if (button != null) button.enabled = enabled;
 	}
 
 	private function hideLoadingGraphic():Void {
-		var loading = DisplayUtil.findByName(art, "loadingGraphic");
+		var loading = DisplayUtil.directChildByName(art, "loadingGraphic");
 		if (loading != null && loading.parent != null) {
 			loading.parent.removeChild(loading);
 		}
 	}
 
 	private function levelsHolder():Null<DisplayObjectContainer> {
-		return Std.downcast(DisplayUtil.findByName(art, "levelsHolder"), DisplayObjectContainer);
+		return Std.downcast(DisplayUtil.directChildByName(art, "levelsHolder"), DisplayObjectContainer);
 	}
 
 	private function setText(name:String, value:String):Void {
-		var field = LobbyArt.text(art, name);
+		var field = LobbyArt.directText(art, name);
 		if (field != null) {
 			field.text = value;
 		}
 	}
 
 	private function bind(name:String, handler:Void->Void):Void {
-		var binding = LobbyArt.bind(DisplayUtil.findByName(art, name), handler);
+		var binding = LobbyArt.bind(DisplayUtil.directChildByName(art, name), handler);
 		if (binding != null) {
 			bindings.push(binding);
 		}
@@ -129,6 +143,8 @@ class GetReportedLevelsPopup extends Popup {
 		}
 		listings.resize(0);
 		selected = null;
+		if (scroll != null) scroll.remove();
+		scroll = null;
 		art.dispose();
 		super.remove();
 	}

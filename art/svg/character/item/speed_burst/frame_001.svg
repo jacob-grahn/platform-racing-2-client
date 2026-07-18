@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="550px" height="400px" viewBox="0 0 550 400" preserveAspectRatio="none" data-xfl-root="MovieClips/Symbol 875">
+  <g data-xfl-symbol="MovieClips/Symbol 875">
+    <g data-svg-leaf="movieclips_symbol_875_0720b0f710/t00_l002_f0000_r00.svg">
+      <defs>
+        <radialGradient id="xfl1_Gradient_1" gradientUnits="userSpaceOnUse" cx="0" cy="0" r="46.150000000000006" fx="0" fy="0" gradientTransform="matrix( 1, 0, 0, 1, 0,0) " spreadMethod="pad">
+          <stop offset="0%" stop-color="#FFFF00" />
+          <stop offset="100%" stop-color="#00FF00" stop-opacity="0" />
+        </radialGradient>
+        <g id="xfl1_Layer0_0_FILL">
+          <path fill="url(#xfl1_Gradient_1)" stroke="none" d=" M 31.8 -31.85 Q 18.65 -45 0 -45 -18.65 -45 -31.85 -31.85 -45 -18.65 -45 0 -45 18.65 -31.85 31.8 -18.65 45 0 45 18.65 45 31.8 31.8 45 18.65 45 0 45 -18.65 31.8 -31.85 Z" />
+        </g>
+        <path id="xfl1_Layer0_0_1_STROKES" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" fill="none" d=" M 31.8 -31.85 Q 45 -18.65 45 0 45 18.65 31.8 31.8 18.65 45 0 45 -18.65 45 -31.85 31.8 -45 18.65 -45 0 -45 -18.65 -31.85 -31.85 -18.65 -45 0 -45 18.65 -45 31.8 -31.85 Z" />
+      </defs>
+      <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+        <use xlink:href="#xfl1_Layer0_0_FILL" />
+        <use xlink:href="#xfl1_Layer0_0_1_STROKES" />
+      </g>
+    </g>
+    <g transform="matrix(0 0.6018371582 -0.6018371582 0 -18.05 -0.6)">
+      <g data-xfl-symbol="MovieClips/Symbol 450">
+        <g data-svg-leaf="movieclips_symbol_450_7313ee55ec/t00_l000_f0000_r00.svg">
+          <defs>
+            <linearGradient id="xfl2_Gradient_1" gradientUnits="userSpaceOnUse" x1="0.075" y1="28.05" x2="-0.175" y2="-28.05" spreadMethod="pad">
+              <stop offset="0%" stop-color="#000000" />
+              <stop offset="100%" stop-color="#FFFFFF" />
+            </linearGradient>
+            <g id="xfl2_Layer0_0_FILL">
+              <path fill="url(#xfl2_Gradient_1)" stroke="none" d=" M 7 -2.55 L 22.1 -2.55 -0.05 -32.65 -22.15 -2.55 -6 -2.55 -6 32.65 7 32.65 7 -2.55 Z" />
+            </g>
+            <path id="xfl2_Layer0_0_1_STROKES" stroke="#000000" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" fill="none" d=" M 7 -2.55 L 7 32.65 -6 32.65 -6 -2.55 -22.15 -2.55 -0.05 -32.65 22.1 -2.55 7 -2.55 Z" />
+          </defs>
+          <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+            <use xlink:href="#xfl2_Layer0_0_FILL" />
+            <use xlink:href="#xfl2_Layer0_0_1_STROKES" />
+          </g>
+        </g>
+      </g>
+    </g>
+    <g transform="matrix(0 0.6018371582 -0.6018371582 0 20.95 -0.6)">
+      <g data-xfl-symbol="MovieClips/Symbol 450">
+        <g data-svg-leaf="movieclips_symbol_450_7313ee55ec/t00_l000_f0000_r00.svg">
+          <defs>
+            <linearGradient id="xfl3_Gradient_1" gradientUnits="userSpaceOnUse" x1="0.075" y1="28.05" x2="-0.175" y2="-28.05" spreadMethod="pad">
+              <stop offset="0%" stop-color="#000000" />
+              <stop offset="100%" stop-color="#FFFFFF" />
+            </linearGradient>
+            <g id="xfl3_Layer0_0_FILL">
+              <path fill="url(#xfl3_Gradient_1)" stroke="none" d=" M 7 -2.55 L 22.1 -2.55 -0.05 -32.65 -22.15 -2.55 -6 -2.55 -6 32.65 7 32.65 7 -2.55 Z" />
+            </g>
+            <path id="xfl3_Layer0_0_1_STROKES" stroke="#000000" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" fill="none" d=" M 7 -2.55 L 7 32.65 -6 32.65 -6 -2.55 -22.15 -2.55 -0.05 -32.65 22.1 -2.55 7 -2.55 Z" />
+          </defs>
+          <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+            <use xlink:href="#xfl3_Layer0_0_FILL" />
+            <use xlink:href="#xfl3_Layer0_0_1_STROKES" />
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

@@ -12,7 +12,6 @@ import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
 import pr2.lobby.account.Settings;
 import pr2.net.ServerConfig;
-import pr2.runtime.FlSliderEvent;
 import pr2.ui.controls.GameSlider;
 import pr2.util.DisplayUtil;
 
@@ -47,7 +46,7 @@ class OptionsPopup extends Popup {
 		if (sound != null) {
 			sound.value = Settings.soundLevel;
 			sound.addEventListener(Event.CHANGE, soundChanged);
-			sound.addEventListener(FlSliderEvent.THUMB_RELEASE, soundSliderRelease);
+			sound.onRelease = function():Void soundSliderRelease(null);
 		}
 		setText("musicPercentBox", Settings.musicLevel + "%");
 		setText("soundPercentBox", Settings.soundLevel + "%");
@@ -67,16 +66,16 @@ class OptionsPopup extends Popup {
 		setupAccountButtons();
 	}
 
-	private function slider(name:String):Null<GameSlider> return Std.downcast(DisplayUtil.findByName(art, name), GameSlider);
-	private function text(name:String):Null<TextField> return LobbyArt.text(art, name);
+	private function slider(name:String):Null<GameSlider> return Std.downcast(DisplayUtil.directChildByName(art, name), GameSlider);
+	private function text(name:String):Null<TextField> return LobbyArt.directText(art, name);
 	private function setText(name:String, value:String):Void { var field = text(name); if (field != null) field.text = value; }
 	private function bind(name:String, handler:Void->Void):Void {
-		var binding = LobbyArt.bind(DisplayUtil.findByName(art, name), handler);
+		var binding = LobbyArt.bind(DisplayUtil.directChildByName(art, name), handler);
 		if (binding != null) bindings.push(binding);
 	}
 
 	private function bindHover(name:String, over:Void->Void, out:Void->Void):Void {
-		var target = DisplayUtil.findByName(art, name);
+		var target = DisplayUtil.directChildByName(art, name);
 		if (target == null) return;
 		var onOver = function(_:Event):Void over();
 		var onOut = function(_:Event):Void out();
@@ -96,7 +95,7 @@ class OptionsPopup extends Popup {
 		accountButtons = new PopupButtonStack(art, 80, 20);
 		var buttons:Map<String, DisplayObject> = new Map();
 		for (name in ["changePass_bt", "changeEmail_bt", "guildLeave_bt", "guildCreate_bt", "guildEdit_bt", "guildTransfer_bt"]) {
-			var button = DisplayUtil.findByName(art, name);
+			var button = DisplayUtil.directChildByName(art, name);
 			if (button != null) buttons.set(name, button);
 		}
 		for (button in buttons) {
@@ -167,19 +166,19 @@ class OptionsPopup extends Popup {
 	private function setDrawArt(value:Bool):Void {
 		drawArt = value;
 		setHighlight("artHighlight", value);
-		var button = DisplayUtil.findByName(art, "art_bt");
-		var offText = DisplayUtil.findByName(art, "artOffText");
+		var button = DisplayUtil.directChildByName(art, "art_bt");
+		var offText = DisplayUtil.directChildByName(art, "artOffText");
 		if (button != null) button.visible = value;
 		if (offText != null) offText.visible = !value;
 		if (!value) closeArtMenu();
 		if (!value) hoverOut();
 	}
-	private function setHighlight(name:String, value:Bool):Void { var target = DisplayUtil.findByName(art, name); if (target != null) target.y = value ? TRUE_Y : FALSE_Y; }
+	private function setHighlight(name:String, value:Bool):Void { var target = DisplayUtil.directChildByName(art, name); if (target != null) target.y = value ? TRUE_Y : FALSE_Y; }
 
 	private function hoverArt():Void {
 		if (!drawArt) return;
 		hoverOut();
-		var target = DisplayUtil.findByName(art, "art_bt");
+		var target = DisplayUtil.directChildByName(art, "art_bt");
 		if (target != null) {
 			hoverActive = new HoverPopup("Choose Art Quality",
 				"Choose whether to draw art with lossless quality. This setting may degrade performance on some systems.", target);
@@ -189,7 +188,7 @@ class OptionsPopup extends Popup {
 
 	private function hoverMusic():Void {
 		hoverOut();
-		var target = DisplayUtil.findByName(art, "music_bt");
+		var target = DisplayUtil.directChildByName(art, "music_bt");
 		if (target != null) {
 			hoverActive = new HoverPopup("Choose Music", "Choose which songs are allowed to play in a level.", target);
 		}
@@ -229,7 +228,7 @@ class OptionsPopup extends Popup {
 
 	private function toggleArtMenu():Void {
 		if (!drawArt) return;
-		var target = DisplayUtil.findByName(art, "art_bt");
+		var target = DisplayUtil.directChildByName(art, "art_bt");
 		if (target != null) {
 			new OptionsArtQualityMenu(target);
 		}
@@ -242,7 +241,7 @@ class OptionsPopup extends Popup {
 	}
 
 	private function toggleSongsMenu():Void {
-		var target = DisplayUtil.findByName(art, "music_bt");
+		var target = DisplayUtil.directChildByName(art, "music_bt");
 		if (target != null) {
 			new OptionsSongsMenu(target);
 		}
@@ -274,7 +273,7 @@ class OptionsPopup extends Popup {
 		if (music != null) music.removeEventListener(Event.CHANGE, musicChanged);
 		if (sound != null) {
 			sound.removeEventListener(Event.CHANGE, soundChanged);
-			sound.removeEventListener(FlSliderEvent.THUMB_RELEASE, soundSliderRelease);
+			sound.onRelease = null;
 		}
 		if (art != null) {
 			art.dispose();

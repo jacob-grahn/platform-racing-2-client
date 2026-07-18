@@ -3,7 +3,6 @@ package pr2.levelEditor;
 import pr2.gameplay.Items;
 import pr2.page.EditorBlockOptions;
 import pr2.ui.controls.GameCheckBox;
-import pr2.util.DisplayUtil;
 
 class EditorItemBlockOptionsPopup extends EditorBlockOptionsPopup {
 	private final checks:Map<Int, GameCheckBox> = new Map();
@@ -11,16 +10,8 @@ class EditorItemBlockOptionsPopup extends EditorBlockOptionsPopup {
 	public function new(editor:LevelEditor, block:EditorBlockObject) {
 		super(editor, block, "ItemBlockOptionsGraphic");
 		var selected = EditorBlockOptions.selectedItems(block.options, editor.allowedItems);
-		for (itemId in Items.getAllCodes()) {
-			var check:Null<GameCheckBox> = Std.downcast(DisplayUtil.findByName(art, "check" + itemId), GameCheckBox);
-			if (check == null && itemId == Items.SNAKE) {
-				check = new GameCheckBox("Snake");
-				check.name = "check" + itemId;
-				var previous = Std.downcast(DisplayUtil.findByName(art, "check" + Items.ICE_WAVE), GameCheckBox);
-				check.x = previous == null ? 8 : previous.x;
-				check.y = previous == null ? 142 : previous.y + 18;
-				art.addChild(check);
-			}
+		for (itemId in flashItemCodes()) {
+			var check:Null<GameCheckBox> = Std.downcast(art.childNamed("check" + itemId), GameCheckBox);
 			if (check != null) {
 				check.selected = selected.indexOf(itemId) >= 0;
 				checks.set(itemId, check);
@@ -37,7 +28,7 @@ class EditorItemBlockOptionsPopup extends EditorBlockOptionsPopup {
 
 	override public function remove():Void {
 		var selected:Array<Int> = [];
-		for (itemId in Items.getAllCodes()) {
+		for (itemId in flashItemCodes()) {
 			var check = checks.get(itemId);
 			if (check != null && check.selected) {
 				selected.push(itemId);
@@ -45,5 +36,10 @@ class EditorItemBlockOptionsPopup extends EditorBlockOptionsPopup {
 		}
 		block.setOptions(EditorBlockOptions.applyItemOptions(selected, editor.allowedItems));
 		super.remove();
+	}
+
+	private static function flashItemCodes():Array<Int> {
+		return [Items.LASER_GUN, Items.MINE, Items.LIGHTNING, Items.TELEPORT, Items.SUPER_JUMP, Items.JET_PACK, Items.SPEED_BURST, Items.SWORD,
+			Items.ICE_WAVE];
 	}
 }
