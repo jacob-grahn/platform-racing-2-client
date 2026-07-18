@@ -1943,6 +1943,8 @@ class LobbyServicesTest {
 	}
 
 	private static function testScrollBarMapping():Void {
+		var scrollBar = new CustomScrollBar();
+		assertEquals(0.0, scrollBar.thumbCenterOffsetForTests(), "thumb art is centered on its Flash registration point");
 		// Thumb spans [20, 120]; target overflow = 400 - 300 = 100 px.
 		// At the top the target sits at its initial y; at the bottom it scrolls up
 		// by the full overflow.

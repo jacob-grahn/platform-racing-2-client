@@ -10,6 +10,7 @@ import pr2.lobby.account.AccountCustomizeData;
 import pr2.lobby.account.LoadoutsPopup;
 import pr2.lobby.account.PartInfoPopup;
 import pr2.lobby.account.PartPopup;
+import pr2.lobby.account.PartSelector;
 import pr2.lobby.account.PlayerDisplay;
 import pr2.lobby.account.Presets;
 import pr2.lobby.account.Settings;
@@ -31,7 +32,8 @@ class AccountTabTest {
 		testCharacterGraphicScale();
 		if (pr2.DeterministicTestMode.finishSmokeSuite("AccountTabTest")) return;
 		testCustomizePayload();
-		testGuildRenderingUsesLinkedClipAndEmblem();
+		testPartSelectorArrowsChangePart();
+		testGuildRenderingUsesLinkedClip();
 		testAccountSummaryValuesArePlainText();
 		testManualPartDispatchSavesOverrideAndRefreshes();
 		testRankTokenChangesRetestLevelAccess();
@@ -71,7 +73,20 @@ class AccountTabTest {
 		assertEquals(null, AccountCustomizeData.parse(["short"]), "short payload rejected");
 	}
 
-	private static function testGuildRenderingUsesLinkedClipAndEmblem():Void {
+	private static function testPartSelectorArrowsChangePart():Void {
+		var selector = new PartSelector(["1", "4"], 1, 0, []);
+		var changes = 0;
+		selector.addEventListener(openfl.events.Event.CHANGE, function(_):Void changes++);
+
+		@:privateAccess selector.arrows.rightButton.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		assertEquals(4, selector.getValue(), "right part-picker arrow selects the next owned part");
+		@:privateAccess selector.arrows.leftButton.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		assertEquals(1, selector.getValue(), "left part-picker arrow selects the previous owned part");
+		assertEquals(2, changes, "part-picker arrows dispatch changes to the character preview");
+		selector.remove();
+	}
+
+	private static function testGuildRenderingUsesLinkedClip():Void {
 		var handler = new CommandHandler();
 		var savedFactory = GuildName.popupFactory;
 		var openedGuilds:Array<Int> = [];
@@ -91,7 +106,7 @@ class AccountTabTest {
 		assertEquals(145.0, guildName.nameWidthForTests(), "account GuildName uses wide account width");
 		assertEquals(false, guildName.nameHtmlForTests().indexOf("<b>") >= 0, "account GuildName uses plain text");
 		assertEquals(true, guildName.nameHtmlForTests().indexOf("&lt;Guild&gt;") >= 0, "account GuildName escapes guild name");
-		assertEquals("speed.png", guildName.emblemForTests().getFileName(), "account GuildName loads emblem");
+		assertEquals(1, guildName.numChildren, "account GuildName matches the source text-only symbol");
 		guildName.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 		assertEquals(1, openedGuilds.length, "account GuildName remains clickable");
 		assertEquals(42, openedGuilds[0], "account GuildName routes guild id");
@@ -299,9 +314,9 @@ class AccountTabTest {
 		var decButton = Std.downcast(@:privateAccess speedSlider.decButton, openfl.display.Sprite);
 		var incButton = Std.downcast(@:privateAccess speedSlider.incButton, openfl.display.Sprite);
 
-		assertEquals(80.0, @:privateAccess speedSlider.slider.controlWidth, "speed slider track ends before right arrow");
-		assertEquals(80.0, @:privateAccess accelSlider.slider.controlWidth, "acceleration slider track ends before right arrow");
-		assertEquals(80.0, @:privateAccess jumpSlider.slider.controlWidth, "jumping slider track ends before right arrow");
+		assertEquals(125.0, @:privateAccess speedSlider.slider.controlWidth, "speed slider keeps source width before right arrow");
+		assertEquals(125.0, @:privateAccess accelSlider.slider.controlWidth, "acceleration slider keeps source width before right arrow");
+		assertEquals(125.0, @:privateAccess jumpSlider.slider.controlWidth, "jumping slider keeps source width before right arrow");
 		assertEquals(24.0, decButton.width, "left stat arrow has a larger square hitbox");
 		assertEquals(24.0, decButton.height, "left stat arrow hitbox is square");
 		assertEquals(24.0, incButton.width, "right stat arrow has a larger square hitbox");

@@ -33,17 +33,17 @@ class PlayerView extends NativeView {
 		playerInfo.y = -115.2;
 		addChild(playerInfo);
 		field(playerInfo, "statusBox", -106.75, 1, 213.5, 14.5, 10, false, TextFormatAlign.CENTER, 0x666666);
-		label("Group", -37.75, 22, 37.3);
+		label("Group", -37.75, 22, 37.3, TextFormatAlign.LEFT);
 		field(playerInfo, "groupBox", -38, 34, 141, 14.55, 12, false, TextFormatAlign.LEFT);
-		label("Guild", -38, 54, 37.3);
+		label("Guild", -38, 54, 37.3, TextFormatAlign.LEFT);
 		field(playerInfo, "guildBox", -38, 66, 141, 14.55, 12, false, TextFormatAlign.LEFT);
-		label("Rank", -38, 86, 36);
+		label("Rank", -38, 86, 36, TextFormatAlign.LEFT);
 		field(playerInfo, "rankBox", -38, 98, 36, 14.55, 12, false, TextFormatAlign.LEFT);
-		label("Joined", 12, 86, 91);
+		label("Joined", 12, 86, 91, TextFormatAlign.RIGHT);
 		field(playerInfo, "registerBox", 12, 98, 91, 14.85, 12, false, TextFormatAlign.RIGHT);
-		label("Hats", -38, 118, 36);
+		label("Hats", -38, 118, 36, TextFormatAlign.LEFT);
 		field(playerInfo, "hatBox", -38, 130, 36, 14.55, 12, false, TextFormatAlign.LEFT);
-		label("Active", 12, 118, 91);
+		label("Active", 12, 118, 91, TextFormatAlign.RIGHT);
 		field(playerInfo, "activeBox", 12, 130, 91, 14.95, 12, false, TextFormatAlign.RIGHT);
 
 		sourceIcon(playerInfo, "verifiedIcon", StaticSvg.PlayerPopupVerified, -6, 21.95, 0.53656005859375);
@@ -99,8 +99,8 @@ class PlayerView extends NativeView {
 		parent.addChild(icon);
 	}
 
-	private function label(value:String, x:Float, y:Float, width:Float):Void {
-		field(playerInfo, null, x, y, width, 10.95, 9, false, TextFormatAlign.RIGHT, 0x666666).text = value;
+	private function label(value:String, x:Float, y:Float, width:Float, align:TextFormatAlign):Void {
+		field(playerInfo, null, x, y, width, 10.95, 9, false, align, 0x666666).text = value;
 	}
 
 	private function sourceButton(parent:Sprite, name:String, kind:PlayerSourceButtonKind, x:Float, y:Float):Void {

@@ -117,8 +117,22 @@ class GameShellMountTest {
 		testTournamentStartForcesFirstStartPosition();
 		testTimerBeginRaceAndTimeoutBoundary();
 		testLiveRaceEmitsMultiplayerUpdates();
+		testLocalCharacterAnimationAdvancesDuringRace();
 
 		trace('GameShellMountTest passed $assertions assertions');
+	}
+
+	private static function testLocalCharacterAnimationAdvancesDuringRace():Void {
+		var course = buildCourse();
+		course.raceStarted = true;
+		course.updatePlayerDisplay();
+		var state = course.localCharacter.display.currentState;
+		var firstFrame = course.localCharacter.display.currentFrame;
+		course.updatePlayerDisplay();
+		assertEquals(state, course.localCharacter.display.currentState, "stable race motion keeps the same character animation");
+		assertEquals(firstFrame + 1, course.localCharacter.display.currentFrame,
+			"stable race motion advances instead of restarting the character animation");
+		course.remove();
 	}
 
 	private static function testDeathmatchHeartsShowInitialLives():Void {

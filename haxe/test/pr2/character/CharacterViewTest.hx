@@ -11,6 +11,7 @@ class CharacterViewTest {
 		testGeneratedRigContract();
 		if (pr2.DeterministicTestMode.finishSmokeSuite("CharacterViewTest")) return;
 		testExplicitHierarchyAndColors();
+		testLegacyRootRegistration();
 		testAppearanceSelectionAndPerPartColors();
 		testBubbleBodyNestedLoops();
 		testStandardHatStack();
@@ -427,6 +428,7 @@ class CharacterViewTest {
 	private static function testExplicitHierarchyAndColors():Void {
 		var view = new CharacterView(0x123456, 0xABCDEF);
 		assertEquals("rigRoot", view.getChildAt(0).name, "native rig root is explicit");
+		assertClose(14.05, view.getChildAt(0).transform.matrix.ty, "shared native root matches the legacy character registration");
 		assertEquals("heldItem", view.heldItemSocket.name, "held-item socket is explicit");
 		assertEquals("hatSocket", view.hatSocket.name, "hat socket is explicit");
 		assertEquals(view.slot("head"), view.hatSocket.parent, "hat socket follows the head slot");
@@ -440,6 +442,23 @@ class CharacterViewTest {
 		view.setColors(0x010203, -1);
 		var bodyArtwork = cast(view.slot("body").getChildByName("artwork"), openfl.display.Sprite);
 		assertEquals(false, bodyArtwork.getChildByName("secondary").visible, "negative epic color hides the secondary channel");
+	}
+
+	private static function testLegacyRootRegistration():Void {
+		var legacy = new CharacterDisplay(null, null, false);
+		legacy.setState("standAnim");
+		var legacyState = legacy.getStateClip("standAnim");
+		var nativeView = new CharacterView(0x2E8BFF, 0xFFD24A, null, "stand");
+		for (pair in [
+			{legacy: "head", nativeSlot: "head"},
+			{legacy: "body", nativeSlot: "body"},
+			{legacy: "foot1", nativeSlot: "frontFoot"},
+			{legacy: "foot2", nativeSlot: "backFoot"}
+		]) {
+			var legacyY = legacyState.getChildByTimelineName(pair.legacy).getBounds(legacy).y;
+			var nativeY = nativeView.slot(pair.nativeSlot).getBounds(nativeView).y;
+			assertTrue(Math.abs(legacyY - nativeY) < 0.02, '${pair.nativeSlot} matches the legacy shared-root vertical registration');
+		}
 	}
 
 	private static function testDeterministicStandingLoop():Void {

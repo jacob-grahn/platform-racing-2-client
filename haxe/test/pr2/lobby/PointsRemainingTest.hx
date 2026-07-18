@@ -2,6 +2,7 @@ package pr2.lobby;
 
 import openfl.text.TextField;
 import pr2.lobby.account.StatsSelect;
+import pr2.ui.controls.GameSlider;
 import pr2.util.TestDisplayUtil as DisplayUtil;
 
 class PointsRemainingTest {
@@ -34,7 +35,7 @@ class PointsRemainingTest {
 		var speed = @:privateAccess stats.speedSlider;
 		var nameBox = Std.downcast(DisplayUtil.findByName(speed, "nameBox"), TextField);
 		var statBox = Std.downcast(DisplayUtil.findByName(speed, "textBox"), TextField);
-		var slider = DisplayUtil.findByName(speed, "slider");
+		var slider = Std.downcast(DisplayUtil.findByName(speed, "slider"), GameSlider);
 		var dec = DisplayUtil.findByName(speed, "decBtn");
 		var inc = DisplayUtil.findByName(speed, "incBtn");
 		assertClose(1.85, nameBox.x, "stat name keeps XFL X");
@@ -42,6 +43,8 @@ class PointsRemainingTest {
 		assertClose(93, statBox.x, "stat value keeps XFL X");
 		assertClose(2, statBox.y, "stat value keeps XFL Y");
 		assertClose(20, slider.y, "stat slider keeps XFL Y");
+		assertClose(125, slider.controlWidth, "stat slider keeps XFL scaled width");
+		assertClose(22, slider.controlHeight, "stat slider keeps XFL height");
 		assertClose(-1, dec.transform.matrix.a, "decrement arrow keeps XFL horizontal inversion");
 		assertClose(-1, dec.transform.matrix.d, "decrement arrow keeps XFL vertical inversion");
 		assertClose(-8.7, dec.transform.matrix.tx, "decrement arrow keeps XFL X");

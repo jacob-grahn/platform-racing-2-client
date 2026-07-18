@@ -23,8 +23,7 @@ class GuildNameTest {
 		assertEquals(145.0, guild.nameWidthForTests(), "wide guild name width");
 		assertEquals(true, guild.nameHtmlForTests().indexOf("<b>") != -1, "bold guild name uses html text");
 		assertEquals(true, guild.nameHtmlForTests().indexOf("&lt;Guild&gt;") != -1, "bold guild name escapes html");
-		assertNotNull(guild.emblemForTests(), "guild name creates emblem surface");
-		assertEquals("emblem.png", guild.emblemForTests().getFileName(), "guild name loads emblem filename");
+		assertEquals(1, guild.numChildren, "guild name matches the source text-only symbol");
 
 		guild.makeWidth(120);
 		assertEquals(120.0, guild.nameWidthForTests(), "makeWidth updates authored name field");
@@ -54,8 +53,4 @@ class GuildNameTest {
 		if (expected != actual) throw '$message: expected $expected, got $actual';
 	}
 
-	private static function assertNotNull(value:Dynamic, message:String):Void {
-		assertions++;
-		if (value == null) throw message;
-	}
 }

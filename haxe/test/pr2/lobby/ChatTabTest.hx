@@ -70,7 +70,10 @@ class ChatTabTest {
 		assertClose(175, DisplayUtil.findByName(view, "infoButton").x, "chat info button keeps XFL X");
 		assertClose(25, view.transcriptArea.y, "chat transcript keeps XFL Y");
 		assertClose(100 * 1.87985229492188, view.transcriptArea.controlWidth, "chat transcript keeps XFL width");
-		assertClose(22 * 6.88603210449219, view.transcriptArea.controlHeight, "chat transcript keeps XFL height");
+		assertClose(44 * 6.88603210449219, view.transcriptArea.controlHeight, "chat transcript keeps XFL height");
+		assertClose(331 - 25 - 44 * 6.88603210449219,
+			view.chatInputControl.y - view.transcriptArea.y - view.transcriptArea.controlHeight,
+			"chat transcript reaches the input with the authored gap");
 		assertEquals(TextFieldType.DYNAMIC, view.textBox.type, "chat transcript keeps XFL non-editable state");
 		assertClose(331, view.chatInputControl.y, "chat input keeps XFL Y");
 		assertClose(100 * 1.45013427734375, view.chatInputControl.controlWidth, "chat input keeps XFL width");

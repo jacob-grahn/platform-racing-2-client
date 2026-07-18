@@ -1,6 +1,7 @@
 package pr2.ui.controls;
 
 import openfl.display.Shape;
+import openfl.events.MouseEvent;
 import pr2.assets.NativeAssetIds.StaticSvg;
 import pr2.assets.NativeAssets;
 
@@ -14,6 +15,7 @@ class AuthoredArrowButton extends NativeControl {
 		super(10, 16);
 		this.pointsRight = pointsRight;
 		this.action = action;
+		addEventListener(MouseEvent.CLICK, onClick);
 		redraw();
 	}
 
@@ -34,8 +36,13 @@ class AuthoredArrowButton extends NativeControl {
 	}
 
 	override public function dispose():Void {
+		removeEventListener(MouseEvent.CLICK, onClick);
 		action = function():Void {};
 		super.dispose();
+	}
+
+	private function onClick(_:MouseEvent):Void {
+		activate();
 	}
 
 	private function assetForState():StaticSvg {

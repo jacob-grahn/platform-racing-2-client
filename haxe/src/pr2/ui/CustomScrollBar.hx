@@ -35,7 +35,7 @@ class CustomScrollBar extends Sprite {
 		art = new Sprite();
 		track = NativeAssets.svg(StaticSvg.ScrollTrack);
 		track.y = 12.95;
-		thumb = makeVisual(StaticSvg.ScrollThumb);
+		thumb = makeVisual(StaticSvg.ScrollThumb, true);
 		thumb.y = 40;
 		var thumbIcon = NativeAssets.svg(StaticSvg.ScrollThumbIcon);
 		thumbIcon.x = 4;
@@ -109,6 +109,12 @@ class CustomScrollBar extends Sprite {
 
 	public function thumbHitBoundsForTests():Rectangle {
 		return thumbHitArea == null ? new Rectangle() : thumbHitArea.getBounds(thumbHitArea);
+	}
+
+	public function thumbCenterOffsetForTests():Float {
+		if (thumb == null || art == null) return Math.NaN;
+		var bounds = thumb.getBounds(art);
+		return bounds.y + bounds.height / 2 - thumb.y;
 	}
 
 	public function trackMouseEnabledForTests():Bool {
@@ -217,9 +223,13 @@ class CustomScrollBar extends Sprite {
 		}
 	}
 
-	private static function makeVisual(asset:StaticSvg):Sprite {
+	private static function makeVisual(asset:StaticSvg, centerVertically:Bool = false):Sprite {
 		var visual = new Sprite();
-		visual.addChild(NativeAssets.svg(asset));
+		var svg = NativeAssets.svg(asset);
+		if (centerVertically) {
+			svg.y = -svg.height / 2;
+		}
+		visual.addChild(svg);
 		return visual;
 	}
 }

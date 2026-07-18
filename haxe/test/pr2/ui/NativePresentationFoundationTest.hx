@@ -126,6 +126,9 @@ class NativePresentationFoundationTest {
 		assertEquals(0x555555, nativeButton.labelField.textColor, "disabled button uses the authored component label color");
 		assertEquals(5.0, nativeButton.labelField.x, "button reserves the authored five-pixel label gutter");
 		assertEquals(90.0, nativeButton.labelField.width, "button label width excludes both authored gutters");
+		var buttonBackground = @:privateAccess nativeButton.authoredBackground;
+		assertEquals(null, buttonBackground.scale9Grid, "button wrapper does not nine-slice and clip its child on HTML5");
+		assertEquals(true, buttonBackground.getChildAt(0).scale9Grid != null, "button nine-slices the authored vector itself");
 		var emphasized = new GameButton("Primary");
 		emphasized.emphasized = true;
 		assertEquals(cast StaticSvg.ButtonEmphasized, cast @:privateAccess emphasized.authoredAsset(), "emphasized button uses exact authored emphasized skin");
@@ -234,6 +237,9 @@ class NativePresentationFoundationTest {
 		assertEquals(5.0, input.textField.x, "text input keeps the authored component five-pixel horizontal padding");
 		assertEquals(1.0, input.textField.y, "text input leaves one pixel for the authored bevel");
 		assertEquals(90.0, input.textField.width, "text input text width excludes both authored horizontal gutters");
+		var inputBackground = @:privateAccess input.authoredBackground;
+		assertEquals(null, inputBackground.scale9Grid, "text input wrapper does not nine-slice and clip its child on HTML5");
+		assertEquals(true, inputBackground.getChildAt(0).scale9Grid != null, "text input nine-slices the authored vector itself");
 		input.displayAsPassword = true;
 		input.restrict = "A-Z0-9";
 		input.maxChars = 20;

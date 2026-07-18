@@ -1328,7 +1328,10 @@ class Course extends Sprite {
 		// grounded spawn, so the character sits still on its start block through
 		// the 3-2-1 rather than floating mid-jump.
 		var clipState = raceStarted ? state.characterState : CharacterState.Stand;
-		player.display.setState(clipState.toClipName());
+		var clipName = clipState.toClipName();
+		if (!player.display.isState(clipName)) {
+			player.display.setState(clipName);
+		}
 		player.display.advanceOneFrame();
 	}
 

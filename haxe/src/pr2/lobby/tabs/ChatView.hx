@@ -21,7 +21,7 @@ class ChatView extends NativeView {
 
 	public function new() {
 		super();
-		transcriptArea = ownControl(new GameTextArea(100 * 1.87985229492188, 22 * 6.88603210449219));
+		transcriptArea = ownControl(new GameTextArea(100 * 1.87985229492188, 44 * 6.88603210449219));
 		transcriptArea.name = "textArea";
 		transcriptArea.x = 0;
 		transcriptArea.y = 25;

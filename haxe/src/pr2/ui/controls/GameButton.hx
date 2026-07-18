@@ -67,10 +67,10 @@ class GameButton extends NativeControl {
 		while (authoredBackground.numChildren > 0) authoredBackground.removeChildAt(0);
 		var asset = authoredAsset();
 		var art = NativeAssets.svg(asset);
+		art.scale9Grid = new Rectangle(7, 5, 68, 11);
+		art.width = controlWidth;
+		art.height = controlHeight;
 		authoredBackground.addChild(art);
-		authoredBackground.scale9Grid = new Rectangle(7, 5, 68, 11);
-		authoredBackground.width = controlWidth;
-		authoredBackground.height = controlHeight;
 	}
 	override public function dispose():Void { removeEventListener(MouseEvent.CLICK, onClick); onPress = null; super.dispose(); }
 

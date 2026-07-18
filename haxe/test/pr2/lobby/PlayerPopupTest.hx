@@ -149,7 +149,7 @@ class PlayerPopupTest {
 		assertEquals(145.0, guildName.nameWidthForTests(), "GuildName uses wide profile width");
 		assertEquals(true, guildName.nameHtmlForTests().indexOf("<b>") >= 0, "GuildName uses bold profile text");
 		assertEquals(true, guildName.nameHtmlForTests().indexOf("&lt;Guild&gt;") >= 0, "GuildName escapes profile guild name");
-		assertEquals("speed.png", guildName.emblemForTests().getFileName(), "GuildName loads profile emblem");
+		assertEquals(1, guildName.numChildren, "profile GuildName matches the source text-only banner");
 		guildName.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 		assertEquals(1, openedGuilds.length, "profile GuildName remains clickable");
 		assertEquals(42, openedGuilds[0], "profile GuildName routes guild id");

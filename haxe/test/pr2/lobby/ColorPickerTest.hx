@@ -10,6 +10,7 @@ import pr2.lobby.account.ColorChoices;
 import pr2.lobby.account.ColorPicker;
 import pr2.lobby.account.ColorPickerPopup;
 import pr2.lobby.account.CursorEyedropper;
+import pr2.lobby.account.PartSelector;
 import pr2.ui.CustomCursor;
 
 class ColorPickerTest {
@@ -20,6 +21,7 @@ class ColorPickerTest {
 		if (pr2.DeterministicTestMode.finishSmokeSuite("ColorPickerTest")) return;
 		testColorChoicesPalette();
 		testColorPickerEventsAndRecents();
+		testAccountPartSelectorPickerSize();
 		testPopupOrientationAndDirection();
 		testPopupTextPaletteAndCancel();
 		testPopupSpectrumAndHue();
@@ -28,6 +30,20 @@ class ColorPickerTest {
 		testCursorEyedropperSamplingAndExclusions();
 		testPopupRestoresPriorCustomCursor();
 		trace('ColorPickerTest passed $assertions assertions');
+	}
+
+	private static function testAccountPartSelectorPickerSize():Void {
+		var selector = new PartSelector(["1"], 1, 0x123456, ["1"], 0x654321);
+		var primary:ColorPicker = @:privateAccess selector.cp;
+		var secondary:ColorPicker = @:privateAccess selector.cp2;
+		assertClose(20, primary.width, "account primary picker uses Flash width");
+		assertClose(20, primary.height, "account primary picker uses Flash height");
+		assertClose(20, secondary.width, "account epic picker uses Flash width");
+		assertClose(20, secondary.height, "account epic picker uses Flash height");
+		assertClose(primary.x, secondary.x, "account epic picker overlaps the primary picker");
+		assertClose(primary.y, secondary.y, "account epic picker shares the primary picker y");
+		assertEquals(@:privateAccess selector.epicMask, secondary.mask, "account epic picker uses the Flash triangular mask");
+		selector.remove();
 	}
 
 	private static function testColorUtilCompatibility():Void {

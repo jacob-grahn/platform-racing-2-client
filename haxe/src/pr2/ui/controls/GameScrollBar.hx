@@ -137,10 +137,11 @@ class GameScrollBar extends NativeControl {
 	private function drawTrack():Void {
 		while (trackHolder.numChildren > 0) trackHolder.removeChildAt(0);
 		var track = new Sprite();
-		track.addChild(NativeAssets.svg(StaticSvg.ScrollTrackAuthored));
-		track.scale9Grid = new Rectangle(0, 3, 15, 9);
-		track.width = AUTHORED_WIDTH;
-		track.height = Math.max(0, controlHeight - 2 * ARROW_HEIGHT);
+		var trackArt = NativeAssets.svg(StaticSvg.ScrollTrackAuthored);
+		trackArt.scale9Grid = new Rectangle(0, 3, 15, 9);
+		trackArt.width = AUTHORED_WIDTH;
+		trackArt.height = Math.max(0, controlHeight - 2 * ARROW_HEIGHT);
+		track.addChild(trackArt);
 		track.y = ARROW_HEIGHT;
 		trackHolder.addChild(track);
 	}
@@ -163,10 +164,11 @@ class GameScrollBar extends NativeControl {
 	private function drawThumb():Void {
 		while (thumb.numChildren > 0) thumb.removeChildAt(0);
 		var skin = new Sprite();
-		skin.addChild(NativeAssets.svg(thumbAsset()));
-		skin.scale9Grid = new Rectangle(0, 3, 15, 9);
-		skin.width = AUTHORED_WIDTH;
-		skin.height = thumbHeight();
+		var thumbArt = NativeAssets.svg(thumbAsset());
+		thumbArt.scale9Grid = new Rectangle(0, 3, 15, 9);
+		thumbArt.width = AUTHORED_WIDTH;
+		thumbArt.height = thumbHeight();
+		skin.addChild(thumbArt);
 		thumb.addChild(skin);
 		var icon = NativeAssets.svg(StaticSvg.ScrollThumbIcon);
 		icon.x = (AUTHORED_WIDTH - icon.width) / 2;

@@ -43,6 +43,8 @@ typedef CharacterViewPartColors = {
 **/
 class CharacterView extends Sprite {
 	public static final STATE_NAMES = ["run", "stand", "jump", "superJump", "bumped", "crouch", "crouchWalk", "swim", "frozen"];
+	/** Common legacy CharacterGraphic-to-native content registration delta. */
+	public static inline var LEGACY_ROOT_OFFSET_Y:Float = 13.6;
 	private static inline var VANISH_ASSET:String = "assets/blocks/vanish.png";
 
 	public var currentFrame(default, null):Int = 1;
@@ -207,7 +209,10 @@ class CharacterView extends Sprite {
 		endSignal = null;
 		completeDispatched = false;
 		var root = animation.root;
-		rigRoot.transform.matrix = new Matrix(root.a, root.b, root.c, root.d, root.tx, root.ty);
+		// Direct legacy/native bounds comparison gives a common 13.6 px vertical
+		// delta across the head, body, and both feet. Apply it at their shared root
+		// so the assembled character moves intact while slot matrices stay authored.
+		rigRoot.transform.matrix = new Matrix(root.a, root.b, root.c, root.d, root.tx, root.ty + LEGACY_ROOT_OFFSET_Y);
 		for (target in slots) target.visible = false;
 		var ordered = animation.slots.copy();
 		ordered.sort(function(left:RigSlot, right:RigSlot):Int return left.drawOrder - right.drawOrder);
@@ -218,6 +223,10 @@ class CharacterView extends Sprite {
 		}
 		applyAppearanceHierarchy();
 		applyFrame();
+	}
+
+	public function isState(state:String):Bool {
+		return currentState == normalizeState(state);
 	}
 
 	public function setColors(primary:Int, secondary:Int):Void {

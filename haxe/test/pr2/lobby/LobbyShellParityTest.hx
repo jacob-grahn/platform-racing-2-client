@@ -22,6 +22,14 @@ class LobbyShellParityTest {
 		assertNear(272, footer.levelEditorButton.x, "sponsored level-editor x");
 		assertNear(361, footer.logoutButton.x, "sponsored logout x");
 		assertNear(423, footer.optionsButton.x, "sponsored options x");
+		assertNear(58.1741333007812, footer.creditsButton.controlWidth, "sponsored credits uses the 100px Flash component width");
+		assertNear(81.4407348632812, footer.levelEditorButton.controlWidth, "sponsored level-editor uses the 100px Flash component width");
+		assertTrue(footer.creditsButton.x + footer.creditsButton.controlWidth < footer.levelEditorButton.x,
+			"sponsored credits and level-editor buttons do not overlap");
+		assertTrue(footer.levelEditorButton.x + footer.levelEditorButton.controlWidth < footer.logoutButton.x,
+			"sponsored level-editor and logout buttons do not overlap");
+		assertTrue(footer.logoutButton.x + footer.logoutButton.controlWidth < footer.optionsButton.x,
+			"sponsored logout and options buttons do not overlap");
 		assertNear(421, footer.vaultButton.y, "sponsored vault remains authored below the stage clip");
 		assertNear(421, footer.moreGamesButton.y, "sponsored Kong button remains authored below the stage clip");
 
@@ -32,6 +40,11 @@ class LobbyShellParityTest {
 		assertNear(285, footer.levelEditorButton.x, "member level-editor x");
 		assertNear(363, footer.logoutButton.x, "member logout x");
 		assertNear(423, footer.optionsButton.x, "member options x");
+		assertNear(73.9898681640625, footer.levelEditorButton.controlWidth, "member level-editor uses the 100px Flash component width");
+		assertTrue(footer.levelEditorButton.x + footer.levelEditorButton.controlWidth < footer.logoutButton.x,
+			"member level-editor and logout buttons do not overlap");
+		assertTrue(footer.logoutButton.x + footer.logoutButton.controlWidth < footer.optionsButton.x,
+			"member logout and options buttons do not overlap");
 		assertNear(435, footer.creditsButton.y, "member credits remains authored below the stage clip");
 		assertNear(430, footer.moreGamesButton.y, "member Kong button remains authored below the stage clip");
 
@@ -76,5 +89,10 @@ class LobbyShellParityTest {
 	private static function assertEquals(expected:Dynamic, actual:Dynamic, message:String):Void {
 		assertions++;
 		if (expected != actual) throw '$message: expected $expected, got $actual';
+	}
+
+	private static function assertTrue(actual:Bool, message:String):Void {
+		assertions++;
+		if (!actual) throw '$message: expected true, got false';
 	}
 }

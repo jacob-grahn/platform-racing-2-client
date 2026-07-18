@@ -93,17 +93,17 @@ class GameTextInput extends NativeControl {
 		graphics.clear();
 		while (authoredBackground.numChildren > 0) authoredBackground.removeChildAt(0);
 		var background = NativeAssets.svg(authoredAsset());
+		background.scale9Grid = enabled ? UP_GRID : DISABLED_GRID;
+		background.width = controlWidth;
+		background.height = controlHeight;
 		authoredBackground.addChild(background);
-		authoredBackground.scale9Grid = enabled ? UP_GRID : DISABLED_GRID;
-		authoredBackground.width = controlWidth;
-		authoredBackground.height = controlHeight;
 
 		while (focusBackground.numChildren > 0) focusBackground.removeChildAt(0);
 		var focusArt = NativeAssets.svg(StaticSvg.FocusRect);
+		focusArt.scale9Grid = FOCUS_GRID;
+		focusArt.width = controlWidth;
+		focusArt.height = controlHeight;
 		focusBackground.addChild(focusArt);
-		focusBackground.scale9Grid = FOCUS_GRID;
-		focusBackground.width = controlWidth;
-		focusBackground.height = controlHeight;
 		focusBackground.visible = focused && enabled;
 	}
 

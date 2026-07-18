@@ -31,7 +31,6 @@ class GameSlider extends NativeControl {
 		track = new Sprite();
 		track.mouseEnabled = false;
 		track.mouseChildren = false;
-		track.scale9Grid = new Rectangle(2.25, 0, 75.75, 3);
 		addChild(track);
 		thumb = new Sprite();
 		thumb.mouseChildren = false;
@@ -125,8 +124,10 @@ class GameSlider extends NativeControl {
 	private function drawTrack():Void {
 		if (track == null) return;
 		while (track.numChildren > 0) track.removeChildAt(0);
-		track.addChild(SvgAsset.create(enabled ? "assets/svg/ui/slider_track_up.svg" : "assets/svg/ui/slider_track_disabled.svg"));
-		track.width = controlWidth;
+		var art = SvgAsset.create(enabled ? "assets/svg/ui/slider_track_up.svg" : "assets/svg/ui/slider_track_disabled.svg");
+		art.scale9Grid = new Rectangle(2.25, 0, 75.75, 3);
+		art.width = controlWidth;
+		track.addChild(art);
 		track.y = (controlHeight - 3) / 2;
 	}
 

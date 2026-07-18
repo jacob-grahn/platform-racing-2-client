@@ -19,6 +19,7 @@ class PartSelector extends Sprite {
 	private var arrows:ArrowButtons;
 	private var cp:ColorPicker;
 	private var cp2:ColorPicker;
+	private var epicMask:Sprite;
 	private var epicOverlay:Sprite;
 	private var color:Int = 0;
 	private var color2:Int = -1;
@@ -33,19 +34,26 @@ class PartSelector extends Sprite {
 		this.epicArray = epics;
 
 		cp = new ColorPicker();
+		cp.width = cp.height = 20;
 		cp.setColor(color);
 		cp.x = 120;
 		cp.addEventListener(Event.CHANGE, onColorChange);
 		addChild(cp);
 
 		cp2 = new ColorPicker();
+		cp2.width = cp2.height = 20;
 		cp2.setColor(color2 < 0 ? 0 : color2);
 		cp2.x = 120;
-		cp2.y = 22;
 		cp2.addEventListener(Event.CHANGE, onColorChange);
 		addChild(cp2);
 
-		epicOverlay = makeDiagonalLine(14, 14);
+		epicMask = makeTriangleMask(cp.width, cp.height);
+		epicMask.x = cp2.x;
+		epicMask.y = cp2.y;
+		addChild(epicMask);
+		cp2.mask = epicMask;
+
+		epicOverlay = makeDiagonalLine(Std.int(cp.width - 6), Std.int(cp.height - 6));
 		epicOverlay.x = cp2.x + 3;
 		epicOverlay.y = cp2.y + 3;
 		addChild(epicOverlay);
@@ -134,6 +142,19 @@ class PartSelector extends Sprite {
 		s.graphics.moveTo(0, h);
 		s.graphics.lineTo(w, 0);
 		s.alpha = 0.5;
+		s.mouseEnabled = false;
+		s.mouseChildren = false;
+		return s;
+	}
+
+	private function makeTriangleMask(w:Float, h:Float):Sprite {
+		var s = new Sprite();
+		s.graphics.beginFill(0);
+		s.graphics.moveTo(0, h);
+		s.graphics.lineTo(w, h);
+		s.graphics.lineTo(w, 0);
+		s.graphics.lineTo(0, h);
+		s.graphics.endFill();
 		s.mouseEnabled = false;
 		s.mouseChildren = false;
 		return s;

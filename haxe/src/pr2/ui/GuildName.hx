@@ -7,13 +7,11 @@ import pr2.assets.NativeAssetIds.FontAsset;
 import pr2.assets.NativeAssets;
 import pr2.display.Removable;
 import pr2.lobby.dialogs.GuildPopup;
-import pr2.net.ServerConfig;
 
 class GuildName extends Removable {
 	public static var popupFactory:Int->Void = defaultPopupFactory;
 
 	private var nameBox:Null<TextField>;
-	private var emblemLoader:Null<EmblemLoader>;
 	private var guildId:Int;
 
 	public function new(id:Int, name:String, emblem:String, boldText:Bool = false, wide:Bool = false) {
@@ -42,14 +40,6 @@ class GuildName extends Removable {
 			}
 		}
 
-		emblemLoader = new EmblemLoader(20, 10, ServerConfig.emblemUploadUrl(), ServerConfig.emblemsUrl());
-		emblemLoader.x = -23;
-		emblemLoader.y = 2;
-		emblemLoader.mouseEnabled = false;
-		emblemLoader.mouseChildren = false;
-		emblemLoader.getImage(emblem == null || emblem == "" ? "default-emblem.jpg" : emblem);
-		addChild(emblemLoader);
-
 		addEventListener(MouseEvent.CLICK, clickHandler);
 	}
 
@@ -70,16 +60,8 @@ class GuildName extends Removable {
 		return nameBox == null ? "" : nameBox.htmlText;
 	}
 
-	public function emblemForTests():Null<EmblemLoader> {
-		return emblemLoader;
-	}
-
 	override public function remove():Void {
 		removeEventListener(MouseEvent.CLICK, clickHandler);
-		if (emblemLoader != null) {
-			emblemLoader.remove();
-			emblemLoader = null;
-		}
 		nameBox = null;
 		super.remove();
 	}

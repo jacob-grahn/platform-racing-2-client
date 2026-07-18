@@ -131,10 +131,11 @@ class GameSelect<T> extends NativeControl {
 		var listHeight = visibleRows * 22 + 4;
 		var listSkin = new Sprite();
 		listSkin.mouseEnabled = false;
-		listSkin.addChild(NativeAssets.svg(StaticSvg.ListSkin));
-		listSkin.scale9Grid = new Rectangle(2, 2, 146, 18);
-		listSkin.width = controlWidth;
-		listSkin.height = listHeight;
+		var listArt = NativeAssets.svg(StaticSvg.ListSkin);
+		listArt.scale9Grid = new Rectangle(2, 2, 146, 18);
+		listArt.width = controlWidth;
+		listArt.height = listHeight;
+		listSkin.addChild(listArt);
 		holder.addChild(listSkin);
 		var start = Std.int(Math.max(0, Math.min(maxScrollOffset(), scrollOffset)));
 		var end = Std.int(Math.min(options.length, start + visibleRows));
@@ -176,10 +177,11 @@ class GameSelect<T> extends NativeControl {
 		var asset = selected ? (hovered ? StaticSvg.CellSelectedOver : StaticSvg.CellSelectedUp) : (hovered ? StaticSvg.CellOver : StaticSvg.CellUp);
 		var skin = new Sprite();
 		skin.mouseEnabled = false;
-		skin.addChild(NativeAssets.svg(asset));
-		skin.scale9Grid = new Rectangle(1, 1, 150, 20);
-		skin.width = Math.max(1, controlWidth - 4 - (options.length > visibleRowCount() ? 16 : 0));
-		skin.height = 22;
+		var rowArt = NativeAssets.svg(asset);
+		rowArt.scale9Grid = new Rectangle(1, 1, 150, 20);
+		rowArt.width = Math.max(1, controlWidth - 4 - (options.length > visibleRowCount() ? 16 : 0));
+		rowArt.height = 22;
+		skin.addChild(rowArt);
 		row.addChild(skin);
 		var text = new TextField();
 		text.mouseEnabled = false;
@@ -187,7 +189,7 @@ class GameSelect<T> extends NativeControl {
 		text.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Body), 11, 0, false, false, false, null, null, TextFormatAlign.LEFT);
 		text.x = 5;
 		text.y = (22 - text.textHeight) / 2 - 2;
-		text.width = Math.max(1, skin.width - 10);
+		text.width = Math.max(1, rowArt.width - 10);
 		text.height = 22;
 		text.text = options[index].label;
 		row.addChild(text);
@@ -247,12 +249,11 @@ class GameSelect<T> extends NativeControl {
 		}
 		graphics.clear();
 		while (skinHolder.numChildren > 0) skinHolder.removeChildAt(0);
-		var skin = new Sprite();
-		skin.addChild(NativeAssets.svg(authoredAsset()));
-		skin.scale9Grid = new Rectangle(4, 13.45, 120.75, 4.6);
-		skin.width = controlWidth;
-		skin.height = controlHeight;
-		skinHolder.addChild(skin);
+		var art = NativeAssets.svg(authoredAsset());
+		art.scale9Grid = new Rectangle(4, 13.45, 120.75, 4.6);
+		art.width = controlWidth;
+		art.height = controlHeight;
+		skinHolder.addChild(art);
 	}
 	private function authoredAsset():StaticSvg {
 		if (!enabled) return StaticSvg.ComboBoxDisabled;
