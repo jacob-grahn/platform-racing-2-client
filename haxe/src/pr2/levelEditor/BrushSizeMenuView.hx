@@ -39,7 +39,8 @@ class BrushSizeMenuView extends NativeView {
 		slider.name = "slider";
 		slider.x = -75;
 		slider.y = 29;
-		slider.setSize(187.5, 22);
+		slider.setSize(80, 22);
+		slider.scaleX = 1.875;
 		addChild(slider);
 		textInput = ownControl(new GameTextInput("25"));
 		textInput.name = "textBox";

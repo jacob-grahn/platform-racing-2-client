@@ -4,6 +4,7 @@ import openfl.events.Event;
 import openfl.events.KeyboardEvent;
 import openfl.events.MouseEvent;
 import openfl.display.Sprite;
+import openfl.geom.Point;
 import openfl.geom.Rectangle;
 import openfl.ui.Keyboard;
 import pr2.runtime.SvgAsset;
@@ -81,18 +82,19 @@ class GameSlider extends NativeControl {
 		if (thumb != null) drawThumb();
 		return value;
 	}
-	private function selectFromMouse(event:MouseEvent):Void setValueFromPosition(event.localX);
+	private function selectFromMouse(event:MouseEvent):Void setValueFromPosition(pointerLocalX(event));
 	private function beginDrag(event:MouseEvent):Void {
 		if (!enabled || stage == null) return;
 		dragging = true;
-		setValueFromPosition(event.localX);
+		setValueFromPosition(pointerLocalX(event));
 		stage.addEventListener(MouseEvent.MOUSE_MOVE, drag);
 		stage.addEventListener(MouseEvent.MOUSE_UP, endDrag);
 	}
 	private function drag(event:MouseEvent):Void {
 		if (!dragging) return;
-		setValueFromPosition(globalToLocal(new openfl.geom.Point(event.stageX, event.stageY)).x);
+		setValueFromPosition(pointerLocalX(event));
 	}
+	private function pointerLocalX(event:MouseEvent):Float return globalToLocal(new Point(event.stageX, event.stageY)).x;
 	private function endDrag(_:MouseEvent):Void {
 		if (!dragging) return;
 		dragging = false;

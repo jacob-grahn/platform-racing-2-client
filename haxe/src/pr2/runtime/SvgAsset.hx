@@ -33,6 +33,22 @@ class SvgAsset {
 		return shape;
 	}
 
+	/** Renders the local contents of one named XFL instance without its attachment matrix. */
+	public static function createInstanceContents(assetPath:String, instanceName:String):Shape {
+		var document = Xml.parse(prepare(loadText(assetPath)));
+		var root = document.firstElement();
+		if (root == null) throw 'Invalid SVG asset $assetPath';
+		var instance = findNamedInstance(root, instanceName);
+		if (instance == null) throw 'SVG asset $assetPath has no instance $instanceName';
+		var content = "";
+		for (child in instance) content += child.toString();
+		var width = root.get("width");
+		var height = root.get("height");
+		var viewBox = root.get("viewBox");
+		var isolated = '<svg xmlns="http://www.w3.org/2000/svg" width="$width" height="$height" viewBox="$viewBox">$content</svg>';
+		return createFromText(isolated);
+	}
+
 	/** Returns artwork translated so its visible bounds begin at local (0, 0). */
 	public static function createNormalized(assetPath:String):Sprite {
 		var container = new Sprite();
@@ -110,7 +126,36 @@ class SvgAsset {
 		var definitions:Map<String, Xml> = new Map();
 		collectIds(root, definitions);
 		expandChildren(root, definitions, false);
+		bakeGroupOpacity(root, 1);
 		return document.toString();
+	}
+
+	private static function bakeGroupOpacity(node:Xml, inherited:Float):Void {
+		if (node.nodeType != Xml.Element || localName(node.nodeName) == "defs") return;
+		var local = 1.0;
+		if (node.exists("opacity")) {
+			var parsed = Std.parseFloat(node.get("opacity"));
+			if (!Math.isNaN(parsed)) local = parsed;
+			node.remove("opacity");
+		}
+		var combined = inherited * local;
+		if (isPaintedElement(localName(node.nodeName))) {
+			multiplyOpacity(node, "fill-opacity", combined);
+			multiplyOpacity(node, "stroke-opacity", combined);
+			combined = 1;
+		}
+		for (child in node.elements()) bakeGroupOpacity(child, combined);
+	}
+
+	private static function multiplyOpacity(node:Xml, attribute:String, inherited:Float):Void {
+		if (inherited == 1) return;
+		var own = node.exists(attribute) ? Std.parseFloat(node.get(attribute)) : 1.0;
+		if (Math.isNaN(own)) own = 1;
+		node.set(attribute, Std.string(own * inherited));
+	}
+
+	private static function isPaintedElement(name:String):Bool {
+		return ["path", "rect", "circle", "ellipse", "line", "polyline", "polygon", "text"].indexOf(name) >= 0;
 	}
 
 	private static function collectIds(node:Xml, definitions:Map<String, Xml>):Void {
@@ -182,6 +227,16 @@ class SvgAsset {
 	private static inline function localName(name:String):String {
 		var colon = name.indexOf(":");
 		return colon < 0 ? name : name.substr(colon + 1);
+	}
+
+	private static function findNamedInstance(node:Xml, instanceName:String):Null<Xml> {
+		if (node.nodeType != Xml.Element) return null;
+		if (node.get("data-xfl-instance") == instanceName) return node;
+		for (child in node.elements()) {
+			var found = findNamedInstance(child, instanceName);
+			if (found != null) return found;
+		}
+		return null;
 	}
 
 	private static function applyNamedTints(node:Xml, tints:Map<String, Int>, hidden:Array<String>, inherited:Null<Int>):Bool {

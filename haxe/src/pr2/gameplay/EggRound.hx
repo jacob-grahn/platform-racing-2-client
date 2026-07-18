@@ -121,7 +121,7 @@ class EggRound {
 	}
 
 	public function step(level:ServerLevel, courseRotation:Int = 0, ?playerX:Float, ?playerY:Float, playerCrouching:Bool = false,
-			playerRemoved:Bool = false):Void {
+			playerRemoved:Bool = false, wrapAroundLevel:Bool = true):Void {
 		stepAttackVisuals(level, courseRotation, playerX, playerY, playerCrouching, playerRemoved);
 		for (id in ids()) {
 			var egg = eggs.get(id);
@@ -132,7 +132,7 @@ class EggRound {
 				stepRemovingEgg(id, egg);
 				continue;
 			}
-			stepEgg(egg, level, courseRotation, playerX, playerY, playerCrouching, playerRemoved);
+			stepEgg(egg, level, courseRotation, playerX, playerY, playerCrouching, playerRemoved, wrapAroundLevel);
 			if (playerX != null && playerY != null
 				&& BlockCollision.isNearLocalPlayer(egg.x, egg.y, playerX, playerY, playerCrouching, playerRemoved)) {
 				collectEgg(id);
@@ -272,7 +272,7 @@ class EggRound {
 	}
 
 	private function stepEgg(egg:EggState, level:ServerLevel, courseRotation:Int, ?playerX:Float, ?playerY:Float, playerCrouching:Bool = false,
-			playerRemoved:Bool = false):Void {
+			playerRemoved:Bool = false, wrapAroundLevel:Bool = true):Void {
 		egg.velY += 0.2;
 		if (egg.velY > 8) {
 			egg.velY = 8;
@@ -317,7 +317,9 @@ class EggRound {
 		if (egg.wallCooldown > 0) {
 			egg.wallCooldown--;
 		}
-		wrapPosition(egg, level);
+		if (wrapAroundLevel) {
+			wrapPosition(egg, level);
+		}
 		rotatedPos = RotationMath.rotatePoint(egg.posX, egg.posY, -displayRotation);
 		egg.x = rotatedPos.x;
 		egg.y = rotatedPos.y;

@@ -1,12 +1,11 @@
 package pr2.levelEditor;
 
-import openfl.display.Bitmap;
 import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.geom.ColorTransform;
-import pr2.level.ArtBackgroundLoader;
 import pr2.level.ObjectCodes;
 import pr2.level.ServerLevelRenderer;
+import pr2.runtime.SvgAsset;
 
 /** Owns editor background display objects, asynchronous loading, and tinting. */
 @:access(pr2.levelEditor.LevelEditor)
@@ -61,17 +60,9 @@ class LevelEditorBackgroundController {
 			applyArtBackgroundTransform(code);
 			return;
 		}
-		ArtBackgroundLoader.request(assetPath, function(bitmapData):Void {
-			if (bitmapData == null || owner.artBackgroundContainer == null || generation != owner.backgroundLoadGeneration || owner.artBackgroundCode != code) {
-				return;
-			}
-			var bitmap = new Bitmap(bitmapData);
-			bitmap.smoothing = true;
-			bitmap.width = LevelEditor.BASE_HALF_STAGE_WIDTH * 2;
-			bitmap.height = LevelEditor.BASE_HALF_STAGE_HEIGHT * 2;
-			owner.artBackgroundContainer.addChildAt(bitmap, 0);
-			applyArtBackgroundTransform(code);
-		});
+		if (generation == owner.backgroundLoadGeneration && owner.artBackgroundCode == code) {
+			owner.artBackgroundContainer.addChildAt(SvgAsset.create(assetPath), 0);
+		}
 		applyArtBackgroundTransform(code);
 	}
 

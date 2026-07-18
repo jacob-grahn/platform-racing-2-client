@@ -37,7 +37,10 @@ class LobbyShellParityTest {
 		assertEquals(true, footer.member, "member variant selects kongregateSite frame");
 		assertNear(206, footer.vaultButton.x, "member vault x");
 		assertNear(366, footer.vaultButton.y, "member vault y");
+		assertNear(74.0097045898438, footer.vaultButton.controlWidth, "member vault keeps the nested XFL button width");
 		assertNear(285, footer.levelEditorButton.x, "member level-editor x");
+		assertTrue(footer.vaultButton.x + footer.vaultButton.controlWidth < footer.levelEditorButton.x,
+			"member vault ends before the level-editor button");
 		assertNear(363, footer.logoutButton.x, "member logout x");
 		assertNear(423, footer.optionsButton.x, "member options x");
 		assertNear(73.9898681640625, footer.levelEditorButton.controlWidth, "member level-editor uses the 100px Flash component width");

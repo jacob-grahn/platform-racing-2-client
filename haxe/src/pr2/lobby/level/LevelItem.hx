@@ -796,5 +796,21 @@ private class LevelItemIconButton extends NativeControl {
 			case Minus: down ? StaticSvg.MinusButtonDown : over ? StaticSvg.MinusButtonOver : StaticSvg.MinusButtonUp;
 		};
 		addChild(NativeAssets.svg(asset));
+		if (kind == Info) {
+			// openfl-svg does not render the authored SVG <text>, so restore the
+			// question mark from XFL `Buttons/Symbol 1213` as a native text field.
+			var question = new TextField();
+			question.name = "questionMark";
+			question.mouseEnabled = false;
+			question.selectable = false;
+			question.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 12, over || down ? 0xFFFF00 : 0x000000,
+				false, null, null, null, null, TextFormatAlign.CENTER);
+			question.text = "?";
+			question.x = 1.5;
+			question.y = -0.2;
+			question.width = 7;
+			question.height = 10.7;
+			addChild(question);
+		}
 	}
 }

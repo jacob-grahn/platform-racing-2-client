@@ -342,7 +342,9 @@ class EditorSettingsTest {
 		assertEquals("-- Brush Size --", title.text, "size picker menu preserves authored title");
 		assertClose(-75, menu.slider.x, "size picker slider x follows XFL matrix");
 		assertClose(29, menu.slider.y, "size picker slider y follows XFL matrix");
-		assertClose(187.5, menu.slider.controlWidth, "size picker slider width follows XFL scale");
+		assertClose(80, menu.slider.controlWidth, "size picker slider keeps its authored skin width");
+		assertClose(1.875, menu.slider.scaleX, "size picker slider applies the XFL instance scale");
+		assertClose(150, menu.slider.controlWidth * menu.slider.scaleX, "size picker slider renders at the authored width");
 		assertEquals(100.0, menu.slider.maximum, "size picker slider preserves authored maximum");
 		assertClose(-29, menu.textInput.x, "size picker input x follows XFL matrix");
 		assertClose(-13, menu.textInput.y, "size picker input y follows XFL matrix");
@@ -528,12 +530,16 @@ class EditorSettingsTest {
 		assertEquals(8172673, editor.color, "BG1 button commits Flash background color");
 		assertEquals(201, editor.artBackgroundCode, "BG1 button commits art background code");
 		assertEquals("201", editor.getLevelVars().get("data").split("`")[9], "BG1 button exports art background code");
+		assertEquals(1, @:privateAccess editor.artBackgroundContainer.numChildren,
+			"BG1 button immediately mounts its selected SVG background");
 		assertEquals("", editor.selectedToolId, "background button does not select a placement tool");
 
 		bg5.dispatchEvent(new MouseEvent(MouseEvent.CLICK, true));
 		assertEquals(0, editor.color, "BG5 button commits Flash black background color");
 		assertEquals(205, editor.artBackgroundCode, "BG5 button commits art background code");
 		assertEquals("205", editor.getLevelVars().get("data").split("`")[9], "BG5 button exports art background code");
+		assertEquals(2, @:privateAccess editor.artBackgroundContainer.numChildren,
+			"BG5 button mounts its SVG background and authored circle grid");
 
 		editor.setColor(0x224466);
 		assertEquals(null, editor.artBackgroundCode, "plain color commit clears selected art background");

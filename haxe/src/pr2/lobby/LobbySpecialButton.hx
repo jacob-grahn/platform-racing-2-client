@@ -10,13 +10,14 @@ import pr2.ui.controls.GameButton;
 
 /** Authored blank component skin with the XFL text/icon overlay and glow timeline. */
 class LobbySpecialButton extends GameButton {
+	private static inline final COMPONENT_WIDTH:Float = 100;
 	public final glow:TimelineClip;
 	private final overlay:Shape;
 
 	public function new(kind:LobbySpecialButtonKind) {
 		super("");
 		var isKong = kind == Kong;
-		var authoredWidth = isKong ? 111 * 0.960159301757812 : 111 * 0.740097045898438;
+		var authoredWidth = isKong ? COMPONENT_WIDTH * 0.960159301757812 : COMPONENT_WIDTH * 0.740097045898438;
 		var authoredHeight = 22 * 1.272705078125;
 		setSize(authoredWidth, authoredHeight);
 		glow = new TimelineClip(isKong ? "assets/ui/lobby_kong_glow.json" : "assets/ui/lobby_vault_glow.json");

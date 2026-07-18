@@ -165,6 +165,9 @@ class NativePresentationFoundationTest {
 		nativeSlider.value = 20;
 		flashSlider.value = 20;
 		assertEquals(flashSlider.value, nativeSlider.value, "slider clamps like FlSlider");
+		nativeSlider.value = 5;
+		@:privateAccess nativeSlider.thumb.dispatchEvent(new MouseEvent(MouseEvent.CLICK, true, false, 0, 0));
+		assertEquals(5.0, nativeSlider.value, "thumb release click uses slider coordinates instead of resetting from thumb-local zero");
 	}
 
 	private static function testFocusKeyboardAndTeardown():Void {
@@ -415,8 +418,12 @@ class NativePresentationFoundationTest {
 		assertClose(-75, view.getChildAt(0).y, "message popup ShadowBG keeps its XFL Y");
 		assertClose(-155, view.messageArea.x, "message TextArea keeps its XFL X");
 		assertClose(-65, view.messageArea.y, "message TextArea keeps its XFL Y");
-		assertClose(309.109497070313, view.messageArea.controlWidth, "message TextArea keeps its authored width");
-		assertClose(147.65, view.messageArea.controlHeight, "message TextArea keeps its authored height");
+		assertClose(100, view.messageArea.controlWidth, "message TextArea keeps its component base width");
+		assertClose(44, view.messageArea.controlHeight, "message TextArea keeps its component base height");
+		assertClose(3.09109497070313, view.messageArea.scaleX, "message TextArea keeps its XFL X scale");
+		assertClose(2.27197265625, view.messageArea.scaleY, "message TextArea keeps its XFL Y scale");
+		assertEquals(true, view.messageArea.y + view.messageArea.controlHeight * view.messageArea.scaleY < view.okButton.y,
+			"message TextArea ends above the OK button");
 		assertEquals(false, view.messageArea.editable, "message TextArea is non-editable as authored");
 		assertEquals("Server message", view.message.text, "message popup applies its AS3 htmlText assignment");
 		assertClose(-50, view.okButton.x, "message OK button keeps its XFL X");

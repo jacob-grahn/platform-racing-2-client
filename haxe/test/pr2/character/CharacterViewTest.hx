@@ -1,8 +1,10 @@
 package pr2.character;
 
 import openfl.events.Event;
+import openfl.filters.BlurFilter;
 import pr2.character.CharacterRig.RigSlot;
 import pr2.page.CustomizeCharacterScreen;
+import pr2.runtime.PR2MovieClip;
 
 class CharacterViewTest {
 	private static var assertions:Int = 0;
@@ -21,6 +23,7 @@ class CharacterViewTest {
 		testStableEffectTargetsAndJetState();
 		testDeterministicStandingLoop();
 		testAllStateTimingAndEndBehavior();
+		testSuperJumpChargeGlow();
 		testExhaustiveStateTransitionMatrix();
 		testFrozenOverlayAndCompletion();
 		testMaintainableParityMatrices();
@@ -63,7 +66,7 @@ class CharacterViewTest {
 	private static function testGeneratedRigContract():Void {
 		var rig = CharacterRig.loadClassic();
 		assertEquals("pr2-character-rig", rig.format, "neutral rig format marker");
-		assertEquals(7, rig.version, "neutral rig version");
+		assertEquals(8, rig.version, "neutral rig version");
 		assertEquals("MovieClips/Character", rig.source, "rig records its archival root source");
 		assertEquals(50, rig.parts.head.variants.length, "rig includes every standard head export");
 		assertEquals(47, rig.parts.body.variants.length, "rig includes standard bodies plus Fred");
@@ -105,7 +108,19 @@ class CharacterViewTest {
 	}
 
 	private static function testHeldItemsAndWeaponActions():Void {
+		var rig = CharacterRig.loadClassic();
 		var view = new CharacterView();
+		for (state in CharacterView.STATE_NAMES) {
+			view.setState(state);
+			var animation = CharacterRig.animation(rig, state);
+			var heldSlot = [for (slot in animation.slots) if (slot.name == "heldItem") slot][0];
+			var held = heldSlot.frames[0];
+			var root = animation.root;
+			var expectedY = root.b * held.tx + root.d * held.ty + root.ty;
+			assertClose(expectedY, view.heldItemSocket.transform.concatenatedMatrix.ty,
+				'$state held-item socket cancels the character-art root offset');
+		}
+		view.setState("stand");
 		assertEquals(0, view.heldItemSocket.numChildren, "empty item leaves the stable held-item socket clear");
 		for (name in ["Laser", "Mine", "Lightning", "Teleport", "Super Jump", "Jet Pack", "Speed Burst", "Sword", "Ice Wave", "Snake"]) {
 			view.setItemFrameName(name);
@@ -262,6 +277,10 @@ class CharacterViewTest {
 		view.setJetFlame(0.625, 0.875);
 		assertClose(0.625, view.jetFireScale, "jet fire-one scale is explicit");
 		assertClose(0.875, view.jetFireAlpha, "jet fire-two alpha is explicit");
+		var jetHolder = Std.downcast(view.heldItemSocket.getChildByName("heldItemArtwork"), openfl.display.Sprite);
+		var jetArtwork = Std.downcast(jetHolder.getChildByName("jetPackActiveArtwork"), openfl.display.Sprite);
+		assertClose(0.625, jetArtwork.getChildByName("fire1").scaleY, "jet fire-one flicker updates the rendered thrust scale");
+		assertClose(0.875, jetArtwork.getChildByName("fire2").alpha, "jet fire-two flicker updates the rendered thrust alpha");
 		view.setJetActive(false);
 		assertEquals(1, view.itemActionFrame, "jet-off restores the generated XFL off frame");
 	}
@@ -275,10 +294,10 @@ class CharacterViewTest {
 		assertEquals(false, view.slot("frontFoot").visible, "Fred hides the front foot slot");
 		assertEquals(false, view.slot("backFoot").visible, "Fred hides the back foot slot");
 		assertEquals(view.slot("body"), view.hatSocket.parent, "Fred mounts hats in the body hierarchy");
-		assertClose(-4.3, view.hatSlot(0).transform.matrix.tx, "Fred first hat applies its body attachment and export registration");
-		assertClose(-169, view.hatSlot(0).transform.matrix.ty, "Fred first hat preserves its authored vertical placement");
-		assertClose(-53.8, view.hatSlot(3).transform.matrix.tx, "Fred fourth hat includes the native stack step");
-		assertClose(-264.2, view.hatSlot(3).transform.matrix.ty, "Fred fourth hat includes the native vertical stack step");
+		assertClose(14.8, view.hatSlot(0).transform.matrix.tx, "Fred first hat preserves its authored body attachment x");
+		assertClose(-129.35, view.hatSlot(0).transform.matrix.ty, "Fred first hat preserves its authored body attachment y");
+		assertClose(-4.7, view.hatSlot(3).transform.matrix.tx, "Fred fourth hat preserves its authored body attachment x");
+		assertClose(-176.55, view.hatSlot(3).transform.matrix.ty, "Fred fourth hat preserves its authored body attachment y");
 
 		view.setState("crouch");
 		assertEquals(false, view.slot("head").visible, "Fred keeps the head hidden after a state change");
@@ -319,11 +338,11 @@ class CharacterViewTest {
 		assertHatChannelColor(view, 1, "secondary", 0x778899, "second hat epic color is independent");
 		assertHatChannelColor(view, 3, "primary", 0x123456, "fourth hat primary color is independent");
 
-		assertClose(26.1, view.hatSlot(0).transform.matrix.tx, "classic head applies the exported hat registration");
+		assertClose(45.2, view.hatSlot(0).transform.matrix.tx, "classic head uses the authored first-hat attachment");
 		view.setPartId("head", 23);
-		assertClose(34.2, view.hatSlot(0).transform.matrix.tx, "head 23 uses its authored shifted first-hat x");
+		assertClose(53.3, view.hatSlot(0).transform.matrix.tx, "head 23 uses its authored shifted first-hat x");
 		view.setState("run");
-		assertClose(34.2, view.hatSlot(0).transform.matrix.tx, "hat attachment stays local while the state moves the head");
+		assertClose(53.3, view.hatSlot(0).transform.matrix.tx, "hat attachment stays local while the state moves the head");
 
 		var rejectedHat = false;
 		try view.setHatIds([17, 1, 1, 1]) catch (_:Dynamic) rejectedHat = true;
@@ -355,10 +374,10 @@ class CharacterViewTest {
 					assertClose(expected.b, actual.b, 'head ${attachment.headId}/hat ${hat.id}/slot ${index + 1} preserves matrix b');
 					assertClose(expected.c, actual.c, 'head ${attachment.headId}/hat ${hat.id}/slot ${index + 1} preserves matrix c');
 					assertClose(expected.d, actual.d, 'head ${attachment.headId}/hat ${hat.id}/slot ${index + 1} preserves matrix d');
-					assertClose(expected.tx + rig.parts.hat.registration.x + rig.hatStackStep.x * index, actual.tx,
-						'head ${attachment.headId}/hat ${hat.id}/slot ${index + 1} preserves authored x registration');
-					assertClose(expected.ty + rig.parts.hat.registration.y + rig.hatStackStep.y * index, actual.ty,
-						'head ${attachment.headId}/hat ${hat.id}/slot ${index + 1} preserves authored y registration');
+					assertClose(expected.tx, actual.tx,
+						'head ${attachment.headId}/hat ${hat.id}/slot ${index + 1} preserves authored x attachment');
+					assertClose(expected.ty, actual.ty,
+						'head ${attachment.headId}/hat ${hat.id}/slot ${index + 1} preserves authored y attachment');
 					assertClose(expected.alpha, view.hatSlot(index).alpha,
 						'head ${attachment.headId}/hat ${hat.id}/slot ${index + 1} preserves authored alpha');
 				}
@@ -459,6 +478,18 @@ class CharacterViewTest {
 			var nativeY = nativeView.slot(pair.nativeSlot).getBounds(nativeView).y;
 			assertTrue(Math.abs(legacyY - nativeY) < 0.02, '${pair.nativeSlot} matches the legacy shared-root vertical registration');
 		}
+		var hats = [6, 5, 13, 16];
+		var legacyWithHats = new CharacterDisplay({hat: hats[0], hats: hats, head: 1, body: 1, feet: 1}, null, false);
+		legacyWithHats.setState("standAnim");
+		var legacyHead = Std.downcast(legacyWithHats.getStateClip("standAnim").getChildByTimelineName("head"), PR2MovieClip);
+		var nativeWithHats = new CharacterView(0x2E8BFF, 0xFFD24A, null, "stand", {head: 1, body: 1, feet: 1}, hats);
+		for (index in 0...4) {
+			var legacyHat = legacyHead.getChildByTimelineName('hat${index + 1}');
+			var legacyBounds = legacyHat.getBounds(legacyWithHats);
+			var nativeBounds = nativeWithHats.hatSlot(index).getBounds(nativeWithHats);
+			assertClose(legacyBounds.x, nativeBounds.x, 'hat slot ${index + 1} matches the original game horizontal position');
+			assertClose(legacyBounds.y, nativeBounds.y, 'hat slot ${index + 1} matches the original game vertical position');
+		}
 	}
 
 	private static function testDeterministicStandingLoop():Void {
@@ -499,6 +530,40 @@ class CharacterViewTest {
 		view.setState("run");
 		assertEquals(null, view.endSignal, "changing state clears the prior end signal");
 		assertEquals(1, view.currentFrame, "changing state rewinds the new animation");
+	}
+
+	private static function testSuperJumpChargeGlow():Void {
+		var view = new CharacterView();
+		view.setState("superJump");
+		var head = view.slot("head");
+		view.gotoFrame(39);
+		assertEquals(0, head.filters.length, "super-jump frame 39 has not started the authored charge glow");
+		assertClose(0.25, head.transform.colorTransform.redMultiplier, "super-jump frame 39 keeps the authored pre-glow desaturation");
+		assertClose(191, head.transform.colorTransform.redOffset, "super-jump frame 39 keeps the authored pre-glow brightness");
+
+		view.gotoFrame(40);
+		var blur = Std.downcast(head.filters[0], BlurFilter);
+		assertTrue(blur != null, "super-jump frame 40 starts the authored horizontal blur");
+		assertClose(25, blur.blurX, "super-jump frame 40 starts at the authored blur width");
+		assertClose(0, blur.blurY, "super-jump charge glow remains horizontal");
+		assertClose(0, head.transform.colorTransform.redMultiplier, "super-jump frame 40 replaces the original red channel");
+		assertClose(255, head.transform.colorTransform.redOffset, "super-jump frame 40 starts fully yellow");
+		assertClose(255, head.transform.colorTransform.greenOffset, "super-jump frame 40 starts fully yellow-green");
+		assertClose(0, head.transform.colorTransform.blueOffset, "super-jump charge adds no blue offset");
+
+		view.gotoFrame(46);
+		blur = Std.downcast(head.filters[0], BlurFilter);
+		assertClose(11.3636016845703, blur.blurX, "super-jump midpoint tapers the authored blur");
+		assertClose(0.26953125, head.transform.colorTransform.redMultiplier, "super-jump midpoint restores the authored color fraction");
+		assertClose(186, head.transform.colorTransform.redOffset, "super-jump midpoint tapers the yellow offset");
+
+		view.gotoFrame(51);
+		assertEquals(0, head.filters.length, "super-jump final frame finishes the horizontal blur");
+		assertClose(0.5, head.transform.colorTransform.redMultiplier, "super-jump final frame keeps the authored yellow tint");
+		assertClose(128, head.transform.colorTransform.redOffset, "super-jump final frame keeps the authored yellow offset");
+		view.setState("stand");
+		assertEquals(0, head.filters.length, "leaving super-jump clears its charge filter");
+		assertClose(1, head.transform.colorTransform.redMultiplier, "leaving super-jump restores the normal character color transform");
 	}
 
 	private static function testExhaustiveStateTransitionMatrix():Void {

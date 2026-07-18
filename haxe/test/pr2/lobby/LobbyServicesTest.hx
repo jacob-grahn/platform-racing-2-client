@@ -545,7 +545,7 @@ class LobbyServicesTest {
 		var sizeMenu = editor.activeBrushSizeMenu;
 		var sizeSlider = @:privateAccess sizeMenu.slider;
 		var sliderBounds = sizeSlider.getBounds(sizeMenu);
-		assertNear(19, Std.int(sliderBounds.x + sliderBounds.width / 2), 4, "brush size slider follows the authored XFL placement");
+		assertNear(0, Std.int(sliderBounds.x + sliderBounds.width / 2), 4, "brush size slider follows the authored XFL placement");
 		var popupBounds = sizeMenu.getBounds(editor);
 		var popupX = popupBounds.x + popupBounds.width / 2;
 		var popupY = popupBounds.y + popupBounds.height / 2;
@@ -1944,6 +1944,10 @@ class LobbyServicesTest {
 
 	private static function testScrollBarMapping():Void {
 		var scrollBar = new CustomScrollBar();
+		assertEquals(cast pr2.assets.NativeAssetIds.StaticSvg.ScrollArrowUpUpAuthored, cast scrollBar.arrowAssetForTests(true),
+			"custom scrollbar up box uses the complete authored arrow skin");
+		assertEquals(cast pr2.assets.NativeAssetIds.StaticSvg.ScrollArrowDownUpAuthored, cast scrollBar.arrowAssetForTests(false),
+			"custom scrollbar down box uses the complete authored arrow skin");
 		assertEquals(0.0, scrollBar.thumbCenterOffsetForTests(), "thumb art is centered on its Flash registration point");
 		// Thumb spans [20, 120]; target overflow = 400 - 300 = 100 px.
 		// At the top the target sits at its initial y; at the bottom it scrolls up
@@ -2209,6 +2213,9 @@ class LobbyServicesTest {
 		lifecycleSuccess(new pr2.net.LevelListClient.LevelListResult(lifecycleLevels, true));
 		var lifecycleItem = lifecycle.levelItemForTests(0);
 		assertNotNull(lifecycleItem, "lifecycle listing rendered a level item");
+		var listingQuestion = Std.downcast(DisplayUtil.findByName(lifecycleItem, "questionMark"), TextField);
+		assertNotNull(listingQuestion, "level listing info button restores the authored question mark");
+		assertEquals("?", listingQuestion.text, "level listing info button displays the original question mark");
 		assertEquals(true, lifecycleItem.coverShownForTests(), "rank-gated item shows access cover before cleanup");
 		LobbySocket.resetSent();
 		lifecycleItem.sendFillSlot(2);

@@ -41,8 +41,8 @@ class CustomScrollBar extends Sprite {
 		thumbIcon.x = 4;
 		thumbIcon.y = -4;
 		Std.downcast(thumb, Sprite).addChild(thumbIcon);
-		upArrow = makeVisual(StaticSvg.ScrollArrowUp);
-		downArrow = makeVisual(StaticSvg.ScrollArrowDown);
+		upArrow = makeVisual(arrowAsset(true));
+		downArrow = makeVisual(arrowAsset(false));
 		downArrow.y = 190;
 		art.addChild(track);
 		art.addChild(thumb);
@@ -120,6 +120,14 @@ class CustomScrollBar extends Sprite {
 	public function trackMouseEnabledForTests():Bool {
 		var interactiveTrack = Std.downcast(track, InteractiveObject);
 		return interactiveTrack != null && interactiveTrack.mouseEnabled;
+	}
+
+	private static inline function arrowAsset(up:Bool):StaticSvg {
+		return up ? StaticSvg.ScrollArrowUpUpAuthored : StaticSvg.ScrollArrowDownUpAuthored;
+	}
+
+	public function arrowAssetForTests(up:Bool):StaticSvg {
+		return arrowAsset(up);
 	}
 
 	private function installStableHitArea(display:Null<DisplayObject>, minWidth:Float, minHeight:Float):Null<Sprite> {

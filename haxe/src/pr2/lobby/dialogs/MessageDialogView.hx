@@ -23,10 +23,12 @@ class MessageDialogView extends NativeView {
 		panel.scaleY = 0.785232543945312;
 		addChild(panel);
 
-		messageArea = ownControl(new GameTextArea(309.109497070313, 147.65));
+		messageArea = ownControl(new GameTextArea(100, 44));
 		messageArea.name = "textBox_control";
 		messageArea.x = -155;
 		messageArea.y = -65;
+		messageArea.scaleX = 3.09109497070313;
+		messageArea.scaleY = 2.27197265625;
 		messageArea.editable = false;
 		message = messageArea.textField;
 		message.name = "textBox";

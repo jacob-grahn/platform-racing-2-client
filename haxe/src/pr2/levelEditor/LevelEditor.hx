@@ -7,7 +7,6 @@ import js.Browser;
 #end
 import openfl.display.DisplayObject;
 import openfl.display.DisplayObjectContainer;
-import openfl.display.Bitmap;
 import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.Event;
@@ -23,7 +22,6 @@ import pr2.audio.MusicCatalog;
 import pr2.gameplay.Items;
 import pr2.gameplay.LevelConfig;
 import pr2.level.ServerLevel.DecodedArtLayer;
-import pr2.level.ArtBackgroundLoader;
 import pr2.level.BlockType;
 import pr2.level.ObjectCodes;
 import pr2.level.ServerLevelDecoder;

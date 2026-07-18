@@ -314,9 +314,12 @@ class AccountTabTest {
 		var decButton = Std.downcast(@:privateAccess speedSlider.decButton, openfl.display.Sprite);
 		var incButton = Std.downcast(@:privateAccess speedSlider.incButton, openfl.display.Sprite);
 
-		assertEquals(125.0, @:privateAccess speedSlider.slider.controlWidth, "speed slider keeps source width before right arrow");
-		assertEquals(125.0, @:privateAccess accelSlider.slider.controlWidth, "acceleration slider keeps source width before right arrow");
-		assertEquals(125.0, @:privateAccess jumpSlider.slider.controlWidth, "jumping slider keeps source width before right arrow");
+		assertEquals(80.0, @:privateAccess speedSlider.slider.controlWidth, "speed slider keeps the native source component width");
+		assertEquals(80.0, @:privateAccess accelSlider.slider.controlWidth, "acceleration slider keeps the native source component width");
+		assertEquals(80.0, @:privateAccess jumpSlider.slider.controlWidth, "jumping slider keeps the native source component width");
+		assertEquals(1.5625, @:privateAccess speedSlider.slider.scaleX, "speed slider uses the authored horizontal instance scale");
+		assertEquals(1.5625, @:privateAccess accelSlider.slider.scaleX, "acceleration slider uses the authored horizontal instance scale");
+		assertEquals(1.5625, @:privateAccess jumpSlider.slider.scaleX, "jumping slider uses the authored horizontal instance scale");
 		assertEquals(24.0, decButton.width, "left stat arrow has a larger square hitbox");
 		assertEquals(24.0, decButton.height, "left stat arrow hitbox is square");
 		assertEquals(24.0, incButton.width, "right stat arrow has a larger square hitbox");

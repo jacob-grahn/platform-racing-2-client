@@ -1097,6 +1097,7 @@ class CharacterLifecycleTest {
 		assertEquals(0, course.eggRound.count(), "minion eggs wait for gameplay start");
 		assertTrue(!course.levelRenderer.blockDisplays.exists("0,30"), "minion egg block is not rendered as a fallback tile");
 
+		finishDrawing(course);
 		course.beginRace();
 		finishCountdown(course);
 
@@ -1107,6 +1108,27 @@ class CharacterLifecycleTest {
 		assertEquals(60, Std.int(first.posY), "first minion egg uses Flash y offset from block position");
 		assertTrue(handler.hasCommand("removeEgg25"), "last spawned minion egg registers remote removal command");
 		assertTrue(!handler.hasCommand("removeEgg26"), "minion egg placement enforces Flash's 25 egg cap");
+
+		course.localCharacter.setControllerPosition(150, -100);
+		var playerX = course.localCharacter.x;
+		var playerY = course.localCharacter.y;
+		first.posX = playerX;
+		first.posY = playerY;
+		first.velX = 0;
+		first.velY = 0;
+		var attacker = course.eggRound.egg(2);
+		attacker.posX = playerX - 50;
+		attacker.posY = playerY;
+		attacker.velX = 0;
+		attacker.velY = 0;
+		LobbySocket.resetSent();
+		course.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertTrue(first.removing,
+			'race minion egg squashes when it touches the local player (egg=${first.x},${first.y}; player=${course.localCharacter.x},${course.localCharacter.y}; removed=${course.localCharacter.removed})');
+		assertTrue(LobbySocket.sentCommands.join("|").indexOf("add_effect`") >= 0,
+			"race minion egg attacks when the local player enters its attack probe");
+		assertTrue(LobbySocket.sentCommands.join("|").indexOf("grab_egg`") == -1,
+			"squashing a race minion does not emit Alien Eggs score collection");
 
 		course.remove();
 		assertTrue(!handler.hasCommand("removeEgg25"), "course teardown unregisters minion egg removal command");

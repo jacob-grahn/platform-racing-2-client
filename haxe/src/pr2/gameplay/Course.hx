@@ -658,6 +658,9 @@ class Course extends Sprite {
 	}
 
 	public function collectEgg(id:Int):Void {
+		if (config.gameMode != "egg") {
+			return;
+		}
 		if (onCollectEgg != null && onCollectEgg(id)) {
 			return;
 		}
@@ -867,11 +870,8 @@ class Course extends Sprite {
 			snakeManager.step();
 		}
 		if (raceStarted && eggRound != null) {
-			if (config.gameMode == "egg") {
-				eggRound.step(level, Math.round(levelRenderer.rotation), localCharacter.x, localCharacter.y, localCharacter.crouching, localCharacter.removed);
-			} else {
-				eggRound.step(level);
-			}
+			eggRound.step(level, Math.round(levelRenderer.rotation), localCharacter.x, localCharacter.y, localCharacter.crouching,
+				localCharacter.removed, config.gameMode == "egg");
 		}
 		if (raceStarted && config.gameMode == "hat") {
 			stepLooseHats();

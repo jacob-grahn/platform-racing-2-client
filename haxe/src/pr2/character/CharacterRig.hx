@@ -11,6 +11,25 @@ typedef RigMatrix = {
 	var tx:Float;
 	var ty:Float;
 	var alpha:Float;
+	@:optional var colorTransform:RigColorTransform;
+	@:optional var blur:RigBlur;
+}
+
+typedef RigColorTransform = {
+	var redMultiplier:Float;
+	var greenMultiplier:Float;
+	var blueMultiplier:Float;
+	var alphaMultiplier:Float;
+	var redOffset:Float;
+	var greenOffset:Float;
+	var blueOffset:Float;
+	var alphaOffset:Float;
+}
+
+typedef RigBlur = {
+	var x:Float;
+	var y:Float;
+	var quality:Int;
 }
 
 typedef RigPartChannels = {
@@ -123,7 +142,7 @@ class CharacterRig {
 
 	public static function parse(content:String):CharacterRigDefinition {
 		var rig:CharacterRigDefinition = cast Json.parse(content);
-		if (rig.format != "pr2-character-rig" || rig.version != 7) {
+		if (rig.format != "pr2-character-rig" || rig.version != 8) {
 			throw 'Unsupported character rig ${rig.format} v${rig.version}';
 		}
 		if (rig.animations == null || rig.animations.length == 0) {

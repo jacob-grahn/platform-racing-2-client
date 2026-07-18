@@ -5,8 +5,10 @@ import openfl.display.Bitmap;
 import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.Event;
+import openfl.filters.BlurFilter;
 import openfl.geom.ColorTransform;
 import openfl.geom.Matrix;
+import openfl.geom.Point;
 import openfl.utils.AssetType;
 import openfl.utils.Assets;
 import pr2.character.CharacterRig.CharacterRigDefinition;
@@ -400,6 +402,13 @@ class CharacterView extends Sprite {
 	public function setJetFlame(scale:Float, alpha:Float):Void {
 		jetFireScale = scale;
 		jetFireAlpha = alpha;
+		var holder = Std.downcast(heldItemSocket.getChildByName("heldItemArtwork"), Sprite);
+		var activeArtwork = holder == null ? null : Std.downcast(holder.getChildByName("jetPackActiveArtwork"), Sprite);
+		if (activeArtwork == null) return;
+		var fire1 = activeArtwork.getChildByName("fire1");
+		var fire2 = activeArtwork.getChildByName("fire2");
+		if (fire1 != null) fire1.scaleY = scale;
+		if (fire2 != null) fire2.alpha = alpha;
 	}
 
 	public function effectTarget(slotName:String):Null<Sprite> return slot(slotName);
@@ -455,10 +464,33 @@ class CharacterView extends Sprite {
 		holder.alpha = matrix.alpha;
 		if (activeItem.name == "Mine" && Assets.exists("assets/blocks/mine_block.png", AssetType.IMAGE)) {
 			holder.addChild(new Bitmap(Assets.getBitmapData("assets/blocks/mine_block.png")));
+		} else if (activeItem.name == "Jet Pack" && jetActive && itemActionFrame > 1) {
+			holder.addChild(createActiveJetPackArtwork(activeItem.frames[itemActionFrame - 1]));
 		} else {
 			holder.addChild(SvgAsset.create(activeItem.frames[itemActionFrame - 1]));
 		}
 		heldItemSocket.addChild(holder);
+	}
+
+	private function createActiveJetPackArtwork(assetPath:String):Sprite {
+		var artwork = new Sprite();
+		artwork.name = "jetPackActiveArtwork";
+		var hidden = ["fire1", "fire2"];
+		artwork.addChild(SvgAsset.createTinted(assetPath, new Map<String, Int>(), hidden));
+		var fire2 = new Sprite();
+		fire2.name = "fire2";
+		fire2.transform.matrix = new Matrix(0, 1, -1, 0, 5.35, 146.05);
+		fire2.alpha = jetFireAlpha;
+		fire2.addChild(SvgAsset.createInstanceContents(assetPath, "fire2"));
+		artwork.addChildAt(fire2, 0);
+		var fire1 = new Sprite();
+		fire1.name = "fire1";
+		fire1.x = 4;
+		fire1.y = 105.55;
+		fire1.scaleY = jetFireScale;
+		fire1.addChild(SvgAsset.createInstanceContents(assetPath, "fire1"));
+		artwork.addChildAt(fire1, 1);
+		return artwork;
 	}
 
 	private function createSnakeHeldItem():Sprite {
@@ -527,7 +559,35 @@ class CharacterView extends Sprite {
 			var registration = registrationFor(slotDefinition.partKind);
 			target.transform.matrix = new Matrix(source.a, source.b, source.c, source.d, source.tx + registration.x, source.ty + registration.y);
 			target.alpha = source.alpha;
+			var color = source.colorTransform;
+			target.transform.colorTransform = color == null ? new ColorTransform() : new ColorTransform(
+				color.redMultiplier,
+				color.greenMultiplier,
+				color.blueMultiplier,
+				color.alphaMultiplier,
+				color.redOffset,
+				color.greenOffset,
+				color.blueOffset,
+				color.alphaOffset
+			);
+			var blur = source.blur;
+			target.filters = blur == null ? [] : [new BlurFilter(blur.x, blur.y, blur.quality)];
 		}
+		compensateHeldItemRootOffset();
+		compensateHatRootOffset();
+	}
+
+	private function compensateHeldItemRootOffset():Void {
+		// Held-item matrices already come from the original CharacterGraphic
+		// coordinate space. The legacy correction on rigRoot belongs only to the
+		// exported character-part artwork, so cancel it for this direct attachment.
+		var root = rigRoot.transform.matrix;
+		var determinant = root.a * root.d - root.b * root.c;
+		if (Math.abs(determinant) < 0.000001) return;
+		var current = heldItemSocket.transform.matrix;
+		heldItemSocket.transform.matrix = new Matrix(current.a, current.b, current.c, current.d,
+			current.tx + root.c * LEGACY_ROOT_OFFSET_Y / determinant,
+			current.ty - root.a * LEGACY_ROOT_OFFSET_Y / determinant);
 	}
 
 	private function registrationFor(partKind:Null<String>):{x:Float, y:Float} {
@@ -634,14 +694,17 @@ class CharacterView extends Sprite {
 			: CharacterRig.hatAttachment(rig, partIds.head).slots;
 		for (index in 0...4) {
 			var source = slots[index].matrix;
-			var registration = rig.parts.hat.registration;
+			// These are the matrices of hat1..hat4 inside the authored head/body,
+			// so each already contains its complete attachment and stack position.
+			// Applying the standalone hat-art registration or another stack step here
+			// duplicates offsets that are not present in the original display tree.
 			hatSlots[index].transform.matrix = new Matrix(
 				source.a,
 				source.b,
 				source.c,
 				source.d,
-				source.tx + registration.x + rig.hatStackStep.x * index,
-				source.ty + registration.y + rig.hatStackStep.y * index
+				source.tx,
+				source.ty
 			);
 			hatSlots[index].alpha = source.alpha;
 		}
@@ -655,6 +718,27 @@ class CharacterView extends Sprite {
 			for (slotName in rig.fred.hiddenSlots) requireSlot(slotName).visible = !fred;
 		}
 		applyHatAttachments();
+		compensateHatRootOffset();
+	}
+
+	private function compensateHatRootOffset():Void {
+		if (hatSocket.parent == null) return;
+		// The 13.6 px legacy correction belongs to the exported head/body/feet
+		// artwork, while the authored hat attachments already use the original
+		// CharacterGraphic coordinate space. Cancel that display-space shift for
+		// the hat socket without disturbing the head's rotation or scale.
+		var origin = globalToLocal(hatSocket.parent.localToGlobal(new Point()));
+		var basisX = globalToLocal(hatSocket.parent.localToGlobal(new Point(1, 0)));
+		var basisY = globalToLocal(hatSocket.parent.localToGlobal(new Point(0, 1)));
+		var a = basisX.x - origin.x;
+		var b = basisX.y - origin.y;
+		var c = basisY.x - origin.x;
+		var d = basisY.y - origin.y;
+		var determinant = a * d - b * c;
+		if (Math.abs(determinant) < 0.000001) return;
+		hatSocket.transform.matrix = new Matrix(1, 0, 0, 1,
+			c * LEGACY_ROOT_OFFSET_Y / determinant,
+			-a * LEGACY_ROOT_OFFSET_Y / determinant);
 	}
 
 	private static function copyPartIds(ids:CharacterViewPartIds):CharacterViewPartIds {

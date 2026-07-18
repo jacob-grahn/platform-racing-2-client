@@ -43,7 +43,8 @@ class PointsRemainingTest {
 		assertClose(93, statBox.x, "stat value keeps XFL X");
 		assertClose(2, statBox.y, "stat value keeps XFL Y");
 		assertClose(20, slider.y, "stat slider keeps XFL Y");
-		assertClose(125, slider.controlWidth, "stat slider keeps XFL scaled width");
+		assertClose(80, slider.controlWidth, "stat slider keeps the native XFL component width");
+		assertClose(1.5625, slider.scaleX, "stat slider keeps the XFL horizontal instance scale");
 		assertClose(22, slider.controlHeight, "stat slider keeps XFL height");
 		assertClose(-1, dec.transform.matrix.a, "decrement arrow keeps XFL horizontal inversion");
 		assertClose(-1, dec.transform.matrix.d, "decrement arrow keeps XFL vertical inversion");
