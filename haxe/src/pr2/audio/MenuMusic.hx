@@ -10,6 +10,12 @@ import openfl.utils.Assets;
 
 /** The two-layer Noodle Town menu track, including frame-rate fades and the
 	original random crossfade behavior. */
+#if (js && html5)
+@:access(lime.media.AudioBuffer)
+@:access(lime.media.AudioSource)
+@:access(lime._internal.backend.html5.HTML5AudioSource)
+@:access(openfl.media.SoundChannel)
+#end
 class MenuMusic extends Sprite {
 	private var channel1:Null<SoundChannel>;
 	private var channel2:Null<SoundChannel>;
@@ -26,10 +32,27 @@ class MenuMusic extends Sprite {
 		if (channel1 != null) return;
 		if (Math.random() > 0.5) { percentage1 = 0; percentage2 = 1; }
 		else { percentage1 = 1; percentage2 = 0; }
-		channel1 = Assets.getSound("assets/audio/sfx/menu_noodle_town_2.mp3").play(0, 9999);
-		channel2 = Assets.getSound("assets/audio/sfx/menu_noodle_town_3.mp3").play(0, 9999);
+		channel1 = playLoop("assets/audio/sfx/menu_noodle_town_2.wav");
+		channel2 = playLoop("assets/audio/sfx/menu_noodle_town_3.wav");
 		applyVolume(volume);
 		scheduleCrossfade();
+	}
+
+	private function playLoop(path:String):SoundChannel {
+		var channel = Assets.getSound(path).play(0, 9999);
+		#if (js && html5)
+		// Lime implements a finite loop count by waiting for Howler's `end`
+		// event and starting a new source. That event-to-source handoff leaves a
+		// short audible hole. Let Web Audio loop the already-decoded buffer
+		// instead, which keeps the boundary on the audio clock.
+		var source = channel.__audioSource;
+		var backend = source.__backend;
+		var howl = source.buffer.__srcHowl;
+		howl.off("end", backend.howl_onEnd, backend.id);
+		howl.loop(true, backend.id);
+		source.loops = 0;
+		#end
+		return channel;
 	}
 
 	public function setTargetVolume(value:Float):Void {

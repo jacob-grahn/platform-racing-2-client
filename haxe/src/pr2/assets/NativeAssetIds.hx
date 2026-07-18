@@ -168,7 +168,7 @@ enum abstract FontAsset(String) to String {
 }
 
 enum abstract SoundAsset(String) to String {
-	var ButtonClick = "assets/audio/sfx/menu_noodle_town_2.mp3";
+	var ButtonClick = "assets/audio/sfx/menu_noodle_town_2.wav";
 	var CountdownGo = "assets/audio/sfx/countdown_go.mp3";
 	var CountdownReady = "assets/audio/sfx/countdown_ready.mp3";
 	var Jump = "assets/audio/sfx/jump.mp3";

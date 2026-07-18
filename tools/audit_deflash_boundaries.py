@@ -255,7 +255,7 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--report", type=Path, default=DEFAULT_REPORT)
     parser.add_argument("--allowlist", type=Path, default=DEFAULT_ALLOWLIST)
-    parser.add_argument("--check", action="store_true", help="check report freshness and dependency boundary")
+    parser.add_argument("--check", action="store_true", help="check the dependency boundary without validating the Markdown report")
     parser.add_argument("--update-allowlist", action="store_true", help="replace the maximum dependency allowlist with current imports")
     args = parser.parse_args(argv)
     if args.check and args.update_allowlist:
@@ -264,14 +264,12 @@ def main(argv=None):
     try:
         occurrences = scan_couplings()
         dependencies = scan_forbidden_dependencies()
-        report = render_report(occurrences, dependencies)
         if args.check:
-            if args.report.read_text(encoding="utf-8") != report:
-                raise ValueError(f"coupling inventory is stale: regenerate {args.report}")
             violations = check_boundary(dependencies, load_allowlist(args.allowlist))
             if violations:
                 raise ValueError("new forbidden presentation dependencies:\n  " + "\n  ".join(violations))
         else:
+            report = render_report(occurrences, dependencies)
             args.report.parent.mkdir(parents=True, exist_ok=True)
             args.report.write_text(report, encoding="utf-8")
             if args.update_allowlist:

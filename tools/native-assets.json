@@ -158,7 +158,7 @@
     "Interface": "Verdana"
   },
   "sound": {
-    "ButtonClick": "assets/audio/sfx/menu_noodle_town_2.mp3",
+    "ButtonClick": "assets/audio/sfx/menu_noodle_town_2.wav",
     "CountdownGo": "assets/audio/sfx/countdown_go.mp3",
     "CountdownReady": "assets/audio/sfx/countdown_ready.mp3",
     "Jump": "assets/audio/sfx/jump.mp3"

@@ -93,8 +93,8 @@
     },
     {
       "libraryName": "Sounds/sound103.mp3",
-      "output": "assets/audio/sfx/menu_noodle_town_3.mp3",
-      "sha256": "34b6854c2ba8a23d5e143bcd01113b9cbdbb2f190c31c2b3b48c1fecdabe189f",
+      "output": "assets/audio/sfx/menu_noodle_town_3.wav",
+      "sha256": "3689da39d47d96e37d6cfab4718ff9091edc8c13d36480c54e209107086b63d2",
       "format": "22kHz 16bit Stereo",
       "sampleCount": 546216,
       "durationSeconds": 24.771701,
@@ -107,12 +107,17 @@
           "expression": "private var song2:Sound = new NoodleTown3();"
         }
       ],
-      "timelineUsages": []
+      "timelineUsages": [],
+      "decodedPcm": {
+        "sampleRate": 22050,
+        "bitsPerSample": 16,
+        "channels": 2
+      }
     },
     {
       "libraryName": "Sounds/sound104.mp3",
-      "output": "assets/audio/sfx/menu_noodle_town_2.mp3",
-      "sha256": "ce46aad14b150a70425f71f18f446dd837d1dcf7fab2b49c188b37b1caf47d0c",
+      "output": "assets/audio/sfx/menu_noodle_town_2.wav",
+      "sha256": "1fa9c1b42e7a648631f733a28fed1c746d298cc1cfb52151ff476bc97f313b79",
       "format": "22kHz 16bit Stereo",
       "sampleCount": 546216,
       "durationSeconds": 24.771701,
@@ -125,7 +130,12 @@
           "expression": "private var song1:Sound = new NoodleTown2();"
         }
       ],
-      "timelineUsages": []
+      "timelineUsages": [],
+      "decodedPcm": {
+        "sampleRate": 22050,
+        "bitsPerSample": 16,
+        "channels": 2
+      }
     },
     {
       "libraryName": "Sounds/sound1110.mp3",

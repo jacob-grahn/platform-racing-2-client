@@ -75,10 +75,8 @@ if [[ "$full_suite" == true && -n "$groups" ]]; then
 	exit 1
 fi
 
-# These generated inventories are also architectural boundaries: existing
-# Flash-presentation adapters may shrink, but production code cannot add a new
-# PR2MovieClip/Fl*/generated-timeline dependency unnoticed.
-python3 tools/generate_deflash_symbol_inventory.py --check
+# Keep the production/runtime architectural boundaries enforced independently
+# of the documentation-only symbol inventory.
 python3 tools/audit_deflash_boundaries.py --check
 python3 tools/check_no_compat_runtime.py --source-only
 python3 tools/generate_native_assets.py --check

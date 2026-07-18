@@ -56,6 +56,11 @@ RUNTIME_SOUND_STEMS = {
     "yeah": "artifact_yeah",
 }
 
+# MP3 frame padding creates an audible seam when these authored menu layers
+# loop. Preserve their original PCM payloads so Web Audio receives the exact
+# XFL sample count.
+LOSSLESS_LOOP_STEMS = {"sound103", "sound104"}
+
 
 def local_name(tag):
     return tag.rsplit("}", 1)[-1]
@@ -91,7 +96,8 @@ def wav_bytes(payload, description):
 
 def extracted_sound(xfl_dir, item):
     library_payload = xfl_dir / "LIBRARY" / item["name"]
-    if library_payload.suffix.lower() == ".mp3" and library_payload.exists():
+    source_stem = Path(item["name"]).stem
+    if source_stem not in LOSSLESS_LOOP_STEMS and library_payload.suffix.lower() == ".mp3" and library_payload.exists():
         return library_payload.read_bytes(), "mp3", None
 
     payload = (xfl_dir / "bin" / item["soundDataHRef"]).read_bytes()
