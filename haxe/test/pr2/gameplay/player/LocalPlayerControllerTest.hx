@@ -42,8 +42,10 @@ class LocalPlayerControllerTest {
 		testWaterTouchEmitsRippleVisual();
 		testWaterDampsSinkingAndPaddlesUp();
 		testLeavingWaterReturnsToLand();
+		testSafetyAboveCurrentFloorIsIgnored();
 		testSafetyBlockReturnsPlayerToLastSafeSpot();
-		testSafetyBlockEmitsPoofVisual();
+		testSafetyBlockDoesNotEmitTeleportPoof();
+		testDeathmatchSafetyReturnRemovesLifeAndFinishesAtZero();
 		testFallingPastMapReturnsPlayerToLastSafeSpot();
 		testHighImpactFallBreaksCrumbleBlock();
 		testSettledCrumbleStandDoesNotEmitPieces();
@@ -499,26 +501,21 @@ class LocalPlayerControllerTest {
 			player.controller.freezeBlockForTest(tileX, 7, 0);
 		}
 		var touchedSafety = false;
-		var poofEvents = 0;
 
 		for (_ in 0...120) {
 			player.step(new LocalPlayerInput(false, true));
 			if (player.stateSnapshot().touchedBlockType == "safety") {
 				touchedSafety = true;
-			}
-			for (event in player.consumeBlockVisualEvents()) {
-				if (event.kind == SafetyPoof) {
-					poofEvents++;
-				}
-			}
-			if (touchedSafety && player.stateSnapshot().y > 240) {
 				break;
 			}
 		}
 
 		assertEquals(true, touchedSafety, "player touches frozen safety block");
-		assertEquals(0, poofEvents, "frozen safety block does not emit return poof");
-		assertEquals(true, player.stateSnapshot().y > 200, "frozen safety block does not return player to last safe spot");
+		assertClose(210, player.stateSnapshot().y, "frozen safety block is a solid floor at its top edge");
+		assertClose(0, player.stateSnapshot().vy, "frozen safety block cancels downward velocity as a solid");
+		assertEquals(true, player.stateSnapshot().grounded, "frozen safety block supports the player");
+		assertClose(75, player.lastSafeX, "frozen safety block does not replace the last safe x");
+		assertClose(90, player.lastSafeY, "frozen safety block does not replace the last safe y");
 	}
 
 	private static function testFrozenSupplyBlockSuppressesUse():Void {
@@ -645,6 +642,7 @@ class LocalPlayerControllerTest {
 	private static function testSafetyBlockReturnsPlayerToLastSafeSpot():Void {
 		var player = new LocalCharacter(safetyDropLevel());
 		@:privateAccess player.controller.vx = 6;
+		@:privateAccess player.controller.targetVelX = 8;
 		var touchedSafety = false;
 
 		for (_ in 0...120) {
@@ -659,50 +657,83 @@ class LocalPlayerControllerTest {
 		assertEquals(true, touchedSafety, "falling player touches safety block");
 		assertClose(75, state.x, "safety block restores last safe x");
 		assertClose(90, state.y, "safety block restores last safe y");
-		assertEquals(true, Math.abs(state.vx) > 0.1, "safety block preserves horizontal velocity");
-		assertEquals(true, state.vy > 0.1, "safety block preserves falling velocity");
-		assertEquals(false, state.grounded, "safety return does not rewrite the airborne motion state");
+		assertClose(0, state.vx, "safety block clears raw horizontal velocity");
+		assertClose(0, state.vy, "safety block clears vertical velocity");
+		assertEquals(false, state.grounded, "safety return preserves the pre-return grounded state");
+		@:privateAccess assertAbove(player.controller.targetVelX, 0, "safety block preserves accumulated horizontal target velocity");
+		@:privateAccess assertClose(60, player.controller.hurtFramesRemaining, "safety block starts Flash's bump cooldown");
+		@:privateAccess assertClose(65, player.recoveryFrames, "safety block starts Flash's alpha recovery");
+
+		player.step(new LocalPlayerInput(false, true));
+		assertAbove(player.stateSnapshot().x, 75, "preserved horizontal target resumes rightward movement next frame");
+		assertClose(0, player.stateSnapshot().vy, "safe floor cancels the next frame's gravity without restoring the old fall speed");
 	}
 
-	private static function testSafetyBlockEmitsPoofVisual():Void {
-		var player = new LocalCharacter(safetyDropLevel());
-		var poofEvents = 0;
+	private static function testSafetyAboveCurrentFloorIsIgnored():Void {
+		var player = new LocalCharacter(safetyOverFloorLevel());
+		var touchedSafety = false;
 
 		for (_ in 0...120) {
 			player.step(new LocalPlayerInput(false, true));
-			for (event in player.consumeBlockVisualEvents()) {
-				if (event.kind == SafetyPoof) {
-					poofEvents++;
-					assertEquals(2, event.tileX, "safety poof appears at last safe tile x");
-					assertEquals(3, event.tileY, "safety poof appears at last safe tile y");
-				}
+			if (player.stateSnapshot().touchedBlockType == "safety") {
+				touchedSafety = true;
+				break;
 			}
+		}
+
+		assertEquals(true, touchedSafety, "player reaches safety net above the current floor column");
+		assertAbove(player.stateSnapshot().vx, 0, "same-column safety exception does not clear horizontal velocity");
+		@:privateAccess assertEquals(true, player.controller.hurtFramesRemaining <= 0, "ignored same-column safety does not start bump cooldown");
+		@:privateAccess assertClose(0, player.recoveryFrames, "ignored same-column safety does not start alpha recovery");
+	}
+
+	private static function testSafetyBlockDoesNotEmitTeleportPoof():Void {
+		var player = new LocalCharacter(safetyDropLevel());
+
+		for (_ in 0...120) {
+			player.step(new LocalPlayerInput(false, true));
 			if (player.stateSnapshot().touchedBlockType == "safety") {
 				break;
 			}
 		}
 
-		assertEquals(1, poofEvents, "safety return emits one teleport poof visual event");
+		assertEquals(0, player.consumeBlockVisualEvents().length, "safety return does not emit a teleport poof or sound");
+	}
+
+	private static function testDeathmatchSafetyReturnRemovesLifeAndFinishesAtZero():Void {
+		var player = new LocalCharacter(safetyDropLevel());
+		player.setGameMode("deathmatch");
+		player.setLife(1);
+
+		for (_ in 0...120) {
+			player.step(new LocalPlayerInput(false, true));
+			if (player.stateSnapshot().touchedBlockType == "safety") {
+				break;
+			}
+		}
+
+		assertEquals(0, player.stateSnapshot().lives, "deathmatch safety return removes one life");
+		assertEquals(true, player.stateSnapshot().finished, "deathmatch safety return finishes the player at zero lives");
 	}
 
 	private static function testFallingPastMapReturnsPlayerToLastSafeSpot():Void {
 		var player = newPlayer();
 		var safeX = player.lastSafeX;
 		var safeY = player.lastSafeY;
+		@:privateAccess player.controller.targetVelX = 7;
+		@:privateAccess player.controller.vx = 4;
+		@:privateAccess player.controller.vy = 12;
 		player.setControllerPosition(safeX, 10000);
-		player.step(new LocalPlayerInput());
+		player.step(new LocalPlayerInput(false, true));
 
 		var state = player.stateSnapshot();
 		assertClose(safeX, state.x, "falling 500px past the map restores last safe x");
 		assertClose(safeY, state.y, "falling 500px past the map restores last safe y");
+		assertClose(0, state.vx, "map return clears raw horizontal velocity");
 		assertClose(0, state.vy, "map return clears falling velocity");
-		var sawPoof = false;
-		for (event in player.consumeBlockVisualEvents()) {
-			if (event.kind == SafetyPoof) {
-				sawPoof = true;
-			}
-		}
-		assertEquals(true, sawPoof, "map return emits the Flash safety poof");
+		@:privateAccess assertAbove(player.controller.targetVelX, 0, "map return preserves the friction-adjusted horizontal target");
+		@:privateAccess assertClose(60, player.controller.hurtFramesRemaining, "map return starts the same bump cooldown as safety");
+		assertEquals(0, player.consumeBlockVisualEvents().length, "map return does not emit a teleport poof");
 	}
 
 	private static function testHighImpactFallBreaksCrumbleBlock():Void {
@@ -2403,6 +2434,32 @@ class LocalPlayerControllerTest {
 				new LevelBlock(7, 7, BlockType.Safety),
 				new LevelBlock(8, 7, BlockType.Safety),
 				new LevelBlock(4, 10, BlockType.Finish)
+			]
+		);
+	}
+
+	private static function safetyOverFloorLevel():WorldLevel {
+		return new WorldLevel(
+			"safety-over-floor",
+			"Safety Over Floor",
+			10,
+			8,
+			30,
+			1,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(2, 4),
+			new TilePosition(8, 4),
+			[
+				new LevelBlock(1, 5, BlockType.Solid),
+				new LevelBlock(2, 5, BlockType.Solid),
+				new LevelBlock(3, 5, BlockType.Solid),
+				new LevelBlock(4, 5, BlockType.Solid),
+				new LevelBlock(5, 5, BlockType.Solid),
+				new LevelBlock(6, 5, BlockType.Solid),
+				new LevelBlock(7, 5, BlockType.Solid),
+				new LevelBlock(8, 5, BlockType.Solid),
+				new LevelBlock(5, 4, BlockType.Safety),
+				new LevelBlock(5, 3, BlockType.Safety)
 			]
 		);
 	}

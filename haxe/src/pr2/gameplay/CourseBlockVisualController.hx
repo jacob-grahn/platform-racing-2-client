@@ -55,8 +55,6 @@ class CourseBlockVisualController {
 					showBlockPieces(event, "MinePieceGraphic", 30, 30, 50);
 				case WaterRipple:
 					owner.levelRenderer.triggerWaterRipple(worldXOf(event), worldYOf(event));
-				case SafetyPoof:
-					owner.levelRenderer.showTeleportPop(worldXOf(event), worldYOf(event));
 				case TeleportBlockPop:
 					emitLocalTeleportPop(event);
 				case BlockBumpSound:

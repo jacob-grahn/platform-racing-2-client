@@ -8,7 +8,6 @@ enum BlockVisualEventKind {
 	CrumblePieces;
 	MinePieces;
 	WaterRipple;
-	SafetyPoof;
 	TeleportBlockPop;
 	BlockBumpSound;
 	ItemBlockSound;

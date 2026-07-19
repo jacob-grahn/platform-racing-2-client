@@ -48,6 +48,7 @@ class LocalCharacter extends Character {
 		controller = new LocalPlayerController(level, blockController);
 		controller.onHeartGain = gainHeart;
 		controller.onHitAccepted = dropHighestHatFromHit;
+		controller.onBumpRecovery = function(frames:Int):Void beginRecovery(frames);
 		syncFromController();
 	}
 

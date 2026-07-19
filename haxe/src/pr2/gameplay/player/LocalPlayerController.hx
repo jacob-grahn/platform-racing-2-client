@@ -39,6 +39,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	private static inline var TELEPORT_DEFAULT_COLOR:String = "16744272";
 	private static inline var ROTATE_FRAMES:Int = 30;
 	private static inline var HURT_FRAMES:Int = 60;
+	private static inline var BUMP_RECOVERY_FRAMES:Int = 65;
 	private static inline var FROZEN_SOLID_FRAMES:Int = 54;
 	private static inline var ITEM_LASER_GUN:Int = 1;
 	private static inline var ITEM_MINE:Int = 2;
@@ -95,6 +96,8 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	public var onHeartGain:Null<Void->Void> = null;
 	/** Called for Flash `LocalCharacter.hit` damage, including mine collisions. */
 	public var onHitAccepted:Null<Void->Void> = null;
+	/** Starts the character-alpha recovery used by Flash `bumpPlayer`. */
+	public var onBumpRecovery:Null<Int->Void> = null;
 	public var detailedTraceEnabled(default, null):Bool = false;
 
 	public static inline var MODE_LAND:String = "land";
@@ -928,7 +931,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 					return;
 				}
 				if (standingTileX != block.x || standingTileY < block.y || standingTileY > block.y + 2) {
-					returnToLastSafeSpot(true);
+					returnToLastSafeSpot();
 				}
 			default:
 		}
@@ -1245,19 +1248,28 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		standingTileY = block.y;
 	}
 
-	private function returnToLastSafeSpot(preserveMotion:Bool = false):Void {
-		var poofTile = rotatedTileAtPixel(lastSafeX, lastSafeY);
+	private function returnToLastSafeSpot():Void {
 		setPlayerPos(lastSafeX, lastSafeY);
-		if (!preserveMotion) {
-			vx = 0;
-			vy = 0;
-			targetVelX = 0;
-			jumpVelBoost = 0;
-			jumpHeld = false;
-			setMode(MODE_LAND);
-			grounded = true;
+		vx = 0;
+		vy = 0;
+		bumpPlayer();
+	}
+
+	/** Flash uses this for both safety-net returns and falling beyond the map. */
+	private function bumpPlayer():Void {
+		if (hurtFramesRemaining > 0) {
+			return;
 		}
-		blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.SafetyPoof, poofTile.x, poofTile.y));
+		hurtFramesRemaining = HURT_FRAMES;
+		if (onBumpRecovery != null) {
+			onBumpRecovery(BUMP_RECOVERY_FRAMES);
+		}
+		if (gameMode == "deathmatch") {
+			setLife(lives - 1);
+			if (lives <= 0) {
+				finished = true;
+			}
+		}
 	}
 
 	private function startRotate(block:LevelBlock):Void {
@@ -1814,7 +1826,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 			return trail;
 		}
 		var block = level.blockAt(tileX, tileY);
-		if (block == null || isBlockRemoved(block) || !block.type.isSolid()) {
+		if (block == null || isBlockRemoved(block) || (!block.type.isSolid() && !isBlockFrozen(block))) {
 			return null;
 		}
 		if (topHatActive && block.type == BlockType.Vanish && !allowTopHatVanishCollision) {

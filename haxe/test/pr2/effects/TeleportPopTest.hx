@@ -4,12 +4,12 @@ import openfl.display.Sprite;
 import openfl.events.Event;
 
 /**
-	Regression guard for the teleport/safety poof effect. `TeleportPop` resolves
+	Regression guard for the teleport poof effect. `TeleportPop` resolves
 	the authored animation through `PR2MovieClip.fromLinkage`; the linkage is
 	registered under its class name `TeleportAnimation`, not its identifier
 	`TeleportEffectGraphic`. Passing the identifier threw "Unknown PR2 linkage
-	class" from the ENTER_FRAME handler that spawns the poof (safety-net return
-	and teleport blocks), which killed the whole frame loop and froze the game.
+	class" from the ENTER_FRAME handler that spawns teleport-block and item poofs,
+	which killed the whole frame loop and froze the game.
 **/
 class TeleportPopTest {
 	private static var assertions:Int = 0;

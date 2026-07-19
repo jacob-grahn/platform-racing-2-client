@@ -154,13 +154,14 @@ class CampaignTestScreen extends Sprite {
 				add(ObjectCodes.BLOCK_START1, 20, 19);
 
 			case "safety":
-				// Safety-net sandbox: a brick floor with a safety net standing on it a
-				// few tiles to the right of the spawn. Walk right into the net to touch
-				// it from the side, the condition that fires `returnToLastSafeSpot`
-				// and guards the historical safety-net freeze regression.
+				// Safety-net sandbox: leave a floor gap under the net so the standing
+				// tile remains in the previous column. A net directly over the current
+				// floor tile is intentionally ignored by Flash's SafetyBlock exception.
 				title = "Local Safety Test";
 				for (col in 6...34) {
-					add(ObjectCodes.BLOCK_BRICK, col, 20);
+					if (col != 24) {
+						add(ObjectCodes.BLOCK_BRICK, col, 20);
+					}
 				}
 				add(ObjectCodes.BLOCK_SAFETY, 24, 19);
 				add(ObjectCodes.BLOCK_SAFETY, 24, 18);
