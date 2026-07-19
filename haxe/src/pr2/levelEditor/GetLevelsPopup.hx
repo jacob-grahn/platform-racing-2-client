@@ -18,6 +18,8 @@ import pr2.levelEditor.EditorPersistenceTypes.GetLevelsPostFactory;
 import pr2.levelEditor.EditorPersistenceTypes.GetLevelsLoadFactory;
 
 class GetLevelsPopup extends Popup {
+	private static inline var ITEM_SPACING = 18;
+
 	public static var postFactory:GetLevelsPostFactory = defaultPost;
 	public static var loadFactory:GetLevelsLoadFactory = defaultLoad;
 
@@ -77,7 +79,7 @@ class GetLevelsPopup extends Popup {
 	}
 
 	private function addListing(listing:GetLevelsPopupItem):Void {
-		listing.y = listings.length * 25;
+		listing.y = listings.length * ITEM_SPACING;
 		var holder = levelsHolder();
 		if (holder != null) {
 			holder.addChild(listing);

@@ -192,7 +192,13 @@ class EditorBlockOptionsTest {
 	private static function testAuthoredGetLevelsView():Void {
 		var view = new GetLevelsView();
 		assertPoint(view.getChildByName("background"), -147, -129, 1.08087158203125, 1.3455810546875, "get-levels background");
-		assertPoint(view.getChildByName("listSkin"), -131, -86, 1.64472961425781, 7.27272033691406, "get-levels list skin");
+		var listSkin = view.getChildByName("listSkin");
+		assertPoint(listSkin, -131, -86, 1.64472961425781, 7.27272033691406, "get-levels list skin");
+		assertNotNull(listSkin.scale9Grid, "get-levels list skin preserves its authored nine-slice grid");
+		assertNear(1.55, listSkin.scale9Grid.x, "get-levels list skin grid x");
+		assertNear(1.55, listSkin.scale9Grid.y, "get-levels list skin grid y");
+		assertNear(148.5, listSkin.scale9Grid.width, "get-levels list skin grid width");
+		assertNear(18.4, listSkin.scale9Grid.height, "get-levels list skin grid height");
 		var title = Std.downcast(view.getChildByName("titleBox"), TextField);
 		assertEquals("-- Load --", title.text, "get-levels authored title");
 		assertNear(-84.15, title.x, "get-levels title x");

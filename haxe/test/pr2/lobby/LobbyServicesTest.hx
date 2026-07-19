@@ -955,6 +955,8 @@ class LobbyServicesTest {
 		assertEquals("http://example.test/levels_get.php", requestedUrl, "load popup posts to levels_get");
 		assertEquals("load-token", requestedToken, "load popup sends the session token");
 		assertEquals(2, popup.listings.length, "load popup renders returned listings");
+		assertEquals(0.0, popup.listings[0].y, "first load-popup listing starts at the authored origin");
+		assertEquals(18.0, popup.listings[1].y, "load-popup listings use the Flash 18px row spacing");
 		assertEquals("Alpha <One>", LobbyArt.text(popup.listings[0].art, "titleBox").text, "listing renders title");
 		assertEquals("Published", LobbyArt.text(popup.listings[0].art, "statusBox").text, "listing renders published state");
 		assertEquals(1, popup.listings[0].art.currentFrame, "load listing row starts on the authored up frame");

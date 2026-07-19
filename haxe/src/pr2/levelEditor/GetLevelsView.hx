@@ -2,6 +2,7 @@ package pr2.levelEditor;
 
 import openfl.display.Shape;
 import openfl.display.Sprite;
+import openfl.geom.Rectangle;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
@@ -14,6 +15,8 @@ import pr2.ui.view.NativeView;
 
 /** Exact native composition of XFL `GetLevelsPopupGraphic`. */
 class GetLevelsView extends NativeView {
+	private static final LIST_SKIN_GRID = new Rectangle(1.55, 1.55, 148.5, 18.4);
+
 	private var loading:Null<LoadingView>;
 	public function new() {
 		super();
@@ -27,6 +30,7 @@ class GetLevelsView extends NativeView {
 
 		var listSkin = SvgAsset.create("assets/svg/ui/text_area_up.svg");
 		listSkin.name = "listSkin";
+		listSkin.scale9Grid = LIST_SKIN_GRID;
 		listSkin.x = -131;
 		listSkin.y = -86;
 		listSkin.scaleX = 1.64472961425781;
