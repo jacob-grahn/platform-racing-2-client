@@ -8,7 +8,6 @@ import openfl.events.Event;
 import openfl.filters.BlurFilter;
 import openfl.geom.ColorTransform;
 import openfl.geom.Matrix;
-import openfl.geom.Point;
 import openfl.utils.AssetType;
 import openfl.utils.Assets;
 import pr2.character.CharacterRig.CharacterRigDefinition;
@@ -45,9 +44,6 @@ typedef CharacterViewPartColors = {
 **/
 class CharacterView extends Sprite {
 	public static final STATE_NAMES = ["run", "stand", "jump", "superJump", "bumped", "crouch", "crouchWalk", "swim", "frozen"];
-	/** Common legacy CharacterGraphic-to-native content registration delta. */
-	public static inline var LEGACY_ROOT_OFFSET_X:Float = 5.732218985911458;
-	public static inline var LEGACY_ROOT_OFFSET_Y:Float = 13.6;
 	private static inline var VANISH_ASSET:String = "assets/blocks/vanish.png";
 
 	public var currentFrame(default, null):Int = 1;
@@ -212,10 +208,7 @@ class CharacterView extends Sprite {
 		endSignal = null;
 		completeDispatched = false;
 		var root = animation.root;
-		// Apply the measured vertical registration correction and shared horizontal
-		// visual-origin correction at the complete rig root. Keeping both outside
-		// the slot matrices moves the assembled character intact in every context.
-		rigRoot.transform.matrix = new Matrix(root.a, root.b, root.c, root.d, root.tx + LEGACY_ROOT_OFFSET_X, root.ty + LEGACY_ROOT_OFFSET_Y);
+		rigRoot.transform.matrix = new Matrix(root.a, root.b, root.c, root.d, root.tx, root.ty);
 		for (target in slots) target.visible = false;
 		var ordered = animation.slots.copy();
 		ordered.sort(function(left:RigSlot, right:RigSlot):Int return left.drawOrder - right.drawOrder);
@@ -558,7 +551,20 @@ class CharacterView extends Sprite {
 			var target = requireSlot(slotDefinition.name);
 			var source = slotDefinition.frames[index];
 			var registration = registrationFor(slotDefinition.partKind);
-			target.transform.matrix = new Matrix(source.a, source.b, source.c, source.d, source.tx + registration.x, source.ty + registration.y);
+			// The standalone SVG channels are staged away from their nested symbol
+			// origins. `registration` is therefore a local-space artwork offset, not
+			// an untransformed parent-space translation. Compose it through the slot
+			// matrix so rotating/scaling feet and bodies keep the same authored pivot.
+			// Adding registration.x/y directly makes the artwork orbit that pivot in
+			// strongly rotated poses (most visibly run and jump).
+			target.transform.matrix = new Matrix(
+				source.a,
+				source.b,
+				source.c,
+				source.d,
+				source.tx + source.a * registration.x + source.c * registration.y,
+				source.ty + source.b * registration.x + source.d * registration.y
+			);
 			target.alpha = source.alpha;
 			var color = source.colorTransform;
 			target.transform.colorTransform = color == null ? new ColorTransform() : new ColorTransform(
@@ -574,9 +580,7 @@ class CharacterView extends Sprite {
 			var blur = source.blur;
 			target.filters = blur == null ? [] : [new BlurFilter(blur.x, blur.y, blur.quality)];
 		}
-		compensateHeldItemRootOffset();
 		positionHeadArtwork();
-		compensateHatRootOffset();
 	}
 
 	private function positionHeadArtwork():Void {
@@ -585,35 +589,10 @@ class CharacterView extends Sprite {
 		if (artwork == null) return;
 		// Animate exported head channels around the stage origin, while headsMC
 		// places those channels at its own authored registration. Restore that
-		// local registration, then cancel the shared artwork-only root correction.
-		// Keeping both operations on the artwork leaves the sibling hat socket in
-		// the original headsMC coordinate space as the head rotates and scales.
-		var origin = globalToLocal(head.localToGlobal(new Point()));
-		var basisX = globalToLocal(head.localToGlobal(new Point(1, 0)));
-		var basisY = globalToLocal(head.localToGlobal(new Point(0, 1)));
-		var a = basisX.x - origin.x;
-		var b = basisX.y - origin.y;
-		var c = basisY.x - origin.x;
-		var d = basisY.y - origin.y;
-		var determinant = a * d - b * c;
-		if (Math.abs(determinant) < 0.000001) return;
+		// local registration. Keeping it on the artwork leaves the sibling hat
+		// socket in the original headsMC coordinate space as the head rotates.
 		var registration = rig.parts.head.registration;
-		artwork.transform.matrix = new Matrix(1, 0, 0, 1,
-			registration.x + (-d * LEGACY_ROOT_OFFSET_X + c * LEGACY_ROOT_OFFSET_Y) / determinant,
-			registration.y + (b * LEGACY_ROOT_OFFSET_X - a * LEGACY_ROOT_OFFSET_Y) / determinant);
-	}
-
-	private function compensateHeldItemRootOffset():Void {
-		// Held-item matrices already come from the original CharacterGraphic
-		// coordinate space. The legacy correction on rigRoot belongs only to the
-		// exported character-part artwork, so cancel it for this direct attachment.
-		var root = rigRoot.transform.matrix;
-		var determinant = root.a * root.d - root.b * root.c;
-		if (Math.abs(determinant) < 0.000001) return;
-		var current = heldItemSocket.transform.matrix;
-		heldItemSocket.transform.matrix = new Matrix(current.a, current.b, current.c, current.d,
-			current.tx + (-root.d * LEGACY_ROOT_OFFSET_X + root.c * LEGACY_ROOT_OFFSET_Y) / determinant,
-			current.ty + (root.b * LEGACY_ROOT_OFFSET_X - root.a * LEGACY_ROOT_OFFSET_Y) / determinant);
+		artwork.transform.matrix = new Matrix(1, 0, 0, 1, registration.x, registration.y);
 	}
 
 	private function registrationFor(partKind:Null<String>):{x:Float, y:Float} {
@@ -747,27 +726,7 @@ class CharacterView extends Sprite {
 		}
 		applyHatAttachments();
 		positionHeadArtwork();
-		compensateHatRootOffset();
-	}
-
-	private function compensateHatRootOffset():Void {
-		if (hatSocket.parent == null) return;
-		// The legacy correction belongs to the exported head/body/feet artwork,
-		// while authored hat attachments already use the original CharacterGraphic
-		// coordinate space. Cancel that display-space shift for the hat socket
-		// without disturbing the head's rotation or scale.
-		var origin = globalToLocal(hatSocket.parent.localToGlobal(new Point()));
-		var basisX = globalToLocal(hatSocket.parent.localToGlobal(new Point(1, 0)));
-		var basisY = globalToLocal(hatSocket.parent.localToGlobal(new Point(0, 1)));
-		var a = basisX.x - origin.x;
-		var b = basisX.y - origin.y;
-		var c = basisY.x - origin.x;
-		var d = basisY.y - origin.y;
-		var determinant = a * d - b * c;
-		if (Math.abs(determinant) < 0.000001) return;
-		hatSocket.transform.matrix = new Matrix(1, 0, 0, 1,
-			(-d * LEGACY_ROOT_OFFSET_X + c * LEGACY_ROOT_OFFSET_Y) / determinant,
-			(b * LEGACY_ROOT_OFFSET_X - a * LEGACY_ROOT_OFFSET_Y) / determinant);
+		hatSocket.transform.matrix = new Matrix();
 	}
 
 	private static function copyPartIds(ids:CharacterViewPartIds):CharacterViewPartIds {

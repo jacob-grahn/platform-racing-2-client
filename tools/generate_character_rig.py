@@ -54,8 +54,8 @@ FROZEN_OVERLAY_ASSET = "assets/svg/character/frozen/overlay.svg"
 # registration. Convert that origin back to the nested character-part origin.
 PART_REGISTRATION = {
     "head": {"x": 62.75, "y": 76.85},
-    "body": {"x": -5.0, "y": -18.333333333333332},
-    "feet": {"x": -10.0, "y": -80.0},
+    "body": {"x": 33.5, "y": 72.6},
+    "feet": {"x": 28.4, "y": 10.7},
     "hat": {"x": -19.1, "y": -39.65},
 }
 

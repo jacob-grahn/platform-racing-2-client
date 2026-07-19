@@ -13,6 +13,7 @@ class CharacterViewTest {
 		testGeneratedRigContract();
 		if (pr2.DeterministicTestMode.finishSmokeSuite("CharacterViewTest")) return;
 		testExplicitHierarchyAndColors();
+		testPartRegistrationFollowsSlotRotation();
 		testLegacyRootRegistration();
 		testAppearanceSelectionAndPerPartColors();
 		testBubbleBodyNestedLoops();
@@ -78,6 +79,10 @@ class CharacterViewTest {
 		assertEquals(50, rig.hatAttachments.length, "rig records hat placement for every standard head");
 		assertClose(62.75, rig.parts.head.registration.x, "rig restores the authored headsMC channel registration x");
 		assertClose(76.85, rig.parts.head.registration.y, "rig restores the authored headsMC channel registration y");
+		assertClose(33.5, rig.parts.body.registration.x, "rig restores the body channel registration x");
+		assertClose(72.6, rig.parts.body.registration.y, "rig restores the body channel registration y");
+		assertClose(28.4, rig.parts.feet.registration.x, "rig restores the feet channel registration x");
+		assertClose(10.7, rig.parts.feet.registration.y, "rig restores the feet channel registration y");
 		assertClose(-10, rig.hatStackStep.x, "rig records horizontal multi-hat registration step");
 		assertClose(-16, rig.hatStackStep.y, "rig records vertical multi-hat registration step");
 		assertEquals(29, rig.fred.bodyId, "rig identifies Fred's body frame");
@@ -494,8 +499,8 @@ class CharacterViewTest {
 	private static function testExplicitHierarchyAndColors():Void {
 		var view = new CharacterView(0x123456, 0xABCDEF);
 		assertEquals("rigRoot", view.getChildAt(0).name, "native rig root is explicit");
-		assertClose(5.382218985911458, view.getChildAt(0).transform.matrix.tx, "shared native root matches the legacy horizontal registration");
-		assertClose(14.05, view.getChildAt(0).transform.matrix.ty, "shared native root matches the legacy character registration");
+		assertClose(-0.35, view.getChildAt(0).transform.matrix.tx, "native root keeps the authored horizontal registration");
+		assertClose(0.45, view.getChildAt(0).transform.matrix.ty, "native root keeps the authored vertical registration");
 		assertEquals("heldItem", view.heldItemSocket.name, "held-item socket is explicit");
 		assertEquals("hatSocket", view.hatSocket.name, "hat socket is explicit");
 		assertEquals(view.slot("head"), view.hatSocket.parent, "hat socket follows the head slot");
@@ -544,6 +549,43 @@ class CharacterViewTest {
 			var nativeBounds = nativeWithHats.hatSlot(index).getBounds(nativeWithHats);
 			assertClose(legacyBounds.x, nativeBounds.x, 'hat slot ${index + 1} matches the original game horizontal position');
 			assertClose(legacyBounds.y, nativeBounds.y, 'hat slot ${index + 1} matches the original game vertical position');
+		}
+	}
+
+	private static function testPartRegistrationFollowsSlotRotation():Void {
+		var rig = CharacterRig.loadClassic();
+		var view = new CharacterView();
+		for (state in ["run", "jump"]) {
+			var legacyStateName = state + "Anim";
+			var legacy = new CharacterDisplay(null, null, false);
+			legacy.setState(legacyStateName);
+			view.setState(state);
+			var animation = CharacterRig.animation(rig, state);
+			var slot = [for (candidate in animation.slots) if (candidate.name == "frontFoot") candidate][0];
+			for (frame in 1...animation.frameCount + 1) {
+				var source = slot.frames[frame - 1];
+				var registration = rig.parts.feet.registration;
+				var actual = view.slot("frontFoot").transform.matrix;
+				assertClose(source.tx + source.a * registration.x + source.c * registration.y, actual.tx,
+					'$state frame $frame composes the foot registration through its rotated x basis');
+				assertClose(source.ty + source.b * registration.x + source.d * registration.y, actual.ty,
+					'$state frame $frame composes the foot registration through its rotated y basis');
+				var legacyState = legacy.getStateClip(legacyStateName);
+				for (pair in [
+					{legacy: "body", nativeSlot: "body"},
+					{legacy: "foot1", nativeSlot: "frontFoot"},
+					{legacy: "foot2", nativeSlot: "backFoot"}
+				]) {
+					var legacyBounds = legacyState.getChildByTimelineName(pair.legacy).getBounds(legacy);
+					var nativeBounds = view.slot(pair.nativeSlot).getBounds(view);
+					assertClose(legacyBounds.x, nativeBounds.x, '$state frame $frame ${pair.nativeSlot} keeps the Flash pivot x', 0.02);
+					assertClose(legacyBounds.y, nativeBounds.y, '$state frame $frame ${pair.nativeSlot} keeps the Flash pivot y', 0.02);
+				}
+				if (frame < animation.frameCount) {
+					legacy.advanceOneFrame();
+					view.advanceOneFrame();
+				}
+			}
 		}
 	}
 
