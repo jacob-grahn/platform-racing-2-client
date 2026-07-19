@@ -62,6 +62,7 @@ class LocalPlayerControllerTest {
 		testRegularItemBlockDepletesAfterFirstUse();
 		testNewlyCollectedItemRequiresReleaseBeforeUse();
 		testSuperJumpItemLaunchesPlayerAndConsumesItem();
+		testSuperJumpItemClipsThroughBlockAboveWater();
 		testSuperJumpItemDoesNothingWhileCrouching();
 		testTeleportItemMovesPlayerForwardAndConsumesItem();
 		testTeleportItemBlockedBySolidDestination();
@@ -1131,6 +1132,29 @@ class LocalPlayerControllerTest {
 		assertEquals(5, afterUse.itemId, "crouched super jump item use keeps the held item");
 		assertClose(beforeUse.vy, afterUse.vy, "crouched super jump item use does not apply impulse");
 		assertEquals(null, afterUse.lastItemEffect, "crouched super jump item use emits no effect");
+	}
+
+	private static function testSuperJumpItemClipsThroughBlockAboveWater():Void {
+		var player = new LocalCharacter(superJumpWaterClipLevel());
+		player.controller.setPosition(75, 145);
+		player.grantItemForDebug(5);
+
+		player.step(new LocalPlayerInput(false, false, true));
+		assertEquals("water", player.stateSnapshot().mode, "pressing up beneath the block enters water mode");
+		for (_ in 0...8) {
+			player.step(new LocalPlayerInput(false, false, true));
+		}
+		var beforeUse = player.stateSnapshot();
+		assertEquals(true, beforeUse.y > 60, "swimming and block bounce alone leave the player below the block");
+		assertEquals(5, beforeUse.itemId, "super jump remains held while building upward swim velocity");
+		player.step(new LocalPlayerInput(false, false, true, false, true));
+		for (_ in 0...8) {
+			player.step(new LocalPlayerInput(false, false, true));
+		}
+
+		var afterClip = player.stateSnapshot();
+		assertEquals(null, afterClip.itemId, "water super jump consumes the held item");
+		assertEquals(true, afterClip.y <= 60, "water super jump clips through and lands above the block");
 	}
 
 	private static function testTeleportItemMovesPlayerForwardAndConsumesItem():Void {
@@ -2418,6 +2442,25 @@ class LocalPlayerControllerTest {
 				new LevelBlock(2, 6, BlockType.Solid),
 				new LevelBlock(3, 6, BlockType.Solid),
 				new LevelBlock(4, 6, BlockType.Finish)
+			]
+		);
+	}
+
+	private static function superJumpWaterClipLevel():WorldLevel {
+		return new WorldLevel(
+			"super-jump-water-clip",
+			"Super Jump Water Clip",
+			5,
+			7,
+			30,
+			1,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(2, 5),
+			new TilePosition(4, 5),
+			[
+				new LevelBlock(2, 2, BlockType.Basic),
+				new LevelBlock(2, 3, BlockType.Water),
+				new LevelBlock(4, 5, BlockType.Finish)
 			]
 		);
 	}

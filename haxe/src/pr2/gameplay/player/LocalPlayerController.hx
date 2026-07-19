@@ -983,11 +983,13 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		touch(block);
 		var bumpForce = Math.round(-vy);
 		var preBumpY = y;
-		setPlayerY(rotatedBlockPos(block).y + level.tileSize + (crouching ? STANDING_HEIGHT / 2 : STANDING_HEIGHT));
+		var bounceOffset = blockController.blockBounceOffset(block);
+		setPlayerY(rotatedBlockPos(block).y + bounceOffset.y + level.tileSize + (crouching ? STANDING_HEIGHT / 2 : STANDING_HEIGHT));
 		vy *= -0.25;
 		jumpVelBoost = 0;
 		if (bumpPlaysThump(block)) {
 			blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.BlockBumpSound, block.x, block.y));
+			blockController.startBlockBounce(block, 0, -15);
 		}
 		applyBumpEffect(block, input, bumpForce, preBumpY);
 		endBlockTrace(trace);

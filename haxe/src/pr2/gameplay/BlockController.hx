@@ -67,6 +67,44 @@ class BlockController {
 		updateVanishBlocks();
 		updateTeleportBlocks();
 		updateMoveBlocks();
+		updateBlockBounces();
+	}
+
+	/** Mirrors Block.hitRotated; collision snapping reads this live displacement in Flash. */
+	public function startBlockBounce(block:LevelBlock, hitX:Float, hitY:Float):Void {
+		var velocity = RotationMath.rotatePoint(hitX, hitY, owner.courseRotation);
+		var state = stateFor(block);
+		state.bounceVelocityX = velocity.x;
+		state.bounceVelocityY = velocity.y;
+	}
+
+	public function blockBounceOffset(block:LevelBlock):{x:Float, y:Float} {
+		var state = stateAt(owner.blockKey(block.x, block.y));
+		if (state == null) {
+			return {x: 0, y: 0};
+		}
+		var offset = RotationMath.rotatePoint(state.bounceOffsetX, state.bounceOffsetY, owner.courseRotation);
+		return {x: offset.x, y: offset.y};
+	}
+
+	private function updateBlockBounces():Void {
+		for (state in blockStates) {
+			if (state.bounceVelocityX == null || state.bounceVelocityY == null) {
+				continue;
+			}
+			state.bounceVelocityX *= 0.5;
+			state.bounceVelocityY *= 0.5;
+			state.bounceOffsetX += state.bounceVelocityX;
+			state.bounceOffsetY += state.bounceVelocityY;
+			state.bounceOffsetX += -state.bounceOffsetX * 0.35;
+			state.bounceOffsetY += -state.bounceOffsetY * 0.35;
+			if (Math.abs(state.bounceOffsetX) < 0.25 && Math.abs(state.bounceOffsetY) < 0.25) {
+				state.bounceOffsetX = 0;
+				state.bounceOffsetY = 0;
+				state.bounceVelocityX = null;
+				state.bounceVelocityY = null;
+			}
+		}
 	}
 
 	public function updateMoveBlocks():Void {

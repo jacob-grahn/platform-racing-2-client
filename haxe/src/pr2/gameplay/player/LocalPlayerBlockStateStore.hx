@@ -44,6 +44,10 @@ class LocalPlayerBlockState {
 	public var depletedVisualSupply:Bool = false;
 	public var frozenIceAlpha:Null<Float> = null;
 	public var frozenIceFadeRate:Float = 0.025;
+	public var bounceOffsetX:Float = 0;
+	public var bounceOffsetY:Float = 0;
+	public var bounceVelocityX:Null<Float> = null;
+	public var bounceVelocityY:Null<Float> = null;
 
 	public function new() {}
 }
