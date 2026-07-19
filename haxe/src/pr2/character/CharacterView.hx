@@ -575,7 +575,32 @@ class CharacterView extends Sprite {
 			target.filters = blur == null ? [] : [new BlurFilter(blur.x, blur.y, blur.quality)];
 		}
 		compensateHeldItemRootOffset();
+		positionHeadArtwork();
 		compensateHatRootOffset();
+	}
+
+	private function positionHeadArtwork():Void {
+		var head = requireSlot("head");
+		var artwork = head.getChildByName("artwork");
+		if (artwork == null) return;
+		// Animate exported head channels around the stage origin, while headsMC
+		// places those channels at its own authored registration. Restore that
+		// local registration, then cancel the shared artwork-only root correction.
+		// Keeping both operations on the artwork leaves the sibling hat socket in
+		// the original headsMC coordinate space as the head rotates and scales.
+		var origin = globalToLocal(head.localToGlobal(new Point()));
+		var basisX = globalToLocal(head.localToGlobal(new Point(1, 0)));
+		var basisY = globalToLocal(head.localToGlobal(new Point(0, 1)));
+		var a = basisX.x - origin.x;
+		var b = basisX.y - origin.y;
+		var c = basisY.x - origin.x;
+		var d = basisY.y - origin.y;
+		var determinant = a * d - b * c;
+		if (Math.abs(determinant) < 0.000001) return;
+		var registration = rig.parts.head.registration;
+		artwork.transform.matrix = new Matrix(1, 0, 0, 1,
+			registration.x + (-d * LEGACY_ROOT_OFFSET_X + c * LEGACY_ROOT_OFFSET_Y) / determinant,
+			registration.y + (b * LEGACY_ROOT_OFFSET_X - a * LEGACY_ROOT_OFFSET_Y) / determinant);
 	}
 
 	private function compensateHeldItemRootOffset():Void {
@@ -593,7 +618,9 @@ class CharacterView extends Sprite {
 
 	private function registrationFor(partKind:Null<String>):{x:Float, y:Float} {
 		return switch (partKind) {
-			case "head": rig.parts.head.registration;
+			// Head registration belongs to the artwork inside headsMC so its
+			// sibling hat sockets retain their authored coordinates.
+			case "head": {x: 0, y: 0};
 			case "body": rig.parts.body.registration;
 			case "feet": rig.parts.feet.registration;
 			default: {x: 0, y: 0};
@@ -719,6 +746,7 @@ class CharacterView extends Sprite {
 			for (slotName in rig.fred.hiddenSlots) requireSlot(slotName).visible = !fred;
 		}
 		applyHatAttachments();
+		positionHeadArtwork();
 		compensateHatRootOffset();
 	}
 

@@ -53,7 +53,7 @@ FROZEN_OVERLAY_ASSET = "assets/svg/character/frozen/overlay.svg"
 # Animate's standalone channel exports retain each library item's staging
 # registration. Convert that origin back to the nested character-part origin.
 PART_REGISTRATION = {
-    "head": {"x": 0.0, "y": 0.0},
+    "head": {"x": 62.75, "y": 76.85},
     "body": {"x": -5.0, "y": -18.333333333333332},
     "feet": {"x": -10.0, "y": -80.0},
     "hat": {"x": -19.1, "y": -39.65},

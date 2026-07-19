@@ -18,6 +18,7 @@ class CharacterViewTest {
 		testBubbleBodyNestedLoops();
 		testStandardHatStack();
 		testExhaustiveHatAttachmentMatrix();
+		testHatPositionParityAcrossEveryAnimationFrame();
 		testFredBodyHierarchy();
 		testHeldItemsAndWeaponActions();
 		testStableEffectTargetsAndJetState();
@@ -75,6 +76,8 @@ class CharacterViewTest {
 		assertEquals("33,44,47", rig.emptyPartIds.body.join(","), "rig records authored empty body frames");
 		assertEquals("31,32,33,44,47", rig.emptyPartIds.feet.join(","), "rig records authored empty feet frames");
 		assertEquals(50, rig.hatAttachments.length, "rig records hat placement for every standard head");
+		assertClose(62.75, rig.parts.head.registration.x, "rig restores the authored headsMC channel registration x");
+		assertClose(76.85, rig.parts.head.registration.y, "rig restores the authored headsMC channel registration y");
 		assertClose(-10, rig.hatStackStep.x, "rig records horizontal multi-hat registration step");
 		assertClose(-16, rig.hatStackStep.y, "rig records vertical multi-hat registration step");
 		assertEquals(29, rig.fred.bodyId, "rig identifies Fred's body frame");
@@ -392,6 +395,50 @@ class CharacterViewTest {
 		}
 	}
 
+	private static function testHatPositionParityAcrossEveryAnimationFrame():Void {
+		var hats = [6, 5, 13, 16];
+		var ids = {hat: hats[0], hats: hats, head: 23, body: 28, feet: 40};
+		var legacy = new CharacterDisplay(ids, null, false);
+		var native = new CharacterView(0x2E8BFF, 0xFFD24A, null, "stand", {head: 23, body: 28, feet: 40}, hats);
+		for (state in CharacterView.STATE_NAMES) {
+			var legacyStateName = switch (state) {
+				case "stand": "standAnim";
+				case "run": "runAnim";
+				case "jump": "jumpAnim";
+				case "superJump": "superJumpAnim";
+				case "bumped": "bumpedAnim";
+				case "crouch": "crouchAnim";
+				case "crouchWalk": "crouchWalkAnim";
+				case "swim": "swimAnim";
+				case "frozen": "frozenSolidAnim";
+				default: throw 'Unknown character state $state';
+			}
+			legacy.setState(legacyStateName);
+			native.setState(state);
+			var legacyHead = Std.downcast(legacy.getStateClip(legacyStateName).getChildByTimelineName("head"), PR2MovieClip);
+			for (frame in 1...native.frameCount + 1) {
+				var legacyHatSlots = [for (index in 0...4) legacyHead.getChildByTimelineName('hat${index + 1}')];
+				var legacyHatIndices = [for (slot in legacyHatSlots) legacyHead.getChildIndex(slot)];
+				for (slot in legacyHatSlots) legacyHead.removeChild(slot);
+				var legacyHeadBounds = legacyHead.getBounds(legacy);
+				var nativeHeadBounds = native.slot("head").getChildByName("artwork").getBounds(native);
+				for (index in 0...legacyHatSlots.length) legacyHead.addChildAt(legacyHatSlots[index], legacyHatIndices[index]);
+				assertClose(legacyHeadBounds.x, nativeHeadBounds.x, '$state frame $frame head matches original x', 0.01);
+				assertClose(legacyHeadBounds.y, nativeHeadBounds.y, '$state frame $frame head matches original y', 0.01);
+				for (index in 0...4) {
+					var legacyBounds = legacyHatSlots[index].getBounds(legacy);
+					var nativeBounds = native.hatSlot(index).getBounds(native);
+					assertClose(legacyBounds.x, nativeBounds.x, '$state frame $frame hat ${index + 1} matches original x', 0.001);
+					assertClose(legacyBounds.y, nativeBounds.y, '$state frame $frame hat ${index + 1} matches original y', 0.001);
+				}
+				if (frame < native.frameCount) {
+					legacy.advanceOneFrame();
+					native.advanceOneFrame();
+				}
+			}
+		}
+	}
+
 	private static function hatChannel(view:CharacterView, index:Int, channelName:String):openfl.display.DisplayObject {
 		var artwork = cast(view.hatSlot(index).getChildByName("artwork"), openfl.display.Sprite);
 		return artwork.getChildByName(channelName);
@@ -484,7 +531,7 @@ class CharacterViewTest {
 			}
 			var legacyY = legacyState.getChildByTimelineName(pair.legacy).getBounds(legacy).y;
 			var nativeY = nativeView.slot(pair.nativeSlot).getBounds(nativeView).y;
-			assertTrue(Math.abs(legacyY - nativeY) < 0.02, '${pair.nativeSlot} matches the legacy shared-root vertical registration');
+			assertClose(legacyY, nativeY, '${pair.nativeSlot} matches the legacy shared-root vertical registration', 0.02);
 		}
 		var hats = [6, 5, 13, 16];
 		var legacyWithHats = new CharacterDisplay({hat: hats[0], hats: hats, head: 1, body: 1, feet: 1}, null, false);
@@ -627,9 +674,9 @@ class CharacterViewTest {
 		if (expected != actual) throw '$message: expected $expected, got $actual';
 	}
 
-	private static function assertClose(expected:Float, actual:Float, message:String):Void {
+	private static function assertClose(expected:Float, actual:Float, message:String, tolerance:Float = 0.0001):Void {
 		assertions++;
-		if (Math.abs(expected - actual) > 0.0001) throw '$message: expected $expected, got $actual';
+		if (Math.abs(expected - actual) > tolerance) throw '$message: expected $expected, got $actual';
 	}
 
 	private static function assertTrue(actual:Bool, message:String):Void {
