@@ -19,6 +19,7 @@ class LocalPlayerControllerTest {
 		if (pr2.DeterministicTestMode.finishSmokeSuite("LocalPlayerControllerTest")) return;
 		testSideCollisionDoesNotFinishRace();
 		testBumpingFinishBlockFinishesRaceOnce();
+		testObjectiveModeCanBumpSubsequentFinishBlocks();
 		testJumpAndLandOnFlatFixture();
 		testGravityUsesFlashMultiplierAndSupportsRuntimeChanges();
 		testVelocityIntegrationOrderAndTerminalClamp();
@@ -258,6 +259,34 @@ class LocalPlayerControllerTest {
 			player.step(new LocalPlayerInput(false, false, true));
 		}
 		assertEquals(1, player.stateSnapshot().finishBlockId, "finish supply remains latched after first use");
+	}
+
+	private static function testObjectiveModeCanBumpSubsequentFinishBlocks():Void {
+		var level = new WorldLevel(
+			"objective-finishes",
+			"Objective Finishes",
+			6,
+			6,
+			30,
+			1,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(3, 3),
+			new TilePosition(3, 1),
+			[
+				new LevelBlock(2, 1, BlockType.Finish),
+				new LevelBlock(4, 1, BlockType.Finish),
+				new LevelBlock(3, 4, BlockType.Solid)
+			]
+		);
+		var player = new LocalCharacter(level);
+		player.setGameMode("objective");
+
+		@:privateAccess player.controller.finish(level.blocks[0]);
+		assertEquals(1, player.stateSnapshot().finishBlockId, "objective mode reports the first finish block");
+		@:privateAccess player.controller.finish(level.blocks[1]);
+		assertEquals(2, player.stateSnapshot().finishBlockId, "objective mode reports a subsequent finish block");
+		@:privateAccess player.controller.finish(level.blocks[0]);
+		assertEquals(2, player.stateSnapshot().finishBlockId, "an objective finish supply still fires only once");
 	}
 
 	private static function testJumpAndLandOnFlatFixture():Void {

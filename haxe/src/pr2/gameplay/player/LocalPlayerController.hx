@@ -1123,7 +1123,10 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	// FinishBlock extends SupplyBlock in Flash: it fires once, and only through
 	// onBump. Side, stand, and touch collisions must not complete the race.
 	private function finish(block:LevelBlock):Void {
-		if (finished) {
+		// Objective mode keeps racing after each finish. Its per-block SupplyBlock
+		// state prevents duplicate objectives, so the race-wide finish latch must
+		// not prevent a different FinishBlock from firing.
+		if (finished && gameMode != "objective") {
 			return;
 		}
 		if (!useSupply(block)) {
