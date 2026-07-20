@@ -550,6 +550,12 @@ class LocalPlayerController implements ItemRuntimeOwner {
 			return;
 		}
 		waterTicks--;
+		// Flash keeps Cowboy Hat flight in water mode for as long as the
+		// character is airborne. Without this refresh, every second frame exits
+		// water mode and incorrectly reapplies the water-exit jump boost.
+		if (cowboyHatActive && !grounded) {
+			waterTicks = 1;
+		}
 		if (waterTicks <= 0) {
 			if (input.jump) {
 				vy -= jumpVelocity * 0.5;

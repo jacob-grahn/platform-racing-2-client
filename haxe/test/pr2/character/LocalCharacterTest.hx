@@ -18,6 +18,7 @@ class LocalCharacterTest {
 		if (pr2.DeterministicTestMode.finishSmokeSuite("LocalCharacterTest")) return;
 		testPropellerHatSlowsFallWhenHoldingJump();
 		testCowboyHatBoostsStatsAndForcesAirborneWaterModeUntilRemoved();
+		testCowboyHatFlightDoesNotRepeatWaterExitBoost();
 		testMoonHatReducesGravityUntilRemoved();
 		testSantaHatStandsOnWaterAndSafetyAndRaisesSpeedCapUntilRemoved();
 		testPartyHatIgnoresStingAndZapHurtReactions();
@@ -100,6 +101,25 @@ class LocalCharacterTest {
 		assertClose(50, removed.speedStat, "cowboy hat removal restores starting speed");
 		assertClose(50, removed.accelerationStat, "cowboy hat removal restores starting acceleration");
 		assertClose(50, removed.jumpStat, "cowboy hat removal restores starting jump");
+	}
+
+	private static function testCowboyHatFlightDoesNotRepeatWaterExitBoost():Void {
+		var cowboy = new LocalCharacter(airborneLevel());
+		var lowAccelerationCowboy = new LocalCharacter(airborneLevelWithAcceleration(0));
+		cowboy.setHats([5, 0xFFFFFF, -1]);
+		lowAccelerationCowboy.setHats([5, 0xFFFFFF, -1]);
+
+		var expectedVy = 0.0;
+		for (frame in 0...12) {
+			expectedVy = (expectedVy - 1.86 * 0.65 + 0.7 * 0.25) * 0.92;
+			cowboy.step(new LocalPlayerInput(false, false, true));
+			lowAccelerationCowboy.step(new LocalPlayerInput(false, false, true));
+			assertEquals("water", cowboy.stateSnapshot().mode, 'cowboy remains in water mode on flight frame $frame');
+		}
+
+		assertClose(expectedVy, cowboy.stateSnapshot().vy, "cowboy upward speed follows continuous Flash water physics");
+		assertClose(cowboy.stateSnapshot().vy, lowAccelerationCowboy.stateSnapshot().vy,
+			"cowboy flight uses the Flash acceleration minimum regardless of the lower starting acceleration stat");
 	}
 
 	private static function testMoonHatReducesGravityUntilRemoved():Void {
@@ -504,6 +524,10 @@ class LocalCharacterTest {
 	}
 
 	private static function airborneLevel():Level {
+		return airborneLevelWithAcceleration(50);
+	}
+
+	private static function airborneLevelWithAcceleration(accelerationStat:Float):Level {
 		return new Level(
 			"local-character-airborne",
 			"Local Character Airborne",
@@ -511,7 +535,7 @@ class LocalCharacterTest {
 			8,
 			30,
 			1,
-			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new StatDefaults(50, 0.2 + accelerationStat / 60, 2 + 50 / 40),
 			new TilePosition(2, 2),
 			new TilePosition(6, 6),
 			[]
