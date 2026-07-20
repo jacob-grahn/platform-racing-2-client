@@ -612,6 +612,13 @@ class LevelRenderer extends Sprite {
 
 	/** Mount a block introduced or restored by the live gameplay map. */
 	public function ensureRuntimeBlockDisplay(block:LevelBlock):Void {
+		// BlockController appends runtime blocks to level.blocks after initial
+		// decoding has completed. Keep the decode cursor at the new end as well;
+		// otherwise isDrawingComplete() becomes false forever and Course switches
+		// back to its loading/free-camera branch instead of stepping the player.
+		if (nextBlockToDraw == level.blocks.length - 1 && level.blocks[level.blocks.length - 1] == block) {
+			nextBlockToDraw++;
+		}
 		if (!blockDisplays.exists(blockKey(block.worldX, block.worldY))) {
 			addBlockDisplay(block);
 		}

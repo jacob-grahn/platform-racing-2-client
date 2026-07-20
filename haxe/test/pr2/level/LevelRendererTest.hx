@@ -36,6 +36,7 @@ class LevelRendererTest {
 		testMoveBlockDisplay();
 		testMoveBlockArrowDisplay();
 		testIncrementalBlockDrawing();
+		testRuntimeBlockAppendPreservesDrawingCompletion();
 		testViewWindowRefreshesBeforeLeftEdgeExposure();
 		testIncrementalArtDrawing();
 		testArtRasterTilesCullToViewWindow();
@@ -264,6 +265,21 @@ class LevelRendererTest {
 		assertEquals(5, renderer.drawnBlockCount(), "incremental renderer draws final partial batch");
 		assertEquals(5, blockLayer.numChildren, "incremental renderer eventually attaches every block");
 		assertEquals(true, renderer.isBlockDrawingComplete(), "incremental renderer reports completion");
+	}
+
+	private static function testRuntimeBlockAppendPreservesDrawingCompletion():Void {
+		var initial = new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 10020, 10050);
+		var level = new TestLevel(0xFFFFFF, [initial]);
+		var renderer = new LevelRenderer(level, initial);
+		var mine = new DecodedBlock(ObjectCodes.BLOCK_MINE, 10050, 10050);
+
+		assertEquals(true, renderer.isDrawingComplete(), "renderer completes before a runtime mine is appended");
+		level.blocks.push(mine);
+		renderer.ensureRuntimeBlockDisplay(mine);
+
+		assertEquals(2, renderer.drawnBlockCount(), "runtime mine advances the completed decode cursor");
+		assertEquals(true, renderer.isDrawingComplete(), "runtime mine does not reopen the loading/free-camera state");
+		assertEquals(1.0, renderer.blockAlphaAt(mine.worldX, mine.worldY), "runtime mine is mounted immediately");
 	}
 
 	private static function testViewWindowRefreshesBeforeLeftEdgeExposure():Void {
