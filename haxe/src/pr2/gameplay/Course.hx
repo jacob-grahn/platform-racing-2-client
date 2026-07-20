@@ -572,6 +572,21 @@ class Course extends Sprite {
 		}
 	}
 
+	/** Keep lightweight effect collision aligned with a block moved in the live world. */
+	private function moveRuntimeBlock(fromWorldX:Int, fromWorldY:Int, toWorldX:Int, toWorldY:Int):Bool {
+		for (i in 0...level.blocks.length) {
+			var block = level.blocks[i];
+			if (block.x == fromWorldX && block.y == fromWorldY) {
+				level.blocks[i] = new DecodedBlock(block.code, toWorldX, toWorldY, block.opts);
+				if (levelRenderer != null) {
+					levelRenderer.moveBlockDisplay(fromWorldX, fromWorldY, toWorldX, toWorldY);
+				}
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public function placeRuntimeMine(worldX:Int, worldY:Int):Bool {
 		if (blockController == null || worldLevel == null) {
 			return false;

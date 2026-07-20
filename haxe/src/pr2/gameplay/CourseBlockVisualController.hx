@@ -18,7 +18,6 @@ class CourseBlockVisualController {
 
 	public function syncBlockVisuals():Void {
 		syncMoveBlockArrows();
-		syncMoveBlockDisplays();
 		// Only blocks with non-default alpha/tint (fading/removed/depleted) need
 		// restyling; iterating all blocks here was O(blocks) per frame and dropped
 		// large levels to a few fps. Update just the active set, and reset any block
@@ -72,7 +71,7 @@ class CourseBlockVisualController {
 					owner.playSuperJumpSound();
 				case PushBlockMove:
 					if (event.toTileX != null && event.toTileY != null) {
-						owner.levelRenderer.moveBlockDisplay(
+						owner.moveRuntimeBlock(
 							worldXOf(event),
 							worldYOf(event),
 							worldTileX(event.toTileX),
@@ -81,6 +80,10 @@ class CourseBlockVisualController {
 					}
 			}
 		}
+		// Process explicit chain movement events first so adjacent blocks vacate
+		// their destinations in order. This pass also catches position changes
+		// made before display tracking was initialized.
+		syncMoveBlockDisplays();
 		owner.publishMultiplayerDiagnostics();
 	}
 
@@ -110,7 +113,7 @@ class CourseBlockVisualController {
 				displayed = owner.displayedMoveBlockPositions.get(i);
 			}
 			if (displayed.worldX != currentWorldX || displayed.worldY != currentWorldY) {
-				owner.levelRenderer.moveBlockDisplay(displayed.worldX, displayed.worldY, currentWorldX, currentWorldY);
+				owner.moveRuntimeBlock(displayed.worldX, displayed.worldY, currentWorldX, currentWorldY);
 				owner.displayedMoveBlockPositions.set(i, {
 					worldX: currentWorldX,
 					worldY: currentWorldY,

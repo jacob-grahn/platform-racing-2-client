@@ -965,6 +965,10 @@ class CharacterLifecycleTest {
 		assertEquals(null, @:privateAccess course.worldLevel.blockAt(6, 0), "remote push leaves the source collision tile");
 		assertEquals(BlockType.Push, @:privateAccess course.worldLevel.blockAt(7, 0).type,
 			"remote push updates the destination collision tile");
+		assertEquals(null, BlockCollision.blockFromPos(@:privateAccess course.level, 180, 0, 0),
+			"remote push clears its source from the effect collision map");
+		assertEquals(ObjectCodes.BLOCK_PUSH, BlockCollision.blockFromPos(@:privateAccess course.level, 210, 0, 0).code,
+			"remote push updates its destination in the effect collision map");
 
 		handler.dispatch("activate", ["8", "0", "20"]);
 		assertEquals(1.0, course.localCharacter.blockAlphaAt(8, 0), "first remote crumble hit retains remaining life");
@@ -987,6 +991,13 @@ class CharacterLifecycleTest {
 		course.syncMoveBlockDisplays();
 		var tracked = course.displayedMoveBlockPositions.get(0);
 		assertEquals(30, tracked.worldX, "move display tracking starts at the move block, not the omitted start-marker index");
+		var moveBlock = @:privateAccess course.worldLevel.blockAt(1, 0);
+		moveBlock.x = 2;
+		course.syncMoveBlockDisplays();
+		assertEquals(null, BlockCollision.blockFromPos(@:privateAccess course.level, 30, 0, 0),
+			"move block clears its original effect collision tile");
+		assertEquals(ObjectCodes.BLOCK_MOVE, BlockCollision.blockFromPos(@:privateAccess course.level, 60, 0, 0).code,
+			"move block occupies its new effect collision tile");
 		course.remove();
 	}
 
