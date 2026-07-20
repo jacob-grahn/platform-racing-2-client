@@ -4,8 +4,8 @@ import openfl.events.Event;
 import pr2.gameplay.EffectBackground;
 import pr2.effects.PhysicsEffect.PhysicsEffectContext;
 import pr2.level.ObjectCodes;
-import pr2.level.ServerLevel;
-import pr2.level.ServerLevel.DecodedBlock;
+import pr2.level.Level;
+import pr2.level.Level.LevelBlock;
 
 class PhysicsEffectTest {
 	private static var assertions:Int = 0;
@@ -19,9 +19,9 @@ class PhysicsEffectTest {
 	}
 
 	private static function testGravityLandingWallAndPlayerProbe():Void {
-		var level = new ServerLevel(0xffffff, [
-			new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 0, 0),
-			new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 30, -30)
+		var level = Level.fromDecoded(0xffffff, [
+			LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_BASIC1, 0, 0),
+			LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_BASIC1, 30, -30)
 		]);
 		var effect = new TestPhysicsEffect(15, -20, 0);
 		effect.deactivate();
@@ -55,7 +55,7 @@ class PhysicsEffectTest {
 	}
 
 	private static function testRotatedCollisionAndInactiveOptIn():Void {
-		var rotatedLevel = new ServerLevel(0xffffff, [new DecodedBlock(ObjectCodes.BLOCK_BASIC1, -30, -30)]);
+		var rotatedLevel = Level.fromDecoded(0xffffff, [LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_BASIC1, -30, -30)]);
 		var rotated = new TestPhysicsEffect(-1, -15, 90);
 		rotated.deactivate();
 		rotated.setVelocity(1, 0);
@@ -63,7 +63,7 @@ class PhysicsEffectTest {
 		assertEquals(1, rotated.wallTouches, "rotated wall probe finds the active block");
 		assertEquals(-90, Std.int(rotated.rotation), "display rotation follows course rotation minus effect rotation");
 
-		var inactiveLevel = new ServerLevel(0xffffff, [new DecodedBlock(ObjectCodes.BLOCK_WATER, 0, 0)]);
+		var inactiveLevel = Level.fromDecoded(0xffffff, [LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_WATER, 0, 0)]);
 		var inactive = new TestPhysicsEffect(15, -1, 0);
 		inactive.deactivate();
 		inactive.setVelocity(0, 1);
@@ -78,7 +78,7 @@ class PhysicsEffectTest {
 	}
 
 	private static function testEnterFrameDriverAndRemovalCleanup():Void {
-		var level = new ServerLevel(0xffffff, [new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 0, 0)]);
+		var level = Level.fromDecoded(0xffffff, [LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_BASIC1, 0, 0)]);
 		var contextCalls = 0;
 		var effect = new TestPhysicsEffect(15, -1, 0, function():PhysicsEffectContext {
 			contextCalls++;

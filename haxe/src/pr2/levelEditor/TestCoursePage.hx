@@ -5,7 +5,7 @@ import openfl.events.MouseEvent;
 import pr2.app.AppStage;
 import pr2.gameplay.Course;
 import pr2.gameplay.LevelConfig;
-import pr2.level.ServerLevelDecoder;
+import pr2.level.LevelDecoder;
 import pr2.lobby.account.Settings;
 import pr2.lobby.account.StatsSelect;
 import pr2.lobby.LobbyArt;
@@ -85,7 +85,7 @@ class TestCoursePage extends Page {
 
 	private function mountCourse():Void {
 		var data = new ServerLevelData(variables, true);
-		var level = ServerLevelDecoder.decode(data.data);
+		var level = LevelDecoder.decode(data.data);
 		var config = LevelConfig.fromServerData(data);
 		course = new Course(level, data, config);
 		course.removeRaceChat();

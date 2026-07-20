@@ -4,7 +4,7 @@ import openfl.events.MouseEvent;
 import openfl.ui.Keyboard;
 import pr2.gameplay.GameCommandShell.RemoteCharacterInit;
 import pr2.lobby.LobbyArt;
-import pr2.level.ServerLevelDecoder;
+import pr2.level.LevelDecoder;
 import pr2.net.ServerLevelData;
 import pr2.util.TestDisplayUtil as DisplayUtil;
 
@@ -82,7 +82,7 @@ class SpectatePickerTest {
 
 	private static function buildCourse():Course {
 		var dataString = "m3`ffffff`0;0;11,1;0;16";
-		var level = ServerLevelDecoder.decode(dataString);
+		var level = LevelDecoder.decode(dataString);
 		var vars:Map<String, String> = new Map();
 		vars.set("level_id", "77");
 		vars.set("title", "Spectate Test");

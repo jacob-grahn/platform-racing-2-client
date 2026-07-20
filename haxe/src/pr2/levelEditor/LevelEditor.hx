@@ -21,11 +21,11 @@ import openfl.ui.Keyboard;
 import pr2.audio.MusicCatalog;
 import pr2.gameplay.Items;
 import pr2.gameplay.LevelConfig;
-import pr2.level.ServerLevel.DecodedArtLayer;
+import pr2.level.Level.LevelArtLayer;
 import pr2.level.BlockType;
 import pr2.level.ObjectCodes;
-import pr2.level.ServerLevelDecoder;
-import pr2.level.ServerLevelRenderer;
+import pr2.level.LevelDecoder;
+import pr2.level.LevelRenderer;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.dialogs.Popup;
 import pr2.net.ServerLevelData;
@@ -309,7 +309,7 @@ class LevelEditor extends Page {
 	public function applyLoadedLevelData(data:ServerLevelData, report:Bool = false):Void {
 		setVariables(data.vars);
 		if (data.data != "" && blockLayer != null) {
-			var level = ServerLevelDecoder.decode(data.data);
+			var level = LevelDecoder.decode(data.data);
 			setColor(level.bgColor);
 			setArtBackground(level.artBackgroundCode);
 			blockLayer.loadBlocks(level.blocks);
@@ -1420,7 +1420,7 @@ class LevelEditor extends Page {
 		}
 	}
 
-	private function loadObjectLayersFromDecoded(layers:Array<DecodedArtLayer>):Void {
+	private function loadObjectLayersFromDecoded(layers:Array<LevelArtLayer>):Void {
 		for (i in 0...objectLayers.length) {
 			objectLayers[i].loadArtLayer(i < layers.length ? layers[i] : null);
 		}

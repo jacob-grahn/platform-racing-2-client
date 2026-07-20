@@ -2,9 +2,9 @@ package pr2.levelEditor;
 
 import openfl.display.Sprite;
 import openfl.geom.Point;
-import pr2.level.ServerLevel.DecodedDrawAction;
-import pr2.level.ServerLevelDecoder;
-import pr2.level.ServerLevelRenderer;
+import pr2.level.Level.LevelDrawAction;
+import pr2.level.LevelDecoder;
+import pr2.level.LevelRenderer;
 
 class EditorDrawableLayer extends Sprite {
 	public static inline var DEFAULT_BRUSH_SIZE:Float = 4;
@@ -14,7 +14,7 @@ class EditorDrawableLayer extends Sprite {
 	public final layerScale:Float;
 	public final saveArray:Array<String> = [];
 	public final redoArray:Array<String> = [];
-	public final drawActions:Array<DecodedDrawAction> = [];
+	public final drawActions:Array<LevelDrawAction> = [];
 	public final rasterCanvas:Sprite;
 	public final brushCanvas:Sprite;
 	private var color:Int = 0;
@@ -105,7 +105,7 @@ class EditorDrawableLayer extends Sprite {
 				}
 			}
 		}
-		for (action in ServerLevelDecoder.decodeDrawActions(getSaveString())) {
+		for (action in LevelDecoder.decodeDrawActions(getSaveString())) {
 			drawActions.push(action);
 		}
 		drawing = false;
@@ -159,7 +159,7 @@ class EditorDrawableLayer extends Sprite {
 		if (color != nextColor) {
 			color = nextColor;
 			brushCanvas.graphics.lineStyle(brushSize, color);
-			recordAction(new DecodedDrawAction("c", [color]), "c" + StringTools.hex(color, 6).toLowerCase());
+			recordAction(new LevelDrawAction("c", [color]), "c" + StringTools.hex(color, 6).toLowerCase());
 		}
 	}
 
@@ -167,21 +167,21 @@ class EditorDrawableLayer extends Sprite {
 		if (brushSize != nextSize) {
 			brushSize = nextSize;
 			brushCanvas.graphics.lineStyle(brushSize, color);
-			recordAction(new DecodedDrawAction("t", [brushSize]), "t" + brushSize);
+			recordAction(new LevelDrawAction("t", [brushSize]), "t" + brushSize);
 		}
 	}
 
 	private function setMode(nextMode:String):Void {
 		if (mode != nextMode) {
 			mode = nextMode;
-			recordAction(new DecodedDrawAction("m", [], mode), "m" + mode);
+			recordAction(new LevelDrawAction("m", [], mode), "m" + mode);
 		}
 	}
 
 	private function moveTo(x:Float, y:Float):Void {
 		brushX = x;
 		brushY = y;
-		var action = new DecodedDrawAction("d", [x, y]);
+		var action = new LevelDrawAction("d", [x, y]);
 		recordAction(action, "d" + x + ";" + y);
 		brushCanvas.graphics.moveTo(x, y);
 		brushCanvas.graphics.lineTo(x - 0.15, y);
@@ -202,7 +202,7 @@ class EditorDrawableLayer extends Sprite {
 
 	private function rasterize():Void {
 		clearChildren(rasterCanvas);
-		ServerLevelRenderer.renderLayerStrokes(rasterCanvas, drawActions);
+		LevelRenderer.renderLayerStrokes(rasterCanvas, drawActions);
 		brushCanvas.graphics.clear();
 		brushCanvas.graphics.lineStyle(brushSize, color);
 	}
@@ -224,7 +224,7 @@ class EditorDrawableLayer extends Sprite {
 		return point;
 	}
 
-	private function recordAction(action:DecodedDrawAction, encoded:String):Void {
+	private function recordAction(action:LevelDrawAction, encoded:String):Void {
 		drawActions.push(action);
 		saveArray.push(encoded);
 		redoArray.resize(0);
@@ -232,7 +232,7 @@ class EditorDrawableLayer extends Sprite {
 
 	private function rebuildFromSaveArray():Void {
 		drawActions.resize(0);
-		for (action in ServerLevelDecoder.decodeDrawActions(getSaveString())) {
+		for (action in LevelDecoder.decodeDrawActions(getSaveString())) {
 			drawActions.push(action);
 		}
 		rebuildBrushState();

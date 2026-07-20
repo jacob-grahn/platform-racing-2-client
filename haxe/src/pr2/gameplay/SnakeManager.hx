@@ -7,9 +7,9 @@ import openfl.geom.Point;
 import openfl.utils.AssetType;
 import openfl.utils.Assets;
 import pr2.gameplay.player.LocalPlayerController;
-import pr2.level.ServerLevelRenderer;
+import pr2.level.LevelRenderer;
 import pr2.level.ObjectCodes;
-import pr2.level.WorldLevel;
+import pr2.level.Level;
 import pr2.net.LobbySocket;
 
 private class SnakeState {
@@ -59,8 +59,8 @@ class SnakeManager {
 	public static inline var MOVE_FRAMES_PER_TILE:Int = 6;
 	private static inline var TRAIL_ASSET:String = "assets/blocks/vanish.png";
 
-	private final level:WorldLevel;
-	private final renderer:ServerLevelRenderer;
+	private final level:Level;
+	private final renderer:LevelRenderer;
 	private final controller:LocalPlayerController;
 	private final snakes:Map<Int, SnakeState> = new Map();
 	private final trails:Map<String, SnakeTrailSegment> = new Map();
@@ -68,7 +68,7 @@ class SnakeManager {
 	private var frame:Int = 0;
 	private var localOwnerId:Null<Int> = null;
 
-	public function new(level:WorldLevel, renderer:ServerLevelRenderer, controller:LocalPlayerController) {
+	public function new(level:Level, renderer:LevelRenderer, controller:LocalPlayerController) {
 		this.level = level;
 		this.renderer = renderer;
 		this.controller = controller;
@@ -162,7 +162,7 @@ class SnakeManager {
 			snake.dy = snake.pendingDy;
 			setHead(snake.tileX, snake.tileY, true, snake.dx, snake.dy);
 		}
-		var pixelsPerFrame = ServerLevelRenderer.TILE_SIZE / MOVE_FRAMES_PER_TILE;
+		var pixelsPerFrame = LevelRenderer.TILE_SIZE / MOVE_FRAMES_PER_TILE;
 		snake.sprite.x += snake.dx * pixelsPerFrame;
 		snake.sprite.y += snake.dy * pixelsPerFrame;
 		snake.moveFrames--;
@@ -295,19 +295,19 @@ class SnakeManager {
 	}
 
 	private function positionSnake(snake:SnakeState):Void {
-		snake.sprite.x = worldPixelX(snake.tileX) + ServerLevelRenderer.TILE_SIZE / 2;
-		snake.sprite.y = worldPixelY(snake.tileY) + ServerLevelRenderer.TILE_SIZE / 2;
+		snake.sprite.x = worldPixelX(snake.tileX) + LevelRenderer.TILE_SIZE / 2;
+		snake.sprite.y = worldPixelY(snake.tileY) + LevelRenderer.TILE_SIZE / 2;
 	}
 
 	private function createTrailSegment(tileX:Int, tileY:Int):SnakeTrailSegment {
 		var display = new Sprite();
 		display.x = worldPixelX(tileX);
 		display.y = worldPixelY(tileY);
-		var data = ServerLevelRenderer.blockBitmapData(ObjectCodes.BLOCK_VANISH);
+		var data = LevelRenderer.blockBitmapData(ObjectCodes.BLOCK_VANISH);
 		if (data != null) {
 			var bitmap = new Bitmap(data);
-			bitmap.width = ServerLevelRenderer.TILE_SIZE;
-			bitmap.height = ServerLevelRenderer.TILE_SIZE;
+			bitmap.width = LevelRenderer.TILE_SIZE;
+			bitmap.height = LevelRenderer.TILE_SIZE;
 			display.addChild(bitmap);
 		} else throw "Missing authored vanish block bitmap for Snake trail";
 		var eyes = new Shape();
@@ -345,8 +345,8 @@ class SnakeManager {
 		LobbySocket.write('add_effect`SnakeStep`${snake.ownerId}`${snake.sequence}`${snake.tileX}`${snake.tileY}`${snake.dx}`${snake.dy}');
 	}
 
-	private inline function worldPixelX(tileX:Int):Int return tileX * ServerLevelRenderer.TILE_SIZE;
-	private inline function worldPixelY(tileY:Int):Int return tileY * ServerLevelRenderer.TILE_SIZE;
+	private inline function worldPixelX(tileX:Int):Int return tileX * LevelRenderer.TILE_SIZE;
+	private inline function worldPixelY(tileY:Int):Int return tileY * LevelRenderer.TILE_SIZE;
 	private static inline function key(tileX:Int, tileY:Int):String return tileX + "," + tileY;
 	private static function intArg(args:Array<String>, index:Int):Int {
 		var parsed = index < args.length ? Std.parseInt(args[index]) : null;

@@ -2,7 +2,7 @@ package pr2.gameplay;
 
 import openfl.ui.Keyboard;
 import pr2.lobby.LobbySession;
-import pr2.level.ServerLevelDecoder;
+import pr2.level.LevelDecoder;
 import pr2.net.ServerLevelData;
 import pr2.gameplay.SpecialEvent.PlaceArtifactRequest;
 
@@ -94,7 +94,7 @@ class SpecialEventTest {
 
 	private static function buildCourse():Course {
 		var dataString = "m3`e0c8b8`334;335;11,1;0;12,0;1;0,1;0";
-		var level = ServerLevelDecoder.decode(dataString);
+		var level = LevelDecoder.decode(dataString);
 		var vars:Map<String, String> = new Map();
 		vars.set("level_id", "42");
 		vars.set("title", "Special Event Test");

@@ -9,19 +9,19 @@ import openfl.events.Event;
 import openfl.text.TextField;
 import pr2.effects.BlockPiece;
 import pr2.lobby.account.Settings;
-import pr2.level.ServerLevel.DecodedArtLayer;
-import pr2.level.ServerLevel.DecodedArtObject;
-import pr2.level.ServerLevel.DecodedBlock;
-import pr2.level.ServerLevel.DecodedDrawAction;
-import pr2.level.ServerLevel.DecodedTextObject;
+import pr2.level.Level.LevelArtLayer;
+import pr2.level.Level.LevelArtObject;
+import pr2.level.Level.LevelDrawAction;
+import pr2.level.Level.LevelTextObject;
+import pr2.level.Level.LevelBlock;
 import pr2.runtime.FontResolver;
 
-class ServerLevelRendererTest {
+class LevelRendererTest {
 	private static var assertions:Int = 0;
 
 	public static function main():Void {
 		testBlockAssetMapping();
-		if (pr2.DeterministicTestMode.finishSmokeSuite("ServerLevelRendererTest")) return;
+		if (pr2.DeterministicTestMode.finishSmokeSuite("LevelRendererTest")) return;
 		testArtAssetMappings();
 		testDefaultArtStrokeThickness();
 		testArtEraseStrokeClearsRasterTiles();
@@ -51,16 +51,16 @@ class ServerLevelRendererTest {
 		testBlockPieces();
 		testArtLayerDepthAndParallax();
 		testRemoveDisposesAnimatedChildren();
-		trace('ServerLevelRendererTest passed $assertions assertions');
+		trace('LevelRendererTest passed $assertions assertions');
 	}
 
 	private static function testMineExplosion():Void {
 		var block = new DecodedBlock(ObjectCodes.BLOCK_MINE, 10020, 10050);
-		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [block]), block);
-		var effect = renderer.showMineExplosion(block.x, block.y, false);
+		var renderer = new LevelRenderer(new TestLevel(0xFFFFFF, [block]), block);
+		var effect = renderer.showMineExplosion(block.worldX, block.worldY, false);
 		var blockLayer = worldLayer(renderer, 1);
-		assertEquals(block.x, effect.x, "mine explosion uses block world x");
-		assertEquals(block.y, effect.y, "mine explosion uses block world y");
+		assertEquals(block.worldX, effect.x, "mine explosion uses block world x");
+		assertEquals(block.worldY, effect.y, "mine explosion uses block world y");
 		assertEquals(effect, blockLayer.getChildAt(1), "mine explosion renders over the block layer");
 		for (_ in 0...100) {
 			effect.animation.dispatchEvent(new openfl.events.Event(openfl.events.Event.ENTER_FRAME));
@@ -81,20 +81,20 @@ class ServerLevelRendererTest {
 		defaultPiece.remove();
 
 		var block = new DecodedBlock(ObjectCodes.BLOCK_BRICK, 10020, 10050);
-		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [block]), block);
-		var pieces = renderer.showBlockPieces("BrickPieceGraphic", block.x, block.y, 1, 10, 10, 25, 0.75, 0.95, 0.05,
+		var renderer = new LevelRenderer(new TestLevel(0xFFFFFF, [block]), block);
+		var pieces = renderer.showBlockPieces("BrickPieceGraphic", block.worldX, block.worldY, 1, 10, 10, 25, 0.75, 0.95, 0.05,
 			function() return 0.5);
 		var piece = pieces[0];
 		var blockLayer = worldLayer(renderer, 1);
-		assertEquals(block.x + 15, piece.x, "piece starts at randomized position inside block");
-		assertEquals(block.y + 15, piece.y, "piece starts at randomized position inside block");
+		assertEquals(block.worldX + 15, piece.x, "piece starts at randomized position inside block");
+		assertEquals(block.worldY + 15, piece.y, "piece starts at randomized position inside block");
 		assertEquals(180.0, piece.rotation, "piece starts with randomized rotation");
 		assertEquals(3, piece.selectedFrame, "brick fragment chooses a random native authored frame");
 		piece.dispatchEvent(new openfl.events.Event(openfl.events.Event.ENTER_FRAME));
-		assertEquals(block.y + 15.75, piece.y, "piece applies friction then gravity");
+		assertEquals(block.worldY + 15.75, piece.y, "piece applies friction then gravity");
 		assertEquals(3, piece.selectedFrame, "brick fragment frame does not auto-play after construction");
 		assertClose(0.95, piece.alpha, "piece fades by Flash rate");
-		var minePieces = renderer.showBlockPieces("MinePieceGraphic", block.x, block.y, 1, 10, 10, 25, 0.75, 0.95, 0.05,
+		var minePieces = renderer.showBlockPieces("MinePieceGraphic", block.worldX, block.worldY, 1, 10, 10, 25, 0.75, 0.95, 0.05,
 			function() return 0.5);
 		var minePiece = minePieces[0];
 		assertEquals(4, minePiece.selectedFrame, "mine fragment chooses and stops on a random authored frame");
@@ -102,8 +102,8 @@ class ServerLevelRendererTest {
 		assertEquals(4, minePiece.selectedFrame, "mine fragment frame does not auto-play after construction");
 		minePiece.remove();
 		var basic = new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 10110, 10050);
-		var basicRenderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [basic]), basic);
-		var sliced = basicRenderer.showBasicBlockPieces(basic.x, basic.y, 6, 10, 10, 25, function() return 0.5);
+		var basicRenderer = new LevelRenderer(new TestLevel(0xFFFFFF, [basic]), basic);
+		var sliced = basicRenderer.showBasicBlockPieces(basic.worldX, basic.worldY, 6, 10, 10, 25, function() return 0.5);
 		assertEquals(6, sliced.length, "basic Snake dig creates the six brick-style fragments");
 		var firstSlice = Std.downcast(sliced[0].visual, openfl.display.Bitmap);
 		assertTrue(firstSlice != null, "basic Snake fragment is a bitmap crop rather than authored brick art");
@@ -126,88 +126,88 @@ class ServerLevelRendererTest {
 			new DecodedBlock(ObjectCodes.BLOCK_CRUMBLE, 10080, 10050),
 			new DecodedBlock(ObjectCodes.BLOCK_VANISH, 10110, 10050)
 		];
-		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, blocks), blocks[0]);
+		var renderer = new LevelRenderer(new TestLevel(0xFFFFFF, blocks), blocks[0]);
 		for (block in blocks) {
-			renderer.setBlockAlpha(block.x, block.y, 0);
+			renderer.setBlockAlpha(block.worldX, block.worldY, 0);
 		}
 
 		var blockLayer = worldLayer(renderer, 1);
-		assertEquals(0.0, blockLayer.getChildAt(0).alpha, "server renderer hides removed brick");
-		assertEquals(0.0, blockLayer.getChildAt(1).alpha, "server renderer hides removed mine");
-		assertEquals(0.0, blockLayer.getChildAt(2).alpha, "server renderer hides removed crumble");
-		assertEquals(0.0, blockLayer.getChildAt(3).alpha, "server renderer hides vanished block");
+		assertEquals(0.0, blockLayer.getChildAt(0).alpha, "level renderer hides removed brick");
+		assertEquals(0.0, blockLayer.getChildAt(1).alpha, "level renderer hides removed mine");
+		assertEquals(0.0, blockLayer.getChildAt(2).alpha, "level renderer hides removed crumble");
+		assertEquals(0.0, blockLayer.getChildAt(3).alpha, "level renderer hides vanished block");
 	}
 
 	private static function testBlockColorMultiplierUpdate():Void {
 		var block = new DecodedBlock(ObjectCodes.BLOCK_ITEM, 10020, 10050);
-		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [block]), block);
-		renderer.setBlockColorMultiplier(block.x, block.y, 0.5);
+		var renderer = new LevelRenderer(new TestLevel(0xFFFFFF, [block]), block);
+		renderer.setBlockColorMultiplier(block.worldX, block.worldY, 0.5);
 
 		var blockLayer = worldLayer(renderer, 1);
 		var transform = blockLayer.getChildAt(0).transform.colorTransform;
-		assertEquals(0.5, transform.redMultiplier, "server renderer applies depleted item red multiplier");
-		assertEquals(0.5, transform.greenMultiplier, "server renderer applies depleted item green multiplier");
-		assertEquals(0.5, transform.blueMultiplier, "server renderer applies depleted item blue multiplier");
+		assertEquals(0.5, transform.redMultiplier, "level renderer applies depleted item red multiplier");
+		assertEquals(0.5, transform.greenMultiplier, "level renderer applies depleted item green multiplier");
+		assertEquals(0.5, transform.blueMultiplier, "level renderer applies depleted item blue multiplier");
 	}
 
 	private static function testBlockIceOverlayUpdate():Void {
 		var block = new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 10020, 10050);
-		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [block]), block);
+		var renderer = new LevelRenderer(new TestLevel(0xFFFFFF, [block]), block);
 
-		renderer.setBlockIceOverlayAlpha(block.x, block.y, 0.75);
-		assertEquals(0.75, renderer.blockIceOverlayAlphaAt(block.x, block.y), "server renderer adds ice overlay alpha");
+		renderer.setBlockIceOverlayAlpha(block.worldX, block.worldY, 0.75);
+		assertEquals(0.75, renderer.blockIceOverlayAlphaAt(block.worldX, block.worldY), "level renderer adds ice overlay alpha");
 
 		var blockLayer = worldLayer(renderer, 1);
 		var blockDisplay = Std.downcast(blockLayer.getChildAt(0), Sprite);
 		assertEquals(2, blockDisplay.numChildren, "ice overlay is a child above the base block");
 
-		renderer.setBlockIceOverlayAlpha(block.x, block.y, 0);
-		assertEquals(0.0, renderer.blockIceOverlayAlphaAt(block.x, block.y), "server renderer removes ice overlay at zero alpha");
+		renderer.setBlockIceOverlayAlpha(block.worldX, block.worldY, 0);
+		assertEquals(0.0, renderer.blockIceOverlayAlphaAt(block.worldX, block.worldY), "level renderer removes ice overlay at zero alpha");
 		assertEquals(1, blockDisplay.numChildren, "ice overlay child is removed after thaw");
 	}
 
 	private static function testBlockBumpAnimation():Void {
 		var block = new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 10020, 10050);
-		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [block]), block);
+		var renderer = new LevelRenderer(new TestLevel(0xFFFFFF, [block]), block);
 		var blockLayer = worldLayer(renderer, 1);
 		var display = blockLayer.getChildAt(0);
 
-		renderer.animateBlockBump(block.x, block.y);
+		renderer.animateBlockBump(block.worldX, block.worldY);
 		renderer.dispatchEvent(new Event(Event.ENTER_FRAME));
 
-		assertEquals(block.x, display.x, "block bump from below keeps x aligned");
-		assertClose(block.y - 4.875, display.y, "block bump uses Flash bounce decay on first frame");
+		assertEquals(block.worldX, display.x, "block bump from below keeps x aligned");
+		assertClose(block.worldY - 4.875, display.y, "block bump uses Flash bounce decay on first frame");
 		for (_ in 0...100) {
 			renderer.dispatchEvent(new Event(Event.ENTER_FRAME));
 		}
-		assertWithin(block.x, display.x, 0.01, "block bump visually returns to original x");
-		assertWithin(block.y, display.y, 0.01, "block bump visually returns to original y");
-		assertEquals(true, renderer.blockIsBouncingAt(block.x, block.y), "Flash off-diagonal bounce quirk keeps listener active");
+		assertWithin(block.worldX, display.x, 0.01, "block bump visually returns to original x");
+		assertWithin(block.worldY, display.y, 0.01, "block bump visually returns to original y");
+		assertEquals(true, renderer.blockIsBouncingAt(block.worldX, block.worldY), "Flash off-diagonal bounce quirk keeps listener active");
 
-		renderer.animateBlockBump(block.x, block.y, 5, 0);
+		renderer.animateBlockBump(block.worldX, block.worldY, 5, 0);
 		renderer.dispatchEvent(new Event(Event.ENTER_FRAME));
 
-		assertClose(block.x + 1.625, display.x, "block side bump uses horizontal Flash bounce decay on first frame");
-		assertClose(block.y, display.y, "block side bump keeps y aligned");
+		assertClose(block.worldX + 1.625, display.x, "block side bump uses horizontal Flash bounce decay on first frame");
+		assertClose(block.worldY, display.y, "block side bump keeps y aligned");
 		for (_ in 0...20) {
 			renderer.dispatchEvent(new Event(Event.ENTER_FRAME));
 		}
-		assertWithin(block.x, display.x, 0.01, "block side bump visually returns to original x");
-		assertWithin(block.y, display.y, 0.01, "block side bump visually returns to original y");
-		assertEquals(true, renderer.blockIsBouncingAt(block.x, block.y), "Flash side-bump quirk also keeps listener active off diagonal");
+		assertWithin(block.worldX, display.x, 0.01, "block side bump visually returns to original x");
+		assertWithin(block.worldY, display.y, 0.01, "block side bump visually returns to original y");
+		assertEquals(true, renderer.blockIsBouncingAt(block.worldX, block.worldY), "Flash side-bump quirk also keeps listener active off diagonal");
 
 		var diagonal = new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 10020, 10020);
-		var diagonalRenderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [diagonal]), diagonal);
-		diagonalRenderer.animateBlockBump(diagonal.x, diagonal.y);
+		var diagonalRenderer = new LevelRenderer(new TestLevel(0xFFFFFF, [diagonal]), diagonal);
+		diagonalRenderer.animateBlockBump(diagonal.worldX, diagonal.worldY);
 		for (_ in 0...21) {
 			diagonalRenderer.dispatchEvent(new Event(Event.ENTER_FRAME));
 		}
-		assertEquals(false, diagonalRenderer.blockIsBouncingAt(diagonal.x, diagonal.y), "diagonal block still clears under Flash stop condition");
+		assertEquals(false, diagonalRenderer.blockIsBouncingAt(diagonal.worldX, diagonal.worldY), "diagonal block still clears under Flash stop condition");
 	}
 
 	private static function testMoveBlockDisplay():Void {
 		var block = new DecodedBlock(ObjectCodes.BLOCK_MOVE, 10020, 10050);
-		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [block]), block);
+		var renderer = new LevelRenderer(new TestLevel(0xFFFFFF, [block]), block);
 
 		renderer.moveBlockDisplay(10020, 10050, 10050, 10050);
 
@@ -221,7 +221,7 @@ class ServerLevelRendererTest {
 
 	private static function testMoveBlockArrowDisplay():Void {
 		var block = new DecodedBlock(ObjectCodes.BLOCK_MOVE, 10020, 10050);
-		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [block]), block);
+		var renderer = new LevelRenderer(new TestLevel(0xFFFFFF, [block]), block);
 		var blockLayer = worldLayer(renderer, 1);
 		var display = cast(blockLayer.getChildAt(0), Sprite);
 
@@ -246,7 +246,7 @@ class ServerLevelRendererTest {
 			new DecodedBlock(ObjectCodes.BLOCK_BASIC4, 10110, 10050),
 			new DecodedBlock(ObjectCodes.BLOCK_BRICK, 10140, 10050)
 		];
-		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, blocks), blocks[0], 180, 280, true, 2);
+		var renderer = new LevelRenderer(new TestLevel(0xFFFFFF, blocks), blocks[0], 180, 280, true, 2);
 		var blockLayer = worldLayer(renderer, 1);
 		assertEquals(0, renderer.drawnBlockCount(), "incremental renderer starts before drawing blocks");
 		assertEquals(0, blockLayer.numChildren, "incremental block layer starts empty");
@@ -269,24 +269,24 @@ class ServerLevelRendererTest {
 	private static function testViewWindowRefreshesBeforeLeftEdgeExposure():Void {
 		var focus = new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 10020, 10050);
 		var leftEdge = new DecodedBlock(ObjectCodes.BLOCK_BASIC2, 9750, 10050);
-		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [focus, leftEdge]), focus, 180, 280);
+		var renderer = new LevelRenderer(new TestLevel(0xFFFFFF, [focus, leftEdge]), focus, 180, 280);
 		var blockLayer = worldLayer(renderer, 1);
 		assertEquals(1, blockLayer.numChildren, "block just beyond the left view margin starts detached");
 
 		renderer.setCameraOffset(-9750, 280 - 10050);
 
 		assertEquals(2, blockLayer.numChildren, "leftward scroll attaches blocks before they reach the stage edge");
-		assertEquals(0.0, renderer.worldToScreen(leftEdge.x, leftEdge.y).x, "regression block is exactly on the left edge");
+		assertEquals(0.0, renderer.worldToScreen(leftEdge.worldX, leftEdge.worldY).x, "regression block is exactly on the left edge");
 	}
 
 	private static function testIncrementalArtDrawing():Void {
 		var block = new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 10020, 10050);
-		var art = new DecodedArtLayer([
-			new DecodedDrawAction("c", [0xFF0000]),
-			new DecodedDrawAction("t", [3]),
-			new DecodedDrawAction("d", [10020, 10050, 10, 10])
-		], [new DecodedArtObject(4, 10, 20)], [new DecodedTextObject("hello#44world", 15, 25, 0x00FF00)], 1);
-		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [block], [art]), block, 180, 280, true, 3);
+		var art = new LevelArtLayer([
+			new LevelDrawAction("c", [0xFF0000]),
+			new LevelDrawAction("t", [3]),
+			new LevelDrawAction("d", [10020, 10050, 10, 10])
+		], [new LevelArtObject(4, 10, 20)], [new LevelTextObject("hello#44world", 15, 25, 0x00FF00)], 1);
+		var renderer = new LevelRenderer(new TestLevel(0xFFFFFF, [block], [art]), block, 180, 280, true, 3);
 		var artLayer = worldLayer(renderer, 1);
 		assertEquals(0, renderer.drawnArtItemCount(), "incremental art starts before drawing art");
 		// Child 0 is the (empty) stroke raster canvas that placed art sits on top of.
@@ -314,22 +314,22 @@ class ServerLevelRendererTest {
 
 	private static function testArtRasterTilesCullToViewWindow():Void {
 		var focus = new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 10020, 10050);
-		var tile = ServerLevelRenderer.ART_RASTER_TILE_SIZE;
-		var farX = focus.x + tile * 6;
-		var nearTileX = Std.int(Math.floor(focus.x / tile)) * tile;
+		var tile = LevelRenderer.ART_RASTER_TILE_SIZE;
+		var farX = focus.worldX + tile * 6;
+		var nearTileX = Std.int(Math.floor(focus.worldX / tile)) * tile;
 		var farTileX = Std.int(Math.floor(farX / tile)) * tile;
-		var art = new DecodedArtLayer([
-			new DecodedDrawAction("d", [focus.x, focus.y]),
-			new DecodedDrawAction("d", [farX, focus.y])
+		var art = new LevelArtLayer([
+			new LevelDrawAction("d", [focus.worldX, focus.worldY]),
+			new LevelDrawAction("d", [farX, focus.worldY])
 		], [], [], 1);
-		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [focus], [art]), focus, 180, 280);
+		var renderer = new LevelRenderer(new TestLevel(0xFFFFFF, [focus], [art]), focus, 180, 280);
 		var raster = strokeRaster(worldLayer(renderer, 1));
 
 		assertEquals(1, raster.numChildren, "art raster culling starts with only visible tiles attached");
 		var visible = Std.downcast(raster.getChildAt(0), Bitmap);
 		assertEquals(nearTileX, Std.int(visible.x), "initial art raster tile is the focused tile");
 
-		renderer.setCameraOffset(180 - farX, 280 - focus.y);
+		renderer.setCameraOffset(180 - farX, 280 - focus.worldY);
 		renderer.dispatchEvent(new Event(Event.ENTER_FRAME));
 
 		assertEquals(1, raster.numChildren, "art raster culling keeps off-screen tiles detached after scroll");
@@ -339,12 +339,12 @@ class ServerLevelRendererTest {
 
 	private static function testIncrementalArtFailureCompletesAndWarns():Void {
 		var block = new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 10020, 10050);
-		var art = new DecodedArtLayer([
-			new DecodedDrawAction("d", [0, 0]),
-			new DecodedDrawAction("d", [10, 10])
-		], [], [new DecodedTextObject("after", 15, 25, 0x00FF00)], 1);
+		var art = new LevelArtLayer([
+			new LevelDrawAction("d", [0, 0]),
+			new LevelDrawAction("d", [10, 10])
+		], [], [new LevelTextObject("after", 15, 25, 0x00FF00)], 1);
 		var warnings:Array<String> = [];
-		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [block], [art]), block, 180, 280, true, 1, {
+		var renderer = new LevelRenderer(new TestLevel(0xFFFFFF, [block], [art]), block, 180, 280, true, 1, {
 			onArtWarning: function(message:String):Void warnings.push(message),
 			artDrawFaultInjector: function(index:Int):Void {
 				if (index == 0) {
@@ -366,14 +366,14 @@ class ServerLevelRendererTest {
 
 	private static function testRasterTileLimitStopsAndWarns():Void {
 		var block = new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 10020, 10050);
-		var tile = ServerLevelRenderer.ART_RASTER_TILE_SIZE;
-		var art = new DecodedArtLayer([
-			new DecodedDrawAction("d", [block.x, block.y]),
-			new DecodedDrawAction("d", [block.x + tile + 20, block.y])
+		var tile = LevelRenderer.ART_RASTER_TILE_SIZE;
+		var art = new LevelArtLayer([
+			new LevelDrawAction("d", [block.worldX, block.worldY]),
+			new LevelDrawAction("d", [block.worldX + tile + 20, block.worldY])
 		], [], [], 1);
 		var warnings:Array<String> = [];
-		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [block], [art]), block, 180, 280, false,
-			ServerLevelRenderer.DEFAULT_BLOCKS_PER_FRAME, {
+		var renderer = new LevelRenderer(new TestLevel(0xFFFFFF, [block], [art]), block, 180, 280, false,
+			LevelRenderer.DEFAULT_BLOCKS_PER_FRAME, {
 				onArtWarning: function(message:String):Void warnings.push(message),
 				rasterTileLimit: 1
 			});
@@ -387,25 +387,25 @@ class ServerLevelRendererTest {
 	}
 
 	private static function testArtBatchLimitsRejectHugeSpans():Void {
-		assertEquals(true, ServerLevelRenderer.isArtDrawBatchWithinLimits(
-			ServerLevelRenderer.ART_DRAW_BATCH_MAX_TILE_COUNT,
-			ServerLevelRenderer.ART_DRAW_BATCH_MAX_TILE_SPAN,
-			ServerLevelRenderer.ART_DRAW_BATCH_MAX_TILE_SPAN
+		assertEquals(true, LevelRenderer.isArtDrawBatchWithinLimits(
+			LevelRenderer.ART_DRAW_BATCH_MAX_TILE_COUNT,
+			LevelRenderer.ART_DRAW_BATCH_MAX_TILE_SPAN,
+			LevelRenderer.ART_DRAW_BATCH_MAX_TILE_SPAN
 		), "art batch accepts the configured maximum");
-		assertEquals(false, ServerLevelRenderer.isArtDrawBatchWithinLimits(
-			ServerLevelRenderer.ART_DRAW_BATCH_MAX_TILE_COUNT + 1,
+		assertEquals(false, LevelRenderer.isArtDrawBatchWithinLimits(
+			LevelRenderer.ART_DRAW_BATCH_MAX_TILE_COUNT + 1,
 			1,
 			1
 		), "art batch rejects too many touched tiles");
-		assertEquals(false, ServerLevelRenderer.isArtDrawBatchWithinLimits(
+		assertEquals(false, LevelRenderer.isArtDrawBatchWithinLimits(
 			2,
-			ServerLevelRenderer.ART_DRAW_BATCH_MAX_TILE_SPAN + 1,
+			LevelRenderer.ART_DRAW_BATCH_MAX_TILE_SPAN + 1,
 			1
 		), "art batch rejects far-apart horizontal strokes");
-		assertEquals(false, ServerLevelRenderer.isArtDrawBatchWithinLimits(
+		assertEquals(false, LevelRenderer.isArtDrawBatchWithinLimits(
 			2,
 			1,
-			ServerLevelRenderer.ART_DRAW_BATCH_MAX_TILE_SPAN + 1
+			LevelRenderer.ART_DRAW_BATCH_MAX_TILE_SPAN + 1
 		), "art batch rejects far-apart vertical strokes");
 	}
 
@@ -413,8 +413,8 @@ class ServerLevelRendererTest {
 		Settings.disablePersistenceForTests();
 		Settings.setValue(Settings.DRAW_ART, false);
 		var block = new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 10020, 10050);
-		var art = new DecodedArtLayer([new DecodedDrawAction("d", [10, 10])], [], [new DecodedTextObject("hidden", 15, 25, 0x00FF00)], 1);
-		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [block], [art], 201), block);
+		var art = new LevelArtLayer([new LevelDrawAction("d", [10, 10])], [], [new LevelTextObject("hidden", 15, 25, 0x00FF00)], 1);
+		var renderer = new LevelRenderer(new TestLevel(0xFFFFFF, [block], [art], 201), block);
 		var world = Std.downcast(renderer.getChildAt(1), Sprite);
 
 		assertEquals(2, renderer.numChildren, "drawArt=false keeps only solid background and world container");
@@ -426,7 +426,7 @@ class ServerLevelRendererTest {
 	}
 
 	private static function testBg5CircleGrid():Void {
-		var grid = ServerLevelRenderer.createBg5CircleGrid(function() return 0.25);
+		var grid = LevelRenderer.createBg5CircleGrid(function() return 0.25);
 		assertEquals(88, grid.numChildren, "BG5 grid creates Flash's 11 by 8 colored circles");
 		assertEquals(false, grid.mouseEnabled, "BG5 grid ignores direct mouse input");
 		assertEquals(false, grid.mouseChildren, "BG5 grid ignores child mouse input");
@@ -438,7 +438,7 @@ class ServerLevelRendererTest {
 		Settings.disablePersistenceForTests();
 		Settings.setValue(Settings.DRAW_ART, true);
 		var block = new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 10020, 10050);
-		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [block], [], ServerLevelRenderer.BG5_CODE), block);
+		var renderer = new LevelRenderer(new TestLevel(0xFFFFFF, [block], [], LevelRenderer.BG5_CODE), block);
 		var mounted = Std.downcast(findChildByName(renderer, "bg5CircleGrid"), Sprite);
 		assertTrue(mounted != null, "BG5 renderer mounts colored circle grid over the art background");
 		assertEquals(88, mounted.numChildren, "mounted BG5 grid preserves Flash circle count");
@@ -446,20 +446,20 @@ class ServerLevelRendererTest {
 	}
 
 	private static function testBlockAssetMapping():Void {
-		assertEquals("assets/blocks/basic1.png", ServerLevelRenderer.blockAssetPath(ObjectCodes.BLOCK_BASIC1), "basic1 asset");
-		assertEquals("assets/blocks/start.png", ServerLevelRenderer.blockAssetPath(ObjectCodes.BLOCK_START3), "start variants share asset");
-		assertEquals("assets/blocks/teleport_block.png", ServerLevelRenderer.blockAssetPath(ObjectCodes.BLOCK_TELEPORT), "teleport asset");
-		assertEquals("assets/blocks/basic2.png", ServerLevelRenderer.blockAssetPath(ObjectCodes.BLOCK_ARROW_RIGHT), "arrow blocks use the basic2 base tile");
+		assertEquals("assets/blocks/basic1.png", LevelRenderer.blockAssetPath(ObjectCodes.BLOCK_BASIC1), "basic1 asset");
+		assertEquals("assets/blocks/start.png", LevelRenderer.blockAssetPath(ObjectCodes.BLOCK_START3), "start variants share asset");
+		assertEquals("assets/blocks/teleport_block.png", LevelRenderer.blockAssetPath(ObjectCodes.BLOCK_TELEPORT), "teleport asset");
+		assertEquals("assets/blocks/basic2.png", LevelRenderer.blockAssetPath(ObjectCodes.BLOCK_ARROW_RIGHT), "arrow blocks use the basic2 base tile");
 		testArrowOverlay();
 	}
 
 	private static function testTeleportBlockColorBackground():Void {
-		@:privateAccess assertEquals(0xFF7F50, ServerLevelRenderer.teleportBlockColor(""), "empty teleport options use default color");
-		@:privateAccess assertEquals(0xFF7F50, ServerLevelRenderer.teleportBlockColor("16744272"), "explicit default teleport color matches empty options");
-		@:privateAccess assertEquals(0x123456, ServerLevelRenderer.teleportBlockColor("1193046"), "custom teleport options parse as decimal color");
+		@:privateAccess assertEquals(0xFF7F50, LevelRenderer.teleportBlockColor(""), "empty teleport options use default color");
+		@:privateAccess assertEquals(0xFF7F50, LevelRenderer.teleportBlockColor("16744272"), "explicit default teleport color matches empty options");
+		@:privateAccess assertEquals(0x123456, LevelRenderer.teleportBlockColor("1193046"), "custom teleport options parse as decimal color");
 
 		var block = new DecodedBlock(ObjectCodes.BLOCK_TELEPORT, 10020, 10050, "1193046");
-		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [block]), block);
+		var renderer = new LevelRenderer(new TestLevel(0xFFFFFF, [block]), block);
 		var blockLayer = worldLayer(renderer, 1);
 		var blockDisplay = Std.downcast(blockLayer.getChildAt(0), Sprite);
 		assertEquals(2, blockDisplay.numChildren, "teleport block renders option-color background behind bitmap");
@@ -467,12 +467,12 @@ class ServerLevelRendererTest {
 	}
 
 	private static function testArrowOverlay():Void {
-		assertEquals("assets/svg/blocks/arrow_overlay.svg", ServerLevelRenderer.arrowOverlayAssetPath(), "arrow overlay art path");
-		assertEquals(0.0, ServerLevelRenderer.arrowOverlayRotation(ObjectCodes.BLOCK_ARROW_UP), "up arrow points up");
-		assertEquals(180.0, ServerLevelRenderer.arrowOverlayRotation(ObjectCodes.BLOCK_ARROW_DOWN), "down arrow rotates 180");
-		assertEquals(-90.0, ServerLevelRenderer.arrowOverlayRotation(ObjectCodes.BLOCK_ARROW_LEFT), "left arrow rotates -90");
-		assertEquals(90.0, ServerLevelRenderer.arrowOverlayRotation(ObjectCodes.BLOCK_ARROW_RIGHT), "right arrow rotates 90");
-		assertEquals(null, ServerLevelRenderer.arrowOverlayRotation(ObjectCodes.BLOCK_BASIC2), "non-arrow blocks have no overlay rotation");
+		assertEquals("assets/svg/blocks/arrow_overlay.svg", LevelRenderer.arrowOverlayAssetPath(), "arrow overlay art path");
+		assertEquals(0.0, LevelRenderer.arrowOverlayRotation(ObjectCodes.BLOCK_ARROW_UP), "up arrow points up");
+		assertEquals(180.0, LevelRenderer.arrowOverlayRotation(ObjectCodes.BLOCK_ARROW_DOWN), "down arrow rotates 180");
+		assertEquals(-90.0, LevelRenderer.arrowOverlayRotation(ObjectCodes.BLOCK_ARROW_LEFT), "left arrow rotates -90");
+		assertEquals(90.0, LevelRenderer.arrowOverlayRotation(ObjectCodes.BLOCK_ARROW_RIGHT), "right arrow rotates 90");
+		assertEquals(null, LevelRenderer.arrowOverlayRotation(ObjectCodes.BLOCK_BASIC2), "non-arrow blocks have no overlay rotation");
 	}
 
 	private static function testArrowAnimation():Void {
@@ -503,8 +503,8 @@ class ServerLevelRendererTest {
 		authored.dispose();
 
 		var arrow = new DecodedBlock(ObjectCodes.BLOCK_ARROW_RIGHT, 10020, 10050);
-		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [arrow]), arrow);
-		assertEquals(1, renderer.arrowFrameAt(arrow.x, arrow.y), "arrow timeline starts stopped on frame 1");
+		var renderer = new LevelRenderer(new TestLevel(0xFFFFFF, [arrow]), arrow);
+		assertEquals(1, renderer.arrowFrameAt(arrow.worldX, arrow.worldY), "arrow timeline starts stopped on frame 1");
 
 		var blockLayer = worldLayer(renderer, 1);
 		var blockDisplay = Std.downcast(blockLayer.getChildAt(0), Sprite);
@@ -516,20 +516,20 @@ class ServerLevelRendererTest {
 		var restDepth = deepChildCount(timeline);
 		assertTrue(restDepth > 1, "arrow chevron has inner content at rest");
 
-		renderer.animateArrow(arrow.x, arrow.y);
-		assertEquals(2, renderer.arrowFrameAt(arrow.x, arrow.y), "arrow activation starts one frame brighter");
+		renderer.animateArrow(arrow.worldX, arrow.worldY);
+		assertEquals(2, renderer.arrowFrameAt(arrow.worldX, arrow.worldY), "arrow activation starts one frame brighter");
 
 		for (_ in 0...4) {
 			timeline.dispatchEvent(new Event(Event.ENTER_FRAME));
 		}
-		assertEquals(6, renderer.arrowFrameAt(arrow.x, arrow.y), "arrow timeline reaches the fading half");
-		renderer.animateArrow(arrow.x, arrow.y);
-		assertEquals(5, renderer.arrowFrameAt(arrow.x, arrow.y), "repeat activation steps a fading arrow back toward its bright center");
+		assertEquals(6, renderer.arrowFrameAt(arrow.worldX, arrow.worldY), "arrow timeline reaches the fading half");
+		renderer.animateArrow(arrow.worldX, arrow.worldY);
+		assertEquals(5, renderer.arrowFrameAt(arrow.worldX, arrow.worldY), "repeat activation steps a fading arrow back toward its bright center");
 
 		for (_ in 0...4) {
 			timeline.dispatchEvent(new Event(Event.ENTER_FRAME));
 		}
-		assertEquals(1, renderer.arrowFrameAt(arrow.x, arrow.y), "arrow overlay returns to its stopped first frame");
+		assertEquals(1, renderer.arrowFrameAt(arrow.worldX, arrow.worldY), "arrow overlay returns to its stopped first frame");
 		assertEquals(2, blockDisplay.numChildren, "arrow block keeps its overlay after activation");
 		assertEquals(restDepth, deepChildCount(timeline), "arrow chevron keeps its inner content after animating and settling");
 		assertEquals(null, renderer.arrowFrameAt(0, 0), "non-arrow coordinate has no animation frame");
@@ -542,81 +542,81 @@ class ServerLevelRendererTest {
 		var start = new DecodedBlock(ObjectCodes.BLOCK_START1, 10020, 10050);
 		var minionEgg = new DecodedBlock(ObjectCodes.BLOCK_MINION_EGG, 10080, 10050);
 		var brick = new DecodedBlock(ObjectCodes.BLOCK_BRICK, 10050, 10050);
-		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [start, brick, minionEgg]), start);
+		var renderer = new LevelRenderer(new TestLevel(0xFFFFFF, [start, brick, minionEgg]), start);
 		var blockLayer = worldLayer(renderer, 1);
 		assertEquals(1, blockLayer.numChildren, "spawn marker blocks must not render during a race");
-		assertEquals(brick.x, Std.downcast(blockLayer.getChildAt(0), Sprite).x, "the only rendered block is the brick, not the start marker");
-		assertTrue(ServerLevelRenderer.isStartBlockCode(ObjectCodes.BLOCK_START4), "start variants are start-block codes");
-		assertTrue(!ServerLevelRenderer.isStartBlockCode(ObjectCodes.BLOCK_BRICK), "non-start codes are not start blocks");
-		assertTrue(ServerLevelRenderer.isSpawnMarkerBlockCode(ObjectCodes.BLOCK_MINION_EGG), "minion egg block is a spawn marker");
+		assertEquals(brick.worldX, Std.downcast(blockLayer.getChildAt(0), Sprite).x, "the only rendered block is the brick, not the start marker");
+		assertTrue(LevelRenderer.isStartBlockCode(ObjectCodes.BLOCK_START4), "start variants are start-block codes");
+		assertTrue(!LevelRenderer.isStartBlockCode(ObjectCodes.BLOCK_BRICK), "non-start codes are not start blocks");
+		assertTrue(LevelRenderer.isSpawnMarkerBlockCode(ObjectCodes.BLOCK_MINION_EGG), "minion egg block is a spawn marker");
 	}
 
 	private static function testRemoteVisibleBlockActivation():Void {
 		var vanish = new DecodedBlock(ObjectCodes.BLOCK_VANISH, 10020, 10050);
 		var water = new DecodedBlock(ObjectCodes.BLOCK_WATER, 10050, 10050);
-		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [vanish, water]), vanish);
+		var renderer = new LevelRenderer(new TestLevel(0xFFFFFF, [vanish, water]), vanish);
 
-		renderer.activateVanish(vanish.x, vanish.y);
-		assertEquals(0.0, renderer.blockAlphaAt(vanish.x, vanish.y), "remote vanish activation hides block");
+		renderer.activateVanish(vanish.worldX, vanish.worldY);
+		assertEquals(0.0, renderer.blockAlphaAt(vanish.worldX, vanish.worldY), "remote vanish activation hides block");
 
-		renderer.triggerWaterRipple(water.x, water.y);
-		assertClose(0.9, renderer.blockAlphaAt(water.x, water.y), "remote water ripple dims block");
+		renderer.triggerWaterRipple(water.worldX, water.worldY);
+		assertClose(0.9, renderer.blockAlphaAt(water.worldX, water.worldY), "remote water ripple dims block");
 		renderer.dispatchEvent(new Event(Event.ENTER_FRAME));
-		assertClose(0.93, renderer.blockAlphaAt(water.x, water.y), "remote water ripple recovers each frame");
+		assertClose(0.93, renderer.blockAlphaAt(water.worldX, water.worldY), "remote water ripple recovers each frame");
 		for (_ in 0...3) {
-			renderer.triggerWaterRipple(water.x, water.y);
+			renderer.triggerWaterRipple(water.worldX, water.worldY);
 		}
-		assertClose(0.63, renderer.blockAlphaAt(water.x, water.y), "remote water ripple stacks alpha reduction");
+		assertClose(0.63, renderer.blockAlphaAt(water.worldX, water.worldY), "remote water ripple stacks alpha reduction");
 		for (_ in 0...20) {
-			renderer.triggerWaterRipple(water.x, water.y);
+			renderer.triggerWaterRipple(water.worldX, water.worldY);
 		}
-		assertEquals(0.5, renderer.blockAlphaAt(water.x, water.y), "remote water ripple clamps minimum alpha");
+		assertEquals(0.5, renderer.blockAlphaAt(water.worldX, water.worldY), "remote water ripple clamps minimum alpha");
 	}
 
 	private static function testArtAssetMappings():Void {
-		assertEquals("assets/svg/backgrounds/bg1.svg", ServerLevelRenderer.artBackgroundAssetPath(201), "bg1 asset");
-		assertEquals("assets/svg/backgrounds/bg7.svg", ServerLevelRenderer.artBackgroundAssetPath(207), "bg7 asset");
-		assertEquals("", ServerLevelRenderer.artBackgroundAssetPath(999), "unknown background asset");
-		assertEquals("assets/svg/stamps/tree1.svg", ServerLevelRenderer.stampAssetPath(0), "tree stamp asset");
-		assertEquals("assets/svg/stamps/spire2.svg", ServerLevelRenderer.stampAssetPath(8), "spire stamp asset");
-		assertEquals("assets/svg/stamps/cactus.svg", ServerLevelRenderer.stampAssetPath(4), "composed cactus stamp asset");
-		assertEquals("assets/svg/stamps/building1.svg", ServerLevelRenderer.stampAssetPath(9), "composed building stamp asset");
+		assertEquals("assets/svg/backgrounds/bg1.svg", LevelRenderer.artBackgroundAssetPath(201), "bg1 asset");
+		assertEquals("assets/svg/backgrounds/bg7.svg", LevelRenderer.artBackgroundAssetPath(207), "bg7 asset");
+		assertEquals("", LevelRenderer.artBackgroundAssetPath(999), "unknown background asset");
+		assertEquals("assets/svg/stamps/tree1.svg", LevelRenderer.stampAssetPath(0), "tree stamp asset");
+		assertEquals("assets/svg/stamps/spire2.svg", LevelRenderer.stampAssetPath(8), "spire stamp asset");
+		assertEquals("assets/svg/stamps/cactus.svg", LevelRenderer.stampAssetPath(4), "composed cactus stamp asset");
+		assertEquals("assets/svg/stamps/building1.svg", LevelRenderer.stampAssetPath(9), "composed building stamp asset");
 	}
 
 	private static function testDefaultArtStrokeThickness():Void {
 		var brush = new Sprite();
-		ServerLevelRenderer.drawLayerStrokes(brush, [new DecodedDrawAction("d", [20, 20, 20, 0])]);
+		LevelRenderer.drawLayerStrokes(brush, [new LevelDrawAction("d", [20, 20, 20, 0])]);
 		var bounds = brush.getBounds(brush);
-		assertEquals(4.0, ServerLevelRenderer.DEFAULT_ART_BRUSH_SIZE, "server art uses Flash's default brush size");
+		assertEquals(4.0, LevelRenderer.DEFAULT_ART_BRUSH_SIZE, "server art uses Flash's default brush size");
 		assertClose(4.0, bounds.height, "server art default stroke bounds match Flash brush thickness");
 	}
 
 	private static function testArtEraseStrokeClearsRasterTiles():Void {
 		var raster = new Sprite();
-		ServerLevelRenderer.renderLayerStrokes(raster, [
-			new DecodedDrawAction("c", [0xFF0000]),
-			new DecodedDrawAction("t", [10]),
-			new DecodedDrawAction("d", [10, 10, 80, 0]),
-			new DecodedDrawAction("m", [], "erase"),
-			new DecodedDrawAction("t", [12]),
-			new DecodedDrawAction("d", [50, 10, 20, 0]),
-			new DecodedDrawAction("m", [], "draw"),
-			new DecodedDrawAction("c", [0x0000FF]),
-			new DecodedDrawAction("d", [75, 10, 10, 0])
+		LevelRenderer.renderLayerStrokes(raster, [
+			new LevelDrawAction("c", [0xFF0000]),
+			new LevelDrawAction("t", [10]),
+			new LevelDrawAction("d", [10, 10, 80, 0]),
+			new LevelDrawAction("m", [], "erase"),
+			new LevelDrawAction("t", [12]),
+			new LevelDrawAction("d", [50, 10, 20, 0]),
+			new LevelDrawAction("m", [], "draw"),
+			new LevelDrawAction("c", [0x0000FF]),
+			new LevelDrawAction("d", [75, 10, 10, 0])
 		]);
 
 		var tile = Std.downcast(raster.getChildAt(0), Bitmap).bitmapData;
 		assertEquals(1, raster.numChildren, "mixed draw/erase strokes create one raster tile");
-		assertEquals(ServerLevelRenderer.ART_RASTER_TILE_SIZE + 1, tile.width, "raster tile keeps overlap width");
-		assertEquals(ServerLevelRenderer.ART_RASTER_TILE_SIZE + 1, tile.height, "raster tile keeps overlap height");
+		assertEquals(LevelRenderer.ART_RASTER_TILE_SIZE + 1, tile.width, "raster tile keeps overlap width");
+		assertEquals(LevelRenderer.ART_RASTER_TILE_SIZE + 1, tile.height, "raster tile keeps overlap height");
 	}
 
 	private static function testWorldToScreenFocus():Void {
 		var focus = new DecodedBlock(ObjectCodes.BLOCK_START1, 10020, 10050);
-		var level = new ServerLevel(0xFFFFFF, [focus, new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 10050, 10050)]);
-		var renderer = new ServerLevelRenderer(level, focus, 180, 280);
+		var level = new TestLevel(0xFFFFFF, [focus, new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 10050, 10050)]);
+		var renderer = new LevelRenderer(level, focus, 180, 280);
 
-		var focused = renderer.worldToScreen(focus.x, focus.y);
+		var focused = renderer.worldToScreen(focus.worldX, focus.worldY);
 		assertEquals(180.0, focused.x, "focus x");
 		assertEquals(280.0, focused.y, "focus y");
 
@@ -633,13 +633,13 @@ class ServerLevelRendererTest {
 	private static function testBackgroundColorTransforms():Void {
 		var focus = new DecodedBlock(ObjectCodes.BLOCK_START1, 10020, 10050);
 		var layers = [
-			new DecodedArtLayer([], [], [], 1),
-			new DecodedArtLayer([], [], [], 0.5),
-			new DecodedArtLayer([], [], [], 0.25),
-			new DecodedArtLayer([], [], [], 1),
-			new DecodedArtLayer([], [], [], 2)
+			new LevelArtLayer([], [], [], 1),
+			new LevelArtLayer([], [], [], 0.5),
+			new LevelArtLayer([], [], [], 0.25),
+			new LevelArtLayer([], [], [], 1),
+			new LevelArtLayer([], [], [], 2)
 		];
-		var renderer = new ServerLevelRenderer(new ServerLevel(0x123456, [focus, new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 10050, 10050)], layers),
+		var renderer = new LevelRenderer(new TestLevel(0x123456, [focus, new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 10050, 10050)], layers),
 			focus, 180, 280);
 
 		var rearTransform = worldLayer(renderer, 1).transform.colorTransform;
@@ -665,9 +665,9 @@ class ServerLevelRendererTest {
 
 	private static function testArtObjectAndTextLayerScale():Void {
 		var focus = new DecodedBlock(ObjectCodes.BLOCK_START1, 10020, 10050);
-		var layer = new DecodedArtLayer([], [new DecodedArtObject(0, 10, 20, 2, 3)], [new DecodedTextObject("scaled", 15, 25, 0x00FF00, 4, 5)],
+		var layer = new LevelArtLayer([], [new LevelArtObject(0, 10, 20, 2, 3)], [new LevelTextObject("scaled", 15, 25, 0x00FF00, 4, 5)],
 			0.5);
-		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [focus], [layer]), focus, 180, 280);
+		var renderer = new LevelRenderer(new TestLevel(0xFFFFFF, [focus], [layer]), focus, 180, 280);
 		var artLayer = worldLayer(renderer, 1);
 		var object = artLayer.getChildAt(1);
 		var text = Std.downcast(artLayer.getChildAt(2), TextField);
@@ -685,8 +685,8 @@ class ServerLevelRendererTest {
 		assertEquals(true, text.cacheAsBitmap, "placed text preserves Flash bitmap caching");
 
 		var escapedContainer = new Sprite();
-		ServerLevelRenderer.addLayerText(escapedContainer,
-			new DecodedTextObject("#96#38#44#59#43#45#35", 0, 0, 0x123456), 1);
+		LevelRenderer.addLayerText(escapedContainer,
+			new LevelTextObject("#96#38#44#59#43#45#35", 0, 0, 0x123456), 1);
 		var escaped = Std.downcast(escapedContainer.getChildAt(0), TextField);
 		assertEquals("`&,;+-#", escaped.text, "placed text decodes the complete Flash TextObject escape table in source order");
 		assertEquals(0x123456, escaped.textColor, "placed text applies the serialized color");
@@ -695,14 +695,14 @@ class ServerLevelRendererTest {
 	private static function testArtLayerDepthAndParallax():Void {
 		var focus = new DecodedBlock(ObjectCodes.BLOCK_START1, 10020, 10050);
 		var layers = [
-			new DecodedArtLayer([], [], [], 1),
-			new DecodedArtLayer([], [], [], 0.5),
-			new DecodedArtLayer([new DecodedDrawAction("d", [0, 0, 1, 1])], [], [], 0.25),
-			new DecodedArtLayer([], [], [], 1),
-			new DecodedArtLayer([], [], [], 2)
+			new LevelArtLayer([], [], [], 1),
+			new LevelArtLayer([], [], [], 0.5),
+			new LevelArtLayer([new LevelDrawAction("d", [0, 0, 1, 1])], [], [], 0.25),
+			new LevelArtLayer([], [], [], 1),
+			new LevelArtLayer([], [], [], 2)
 		];
-		var level = new ServerLevel(0xFFFFFF, [focus], layers);
-		var renderer = new ServerLevelRenderer(level, focus, 180, 280);
+		var level = new TestLevel(0xFFFFFF, [focus], layers);
+		var renderer = new LevelRenderer(level, focus, 180, 280);
 
 		assertEquals("artLayer3", worldLayer(renderer, 1).name, "furthest rear layer renders first");
 		assertEquals("artLayer2", worldLayer(renderer, 2).name, "middle rear layer renders second");
@@ -724,14 +724,14 @@ class ServerLevelRendererTest {
 
 	private static function testRemoveDisposesAnimatedChildren():Void {
 		var arrow = new DecodedBlock(ObjectCodes.BLOCK_ARROW_RIGHT, 10020, 10050);
-		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [arrow]), arrow);
-		renderer.animateArrow(arrow.x, arrow.y);
+		var renderer = new LevelRenderer(new TestLevel(0xFFFFFF, [arrow]), arrow);
+		renderer.animateArrow(arrow.worldX, arrow.worldY);
 		var blockLayer = worldLayer(renderer, 1);
 		var blockDisplay = Std.downcast(blockLayer.getChildAt(0), Sprite);
 		var pivot = Std.downcast(blockDisplay.getChildAt(1), Sprite);
 		var arrowTimeline = pivot.getChildAt(0);
-		var explosion = renderer.showMineExplosion(arrow.x, arrow.y, false);
-		var pieces = renderer.showBlockPieces("BrickPieceGraphic", arrow.x, arrow.y, 1, 10, 10, 25, 0.75, 0.95, 0.05,
+		var explosion = renderer.showMineExplosion(arrow.worldX, arrow.worldY, false);
+		var pieces = renderer.showBlockPieces("BrickPieceGraphic", arrow.worldX, arrow.worldY, 1, 10, 10, 25, 0.75, 0.95, 0.05,
 			function() return 0.5);
 		var piece = pieces[0];
 
@@ -751,9 +751,9 @@ class ServerLevelRendererTest {
 	// The block and parallax art layers now live inside the renderer's rotating
 	// world container (renderer child index 1), so a layer that used to sit at
 	// renderer child `index` is now at world-container child `index - 1`. See
-	// ServerLevelRenderer.worldContainer, which lets a rotate block spin the
+	// LevelRenderer.worldContainer, which lets a rotate block spin the
 	// whole world about the screen centre without moving the upright backgrounds.
-	private static function worldLayer(renderer:ServerLevelRenderer, index:Int):Sprite {
+	private static function worldLayer(renderer:LevelRenderer, index:Int):Sprite {
 		var world = Std.downcast(renderer.getChildAt(1), Sprite);
 		return Std.downcast(world.getChildAt(index - 1), Sprite);
 	}
@@ -818,5 +818,25 @@ class ServerLevelRendererTest {
 			}
 		}
 		return null;
+	}
+}
+
+private class DecodedBlock extends LevelBlock {
+	public function new(code:Int, worldX:Int, worldY:Int, options:String = "") {
+		super(Std.int(Math.floor(worldX / Level.DEFAULT_TILE_SIZE)), Std.int(Math.floor(worldY / Level.DEFAULT_TILE_SIZE)),
+			LevelBlock.typeForCode(code), options, code);
+	}
+}
+
+private class TestLevel extends Level {
+	public function new(bgColor:Int, blocks:Array<DecodedBlock>, ?artLayers:Array<LevelArtLayer>, ?artBackgroundCode:Null<Int>) {
+		var source = Level.fromDecoded(bgColor, cast blocks, artLayers, artBackgroundCode);
+		super(source.id, source.name, source.widthTiles, source.heightTiles, source.tileSize, source.gravity, source.stats, source.playerStart,
+			source.finish, cast blocks, source.minTileX, source.minTileY, source.bgColor, source.artLayers, source.artBackgroundCode, {
+				minX: source.minX,
+				minY: source.minY,
+				maxX: source.maxX,
+				maxY: source.maxY
+			});
 	}
 }

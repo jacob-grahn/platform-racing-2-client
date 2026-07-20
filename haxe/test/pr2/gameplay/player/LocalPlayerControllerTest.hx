@@ -3,12 +3,12 @@ package pr2.gameplay.player;
 import com.jiggmin.data.SecureData;
 import pr2.character.LocalCharacter;
 import pr2.gameplay.BlockController;
-import pr2.level.WorldLevelParser;
+import pr2.level.LevelParser;
 import pr2.level.BlockType;
-import pr2.level.WorldLevel;
-import pr2.level.WorldLevel.LevelBlock;
-import pr2.level.WorldLevel.StatDefaults;
-import pr2.level.WorldLevel.TilePosition;
+import pr2.level.Level;
+import pr2.level.Level.LevelBlock;
+import pr2.level.Level.StatDefaults;
+import pr2.level.Level.TilePosition;
 import sys.io.File;
 
 class LocalPlayerControllerTest {
@@ -145,7 +145,7 @@ class LocalPlayerControllerTest {
 	}
 
 	private static function testSnakeTrailAndDiggingInteractions():Void {
-		var level = new WorldLevel("snake", "Snake", 10, 6, 30, 1,
+		var level = new Level("snake", "Snake", 10, 6, 30, 1,
 			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40), new TilePosition(1, 3), new TilePosition(9, 4), [
 				new LevelBlock(2, 2, BlockType.Basic),
 				new LevelBlock(3, 2, BlockType.Brick),
@@ -270,7 +270,7 @@ class LocalPlayerControllerTest {
 	}
 
 	private static function testObjectiveModeCanBumpSubsequentFinishBlocks():Void {
-		var level = new WorldLevel(
+		var level = new Level(
 			"objective-finishes",
 			"Objective Finishes",
 			6,
@@ -777,7 +777,7 @@ class LocalPlayerControllerTest {
 	}
 
 	private static function testSettledCrumbleStandDoesNotEmitPieces():Void {
-		var level = new WorldLevel(
+		var level = new Level(
 			"settled-crumble",
 			"Settled Crumble",
 			6,
@@ -1829,7 +1829,7 @@ class LocalPlayerControllerTest {
 		assertEquals(0, player.consumeBlockVisualEvents().length, "depleted time block does not replay TickTockSound");
 	}
 
-	private static function bumpSupply(level:WorldLevel, type:BlockType):LocalCharacter {
+	private static function bumpSupply(level:Level, type:BlockType):LocalCharacter {
 		var player = new LocalCharacter(level);
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput(false, false, true));
@@ -2338,10 +2338,10 @@ class LocalPlayerControllerTest {
 	}
 
 	private static function newPlayer():LocalCharacter {
-		return new LocalCharacter(WorldLevelParser.parse(File.getContent("test/fixtures/flat-level.json")));
+		return new LocalCharacter(LevelParser.parse(File.getContent("test/fixtures/flat-level.json")));
 	}
 
-	private static function collectItem(level:WorldLevel, itemId:Int):LocalCharacter {
+	private static function collectItem(level:Level, itemId:Int):LocalCharacter {
 		var player = new LocalCharacter(level);
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput(false, false, true));
@@ -2364,13 +2364,13 @@ class LocalPlayerControllerTest {
 
 	// Start tile is in open air above a deep water column on a solid floor, so a
 	// dropped player falls in, swims, and can paddle back out the top.
-	private static function waterPoolLevel():WorldLevel {
+	private static function waterPoolLevel():Level {
 		var blocks:Array<LevelBlock> = [];
 		for (tileY in 2...10) {
 			blocks.push(new LevelBlock(2, tileY, BlockType.Water));
 		}
 		blocks.push(new LevelBlock(2, 10, BlockType.Solid));
-		return new WorldLevel(
+		return new Level(
 			"water-pool",
 			"Water Pool",
 			6,
@@ -2384,8 +2384,8 @@ class LocalPlayerControllerTest {
 		);
 	}
 
-	private static function emptyLevel(gravity:Float):WorldLevel {
-		return new WorldLevel(
+	private static function emptyLevel(gravity:Float):Level {
+		return new Level(
 			"empty",
 			"Empty",
 			10,
@@ -2399,8 +2399,8 @@ class LocalPlayerControllerTest {
 		);
 	}
 
-	private static function singleBlockLevel(type:BlockType):WorldLevel {
-		return new WorldLevel(
+	private static function singleBlockLevel(type:BlockType):Level {
+		return new Level(
 			"single-block",
 			"Single Block",
 			5,
@@ -2417,8 +2417,8 @@ class LocalPlayerControllerTest {
 		);
 	}
 
-	private static function lowCeilingLevel():WorldLevel {
-		return new WorldLevel(
+	private static function lowCeilingLevel():Level {
+		return new Level(
 			"low-ceiling",
 			"Low Ceiling",
 			6,
@@ -2441,8 +2441,8 @@ class LocalPlayerControllerTest {
 		);
 	}
 
-	private static function lowItemCeilingLevel(type:BlockType = BlockType.Item, options:String = "4"):WorldLevel {
-		return new WorldLevel(
+	private static function lowItemCeilingLevel(type:BlockType = BlockType.Item, options:String = "4"):Level {
+		return new Level(
 			"low-item-ceiling",
 			"Low Item Ceiling",
 			6,
@@ -2465,8 +2465,8 @@ class LocalPlayerControllerTest {
 		);
 	}
 
-	private static function lowTeleportCeilingLevel():WorldLevel {
-		return new WorldLevel(
+	private static function lowTeleportCeilingLevel():Level {
+		return new Level(
 			"low-teleport-ceiling",
 			"Low Teleport Ceiling",
 			6,
@@ -2490,8 +2490,8 @@ class LocalPlayerControllerTest {
 		);
 	}
 
-	private static function mineBlockLevel():WorldLevel {
-		return new WorldLevel(
+	private static function mineBlockLevel():Level {
+		return new Level(
 			"mine-block",
 			"Mine Block",
 			5,
@@ -2508,8 +2508,8 @@ class LocalPlayerControllerTest {
 		);
 	}
 
-	private static function delayedMineBlockLevel():WorldLevel {
-		return new WorldLevel(
+	private static function delayedMineBlockLevel():Level {
+		return new Level(
 			"delayed-mine-block",
 			"Delayed Mine Block",
 			5,
@@ -2526,8 +2526,8 @@ class LocalPlayerControllerTest {
 		);
 	}
 
-	private static function safetyDropLevel():WorldLevel {
-		return new WorldLevel(
+	private static function safetyDropLevel():Level {
+		return new Level(
 			"safety-drop",
 			"Safety Drop",
 			10,
@@ -2548,8 +2548,8 @@ class LocalPlayerControllerTest {
 		);
 	}
 
-	private static function safetyOverFloorLevel():WorldLevel {
-		return new WorldLevel(
+	private static function safetyOverFloorLevel():Level {
+		return new Level(
 			"safety-over-floor",
 			"Safety Over Floor",
 			10,
@@ -2574,8 +2574,8 @@ class LocalPlayerControllerTest {
 		);
 	}
 
-	private static function itemBlockLevel(type:BlockType):WorldLevel {
-		return new WorldLevel(
+	private static function itemBlockLevel(type:BlockType):Level {
+		return new Level(
 			"item-block",
 			"Item Block",
 			5,
@@ -2593,8 +2593,8 @@ class LocalPlayerControllerTest {
 		);
 	}
 
-	private static function superJumpItemLevel():WorldLevel {
-		return new WorldLevel(
+	private static function superJumpItemLevel():Level {
+		return new Level(
 			"super-jump-item",
 			"Super Jump Item",
 			5,
@@ -2613,8 +2613,8 @@ class LocalPlayerControllerTest {
 		);
 	}
 
-	private static function superJumpWaterClipLevel():WorldLevel {
-		return new WorldLevel(
+	private static function superJumpWaterClipLevel():Level {
+		return new Level(
 			"super-jump-water-clip",
 			"Super Jump Water Clip",
 			5,
@@ -2632,7 +2632,7 @@ class LocalPlayerControllerTest {
 		);
 	}
 
-	private static function teleportItemLevel(blocked:Bool):WorldLevel {
+	private static function teleportItemLevel(blocked:Bool):Level {
 		var blocks:Array<LevelBlock> = [
 			new LevelBlock(2, 3, BlockType.Item, "4"),
 			new LevelBlock(2, 6, BlockType.Solid),
@@ -2645,7 +2645,7 @@ class LocalPlayerControllerTest {
 		if (blocked) {
 			blocks.push(new LevelBlock(7, 5, BlockType.Solid));
 		}
-		return new WorldLevel(
+		return new Level(
 			"teleport-item",
 			"Teleport Item",
 			10,
@@ -2659,8 +2659,8 @@ class LocalPlayerControllerTest {
 		);
 	}
 
-	private static function speedBurstItemLevel():WorldLevel {
-		return new WorldLevel(
+	private static function speedBurstItemLevel():Level {
+		return new Level(
 			"speed-burst-item",
 			"Speed Burst Item",
 			12,
@@ -2685,8 +2685,8 @@ class LocalPlayerControllerTest {
 		);
 	}
 
-	private static function speedBurstComparisonLevel():WorldLevel {
-		return new WorldLevel(
+	private static function speedBurstComparisonLevel():Level {
+		return new Level(
 			"speed-burst-comparison",
 			"Speed Burst Comparison",
 			12,
@@ -2710,8 +2710,8 @@ class LocalPlayerControllerTest {
 		);
 	}
 
-	private static function jetPackItemLevel():WorldLevel {
-		return new WorldLevel(
+	private static function jetPackItemLevel():Level {
+		return new Level(
 			"jet-pack-item",
 			"Jet Pack Item",
 			6,
@@ -2730,8 +2730,8 @@ class LocalPlayerControllerTest {
 		);
 	}
 
-	private static function heldItemLevel(itemId:Int):WorldLevel {
-		return new WorldLevel(
+	private static function heldItemLevel(itemId:Int):Level {
+		return new Level(
 			'held-item-$itemId',
 			'Held Item $itemId',
 			8,
@@ -2753,21 +2753,21 @@ class LocalPlayerControllerTest {
 		);
 	}
 
-	private static function heldItemWithTargetBlockLevel(itemId:Int, targetType:BlockType = BlockType.Solid, targetX:Int = 4):WorldLevel {
+	private static function heldItemWithTargetBlockLevel(itemId:Int, targetType:BlockType = BlockType.Solid, targetX:Int = 4):Level {
 		var level = heldItemLevel(itemId);
 		level.blocks.push(new LevelBlock(targetX, 5, targetType));
 		return level;
 	}
 
-	private static function blockedMineItemLevel():WorldLevel {
+	private static function blockedMineItemLevel():Level {
 		var level = heldItemLevel(2);
 		level.blocks.push(new LevelBlock(3, 4, BlockType.Solid));
 		level.blocks.push(new LevelBlock(3, 5, BlockType.Solid));
 		return level;
 	}
 
-	private static function jetPackComparisonLevel():WorldLevel {
-		return new WorldLevel(
+	private static function jetPackComparisonLevel():Level {
+		return new Level(
 			"jet-pack-comparison",
 			"Jet Pack Comparison",
 			6,
@@ -2785,8 +2785,8 @@ class LocalPlayerControllerTest {
 		);
 	}
 
-	private static function customStatsBlockLevel(options:String):WorldLevel {
-		return new WorldLevel(
+	private static function customStatsBlockLevel(options:String):Level {
+		return new Level(
 			"custom-stats-block",
 			"Custom Stats Block",
 			5,
@@ -2804,8 +2804,8 @@ class LocalPlayerControllerTest {
 		);
 	}
 
-	private static function supplyBlockLevel(type:BlockType, options:String = ""):WorldLevel {
-		return new WorldLevel(
+	private static function supplyBlockLevel(type:BlockType, options:String = ""):Level {
+		return new Level(
 			"supply-block",
 			"Supply Block",
 			5,
@@ -2823,8 +2823,8 @@ class LocalPlayerControllerTest {
 		);
 	}
 
-	private static function finishBumpLevel():WorldLevel {
-		return new WorldLevel(
+	private static function finishBumpLevel():Level {
+		return new Level(
 			"finish-bump",
 			"Finish Bump",
 			6,
@@ -2841,8 +2841,8 @@ class LocalPlayerControllerTest {
 		);
 	}
 
-	private static function customStatsResetLevel():WorldLevel {
-		return new WorldLevel(
+	private static function customStatsResetLevel():Level {
+		return new Level(
 			"custom-stats-reset",
 			"Custom Stats Reset",
 			5,
@@ -2860,8 +2860,8 @@ class LocalPlayerControllerTest {
 		);
 	}
 
-	private static function teleportPairLevel():WorldLevel {
-		return new WorldLevel(
+	private static function teleportPairLevel():Level {
+		return new Level(
 			"teleport-pair",
 			"Teleport Pair",
 			7,
@@ -2879,8 +2879,8 @@ class LocalPlayerControllerTest {
 		);
 	}
 
-	private static function teleportDefaultColorPairLevel():WorldLevel {
-		return new WorldLevel(
+	private static function teleportDefaultColorPairLevel():Level {
+		return new Level(
 			"teleport-default-color-pair",
 			"Teleport Default Color Pair",
 			7,
@@ -2898,8 +2898,8 @@ class LocalPlayerControllerTest {
 		);
 	}
 
-	private static function pushBlockLevel():WorldLevel {
-		return new WorldLevel(
+	private static function pushBlockLevel():Level {
+		return new Level(
 			"push-block",
 			"Push Block",
 			5,
@@ -2916,8 +2916,8 @@ class LocalPlayerControllerTest {
 		);
 	}
 
-	private static function pushBlockChainLevel():WorldLevel {
-		return new WorldLevel(
+	private static function pushBlockChainLevel():Level {
+		return new Level(
 			"push-block-chain",
 			"Push Block Chain",
 			5,
@@ -2935,7 +2935,7 @@ class LocalPlayerControllerTest {
 		);
 	}
 
-	private static function timedMoveBlockLevel(direction:String, blocked:Bool):WorldLevel {
+	private static function timedMoveBlockLevel(direction:String, blocked:Bool):Level {
 		var blocks:Array<LevelBlock> = [
 			new LevelBlock(2, 3, BlockType.Move, direction),
 			new LevelBlock(4, 4, BlockType.Finish)
@@ -2943,7 +2943,7 @@ class LocalPlayerControllerTest {
 		if (blocked) {
 			blocks.push(new LevelBlock(3, 3, BlockType.Solid));
 		}
-		return new WorldLevel(
+		return new Level(
 			"timed-move-block",
 			"Timed Move Block",
 			6,
@@ -2957,7 +2957,7 @@ class LocalPlayerControllerTest {
 		);
 	}
 
-	private static function timedMoveHarness(level:WorldLevel):{player:LocalCharacter, clock:ManualClock} {
+	private static function timedMoveHarness(level:Level):{player:LocalCharacter, clock:ManualClock} {
 		var clock = new ManualClock();
 		var blockController = new BlockController(level, clock.read);
 		var player = new LocalCharacter(level, 1, 1, 1, 1, blockController);
@@ -2965,8 +2965,8 @@ class LocalPlayerControllerTest {
 		return {player: player, clock: clock};
 	}
 
-	private static function timedMovePushChainLevel():WorldLevel {
-		return new WorldLevel(
+	private static function timedMovePushChainLevel():Level {
+		return new Level(
 			"timed-move-push-chain",
 			"Timed Move Push Chain",
 			6,
@@ -2984,8 +2984,8 @@ class LocalPlayerControllerTest {
 		);
 	}
 
-	private static function randomMoveBlockLevel():WorldLevel {
-		return new WorldLevel(
+	private static function randomMoveBlockLevel():Level {
+		return new Level(
 			"random-move-blocks",
 			"Random Move Blocks",
 			8,
@@ -3006,8 +3006,8 @@ class LocalPlayerControllerTest {
 		);
 	}
 
-	private static function itemAndRandomMoveBlockLevel():WorldLevel {
-		return new WorldLevel(
+	private static function itemAndRandomMoveBlockLevel():Level {
+		return new Level(
 			"item-and-random-move-blocks",
 			"Item And Random Move Blocks",
 			8,
@@ -3035,8 +3035,8 @@ class LocalPlayerControllerTest {
 		);
 	}
 
-	private static function rotateBlockLevel(type:BlockType):WorldLevel {
-		return new WorldLevel(
+	private static function rotateBlockLevel(type:BlockType):Level {
+		return new Level(
 			"rotate-block",
 			"Rotate Block",
 			5,
@@ -3054,8 +3054,8 @@ class LocalPlayerControllerTest {
 		);
 	}
 
-	private static function crumbleDropLevel():WorldLevel {
-		return new WorldLevel(
+	private static function crumbleDropLevel():Level {
+		return new Level(
 			"crumble-drop",
 			"Crumble Drop",
 			5,
@@ -3072,8 +3072,8 @@ class LocalPlayerControllerTest {
 		);
 	}
 
-	private static function cheeseSideCrumbleLevel():WorldLevel {
-		return new WorldLevel(
+	private static function cheeseSideCrumbleLevel():Level {
+		return new Level(
 			"cheese-side-crumble",
 			"Cheese Side Crumble",
 			7,
@@ -3094,8 +3094,8 @@ class LocalPlayerControllerTest {
 		);
 	}
 
-	private static function vanishReappearLevel():WorldLevel {
-		return new WorldLevel(
+	private static function vanishReappearLevel():Level {
+		return new Level(
 			"vanish-reappear",
 			"Vanish Reappear",
 			5,

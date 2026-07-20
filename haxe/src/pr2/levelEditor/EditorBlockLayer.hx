@@ -2,10 +2,10 @@ package pr2.levelEditor;
 
 import openfl.display.Sprite;
 import openfl.geom.Point;
-import pr2.level.ServerLevel.DecodedBlock;
+import pr2.level.Level.LevelBlock;
 import pr2.level.BlockType;
 import pr2.level.ObjectCodes;
-import pr2.level.ServerLevelDecoder;
+import pr2.level.LevelDecoder;
 
 class EditorBlockLayer extends Sprite {
 	public final editor:LevelEditor;
@@ -124,7 +124,7 @@ class EditorBlockLayer extends Sprite {
 		}
 	}
 
-	public function loadBlocks(decodedBlocks:Array<DecodedBlock>):Void {
+	public function loadBlocks(decodedBlocks:Array<LevelBlock>):Void {
 		historyBatchDepth = 0;
 		historyBatchDirty = false;
 		editor.selectBlock(null);
@@ -133,7 +133,7 @@ class EditorBlockLayer extends Sprite {
 		}
 		blocksBySeg.clear();
 		for (decoded in decodedBlocks) {
-			var block = addBlockAtLocal(decoded.code, typeForCode(decoded.code), decoded.x, decoded.y, false, decoded.opts);
+			var block = addBlockAtLocal(decoded.code, typeForCode(decoded.code), decoded.worldX, decoded.worldY, false, decoded.options);
 			block.deleteable = !isStartBlockCode(decoded.code);
 		}
 		initialSaveString = getSaveString();
@@ -250,8 +250,8 @@ class EditorBlockLayer extends Sprite {
 			removeBlock(blocks[blocks.length - 1], false);
 		}
 		blocksBySeg.clear();
-		for (decoded in ServerLevelDecoder.decodeBlocks("m4", saveString)) {
-			var block = addBlockAtLocal(decoded.code, typeForCode(decoded.code), decoded.x, decoded.y, false, decoded.opts);
+		for (decoded in LevelDecoder.decodeBlocks("m4", saveString)) {
+			var block = addBlockAtLocal(decoded.code, typeForCode(decoded.code), decoded.worldX, decoded.worldY, false, decoded.options);
 			block.deleteable = !isStartBlockCode(decoded.code);
 		}
 	}

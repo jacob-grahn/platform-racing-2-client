@@ -3,10 +3,10 @@ package pr2.gameplay;
 import pr2.gameplay.player.LocalPlayerController;
 import pr2.gameplay.player.LocalPlayerInput;
 import pr2.level.BlockType;
-import pr2.level.WorldLevel;
-import pr2.level.WorldLevel.LevelBlock;
-import pr2.level.WorldLevel.StatDefaults;
-import pr2.level.WorldLevel.TilePosition;
+import pr2.level.Level;
+import pr2.level.Level.LevelBlock;
+import pr2.level.Level.StatDefaults;
+import pr2.level.Level.TilePosition;
 
 class RoguelikeModeTest {
 	private static var assertions:Int = 0;
@@ -94,8 +94,8 @@ class RoguelikeModeTest {
 		assertEquals(false, player.stateSnapshot().finished, "lethal combat is not a race finish");
 	}
 
-	private static function level():WorldLevel {
-		return new WorldLevel(
+	private static function level():Level {
+		return new Level(
 			"roguelike",
 			"Roguelike",
 			8,

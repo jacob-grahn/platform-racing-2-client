@@ -9,7 +9,7 @@ import pr2.net.ServerLevelData;
 	`GamePage` was both the in-session display page and the holder of a level's
 	parsed settings (allowed items, banned hats, gravity, time limit, song, game
 	mode, cowboy chance, credits, background color). The geometry decode (read
-	modes `m1`..`m4`) already lives in `pr2.level.ServerLevelDecoder`, and the
+	modes `m1`..`m4`) already lives in `pr2.level.LevelDecoder`, and the
 	fetch / MD5 / `validateSaveString` / var-parsing already lives in
 	`pr2.net.LevelDataClient`; this class is the remaining piece — the faithful
 	`setVariables` / `setItems` / `setBadHats` / etc. setter semantics that turn a

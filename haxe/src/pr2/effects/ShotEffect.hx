@@ -2,11 +2,11 @@ package pr2.effects;
 
 import openfl.events.Event;
 import pr2.gameplay.RotationMath;
-import pr2.level.ServerLevel;
-import pr2.level.ServerLevel.DecodedBlock;
+import pr2.level.Level;
+import pr2.level.Level.LevelBlock;
 
 typedef ShotEffectContext = {
-	final level:ServerLevel;
+	final level:Level;
 	final courseRotation:Int;
 	@:optional final players:Array<ShotEffectPlayer>;
 }
@@ -71,7 +71,7 @@ class ShotEffect extends Effect {
 		updateVelocity();
 	}
 
-	public function step(level:ServerLevel, courseRotation:Int, ?players:Array<ShotEffectPlayer>):Void {
+	public function step(level:Level, courseRotation:Int, ?players:Array<ShotEffectPlayer>):Void {
 		move();
 		position(courseRotation);
 		checkCollisions(level, courseRotation, players);
@@ -93,7 +93,7 @@ class ShotEffect extends Effect {
 		rotation = angle + courseRotation - rot;
 	}
 
-	function checkCollisions(level:ServerLevel, courseRotation:Int, ?players:Array<ShotEffectPlayer>):Void {
+	function checkCollisions(level:Level, courseRotation:Int, ?players:Array<ShotEffectPlayer>):Void {
 		var block = PhysicsEffect.blockFromPos(level, Std.int(x), Std.int(y), courseRotation);
 		if (block != null && (hitInactiveBlocks || PhysicsEffect.isActiveBlock(block))) {
 			hitBlock(block);
@@ -127,7 +127,7 @@ class ShotEffect extends Effect {
 		velY = Math.sin(radians) * speed;
 	}
 
-	function hitBlock(block:DecodedBlock):Void {
+	function hitBlock(block:LevelBlock):Void {
 		onBlockDamage(block, velX);
 		hitAnything();
 	}
@@ -140,7 +140,7 @@ class ShotEffect extends Effect {
 		hitAnything();
 	}
 
-	function onBlockDamage(block:DecodedBlock, damageX:Float):Void {}
+	function onBlockDamage(block:LevelBlock, damageX:Float):Void {}
 
 	function hitAnything():Void {}
 

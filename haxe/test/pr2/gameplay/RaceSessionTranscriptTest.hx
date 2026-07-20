@@ -4,7 +4,7 @@ import openfl.display.InteractiveObject;
 import openfl.events.Event;
 import openfl.events.MouseEvent;
 import pr2.gameplay.LevelEntry.LevelEntryState;
-import pr2.level.ServerLevelDecoder;
+import pr2.level.LevelDecoder;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbySession;
 import pr2.lobby.dialogs.Popup;

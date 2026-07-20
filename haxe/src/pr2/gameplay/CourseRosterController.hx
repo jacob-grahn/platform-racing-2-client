@@ -118,7 +118,7 @@ class CourseRosterController {
 	}
 
 	public function activateCommand(args:Array<String>):Void {
-		if (owner.remoteBlockActivation == null || owner.localCharacter == null || owner.worldLevel == null || args.length < 2) {
+		if (owner.remoteBlockActivation == null || owner.localCharacter == null || args.length < 2) {
 			return;
 		}
 		var segX = Course.parseIntArg(args[0]);
@@ -133,7 +133,7 @@ class CourseRosterController {
 	}
 
 	public function remoteBlockTouch(segX:Int, segY:Int):Void {
-		if (owner.localCharacter != null && owner.worldLevel != null
+		if (owner.localCharacter != null
 			&& owner.localCharacter.applyRemoteBlockTouch(segX, segY)) {
 			owner.syncBlockVisuals();
 		} else if (owner.remoteBlockActivation != null) {
@@ -174,7 +174,7 @@ class CourseRosterController {
 	}
 
 	public function positionRemoteAtStartCenter(remote:RemoteCharacter):Void {
-		if (remote == null || owner.worldLevel == null || owner.levelRenderer == null || owner.startPositions.length == 0) {
+		if (remote == null || owner.levelRenderer == null || owner.startPositions.length == 0) {
 			return;
 		}
 		var startIndex = LobbySession.tournamentMode ? 0 : remote.tempID;

@@ -3,8 +3,8 @@ package pr2.effects;
 import openfl.display.Sprite;
 import openfl.events.Event;
 import pr2.level.ObjectCodes;
-import pr2.level.ServerLevel;
-import pr2.level.ServerLevel.DecodedBlock;
+import pr2.level.Level;
+import pr2.level.Level.LevelBlock;
 
 class SlashTest {
 	private static var assertions:Int = 0;
@@ -50,18 +50,18 @@ class SlashTest {
 
 	private static function testRightSlashAnimationProbesSoundAndRemoval():Void {
 		var blocks = [
-			new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 0, -30),
-			new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 0, 0),
-			new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 30, -30),
-			new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 30, 0),
-			new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 60, -30),
-			new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 60, 0)
+			LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_BASIC1, 0, -30),
+			LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_BASIC1, 0, 0),
+			LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_BASIC1, 30, -30),
+			LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_BASIC1, 30, 0),
+			LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_BASIC1, 60, -30),
+			LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_BASIC1, 60, 0)
 		];
 		var hits:Array<String> = [];
 		var playerHits:Array<String> = [];
 		var sounds:Array<String> = [];
 		var slash = new Slash(0, 0, "right", 7, {
-			level: new ServerLevel(0xffffff, blocks),
+			level: Level.fromDecoded(0xffffff, blocks),
 			courseRotation: 0,
 			player: {
 				tempId: 9,
@@ -70,7 +70,7 @@ class SlashTest {
 				removed: false,
 				hit: function(vx:Float, vy:Float):Void playerHits.push('$vx,$vy')
 			},
-			onBlockDamage: function(block, reach):Void hits.push('${block.x},${block.y}:$reach'),
+			onBlockDamage: function(block, reach):Void hits.push('${block.worldX},${block.worldY}:$reach'),
 			playSound: function(x:Float, y:Float):Void sounds.push('$x,$y')
 		});
 
@@ -97,7 +97,7 @@ class SlashTest {
 	private static function testLeftSlashShooterFilteringAndScale():Void {
 		var playerHits = 0;
 		var slash = new Slash(100, 20, "left", 7, {
-			level: new ServerLevel(0xffffff, []),
+			level: Level.fromDecoded(0xffffff, []),
 			courseRotation: 0,
 			player: {
 				tempId: 7,

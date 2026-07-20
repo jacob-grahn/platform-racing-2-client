@@ -21,9 +21,9 @@ import pr2.net.CampaignLevelInfo;
 import pr2.net.LevelDataClient;
 import pr2.net.ServerConfig;
 import pr2.net.ServerLevelData;
-import pr2.level.ServerLevel;
-import pr2.level.ServerLevel.DecodedBlock;
-import pr2.level.ServerLevelDecoder;
+import pr2.level.Level;
+import pr2.level.Level.LevelBlock;
+import pr2.level.LevelDecoder;
 import pr2.level.ObjectCodes;
 
 /**
@@ -131,15 +131,15 @@ class CampaignTestScreen extends Sprite {
 	}
 
 	// Builds a synthetic level entirely client-side (no server fetch) so gameplay
-	// can be exercised and screenshotted in the real `Course`/`ServerLevelRenderer`
+	// can be exercised and screenshotted in the real `Course`/`LevelRenderer`
 	// path without a server. This is the replacement for the old standalone
 	// gameplay harness: pick a layout with `?screen=campaign&debug=1&localLevel=<name>`.
 	// Supported names: `rotate` (default), `flat`, `arrow`, and `safety`.
 	private function buildLocalLevel():Void {
 		var name = localLevel == null ? "rotate" : localLevel.toLowerCase();
-		var blocks:Array<DecodedBlock> = [];
+		var blocks:Array<LevelBlock> = [];
 		function add(code:Int, col:Int, row:Int):Void {
-			blocks.push(new DecodedBlock(code, col * 30, row * 30));
+			blocks.push(LevelBlock.fromWorldPixels(code, col * 30, row * 30));
 		}
 
 		var title;
@@ -198,7 +198,7 @@ class CampaignTestScreen extends Sprite {
 				add(ObjectCodes.BLOCK_ROTATE_RIGHT, 20, 16);
 		}
 
-		var level = new ServerLevel(0x6688AA, blocks);
+		var level = Level.fromDecoded(0x6688AA, blocks);
 		var vars = new Map<String, String>();
 		vars.set("title", title);
 		vars.set("gravity", "1");
@@ -266,7 +266,7 @@ class CampaignTestScreen extends Sprite {
 
 		var debug = 'phase=levelLoaded;id=${info.levelId};hashValid=${data.hashValid};readMode=${data.readMode()}';
 		try {
-			var level = ServerLevelDecoder.decode(data.data);
+			var level = LevelDecoder.decode(data.data);
 			mountCourse(level, data);
 			lines.push('decoded: blocks=${level.blocks.length} bg=0x${StringTools.hex(level.bgColor, 6)}');
 			lines.push('starts=${level.startBlocks().length} finishes=${level.finishBlocks().length} bounds=${level.maxX - level.minX}x${level.maxY - level.minY}px');
@@ -279,7 +279,7 @@ class CampaignTestScreen extends Sprite {
 		setStatus(debug, lines.join("\n"));
 	}
 
-	private function mountCourse(level:ServerLevel, data:ServerLevelData):Void {
+	private function mountCourse(level:Level, data:ServerLevelData):Void {
 		if (course != null) {
 			course.remove();
 		}

@@ -1,9 +1,8 @@
 package pr2.gameplay;
 
 import pr2.level.BlockType;
-import pr2.level.ServerLevelWorldAdapter;
-import pr2.level.ServerLevelRenderer;
-import pr2.level.WorldLevel;
+import pr2.level.LevelRenderer;
+import pr2.level.Level;
 
 /**
 	RemoteCharacter.processBlockTouches mirrors Flash by activating only the
@@ -11,10 +10,10 @@ import pr2.level.WorldLevel;
 	water ripples. Physics remains server/local-authoritative.
 **/
 class RemoteBlockActivation {
-	private final level:WorldLevel;
-	private final renderer:ServerLevelRenderer;
+	private final level:Level;
+	private final renderer:LevelRenderer;
 
-	public function new(level:WorldLevel, renderer:ServerLevelRenderer) {
+	public function new(level:Level, renderer:LevelRenderer) {
 		this.level = level;
 		this.renderer = renderer;
 	}
@@ -24,8 +23,8 @@ class RemoteBlockActivation {
 		if (block == null) {
 			return;
 		}
-		var worldX = block.x * ServerLevelWorldAdapter.TILE_SIZE;
-		var worldY = block.y * ServerLevelWorldAdapter.TILE_SIZE;
+		var worldX = block.worldX;
+		var worldY = block.worldY;
 		activateBlock(block.type, worldX, worldY);
 	}
 
@@ -34,7 +33,7 @@ class RemoteBlockActivation {
 		if (block == null) {
 			return;
 		}
-		activateBlock(block.type, segX * ServerLevelWorldAdapter.TILE_SIZE, segY * ServerLevelWorldAdapter.TILE_SIZE, payload);
+		activateBlock(block.type, segX * level.tileSize, segY * level.tileSize, payload);
 	}
 
 	private function activateBlock(type:BlockType, worldX:Int, worldY:Int, payload:String = ""):Void {
@@ -76,8 +75,7 @@ class RemoteBlockActivation {
 			default:
 		}
 		if (dx != 0 || dy != 0) {
-			renderer.moveBlockDisplay(worldX, worldY, worldX + dx * ServerLevelWorldAdapter.TILE_SIZE,
-				worldY + dy * ServerLevelWorldAdapter.TILE_SIZE);
+			renderer.moveBlockDisplay(worldX, worldY, worldX + dx * level.tileSize, worldY + dy * level.tileSize);
 		}
 	}
 }

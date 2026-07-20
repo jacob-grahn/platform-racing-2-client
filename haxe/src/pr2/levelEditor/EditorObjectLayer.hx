@@ -5,9 +5,9 @@ import openfl.display.DisplayObject;
 import openfl.display.Sprite;
 import openfl.geom.Point;
 import openfl.geom.Rectangle;
-import pr2.level.ServerLevel.DecodedArtLayer;
-import pr2.level.ServerLevel.DecodedArtObject;
-import pr2.level.ServerLevel.DecodedTextObject;
+import pr2.level.Level.LevelArtLayer;
+import pr2.level.Level.LevelArtObject;
+import pr2.level.Level.LevelTextObject;
 
 class EditorObjectLayer extends Sprite {
 	public final layerNum:Int;
@@ -37,7 +37,7 @@ class EditorObjectLayer extends Sprite {
 		return placed;
 	}
 
-	public function loadArtLayer(layer:Null<DecodedArtLayer>):Void {
+	public function loadArtLayer(layer:Null<LevelArtLayer>):Void {
 		clearPlacedObjects();
 		clearTextObjects();
 		saveArray.resize(0);
@@ -523,11 +523,11 @@ class EditorObjectLayer extends Sprite {
 		textObjects.resize(0);
 	}
 
-	private function addLoadedStamp(object:DecodedArtObject):Void {
+	private function addLoadedStamp(object:LevelArtObject):Void {
 		addPlacedStamp(object.code, Math.round(object.x), Math.round(object.y), object.scaleX, object.scaleY);
 	}
 
-	private static function encodedObjectAction(object:DecodedArtObject):String {
+	private static function encodedObjectAction(object:LevelArtObject):String {
 		var action = "o" + object.code + ";" + Math.round(object.x) + ";" + Math.round(object.y);
 		var widthPerc = Std.int(object.scaleX * 100);
 		var heightPerc = Std.int(object.scaleY * 100);
@@ -537,7 +537,7 @@ class EditorObjectLayer extends Sprite {
 		return action;
 	}
 
-	private static function encodedTextAction(text:DecodedTextObject):String {
+	private static function encodedTextAction(text:LevelTextObject):String {
 		return "u" + text.text + ";" + Math.round(text.x) + ";" + Math.round(text.y) + ";" + text.color + ";"
 			+ Std.int(text.scaleX * 100) + ";" + Std.int(text.scaleY * 100);
 	}

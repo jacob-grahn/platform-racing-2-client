@@ -1,6 +1,6 @@
 package pr2.gameplay.player;
 
-import pr2.level.WorldLevel.LevelBlock;
+import pr2.level.Level.LevelBlock;
 
 class PixelPoint {
 	public final x:Float;

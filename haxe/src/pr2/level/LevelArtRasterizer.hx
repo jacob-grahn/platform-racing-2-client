@@ -8,7 +8,7 @@ import openfl.display.Sprite;
 import openfl.geom.Matrix;
 import openfl.geom.Point;
 import openfl.geom.Rectangle;
-import pr2.level.ServerLevel.DecodedDrawAction;
+import pr2.level.Level.LevelDrawAction;
 
 /** Tile-based stroke rasterization, batching, culling, and resource budgeting. */
 class ArtStrokeTileSet {
@@ -46,14 +46,14 @@ class ArtStrokeTileSet {
 		if (keys.length == 0) {
 			return 0;
 		}
-		return Std.int((maxTileX - minTileX) / ServerLevelRenderer.ART_RASTER_TILE_SIZE) + 1;
+		return Std.int((maxTileX - minTileX) / LevelRenderer.ART_RASTER_TILE_SIZE) + 1;
 	}
 
 	public function tileSpanY():Int {
 		if (keys.length == 0) {
 			return 0;
 		}
-		return Std.int((maxTileY - minTileY) / ServerLevelRenderer.ART_RASTER_TILE_SIZE) + 1;
+		return Std.int((maxTileY - minTileY) / LevelRenderer.ART_RASTER_TILE_SIZE) + 1;
 	}
 }
 
@@ -133,7 +133,7 @@ class ArtRasterTiles {
 	private var viewMinTileY:Int = 0;
 	private var viewMaxTileY:Int = 0;
 	private var color:Int = 0x000000;
-	private var size:Float = ServerLevelRenderer.DEFAULT_ART_BRUSH_SIZE;
+	private var size:Float = LevelRenderer.DEFAULT_ART_BRUSH_SIZE;
 	private var mode:String = "draw";
 
 	public function new(rasterCanvas:Sprite, ?budget:ArtRasterBudget) {
@@ -141,14 +141,14 @@ class ArtRasterTiles {
 		this.budget = budget;
 	}
 
-	public function applyAll(actions:Array<DecodedDrawAction>):Void {
+	public function applyAll(actions:Array<LevelDrawAction>):Void {
 		for (action in actions) {
 			while (!apply(action, true)) {}
 		}
 		flush();
 	}
 
-	public function apply(action:DecodedDrawAction, batch:Bool = false, ?deadline:Null<Float>):Bool {
+	public function apply(action:LevelDrawAction, batch:Bool = false, ?deadline:Null<Float>):Bool {
 		if (pendingLargeStroke != null) {
 			return continueLargeStroke(deadline);
 		}
@@ -208,7 +208,7 @@ class ArtRasterTiles {
 		if (pendingBounds == null) {
 			return;
 		}
-		var tileSize = ServerLevelRenderer.ART_RASTER_TILE_SIZE + 1;
+		var tileSize = LevelRenderer.ART_RASTER_TILE_SIZE + 1;
 		for (i in 0...pendingTileKeys.length) {
 			var bitmap = tiles.get(pendingTileKeys[i]);
 			if (bitmap == null) {
@@ -246,7 +246,7 @@ class ArtRasterTiles {
 	}
 
 	public function setVisibleTileWindow(minTileX:Int, maxTileX:Int, minTileY:Int, maxTileY:Int, force:Bool):Void {
-		var threshold = ServerLevelRenderer.ART_RASTER_VIEW_REBUILD_THRESHOLD * ServerLevelRenderer.ART_RASTER_TILE_SIZE;
+		var threshold = LevelRenderer.ART_RASTER_VIEW_REBUILD_THRESHOLD * LevelRenderer.ART_RASTER_TILE_SIZE;
 		if (!force
 			&& viewInitialized
 			&& intAbs(minTileX - viewMinTileX) <= threshold
@@ -328,7 +328,7 @@ class ArtRasterTiles {
 		if (budget != null && !budget.reserveTile()) {
 			return null;
 		}
-		bitmap = new Bitmap(new BitmapData(ServerLevelRenderer.ART_RASTER_TILE_SIZE + 1, ServerLevelRenderer.ART_RASTER_TILE_SIZE + 1, true, 0));
+		bitmap = new Bitmap(new BitmapData(LevelRenderer.ART_RASTER_TILE_SIZE + 1, LevelRenderer.ART_RASTER_TILE_SIZE + 1, true, 0));
 		bitmap.smoothing = true;
 		bitmap.x = tileX;
 		bitmap.y = tileY;
@@ -367,7 +367,7 @@ class ArtRasterTiles {
 		return value < 0 ? -value : value;
 	}
 
-	private function startLargeStroke(action:DecodedDrawAction, erase:Bool, profilePath:String, ?deadline:Null<Float>):Bool {
+	private function startLargeStroke(action:LevelDrawAction, erase:Bool, profilePath:String, ?deadline:Null<Float>):Bool {
 		flush();
 		var radius = Math.max(0.5, size / 2);
 		var strokeTiles = collectStrokeTilesForErase(action, radius);
@@ -426,7 +426,7 @@ class ArtRasterTiles {
 		}
 		var tileX = op.strokeTiles.tileXs[op.tileIndex];
 		var tileY = op.strokeTiles.tileYs[op.tileIndex];
-		var tileSize = ServerLevelRenderer.ART_RASTER_TILE_SIZE + 1;
+		var tileSize = LevelRenderer.ART_RASTER_TILE_SIZE + 1;
 		var rectX = Std.int(Math.max(0, Math.floor(op.bounds.x - tileX)));
 		var rectY = Std.int(Math.max(0, Math.floor(op.bounds.y - tileY)));
 		var rectRight = Std.int(Math.min(tileSize, Math.ceil(op.bounds.right - tileX)));
@@ -465,7 +465,7 @@ class ArtRasterTiles {
 		target.unlock(targetRect);
 	}
 
-	private function strokeShape(action:DecodedDrawAction, strokeColor:Int):Shape {
+	private function strokeShape(action:LevelDrawAction, strokeColor:Int):Shape {
 		var shape = new Shape();
 		var graphics = shape.graphics;
 		graphics.lineStyle(size, strokeColor);
@@ -486,7 +486,7 @@ class ArtRasterTiles {
 		return shape;
 	}
 
-	private function strokeBounds(action:DecodedDrawAction, radius:Float):Rectangle {
+	private function strokeBounds(action:LevelDrawAction, radius:Float):Rectangle {
 		var x = action.values[0];
 		var y = action.values[1];
 		var minX = x - radius - 1;
@@ -506,7 +506,7 @@ class ArtRasterTiles {
 		return new Rectangle(minX, minY, maxX - minX, maxY - minY);
 	}
 
-	private function addDrawStrokeToBatch(action:DecodedDrawAction, ?deadline:Null<Float>):Bool {
+	private function addDrawStrokeToBatch(action:LevelDrawAction, ?deadline:Null<Float>):Bool {
 		var radius = Math.max(0.5, size / 2);
 		var strokeTiles = collectStrokeTiles(action, radius);
 		if (strokeTiles == null) {
@@ -534,7 +534,7 @@ class ArtRasterTiles {
 		return true;
 	}
 
-	private function addEraseStrokeToBatch(action:DecodedDrawAction, ?deadline:Null<Float>):Bool {
+	private function addEraseStrokeToBatch(action:LevelDrawAction, ?deadline:Null<Float>):Bool {
 		var radius = Math.max(0.5, size / 2);
 		var strokeTiles = collectStrokeTiles(action, radius);
 		if (strokeTiles == null) {
@@ -563,7 +563,7 @@ class ArtRasterTiles {
 		return true;
 	}
 
-	private function appendStrokeToGraphics(graphics:openfl.display.Graphics, action:DecodedDrawAction):Void {
+	private function appendStrokeToGraphics(graphics:openfl.display.Graphics, action:LevelDrawAction):Void {
 		var x = action.values[0];
 		var y = action.values[1];
 		graphics.moveTo(x, y);
@@ -580,7 +580,7 @@ class ArtRasterTiles {
 		}
 	}
 
-	private function collectStrokeTiles(action:DecodedDrawAction, radius:Float):Null<ArtStrokeTileSet> {
+	private function collectStrokeTiles(action:LevelDrawAction, radius:Float):Null<ArtStrokeTileSet> {
 		var tiles = new ArtStrokeTileSet();
 		var x = action.values[0];
 		var y = action.values[1];
@@ -608,7 +608,7 @@ class ArtRasterTiles {
 		return tiles;
 	}
 
-	private function collectStrokeTilesForErase(action:DecodedDrawAction, radius:Float):ArtStrokeTileSet {
+	private function collectStrokeTilesForErase(action:LevelDrawAction, radius:Float):ArtStrokeTileSet {
 		var tiles = new ArtStrokeTileSet();
 		var x = action.values[0];
 		var y = action.values[1];
@@ -631,7 +631,7 @@ class ArtRasterTiles {
 	}
 
 	private function addTilesForBounds(tiles:ArtStrokeTileSet, minX:Float, minY:Float, maxX:Float, maxY:Float):Void {
-		var tile = ServerLevelRenderer.ART_RASTER_TILE_SIZE;
+		var tile = LevelRenderer.ART_RASTER_TILE_SIZE;
 		var tileY = tileOrigin(Std.int(Math.floor(minY)));
 		var endY = tileOrigin(Std.int(Math.floor(maxY)));
 		while (tileY <= endY) {
@@ -647,7 +647,7 @@ class ArtRasterTiles {
 	}
 
 	private function isStrokeTileSetBatchable(tiles:ArtStrokeTileSet):Bool {
-		return ServerLevelRenderer.isArtDrawBatchWithinLimits(tiles.keys.length, tiles.tileSpanX(), tiles.tileSpanY());
+		return LevelRenderer.isArtDrawBatchWithinLimits(tiles.keys.length, tiles.tileSpanX(), tiles.tileSpanY());
 	}
 
 	private function canAddStrokeTilesToBatch(strokeTiles:ArtStrokeTileSet):Bool {
@@ -675,8 +675,8 @@ class ArtRasterTiles {
 			if (tileY < minTileY) minTileY = tileY;
 			if (tileY > maxTileY) maxTileY = tileY;
 		}
-		var tile = ServerLevelRenderer.ART_RASTER_TILE_SIZE;
-		return ServerLevelRenderer.isArtDrawBatchWithinLimits(
+		var tile = LevelRenderer.ART_RASTER_TILE_SIZE;
+		return LevelRenderer.isArtDrawBatchWithinLimits(
 			count,
 			Std.int((maxTileX - minTileX) / tile) + 1,
 			Std.int((maxTileY - minTileY) / tile) + 1
@@ -734,13 +734,13 @@ class ArtRasterTiles {
 		lastProfileTileSpanY = strokeTiles.tileSpanY();
 	}
 
-	private function setEstimatedStrokeProfile(action:DecodedDrawAction, path:String):Void {
+	private function setEstimatedStrokeProfile(action:LevelDrawAction, path:String):Void {
 		var bounds = strokeBounds(action, Math.max(0.5, size / 2));
 		var minTileX = tileOrigin(Std.int(Math.floor(bounds.x)));
 		var maxTileX = tileOrigin(Std.int(Math.floor(bounds.right)));
 		var minTileY = tileOrigin(Std.int(Math.floor(bounds.y)));
 		var maxTileY = tileOrigin(Std.int(Math.floor(bounds.bottom)));
-		var tile = ServerLevelRenderer.ART_RASTER_TILE_SIZE;
+		var tile = LevelRenderer.ART_RASTER_TILE_SIZE;
 		lastProfilePath = path;
 		lastProfileMode = mode;
 		lastProfileTileSpanX = Std.int((maxTileX - minTileX) / tile) + 1;
@@ -765,13 +765,13 @@ class ArtRasterTiles {
 			lastProfileTileSpanY = 0;
 			return;
 		}
-		var tile = ServerLevelRenderer.ART_RASTER_TILE_SIZE;
+		var tile = LevelRenderer.ART_RASTER_TILE_SIZE;
 		lastProfileTileSpanX = Std.int((pendingMaxTileX - pendingMinTileX) / tile) + 1;
 		lastProfileTileSpanY = Std.int((pendingMaxTileY - pendingMinTileY) / tile) + 1;
 	}
 
 	private static inline function tileOrigin(pixel:Int):Int {
-		var tile = ServerLevelRenderer.ART_RASTER_TILE_SIZE;
+		var tile = LevelRenderer.ART_RASTER_TILE_SIZE;
 		return Std.int(Math.floor(pixel / tile)) * tile;
 	}
 

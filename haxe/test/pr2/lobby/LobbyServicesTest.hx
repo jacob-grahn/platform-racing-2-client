@@ -39,8 +39,8 @@ import pr2.lobby.messages.UnreadNotif;
 import pr2.gameplay.LevelConfig;
 import pr2.gameplay.Items;
 import pr2.level.ObjectCodes;
-import pr2.level.ServerLevelDecoder;
-import pr2.level.ServerLevelRenderer;
+import pr2.level.LevelDecoder;
+import pr2.level.LevelRenderer;
 import pr2.net.CampaignLevelInfo;
 import pr2.net.LevelDataClient;
 import pr2.net.LoginAuthClient;
@@ -510,7 +510,7 @@ class LobbyServicesTest {
 		var stamp4Entry = Std.downcast(editor.menu.sideBar.getChildByName("stamp4Entry"), EditorSideBarEntry);
 		var stamp9Entry = Std.downcast(editor.menu.sideBar.getChildByName("stamp9Entry"), EditorSideBarEntry);
 		assertEquals("BrushGraphic", stampBrushEntry.iconNameForTests(), "stamp brush entry uses authored brush graphic");
-		if (Assets.exists(ServerLevelRenderer.stampAssetPath(0), AssetType.IMAGE)) {
+		if (Assets.exists(LevelRenderer.stampAssetPath(0), AssetType.IMAGE)) {
 			assertEquals("Tree", stamp0Entry.iconNameForTests(), "stamp entry uses bitmap object preview");
 			assertEquals(true, stamp0Entry.iconVisibleInButtonForTests(), "tree stamp entry renders inside the button");
 			assertEquals(true, stamp1Entry.iconVisibleInButtonForTests(), "second tree stamp entry renders inside the button");
@@ -1779,11 +1779,11 @@ class LobbyServicesTest {
 		var firstCourse = testCourse.course;
 		var firstStatsSelect = testCourse.statsSelect;
 		var firstHatPicker = testCourse.hatPicker;
-		var authoredBrick = Lambda.find(ServerLevelDecoder.decode(Std.string(sourceData)).blocks,
+		var authoredBrick = Lambda.find(LevelDecoder.decode(Std.string(sourceData)).blocks,
 			function(block) return block.code == ObjectCodes.BLOCK_BRICK);
 		assertNotNull(authoredBrick, "restart fixture contains its authored brick");
-		var authoredBrickTileX = Std.int(Math.floor(authoredBrick.x / ServerLevelRenderer.TILE_SIZE));
-		var authoredBrickTileY = Std.int(Math.floor(authoredBrick.y / ServerLevelRenderer.TILE_SIZE));
+		var authoredBrickTileX = Std.int(Math.floor(authoredBrick.x / LevelRenderer.TILE_SIZE));
+		var authoredBrickTileY = Std.int(Math.floor(authoredBrick.y / LevelRenderer.TILE_SIZE));
 		assertEquals(true, testCourse.course.localCharacter.applyRemoteBlockActivation(authoredBrickTileX, authoredBrickTileY),
 			"restart fixture destroys an authored block in the live map");
 		assertEquals(true, testCourse.course.placeRuntimeMine(960, 960), "restart fixture adds a runtime-only mine");

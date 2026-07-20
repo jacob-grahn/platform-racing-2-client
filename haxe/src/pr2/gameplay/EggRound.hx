@@ -8,8 +8,8 @@ import pr2.audio.SoundEffects;
 import pr2.effects.LaserShotView;
 import pr2.effects.NativeEffectAnimation;
 import pr2.effects.PhysicsEffect;
-import pr2.level.ServerLevel.DecodedBlock;
-import pr2.level.ServerLevel;
+import pr2.level.Level;
+import pr2.level.Level.LevelBlock;
 import pr2.level.ObjectCodes;
 import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
@@ -76,13 +76,13 @@ class EggRound {
 	private final playCollectSound:Int->Int->Void;
 	private final visualRandom:Void->Float;
 	private final onIcePlayerHit:Int->Void;
-	private final onIceBlockHit:DecodedBlock->Void;
+	private final onIceBlockHit:LevelBlock->Void;
 	private final playLaserHitSound:Int->Int->Void;
 	private var eggs:Map<Int, EggState> = new Map();
 	private var attackVisuals:Array<EggAttackVisual> = [];
 
 	public function new(commandHandler:CommandHandler, onCollect:Int->Void, ?displayLayer:Sprite, ?cameraOffset:Void->Point,
-			?playCollectSound:Int->Int->Void, ?visualRandom:Void->Float, ?onIcePlayerHit:Int->Void, ?onIceBlockHit:DecodedBlock->Void,
+			?playCollectSound:Int->Int->Void, ?visualRandom:Void->Float, ?onIcePlayerHit:Int->Void, ?onIceBlockHit:LevelBlock->Void,
 			?playLaserHitSound:Int->Int->Void) {
 		this.commandHandler = commandHandler;
 		this.onCollect = onCollect;
@@ -91,7 +91,7 @@ class EggRound {
 		this.playCollectSound = playCollectSound != null ? playCollectSound : playDefaultCollectSound;
 		this.visualRandom = visualRandom != null ? visualRandom : Math.random;
 		this.onIcePlayerHit = onIcePlayerHit != null ? onIcePlayerHit : function(_:Int):Void {};
-		this.onIceBlockHit = onIceBlockHit != null ? onIceBlockHit : function(_:DecodedBlock):Void {};
+		this.onIceBlockHit = onIceBlockHit != null ? onIceBlockHit : function(_:LevelBlock):Void {};
 		this.playLaserHitSound = playLaserHitSound != null ? playLaserHitSound : playDefaultLaserHitSound;
 	}
 
@@ -105,7 +105,7 @@ class EggRound {
 		}
 	}
 
-	public function addEggs(count:Int, level:ServerLevel):Void {
+	public function addEggs(count:Int, level:Level):Void {
 		var remaining = count;
 		while (remaining > 0) {
 			spawn(level);
@@ -120,7 +120,7 @@ class EggRound {
 		return id;
 	}
 
-	public function step(level:ServerLevel, courseRotation:Int = 0, ?playerX:Float, ?playerY:Float, playerCrouching:Bool = false,
+	public function step(level:Level, courseRotation:Int = 0, ?playerX:Float, ?playerY:Float, playerCrouching:Bool = false,
 			playerRemoved:Bool = false, wrapAroundLevel:Bool = true):Void {
 		stepAttackVisuals(level, courseRotation, playerX, playerY, playerCrouching, playerRemoved);
 		for (id in ids()) {
@@ -207,7 +207,7 @@ class EggRound {
 		return attackVisuals.length;
 	}
 
-	private function spawn(level:ServerLevel):Void {
+	private function spawn(level:Level):Void {
 		var id = nextId++;
 		var minX = Std.int(Math.min(level.minX, level.maxX));
 		var maxX = Std.int(Math.max(level.minX, level.maxX));
@@ -271,7 +271,7 @@ class EggRound {
 		}
 	}
 
-	private function stepEgg(egg:EggState, level:ServerLevel, courseRotation:Int, ?playerX:Float, ?playerY:Float, playerCrouching:Bool = false,
+	private function stepEgg(egg:EggState, level:Level, courseRotation:Int, ?playerX:Float, ?playerY:Float, playerCrouching:Bool = false,
 			playerRemoved:Bool = false, wrapAroundLevel:Bool = true):Void {
 		egg.velY += 0.2;
 		if (egg.velY > 8) {
@@ -440,7 +440,7 @@ class EggRound {
 		return visual;
 	}
 
-	private function stepAttackVisuals(level:ServerLevel, courseRotation:Int, ?playerX:Float, ?playerY:Float, playerCrouching:Bool,
+	private function stepAttackVisuals(level:Level, courseRotation:Int, ?playerX:Float, ?playerY:Float, playerCrouching:Bool,
 			playerRemoved:Bool):Void {
 		var remaining:Array<EggAttackVisual> = [];
 		var spawned:Array<EggAttackVisual> = [];
@@ -580,7 +580,7 @@ class EggRound {
 		return value == null ? 0 : value;
 	}
 
-	private static function wrapPosition(egg:EggState, level:ServerLevel):Void {
+	private static function wrapPosition(egg:EggState, level:Level):Void {
 		var limits = BlockCollision.movementLimits(level, egg.rot);
 		if (egg.posX > limits.maxX) {
 			egg.posX = limits.minX;

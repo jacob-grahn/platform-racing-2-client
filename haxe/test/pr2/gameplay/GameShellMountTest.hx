@@ -11,11 +11,11 @@ import pr2.gameplay.player.LocalPlayerState;
 import pr2.lobby.LobbySession;
 import pr2.lobby.dialogs.LevelInfoPopup;
 import pr2.level.BlockType;
-import pr2.level.WorldLevel.LevelBlock;
+import pr2.level.Level.LevelBlock;
 import pr2.level.ObjectCodes;
-import pr2.level.ServerLevel;
-import pr2.level.ServerLevel.DecodedBlock;
-import pr2.level.ServerLevelDecoder;
+import pr2.level.Level;
+import pr2.level.Level.LevelBlock;
+import pr2.level.LevelDecoder;
 import pr2.net.LobbySocket;
 import pr2.net.ServerLevelData;
 import pr2.net.ServerConfig;
@@ -62,9 +62,9 @@ class GameShellMountTest {
 		assertEquals(course.localCharacter, course.characterLayer.getChildAt(0), "local character owns display-list slot");
 		var start = @:privateAccess course.level.startBlocks()[0];
 		var initialState = course.localCharacter.stateSnapshot();
-		assertClose(start.x + 15, initialState.x,
+		assertClose(start.worldX + 15, initialState.x,
 			"local character spawns at Flash start center x");
-		assertClose(start.y + 15, initialState.y,
+		assertClose(start.worldY + 15, initialState.y,
 			"local character spawns at Flash start center y");
 		assertEquals(true, course.levelRenderer.worldChildDepth(course.backCharacterLayer) >= 0,
 			"back character layer sits inside the rotating world (above the background art)");
@@ -295,7 +295,7 @@ class GameShellMountTest {
 
 	private static function buildCourse(gameMode:String = "race"):Course {
 		var dataString = "m3`e0c8b8`334;335;11,1;0;12,0;1;0,1;0";
-		var level = ServerLevelDecoder.decode(dataString);
+		var level = LevelDecoder.decode(dataString);
 
 		var vars:Map<String, String> = new Map();
 		vars.set("level_id", "42");
@@ -313,11 +313,11 @@ class GameShellMountTest {
 	}
 
 	private static function buildLargeCourse():Course {
-		var blocks:Array<DecodedBlock> = [new DecodedBlock(ObjectCodes.BLOCK_START1, 0, 0)];
+		var blocks:Array<LevelBlock> = [LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_START1, 0, 0)];
 		for (i in 0...120) {
-			blocks.push(new DecodedBlock(ObjectCodes.BLOCK_BASIC1, i * 30, 90));
+			blocks.push(LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_BASIC1, i * 30, 90));
 		}
-		var level = new ServerLevel(0xFFFFFF, blocks);
+		var level = Level.fromDecoded(0xFFFFFF, blocks);
 		var vars:Map<String, String> = new Map();
 		vars.set("level_id", "44");
 		vars.set("title", "Large Render Test");
@@ -334,11 +334,11 @@ class GameShellMountTest {
 	private static function testTournamentStartForcesFirstStartPosition():Void {
 		var previousTournamentMode = LobbySession.tournamentMode;
 		LobbySession.tournamentMode = true;
-		var level = new ServerLevel(0xFFFFFF, [
-			new DecodedBlock(ObjectCodes.BLOCK_START1, 0, 0),
-			new DecodedBlock(ObjectCodes.BLOCK_START2, 210, 0),
-			new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 0, 30),
-			new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 210, 30)
+		var level = Level.fromDecoded(0xFFFFFF, [
+			LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_START1, 0, 0),
+			LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_START2, 210, 0),
+			LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_BASIC1, 0, 30),
+			LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_BASIC1, 210, 30)
 		]);
 		var vars:Map<String, String> = new Map();
 		vars.set("level_id", "45");
@@ -379,7 +379,7 @@ class GameShellMountTest {
 
 	private static function testFinishDrawingReadinessEmission():Void {
 		var dataString = "m3`e0c8b8`0;0;11,1;0;16";
-		var level = ServerLevelDecoder.decode(dataString);
+		var level = LevelDecoder.decode(dataString);
 		var saveString = "level_id=42&version=7&title=Draw Ready&song=song1&gravity=1&max_time=120&gameMode=race&cowboyChance=25&badHats=4,6&data="
 			+ dataString;
 
@@ -558,11 +558,11 @@ class GameShellMountTest {
 	}
 
 	private static function buildRotateCourse():Course {
-		var level = new ServerLevel(0xFFFFFF, [
-			new DecodedBlock(ObjectCodes.BLOCK_START1, 60, 90),
-			new DecodedBlock(ObjectCodes.BLOCK_ROTATE_RIGHT, 60, 30),
-			new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 60, 120),
-			new DecodedBlock(ObjectCodes.BLOCK_FINISH, 120, 120)
+		var level = Level.fromDecoded(0xFFFFFF, [
+			LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_START1, 60, 90),
+			LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_ROTATE_RIGHT, 60, 30),
+			LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_BASIC1, 60, 120),
+			LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_FINISH, 120, 120)
 		]);
 
 		var vars:Map<String, String> = new Map();

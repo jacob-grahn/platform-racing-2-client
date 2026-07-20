@@ -4,8 +4,8 @@ package pr2.gameplay.player;
 import js.Browser;
 #end
 import pr2.character.CharacterState;
-import pr2.level.WorldLevel;
-import pr2.level.WorldLevel.LevelBlock;
+import pr2.level.Level;
+import pr2.level.Level.LevelBlock;
 import pr2.level.BlockType;
 import pr2.gameplay.RotationMath;
 import pr2.gameplay.Items;
@@ -107,7 +107,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	public static inline var MODE_FROZEN_SOLID:String = "frozenSolid";
 	public static inline var MODE_HURT:String = "hurt";
 
-	private final level:WorldLevel;
+	private final level:Level;
 	private var accel:Float;
 	private var maxVelX:Float;
 	private var jumpVelocity:Float;
@@ -171,7 +171,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	private var roguelikeStartX:Float;
 	private var roguelikeStartY:Float;
 
-	public function new(level:WorldLevel, ?courseBlockController:BlockController) {
+	public function new(level:Level, ?courseBlockController:BlockController) {
 		this.level = level;
 		itemController = new ItemController(this);
 		blockController = courseBlockController == null ? new BlockController(level) : courseBlockController;

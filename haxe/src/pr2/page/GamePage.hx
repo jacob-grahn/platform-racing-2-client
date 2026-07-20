@@ -30,7 +30,7 @@ import pr2.net.LobbySocket;
 import pr2.net.LevelDataClient;
 import pr2.net.ServerLevelData;
 import pr2.runtime.FontResolver;
-import pr2.level.ServerLevelDecoder;
+import pr2.level.LevelDecoder;
 
 /**
 	Real in-session level page entered only after the server sends `startGame`.
@@ -112,7 +112,7 @@ class GamePage extends Page implements GameCommandDelegate {
 			default:
 		}
 		try {
-			var level = ServerLevelDecoder.decode(data.data);
+			var level = LevelDecoder.decode(data.data);
 			var config = LevelConfig.fromServerData(data);
 			course = new Course(level, data, config, null, onCourseFrame);
 			course.onFinish = onLocalFinish;

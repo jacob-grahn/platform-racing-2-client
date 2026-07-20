@@ -27,7 +27,7 @@ class MultiplayerRaceStageTest {
 
 	private static function testRepeatedDamageStopsAfterRemovalAndParticlesExpire():Void {
 		var stage = new MultiplayerRaceStage(2, "m3`ffffff`0;0;11,0;1;17");
-		var world = @:privateAccess stage.clients[0].course.worldLevel;
+		var world = @:privateAccess stage.clients[0].course.level;
 		var crumble = world.blocks[0];
 		var segX = crumble.x;
 		var segY = crumble.y;

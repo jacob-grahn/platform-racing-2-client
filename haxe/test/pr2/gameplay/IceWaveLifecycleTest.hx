@@ -3,8 +3,8 @@ package pr2.gameplay;
 import openfl.display.Shape;
 import openfl.display.Sprite;
 import pr2.level.ObjectCodes;
-import pr2.level.ServerLevel;
-import pr2.level.ServerLevel.DecodedBlock;
+import pr2.level.Level;
+import pr2.level.Level.LevelBlock;
 import pr2.net.CommandHandler;
 
 @:access(pr2.gameplay.EggRound)
@@ -32,7 +32,7 @@ class IceWaveLifecycleTest {
 		var art = Std.downcast(straight.display.getChildByName("iceWaveCore"), Shape);
 		assertTrue(art != null && art.width > 75 && art.height > 65, "IceWave renders the exact authored XFL silhouette");
 
-		round.step(new ServerLevel(0xffffff, []));
+		round.step(Level.fromDecoded(0xffffff, []));
 		assertNear(35, straight.display.x, 0.001, "first frame continues from the skipped position at speed five");
 		assertEquals(74, straight.life, "IceWave lifetime decrements after movement and collision checks");
 		round.clear();
@@ -43,8 +43,8 @@ class IceWaveLifecycleTest {
 		var frozen = 0;
 		var round = createRound(layer, function(_):Void frozen++);
 		var parent = @:privateAccess round.addIceWaveVisual(0, 15, 0, 0, 7, 0, 75);
-		var block = new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 30, 0);
-		round.step(new ServerLevel(0xffffff, [block]));
+		var block = LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_BASIC1, 30, 0);
+		round.step(Level.fromDecoded(0xffffff, [block]));
 
 		assertEquals(1, frozen, "non-ice block collision freezes the block");
 		assertEquals(3, round.activeAttackVisualCount(), "block collision creates both bounded child waves");
@@ -57,7 +57,7 @@ class IceWaveLifecycleTest {
 		assertNear(30, children[0].angle, 0.001, "upper child branches by 30 degrees");
 		assertNear(-30, children[1].angle, 0.001, "lower child branches by 30 degrees");
 
-		round.step(new ServerLevel(0xffffff, []));
+		round.step(Level.fromDecoded(0xffffff, []));
 		assertNear(70, parent.display.x, 0.001, "parent continues travelling after its block branch");
 		round.clear();
 	}
@@ -70,7 +70,7 @@ class IceWaveLifecycleTest {
 		var layer = new Sprite();
 		var round = createRound(layer);
 		for (_ in 0...9) @:privateAccess round.addIceWaveVisual(0, 15, 0, 0, 7, 0, 75);
-		round.step(new ServerLevel(0xffffff, [new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 30, 0)]));
+		round.step(Level.fromDecoded(0xffffff, [LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_BASIC1, 30, 0)]));
 		assertEquals(11, round.activeAttackVisualCount(),
 			"active-count guard matches Flash by allowing the triggering wave's pair before suppressing later branches");
 		var inherited = 0;
@@ -84,19 +84,19 @@ class IceWaveLifecycleTest {
 		var frozen = 0;
 		var round = createRound(layer, function(_):Void frozen++);
 		var visual = @:privateAccess round.addIceWaveVisual(0, 15, 0, 0, 7, 0, 75);
-		round.step(new ServerLevel(0xffffff, [new DecodedBlock(ObjectCodes.BLOCK_ICE, 30, 0)]));
+		round.step(Level.fromDecoded(0xffffff, [LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_ICE, 30, 0)]));
 		assertEquals(0, frozen, "existing ice blocks are not frozen again");
 		assertEquals(1, round.activeAttackVisualCount(), "ice blocks do not branch the wave");
 		assertEquals(74, visual.life, "ice-block pass-through only costs the normal frame life");
 
 		visual.life = 1;
-		round.step(new ServerLevel(0xffffff, []));
+		round.step(Level.fromDecoded(0xffffff, []));
 		assertEquals(0, round.activeAttackVisualCount(), "life exhaustion removes the wave from active tracking");
 		assertEquals(null, visual.display.parent, "life exhaustion detaches the authored art");
 		assertEquals(0, layer.numChildren, "IceWave teardown leaves no display children");
 	}
 
-	private static function createRound(layer:Sprite, ?onFreeze:DecodedBlock->Void):EggRound {
+	private static function createRound(layer:Sprite, ?onFreeze:LevelBlock->Void):EggRound {
 		return new EggRound(new CommandHandler(), function(_):Void {}, layer, null, function(_, _):Void {}, function():Float return 0.5,
 			null, onFreeze);
 	}

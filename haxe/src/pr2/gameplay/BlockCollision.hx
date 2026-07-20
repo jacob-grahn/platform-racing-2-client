@@ -1,9 +1,8 @@
 package pr2.gameplay;
 
 import pr2.gameplay.RotationMath.RotatedPoint;
-import pr2.level.ObjectCodes;
-import pr2.level.ServerLevel;
-import pr2.level.ServerLevel.DecodedBlock;
+import pr2.level.Level;
+import pr2.level.Level.LevelBlock;
 
 typedef MovementLimits = {
 	final minX:Int;
@@ -14,7 +13,7 @@ typedef MovementLimits = {
 
 /** Shared tile lookup and rotation math for lightweight physics objects. */
 class BlockCollision {
-	public static function blockFromPos(level:ServerLevel, posX:Int, posY:Int, rotation:Int):Null<DecodedBlock> {
+	public static function blockFromPos(level:Level, posX:Int, posY:Int, rotation:Int):Null<LevelBlock> {
 		var probeX = posX;
 		var probeY = posY;
 		if (rotation != 0) {
@@ -22,26 +21,15 @@ class BlockCollision {
 			probeX = pos.x;
 			probeY = pos.y;
 		}
-		var tileX = Math.floor(probeX / 30);
-		var tileY = Math.floor(probeY / 30);
-		for (block in level.blocks) {
-			if (Math.floor(block.x / 30) == tileX && Math.floor(block.y / 30) == tileY) {
-				return block;
-			}
-		}
-		return null;
+		return level.blockAt(Math.floor(probeX / level.tileSize), Math.floor(probeY / level.tileSize));
 	}
 
-	public static function isActiveBlock(block:Null<DecodedBlock>):Bool {
+	public static function isActiveBlock(block:Null<LevelBlock>):Bool {
 		if (block == null) return false;
-		return switch (block.code) {
-			case ObjectCodes.BLOCK_START1 | ObjectCodes.BLOCK_START2 | ObjectCodes.BLOCK_START3 | ObjectCodes.BLOCK_START4
-				| ObjectCodes.BLOCK_WATER | ObjectCodes.BLOCK_SAFETY: false;
-			default: true;
-		}
+		return block.type.isSolid();
 	}
 
-	public static function rotatedBlockPos(block:DecodedBlock, rotation:Int):RotatedPoint {
+	public static function rotatedBlockPos(block:LevelBlock, rotation:Int):RotatedPoint {
 		var offsetX = 0;
 		var offsetY = 0;
 		if (rotation == 90) {
@@ -52,10 +40,10 @@ class BlockCollision {
 		} else if (rotation == -90) {
 			offsetX = 30;
 		}
-		return RotationMath.rotatePoint(block.x + offsetX, block.y + offsetY, -rotation);
+		return RotationMath.rotatePoint(block.worldX + offsetX, block.worldY + offsetY, -rotation);
 	}
 
-	public static function movementLimits(level:ServerLevel, rotation:Int):MovementLimits {
+	public static function movementLimits(level:Level, rotation:Int):MovementLimits {
 		var minPoint = RotationMath.rotatePoint(level.minX - 300, level.minY - 300, -rotation);
 		var maxPoint = RotationMath.rotatePoint(level.maxX + 300, level.maxY + 300, -rotation);
 		return {

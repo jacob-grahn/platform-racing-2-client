@@ -13,9 +13,9 @@ import pr2.effects.StingEffect;
 import pr2.effects.ZapEffect;
 import pr2.level.ObjectCodes;
 import pr2.level.BlockType;
-import pr2.level.ServerLevel;
-import pr2.level.ServerLevel.DecodedBlock;
-import pr2.level.ServerLevelDecoder;
+import pr2.level.Level;
+import pr2.level.Level.LevelBlock;
+import pr2.level.LevelDecoder;
 import pr2.effects.MineAppear;
 import pr2.effects.TeleportPop;
 import pr2.gameplay.GameCommandShell.GameCommandDelegate;
@@ -32,7 +32,7 @@ import pr2.runtime.PR2MovieClip;
 import pr2.util.TestDisplayUtil as DisplayUtil;
 
 @:access(pr2.gameplay.Course)
-@:access(pr2.level.ServerLevelRenderer)
+@:access(pr2.level.LevelRenderer)
 class CharacterLifecycleTest {
 	private static var assertions:Int = 0;
 
@@ -648,7 +648,7 @@ class CharacterLifecycleTest {
 		assertEquals(46, first.display.currentFrame, "egg squash animation reaches authored stop frame");
 		first.display.dispatchEvent(new openfl.events.Event(openfl.events.Event.ENTER_FRAME));
 		assertEquals(46, first.display.currentFrame, "egg squash animation stays stopped on frame 46");
-		var lifecycleLevel = ServerLevelDecoder.decode("m3`ffffff`0;0;11,1;0;8,0;1;0");
+		var lifecycleLevel = LevelDecoder.decode("m3`ffffff`0;0;11,1;0;8,0;1;0");
 		for (_ in 0...26) {
 			course.eggRound.step(lifecycleLevel);
 		}
@@ -682,16 +682,16 @@ class CharacterLifecycleTest {
 			soundPositions.push('$x,$y');
 		});
 		soundRound.initRound(777);
-		soundRound.addEggs(1, ServerLevelDecoder.decode("m3`ffffff`0;0;11,1;0;8,0;1;0"));
+		soundRound.addEggs(1, LevelDecoder.decode("m3`ffffff`0;0;11,1;0;8,0;1;0"));
 		var soundEgg = soundRound.egg(1);
 		assertTrue(soundEgg != null, "sound test egg spawned");
 		assertEquals(true, soundRound.collectEgg(1), "sound test egg collects");
 		assertEquals('${soundEgg.x},${soundEgg.y}', soundPositions[0], "collecting an egg plays its collection sound at the egg position");
 
 		var physicsRound = new EggRound(new CommandHandler(), function(_):Void {}, null, null, function(_, _):Void {});
-		var physicsLevel = new ServerLevel(0xffffff, [
-			new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 0, 0),
-			new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 30, -30)
+		var physicsLevel = Level.fromDecoded(0xffffff, [
+			LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_BASIC1, 0, 0),
+			LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_BASIC1, 30, -30)
 		]);
 		physicsRound.initRound(777);
 		physicsRound.addEggs(1, physicsLevel);
@@ -752,7 +752,7 @@ class CharacterLifecycleTest {
 		var attackRound = new EggRound(new CommandHandler(), function(_):Void {}, null, null, function(_, _):Void {});
 		attackRound.initRound(18);
 		assertEquals(0, attackRound.currentMode(), "attack test seed selects ice mode");
-		attackRound.addEggs(1, new ServerLevel(0xffffff, []));
+		attackRound.addEggs(1, Level.fromDecoded(0xffffff, []));
 		var attackEgg = attackRound.egg(1);
 		assertTrue(attackEgg != null, "attack test egg spawned");
 		attackEgg.posX = 100;
@@ -760,10 +760,10 @@ class CharacterLifecycleTest {
 		attackEgg.velX = 0;
 		attackEgg.velY = 0;
 		LobbySocket.resetSent();
-		attackRound.step(new ServerLevel(0xffffff, []), 0, 150, 120, false, false);
+		attackRound.step(Level.fromDecoded(0xffffff, []), 0, 150, 120, false, false);
 		assertEquals("add_effect`IceWave`100`90`180`0`-1", LobbySocket.lastSent(), "egg attack emits Flash add_effect payload");
 		assertEquals(120, attackEgg.attackCooldown, "egg attack starts Flash cooldown");
-		attackRound.step(new ServerLevel(0xffffff, []), 0, 150, 120, false, false);
+		attackRound.step(Level.fromDecoded(0xffffff, []), 0, 150, 120, false, false);
 		assertEquals(1, LobbySocket.sentCommands.length, "egg attack cooldown suppresses repeat emission");
 		assertEquals(119, attackEgg.attackCooldown, "egg attack cooldown ticks down each frame");
 
@@ -810,7 +810,7 @@ class CharacterLifecycleTest {
 		for (_ in 0...33) {
 			mineAppear.dispatchEvent(new Event(Event.ENTER_FRAME));
 		}
-		assertEquals(BlockType.Mine, @:privateAccess course.worldLevel.blockAt(32, 32).type,
+		assertEquals(BlockType.Mine, @:privateAccess course.level.blockAt(32, 32).type,
 			"remote MineAppear completion adds the mine to the live gameplay map");
 		assertEquals(ObjectCodes.BLOCK_MINE, BlockCollision.blockFromPos(@:privateAccess course.level, 960, 960, 0).code,
 			"remote MineAppear completion adds the mine to the effect collision map");
@@ -845,7 +845,7 @@ class CharacterLifecycleTest {
 		var hitSounds:Array<String> = [];
 		var round = new EggRound(new CommandHandler(), function(_):Void {}, layer, null, function(_, _):Void {}, null, null, null,
 			function(x:Int, y:Int):Void hitSounds.push('$x,$y'));
-		var level = new ServerLevel(0xffffff, [new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 30, 0)]);
+		var level = Level.fromDecoded(0xffffff, [LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_BASIC1, 30, 0)]);
 		round.mountAttackVisual("Laser`0`15`right`0`7");
 		var laser = Std.downcast(layer.getChildAt(0), LaserShotView);
 
@@ -906,7 +906,7 @@ class CharacterLifecycleTest {
 			return values[index++];
 		});
 		round.initRound(777);
-		round.addEggs(1, new ServerLevel(0xffffff, []));
+		round.addEggs(1, Level.fromDecoded(0xffffff, []));
 		var egg = round.egg(1);
 		assertTrue(egg != null, "visual test egg spawned");
 		var display = egg.display;
@@ -962,8 +962,8 @@ class CharacterLifecycleTest {
 		handler.dispatch("activate", ["6", "0", "right"]);
 		assertEquals(null, course.levelRenderer.blockAlphaAt(180, 0), "server activate moves push block away from source segment");
 		assertTrue(course.levelRenderer.blockAlphaAt(210, 0) != null, "server activate moves push block to payload direction segment");
-		assertEquals(null, @:privateAccess course.worldLevel.blockAt(6, 0), "remote push leaves the source collision tile");
-		assertEquals(BlockType.Push, @:privateAccess course.worldLevel.blockAt(7, 0).type,
+		assertEquals(null, @:privateAccess course.level.blockAt(6, 0), "remote push leaves the source collision tile");
+		assertEquals(BlockType.Push, @:privateAccess course.level.blockAt(7, 0).type,
 			"remote push updates the destination collision tile");
 		assertEquals(null, BlockCollision.blockFromPos(@:privateAccess course.level, 180, 0, 0),
 			"remote push clears its source from the effect collision map");
@@ -989,14 +989,14 @@ class CharacterLifecycleTest {
 	private static function testMoveBlockDisplayTracksFixtureCoordinates():Void {
 		var course = buildCourse(new CommandHandler(), "race", "m3`ffffff`0;0;11,1;0;19,1;0;0");
 		course.syncMoveBlockDisplays();
-		var tracked = course.displayedMoveBlockPositions.get(0);
+		var moveBlock = @:privateAccess course.level.blockAt(1, 0);
+		var tracked = course.displayedMoveBlockPositions.get(moveBlock);
 		assertEquals(30, tracked.worldX, "move display tracking starts at the move block, not the omitted start-marker index");
-		var moveBlock = @:privateAccess course.worldLevel.blockAt(1, 0);
-		moveBlock.x = 2;
+		moveBlock.x = 3;
 		course.syncMoveBlockDisplays();
 		assertEquals(null, BlockCollision.blockFromPos(@:privateAccess course.level, 30, 0, 0),
 			"move block clears its original effect collision tile");
-		assertEquals(ObjectCodes.BLOCK_MOVE, BlockCollision.blockFromPos(@:privateAccess course.level, 60, 0, 0).code,
+		assertEquals(ObjectCodes.BLOCK_MOVE, BlockCollision.blockFromPos(@:privateAccess course.level, 90, 0, 0).code,
 			"move block occupies its new effect collision tile");
 		course.remove();
 	}
@@ -1005,7 +1005,7 @@ class CharacterLifecycleTest {
 		var layer = new Sprite();
 		var round = new EggRound(new CommandHandler(), function(_):Void {}, layer, null, function(_, _):Void {});
 		round.initRound(seed);
-		round.addEggs(1, new ServerLevel(0xffffff, []));
+		round.addEggs(1, Level.fromDecoded(0xffffff, []));
 		var egg = round.egg(1);
 		assertTrue(egg != null, '$message: egg spawned');
 		egg.posX = 100;
@@ -1014,7 +1014,7 @@ class CharacterLifecycleTest {
 		egg.velY = 0;
 		var probe = RotationMath.rotatePoint(150, 100, -RotationMath.normalizeDisplayRotation(-egg.rot));
 		LobbySocket.resetSent();
-		round.step(new ServerLevel(0xffffff, []), 0, probe.x, probe.y + 20, false, false);
+		round.step(Level.fromDecoded(0xffffff, []), 0, probe.x, probe.y + 20, false, false);
 		assertTrue(LobbySocket.lastSent().indexOf('add_effect`$expectedType`') == 0, '$message: expected payload type');
 		assertEquals(expectedCount, round.activeAttackVisualCount(), message);
 		assertEquals(expectedCount + 1, layer.numChildren, '$message: visuals share the egg display layer');
@@ -1031,7 +1031,7 @@ class CharacterLifecycleTest {
 			assertEquals(18, laserClip.currentFrame, "laser hit animation stops on authored frame 18");
 		}
 		var initialX = visual.x;
-		round.step(new ServerLevel(0xffffff, []), 0, probe.x, probe.y + 20, false, false);
+		round.step(Level.fromDecoded(0xffffff, []), 0, probe.x, probe.y + 20, false, false);
 		assertTrue(visual.x != initialX || expectedType == "Slash", '$message: projectile visuals advance after mounting');
 		round.clear();
 		assertEquals(0, layer.numChildren, '$message: clear removes mounted visuals');
@@ -1265,7 +1265,7 @@ class CharacterLifecycleTest {
 		if (dataString == null) {
 			dataString = "m3`ffffff`0;0;11,1;0;8,0;1;0";
 		}
-		var level = ServerLevelDecoder.decode(dataString);
+		var level = LevelDecoder.decode(dataString);
 
 		var vars:Map<String, String> = new Map();
 		vars.set("level_id", "99");

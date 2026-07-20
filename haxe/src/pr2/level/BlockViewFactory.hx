@@ -5,44 +5,44 @@ import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.utils.AssetType;
 import openfl.utils.Assets;
-import pr2.level.ServerLevel.DecodedBlock;
+import pr2.level.Level.LevelBlock;
 
 /** Constructs block display trees, overlays, and deterministic vector fallbacks. */
-@:access(pr2.level.ServerLevelRenderer)
-class ServerLevelBlockFactory {
-	private final owner:ServerLevelRenderer;
+@:access(pr2.level.LevelRenderer)
+class BlockViewFactory {
+	private final owner:LevelRenderer;
 
-	public function new(owner:ServerLevelRenderer) {
+	public function new(owner:LevelRenderer) {
 		this.owner = owner;
 	}
 
-	public function createBlockDisplay(block:DecodedBlock):Sprite {
+	public function createBlockDisplay(block:LevelBlock):Sprite {
 		var container = new Sprite();
-		container.x = block.x;
-		container.y = block.y;
+		container.x = block.worldX;
+		container.y = block.worldY;
 
 		if (block.code == ObjectCodes.BLOCK_TELEPORT) {
 			var background = new Shape();
-			background.graphics.beginFill(teleportBlockColor(block.opts));
-			background.graphics.drawRect(0, 0, ServerLevelRenderer.TILE_SIZE, ServerLevelRenderer.TILE_SIZE);
+			background.graphics.beginFill(teleportBlockColor(block.options));
+			background.graphics.drawRect(0, 0, LevelRenderer.TILE_SIZE, LevelRenderer.TILE_SIZE);
 			background.graphics.endFill();
 			container.addChild(background);
 		}
 
-		var data = ServerLevelRenderer.blockBitmapData(block.code);
+		var data = LevelRenderer.blockBitmapData(block.code);
 		if (data != null) {
 			var bitmap = new Bitmap(data);
 			bitmap.smoothing = false;
-			bitmap.width = ServerLevelRenderer.TILE_SIZE;
-			bitmap.height = ServerLevelRenderer.TILE_SIZE;
+			bitmap.width = LevelRenderer.TILE_SIZE;
+			bitmap.height = LevelRenderer.TILE_SIZE;
 			container.addChild(bitmap);
 		} else throw 'Missing authored block bitmap for code ${block.code}';
 
-		var arrowRotation = ServerLevelRenderer.arrowOverlayRotation(block.code);
+		var arrowRotation = LevelRenderer.arrowOverlayRotation(block.code);
 		if (arrowRotation != null) {
 			var arrow = addArrowOverlay(container, arrowRotation);
 			if (arrow != null) {
-				owner.arrowDisplays.set(ServerLevelRenderer.blockKey(block.x, block.y), arrow);
+				owner.arrowDisplays.set(LevelRenderer.blockKey(block.worldX, block.worldY), arrow);
 			}
 		}
 
@@ -51,18 +51,18 @@ class ServerLevelBlockFactory {
 
 	public static function teleportBlockColor(options:String):Int {
 		var parsed = Std.parseInt(options);
-		return parsed == null ? ServerLevelRenderer.TELEPORT_DEFAULT_COLOR : parsed;
+		return parsed == null ? LevelRenderer.TELEPORT_DEFAULT_COLOR : parsed;
 	}
 
 	public function createIceOverlay():Sprite {
 		var overlay = new Sprite();
-		overlay.name = ServerLevelRenderer.ICE_OVERLAY_NAME;
-		var data = ServerLevelRenderer.blockBitmapData(ObjectCodes.BLOCK_ICE);
+		overlay.name = LevelRenderer.ICE_OVERLAY_NAME;
+		var data = LevelRenderer.blockBitmapData(ObjectCodes.BLOCK_ICE);
 		if (data != null) {
 			var bitmap = new Bitmap(data);
 			bitmap.smoothing = false;
-			bitmap.width = ServerLevelRenderer.TILE_SIZE;
-			bitmap.height = ServerLevelRenderer.TILE_SIZE;
+			bitmap.width = LevelRenderer.TILE_SIZE;
+			bitmap.height = LevelRenderer.TILE_SIZE;
 			overlay.addChild(bitmap);
 		} else throw "Missing authored ice block bitmap";
 		return overlay;
@@ -77,8 +77,8 @@ class ServerLevelBlockFactory {
 		var pivot = new Sprite();
 		var arrow = new ArrowBlockView();
 		pivot.addChild(arrow);
-		pivot.x = ServerLevelRenderer.TILE_SIZE / 2;
-		pivot.y = ServerLevelRenderer.TILE_SIZE / 2;
+		pivot.x = LevelRenderer.TILE_SIZE / 2;
+		pivot.y = LevelRenderer.TILE_SIZE / 2;
 		pivot.rotation = rotation;
 		container.addChild(pivot);
 		return arrow;

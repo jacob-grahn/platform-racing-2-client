@@ -37,19 +37,16 @@ import pr2.lobby.chat.ChatText;
 import pr2.lobby.LobbySession;
 import pr2.lobby.dialogs.LevelInfoPopup;
 import pr2.level.ObjectCodes;
-import pr2.level.ServerLevel;
-import pr2.level.ServerLevel.DecodedBlock;
-import pr2.level.ServerLevelWorldAdapter;
-import pr2.level.ServerLevelRenderer;
-import pr2.level.WorldLevel;
-import pr2.level.WorldLevel.LevelBlock;
+import pr2.level.LevelRenderer;
+import pr2.level.Level;
+import pr2.level.Level.LevelBlock;
 import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
 import pr2.net.ServerLevelData;
 import pr2.runtime.FontResolver;
 
 /**
-	The in-game race shell: a decoded `ServerLevel` rendered with the authored HUD
+	The in-game race shell: a decoded `Level` rendered with the authored HUD
 	mounted at Course's holder->stage offsets, a local player driven by
 	`LocalCharacter`, a follow camera, and incremental block drawing.
 
@@ -82,7 +79,7 @@ class Course extends Sprite {
 	public static inline var HEARTS_X:Float = 515;
 	public static inline var HEARTS_Y:Float = 59;
 
-	private final level:ServerLevel;
+	private final level:Level;
 	private final data:ServerLevelData;
 	private final config:LevelConfig;
 	private final onChatLine:Null<String->Bool>;
@@ -91,7 +88,7 @@ class Course extends Sprite {
 
 	private final input:LocalPlayerInput = new LocalPlayerInput();
 
-	public var levelRenderer(default, null):ServerLevelRenderer;
+	public var levelRenderer(default, null):LevelRenderer;
 	public var backCharacterLayer(default, null):Sprite;
 	public var characterLayer(default, null):Sprite;
 	public var localCharacter(default, null):LocalCharacter;
@@ -99,7 +96,6 @@ class Course extends Sprite {
 	public var playerArray(default, null):Array<Character> = [];
 	public var playerSpectating(default, null):Null<Character>;
 	public var canSpectate(default, null):Bool = false;
-	private var worldLevel:WorldLevel;
 	private var blockController:BlockController;
 	private var player:LocalCharacter;
 	private var camera:CameraFollow;
@@ -154,7 +150,7 @@ class Course extends Sprite {
 	private var displayedLives:Null<Int>;
 	private var finishDrawingEmitted:Bool = false;
 	private var displayedCourseRotation:Int = 0;
-	private final displayedMoveBlockPositions:Map<Int, {worldX:Int, worldY:Int, originalWorldX:Int, originalWorldY:Int}> = new Map();
+	private final displayedMoveBlockPositions:Map<LevelBlock, {worldX:Int, worldY:Int, originalWorldX:Int, originalWorldY:Int}> = new Map();
 	private var displayedMoveBlockArrows:Map<String, Bool> = new Map();
 	// Tile keys ("x,y") whose block visual was non-default last frame, so they can
 	// be reset to alpha/tint 1 once they return to default. See syncBlockVisuals.
@@ -180,7 +176,7 @@ class Course extends Sprite {
 	private final roster:CourseRosterController;
 	private final blockVisuals:CourseBlockVisualController;
 
-	public function new(level:ServerLevel, data:ServerLevelData, config:LevelConfig, ?onChatLine:String->Bool, ?onFrame:LocalPlayerState->Void,
+	public function new(level:Level, data:ServerLevelData, config:LevelConfig, ?onChatLine:String->Bool, ?onFrame:LocalPlayerState->Void,
 			?commandHandler:CommandHandler) {
 		super();
 		this.level = level;
@@ -213,18 +209,18 @@ class Course extends Sprite {
 	}
 
 	private function build():Void {
+		level.configureRuntime(Std.string(config.levelId), config.title, data.gravity);
 		var startBlocks = level.startBlocks();
 		var focus = startBlocks.length == 0 ? null : startBlocks[0];
-		levelRenderer = new ServerLevelRenderer(level, focus, ServerLevelRenderer.DEFAULT_FOCUS_X, ServerLevelRenderer.DEFAULT_FOCUS_Y, true);
+		levelRenderer = new LevelRenderer(level, focus, LevelRenderer.DEFAULT_FOCUS_X, LevelRenderer.DEFAULT_FOCUS_Y, true);
 		addChild(levelRenderer);
 		raceSounds = new RaceSounds(levelRenderer.cameraOffset);
 
-		worldLevel = ServerLevelWorldAdapter.convert(level, data.gravity, Std.string(config.levelId), config.title);
-		blockController = new BlockController(worldLevel);
+		blockController = new BlockController(level);
 		blockController.onBlockRemoved = removeRuntimeBlock;
 		blockController.onBlockAdded = addRuntimeBlock;
-		player = new LocalCharacter(worldLevel, 1, 1, 1, 1, blockController);
-		snakeManager = new SnakeManager(worldLevel, levelRenderer, player.controller);
+		player = new LocalCharacter(level, 1, 1, 1, 1, blockController);
+		snakeManager = new SnakeManager(level, levelRenderer, player.controller);
 		player.onPlayJumpSound = playJumpSound;
 		player.onPlayCharacterSound = playCharacterSound;
 		player.onArtifactHatActivated = onArtifactHatActivated;
@@ -237,7 +233,7 @@ class Course extends Sprite {
 		player.setCourseTime(maxCourseTimeSeconds());
 		localCharacter = player;
 		playerArray[player.tempID] = player;
-		remoteBlockActivation = new RemoteBlockActivation(worldLevel, levelRenderer);
+		remoteBlockActivation = new RemoteBlockActivation(level, levelRenderer);
 		activeCommandHandler().defineCommand("activate", activateCommand);
 		buildStartPositions();
 		positionLocalAtStartCenter();
@@ -267,12 +263,11 @@ class Course extends Sprite {
 				if (localCharacter != null && shooterId != localCharacter.tempID && !localCharacter.isFrozen()) {
 					localCharacter.freeze();
 				}
-			}, function(block:DecodedBlock):Void {
+			}, function(block:LevelBlock):Void {
 				if (localCharacter == null || block.code == ObjectCodes.BLOCK_ICE) {
 					return;
 				}
-				localCharacter.freezeBlock(Std.int(Math.round(block.x / ServerLevelRenderer.TILE_SIZE)),
-					Std.int(Math.round(block.y / ServerLevelRenderer.TILE_SIZE)));
+				localCharacter.freezeBlock(block.x, block.y);
 			});
 		updatePlayerDisplay();
 	}
@@ -290,7 +285,7 @@ class Course extends Sprite {
 			if (block.code == ObjectCodes.BLOCK_MINION_EGG) {
 				continue;
 			}
-			miniMap.addBlock(block.code, block.x, block.y);
+			miniMap.addBlock(block.code, block.worldX, block.worldY);
 		}
 		miniMap.rasterize();
 		playerDot = miniMap.getDot();
@@ -411,13 +406,13 @@ class Course extends Sprite {
 		startPositions = [];
 		for (block in level.blocks) {
 			if (isStartBlock(block)) {
-				startPositions.push({x: block.x + 15, y: block.y + 15});
+				startPositions.push({x: block.worldX + 15, y: block.worldY + 15});
 			}
 		}
 	}
 
 	private function positionLocalAtStartCenter():Void {
-		if (localCharacter == null || worldLevel == null || startPositions.length == 0) {
+		if (localCharacter == null || startPositions.length == 0) {
 			return;
 		}
 		var startIndex = LobbySession.tournamentMode ? 0 : localCharacter.tempID;
@@ -464,7 +459,7 @@ class Course extends Sprite {
 		return config.gameMode;
 	}
 
-	private static function isStartBlock(block:DecodedBlock):Bool {
+	private static function isStartBlock(block:LevelBlock):Bool {
 		return block.code >= ObjectCodes.BLOCK_START1 && block.code <= ObjectCodes.BLOCK_START4;
 	}
 
@@ -527,7 +522,7 @@ class Course extends Sprite {
 	}
 
 	public function teleportLocalToStage(stageX:Float, stageY:Float):Bool {
-		if (localCharacter == null || levelRenderer == null || worldLevel == null) {
+		if (localCharacter == null || levelRenderer == null) {
 			return false;
 		}
 		var local = globalToLocal(new Point(stageX, stageY));
@@ -540,60 +535,25 @@ class Course extends Sprite {
 		return true;
 	}
 
-	private function removeRuntimeBlock(block:LevelBlock):Void {
-		var worldX = block.x * ServerLevelWorldAdapter.TILE_SIZE;
-		var worldY = block.y * ServerLevelWorldAdapter.TILE_SIZE;
-		var index = level.blocks.length;
-		var removedIndex = -1;
-		while (index > 0) {
-			index--;
-			var decoded = level.blocks[index];
-			if (decoded.x == worldX && decoded.y == worldY) {
-				level.blocks.splice(index, 1);
-				removedIndex = index;
-				break;
-			}
-		}
+	private function removeRuntimeBlock(block:LevelBlock, removedIndex:Int):Void {
 		if (levelRenderer != null) {
-			levelRenderer.removeRuntimeBlockDisplay(worldX, worldY, removedIndex);
+			levelRenderer.removeRuntimeBlockDisplay(block.worldX, block.worldY, removedIndex);
 		}
 	}
 
 	private function addRuntimeBlock(block:LevelBlock):Void {
-		var code = switch (block.type) {
-			case pr2.level.BlockType.Mine: ObjectCodes.BLOCK_MINE;
-			default: return;
-		}
-		var decoded = new DecodedBlock(code, block.x * ServerLevelWorldAdapter.TILE_SIZE, block.y * ServerLevelWorldAdapter.TILE_SIZE,
-			block.options);
-		level.blocks.push(decoded);
 		if (levelRenderer != null) {
-			levelRenderer.ensureRuntimeBlockDisplay(decoded);
+			levelRenderer.ensureRuntimeBlockDisplay(block);
 		}
-	}
-
-	/** Keep lightweight effect collision aligned with a block moved in the live world. */
-	private function moveRuntimeBlock(fromWorldX:Int, fromWorldY:Int, toWorldX:Int, toWorldY:Int):Bool {
-		for (i in 0...level.blocks.length) {
-			var block = level.blocks[i];
-			if (block.x == fromWorldX && block.y == fromWorldY) {
-				level.blocks[i] = new DecodedBlock(block.code, toWorldX, toWorldY, block.opts);
-				if (levelRenderer != null) {
-					levelRenderer.moveBlockDisplay(fromWorldX, fromWorldY, toWorldX, toWorldY);
-				}
-				return true;
-			}
-		}
-		return false;
 	}
 
 	public function placeRuntimeMine(worldX:Int, worldY:Int):Bool {
-		if (blockController == null || worldLevel == null) {
+		if (blockController == null) {
 			return false;
 		}
 		return blockController.addBlock(new LevelBlock(
-			Std.int(Math.floor(worldX / ServerLevelWorldAdapter.TILE_SIZE)),
-			Std.int(Math.floor(worldY / ServerLevelWorldAdapter.TILE_SIZE)),
+			Std.int(Math.floor(worldX / level.tileSize)),
+			Std.int(Math.floor(worldY / level.tileSize)),
 			pr2.level.BlockType.Mine
 		));
 	}
@@ -808,7 +768,7 @@ class Course extends Sprite {
 			if (placed >= 25) {
 				break;
 			}
-			eggRound.addFixedEgg(block.x + 30, block.y + 30, 0);
+			eggRound.addFixedEgg(block.worldX + 30, block.worldY + 30, 0);
 			placed++;
 		}
 	}
@@ -1137,8 +1097,8 @@ class Course extends Sprite {
 				if (Math.isNaN(effectX) || Math.isNaN(effectY) || Math.isNaN(rotation)) {
 					return;
 				}
-				var tileWorldX = Std.int(Math.round((effectX - 15) / ServerLevelRenderer.TILE_SIZE)) * ServerLevelRenderer.TILE_SIZE;
-				var tileWorldY = Std.int(Math.round((effectY - 15) / ServerLevelRenderer.TILE_SIZE)) * ServerLevelRenderer.TILE_SIZE;
+				var tileWorldX = Std.int(Math.round((effectX - 15) / LevelRenderer.TILE_SIZE)) * LevelRenderer.TILE_SIZE;
+				var tileWorldY = Std.int(Math.round((effectY - 15) / LevelRenderer.TILE_SIZE)) * LevelRenderer.TILE_SIZE;
 				levelRenderer.showMineAppear(effectX, effectY, tileWorldX, tileWorldY, rotation, true,
 					function():Void placeRuntimeMine(tileWorldX, tileWorldY));
 				LobbySocket.write('add_effect`Mine`$effectX`$effectY`$rotation');
@@ -1184,7 +1144,7 @@ class Course extends Sprite {
 			},
 			onBlockDamage: function(block, reach):Void {
 				if (levelRenderer != null) {
-					levelRenderer.animateBlockBump(block.x, block.y, reach, 0);
+					levelRenderer.animateBlockBump(block.worldX, block.worldY, reach, 0);
 				}
 			},
 			playSound: playSlashSound
@@ -1290,7 +1250,7 @@ class Course extends Sprite {
 	}
 
 	private function updatePlayerDisplay():Void {
-		if (player == null || levelRenderer == null || worldLevel == null) {
+		if (player == null || levelRenderer == null) {
 			return;
 		}
 

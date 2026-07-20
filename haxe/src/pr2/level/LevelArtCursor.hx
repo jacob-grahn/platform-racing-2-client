@@ -2,9 +2,9 @@ package pr2.level;
 
 import haxe.Timer;
 import openfl.display.Sprite;
-import pr2.level.ServerLevel.DecodedArtLayer;
-import pr2.level.ServerLevel.DecodedDrawAction;
-import pr2.level.ServerLevelArtRasterizer.ArtRasterTiles;
+import pr2.level.Level.LevelArtLayer;
+import pr2.level.Level.LevelDrawAction;
+import pr2.level.LevelArtRasterizer.ArtRasterTiles;
 
 /** Incrementally schedules one decoded art layer into the raster engine. */
 typedef ArtStrokeState = {
@@ -16,7 +16,7 @@ typedef ArtStrokeState = {
 class ArtDrawCursor {
 	public final container:Sprite;
 	public final rasterCanvas:Sprite;
-	public final layer:DecodedArtLayer;
+	public final layer:LevelArtLayer;
 	public var lastProfileActionIndex(default, null):Int = -1;
 	public var lastProfileKind(default, null):String = "";
 	public var lastProfilePath(default, null):String = "";
@@ -31,7 +31,7 @@ class ArtDrawCursor {
 	private var objectIndex:Int = 0;
 	private var textIndex:Int = 0;
 
-	public function new(container:Sprite, strokeTiles:ArtRasterTiles, layer:DecodedArtLayer) {
+	public function new(container:Sprite, strokeTiles:ArtRasterTiles, layer:LevelArtLayer) {
 		this.container = container;
 		this.rasterCanvas = strokeTiles.rasterCanvas;
 		this.layer = layer;
@@ -80,7 +80,7 @@ class ArtDrawCursor {
 		}
 		if (objectIndex < layer.objects.length) {
 			var objectStarted = Timer.stamp();
-			ServerLevelRenderer.addLayerObject(container, layer.objects[objectIndex++], layer.scale);
+			LevelRenderer.addLayerObject(container, layer.objects[objectIndex++], layer.scale);
 			lastProfileMs = (Timer.stamp() - objectStarted) * 1000;
 			lastProfileActionIndex = objectIndex - 1;
 			lastProfileKind = "object";
@@ -94,7 +94,7 @@ class ArtDrawCursor {
 		}
 		if (textIndex < layer.texts.length) {
 			var textStarted = Timer.stamp();
-			ServerLevelRenderer.addLayerText(container, layer.texts[textIndex++], layer.scale);
+			LevelRenderer.addLayerText(container, layer.texts[textIndex++], layer.scale);
 			lastProfileMs = (Timer.stamp() - textStarted) * 1000;
 			lastProfileActionIndex = textIndex - 1;
 			lastProfileKind = "text";
@@ -109,7 +109,7 @@ class ArtDrawCursor {
 		return 0;
 	}
 
-	private function copyStrokeProfile(action:DecodedDrawAction, actionIndex:Int, elapsedMs:Float):Void {
+	private function copyStrokeProfile(action:LevelDrawAction, actionIndex:Int, elapsedMs:Float):Void {
 		lastProfileMs = elapsedMs;
 		lastProfileActionIndex = actionIndex;
 		lastProfileKind = action.kind;
@@ -137,4 +137,3 @@ class ArtDrawCursor {
 		return actionIndex >= layer.drawActions.length && objectIndex >= layer.objects.length && textIndex >= layer.texts.length;
 	}
 }
-

@@ -4,8 +4,8 @@ import openfl.events.Event;
 import pr2.effects.ShotEffect.ShotEffectContext;
 import pr2.effects.ShotEffect.ShotEffectPlayer;
 import pr2.level.ObjectCodes;
-import pr2.level.ServerLevel;
-import pr2.level.ServerLevel.DecodedBlock;
+import pr2.level.Level;
+import pr2.level.Level.LevelBlock;
 
 class ShotEffectTest {
 	private static var assertions:Int = 0;
@@ -19,8 +19,8 @@ class ShotEffectTest {
 	}
 
 	private static function testMovementCollisionOrderingAndLife():Void {
-		var block = new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 30, 0);
-		var level = new ServerLevel(0xffffff, [block]);
+		var block = LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_BASIC1, 30, 0);
+		var level = Level.fromDecoded(0xffffff, [block]);
 		var shot = new TestShotEffect(0, 15, 0, 0, 7, "laser");
 		shot.life = 2;
 		shot.step(level, 0);
@@ -39,7 +39,7 @@ class ShotEffectTest {
 	}
 
 	private static function testPlayerHitFilteringAndRecoil():Void {
-		var level = new ServerLevel(0xffffff, []);
+		var level = Level.fromDecoded(0xffffff, []);
 		var recoil:Array<String> = [];
 		var players:Array<ShotEffectPlayer> = [
 			{tempId: 7, x: 10, y: 20, removed: false, local: true, onHit: function(vx:Float, vy:Float):Void recoil.push('${Math.round(vx)},${Math.round(vy)}')},
@@ -63,7 +63,7 @@ class ShotEffectTest {
 	}
 
 	private static function testInactiveBlocksAndFrameCleanup():Void {
-		var level = new ServerLevel(0xffffff, [new DecodedBlock(ObjectCodes.BLOCK_WATER, 0, 0)]);
+		var level = Level.fromDecoded(0xffffff, [LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_WATER, 0, 0)]);
 		var shot = new TestShotEffect(0, 15, 0, 0, -1, "ice");
 		shot.checkCollisionsForTests(level, 0);
 		assertEquals(0, shot.blockHits, "inactive blocks are ignored by default");
@@ -74,7 +74,7 @@ class ShotEffectTest {
 		var calls = 0;
 		var driven = new TestShotEffect(0, 15, 0, 0, -1, "laser", 0, function():ShotEffectContext {
 			calls++;
-			return {level: new ServerLevel(0xffffff, []), courseRotation: 0};
+			return {level: Level.fromDecoded(0xffffff, []), courseRotation: 0};
 		});
 		assertEquals(true, driven.hasEventListener(Event.ENTER_FRAME), "shot activates enter-frame listener");
 		assertEquals(1, calls, "constructor uses the provided context for Flash's immediate collision check");
@@ -98,7 +98,7 @@ private class TestShotEffect extends ShotEffect {
 	public var hitAnythingCount(default, null):Int = 0;
 	public var lastDamageX(default, null):Float = 0;
 
-	override function onBlockDamage(block:DecodedBlock, damageX:Float):Void {
+	override function onBlockDamage(block:LevelBlock, damageX:Float):Void {
 		blockHits++;
 		lastDamageX = damageX;
 	}
@@ -112,7 +112,7 @@ private class TestShotEffect extends ShotEffect {
 		hitAnythingCount++;
 	}
 
-	public function checkCollisionsForTests(level:ServerLevel, courseRotation:Int):Void {
+	public function checkCollisionsForTests(level:Level, courseRotation:Int):Void {
 		checkCollisions(level, courseRotation);
 	}
 }

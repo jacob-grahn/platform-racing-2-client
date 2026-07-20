@@ -3,14 +3,14 @@ package pr2.effects;
 import openfl.utils.Assets;
 import pr2.audio.SoundEffects;
 import pr2.gameplay.RotationMath;
-import pr2.level.ServerLevel;
-import pr2.level.ServerLevel.DecodedBlock;
+import pr2.level.Level;
+import pr2.level.Level.LevelBlock;
 
 typedef SlashContext = {
-	final level:ServerLevel;
+	final level:Level;
 	final courseRotation:Int;
 	@:optional final player:SlashPlayer;
-	@:optional final onBlockDamage:DecodedBlock->Float->Void;
+	@:optional final onBlockDamage:LevelBlock->Float->Void;
 	@:optional final playSound:Float->Float->Void;
 }
 

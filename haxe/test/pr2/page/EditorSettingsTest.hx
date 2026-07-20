@@ -17,9 +17,9 @@ import pr2.lobby.Memory;
 import pr2.gameplay.Items;
 import pr2.gameplay.LevelConfig;
 import pr2.level.BlockType;
-import pr2.level.ServerLevel.DecodedTextObject;
+import pr2.level.Level.LevelTextObject;
 import pr2.level.ObjectCodes;
-import pr2.level.ServerLevelDecoder;
+import pr2.level.LevelDecoder;
 import pr2.net.ServerConfig;
 import pr2.net.ServerLevelData;
 import pr2.levelEditor.LevelEditor;
@@ -658,9 +658,9 @@ class EditorSettingsTest {
 		textObject.moveToLocal(120, 130);
 		textObject.resizeTo(1.23, 0.75);
 
-		var decoded = ServerLevelDecoder.decodeArtObjects("m4", layer.getSaveString());
+		var decoded = LevelDecoder.decodeArtObjects("m4", layer.getSaveString());
 		assertEquals(1, decoded.length, "text object save emits one art object");
-		var text = Std.downcast(decoded[0], DecodedTextObject);
+		var text = Std.downcast(decoded[0], LevelTextObject);
 		assertNotNull(text, "text object save decodes as text");
 		assertEquals("Hello #35#96#44#38#43#45#59", text.text, "text object save escapes Flash separators");
 		assertEquals(120, text.x, "text object save exports moved x");
@@ -1247,7 +1247,7 @@ class EditorSettingsTest {
 			assertEquals(true, editor.beginSelectedBrushAt(paintPoint.x, paintPoint.y), 'art $layerNum accepts a brush stroke');
 			assertEquals(true, editor.endSelectedBrush(), 'art $layerNum finishes its brush stroke');
 		}
-		var previewLevel = ServerLevelDecoder.decode(editor.getSaveString());
+		var previewLevel = LevelDecoder.decode(editor.getSaveString());
 		for (i in 0...previewLevel.artLayers.length) {
 			var stroke = previewLevel.artLayers[i].drawActions[0];
 			var parallax = previewLevel.artLayers[i].scale;

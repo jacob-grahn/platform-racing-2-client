@@ -1,9 +1,9 @@
 package pr2.level;
 
-import pr2.level.ServerLevelArtCursor.ArtDrawCursor;
-import pr2.level.ServerLevelArtRasterizer.ArtRasterBudget;
-import pr2.level.ServerLevelArtRasterizer.ArtRasterTiles;
-import pr2.level.ServerLevelArtCursor.ArtStrokeState;
+import pr2.level.LevelArtCursor.ArtDrawCursor;
+import pr2.level.LevelArtRasterizer.ArtRasterBudget;
+import pr2.level.LevelArtRasterizer.ArtRasterTiles;
+import pr2.level.LevelArtCursor.ArtStrokeState;
 
 import com.jiggmin.data.Objects;
 import haxe.Timer;
@@ -28,11 +28,11 @@ import pr2.gameplay.PrizePopup;
 import pr2.lobby.account.Settings;
 import pr2.lobby.dialogs.MessagePopup;
 import pr2.lobby.dialogs.Popup;
-import pr2.level.ServerLevel.DecodedArtLayer;
-import pr2.level.ServerLevel.DecodedArtObject;
-import pr2.level.ServerLevel.DecodedBlock;
-import pr2.level.ServerLevel.DecodedDrawAction;
-import pr2.level.ServerLevel.DecodedTextObject;
+import pr2.level.Level.LevelArtLayer;
+import pr2.level.Level.LevelArtObject;
+import pr2.level.Level.LevelDrawAction;
+import pr2.level.Level.LevelTextObject;
+import pr2.level.Level.LevelBlock;
 import pr2.effects.BlockPiece;
 import pr2.effects.MineAppear;
 import pr2.effects.MineExplosion;
@@ -50,11 +50,11 @@ typedef ArtRenderOptions = {
 /**
 	Renders the decoded server block layer in original PR2 pixel units.
 
-	Server levels are stored around large editor coordinates (~10000 px). This
+	PR2 levels are stored around large editor coordinates (~10000 px). This
 	renderer keeps the 30 px block scale and translates the world so a chosen
 	focus point, usually the first start block, appears at a stable stage point.
 **/
-class ServerLevelRenderer extends Sprite {
+class LevelRenderer extends Sprite {
 	public static inline var TILE_SIZE:Int = 30;
 	private static inline var TELEPORT_DEFAULT_COLOR:Int = 0xFF7F50;
 	// Edge length of the transparent square that stroke art is rasterized onto,
@@ -94,7 +94,7 @@ class ServerLevelRenderer extends Sprite {
 	// window refreshes and visibly pop in at the edge.
 	public static inline var VIEW_REBUILD_THRESHOLD:Int = VIEW_MARGIN_SEGMENTS;
 
-	private final level:ServerLevel;
+	private final level:Level;
 	private var offsetX:Float;
 	private var offsetY:Float;
 	// Unrounded camera offset, kept so the parallax layers can re-derive their
@@ -150,7 +150,7 @@ class ServerLevelRenderer extends Sprite {
 	private final drawArtEnabled:Bool;
 	private final artOptions:Null<ArtRenderOptions>;
 	private final artRasterBudget:ArtRasterBudget;
-	private final blockFactory:ServerLevelBlockFactory;
+	private final blockFactory:BlockViewFactory;
 	private var attemptedArtItems:Int = 0;
 	private var artLoadWarningShown:Bool = false;
 	private var rasterStopNotified:Bool = false;
@@ -181,11 +181,11 @@ class ServerLevelRenderer extends Sprite {
 	public var artProfileMaxSpanX(default, null):Int = 0;
 	public var artProfileMaxSpanY(default, null):Int = 0;
 
-	public function new(level:ServerLevel, ?focusBlock:DecodedBlock, focusScreenX:Float = DEFAULT_FOCUS_X, focusScreenY:Float = DEFAULT_FOCUS_Y,
+	public function new(level:Level, ?focusBlock:LevelBlock, focusScreenX:Float = DEFAULT_FOCUS_X, focusScreenY:Float = DEFAULT_FOCUS_Y,
 			incrementalBlocks:Bool = false, blocksPerFrame:Int = DEFAULT_BLOCKS_PER_FRAME, ?artOptions:ArtRenderOptions) {
 		super();
 		this.level = level;
-		blockFactory = new ServerLevelBlockFactory(this);
+		blockFactory = new BlockViewFactory(this);
 		this.incrementalBlocks = incrementalBlocks;
 		this.blocksPerFrame = blocksPerFrame <= 0 ? DEFAULT_BLOCKS_PER_FRAME : blocksPerFrame;
 		this.drawArtEnabled = Settings.getValue(Settings.DRAW_ART, true) != false;
@@ -199,8 +199,8 @@ class ServerLevelRenderer extends Sprite {
 			offsetX = 0;
 			offsetY = 0;
 		} else {
-			offsetX = focusScreenX - focus.x;
-			offsetY = focusScreenY - focus.y;
+			offsetX = focusScreenX - focus.worldX;
+			offsetY = focusScreenY - focus.worldY;
 		}
 		rawOffsetX = offsetX;
 		rawOffsetY = offsetY;
@@ -611,8 +611,8 @@ class ServerLevelRenderer extends Sprite {
 	}
 
 	/** Mount a block introduced or restored by the live gameplay map. */
-	public function ensureRuntimeBlockDisplay(block:DecodedBlock):Void {
-		if (!blockDisplays.exists(blockKey(block.x, block.y))) {
+	public function ensureRuntimeBlockDisplay(block:LevelBlock):Void {
+		if (!blockDisplays.exists(blockKey(block.worldX, block.worldY))) {
 			addBlockDisplay(block);
 		}
 	}
@@ -722,7 +722,7 @@ class ServerLevelRenderer extends Sprite {
 			if (placeRuntimeMine != null) {
 				placeRuntimeMine();
 			} else if (!blockDisplays.exists(blockKey(tileWorldX, tileWorldY))) {
-				addBlockDisplay(new DecodedBlock(ObjectCodes.BLOCK_MINE, tileWorldX, tileWorldY));
+				addBlockDisplay(LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_MINE, tileWorldX, tileWorldY));
 			}
 		}, playSound);
 		blockLayer.addChild(effect);
@@ -1037,21 +1037,21 @@ class ServerLevelRenderer extends Sprite {
 		}
 	}
 
-	private function addBlockDisplay(block:DecodedBlock):Void {
+	private function addBlockDisplay(block:LevelBlock):Void {
 		// Start and minion-egg blocks are spawn markers, not scenery. Flash's
 		// gameplay Map records their positions and never adds them to the block
 		// display list.
 		if (isSpawnMarkerBlockCode(block.code)) {
 			return;
 		}
-		if (blockDisplays.exists(blockKey(block.x, block.y))) {
+		if (blockDisplays.exists(blockKey(block.worldX, block.worldY))) {
 			return;
 		}
 		var display = createBlockDisplay(block);
-		blockDisplays.set(blockKey(block.x, block.y), display);
-		addToBlockGrid(block.x, block.y, display);
-		var segX = segmentOf(block.x);
-		var segY = segmentOf(block.y);
+		blockDisplays.set(blockKey(block.worldX, block.worldY), display);
+		addToBlockGrid(block.worldX, block.worldY, display);
+		var segX = segmentOf(block.worldX);
+		var segY = segmentOf(block.worldY);
 		// Attach only if the block currently falls inside the view window; otherwise
 		// it stays in the grid and is attached later when the camera scrolls to it.
 		if (isInView(segX, segY)) {
@@ -1585,36 +1585,36 @@ class ServerLevelRenderer extends Sprite {
 		return open.length == 0 || (open.length == 1 && Std.isOfType(open[0], PrizePopup));
 	}
 
-	public static function drawLayerStrokes(brushCanvas:Sprite, actions:Array<DecodedDrawAction>):Void
-		ServerLevelArtFactory.drawLayerStrokes(brushCanvas, actions);
+	public static function drawLayerStrokes(brushCanvas:Sprite, actions:Array<LevelDrawAction>):Void
+		LevelArtFactory.drawLayerStrokes(brushCanvas, actions);
 
-	public static function renderLayerStrokes(rasterCanvas:Sprite, actions:Array<DecodedDrawAction>, ?budget:ArtRasterBudget):Void
-		ServerLevelArtFactory.renderLayerStrokes(rasterCanvas, actions, budget);
+	public static function renderLayerStrokes(rasterCanvas:Sprite, actions:Array<LevelDrawAction>, ?budget:ArtRasterBudget):Void
+		LevelArtFactory.renderLayerStrokes(rasterCanvas, actions, budget);
 
 	public static function rasterizeBrushInto(rasterCanvas:Sprite, brushCanvas:Sprite):Void
-		ServerLevelArtFactory.rasterizeBrushInto(rasterCanvas, brushCanvas);
+		LevelArtFactory.rasterizeBrushInto(rasterCanvas, brushCanvas);
 
-	public static function drawStrokeAction(container:Sprite, color:Int, size:Float, mode:String, action:DecodedDrawAction):ArtStrokeState
-		return ServerLevelArtFactory.drawStrokeAction(container, color, size, mode, action);
+	public static function drawStrokeAction(container:Sprite, color:Int, size:Float, mode:String, action:LevelDrawAction):ArtStrokeState
+		return LevelArtFactory.drawStrokeAction(container, color, size, mode, action);
 
-	private function drawLayerObjects(container:Sprite, objects:Array<DecodedArtObject>, layerScale:Float):Void
-		ServerLevelArtFactory.drawLayerObjects(container, objects, layerScale);
+	private function drawLayerObjects(container:Sprite, objects:Array<LevelArtObject>, layerScale:Float):Void
+		LevelArtFactory.drawLayerObjects(container, objects, layerScale);
 
-	private function drawLayerTexts(container:Sprite, texts:Array<DecodedTextObject>, layerScale:Float):Void
-		ServerLevelArtFactory.drawLayerTexts(container, texts, layerScale);
+	private function drawLayerTexts(container:Sprite, texts:Array<LevelTextObject>, layerScale:Float):Void
+		LevelArtFactory.drawLayerTexts(container, texts, layerScale);
 
-	public static function addLayerObject(container:Sprite, object:DecodedArtObject, layerScale:Float):Void
-		ServerLevelArtFactory.addLayerObject(container, object, layerScale);
+	public static function addLayerObject(container:Sprite, object:LevelArtObject, layerScale:Float):Void
+		LevelArtFactory.addLayerObject(container, object, layerScale);
 
-	public static function addLayerText(container:Sprite, text:DecodedTextObject, layerScale:Float):Void
-		ServerLevelArtFactory.addLayerText(container, text, layerScale);
+	public static function addLayerText(container:Sprite, text:LevelTextObject, layerScale:Float):Void
+		LevelArtFactory.addLayerText(container, text, layerScale);
 
-	private function createBlockDisplay(block:DecodedBlock):Sprite return blockFactory.createBlockDisplay(block);
+	private function createBlockDisplay(block:LevelBlock):Sprite return blockFactory.createBlockDisplay(block);
 	private function createIceOverlay():Sprite return blockFactory.createIceOverlay();
-	private static function moveBlockArrowRotation(direction:Int):Float return ServerLevelBlockFactory.moveBlockArrowRotation(direction);
-	private static function teleportBlockColor(options:String):Int return ServerLevelBlockFactory.teleportBlockColor(options);
+	private static function moveBlockArrowRotation(direction:Int):Float return BlockViewFactory.moveBlockArrowRotation(direction);
+	private static function teleportBlockColor(options:String):Int return BlockViewFactory.teleportBlockColor(options);
 
-	private static function firstRenderableBlock(level:ServerLevel):Null<DecodedBlock> {
+	private static function firstRenderableBlock(level:Level):Null<LevelBlock> {
 		return level.blocks.length == 0 ? null : level.blocks[0];
 	}
 

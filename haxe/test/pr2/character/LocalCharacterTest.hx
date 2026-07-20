@@ -3,10 +3,10 @@ package pr2.character;
 import pr2.gameplay.player.LocalPlayerController;
 import pr2.gameplay.player.LocalPlayerInput;
 import pr2.level.BlockType;
-import pr2.level.WorldLevel;
-import pr2.level.WorldLevel.LevelBlock;
-import pr2.level.WorldLevel.StatDefaults;
-import pr2.level.WorldLevel.TilePosition;
+import pr2.level.Level;
+import pr2.level.Level.LevelBlock;
+import pr2.level.Level.StatDefaults;
+import pr2.level.Level.TilePosition;
 import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
 
@@ -484,8 +484,8 @@ class LocalCharacterTest {
 		assertClose(0.9 * controller.facingScaleX, character.display.scaleX, '$label facing scale');
 	}
 
-	private static function flatLevel():WorldLevel {
-		return new WorldLevel(
+	private static function flatLevel():Level {
+		return new Level(
 			"local-character-flat",
 			"Local Character Flat",
 			8,
@@ -503,8 +503,8 @@ class LocalCharacterTest {
 		);
 	}
 
-	private static function airborneLevel():WorldLevel {
-		return new WorldLevel(
+	private static function airborneLevel():Level {
+		return new Level(
 			"local-character-airborne",
 			"Local Character Airborne",
 			8,
@@ -518,8 +518,8 @@ class LocalCharacterTest {
 		);
 	}
 
-	private static function heavyGravityAirborneLevel():WorldLevel {
-		return new WorldLevel(
+	private static function heavyGravityAirborneLevel():Level {
+		return new Level(
 			"local-character-heavy-airborne",
 			"Local Character Heavy Airborne",
 			8,
@@ -533,8 +533,8 @@ class LocalCharacterTest {
 		);
 	}
 
-	private static function nonSolidFloorLevel(type:BlockType):WorldLevel {
-		return new WorldLevel(
+	private static function nonSolidFloorLevel(type:BlockType):Level {
+		return new Level(
 			"local-character-non-solid-floor",
 			"Local Character Non-solid Floor",
 			8,
@@ -548,12 +548,12 @@ class LocalCharacterTest {
 		);
 	}
 
-	private static function longFlatLevel():WorldLevel {
+	private static function longFlatLevel():Level {
 		var blocks:Array<LevelBlock> = [];
 		for (tileX in 0...38) {
 			blocks.push(new LevelBlock(tileX, 4, BlockType.Basic));
 		}
-		return new WorldLevel(
+		return new Level(
 			"local-character-long-flat",
 			"Local Character Long Flat",
 			40,
@@ -567,8 +567,8 @@ class LocalCharacterTest {
 		);
 	}
 
-	private static function vanishWallLevel():WorldLevel {
-		return new WorldLevel(
+	private static function vanishWallLevel():Level {
+		return new Level(
 			"local-character-vanish-wall",
 			"Local Character Vanish Wall",
 			8,
@@ -588,8 +588,8 @@ class LocalCharacterTest {
 		);
 	}
 
-	private static function delayedMineBlockLevel():WorldLevel {
-		return new WorldLevel(
+	private static function delayedMineBlockLevel():Level {
+		return new Level(
 			"local-character-delayed-mine-block",
 			"Local Character Delayed Mine Block",
 			5,

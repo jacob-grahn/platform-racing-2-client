@@ -1,15 +1,15 @@
 package pr2.level;
 
-import pr2.level.ServerLevel.DecodedBlock;
-import pr2.level.ServerLevel.DecodedArtLayer;
-import pr2.level.ServerLevel.DecodedArtObject;
-import pr2.level.ServerLevel.DecodedDrawAction;
-import pr2.level.ServerLevel.DecodedTextObject;
+import pr2.level.Level.LevelArtLayer;
+import pr2.level.Level.LevelArtObject;
+import pr2.level.Level.LevelDrawAction;
+import pr2.level.Level.LevelTextObject;
+import pr2.level.Level.LevelBlock;
 import StringTools;
 
 /**
 	Decodes the backtick-delimited `data` blob from a server level into a
-	`ServerLevel`. Ported from `GamePage.decodeLevelData` and its helpers
+		`Level`. Ported from `GamePage.decodeLevelData` and its helpers
 	(`decodeObjectString`, `decodeObjectString2`, `decodeBlockString`).
 
 	Read modes:
@@ -18,10 +18,10 @@ import StringTools;
 	- `m3`: relative coords, segMult = SEG_SIZE (the common campaign-era format).
 	- `m4`: relative coords with a per-block options field, segMult = SEG_SIZE.
 **/
-class ServerLevelDecoder {
+class LevelDecoder {
 	public static inline var SEG_SIZE:Int = 30;
 
-	public static function decode(rawData:String):ServerLevel {
+	public static function decode(rawData:String):Level {
 		if (rawData == null || rawData == "") {
 			throw "empty level data";
 		}
@@ -33,7 +33,7 @@ class ServerLevelDecoder {
 		var bgColor = parseHexColor(section(sections, 1));
 		var blockString = section(sections, 2);
 
-		return new ServerLevel(
+		return Level.fromDecoded(
 			bgColor,
 			decodeBlocks(mode, blockString),
 			decodeArtLayers(mode, sections),
@@ -41,7 +41,7 @@ class ServerLevelDecoder {
 		);
 	}
 
-	public static function decodeBlocks(mode:String, blockString:String):Array<DecodedBlock> {
+	public static function decodeBlocks(mode:String, blockString:String):Array<LevelBlock> {
 		return switch (mode) {
 			case "m1": decodeObjectStringHex(blockString);
 			case "m2": decodeRelative(blockString, 1, false);
@@ -51,7 +51,7 @@ class ServerLevelDecoder {
 		};
 	}
 
-	public static function decodeArtLayers(mode:String, sections:Array<String>):Array<DecodedArtLayer> {
+	public static function decodeArtLayers(mode:String, sections:Array<String>):Array<LevelArtLayer> {
 		return [
 			decodeArtLayer(mode, section(sections, 3), section(sections, 6), 1),
 			decodeArtLayer(mode, section(sections, 4), section(sections, 7), 0.5),
@@ -61,25 +61,25 @@ class ServerLevelDecoder {
 		];
 	}
 
-	private static function decodeArtLayer(mode:String, objectString:String, drawString:String, scale:Float):DecodedArtLayer {
-		var objects:Array<DecodedArtObject> = [];
-		var texts:Array<DecodedTextObject> = [];
+	private static function decodeArtLayer(mode:String, objectString:String, drawString:String, scale:Float):LevelArtLayer {
+		var objects:Array<LevelArtObject> = [];
+		var texts:Array<LevelTextObject> = [];
 		for (entry in decodeArtObjects(mode, objectString)) {
-			var text = Std.downcast(entry, DecodedTextObject);
+			var text = Std.downcast(entry, LevelTextObject);
 			if (text != null) {
 				texts.push(text);
 			} else {
-				var object = Std.downcast(entry, DecodedArtObject);
+				var object = Std.downcast(entry, LevelArtObject);
 				if (object != null) {
 					objects.push(object);
 				}
 			}
 		}
-		return new DecodedArtLayer(decodeDrawActions(drawString), objects, texts, scale);
+		return new LevelArtLayer(decodeDrawActions(drawString), objects, texts, scale);
 	}
 
-	public static function decodeDrawActions(drawString:String):Array<DecodedDrawAction> {
-		var actions:Array<DecodedDrawAction> = [];
+	public static function decodeDrawActions(drawString:String):Array<LevelDrawAction> {
+		var actions:Array<LevelDrawAction> = [];
 		if (drawString == null || drawString == "" || drawString == ",") {
 			return actions;
 		}
@@ -92,13 +92,13 @@ class ServerLevelDecoder {
 			var data = entry.substr(1);
 			switch (kind) {
 				case "c":
-					actions.push(new DecodedDrawAction(kind, [parseHex(data)]));
+					actions.push(new LevelDrawAction(kind, [parseHex(data)]));
 				case "t":
-					actions.push(new DecodedDrawAction(kind, [parseFloatValue(data)]));
+					actions.push(new LevelDrawAction(kind, [parseFloatValue(data)]));
 				case "d":
-					actions.push(new DecodedDrawAction(kind, data.split(";").map(parseFloatValue)));
+					actions.push(new LevelDrawAction(kind, data.split(";").map(parseFloatValue)));
 				case "m":
-					actions.push(new DecodedDrawAction(kind, [], data));
+					actions.push(new LevelDrawAction(kind, [], data));
 				default:
 			}
 		}
@@ -119,8 +119,8 @@ class ServerLevelDecoder {
 		`thisBlock[3]` is a raw per-block option string; the m2/m3 path instead
 		treats trailing fields as width/height percentages, which blocks never use.
 	**/
-	private static function decodeRelative(blockString:String, segMult:Int, withOptions:Bool):Array<DecodedBlock> {
-		var blocks:Array<DecodedBlock> = [];
+	private static function decodeRelative(blockString:String, segMult:Int, withOptions:Bool):Array<LevelBlock> {
+		var blocks:Array<LevelBlock> = [];
 		if (blockString == null || blockString == "") {
 			return blocks;
 		}
@@ -145,14 +145,15 @@ class ServerLevelDecoder {
 					code = intPart(parts, 2);
 				}
 				var opts = part(parts, 3);
-				blocks.push(new DecodedBlock(ObjectCodes.resolveBlockCode(code), currentX * segMult, currentY * segMult, opts == null ? "" : opts));
+				blocks.push(LevelBlock.fromWorldPixels(ObjectCodes.resolveBlockCode(code), currentX * segMult, currentY * segMult,
+					opts == null ? "" : opts));
 			} else {
 				// In decodeObjectString2 a new object code only appears when there
 				// is no width/height pair, i.e. exactly three fields.
 				if (part(parts, 4) == null && part(parts, 3) == null && part(parts, 2) != null) {
 					code = intPart(parts, 2);
 				}
-				blocks.push(new DecodedBlock(ObjectCodes.resolveBlockCode(code), currentX * segMult, currentY * segMult));
+				blocks.push(LevelBlock.fromWorldPixels(ObjectCodes.resolveBlockCode(code), currentX * segMult, currentY * segMult));
 			}
 		}
 
@@ -160,8 +161,8 @@ class ServerLevelDecoder {
 	}
 
 	/** Port of `decodeObjectString` (m1): hex coords with a leading base offset. **/
-	private static function decodeObjectStringHex(blockString:String):Array<DecodedBlock> {
-		var blocks:Array<DecodedBlock> = [];
+	private static function decodeObjectStringHex(blockString:String):Array<LevelBlock> {
+		var blocks:Array<LevelBlock> = [];
 		if (blockString == null || blockString == "") {
 			return blocks;
 		}
@@ -176,7 +177,7 @@ class ServerLevelDecoder {
 			var code = parseHex(part(parts, 0));
 			var x = parseHex(part(parts, 1)) + baseX;
 			var y = parseHex(part(parts, 2)) + baseY;
-			blocks.push(new DecodedBlock(ObjectCodes.resolveBlockCode(code), x, y));
+			blocks.push(LevelBlock.fromWorldPixels(ObjectCodes.resolveBlockCode(code), x, y));
 		}
 
 		return blocks;
@@ -197,7 +198,7 @@ class ServerLevelDecoder {
 			var parts = entry.split(";");
 			var scaleX = part(parts, 3) == null ? 1 : parseHex(part(parts, 3)) / 100;
 			var scaleY = part(parts, 4) == null ? 1 : parseHex(part(parts, 4)) / 100;
-			objects.push(new DecodedArtObject(parseHex(part(parts, 0)), parseHex(part(parts, 1)) + baseX, parseHex(part(parts, 2)) + baseY, scaleX, scaleY));
+			objects.push(new LevelArtObject(parseHex(part(parts, 0)), parseHex(part(parts, 1)) + baseX, parseHex(part(parts, 2)) + baseY, scaleX, scaleY));
 		}
 
 		return objects;
@@ -219,7 +220,7 @@ class ServerLevelDecoder {
 			currentY += intPart(parts, 1);
 
 			if (part(parts, 2) == "t") {
-				objects.push(new DecodedTextObject(
+				objects.push(new LevelTextObject(
 					part(parts, 3) == null ? "" : part(parts, 3),
 					currentX,
 					currentY,
@@ -240,7 +241,7 @@ class ServerLevelDecoder {
 				} else if (part(parts, 2) != null) {
 					objectCode = intPart(parts, 2);
 				}
-				objects.push(new DecodedArtObject(objectCode, currentX, currentY, scaleX, scaleY));
+				objects.push(new LevelArtObject(objectCode, currentX, currentY, scaleX, scaleY));
 			}
 		}
 

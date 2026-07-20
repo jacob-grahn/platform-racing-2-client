@@ -1,14 +1,14 @@
 package pr2.level;
 
 import haxe.Json;
-import pr2.level.WorldLevel.LevelBlock;
-import pr2.level.WorldLevel.StatDefaults;
-import pr2.level.WorldLevel.TilePosition;
+import pr2.level.Level.LevelBlock;
+import pr2.level.Level.StatDefaults;
+import pr2.level.Level.TilePosition;
 
-class WorldLevelParser {
-	public static function parse(json:String):WorldLevel {
+class LevelParser {
+	public static function parse(json:String):Level {
 		var data:Dynamic = Json.parse(json);
-		var level = new WorldLevel(
+		var level = new Level(
 			requiredString(data, "id"),
 			requiredString(data, "name"),
 			requiredInt(data, "widthTiles"),
@@ -52,7 +52,7 @@ class WorldLevelParser {
 		return blocks;
 	}
 
-	private static function validate(level:WorldLevel):Void {
+	private static function validate(level:Level):Void {
 		if (level.widthTiles <= 0 || level.heightTiles <= 0) {
 			throw "world dimensions must be positive";
 		}
@@ -82,7 +82,7 @@ class WorldLevelParser {
 		}
 	}
 
-	private static function requireInBounds(position:TilePosition, level:WorldLevel, field:String):Void {
+	private static function requireInBounds(position:TilePosition, level:Level, field:String):Void {
 		if (!level.containsTile(position.x, position.y)) {
 			throw '$field ${position.x},${position.y} is outside world bounds';
 		}

@@ -4,11 +4,11 @@ import openfl.events.Event;
 import pr2.gameplay.BlockCollision;
 import pr2.gameplay.RotationMath;
 import pr2.gameplay.RotationMath.RotatedPoint;
-import pr2.level.ServerLevel;
-import pr2.level.ServerLevel.DecodedBlock;
+import pr2.level.Level;
+import pr2.level.Level.LevelBlock;
 
 typedef PhysicsEffectContext = {
-	final level:ServerLevel;
+	final level:Level;
 	final courseRotation:Int;
 	@:optional final playerX:Float;
 	@:optional final playerY:Float;
@@ -60,7 +60,7 @@ class PhysicsEffect extends Effect {
 		return grounded;
 	}
 
-	public function step(level:ServerLevel, courseRotation:Int, ?playerX:Float, ?playerY:Float, playerCrouching:Bool = false,
+	public function step(level:Level, courseRotation:Int, ?playerX:Float, ?playerY:Float, playerCrouching:Bool = false,
 			playerRemoved:Bool = false):Void {
 		velY += GRAVITY;
 		if (velY > MAX_FALL_SPEED) {
@@ -113,7 +113,7 @@ class PhysicsEffect extends Effect {
 		step(context.level, context.courseRotation, context.playerX, context.playerY, context.playerCrouching == true, context.playerRemoved == true);
 	}
 
-	private function canHitBlock(block:Null<DecodedBlock>):Bool {
+	private function canHitBlock(block:Null<LevelBlock>):Bool {
 		return block != null && (hitInactiveBlocks || isActiveBlock(block));
 	}
 
@@ -127,15 +127,15 @@ class PhysicsEffect extends Effect {
 		super.remove();
 	}
 
-	public static function blockFromPos(level:ServerLevel, posX:Int, posY:Int, rotation:Int):Null<DecodedBlock> {
+	public static function blockFromPos(level:Level, posX:Int, posY:Int, rotation:Int):Null<LevelBlock> {
 		return BlockCollision.blockFromPos(level, posX, posY, rotation);
 	}
 
-	public static function isActiveBlock(block:Null<DecodedBlock>):Bool {
+	public static function isActiveBlock(block:Null<LevelBlock>):Bool {
 		return BlockCollision.isActiveBlock(block);
 	}
 
-	public static function rotatedBlockPos(block:DecodedBlock, rot:Int):RotatedPoint {
+	public static function rotatedBlockPos(block:LevelBlock, rot:Int):RotatedPoint {
 		return BlockCollision.rotatedBlockPos(block, rot);
 	}
 

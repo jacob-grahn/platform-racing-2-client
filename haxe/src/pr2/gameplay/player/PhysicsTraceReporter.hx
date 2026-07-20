@@ -4,7 +4,7 @@ package pr2.gameplay.player;
 import js.Browser;
 #end
 import pr2.gameplay.player.LocalPlayerControllerTypes.PhysicsBlockTrace;
-import pr2.level.WorldLevel.LevelBlock;
+import pr2.level.Level.LevelBlock;
 
 /** Formats deterministic physics trace records without burdening movement code. */
 @:access(pr2.gameplay.player.LocalPlayerController)

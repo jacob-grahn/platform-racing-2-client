@@ -8,7 +8,7 @@ import openfl.utils.AssetType;
 import openfl.utils.Assets;
 import pr2.level.BlockType;
 import pr2.level.ObjectCodes;
-import pr2.level.ServerLevelRenderer;
+import pr2.level.LevelRenderer;
 import pr2.page.EditorBlockOptions;
 import pr2.runtime.SvgAsset;
 
@@ -333,7 +333,7 @@ class EditorBlockObject extends Sprite {
 			teleportBackground.name = "teleportColor";
 			holder.addChild(teleportBackground);
 		}
-		var data = ServerLevelRenderer.blockBitmapData(code);
+		var data = LevelRenderer.blockBitmapData(code);
 		if (data != null) {
 			var bitmap = new Bitmap(data);
 			bitmap.width = LevelEditor.segSize;
@@ -341,7 +341,7 @@ class EditorBlockObject extends Sprite {
 			bitmap.smoothing = false;
 			holder.addChild(bitmap);
 		} else throw 'Missing authored block bitmap for code $code';
-		var rotation = ServerLevelRenderer.arrowOverlayRotation(code);
+		var rotation = LevelRenderer.arrowOverlayRotation(code);
 		if (rotation != null) {
 			var pivot = new Sprite();
 			pivot.addChild(new pr2.level.ArrowBlockView());

@@ -8,19 +8,19 @@ import openfl.geom.Matrix;
 import openfl.text.TextField;
 import openfl.text.TextFieldAutoSize;
 import openfl.text.TextFormat;
-import pr2.level.ServerLevel.DecodedArtObject;
-import pr2.level.ServerLevel.DecodedDrawAction;
-import pr2.level.ServerLevel.DecodedTextObject;
-import pr2.level.ServerLevelArtCursor.ArtStrokeState;
-import pr2.level.ServerLevelArtRasterizer.ArtRasterBudget;
-import pr2.level.ServerLevelArtRasterizer.ArtRasterTiles;
+import pr2.level.Level.LevelArtObject;
+import pr2.level.Level.LevelDrawAction;
+import pr2.level.Level.LevelTextObject;
+import pr2.level.LevelArtCursor.ArtStrokeState;
+import pr2.level.LevelArtRasterizer.ArtRasterBudget;
+import pr2.level.LevelArtRasterizer.ArtRasterTiles;
 import pr2.runtime.FontResolver;
 
 /** Builds decoded stroke, stamp, and text display objects for server art layers. */
-class ServerLevelArtFactory {
-	public static function drawLayerStrokes(brushCanvas:Sprite, actions:Array<DecodedDrawAction>):Void {
+class LevelArtFactory {
+	public static function drawLayerStrokes(brushCanvas:Sprite, actions:Array<LevelDrawAction>):Void {
 		var color = 0x000000;
-		var size = ServerLevelRenderer.DEFAULT_ART_BRUSH_SIZE;
+		var size = LevelRenderer.DEFAULT_ART_BRUSH_SIZE;
 		var mode = "draw";
 		var drawing = false;
 		brushCanvas.graphics.lineStyle(size, color);
@@ -39,7 +39,7 @@ class ServerLevelArtFactory {
 		}
 	}
 
-	public static function renderLayerStrokes(rasterCanvas:Sprite, actions:Array<DecodedDrawAction>, ?budget:ArtRasterBudget):Void {
+	public static function renderLayerStrokes(rasterCanvas:Sprite, actions:Array<LevelDrawAction>, ?budget:ArtRasterBudget):Void {
 		var tiles = new ArtRasterTiles(rasterCanvas, budget);
 		tiles.applyAll(actions);
 		tiles.attachQueuedTiles(1000000);
@@ -64,7 +64,7 @@ class ServerLevelArtFactory {
 		if (bounds.width <= 0 || bounds.height <= 0) {
 			return;
 		}
-		var tile = ServerLevelRenderer.ART_RASTER_TILE_SIZE;
+		var tile = LevelRenderer.ART_RASTER_TILE_SIZE;
 		var tileY = Math.floor(bounds.y / tile) * tile;
 		var endX = bounds.x + bounds.width;
 		var endY = bounds.y + bounds.height;
@@ -92,7 +92,7 @@ class ServerLevelArtFactory {
 		}
 	}
 
-	public static function drawStrokeAction(container:Sprite, color:Int, size:Float, mode:String, action:DecodedDrawAction):ArtStrokeState {
+	public static function drawStrokeAction(container:Sprite, color:Int, size:Float, mode:String, action:LevelDrawAction):ArtStrokeState {
 		switch (action.kind) {
 			case "c":
 				color = Std.int(action.values[0]);
@@ -122,19 +122,19 @@ class ServerLevelArtFactory {
 		return {color: color, size: size, mode: mode};
 	}
 
-	public static function drawLayerObjects(container:Sprite, objects:Array<DecodedArtObject>, layerScale:Float):Void {
+	public static function drawLayerObjects(container:Sprite, objects:Array<LevelArtObject>, layerScale:Float):Void {
 		for (object in objects) {
 			addLayerObject(container, object, layerScale);
 		}
 	}
 
-	public static function drawLayerTexts(container:Sprite, texts:Array<DecodedTextObject>, layerScale:Float):Void {
+	public static function drawLayerTexts(container:Sprite, texts:Array<LevelTextObject>, layerScale:Float):Void {
 		for (text in texts) {
 			addLayerText(container, text, layerScale);
 		}
 	}
 
-	public static function addLayerObject(container:Sprite, object:DecodedArtObject, layerScale:Float):Void {
+	public static function addLayerObject(container:Sprite, object:LevelArtObject, layerScale:Float):Void {
 		var display = Objects.getFromCode(object.code);
 		if (display == null) {
 			return;
@@ -148,7 +148,7 @@ class ServerLevelArtFactory {
 		container.addChild(display);
 	}
 
-	public static function addLayerText(container:Sprite, text:DecodedTextObject, layerScale:Float):Void {
+	public static function addLayerText(container:Sprite, text:LevelTextObject, layerScale:Float):Void {
 		var field = new TextField();
 		var format = new TextFormat(FontResolver.resolve("Verdana"), 18, text.color);
 		format.leading = 4;

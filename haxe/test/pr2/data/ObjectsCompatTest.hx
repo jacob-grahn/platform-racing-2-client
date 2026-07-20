@@ -6,8 +6,8 @@ import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.text.TextField;
 import pr2.level.ObjectCodes;
-import pr2.level.ServerLevel.DecodedArtObject;
-import pr2.level.ServerLevelRenderer;
+import pr2.level.Level.LevelArtObject;
+import pr2.level.LevelRenderer;
 import pr2.runtime.FontResolver;
 import pr2.runtime.PR2MovieClip;
 
@@ -140,8 +140,8 @@ class ObjectsCompatTest {
 
 	private static function testRendererUsesObjectFactoryForAllStamps():Void {
 		var container = new Sprite();
-		ServerLevelRenderer.addLayerObject(container, new DecodedArtObject(ObjectCodes.STAMP_CACTUS, 12, 34, 1.5, 0.5), 2);
-		ServerLevelRenderer.addLayerObject(container, new DecodedArtObject(ObjectCodes.STAMP_BUILDING1, 20, 40), 1);
+		LevelRenderer.addLayerObject(container, new LevelArtObject(ObjectCodes.STAMP_CACTUS, 12, 34, 1.5, 0.5), 2);
+		LevelRenderer.addLayerObject(container, new LevelArtObject(ObjectCodes.STAMP_BUILDING1, 20, 40), 1);
 		assertEquals(2, container.numChildren, "renderer mounts stamps that lack raster paths");
 		assertEquals("Cactus", container.getChildAt(0).name, "renderer uses cactus linkage");
 		assertEquals(24.0, container.getChildAt(0).x, "renderer scales cactus x");

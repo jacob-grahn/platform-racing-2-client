@@ -4,7 +4,7 @@ import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.geom.ColorTransform;
 import pr2.level.ObjectCodes;
-import pr2.level.ServerLevelRenderer;
+import pr2.level.LevelRenderer;
 import pr2.runtime.SvgAsset;
 
 /** Owns editor background display objects, asynchronous loading, and tinting. */
@@ -53,9 +53,9 @@ class LevelEditorBackgroundController {
 			return;
 		}
 		if (code == ObjectCodes.BG5Code) {
-			owner.artBackgroundContainer.addChild(ServerLevelRenderer.createBg5CircleGrid());
+			owner.artBackgroundContainer.addChild(LevelRenderer.createBg5CircleGrid());
 		}
-		var assetPath = ServerLevelRenderer.artBackgroundAssetPath(code);
+		var assetPath = LevelRenderer.artBackgroundAssetPath(code);
 		if (assetPath == "") {
 			applyArtBackgroundTransform(code);
 			return;

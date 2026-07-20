@@ -3,7 +3,7 @@ package pr2.gameplay;
 /**
 	AS3-spec transcript test for `LevelConfig`, the config-setter half of Flash
 	`page.GamePage`. The geometry decode (read modes m1..m4) is covered by
-	`ServerLevelDecoderTest`; this checks the metadata setters: item-code
+	`LevelDecoderTest`; this checks the metadata setters: item-code
 	resolution, banned hats, gameMode `eggs`->`egg`, cowboy-chance clamping,
 	gravity string formatting, max-time clamping, and credits splitting, plus the
 	`setVariables` ingest order against a representative level var map.

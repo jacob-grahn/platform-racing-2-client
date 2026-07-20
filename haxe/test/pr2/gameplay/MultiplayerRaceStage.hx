@@ -4,7 +4,7 @@ import openfl.events.Event;
 import pr2.effects.BlockPiece;
 import pr2.gameplay.player.LocalPlayerInput;
 import pr2.level.BlockType;
-import pr2.level.ServerLevelDecoder;
+import pr2.level.LevelDecoder;
 import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
 import pr2.net.ServerLevelData;
@@ -31,7 +31,7 @@ class MultiplayerRaceStage {
 	public function new(clientCount:Int, dataString:String, gravity:Float = 1) {
 		for (i in 0...clientCount) {
 			var handler = new CommandHandler();
-			var level = ServerLevelDecoder.decode(dataString);
+			var level = LevelDecoder.decode(dataString);
 			var vars:Map<String, String> = new Map();
 			vars.set("level_id", "9001");
 			vars.set("title", "Multiplayer Stage");
@@ -50,7 +50,7 @@ class MultiplayerRaceStage {
 	public function placeAllOnFirstBlock(type:BlockType):Void {
 		for (client in clients) {
 			var target = null;
-			for (block in client.course.worldLevel.blocks) {
+			for (block in client.course.level.blocks) {
 				if (block.type == type) {
 					target = block;
 					break;
@@ -60,8 +60,8 @@ class MultiplayerRaceStage {
 				throw 'multiplayer stage has no $type block';
 			}
 			client.course.localCharacter.setControllerPosition(
-				target.x * client.course.worldLevel.tileSize + client.course.worldLevel.tileSize / 2,
-				target.y * client.course.worldLevel.tileSize
+				target.x * client.course.level.tileSize + client.course.level.tileSize / 2,
+				target.y * client.course.level.tileSize
 			);
 		}
 	}

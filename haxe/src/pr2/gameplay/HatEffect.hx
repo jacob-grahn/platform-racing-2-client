@@ -3,7 +3,7 @@ package pr2.gameplay;
 import openfl.display.DisplayObject;
 import openfl.display.Sprite;
 import openfl.geom.ColorTransform;
-import pr2.level.ServerLevel;
+import pr2.level.Level;
 import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
 
@@ -66,7 +66,7 @@ class HatEffect {
 		this.commandHandler.defineCommand('removeHat$id', function(_:Array<String>):Void remove());
 	}
 
-	public function step(level:ServerLevel, courseRotation:Int, ?playerX:Float, ?playerY:Float, playerCrouching:Bool = false,
+	public function step(level:Level, courseRotation:Int, ?playerX:Float, ?playerY:Float, playerCrouching:Bool = false,
 			playerRemoved:Bool = false, donePlaying:Bool = false):Void {
 		velY += 0.2;
 		if (velY > 8) {

@@ -5,10 +5,9 @@ import openfl.events.Event;
 import pr2.gameplay.MiniMapDot;
 import pr2.gameplay.RemoteBlockActivation;
 import pr2.level.ObjectCodes;
-import pr2.level.ServerLevel;
-import pr2.level.ServerLevel.DecodedBlock;
-import pr2.level.ServerLevelWorldAdapter;
-import pr2.level.ServerLevelRenderer;
+import pr2.level.Level;
+import pr2.level.Level.LevelBlock;
+import pr2.level.LevelRenderer;
 import pr2.net.CommandHandler;
 
 class RemoteCharacterConsumeTest {
@@ -136,12 +135,12 @@ class RemoteCharacterConsumeTest {
 	}
 
 	private static function testRemoteBlockTouchesActivateRealMapEffects():Void {
-		var arrow = new DecodedBlock(ObjectCodes.BLOCK_ARROW_RIGHT, 0, 0);
-		var vanish = new DecodedBlock(ObjectCodes.BLOCK_VANISH, 30, 0);
-		var water = new DecodedBlock(ObjectCodes.BLOCK_WATER, 60, 0);
-		var level = new ServerLevel(0xFFFFFF, [arrow, vanish, water]);
-		var fixture = ServerLevelWorldAdapter.convert(level, 0.7);
-		var renderer = new ServerLevelRenderer(level, arrow);
+		var arrow = LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_ARROW_RIGHT, 0, 0);
+		var vanish = LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_VANISH, 30, 0);
+		var water = LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_WATER, 60, 0);
+		var fixture = Level.fromDecoded(0xFFFFFF, [arrow, vanish, water]);
+		fixture.configureRuntime("fixture", "Fixture", 0.7);
+		var renderer = new LevelRenderer(fixture, arrow);
 		var activation = new RemoteBlockActivation(fixture, renderer);
 
 		var remote = new RemoteCharacter(4, null, "Remote", 1, 1, 1, 1, "0", new CommandHandler());

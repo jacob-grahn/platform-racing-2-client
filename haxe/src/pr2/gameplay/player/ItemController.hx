@@ -7,7 +7,7 @@ import pr2.gameplay.player.BlockVisualEvent.BlockVisualEventKind;
 import pr2.gameplay.player.LocalPlayerControllerTypes.PendingMinePlacement;
 import pr2.gameplay.player.LocalPlayerControllerTypes.PendingProjectileDamage;
 import pr2.level.BlockType;
-import pr2.level.WorldLevel.LevelBlock;
+import pr2.level.Level.LevelBlock;
 
 /** Executes held-item behavior while the controller retains authoritative movement state. */
 @:access(pr2.gameplay.player.LocalPlayerController)

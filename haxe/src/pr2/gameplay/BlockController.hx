@@ -5,8 +5,8 @@ import pr2.gameplay.player.LocalPlayerBlockStateStore;
 import pr2.gameplay.player.LocalPlayerBlockStateStore.LocalPlayerBlockState;
 import pr2.gameplay.player.LocalPlayerController;
 import pr2.level.BlockType;
-import pr2.level.WorldLevel;
-import pr2.level.WorldLevel.LevelBlock;
+import pr2.level.Level;
+import pr2.level.Level.LevelBlock;
 import pr2.util.FlashRandom;
 
 enum MoveBlockPhase {
@@ -26,7 +26,7 @@ class BlockController {
 	public static inline var MOVE_PREVIEW_MS:Int = 1000;
 	public static inline var MOVE_INTERVAL_MS:Int = 5000;
 
-	private final level:WorldLevel;
+	private final level:Level;
 	private final clock:Void->Float;
 	private var owner:LocalPlayerController;
 	private final blockStates:LocalPlayerBlockStateStore = new LocalPlayerBlockStateStore();
@@ -37,10 +37,10 @@ class BlockController {
 	private var moveStartTimeMs:Float = 0;
 	private var moveCount:Int = 0;
 	private var moveRandom:FlashRandom = new FlashRandom(1);
-	public var onBlockRemoved:Null<LevelBlock->Void> = null;
+	public var onBlockRemoved:Null<(LevelBlock, Int)->Void> = null;
 	public var onBlockAdded:Null<LevelBlock->Void> = null;
 
-	public function new(level:WorldLevel, ?clock:Void->Float) {
+	public function new(level:Level, ?clock:Void->Float) {
 		this.level = level;
 		this.clock = clock == null ? function():Float return haxe.Timer.stamp() * 1000 : clock;
 	}
@@ -269,7 +269,7 @@ class BlockController {
 		state.evicted = true;
 		level.blocks.splice(index, 1);
 		if (onBlockRemoved != null) {
-			onBlockRemoved(block);
+			onBlockRemoved(block, index);
 		}
 		return true;
 	}

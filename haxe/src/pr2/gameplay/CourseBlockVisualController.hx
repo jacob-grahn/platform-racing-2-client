@@ -4,7 +4,6 @@ import haxe.crypto.Md5;
 import pr2.effects.BlockPiece;
 import pr2.gameplay.player.BlockVisualEvent;
 import pr2.gameplay.player.BlockVisualEvent.BlockVisualEventKind;
-import pr2.level.ServerLevelWorldAdapter;
 import pr2.net.LobbySocket;
 
 /** Applies authoritative block-runtime events to rendering, sound, and networking. */
@@ -71,7 +70,7 @@ class CourseBlockVisualController {
 					owner.playSuperJumpSound();
 				case PushBlockMove:
 					if (event.toTileX != null && event.toTileY != null) {
-						owner.moveRuntimeBlock(
+						owner.levelRenderer.moveBlockDisplay(
 							worldXOf(event),
 							worldYOf(event),
 							worldTileX(event.toTileX),
@@ -88,33 +87,28 @@ class CourseBlockVisualController {
 	}
 
 	public function syncMoveBlockDisplays():Void {
-		if (owner.levelRenderer == null || owner.worldLevel == null) {
+		if (owner.levelRenderer == null) {
 			return;
 		}
-		var worldBlocks = owner.worldLevel.blocks;
-		for (i in 0...worldBlocks.length) {
-			var worldBlock = worldBlocks[i];
-			if (worldBlock.type != pr2.level.BlockType.Move || i >= owner.level.blocks.length) {
+		for (worldBlock in owner.level.blocks) {
+			if (worldBlock.type != pr2.level.BlockType.Move) {
 				continue;
 			}
-			var currentWorldX = worldBlock.x * ServerLevelWorldAdapter.TILE_SIZE;
-			var currentWorldY = worldBlock.y * ServerLevelWorldAdapter.TILE_SIZE;
-			var displayed = owner.displayedMoveBlockPositions.get(i);
+			var currentWorldX = worldBlock.worldX;
+			var currentWorldY = worldBlock.worldY;
+			var displayed = owner.displayedMoveBlockPositions.get(worldBlock);
 			if (displayed == null) {
-				// World conversion omits spawn-marker blocks, so its indices do not
-				// correspond to ServerLevel.blocks. Capture this move block's own initial
-				// coordinate rather than moving whichever decoded block shares its index.
-				owner.displayedMoveBlockPositions.set(i, {
+				owner.displayedMoveBlockPositions.set(worldBlock, {
 					worldX: currentWorldX,
 					worldY: currentWorldY,
 					originalWorldX: currentWorldX,
 					originalWorldY: currentWorldY
 				});
-				displayed = owner.displayedMoveBlockPositions.get(i);
+				displayed = owner.displayedMoveBlockPositions.get(worldBlock);
 			}
 			if (displayed.worldX != currentWorldX || displayed.worldY != currentWorldY) {
-				owner.moveRuntimeBlock(displayed.worldX, displayed.worldY, currentWorldX, currentWorldY);
-				owner.displayedMoveBlockPositions.set(i, {
+				owner.levelRenderer.moveBlockDisplay(displayed.worldX, displayed.worldY, currentWorldX, currentWorldY);
+				owner.displayedMoveBlockPositions.set(worldBlock, {
 					worldX: currentWorldX,
 					worldY: currentWorldY,
 					originalWorldX: displayed.originalWorldX,
@@ -125,7 +119,7 @@ class CourseBlockVisualController {
 	}
 
 	public function syncMoveBlockArrows():Void {
-		if (owner.levelRenderer == null || owner.worldLevel == null || owner.player == null) {
+		if (owner.levelRenderer == null || owner.player == null) {
 			return;
 		}
 		var current:Map<String, Bool> = new Map();
@@ -133,8 +127,8 @@ class CourseBlockVisualController {
 		for (tileKey in directions.keys()) {
 			var tileX = tileKeyX(tileKey);
 			var tileY = tileKeyY(tileKey);
-			var worldX = tileX * ServerLevelWorldAdapter.TILE_SIZE;
-			var worldY = tileY * ServerLevelWorldAdapter.TILE_SIZE;
+			var worldX = tileX * owner.level.tileSize;
+			var worldY = tileY * owner.level.tileSize;
 			var worldKey = '$worldX,$worldY';
 			current.set(worldKey, true);
 			owner.levelRenderer.showMoveBlockArrow(worldX, worldY, directions.get(tileKey));
@@ -164,8 +158,8 @@ class CourseBlockVisualController {
 	}
 
 	public function applyBlockVisual(tileX:Int, tileY:Int, alpha:Float, multiplier:Float, iceOverlayAlpha:Float):Void {
-		var worldX = tileX * ServerLevelWorldAdapter.TILE_SIZE;
-		var worldY = tileY * ServerLevelWorldAdapter.TILE_SIZE;
+		var worldX = tileX * owner.level.tileSize;
+		var worldY = tileY * owner.level.tileSize;
 		owner.levelRenderer.setBlockAlpha(worldX, worldY, alpha);
 		owner.levelRenderer.setBlockColorMultiplier(worldX, worldY, multiplier);
 		owner.levelRenderer.setBlockIceOverlayAlpha(worldX, worldY, iceOverlayAlpha);
@@ -203,25 +197,25 @@ class CourseBlockVisualController {
 		var parts:Array<String> = [];
 		for (i in 0...finishes.length) {
 			var block = finishes[i];
-			parts.push('{"id":${i + 1},"x":${block.x + 15},"y":${block.y + 15}}');
+			parts.push('{"id":${i + 1},"x":${block.worldX + 15},"y":${block.worldY + 15}}');
 		}
 		return "[" + parts.join(",") + "]";
 	}
 
 	private inline function worldXOf(event:BlockVisualEvent):Int {
-		return event.tileX * ServerLevelWorldAdapter.TILE_SIZE;
+		return event.tileX * owner.level.tileSize;
 	}
 
 	private inline function worldYOf(event:BlockVisualEvent):Int {
-		return event.tileY * ServerLevelWorldAdapter.TILE_SIZE;
+		return event.tileY * owner.level.tileSize;
 	}
 
 	private inline function worldTileX(tileX:Int):Int {
-		return tileX * ServerLevelWorldAdapter.TILE_SIZE;
+		return tileX * owner.level.tileSize;
 	}
 
 	private inline function worldTileY(tileY:Int):Int {
-		return tileY * ServerLevelWorldAdapter.TILE_SIZE;
+		return tileY * owner.level.tileSize;
 	}
 
 	public function emitLocalBlockActivation(event:BlockVisualEvent):Void {
@@ -261,10 +255,7 @@ class CourseBlockVisualController {
 	}
 
 	public function recordCrumbleActivation(tileX:Int, tileY:Int, payload:String):Void {
-		if (owner.worldLevel == null) {
-			return;
-		}
-		var block = owner.worldLevel.blockAt(tileX, tileY);
+		var block = owner.level.blockAt(tileX, tileY);
 		if (block != null && block.type == pr2.level.BlockType.Crumble) {
 			owner.debugLastCrumbleForce = payload;
 			owner.debugCrumbleActivations++;

@@ -493,7 +493,7 @@ class CharacterView extends Sprite {
 		item.x = -22;
 		item.y = -22;
 		item.scaleX = item.scaleY = 2;
-		var data = pr2.level.ServerLevelRenderer.blockBitmapData(pr2.level.ObjectCodes.BLOCK_VANISH);
+		var data = pr2.level.LevelRenderer.blockBitmapData(pr2.level.ObjectCodes.BLOCK_VANISH);
 		if (data != null) {
 			var bitmap = new Bitmap(data);
 			bitmap.width = bitmap.height = 22;

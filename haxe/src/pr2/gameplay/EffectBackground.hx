@@ -5,7 +5,7 @@ import openfl.display.Sprite;
 import openfl.utils.Assets;
 import pr2.display.Removable;
 import pr2.audio.SoundEffects;
-import pr2.level.ServerLevelRenderer;
+import pr2.level.LevelRenderer;
 import pr2.net.CommandHandler;
 
 /**
@@ -125,7 +125,7 @@ class EffectBackground extends Sprite {
 	}
 
 	private static function mineTileWorld(world:Int):Int {
-		return Std.int(Math.round((world - ServerLevelRenderer.TILE_SIZE / 2) / ServerLevelRenderer.TILE_SIZE)) * ServerLevelRenderer.TILE_SIZE;
+		return Std.int(Math.round((world - LevelRenderer.TILE_SIZE / 2) / LevelRenderer.TILE_SIZE)) * LevelRenderer.TILE_SIZE;
 	}
 
 	private static function parseIntArg(args:Array<String>, index:Int):Int {
