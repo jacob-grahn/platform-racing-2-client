@@ -54,6 +54,7 @@ class LocalPlayerControllerTest {
 		testCheeseHatBreaksAdjacentHeadLevelCrumbleOnSideHit();
 		testStandingOnVanishBlockFallsThroughAfterFadeOut();
 		testVanishBlockReappearsAfterDelayWhenUnoccupied();
+		testVanishCeilingReappearsWhileChargingSuperJump();
 		testMineBlockLaunchesPlayerAndRemovesItself();
 		testDeathmatchMineHitRemovesLifeAndFinishesAtZero();
 		testBumpingItemBlockGrantsConfiguredItem();
@@ -920,6 +921,34 @@ class LocalPlayerControllerTest {
 			}
 		}
 		assertEquals(true, bumpedVanish, "reappeared vanish block collides again");
+	}
+
+	private static function testVanishCeilingReappearsWhileChargingSuperJump():Void {
+		var player = new LocalCharacter(lowItemCeilingLevel(BlockType.Vanish));
+		assertEquals(true, player.stateSnapshot().crouching, "vanish ceiling initially forces crouch");
+
+		player.step(new LocalPlayerInput(false, false, true));
+		for (_ in 0...11) {
+			player.step(new LocalPlayerInput());
+		}
+		assertClose(0, player.blockAlphaAt(2, 8), "bumped vanish ceiling fades out");
+		assertEquals(false, player.stateSnapshot().crouching, "removed vanish ceiling releases crouch");
+
+		for (_ in 0...15) {
+			player.step(new LocalPlayerInput(false, false, false, true));
+		}
+		assertEquals("superJump", player.stateSnapshot().animation, "holding down starts charging a super jump");
+
+		var reappeared = false;
+		for (_ in 0...55) {
+			player.step(new LocalPlayerInput(false, false, false, true));
+			if (player.blockAlphaAt(2, 8) > 0) {
+				reappeared = true;
+				break;
+			}
+		}
+		assertEquals(true, reappeared, "Flash segment occupancy lets a vanish ceiling reappear during super-jump charge");
+		assertClose(0.2, player.blockAlphaAt(2, 8), "vanish ceiling restarts at one fifth alpha");
 	}
 
 	private static function testMineBlockLaunchesPlayerAndRemovesItself():Void {

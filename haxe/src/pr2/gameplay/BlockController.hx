@@ -381,18 +381,30 @@ class BlockController {
 	}
 
 	public function playerOccupiesTile(targetTileX:Int, targetTileY:Int):Bool {
-		var left = owner.tileIndex(owner.x - LocalPlayerController.HALF_WIDTH);
-		var right = owner.tileIndex(owner.x + LocalPlayerController.HALF_WIDTH);
-		var top = owner.tileIndex(owner.y - (owner.crouching ? LocalPlayerController.CROUCHING_HEIGHT : LocalPlayerController.STANDING_HEIGHT));
-		var bottom = owner.tileIndex(owner.y);
-		for (tileX in left...right + 1) {
-			for (tileY in top...bottom + 1) {
-				if (tileX == targetTileX && tileY == targetTileY) {
-					return true;
-				}
-			}
+		// Map.characterOccupiesSpace checks Character.seg1/seg2, not the
+		// character's collision bounds. Character.updateSegs always defines those
+		// as the feet tile and the tile immediately above it, even while crouched.
+		var baseX = owner.tileIndex(owner.x);
+		var baseY = owner.tileIndex(owner.y);
+		var seg1 = RotationMath.rotatePoint(baseX, baseY, owner.courseRotation);
+		var seg1X = seg1.x;
+		var seg1Y = seg1.y;
+		var seg2X = seg1X;
+		var seg2Y = seg1Y - 1;
+		if (owner.courseRotation == 90) {
+			seg1X--;
+			seg2X--;
+		} else if (Math.abs(owner.courseRotation) == 180) {
+			seg1X--;
+			seg2X--;
+			seg1Y++;
+			seg2Y++;
+		} else if (owner.courseRotation == -90) {
+			seg1Y++;
+			seg2Y++;
 		}
-		return false;
+		return (seg1X == targetTileX && seg1Y == targetTileY)
+			|| (seg2X == targetTileX && seg2Y == targetTileY);
 	}
 
 }
