@@ -18,10 +18,9 @@
     { "time": 13.5,  "action": "typeText", "text": "haxe-port-test" },
     { "time": 14.5,  "action": "click",    "x": 232, "y": 300, "_note": "Log In (name/pass form button)" },
 
-    { "time": 21.0,  "action": "click", "x": 538, "y": 8,   "_note": "lobby: favorites (heart) tab, far top-right" },
-
-    { "time": 23.0,  "action": "click-display-object", "name": "levelSlot", "index": 0, "x": 255, "y": 70, "timeout": 30, "_note": "OpenFL waits for the favorites response and clicks the first rendered slot; Flash uses the stage-coordinate fallback" },
-    { "time": 24.0,  "action": "click-display-object", "name": "play_bt", "x": 160, "y": 85, "timeout": 15, "_note": "OpenFL clicks as soon as the live Play button exists; Flash uses the stage-coordinate fallback" },
+    { "time": 14.5,  "action": "click-display-object", "name": "favoritesTab", "x": 538, "y": 8, "timeout": 5, "fallbackDelay": 5, "_note": "OpenFL waits up to five seconds for the authenticated lobby and clicks its live Favorites tab; Flash waits the same five seconds before using the stage-coordinate fallback" },
+    { "time": 14.5,  "action": "click-display-object", "name": "levelSlot", "index": 0, "x": 255, "y": 70, "timeout": 5, "fallbackDelay": 5, "_note": "OpenFL waits up to five seconds for the favorites response and clicks the first rendered slot; Flash waits the same five seconds before using the stage-coordinate fallback" },
+    { "time": 14.5,  "action": "click-display-object", "name": "play_bt", "x": 160, "y": 85, "timeout": 5, "fallbackDelay": 5, "_note": "OpenFL waits up to five seconds for the live Play button; Flash waits the same five seconds before using the stage-coordinate fallback" },
 
     { "time": 37.0,  "action": "shot", "out": "test/output/dmjv-{target}/09-racing.png", "_note": "race underway after countdown" },
     { "time": 140.0, "action": "shot", "out": "test/output/dmjv-{target}/10-complete.png", "_note": "Race Complete! popup should be visible; includes timing headroom for slower machines" },

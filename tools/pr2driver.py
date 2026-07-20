@@ -400,6 +400,9 @@ def cmd_sequence(script_path):
                 # Shared parity sequences therefore provide authored stage
                 # coordinates as a fallback while OpenFL resolves the named live
                 # display object and clicks its measured center.
+                fallback_delay = _parse_seconds(step.get("fallbackDelay", 0))
+                if fallback_delay > 0:
+                    time.sleep(fallback_delay)
                 cmd_click(step["x"], step["y"])
             elif action == "keyDown":
                 cmd_key_down(step["key"])

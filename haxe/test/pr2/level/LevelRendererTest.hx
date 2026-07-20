@@ -268,10 +268,12 @@ class LevelRendererTest {
 	}
 
 	private static function testRuntimeBlockAppendPreservesDrawingCompletion():Void {
-		var initial = new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 10020, 10050);
-		var level = new TestLevel(0xFFFFFF, [initial]);
-		var renderer = new LevelRenderer(level, initial);
-		var mine = new DecodedBlock(ObjectCodes.BLOCK_MINE, 10050, 10050);
+		// Flash records start blocks as spawn markers without occupying Map.blockArray.
+		// Runtime blocks are therefore allowed to occupy the marker's exact tile.
+		var start = new DecodedBlock(ObjectCodes.BLOCK_START1, 10020, 10050);
+		var level = new TestLevel(0xFFFFFF, [start]);
+		var renderer = new LevelRenderer(level, start);
+		var mine = new DecodedBlock(ObjectCodes.BLOCK_MINE, start.worldX, start.worldY);
 
 		assertEquals(true, renderer.isDrawingComplete(), "renderer completes before a runtime mine is appended");
 		level.blocks.push(mine);
@@ -279,7 +281,7 @@ class LevelRendererTest {
 
 		assertEquals(2, renderer.drawnBlockCount(), "runtime mine advances the completed decode cursor");
 		assertEquals(true, renderer.isDrawingComplete(), "runtime mine does not reopen the loading/free-camera state");
-		assertEquals(1.0, renderer.blockAlphaAt(mine.worldX, mine.worldY), "runtime mine is mounted immediately");
+		assertEquals(1.0, renderer.blockAlphaAt(mine.worldX, mine.worldY), "runtime mine mounts over the non-occupying start marker");
 	}
 
 	private static function testViewWindowRefreshesBeforeLeftEdgeExposure():Void {

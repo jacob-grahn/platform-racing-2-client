@@ -1782,8 +1782,8 @@ class LobbyServicesTest {
 		var authoredBrick = Lambda.find(LevelDecoder.decode(Std.string(sourceData)).blocks,
 			function(block) return block.code == ObjectCodes.BLOCK_BRICK);
 		assertNotNull(authoredBrick, "restart fixture contains its authored brick");
-		var authoredBrickTileX = Std.int(Math.floor(authoredBrick.x / LevelRenderer.TILE_SIZE));
-		var authoredBrickTileY = Std.int(Math.floor(authoredBrick.y / LevelRenderer.TILE_SIZE));
+		var authoredBrickTileX = authoredBrick.x;
+		var authoredBrickTileY = authoredBrick.y;
 		assertEquals(true, testCourse.course.localCharacter.applyRemoteBlockActivation(authoredBrickTileX, authoredBrickTileY),
 			"restart fixture destroys an authored block in the live map");
 		assertEquals(true, testCourse.course.placeRuntimeMine(960, 960), "restart fixture adds a runtime-only mine");

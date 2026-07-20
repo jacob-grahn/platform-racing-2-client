@@ -203,7 +203,11 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		lastSafeY = y;
 		standingTileX = level.playerStart.x;
 		standingTileY = level.playerStart.y + 1;
-		processBlocks(new LocalPlayerInput());
+		// Standalone controllers begin on their authored tile and need an initial
+		// collision pass. Course-owned controllers are repositioned onto a specific
+		// start marker immediately after construction; processing here would consume
+		// overlapping one-shot blocks (notably Don't Move JV's mine) before that reset.
+		if (courseBlockController == null) processBlocks(new LocalPlayerInput());
 	}
 
 	public function setPosition(px:Float, py:Float):Void {

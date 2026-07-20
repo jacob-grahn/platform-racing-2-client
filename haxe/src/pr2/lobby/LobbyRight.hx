@@ -38,6 +38,7 @@ class LobbyRight extends LobbySide {
 		var newTab = new LobbyTab(clickNew, "Newest");
 		searchTab = new LobbyTab(clickSearch, "Search");
 		var favsTab = new LobbyTab(clickFavs, "♥");
+		favsTab.name = "favoritesTab";
 
 		var tabsArray = [campaignTab, atbTab, wbTab, newTab, searchTab];
 		var tabKeys = ["campaign", "best", "best_week", "newest", "search"];

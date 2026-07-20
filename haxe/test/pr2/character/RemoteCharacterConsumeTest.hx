@@ -148,7 +148,7 @@ class RemoteCharacterConsumeTest {
 
 		remote.setPos(15, -1);
 		remote.stepFrame();
-		assertEquals(2, renderer.arrowFrameAt(arrow.x, arrow.y), "remote touch animates arrow block");
+		assertEquals(2, renderer.arrowFrameAt(arrow.worldX, arrow.worldY), "remote touch animates arrow block");
 		var world = Std.downcast(renderer.getChildAt(1), Sprite);
 		var blockLayer = Std.downcast(world.getChildAt(0), Sprite);
 		var blockDisplay = Std.downcast(blockLayer.getChildAt(0), Sprite);
@@ -157,15 +157,15 @@ class RemoteCharacterConsumeTest {
 		for (_ in 0...7) {
 			arrowTimeline.dispatchEvent(new Event(Event.ENTER_FRAME));
 		}
-		assertEquals(1, renderer.arrowFrameAt(arrow.x, arrow.y), "remote arrow activation leaves the overlay stopped");
+		assertEquals(1, renderer.arrowFrameAt(arrow.worldX, arrow.worldY), "remote arrow activation leaves the overlay stopped");
 
 		remote.setPos(45, -1);
 		remote.stepFrame();
-		assertEquals(0.0, renderer.blockAlphaAt(vanish.x, vanish.y), "remote touch activates vanish block");
+		assertEquals(0.0, renderer.blockAlphaAt(vanish.worldX, vanish.worldY), "remote touch activates vanish block");
 
 		remote.setPos(75, -1);
 		remote.stepFrame();
-		assertClose(0.9, renderer.blockAlphaAt(water.x, water.y), "remote touch triggers water ripple");
+		assertClose(0.9, renderer.blockAlphaAt(water.worldX, water.worldY), "remote touch triggers water ripple");
 	}
 
 	private static function testRemoteAnimationAdvancesEachStageFrame():Void {

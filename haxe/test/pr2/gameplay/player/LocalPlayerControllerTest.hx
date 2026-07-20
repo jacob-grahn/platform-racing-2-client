@@ -6,6 +6,7 @@ import pr2.gameplay.BlockController;
 import pr2.level.LevelParser;
 import pr2.level.BlockType;
 import pr2.level.Level;
+import pr2.level.ObjectCodes;
 import pr2.level.Level.LevelBlock;
 import pr2.level.Level.StatDefaults;
 import pr2.level.Level.TilePosition;
@@ -56,6 +57,7 @@ class LocalPlayerControllerTest {
 		testVanishBlockReappearsAfterDelayWhenUnoccupied();
 		testVanishCeilingReappearsWhileChargingSuperJump();
 		testMineBlockLaunchesPlayerAndRemovesItself();
+		testDontMoveSpawnMarkerOverlapPreservesMineAndTeleport();
 		testDeathmatchMineHitRemovesLifeAndFinishesAtZero();
 		testBumpingItemBlockGrantsConfiguredItem();
 		testBumpingItemBlockEmitsStarSound();
@@ -988,6 +990,28 @@ class LocalPlayerControllerTest {
 		var state = player.stateSnapshot();
 		assertEquals(false, state.grounded, "removed mine no longer supports player");
 		assertBelow(90, state.y, "player falls through removed mine block");
+	}
+
+	private static function testDontMoveSpawnMarkerOverlapPreservesMineAndTeleport():Void {
+		// Don't Move JV relies on Flash Map.attachObject keeping the start marker
+		// out of blockArray: a teleport occupies the start tile while a mine sits
+		// directly above the spawned character. Neither may be consumed before the
+		// Course moves the controller onto the selected start marker.
+		var start = LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_START1, 60, 90);
+		var mine = LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_MINE, 60, 60);
+		var sourceTeleport = LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_TELEPORT, 60, 90, "16777215");
+		var destinationTeleport = LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_TELEPORT, 150, 150, "16777215");
+		var level = Level.fromDecoded(0xFFFFFF, [start, mine, sourceTeleport, destinationTeleport]);
+		var player = new LocalPlayerController(level, new BlockController(level));
+
+		assertEquals(mine, level.blockAt(mine.x, mine.y), "course construction does not consume the spawn mine before start placement");
+		player.resetPreRacePosition(start.worldX + 15, start.worldY + 15);
+
+		player.step(new LocalPlayerInput());
+		var state = player.stateSnapshot();
+
+		assertEquals(mine, level.blockAt(mine.x, mine.y), "spawn mine remains available after the start-tile teleport");
+		assertAbove(state.x, start.worldX + 15, "start-tile teleport moves the player despite overlapping the spawn marker");
 	}
 
 	private static function testDeathmatchMineHitRemovesLifeAndFinishesAtZero():Void {

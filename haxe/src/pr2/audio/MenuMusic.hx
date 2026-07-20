@@ -48,8 +48,16 @@ class MenuMusic extends Sprite {
 		var source = channel.__audioSource;
 		var backend = source.__backend;
 		var howl = source.buffer.__srcHowl;
-		howl.off("end", backend.howl_onEnd, backend.id);
-		howl.loop(true, backend.id);
+		var enableGaplessLoop = function():Void {
+			howl.off("end", backend.howl_onEnd, backend.id);
+			howl.loop(true, backend.id);
+		};
+		// Assets.getSound(...).play() can return while Howler is still decoding
+		// the WAV. Its load event precedes initialization of the queued sound's
+		// stop time, so wait for that specific sound's play event before calling
+		// loop(); otherwise Howler assigns an undefined Web Audio loopEnd.
+		if (howl.playing(backend.id)) enableGaplessLoop();
+		else howl.once("play", enableGaplessLoop, backend.id);
 		source.loops = 0;
 		#end
 		return channel;
