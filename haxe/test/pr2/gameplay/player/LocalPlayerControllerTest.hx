@@ -81,6 +81,7 @@ class LocalPlayerControllerTest {
 		testLightningEmitsZapAndConsumesItem();
 		testReloadableItemReleaseGateThenHeldRefire();
 		testSwordReloadTiming();
+		testSwordDamageBreaksTwoByTwoBrickGrid();
 		testSwordDamageActivatesVanishBlock();
 		testIceWaveReloadTiming();
 		testIceWaveShotAnimatesBlockFromSide();
@@ -1563,6 +1564,24 @@ class LocalPlayerControllerTest {
 		assertClose(1, player.blockAlphaAt(3, 5), "slash-damaged vanish block waits until the next frame to fade");
 		player.step(new LocalPlayerInput());
 		assertClose(0.9, player.blockAlphaAt(3, 5), "slash-damaged vanish block fades like contact activation");
+	}
+
+	private static function testSwordDamageBreaksTwoByTwoBrickGrid():Void {
+		var level = heldItemLevel(8);
+		level.blocks.push(new LevelBlock(3, 4, BlockType.Brick));
+		level.blocks.push(new LevelBlock(4, 4, BlockType.Brick));
+		level.blocks.push(new LevelBlock(3, 5, BlockType.Brick));
+		level.blocks.push(new LevelBlock(4, 5, BlockType.Brick));
+		var player = collectItem(level, 8);
+		player.consumeBlockVisualEvents();
+
+		makeItemAvailable(player);
+		player.step(new LocalPlayerInput(false, false, false, false, true));
+
+		assertClose(0, player.blockAlphaAt(3, 4), "sword breaks the upper-near brick");
+		assertClose(0, player.blockAlphaAt(4, 4), "sword breaks the upper-far brick");
+		assertClose(0, player.blockAlphaAt(3, 5), "sword breaks the lower-near brick");
+		assertClose(0, player.blockAlphaAt(4, 5), "sword breaks the lower-far brick");
 	}
 
 	private static function testIceWaveReloadTiming():Void {

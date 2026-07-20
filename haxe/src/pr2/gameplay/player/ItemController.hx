@@ -282,8 +282,26 @@ class ItemController {
 		var direction = owner.facingDirection < 0 ? "left" : "right";
 		owner.vx += owner.facingDirection < 0 ? -8 : 8;
 		owner.lastItemEffect = "slash:" + direction;
-		animateForwardBlockDamage(owner.facingDirection < 0 ? 180 : 0, owner.facingDirection * 8, 15);
+		damageSwordArea();
 		consumeHeldItemUse();
+	}
+
+	private function damageSwordArea():Void {
+		var startX = owner.x;
+		var startY = owner.y - 25;
+		var reach = owner.facingDirection < 0 ? -29 : 29;
+		for (step in 0...3) {
+			var probeX = startX + reach * step;
+			damageSwordProbe(probeX, startY - 14, reach);
+			damageSwordProbe(probeX, startY + 14, reach);
+		}
+	}
+
+	private function damageSwordProbe(pixelX:Float, pixelY:Float, damageForce:Float):Void {
+		var block = owner.getBlockAtPixel(pixelX, pixelY);
+		if (block != null) {
+			damageBlockFromItem(block, damageForce);
+		}
 	}
 
 	public function useIceWave():Void {
