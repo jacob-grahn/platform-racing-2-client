@@ -50,7 +50,8 @@ class EffectBackground extends Sprite {
 				var tileWorldX = mineTileWorld(originX);
 				var tileWorldY = mineTileWorld(originY);
 				if (course.levelRenderer != null) {
-					course.levelRenderer.showMineAppear(originX, originY, tileWorldX, tileWorldY, rotation);
+					course.levelRenderer.showMineAppear(originX, originY, tileWorldX, tileWorldY, rotation, true,
+						function():Void course.placeRuntimeMine(tileWorldX, tileWorldY));
 				}
 			case "Hat":
 				course.addLooseHat(originX, originY, parseIntArg(args, 3), parseIntArg(args, 4), parseIntArg(args, 5), parseIntArg(args, 6),

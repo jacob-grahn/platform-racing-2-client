@@ -42,6 +42,7 @@ import pr2.level.ServerLevel.DecodedBlock;
 import pr2.level.ServerLevelWorldAdapter;
 import pr2.level.ServerLevelRenderer;
 import pr2.level.WorldLevel;
+import pr2.level.WorldLevel.LevelBlock;
 import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
 import pr2.net.ServerLevelData;
@@ -99,6 +100,7 @@ class Course extends Sprite {
 	public var playerSpectating(default, null):Null<Character>;
 	public var canSpectate(default, null):Bool = false;
 	private var worldLevel:WorldLevel;
+	private var originalDecodedBlocks:Array<DecodedBlock> = [];
 	private var blockController:BlockController;
 	private var player:LocalCharacter;
 	private var camera:CameraFollow;
@@ -212,6 +214,7 @@ class Course extends Sprite {
 	}
 
 	private function build():Void {
+		originalDecodedBlocks = level.blocks.copy();
 		var startBlocks = level.startBlocks();
 		var focus = startBlocks.length == 0 ? null : startBlocks[0];
 		levelRenderer = new ServerLevelRenderer(level, focus, ServerLevelRenderer.DEFAULT_FOCUS_X, ServerLevelRenderer.DEFAULT_FOCUS_Y, true);
@@ -220,6 +223,9 @@ class Course extends Sprite {
 
 		worldLevel = ServerLevelWorldAdapter.convert(level, data.gravity, Std.string(config.levelId), config.title);
 		blockController = new BlockController(worldLevel);
+		blockController.onBlockRemoved = removeRuntimeBlock;
+		blockController.onBlockAdded = addRuntimeBlock;
+		blockController.onBlocksReset = resetRuntimeBlocks;
 		player = new LocalCharacter(worldLevel, 1, 1, 1, 1, blockController);
 		snakeManager = new SnakeManager(worldLevel, levelRenderer, player.controller);
 		player.onPlayJumpSound = playJumpSound;
@@ -583,6 +589,75 @@ class Course extends Sprite {
 		syncStatsDisplay();
 		rebuildMiniMap();
 		updatePlayerDisplay();
+	}
+
+	private function removeRuntimeBlock(block:LevelBlock):Void {
+		var worldX = block.x * ServerLevelWorldAdapter.TILE_SIZE;
+		var worldY = block.y * ServerLevelWorldAdapter.TILE_SIZE;
+		var index = level.blocks.length;
+		var removedIndex = -1;
+		while (index > 0) {
+			index--;
+			var decoded = level.blocks[index];
+			if (decoded.x == worldX && decoded.y == worldY) {
+				level.blocks.splice(index, 1);
+				removedIndex = index;
+				break;
+			}
+		}
+		if (levelRenderer != null) {
+			levelRenderer.removeRuntimeBlockDisplay(worldX, worldY, removedIndex);
+		}
+	}
+
+	private function addRuntimeBlock(block:LevelBlock):Void {
+		var code = switch (block.type) {
+			case pr2.level.BlockType.Mine: ObjectCodes.BLOCK_MINE;
+			default: return;
+		}
+		var decoded = new DecodedBlock(code, block.x * ServerLevelWorldAdapter.TILE_SIZE, block.y * ServerLevelWorldAdapter.TILE_SIZE,
+			block.options);
+		level.blocks.push(decoded);
+		if (levelRenderer != null) {
+			levelRenderer.ensureRuntimeBlockDisplay(decoded);
+		}
+	}
+
+	public function placeRuntimeMine(worldX:Int, worldY:Int):Bool {
+		if (blockController == null || worldLevel == null) {
+			return false;
+		}
+		return blockController.addBlock(new LevelBlock(
+			Std.int(Math.floor(worldX / ServerLevelWorldAdapter.TILE_SIZE)),
+			Std.int(Math.floor(worldY / ServerLevelWorldAdapter.TILE_SIZE)),
+			pr2.level.BlockType.Mine
+		));
+	}
+
+	private function resetRuntimeBlocks():Void {
+		var originalByPosition:Map<String, DecodedBlock> = new Map();
+		for (block in originalDecodedBlocks) {
+			originalByPosition.set(decodedBlockKey(block), block);
+		}
+		if (levelRenderer != null) {
+			for (block in level.blocks) {
+				var original = originalByPosition.get(decodedBlockKey(block));
+				if (original == null || original.code != block.code) {
+					levelRenderer.removeBlockDisplay(block.x, block.y);
+				}
+			}
+		}
+		level.blocks.resize(0);
+		for (block in originalDecodedBlocks) {
+			level.blocks.push(block);
+			if (levelRenderer != null) {
+				levelRenderer.ensureRuntimeBlockDisplay(block);
+			}
+		}
+	}
+
+	private static inline function decodedBlockKey(block:DecodedBlock):String {
+		return block.x + "," + block.y;
 	}
 
 	public function setLife(lives:Int):Void {
@@ -1126,7 +1201,8 @@ class Course extends Sprite {
 				}
 				var tileWorldX = Std.int(Math.round((effectX - 15) / ServerLevelRenderer.TILE_SIZE)) * ServerLevelRenderer.TILE_SIZE;
 				var tileWorldY = Std.int(Math.round((effectY - 15) / ServerLevelRenderer.TILE_SIZE)) * ServerLevelRenderer.TILE_SIZE;
-				levelRenderer.showMineAppear(effectX, effectY, tileWorldX, tileWorldY, rotation);
+				levelRenderer.showMineAppear(effectX, effectY, tileWorldX, tileWorldY, rotation, true,
+					function():Void placeRuntimeMine(tileWorldX, tileWorldY));
 				LobbySocket.write('add_effect`Mine`$effectX`$effectY`$rotation');
 			case "teleport":
 				if (parts.length < 3) {

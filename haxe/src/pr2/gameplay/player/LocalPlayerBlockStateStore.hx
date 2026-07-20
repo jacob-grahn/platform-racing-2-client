@@ -14,6 +14,10 @@ class LocalPlayerBlockStateStore {
 		return states.get(key);
 	}
 
+	public inline function remove(key:String):Bool {
+		return states.remove(key);
+	}
+
 	public function getOrCreate(key:String):LocalPlayerBlockState {
 		var state = states.get(key);
 		if (state == null) {
@@ -36,6 +40,7 @@ class LocalPlayerBlockStateStore {
 class LocalPlayerBlockState {
 	public var crumbleLife:Null<Int> = null;
 	public var removed:Bool = false;
+	public var evicted:Bool = false;
 	public var vanishFadeFrames:Null<Int> = null;
 	public var vanishReappearFrames:Null<Int> = null;
 	public var vanishFadeInFrames:Null<Int> = null;

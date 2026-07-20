@@ -803,13 +803,21 @@ class CharacterLifecycleTest {
 		assertEquals("120,80", iceWaveSounds[0], "remote ice wave plays its world-position sound");
 
 		var blockChildren = course.levelRenderer.blockLayer.numChildren;
-		handler.dispatch("addEffect", ["Mine", "75", "75", "90"]);
+		handler.dispatch("addEffect", ["Mine", "975", "975", "90"]);
 		assertEquals(blockChildren + 1, course.levelRenderer.blockLayer.numChildren, "remote mine mounts MineAppear on the block layer");
-		assertTrue(Std.downcast(course.levelRenderer.blockLayer.getChildAt(blockChildren), MineAppear) != null, "remote mine uses MineAppear");
+		var mineAppear = Std.downcast(course.levelRenderer.blockLayer.getChildAt(blockChildren), MineAppear);
+		assertTrue(mineAppear != null, "remote mine uses MineAppear");
+		for (_ in 0...33) {
+			mineAppear.dispatchEvent(new Event(Event.ENTER_FRAME));
+		}
+		assertEquals(BlockType.Mine, @:privateAccess course.worldLevel.blockAt(32, 32).type,
+			"remote MineAppear completion adds the mine to the live gameplay map");
+		assertEquals(ObjectCodes.BLOCK_MINE, BlockCollision.blockFromPos(@:privateAccess course.level, 960, 960, 0).code,
+			"remote MineAppear completion adds the mine to the effect collision map");
 
 		handler.dispatch("addEffect", ["Teleport", "90", "60", "0"]);
-		assertEquals(blockChildren + 2, course.levelRenderer.blockLayer.numChildren, "remote teleport mounts TeleportPop on the block layer");
-		assertTrue(Std.downcast(course.levelRenderer.blockLayer.getChildAt(blockChildren + 1), TeleportPop) != null,
+		assertEquals(blockChildren + 1, course.levelRenderer.blockLayer.numChildren, "remote teleport mounts TeleportPop on the block layer");
+		assertTrue(Std.downcast(course.levelRenderer.blockLayer.getChildAt(blockChildren), TeleportPop) != null,
 			"remote teleport uses TeleportPop");
 
 		handler.dispatch("addEffect", ["Hat", "40", "50", "90", "5", "1193046", "-1", "3"]);
@@ -940,12 +948,16 @@ class CharacterLifecycleTest {
 		assertTrue(course.levelRenderer.blockAlphaAt(90, 0) < waterAlpha, "server activate ripples water blocks by segment");
 
 		handler.dispatch("activate", ["4", "0", ""]);
-		assertEquals(0.0, course.levelRenderer.blockAlphaAt(120, 0), "server activate hides brick block display");
+		assertEquals(null, course.levelRenderer.blockAlphaAt(120, 0), "server activate removes brick block display");
 		assertEquals(0.0, course.localCharacter.blockAlphaAt(4, 0), "remote brick removal updates local collision state");
+		assertEquals(null, BlockCollision.blockFromPos(@:privateAccess course.level, 120, 0, 0),
+			"remote brick removal evicts the effect collision entry");
 
 		handler.dispatch("activate", ["5", "0", ""]);
-		assertEquals(0.0, course.levelRenderer.blockAlphaAt(150, 0), "server activate hides mine block display");
+		assertEquals(null, course.levelRenderer.blockAlphaAt(150, 0), "server activate removes mine block display");
 		assertEquals(0.0, course.localCharacter.blockAlphaAt(5, 0), "remote mine removal updates local collision state");
+		assertEquals(null, BlockCollision.blockFromPos(@:privateAccess course.level, 150, 0, 0),
+			"remote mine removal evicts the effect collision entry");
 
 		handler.dispatch("activate", ["6", "0", "right"]);
 		assertEquals(null, course.levelRenderer.blockAlphaAt(180, 0), "server activate moves push block away from source segment");
@@ -958,7 +970,9 @@ class CharacterLifecycleTest {
 		assertEquals(1.0, course.localCharacter.blockAlphaAt(8, 0), "first remote crumble hit retains remaining life");
 		handler.dispatch("activate", ["8", "0", "20"]);
 		assertEquals(0.0, course.localCharacter.blockAlphaAt(8, 0), "cumulative remote crumble damage removes collision state");
-		assertEquals(0.0, course.levelRenderer.blockAlphaAt(240, 0), "cumulative remote crumble damage hides the display");
+		assertEquals(null, course.levelRenderer.blockAlphaAt(240, 0), "cumulative remote crumble damage removes the display");
+		assertEquals(null, BlockCollision.blockFromPos(@:privateAccess course.level, 240, 0, 0),
+			"spent crumble is evicted from the effect collision map");
 		var effectsAfterRemoval = course.levelRenderer.worldEffectLayer().numChildren;
 		handler.dispatch("activate", ["8", "0", "20"]);
 		assertEquals(effectsAfterRemoval, course.levelRenderer.worldEffectLayer().numChildren,

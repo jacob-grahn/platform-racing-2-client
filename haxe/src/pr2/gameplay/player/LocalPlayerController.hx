@@ -712,7 +712,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 				if (local) {
 					emitLocalActivate(block, payload);
 				}
-				state.removed = true;
+				blockController.removeBlock(block);
 				blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.MinePieces, block.x, block.y, 10));
 				blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.MineExplode, block.x, block.y));
 			case BlockType.Brick:
@@ -722,12 +722,11 @@ class LocalPlayerController implements ItemRuntimeOwner {
 				if (local) {
 					emitLocalActivate(block, payload);
 				}
-				state.removed = true;
+				blockController.removeBlock(block);
 				blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.BrickPieces, block.x, block.y, 6));
 			case BlockType.Crumble:
 				// Flash removes a spent crumble from Map, so subsequent queued activate
-				// commands cannot find it. WorldLevel retains its LevelBlock; explicitly
-				// ignore those late commands instead of spawning another final shower.
+				// commands cannot find it.
 				if (state.removed) {
 					return true;
 				}
@@ -748,7 +747,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 						Std.int(Math.min(damage * 2, 20))));
 					if (life <= 0) {
 						blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.CrumblePieces, block.x, block.y, 10));
-						state.removed = true;
+						blockController.removeBlock(block);
 					}
 				}
 			case BlockType.Vanish:

@@ -602,6 +602,21 @@ class ServerLevelRenderer extends Sprite {
 		return true;
 	}
 
+	/** Keep incremental decoding aligned when the live map splices its source array. */
+	public function removeRuntimeBlockDisplay(worldX:Int, worldY:Int, decodedIndex:Int):Bool {
+		if (decodedIndex >= 0 && decodedIndex < nextBlockToDraw) {
+			nextBlockToDraw--;
+		}
+		return removeBlockDisplay(worldX, worldY);
+	}
+
+	/** Mount a block introduced or restored by the live gameplay map. */
+	public function ensureRuntimeBlockDisplay(block:DecodedBlock):Void {
+		if (!blockDisplays.exists(blockKey(block.x, block.y))) {
+			addBlockDisplay(block);
+		}
+	}
+
 	public function moveBlockDisplay(fromWorldX:Int, fromWorldY:Int, toWorldX:Int, toWorldY:Int):Void {
 		if (fromWorldX == toWorldX && fromWorldY == toWorldY) {
 			return;
@@ -701,9 +716,12 @@ class ServerLevelRenderer extends Sprite {
 		return effect;
 	}
 
-	public function showMineAppear(worldX:Float, worldY:Float, tileWorldX:Int, tileWorldY:Int, rotationDegrees:Float = 0, playSound:Bool = true):MineAppear {
+	public function showMineAppear(worldX:Float, worldY:Float, tileWorldX:Int, tileWorldY:Int, rotationDegrees:Float = 0, playSound:Bool = true,
+			?placeRuntimeMine:Void->Void):MineAppear {
 		var effect = new MineAppear(worldX, worldY, rotationDegrees, offsetX, offsetY, function():Void {
-			if (!blockDisplays.exists(blockKey(tileWorldX, tileWorldY))) {
+			if (placeRuntimeMine != null) {
+				placeRuntimeMine();
+			} else if (!blockDisplays.exists(blockKey(tileWorldX, tileWorldY))) {
 				addBlockDisplay(new DecodedBlock(ObjectCodes.BLOCK_MINE, tileWorldX, tileWorldY));
 			}
 		}, playSound);
@@ -1047,6 +1065,9 @@ class ServerLevelRenderer extends Sprite {
 		// gameplay Map records their positions and never adds them to the block
 		// display list.
 		if (isSpawnMarkerBlockCode(block.code)) {
+			return;
+		}
+		if (blockDisplays.exists(blockKey(block.x, block.y))) {
 			return;
 		}
 		var display = createBlockDisplay(block);

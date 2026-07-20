@@ -32,18 +32,21 @@ class BlockController {
 	private final blockStates:LocalPlayerBlockStateStore = new LocalPlayerBlockStateStore();
 	private final disabledTeleportFrames:Map<String, Int> = new Map();
 	private final moveBlockDirections:Map<String, Int> = new Map();
-	private final originalBlockPositions:Array<{x:Int, y:Int}> = [];
+	private final originalBlocks:Array<LevelBlock> = [];
 	private var moveBlockPhase:MoveBlockPhase = Preview;
 	private var moveBlockDeadlineMs:Null<Float> = null;
 	private var moveStartTimeMs:Float = 0;
 	private var moveCount:Int = 0;
 	private var moveRandom:FlashRandom = new FlashRandom(1);
+	public var onBlockRemoved:Null<LevelBlock->Void> = null;
+	public var onBlockAdded:Null<LevelBlock->Void> = null;
+	public var onBlocksReset:Null<Void->Void> = null;
 
 	public function new(level:WorldLevel, ?clock:Void->Float) {
 		this.level = level;
 		this.clock = clock == null ? function():Float return haxe.Timer.stamp() * 1000 : clock;
 		for (block in level.blocks) {
-			originalBlockPositions.push({x: block.x, y: block.y});
+			originalBlocks.push(copyBlock(block));
 		}
 	}
 
@@ -261,18 +264,45 @@ class BlockController {
 	}
 
 	public function resetTestCourseState():Void {
-		for (i in 0...level.blocks.length) {
-			if (i >= originalBlockPositions.length) {
-				break;
-			}
-			var block = level.blocks[i];
-			var original = originalBlockPositions[i];
-			block.x = original.x;
-			block.y = original.y;
+		level.blocks.resize(0);
+		for (block in originalBlocks) {
+			level.blocks.push(copyBlock(block));
 		}
 		resetPreRaceState();
 		moveRandom = new FlashRandom(1);
 		startGameplay();
+		if (onBlocksReset != null) {
+			onBlocksReset();
+		}
+	}
+
+	/** Mirrors Flash Map.removeBlock: evict a destroyed block from the live grid. */
+	public function removeBlock(block:LevelBlock):Bool {
+		var index = level.blocks.indexOf(block);
+		if (index < 0) {
+			return false;
+		}
+		var state = stateFor(block);
+		state.removed = true;
+		state.evicted = true;
+		level.blocks.splice(index, 1);
+		if (onBlockRemoved != null) {
+			onBlockRemoved(block);
+		}
+		return true;
+	}
+
+	/** Adds a runtime block without inheriting state from a destroyed prior occupant. */
+	public function addBlock(block:LevelBlock):Bool {
+		if (level.blockAt(block.x, block.y) != null) {
+			return false;
+		}
+		blockStates.remove(owner.blockKey(block.x, block.y));
+		level.blocks.push(block);
+		if (onBlockAdded != null) {
+			onBlockAdded(block);
+		}
+		return true;
 	}
 
 	public function stateAt(key:String):Null<LocalPlayerBlockState> {
@@ -292,7 +322,7 @@ class BlockController {
 		for (key => state in blockStates) {
 			if (state.vanishFadeFrames != null
 				|| state.vanishFadeInFrames != null
-				|| state.removed
+				|| (state.removed && !state.evicted)
 				|| state.depletedItem
 				|| state.depletedVisualSupply
 				|| state.frozenIceAlpha != null) {
@@ -405,6 +435,10 @@ class BlockController {
 		}
 		return (seg1X == targetTileX && seg1Y == targetTileY)
 			|| (seg2X == targetTileX && seg2Y == targetTileY);
+	}
+
+	private static function copyBlock(block:LevelBlock):LevelBlock {
+		return new LevelBlock(block.x, block.y, block.type, block.options);
 	}
 
 }

@@ -168,9 +168,7 @@ class ItemController {
 		for (placement in owner.pendingMinePlacements) {
 			placement.framesRemaining--;
 			if (placement.framesRemaining <= 0) {
-				if (owner.level.blockAt(placement.tileX, placement.tileY) == null) {
-					owner.level.blocks.push(new LevelBlock(placement.tileX, placement.tileY, BlockType.Mine));
-				}
+				owner.blockController.addBlock(new LevelBlock(placement.tileX, placement.tileY, BlockType.Mine));
 			} else {
 				stillPending.push(placement);
 			}

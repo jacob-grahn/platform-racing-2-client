@@ -74,9 +74,12 @@ class LocalPlayerControllerTest {
 		testLaserGunReloadTiming();
 		testLaserGunShotAnimatesBlockFromSide();
 		testLaserGunDamageBreaksBrickBlock();
+		testLaserSkipsPreviouslyDestroyedBrick();
 		testTopHatLaserDamagesVanishBlock();
 		testMineItemPlacesMineAndConsumesItem();
 		testMineItemBlockedByOccupiedTile();
+		testMineItemReusesDestroyedBrickTile();
+		testTestCourseResetRestoresEvictedBlocks();
 		testMineAppearSkipsPlacementWhenTileBecomesOccupied();
 		testLightningEmitsZapAndConsumesItem();
 		testReloadableItemReleaseGateThenHeldRefire();
@@ -103,6 +106,7 @@ class LocalPlayerControllerTest {
 		testTeleportDefaultColorOptionsMatchEmptyOptions();
 		testPreRacePositionResetClearsConstructorTeleportCooldown();
 		testStandingOnPushBlockMovesItDown();
+		testPushBlockMovesIntoDestroyedBrickTile();
 		testPushBlockRecursivelyMovesDestinationPushBlock();
 		testUnconfiguredMoveBlocksUseFlashRandomDirections();
 		testTimedMoveBlockPreviewDirections();
@@ -739,7 +743,8 @@ class LocalPlayerControllerTest {
 	}
 
 	private static function testHighImpactFallBreaksCrumbleBlock():Void {
-		var player = new LocalCharacter(crumbleDropLevel());
+		var level = crumbleDropLevel();
+		var player = new LocalCharacter(level);
 		var touchedCrumble = false;
 		var framesAfterCrumble = 0;
 
@@ -769,6 +774,7 @@ class LocalPlayerControllerTest {
 		}
 		assertEquals(true, crumbleActivate != null, "crumble impact emits Flash localActivate event");
 		assertEquals(true, crumbleActivate.activationPayload != "", "crumble localActivate preserves force payload");
+		assertEquals(null, level.blockAt(2, 12), "spent crumble is evicted from the live map");
 	}
 
 	private static function testSettledCrumbleStandDoesNotEmitPieces():Void {
@@ -953,7 +959,8 @@ class LocalPlayerControllerTest {
 	}
 
 	private static function testMineBlockLaunchesPlayerAndRemovesItself():Void {
-		var player = new LocalCharacter(mineBlockLevel());
+		var level = mineBlockLevel();
+		var player = new LocalCharacter(level);
 		var initialState = player.stateSnapshot();
 
 		assertEquals("mine", initialState.touchedBlockType, "standing on mine reports touched block");
@@ -969,6 +976,7 @@ class LocalPlayerControllerTest {
 		assertEquals(10, visualEvents[1].count, "mine hit emits ten pieces");
 		assertEquals("MineExplode", Std.string(visualEvents[2].kind), "mine hit emits explosion event");
 		assertEquals(0, player.consumeBlockVisualEvents().length, "visual events are consumed once");
+		assertEquals(null, level.blockAt(2, 3), "exploded mine is evicted from the live map");
 
 		for (_ in 0...60) {
 			player.step(new LocalPlayerInput());
@@ -1398,7 +1406,8 @@ class LocalPlayerControllerTest {
 	}
 
 	private static function testLaserGunDamageBreaksBrickBlock():Void {
-		var player = collectItem(heldItemWithTargetBlockLevel(1, BlockType.Brick), 1);
+		var level = heldItemWithTargetBlockLevel(1, BlockType.Brick);
+		var player = collectItem(level, 1);
 		player.consumeBlockVisualEvents();
 
 		makeItemAvailable(player);
@@ -1413,6 +1422,29 @@ class LocalPlayerControllerTest {
 		assertEquals("LocalActivate", Std.string(events[1].kind), "laser damage activates the brick");
 		assertEquals("BrickPieces", Std.string(events[2].kind), "laser damage spawns brick pieces");
 		assertEquals(0.0, player.blockAlphaAt(4, 5), "laser-damaged brick is removed");
+		assertEquals(null, level.blockAt(4, 5), "laser-damaged brick is evicted from the live map");
+	}
+
+	private static function testLaserSkipsPreviouslyDestroyedBrick():Void {
+		var level = heldItemWithTargetBlockLevel(1, BlockType.Brick, 3);
+		level.blocks.push(new LevelBlock(5, 5, BlockType.Brick));
+		var player = collectItem(level, 1);
+		assertEquals(true, player.applyRemoteBlockActivation(3, 5), "first brick can be destroyed before firing");
+		assertEquals(null, level.blockAt(3, 5), "destroyed first brick leaves an empty map tile");
+		player.consumeBlockVisualEvents();
+
+		makeItemAvailable(player);
+		player.step(new LocalPlayerInput(false, false, false, false, true));
+		stepFrames(player, 3);
+
+		assertEquals(null, level.blockAt(5, 5), "laser travels through the vacated tile and destroys the later brick");
+		var bumpTiles:Array<Int> = [];
+		for (event in player.consumeBlockVisualEvents()) {
+			if (event.kind == BlockBumpSound) {
+				bumpTiles.push(event.tileX);
+			}
+		}
+		assertEquals("5", [for (tile in bumpTiles) Std.string(tile)].join(","), "laser impacts only the occupied tile");
 	}
 
 	private static function testTopHatLaserDamagesVanishBlock():Void {
@@ -1478,6 +1510,37 @@ class LocalPlayerControllerTest {
 
 		var mineCount = Lambda.count(level.blocks, function(block) return block.type == BlockType.Mine);
 		assertEquals(0, mineCount, "mine appear skips placement if target tile becomes occupied");
+	}
+
+	private static function testMineItemReusesDestroyedBrickTile():Void {
+		var level = heldItemLevel(2);
+		level.blocks.push(new LevelBlock(3, 5, BlockType.Brick));
+		var player = collectItem(level, 2);
+		assertEquals(true, player.applyRemoteBlockActivation(3, 5), "brick at mine target can be destroyed");
+		assertEquals(null, level.blockAt(3, 5), "destroyed brick vacates the mine target");
+		player.consumeBlockVisualEvents();
+
+		makeItemAvailable(player);
+		player.step(new LocalPlayerInput(false, false, false, false, true));
+		stepFrames(player, 33);
+
+		var replacement = level.blockAt(3, 5);
+		assertEquals(BlockType.Mine, replacement == null ? null : replacement.type, "mine can be placed in the vacated tile");
+		assertEquals(1.0, player.blockAlphaAt(3, 5), "replacement mine does not inherit the brick's removed state");
+	}
+
+	private static function testTestCourseResetRestoresEvictedBlocks():Void {
+		var level = heldItemLevel(2);
+		level.blocks.push(new LevelBlock(3, 5, BlockType.Brick));
+		var player = collectItem(level, 2);
+		player.applyRemoteBlockActivation(3, 5);
+		assertEquals(true, player.controller.blockController.addBlock(new LevelBlock(3, 5, BlockType.Mine)),
+			"test setup replaces the destroyed authored block");
+
+		player.resetTestCourseState(75, 180, 120);
+
+		assertEquals(BlockType.Brick, level.blockAt(3, 5).type, "test-course reset restores the authored brick");
+		assertEquals(1.0, player.blockAlphaAt(3, 5), "restored block starts with fresh runtime state");
 	}
 
 	private static function testLightningEmitsZapAndConsumesItem():Void {
@@ -1901,6 +1964,20 @@ class LocalPlayerControllerTest {
 		assertEquals(3, events[1].tileY, "push block display event records source y");
 		assertEquals(2, events[1].toTileX, "push block display event records destination x");
 		assertEquals(4, events[1].toTileY, "push block display event records destination y");
+	}
+
+	private static function testPushBlockMovesIntoDestroyedBrickTile():Void {
+		var level = emptyLevel(1);
+		var player = new LocalCharacter(level);
+		var push = new LevelBlock(2, 3, BlockType.Push);
+		level.blocks.push(push);
+		level.blocks.push(new LevelBlock(3, 3, BlockType.Brick));
+		assertEquals(true, player.applyRemoteBlockActivation(3, 3), "brick in front of push block can be destroyed");
+
+		@:privateAccess player.controller.pushBlock(push, 1, 0);
+
+		assertEquals(null, level.blockAt(2, 3), "push block leaves its source after destruction opens the destination");
+		assertEquals(BlockType.Push, level.blockAt(3, 3).type, "push block enters the physically vacated tile");
 	}
 
 	private static function testPushBlockRecursivelyMovesDestinationPushBlock():Void {
