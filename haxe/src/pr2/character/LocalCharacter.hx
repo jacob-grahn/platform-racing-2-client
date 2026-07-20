@@ -334,6 +334,10 @@ class LocalCharacter extends Character {
 		controller.setLife(lives);
 	}
 
+	public function setCourseTime(seconds:Int):Void {
+		controller.setCourseTime(seconds);
+	}
+
 	public function setControllerPosition(px:Float, py:Float):Void {
 		controller.setPosition(px, py);
 		syncFromController();
@@ -341,12 +345,6 @@ class LocalCharacter extends Character {
 
 	public function resetControllerForRaceStart(px:Float, py:Float):Void {
 		controller.resetPreRacePosition(px, py);
-		syncFromController();
-		forceExactPositionOnNextUpdate();
-	}
-
-	public function resetTestCourseState(startX:Float, startY:Float, maxTime:Int):Void {
-		controller.resetTestCourseState(startX, startY, maxTime);
 		syncFromController();
 		forceExactPositionOnNextUpdate();
 	}

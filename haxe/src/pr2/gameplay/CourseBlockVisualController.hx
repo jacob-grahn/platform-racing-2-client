@@ -84,23 +84,6 @@ class CourseBlockVisualController {
 		owner.publishMultiplayerDiagnostics();
 	}
 
-	public function resetActiveBlockVisuals():Void {
-		for (key in owner.activeVisualBlocks.keys()) {
-			applyBlockVisual(tileKeyX(key), tileKeyY(key), 1, 1, 0);
-		}
-		owner.activeVisualBlocks = new Map();
-	}
-
-	public function resetMovedBlockDisplays():Void {
-		for (i in owner.displayedMoveBlockPositions.keys()) {
-			var displayed = owner.displayedMoveBlockPositions.get(i);
-			if (displayed != null && (displayed.worldX != displayed.originalWorldX || displayed.worldY != displayed.originalWorldY)) {
-				owner.levelRenderer.moveBlockDisplay(displayed.worldX, displayed.worldY, displayed.originalWorldX, displayed.originalWorldY);
-			}
-		}
-		owner.displayedMoveBlockPositions.clear();
-	}
-
 	public function syncMoveBlockDisplays():Void {
 		if (owner.levelRenderer == null || owner.worldLevel == null) {
 			return;

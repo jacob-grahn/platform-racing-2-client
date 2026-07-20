@@ -739,12 +739,6 @@ class ServerLevelRenderer extends Sprite {
 		return blockLayer;
 	}
 
-	public function resetRuntimeState():Void {
-		clearRuntimeEffects();
-		setCourseRotation(0, 0);
-		updateViewWindow(true);
-	}
-
 	public function teleportPopCountForTests():Int {
 		var count = 0;
 		for (i in 0...blockLayer.numChildren) {
@@ -753,23 +747,6 @@ class ServerLevelRenderer extends Sprite {
 			}
 		}
 		return count;
-	}
-
-	private function clearRuntimeEffects():Void {
-		var i = blockLayer.numChildren - 1;
-		while (i >= 0) {
-			var child = blockLayer.getChildAt(i);
-			if (Std.isOfType(child, TeleportPop)) {
-				(cast child : TeleportPop).remove();
-			} else if (Std.isOfType(child, MineExplosion)) {
-				(cast child : MineExplosion).remove();
-			} else if (Std.isOfType(child, MineAppear)) {
-				(cast child : MineAppear).remove(false);
-			} else if (Std.isOfType(child, BlockPiece)) {
-				(cast child : BlockPiece).remove();
-			}
-			i--;
-		}
 	}
 
 	public function showBlockPieces(linkage:String, worldX:Float, worldY:Float, count:Int, spreadX:Float, spreadY:Float,

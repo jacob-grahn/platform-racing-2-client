@@ -246,60 +246,6 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		pendingProjectileDamages.resize(0);
 	}
 
-	public function resetTestCourseState(startX:Float, startY:Float, maxTime:Int):Void {
-		blockController.resetTestCourseState();
-		setPlayerPos(startX, startY);
-		vx = 0;
-		vy = 0;
-		grounded = false;
-		crouching = false;
-		touchedBlock = null;
-		mode = MODE_LAND;
-		animationState = CharacterState.Stand;
-		itemId = null;
-		itemUses = null;
-		heldItem = null;
-		itemAvailable = false;
-		lastItemEffect = null;
-		courseRotation = 0;
-		courseTweenRotation = 0;
-		characterRotation = 0;
-		finished = false;
-		finishBlockId = null;
-		finishX = null;
-		finishY = null;
-		lives = 3;
-		courseTime = maxTime;
-		targetVelX = 0;
-		accelFactor = BASE_ACCEL_FACTOR;
-		jumpHeld = false;
-		jumpVelBoost = 0;
-		crouchCharge = 0;
-		waterTicks = 0;
-		standingTileX = Std.int(Math.floor(x / level.tileSize));
-		standingTileY = Std.int(Math.floor(y / level.tileSize));
-		lastSafeX = x;
-		lastSafeY = y;
-		rotateFramesRemaining = 0;
-		rotateDirection = 0;
-		hurtFramesRemaining = 0;
-		frozenSolidFramesRemaining = 0;
-		facingDirection = 1;
-		speedBurstFramesRemaining = 0;
-		speedBurstFromItem = false;
-		jetPackFuelRemaining = null;
-		jetPackActive = false;
-		itemReloadFramesRemaining = 0;
-		statsSelectSyncRequested = false;
-		animationLeft = false;
-		animationRight = false;
-		pendingMinePlacements.resize(0);
-		pendingProjectileDamages.resize(0);
-		snakeTrailBlocks.clear();
-		blockVisualEvents.resize(0);
-		processBlocks(new LocalPlayerInput());
-	}
-
 	public function beginDetailedTraceFrame(frame:Int):Void {
 		detailedTraceEnabled = true;
 		detailedTraceFrame = frame;
@@ -415,6 +361,10 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		if (courseTime > maxSeconds) {
 			courseTime = maxSeconds;
 		}
+	}
+
+	public function setCourseTime(seconds:Int):Void {
+		courseTime = seconds;
 	}
 
 	// The pool an empty-options item block draws from (Course passes the decoded

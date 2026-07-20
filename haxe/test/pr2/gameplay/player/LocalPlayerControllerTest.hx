@@ -79,7 +79,6 @@ class LocalPlayerControllerTest {
 		testMineItemPlacesMineAndConsumesItem();
 		testMineItemBlockedByOccupiedTile();
 		testMineItemReusesDestroyedBrickTile();
-		testTestCourseResetRestoresEvictedBlocks();
 		testMineAppearSkipsPlacementWhenTileBecomesOccupied();
 		testLightningEmitsZapAndConsumesItem();
 		testReloadableItemReleaseGateThenHeldRefire();
@@ -1527,20 +1526,6 @@ class LocalPlayerControllerTest {
 		var replacement = level.blockAt(3, 5);
 		assertEquals(BlockType.Mine, replacement == null ? null : replacement.type, "mine can be placed in the vacated tile");
 		assertEquals(1.0, player.blockAlphaAt(3, 5), "replacement mine does not inherit the brick's removed state");
-	}
-
-	private static function testTestCourseResetRestoresEvictedBlocks():Void {
-		var level = heldItemLevel(2);
-		level.blocks.push(new LevelBlock(3, 5, BlockType.Brick));
-		var player = collectItem(level, 2);
-		player.applyRemoteBlockActivation(3, 5);
-		assertEquals(true, player.controller.blockController.addBlock(new LevelBlock(3, 5, BlockType.Mine)),
-			"test setup replaces the destroyed authored block");
-
-		player.resetTestCourseState(75, 180, 120);
-
-		assertEquals(BlockType.Brick, level.blockAt(3, 5).type, "test-course reset restores the authored brick");
-		assertEquals(1.0, player.blockAlphaAt(3, 5), "restored block starts with fresh runtime state");
 	}
 
 	private static function testLightningEmitsZapAndConsumesItem():Void {

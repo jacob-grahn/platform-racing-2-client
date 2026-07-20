@@ -29,16 +29,6 @@ class TestCourseHatPicker extends Sprite {
 		display();
 	}
 
-	public function resetHat():Void {
-		if (localCharacter == null) {
-			return;
-		}
-		var color = localCharacter.hat1Color;
-		var color2 = localCharacter.hat1Color2;
-		localCharacter.setHats([]);
-		localCharacter.setHats([pickedHat, color, color2]);
-	}
-
 	public function remove():Void {
 		for (binding in bindings) {
 			LobbyArt.unbind(binding);

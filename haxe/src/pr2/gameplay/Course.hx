@@ -100,7 +100,6 @@ class Course extends Sprite {
 	public var playerSpectating(default, null):Null<Character>;
 	public var canSpectate(default, null):Bool = false;
 	private var worldLevel:WorldLevel;
-	private var originalDecodedBlocks:Array<DecodedBlock> = [];
 	private var blockController:BlockController;
 	private var player:LocalCharacter;
 	private var camera:CameraFollow;
@@ -214,7 +213,6 @@ class Course extends Sprite {
 	}
 
 	private function build():Void {
-		originalDecodedBlocks = level.blocks.copy();
 		var startBlocks = level.startBlocks();
 		var focus = startBlocks.length == 0 ? null : startBlocks[0];
 		levelRenderer = new ServerLevelRenderer(level, focus, ServerLevelRenderer.DEFAULT_FOCUS_X, ServerLevelRenderer.DEFAULT_FOCUS_Y, true);
@@ -225,7 +223,6 @@ class Course extends Sprite {
 		blockController = new BlockController(worldLevel);
 		blockController.onBlockRemoved = removeRuntimeBlock;
 		blockController.onBlockAdded = addRuntimeBlock;
-		blockController.onBlocksReset = resetRuntimeBlocks;
 		player = new LocalCharacter(worldLevel, 1, 1, 1, 1, blockController);
 		snakeManager = new SnakeManager(worldLevel, levelRenderer, player.controller);
 		player.onPlayJumpSound = playJumpSound;
@@ -237,6 +234,7 @@ class Course extends Sprite {
 		player.setGameMode(config.gameMode);
 		player.setHatsAllowed(config.gameMode != Modes.roguelike);
 		player.setAllowedItems(config.allowedItems);
+		player.setCourseTime(maxCourseTimeSeconds());
 		localCharacter = player;
 		playerArray[player.tempID] = player;
 		remoteBlockActivation = new RemoteBlockActivation(worldLevel, levelRenderer);
@@ -542,55 +540,6 @@ class Course extends Sprite {
 		return true;
 	}
 
-	public function resetTestCourse(speed:Float, acceleration:Float, jumping:Float):Void {
-		if (localCharacter == null || levelRenderer == null || worldLevel == null) {
-			return;
-		}
-		input.clear();
-		stopAllJetSounds();
-		particleEffects.clearAll();
-		resetActiveBlockVisuals();
-		resetMovedBlockDisplays();
-		removeAllRemoteCharacters();
-		for (id in [for (id in looseHats.keys()) id]) {
-			removeLooseHat(id);
-		}
-		reachedObjectives.clear();
-		localFinishHandled = false;
-		raceEnded = false;
-		framesPlaying = 0;
-		frameCounterActive = false;
-		rotationTweenActive = false;
-		setStageQuality(StageQuality.HIGH);
-		if (levelRenderer != null) {
-			levelRenderer.setArtCaching(true);
-		}
-		displayedCourseRotation = 0;
-		displayedMoveBlockArrows.clear();
-		levelRenderer.resetRuntimeState();
-		var start = worldLevel.playerStart;
-		localCharacter.resetTestCourseState(start.x * ServerLevelWorldAdapter.TILE_SIZE + ServerLevelWorldAdapter.TILE_SIZE / 2,
-			(start.y + 1) * ServerLevelWorldAdapter.TILE_SIZE, maxCourseTimeSeconds());
-		var roguelike = config.gameMode == Modes.roguelike;
-		localCharacter.setStats(roguelike ? 0 : speed, roguelike ? 0 : acceleration, roguelike ? 0 : jumping);
-		localCharacter.setLife(roguelike ? 1 : 3);
-		if (timer != null) {
-			timer.setTime(maxCourseTimeSeconds());
-		}
-		if (hearts != null) {
-			hearts.setHearts(roguelike ? 1 : 3);
-			hearts.visible = config.gameMode == "deathmatch" || roguelike;
-			displayedLives = hearts.getHeartCount();
-		}
-		displayedItemId = null;
-		displayedItemUses = null;
-		syncItemDisplay();
-		displayedStats = null;
-		syncStatsDisplay();
-		rebuildMiniMap();
-		updatePlayerDisplay();
-	}
-
 	private function removeRuntimeBlock(block:LevelBlock):Void {
 		var worldX = block.x * ServerLevelWorldAdapter.TILE_SIZE;
 		var worldY = block.y * ServerLevelWorldAdapter.TILE_SIZE;
@@ -632,32 +581,6 @@ class Course extends Sprite {
 			Std.int(Math.floor(worldY / ServerLevelWorldAdapter.TILE_SIZE)),
 			pr2.level.BlockType.Mine
 		));
-	}
-
-	private function resetRuntimeBlocks():Void {
-		var originalByPosition:Map<String, DecodedBlock> = new Map();
-		for (block in originalDecodedBlocks) {
-			originalByPosition.set(decodedBlockKey(block), block);
-		}
-		if (levelRenderer != null) {
-			for (block in level.blocks) {
-				var original = originalByPosition.get(decodedBlockKey(block));
-				if (original == null || original.code != block.code) {
-					levelRenderer.removeBlockDisplay(block.x, block.y);
-				}
-			}
-		}
-		level.blocks.resize(0);
-		for (block in originalDecodedBlocks) {
-			level.blocks.push(block);
-			if (levelRenderer != null) {
-				levelRenderer.ensureRuntimeBlockDisplay(block);
-			}
-		}
-	}
-
-	private static inline function decodedBlockKey(block:DecodedBlock):String {
-		return block.x + "," + block.y;
 	}
 
 	public function setLife(lives:Int):Void {
@@ -1331,8 +1254,6 @@ class Course extends Sprite {
 	}
 
 	private function syncBlockVisuals():Void blockVisuals.syncBlockVisuals();
-	private function resetActiveBlockVisuals():Void blockVisuals.resetActiveBlockVisuals();
-	private function resetMovedBlockDisplays():Void blockVisuals.resetMovedBlockDisplays();
 	private function syncMoveBlockDisplays():Void blockVisuals.syncMoveBlockDisplays();
 	private function emitFinishDrawingReady():Void blockVisuals.emitFinishDrawingReady();
 	private function emitLocalBlockActivation(event:BlockVisualEvent):Void blockVisuals.emitLocalBlockActivation(event);

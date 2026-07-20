@@ -38,6 +38,8 @@ import pr2.lobby.messages.MessagesPaging;
 import pr2.lobby.messages.UnreadNotif;
 import pr2.gameplay.LevelConfig;
 import pr2.gameplay.Items;
+import pr2.level.ObjectCodes;
+import pr2.level.ServerLevelDecoder;
 import pr2.level.ServerLevelRenderer;
 import pr2.net.CampaignLevelInfo;
 import pr2.net.LevelDataClient;
@@ -1777,6 +1779,14 @@ class LobbyServicesTest {
 		var firstCourse = testCourse.course;
 		var firstStatsSelect = testCourse.statsSelect;
 		var firstHatPicker = testCourse.hatPicker;
+		var authoredBrick = Lambda.find(ServerLevelDecoder.decode(Std.string(sourceData)).blocks,
+			function(block) return block.code == ObjectCodes.BLOCK_BRICK);
+		assertNotNull(authoredBrick, "restart fixture contains its authored brick");
+		var authoredBrickTileX = Std.int(Math.floor(authoredBrick.x / ServerLevelRenderer.TILE_SIZE));
+		var authoredBrickTileY = Std.int(Math.floor(authoredBrick.y / ServerLevelRenderer.TILE_SIZE));
+		assertEquals(true, testCourse.course.localCharacter.applyRemoteBlockActivation(authoredBrickTileX, authoredBrickTileY),
+			"restart fixture destroys an authored block in the live map");
+		assertEquals(true, testCourse.course.placeRuntimeMine(960, 960), "restart fixture adds a runtime-only mine");
 		DisplayUtil.findByName(testCourse.hatPicker, "right").dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 		assertEquals(15, testCourse.course.localCharacter.hat1, "hat picker skips artifact hat moving right");
 		assertEquals(15, Settings.getValue(Settings.LE_TEST_HAT, 2), "hat picker persists the selected hat");
@@ -1806,13 +1816,20 @@ class LobbyServicesTest {
 			AppStage.stage.focus = null;
 		}
 		DisplayUtil.findByName(testCourse.art, "restart_bt").dispatchEvent(new MouseEvent(MouseEvent.CLICK));
-		assertEquals(firstCourse, testCourse.course, "restart resets the existing test course like Flash");
-		assertEquals(firstStatsSelect, testCourse.statsSelect, "restart keeps the existing StatsSelect control");
-		assertEquals(firstHatPicker, testCourse.hatPicker, "restart keeps the existing HatPicker control");
-		assertEquals(testCourse.course, firstStatsSelect.parent, "restart leaves StatsSelect on the Course holder");
-		assertEquals(testCourse.course, firstHatPicker.parent, "restart leaves HatPicker on the Course holder");
+		assertEquals(false, firstCourse == testCourse.course, "restart rebuilds Course from the editor's serialized level");
+		assertEquals(false, firstStatsSelect == testCourse.statsSelect, "restart rebuilds StatsSelect for the new character");
+		assertEquals(false, firstHatPicker == testCourse.hatPicker, "restart rebuilds HatPicker for the new character");
+		assertEquals(null, firstStatsSelect.parent, "restart removes the old StatsSelect control");
+		assertEquals(null, firstHatPicker.parent, "restart removes the old HatPicker control");
+		assertEquals(testCourse.course, testCourse.art.parent, "restart moves the authored controls onto the new Course");
+		assertEquals(testCourse.course, testCourse.statsSelect.parent, "restart mounts StatsSelect on the new Course");
+		assertEquals(testCourse.course, testCourse.hatPicker.parent, "restart mounts HatPicker on the new Course");
 		assertEquals(0, testCourse.course.levelRenderer.teleportPopCountForTests(), "restart clears teleport pop effects");
 		var restartedStats = testCourse.course.localCharacter.stateSnapshot();
+		assertEquals(1.0, testCourse.course.localCharacter.blockAlphaAt(authoredBrickTileX, authoredBrickTileY),
+			"restart restores authored blocks by decoding the editor level again");
+		assertEquals(false, testCourse.course.localCharacter.applyRemoteBlockActivation(32, 32),
+			"restart discards runtime-only blocks with the old Course");
 		assertEquals(0, restartedStats.courseRotation, "restart resets course rotation");
 		assertEquals(90, restartedStats.courseTime, "restart resets the course timer to max time");
 		assertEquals(3, restartedStats.lives, "restart resets deathmatch lives");

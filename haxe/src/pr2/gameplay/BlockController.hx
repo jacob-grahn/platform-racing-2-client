@@ -32,7 +32,6 @@ class BlockController {
 	private final blockStates:LocalPlayerBlockStateStore = new LocalPlayerBlockStateStore();
 	private final disabledTeleportFrames:Map<String, Int> = new Map();
 	private final moveBlockDirections:Map<String, Int> = new Map();
-	private final originalBlocks:Array<LevelBlock> = [];
 	private var moveBlockPhase:MoveBlockPhase = Preview;
 	private var moveBlockDeadlineMs:Null<Float> = null;
 	private var moveStartTimeMs:Float = 0;
@@ -40,14 +39,10 @@ class BlockController {
 	private var moveRandom:FlashRandom = new FlashRandom(1);
 	public var onBlockRemoved:Null<LevelBlock->Void> = null;
 	public var onBlockAdded:Null<LevelBlock->Void> = null;
-	public var onBlocksReset:Null<Void->Void> = null;
 
 	public function new(level:WorldLevel, ?clock:Void->Float) {
 		this.level = level;
 		this.clock = clock == null ? function():Float return haxe.Timer.stamp() * 1000 : clock;
-		for (block in level.blocks) {
-			originalBlocks.push(copyBlock(block));
-		}
 	}
 
 	public function bindPlayer(owner:LocalPlayerController, startImmediately:Bool):Void {
@@ -263,19 +258,6 @@ class BlockController {
 		disabledTeleportFrames.clear();
 	}
 
-	public function resetTestCourseState():Void {
-		level.blocks.resize(0);
-		for (block in originalBlocks) {
-			level.blocks.push(copyBlock(block));
-		}
-		resetPreRaceState();
-		moveRandom = new FlashRandom(1);
-		startGameplay();
-		if (onBlocksReset != null) {
-			onBlocksReset();
-		}
-	}
-
 	/** Mirrors Flash Map.removeBlock: evict a destroyed block from the live grid. */
 	public function removeBlock(block:LevelBlock):Bool {
 		var index = level.blocks.indexOf(block);
@@ -435,10 +417,6 @@ class BlockController {
 		}
 		return (seg1X == targetTileX && seg1Y == targetTileY)
 			|| (seg2X == targetTileX && seg2Y == targetTileY);
-	}
-
-	private static function copyBlock(block:LevelBlock):LevelBlock {
-		return new LevelBlock(block.x, block.y, block.type, block.options);
 	}
 
 }

@@ -197,15 +197,23 @@ class TestCoursePage extends Page {
 		if (course == null) {
 			return;
 		}
-		var savedStats:Dynamic = Settings.getValue(Settings.LE_TEST_STATS, Settings.DEFAULT_LE_TEST_STATS);
-		var speed = parseStatField(savedStats, "speed", Settings.DEFAULT_LE_TEST_STATS.speed);
-		var acceleration = parseStatField(savedStats, "acceleration", Settings.DEFAULT_LE_TEST_STATS.acceleration);
-		var jumping = parseStatField(savedStats, "jumping", Settings.DEFAULT_LE_TEST_STATS.jumping);
-		course.resetTestCourse(speed, acceleration, jumping);
-		if (hatPicker != null) {
-			hatPicker.resetHat();
+		if (art != null && art.parent != null) {
+			art.parent.removeChild(art);
 		}
-		statsSelectSetFromCharacter();
+		if (statsSelect != null) {
+			statsSelect.remove();
+			statsSelect = null;
+		}
+		if (hatPicker != null) {
+			hatPicker.remove();
+			hatPicker = null;
+		}
+		if (course.levelRenderer != null) {
+			course.levelRenderer.removeEventListener(MouseEvent.CLICK, teleportToClickPos);
+		}
+		course.remove();
+		course = null;
+		mountCourse();
 		stackOverlayControls();
 	}
 
