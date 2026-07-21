@@ -425,11 +425,12 @@ class NativePresentationFoundationTest {
 		assertClose(-75, view.getChildAt(0).y, "message popup ShadowBG keeps its XFL Y");
 		assertClose(-155, view.messageArea.x, "message TextArea keeps its XFL X");
 		assertClose(-65, view.messageArea.y, "message TextArea keeps its XFL Y");
-		assertClose(100, view.messageArea.controlWidth, "message TextArea keeps its component base width");
-		assertClose(44, view.messageArea.controlHeight, "message TextArea keeps its component base height");
-		assertClose(3.09109497070313, view.messageArea.scaleX, "message TextArea keeps its XFL X scale");
-		assertClose(2.27197265625, view.messageArea.scaleY, "message TextArea keeps its XFL Y scale");
-		assertEquals(true, view.messageArea.y + view.messageArea.controlHeight * view.messageArea.scaleY < view.okButton.y,
+		assertClose(309.109497070313, view.messageArea.controlWidth, "message TextArea consumes its XFL X scale as component width");
+		assertClose(49.9833984375, view.messageArea.controlHeight, "message TextArea consumes its XFL Y scale as component height");
+		assertClose(1, view.messageArea.scaleX, "message TextArea does not magnify its component text horizontally");
+		assertClose(1, view.messageArea.scaleY, "message TextArea does not magnify its component text vertically");
+		assertClose(11, view.message.defaultTextFormat.size, "message TextArea keeps the original component font size");
+		assertEquals(true, view.messageArea.y + view.messageArea.controlHeight < view.okButton.y,
 			"message TextArea ends above the OK button");
 		assertEquals(false, view.messageArea.editable, "message TextArea is non-editable as authored");
 		assertEquals("Server message", view.message.text, "message popup applies its AS3 htmlText assignment");
