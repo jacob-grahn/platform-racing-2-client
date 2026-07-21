@@ -1201,8 +1201,9 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	}
 
 	private function updateSafeSpot(block:LevelBlock, centerY:Bool):Void {
-		lastSafeX = block.x * level.tileSize + level.tileSize / 2;
-		lastSafeY = (block.y + (centerY ? 0.5 : 0)) * level.tileSize;
+		var position = rotatedBlockPos(block);
+		lastSafeX = position.x + level.tileSize / 2;
+		lastSafeY = position.y + (centerY ? level.tileSize / 2 : 0);
 		standingTileX = block.x;
 		standingTileY = block.y;
 	}

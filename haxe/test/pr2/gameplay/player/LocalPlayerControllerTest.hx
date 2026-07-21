@@ -122,6 +122,8 @@ class LocalPlayerControllerTest {
 		testRotateLeftCompletesCourseRotation();
 		testRotationTweenMatchesCourseFrames();
 		testRotationMapsSafePosition();
+		testRotatedSafeSpotUsesDisplayedBlockPosition();
+		testRotatedSafetyAndMapReturnsUseRotatedSafeSpot();
 		testCollisionSnapsAgainstRotatedCeiling();
 		testCollisionStopsLeftMovementAfterRotation();
 		testArrowPushUsesRotatedCourseDirection();
@@ -2229,6 +2231,40 @@ class LocalPlayerControllerTest {
 		assertClose(initialSafeX, player.lastSafeY, "right rotation maps the last-safe y coordinate");
 	}
 
+	private static function testRotatedSafeSpotUsesDisplayedBlockPosition():Void {
+		var level = rotatedRecoveryLevel();
+		var player = new LocalCharacter(level);
+		@:privateAccess player.controller.courseRotation = 90;
+
+		var floor = level.blockAt(2, 4);
+		@:privateAccess player.controller.updateSafeSpot(floor, false);
+		assertClose(-135, player.lastSafeX, "rotated solid saves the center of its displayed top edge");
+		assertClose(60, player.lastSafeY, "rotated solid saves its displayed top edge");
+
+		var water = level.blockAt(1, 2);
+		@:privateAccess player.controller.updateSafeSpot(water, true);
+		assertClose(-75, player.lastSafeX, "rotated water saves its displayed center x");
+		assertClose(45, player.lastSafeY, "rotated water saves its displayed center y");
+	}
+
+	private static function testRotatedSafetyAndMapReturnsUseRotatedSafeSpot():Void {
+		var level = rotatedRecoveryLevel();
+		var player = new LocalCharacter(level);
+		@:privateAccess player.controller.courseRotation = 90;
+		@:privateAccess player.controller.updateSafeSpot(level.blockAt(2, 4), false);
+
+		@:privateAccess player.controller.touchAt(-105, 105, "rotatedSafetyTest");
+		var state = player.stateSnapshot();
+		assertClose(-135, state.x, "rotated safety net restores displayed checkpoint x");
+		assertClose(60, state.y, "rotated safety net restores displayed checkpoint y");
+
+		player.setControllerPosition(-135, 10000);
+		player.step(new LocalPlayerInput());
+		state = player.stateSnapshot();
+		assertClose(-135, state.x, "rotated map return restores displayed checkpoint x");
+		assertClose(60, state.y, "rotated map return restores displayed checkpoint y");
+	}
+
 	private static function testCollisionSnapsAgainstRotatedCeiling():Void {
 		var level = rotateBlockLevel(BlockType.RotateRight);
 		level.blocks.push(new LevelBlock(4, 3, BlockType.Solid));
@@ -3074,6 +3110,25 @@ class LocalPlayerControllerTest {
 				new LevelBlock(2, 1, type),
 				new LevelBlock(2, 4, BlockType.Solid),
 				new LevelBlock(4, 4, BlockType.Finish)
+			]
+		);
+	}
+
+	private static function rotatedRecoveryLevel():Level {
+		return new Level(
+			"rotated-recovery",
+			"Rotated Recovery",
+			6,
+			6,
+			30,
+			1,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(2, 3),
+			new TilePosition(5, 5),
+			[
+				new LevelBlock(2, 4, BlockType.Solid),
+				new LevelBlock(1, 2, BlockType.Water),
+				new LevelBlock(3, 3, BlockType.Safety)
 			]
 		);
 	}
