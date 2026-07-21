@@ -312,11 +312,15 @@ class GamePage extends Page implements GameCommandDelegate {
 
 	public function cowboyMode():Void {
 		var mode = new CowboyMode();
+		mode.x = Constants.STAGE_WIDTH / 2;
+		mode.y = Constants.STAGE_HEIGHT / 2;
 		cowboyModes.push(mode);
 		addChild(mode);
 	}
 	public function happyHour():Void {
 		var happy = new HappyHour(onHappyHourRemoved);
+		happy.x = Constants.STAGE_WIDTH / 2;
+		happy.y = Constants.STAGE_HEIGHT / 2;
 		happyHours.push(happy);
 		addChild(happy);
 	}

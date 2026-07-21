@@ -276,6 +276,8 @@ class QuitButtonTest {
 		assertEquals(1, game.cowboyModes.length, "cowboyMode adds the authored animation");
 		var mode = game.cowboyModes[0];
 		assertEquals(true, mode.parent == game, "cowboyMode attaches to the game page");
+		assertEquals(275.0, mode.x, "cowboyMode centers its authored origin horizontally");
+		assertEquals(200.0, mode.y, "cowboyMode centers its authored origin vertically");
 		@:privateAccess assertEquals("assets/effects/cowboy.lottie.json", mode.art.timeline.sourcePath, "cowboyMode uses semantic Lottie data");
 		@:privateAccess assertEquals(1, mode.art.currentFrame, "cowboyMode starts on authored frame one");
 
@@ -297,6 +299,8 @@ class QuitButtonTest {
 		assertEquals(1, game.happyHours.length, "happyHour adds the authored animation");
 		var happy = game.happyHours[0];
 		assertEquals(true, happy.parent == game, "happyHour attaches to the game page");
+		assertEquals(275.0, happy.x, "happyHour centers its authored origin horizontally");
+		assertEquals(200.0, happy.y, "happyHour centers its authored origin vertically");
 		@:privateAccess assertEquals("assets/effects/happy_hour.lottie.json", happy.art.timeline.sourcePath,
 			"happyHour uses semantic Lottie data");
 		@:privateAccess assertEquals(1, happy.art.currentFrame, "happyHour starts on authored frame one");
