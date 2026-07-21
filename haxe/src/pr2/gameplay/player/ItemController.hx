@@ -381,10 +381,6 @@ class ItemController {
 		owner.itemReloadFramesRemaining = 0;
 	}
 
-	public function applyJetPackThrust(input:LocalPlayerInput):Void {
-		if (input.item && owner.itemId == LocalPlayerController.ITEM_JET_PACK && !owner.crouching) owner.jumpHeld = false;
-	}
-
 	public function consumeHeldItemCompletely():Void {
 		owner.itemId = null;
 		owner.itemUses = null;

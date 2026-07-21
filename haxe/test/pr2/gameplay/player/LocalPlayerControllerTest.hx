@@ -73,6 +73,7 @@ class LocalPlayerControllerTest {
 		testTeleportItemBlockedBySolidDestination();
 		testSpeedBurstBoostsMovementThenExpires();
 		testJetPackLiftsPlayerThenExpires();
+		testGroundJumpStacksWithJetPackThrust();
 		testLaserGunReloadTiming();
 		testLaserGunShotAnimatesBlockFromSide();
 		testLaserGunDamageBreaksBrickBlock();
@@ -1374,6 +1375,16 @@ class LocalPlayerControllerTest {
 		}
 
 		assertEquals(null, boosted.stateSnapshot().itemId, "jet pack expires after 200 fuel frames");
+	}
+
+	private static function testGroundJumpStacksWithJetPackThrust():Void {
+		var player = new LocalCharacter(jetPackComparisonLevel());
+		player.grantItemForDebug(6);
+
+		player.step(new LocalPlayerInput(false, false, true, false, true));
+		player.step(new LocalPlayerInput(false, false, true, false, true));
+
+		assertClose(-7.6, player.stateSnapshot().vy, "held ground jump keeps its diminishing boost while Jet Pack thrust is active");
 	}
 
 	private static function testLaserGunReloadTiming():Void {

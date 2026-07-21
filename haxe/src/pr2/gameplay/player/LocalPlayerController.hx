@@ -513,7 +513,6 @@ class LocalPlayerController implements ItemRuntimeOwner {
 			crouchCharge = 0;
 		}
 
-		applyJetPackThrust(input);
 		position(input);
 		updateLandAnimationState(input);
 		processBlocks(input);
@@ -1556,7 +1555,6 @@ class LocalPlayerController implements ItemRuntimeOwner {
 
 	private function updatePendingMinePlacements():Void itemController.updatePendingMinePlacements();
 	private function updatePendingProjectileDamages():Void itemController.updatePendingProjectileDamages();
-	private function applyJetPackThrust(input:LocalPlayerInput):Void itemController.applyJetPackThrust(input);
 	private function activateSpeedBurst(frames:Int):Void itemController.activateSpeedBurst(frames);
 	private function consumeHeldItemCompletely():Void itemController.consumeHeldItemCompletely();
 
