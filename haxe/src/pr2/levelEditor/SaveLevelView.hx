@@ -31,7 +31,7 @@ class SaveLevelView extends NativeView {
 		title.name = "titleBox";
 		title.x = -79;
 		title.y = -78;
-		title.scaleX = 2.03001403808594;
+		title.setSize(100 * 2.03001403808594, 22);
 		title.maxChars = 50;
 		addChild(title);
 		field("titleCharsRemaining", -134, -68, 52, 12.75, 8, false, TextFormatAlign.CENTER, 0xAAAAAA).text = "50 / 50";
@@ -43,8 +43,7 @@ class SaveLevelView extends NativeView {
 		note.name = "noteBox";
 		note.x = -79;
 		note.y = -41;
-		note.scaleX = 2.030029296875;
-		note.scaleY = 1.3865966796875;
+		note.setSize(100 * 2.030029296875, 44 * 1.3865966796875);
 		note.maxChars = 255;
 		note.wordWrap = true;
 		addChild(note);
