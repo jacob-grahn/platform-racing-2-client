@@ -3,7 +3,7 @@ package pr2.gameplay.player;
 import openfl.display.DisplayObject;
 
 class PlayerDisplayPlacement {
-	public static inline var CHARACTER_SCALE:Float = 0.9;
+	public static inline var CHARACTER_SCALE:Float = 1;
 
 	public static function place(
 		playerDisplay:DisplayObject,

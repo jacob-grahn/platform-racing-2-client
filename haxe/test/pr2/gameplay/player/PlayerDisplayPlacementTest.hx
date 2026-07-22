@@ -25,8 +25,8 @@ class PlayerDisplayPlacementTest {
 		assertClose(75, playerDisplay.x, "Flash-compatible character x remains the feet position");
 		assertClose(300, playerDisplay.y, "Flash-compatible character y remains the feet position");
 		assertClose(1, playerDisplay.scaleY, "crouch does not visually squash the character container");
-		assertClose(-0.9, characterDisplay.scaleX, "facing still flips the authored character scale");
-		assertClose(0.9, characterDisplay.scaleY, "crouch keeps the authored character scale");
+		assertClose(-1, characterDisplay.scaleX, "facing still flips the authored character scale");
+		assertClose(1, characterDisplay.scaleY, "crouch keeps the authored character scale");
 	}
 
 	private static function testRotationUsesFeetPivot():Void {
@@ -40,8 +40,8 @@ class PlayerDisplayPlacementTest {
 		assertClose(-90, playerDisplay.rotation, "container stores the requested rotation");
 		assertClose(75, feet.x, "rotated container keeps the feet pivot on the requested x");
 		assertClose(300, feet.y, "rotated container keeps the feet pivot on the requested y");
-		assertClose(0.9, characterDisplay.scaleX, "rotation keeps the authored character x scale");
-		assertClose(0.9, characterDisplay.scaleY, "rotation keeps the authored character y scale");
+		assertClose(1, characterDisplay.scaleX, "rotation keeps the authored character x scale");
+		assertClose(1, characterDisplay.scaleY, "rotation keeps the authored character y scale");
 	}
 
 	private static function assertClose(expected:Float, actual:Float, message:String):Void {
