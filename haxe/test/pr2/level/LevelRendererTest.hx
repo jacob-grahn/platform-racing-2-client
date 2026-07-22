@@ -23,6 +23,7 @@ class LevelRendererTest {
 		testBlockAssetMapping();
 		if (pr2.DeterministicTestMode.finishSmokeSuite("LevelRendererTest")) return;
 		testArtAssetMappings();
+		testPackedArtBackgroundMounts();
 		testDefaultArtStrokeThickness();
 		testArtEraseStrokeClearsRasterTiles();
 		testWorldToScreenFocus();
@@ -599,6 +600,18 @@ class LevelRendererTest {
 		assertEquals("assets/svg/stamps/spire2.svg", LevelRenderer.stampAssetPath(8), "spire stamp asset");
 		assertEquals("assets/svg/stamps/cactus.svg", LevelRenderer.stampAssetPath(4), "composed cactus stamp asset");
 		assertEquals("assets/svg/stamps/building1.svg", LevelRenderer.stampAssetPath(9), "composed building stamp asset");
+	}
+
+	private static function testPackedArtBackgroundMounts():Void {
+		Settings.disablePersistenceForTests();
+		Settings.setValue(Settings.DRAW_ART, true);
+		var block = new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 10020, 10050);
+		var renderer = new LevelRenderer(new TestLevel(0xFFFFFF, [block], [], 201), block);
+		var background = @:privateAccess renderer.artBackgroundContainer;
+
+		assertTrue(background != null, "art background creates its stage container");
+		assertEquals(1, background.numChildren, "packed BG1 SVG mounts through SvgAsset");
+		renderer.remove();
 	}
 
 	private static function testDefaultArtStrokeThickness():Void {

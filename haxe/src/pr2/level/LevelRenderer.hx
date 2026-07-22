@@ -21,7 +21,6 @@ import openfl.geom.Rectangle;
 import openfl.text.TextField;
 import openfl.text.TextFieldAutoSize;
 import openfl.text.TextFormat;
-import openfl.utils.AssetType;
 import openfl.utils.Assets;
 import pr2.Constants;
 import pr2.gameplay.PrizePopup;
@@ -1329,7 +1328,11 @@ class LevelRenderer extends Sprite {
 		addChild(artBackgroundContainer);
 		artBackgroundTintScale = backgroundCode == 204 || backgroundCode == BG5_CODE ? 0 : 1;
 		var assetPath = artBackgroundAssetPath(level.artBackgroundCode);
-		if (assetPath != "" && Assets.exists(assetPath, AssetType.TEXT)) {
+		if (assetPath != "") {
+			// SVGs are virtual entries inside assets/svg-packs/*.json in HTML5
+			// builds, so OpenFL's registry cannot see the individual asset path.
+			// SvgAsset owns that packed lookup and reports a genuinely missing
+			// background if the generated pack is incomplete.
 			// These SVGs are strict XFL compositions in the original 550x400
 			// coordinate space. BitmapData.draw(bg) in Flash preserved that space
 			// and clipped it to the stage; fitting visible bounds changes both the
