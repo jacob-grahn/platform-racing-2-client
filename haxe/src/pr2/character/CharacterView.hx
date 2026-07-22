@@ -2,14 +2,20 @@ package pr2.character;
 
 import haxe.ds.StringMap;
 import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
+import openfl.display.PixelSnapping;
 import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.filters.BlurFilter;
 import openfl.geom.ColorTransform;
 import openfl.geom.Matrix;
+import openfl.geom.Rectangle;
 import openfl.utils.AssetType;
 import openfl.utils.Assets;
+import pr2.Constants;
 import pr2.character.CharacterRig.CharacterRigDefinition;
 import pr2.character.CharacterRig.RigAnimation;
 import pr2.character.CharacterRig.RigHeldItem;
@@ -17,6 +23,7 @@ import pr2.character.CharacterRig.RigPartChannels;
 import pr2.character.CharacterRig.RigPartChannelAnimation;
 import pr2.character.CharacterRig.RigPartKind;
 import pr2.character.CharacterRig.RigSlot;
+import pr2.runtime.ExplicitBitmapCache;
 import pr2.runtime.SvgAsset;
 
 typedef CharacterViewPartIds = {
@@ -42,9 +49,12 @@ typedef CharacterViewPartColors = {
 	Animation advances only through `advanceOneFrame`; it has no ENTER_FRAME
 	listener and therefore remains synchronized with the gameplay clock.
 **/
+@:access(openfl.display.Graphics)
 class CharacterView extends Sprite {
 	public static final STATE_NAMES = ["run", "stand", "jump", "superJump", "bumped", "crouch", "crouchWalk", "swim", "frozen"];
 	private static inline var VANISH_ASSET:String = "assets/blocks/vanish.png";
+	private static inline var PART_CACHE_PADDING:Int = 2;
+	private static final BITMAP_CACHE_SLOTS:Array<String> = ["head", "body", "frontFoot", "backFoot"];
 
 	public var currentFrame(default, null):Int = 1;
 	public var currentState(default, null):String = "stand";
@@ -78,6 +88,14 @@ class CharacterView extends Sprite {
 	private var idleAnimationEnabled:Bool = false;
 	private var idleTicking:Bool = false;
 	private var superJumpWobbleRandom:Void->Float = Math.random;
+	private var partBitmapCacheEnabled:Bool = #if pr2_explicit_character_part_bitmap_cache true #else false #end;
+	private final partBitmapCaches:StringMap<ExplicitBitmapCache> = new StringMap();
+	private final partBitmapCacheScales:StringMap<Float> = new StringMap();
+	@:allow(pr2.character.CharacterViewTest)
+	private final hatAnimationFrames:Array<Int> = [1, 1, 1, 1];
+	private final hatOverlayFrameData:Array<Null<Array<BitmapData>>> = [null, null, null, null];
+	private final hatOverlayBitmaps:Array<Null<Bitmap>> = [null, null, null, null];
+	private final hatOverlayRasterScales:Array<Float> = [0, 0, 0, 0];
 
 	public function new(
 		primaryColor:Int = 0x2E8BFF,
@@ -112,6 +130,161 @@ class CharacterView extends Sprite {
 		createHatSlots();
 		setColors(primaryColor, secondaryColor);
 		setState(state);
+		#if (html5 && pr2_explicit_character_part_bitmap_cache)
+		addEventListener(Event.EXIT_FRAME, refreshPartVectorCaches);
+		#end
+	}
+
+	#if (html5 && pr2_explicit_character_part_bitmap_cache)
+	/**
+		Rasterize each part in its own local coordinate system at its final browser
+		scale. The explicit bitmap is positioned at the source's exact local bounds,
+		so animated slot transforms and registration points remain untouched.
+	**/
+	private function refreshPartVectorCaches(_:Event):Void {
+		if (!partBitmapCacheEnabled) return;
+		for (slotName in BITMAP_CACHE_SLOTS) {
+			var part = requireSlot(slotName);
+			var artwork = Std.downcast(part.getChildByName("artwork"), Sprite);
+			if (artwork == null) continue;
+			refreshExplicitBitmapCache(slotName, artwork);
+		}
+		for (index in 0...hatSlots.length) {
+			if (!hatSlots[index].visible) continue;
+			var artwork = Std.downcast(hatSlots[index].getChildByName("artwork"), Sprite);
+			if (artwork != null) refreshExplicitBitmapCache(hatCacheKey(index), artwork);
+			refreshHatOverlayCache(index);
+		}
+	}
+
+	private function refreshExplicitBitmapCache(cacheKey:String, artwork:Sprite):Void {
+		var effectiveScale = currentPartRasterScale(artwork);
+		if (effectiveScale <= 0) return;
+		var existing = partBitmapCaches.get(cacheKey);
+		var cachedScale = partBitmapCacheScales.get(cacheKey);
+		if (existing != null && existing.target == artwork && cachedScale != null && effectiveScale <= cachedScale + 0.0001) return;
+		disposePartBitmapCache(cacheKey);
+		invalidateVectorCache(artwork);
+		var cache = ExplicitBitmapCache.attach(artwork, {
+			scale: effectiveScale,
+			padding: PART_CACHE_PADDING,
+			bitmapName: '__characterPartCache_$cacheKey'
+		});
+		if (!cache.valid) {
+			cache.dispose();
+			return;
+		}
+		partBitmapCaches.set(cacheKey, cache);
+		partBitmapCacheScales.set(cacheKey, effectiveScale);
+	}
+
+	private function refreshHatOverlayCache(index:Int):Void {
+		var channels = partVariant("hat", hatIds[index]);
+		var animation = channels.overlayAnimation;
+		if (animation == null) return;
+		var overlay = Std.downcast(hatSlots[index].getChildByName("animatedOverlay"), Sprite);
+		if (overlay == null) return;
+		var effectiveScale = currentPartRasterScale(overlay);
+		if (effectiveScale <= 0) return;
+		var currentFrames = hatOverlayFrameData[index];
+		if (currentFrames != null && effectiveScale <= hatOverlayRasterScales[index] + 0.0001) return;
+
+		disposeHatOverlayCache(index, false);
+		var frameArt:Array<DisplayObject> = [];
+		var union:Null<Rectangle> = null;
+		for (assetPath in animation.frames) {
+			var frame = SvgAsset.create(assetPath);
+			invalidateVectorCache(frame);
+			overlay.addChild(frame);
+			var bounds = frame.getBounds(overlay);
+			union = union == null ? bounds.clone() : union.union(bounds);
+			overlay.removeChild(frame);
+			frameArt.push(frame);
+		}
+		if (union == null || union.width <= 0 || union.height <= 0) return;
+
+		var pixelWidth = Std.int(Math.ceil(union.width * effectiveScale)) + PART_CACHE_PADDING * 2;
+		var pixelHeight = Std.int(Math.ceil(union.height * effectiveScale)) + PART_CACHE_PADDING * 2;
+		var renderedFrames:Array<BitmapData> = [];
+		for (frame in frameArt) {
+			var data = new BitmapData(pixelWidth, pixelHeight, true, 0);
+			var drawMatrix = new Matrix(
+				effectiveScale,
+				0,
+				0,
+				effectiveScale,
+				-union.x * effectiveScale + PART_CACHE_PADDING,
+				-union.y * effectiveScale + PART_CACHE_PADDING
+			);
+			data.draw(frame, drawMatrix, null, null, null, true);
+			renderedFrames.push(data);
+		}
+		while (overlay.numChildren > 0) overlay.removeChildAt(0);
+		var bitmap = new Bitmap(renderedFrames[hatAnimationFrames[index] - 1], PixelSnapping.NEVER, true);
+		bitmap.name = "__animatedHatOverlayCache";
+		bitmap.scaleX = bitmap.scaleY = 1 / effectiveScale;
+		bitmap.x = union.x - PART_CACHE_PADDING / effectiveScale;
+		bitmap.y = union.y - PART_CACHE_PADDING / effectiveScale;
+		overlay.addChild(bitmap);
+		hatOverlayFrameData[index] = renderedFrames;
+		hatOverlayBitmaps[index] = bitmap;
+		hatOverlayRasterScales[index] = effectiveScale;
+	}
+
+	private function currentPartRasterScale(artwork:Sprite):Float {
+		if (stage == null || stage.window == null) return 0;
+		var matrix = artwork.transform.concatenatedMatrix;
+		var artworkScaleX = Math.sqrt(matrix.a * matrix.a + matrix.b * matrix.b);
+		var artworkScaleY = Math.sqrt(matrix.c * matrix.c + matrix.d * matrix.d);
+		var pixelWidth = stage.window.width * stage.window.scale;
+		var pixelHeight = stage.window.height * stage.window.scale;
+		var stageScale = Math.min(pixelWidth / Constants.STAGE_WIDTH, pixelHeight / Constants.STAGE_HEIGHT);
+		return Math.max(artworkScaleX, artworkScaleY) * stageScale;
+	}
+
+	private static function invalidateVectorCache(object:DisplayObject):Void {
+		var shape = Std.downcast(object, Shape);
+		if (shape != null) shape.graphics.__dirty = true;
+		var container = Std.downcast(object, DisplayObjectContainer);
+		if (container == null) return;
+		for (index in 0...container.numChildren) invalidateVectorCache(container.getChildAt(index));
+	}
+	#end
+
+	private function disposePartBitmapCache(slotName:String):Void {
+		var cache = partBitmapCaches.get(slotName);
+		if (cache != null) cache.dispose();
+		partBitmapCaches.remove(slotName);
+		partBitmapCacheScales.remove(slotName);
+	}
+
+	private function disposePartBitmapCaches(?kind:String):Void {
+		for (slotName in BITMAP_CACHE_SLOTS) {
+			if (kind != null && slotKinds.get(slotName) != kind) continue;
+			disposePartBitmapCache(slotName);
+		}
+	}
+
+	private static inline function hatCacheKey(index:Int):String return 'hat${index + 1}';
+
+	private function disposeHatBitmapCache(index:Int, restoreOverlay:Bool = true):Void {
+		disposePartBitmapCache(hatCacheKey(index));
+		disposeHatOverlayCache(index, restoreOverlay);
+	}
+
+	private function disposeHatBitmapCaches(restoreOverlay:Bool = true):Void {
+		for (index in 0...hatSlots.length) disposeHatBitmapCache(index, restoreOverlay);
+	}
+
+	private function disposeHatOverlayCache(index:Int, restoreVector:Bool = true):Void {
+		var bitmap = hatOverlayBitmaps[index];
+		if (bitmap != null && bitmap.parent != null) bitmap.parent.removeChild(bitmap);
+		var frames = hatOverlayFrameData[index];
+		if (frames != null) for (data in frames) data.dispose();
+		hatOverlayFrameData[index] = null;
+		hatOverlayBitmaps[index] = null;
+		hatOverlayRasterScales[index] = 0;
+		if (restoreVector && index < hatSlots.length) renderHatOverlayFrame(index);
 	}
 
 	private function createAllSlots():Void {
@@ -174,8 +347,9 @@ class CharacterView extends Sprite {
 
 	private function createHatArtwork(index:Int):Void {
 		var slot = hatSlots[index];
-		var previous = slot.getChildByName("artwork");
-		if (previous != null) slot.removeChild(previous);
+		disposeHatBitmapCache(index, false);
+		while (slot.numChildren > 0) slot.removeChildAt(0);
+		hatAnimationFrames[index] = 1;
 		slot.visible = hatIds[index] != 1;
 		if (!slot.visible) return;
 		var channels = partVariant("hat", hatIds[index]);
@@ -192,6 +366,40 @@ class CharacterView extends Sprite {
 		secondary.name = "secondary";
 		artwork.addChild(secondary);
 		applyHatColorToArtwork(index, artwork);
+		if (channels.overlayAnimation != null) {
+			var overlay = new Sprite();
+			overlay.name = "animatedOverlay";
+			slot.addChild(overlay);
+			renderHatOverlayFrame(index);
+		}
+	}
+
+	private function renderHatOverlayFrame(index:Int):Void {
+		if (index >= hatSlots.length || !hatSlots[index].visible) return;
+		var channels = partVariant("hat", hatIds[index]);
+		var animation = channels.overlayAnimation;
+		if (animation == null) return;
+		var overlay = Std.downcast(hatSlots[index].getChildByName("animatedOverlay"), Sprite);
+		if (overlay == null) return;
+		var cachedFrames = hatOverlayFrameData[index];
+		var bitmap = hatOverlayBitmaps[index];
+		if (cachedFrames != null && bitmap != null) {
+			bitmap.bitmapData = cachedFrames[hatAnimationFrames[index] - 1];
+			return;
+		}
+		while (overlay.numChildren > 0) overlay.removeChildAt(0);
+		var frame = SvgAsset.create(animation.frames[hatAnimationFrames[index] - 1]);
+		frame.name = "vectorFrame";
+		overlay.addChild(frame);
+	}
+
+	private function advanceHatAnimations():Void {
+		for (index in 0...hatSlots.length) {
+			var animation = partVariant("hat", hatIds[index]).overlayAnimation;
+			if (animation == null) continue;
+			hatAnimationFrames[index] = hatAnimationFrames[index] >= animation.frames.length ? 1 : hatAnimationFrames[index] + 1;
+			renderHatOverlayFrame(index);
+		}
 	}
 
 	public function setState(state:String):Void {
@@ -226,6 +434,8 @@ class CharacterView extends Sprite {
 	}
 
 	public function setColors(primary:Int, secondary:Int):Void {
+		disposePartBitmapCaches();
+		disposeHatBitmapCaches();
 		primaryColor = primary;
 		secondaryColor = secondary;
 		for (kind in ["head", "body", "feet"]) partColors.set(kind, {primary: primary, secondary: secondary});
@@ -236,6 +446,7 @@ class CharacterView extends Sprite {
 
 	public function setPartIds(ids:CharacterViewPartIds):Void {
 		validatePartIds(ids);
+		disposePartBitmapCaches();
 		if (partIds.body != ids.body) bodyChannelAnimationFrame = 1;
 		partIds = copyPartIds(ids);
 		for (slotName in slots.keys()) {
@@ -268,12 +479,14 @@ class CharacterView extends Sprite {
 
 	public function setPartColor(kind:String, primary:Int, secondary:Int):Void {
 		partKind(kind);
+		disposePartBitmapCaches(kind);
 		partColors.set(kind, {primary: primary, secondary: secondary});
 		applyPartColor(kind);
 	}
 
 	public function setHatIds(ids:Array<Int>):Void {
 		validateHatIds(ids);
+		disposeHatBitmapCaches(false);
 		hatIds = ids.copy();
 		for (index in 0...4) createHatArtwork(index);
 		applyAppearanceHierarchy();
@@ -291,12 +504,14 @@ class CharacterView extends Sprite {
 
 	public function setHatSlotColor(index:Int, primary:Int, secondary:Int):Void {
 		validateHatSlot(index);
+		disposePartBitmapCache(hatCacheKey(index));
 		hatColors[index] = {primary: primary, secondary: secondary};
 		applyHatColor(index);
 	}
 
 	public function setHatSlotColors(colors:Array<CharacterViewPartColor>):Void {
 		if (colors == null || colors.length != 4) throw "Native character requires four hat-slot colors";
+		for (index in 0...4) disposePartBitmapCache(hatCacheKey(index));
 		for (index in 0...4) hatColors[index] = {primary: colors[index].primary, secondary: colors[index].secondary};
 		applyAllHatColors();
 	}
@@ -318,6 +533,7 @@ class CharacterView extends Sprite {
 		applyFrame();
 		advanceItemAction();
 		advancePartChannelAnimations();
+		advanceHatAnimations();
 		if (currentState == "superJump") {
 			var amount = currentFrame / 2;
 			scaleY = (superJumpWobbleRandom() * amount + (100 - amount / 2)) / 100;
@@ -332,6 +548,7 @@ class CharacterView extends Sprite {
 		bodyChannelAnimationFrame = bodyChannelAnimationFrame >= frameCount ? 1 : bodyChannelAnimationFrame + 1;
 		for (slotName in slots.keys()) {
 			if (slotKinds.get(slotName) != "body") continue;
+			disposePartBitmapCache(slotName);
 			var artwork = Std.downcast(requireSlot(slotName).getChildByName("artwork"), Sprite);
 			if (artwork == null) continue;
 			for (animation in channels.channelAnimations) replaceAnimatedPartChannel(artwork, animation);
@@ -406,6 +623,16 @@ class CharacterView extends Sprite {
 	}
 
 	public function effectTarget(slotName:String):Null<Sprite> return slot(slotName);
+
+	/** Enables or disables explicit character-part and hat BitmapData caches. */
+	public function setPartBitmapCacheEnabled(enabled:Bool):Void {
+		if (partBitmapCacheEnabled == enabled) return;
+		partBitmapCacheEnabled = enabled;
+		if (!enabled) {
+			disposePartBitmapCaches();
+			disposeHatBitmapCaches();
+		}
+	}
 
 	public function enableIdleAnimation():Void {
 		if (idleAnimationEnabled) return;

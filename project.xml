@@ -30,6 +30,9 @@
 
 	<haxelib name="openfl" />
 	<haxelib name="svg" />
+	<!-- Rasterize character parts and hat bases in local coordinates at their
+	     final browser scale; animated hat overlays use pre-rendered frame sets. -->
+	<haxedef name="pr2_explicit_character_part_bitmap_cache" if="html5" />
 	<postbuild command="python3 tools/prune_html5_fonts.py" if="html5" />
 	<postbuild command="python3 tools/minify_html5_js.py" if="html5" unless="debug" />
 	<postbuild command="python3 tools/check_no_compat_runtime.py" if="html5" />

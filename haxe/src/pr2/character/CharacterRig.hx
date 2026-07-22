@@ -39,10 +39,17 @@ typedef RigPartChannels = {
 	var primary:String;
 	var secondary:String;
 	@:optional var channelAnimations:Array<RigPartChannelAnimation>;
+	@:optional var overlayAnimation:RigPartOverlayAnimation;
 }
 
 typedef RigPartChannelAnimation = {
 	var channel:String;
+	var frameRate:Int;
+	var endBehavior:String;
+	var frames:Array<String>;
+}
+
+typedef RigPartOverlayAnimation = {
 	var frameRate:Int;
 	var endBehavior:String;
 	var frames:Array<String>;
@@ -142,7 +149,7 @@ class CharacterRig {
 
 	public static function parse(content:String):CharacterRigDefinition {
 		var rig:CharacterRigDefinition = cast Json.parse(content);
-		if (rig.format != "pr2-character-rig" || rig.version != 8) {
+		if (rig.format != "pr2-character-rig" || rig.version != 9) {
 			throw 'Unsupported character rig ${rig.format} v${rig.version}';
 		}
 		if (rig.animations == null || rig.animations.length == 0) {
@@ -151,12 +158,17 @@ class CharacterRig {
 		for (kind in [rig.parts.head, rig.parts.body, rig.parts.feet, rig.parts.hat]) {
 			if (kind.variants == null || kind.variants.length == 0) throw "Character rig has an empty part kind";
 			for (variant in kind.variants) {
-				if (variant.channelAnimations == null) continue;
-				for (channel in variant.channelAnimations) {
-					if (["primary", "static", "secondary"].indexOf(channel.channel) == -1) throw 'Character rig part ${variant.name} has an invalid animated channel';
-					if (channel.frameRate <= 0 || channel.frames == null || channel.frames.length == 0 || channel.endBehavior != "loop") {
-						throw 'Character rig part ${variant.name} has invalid channel animation data';
+				if (variant.channelAnimations != null) {
+					for (channel in variant.channelAnimations) {
+						if (["primary", "static", "secondary"].indexOf(channel.channel) == -1) throw 'Character rig part ${variant.name} has an invalid animated channel';
+						if (channel.frameRate <= 0 || channel.frames == null || channel.frames.length == 0 || channel.endBehavior != "loop") {
+							throw 'Character rig part ${variant.name} has invalid channel animation data';
+						}
 					}
+				}
+				var overlay = variant.overlayAnimation;
+				if (overlay != null && (overlay.frameRate <= 0 || overlay.frames == null || overlay.frames.length == 0 || overlay.endBehavior != "loop")) {
+					throw 'Character rig part ${variant.name} has invalid overlay animation data';
 				}
 			}
 		}

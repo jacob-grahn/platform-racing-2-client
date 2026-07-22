@@ -63,6 +63,11 @@ EXCLUDED_PART_IDS = {
     "body": {29},  # Fred owns a different attachment and visibility hierarchy.
 }
 
+ANIMATED_HAT_OVERLAYS = {
+    4: {"frames": 4},
+    13: {"frames": 9},
+}
+
 
 def number(value: str | None, default: float) -> float:
     return default if value is None else float(value)
@@ -162,6 +167,19 @@ def part_variants(kind: str, include_excluded: bool = False) -> list[dict[str, o
             "primary": f"assets/svg/character/{kind}/{directory.name}/primary.svg",
             "secondary": f"assets/svg/character/{kind}/{directory.name}/secondary.svg",
         }
+        # Propeller and Jigg keep their nested MovieClip animation above a static
+        # base. Their generated frames share the hat container's local origin.
+        if kind == "hat" and part_id in ANIMATED_HAT_OVERLAYS:
+            overlay = ANIMATED_HAT_OVERLAYS[part_id]
+            record["fixed"] = f"assets/svg/character/hat/{directory.name}/static_base.svg"
+            record["overlayAnimation"] = {
+                "frameRate": 27,
+                "endBehavior": "loop",
+                "frames": [
+                    f"assets/svg/character/hat/{directory.name}/overlay_frames/frame_{frame:03d}.svg"
+                    for frame in range(1, overlay["frames"] + 1)
+                ],
+            }
         if kind == "body" and part_id == 21:
             record["channelAnimations"] = [
                 {
@@ -342,7 +360,7 @@ def generate() -> dict[str, object]:
         }
     return {
         "format": "pr2-character-rig",
-        "version": 8,
+        "version": 9,
         "source": "MovieClips/Character",
         "parts": parts,
         "emptyPartIds": {

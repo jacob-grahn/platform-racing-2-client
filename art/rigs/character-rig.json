@@ -1,6 +1,6 @@
 {
   "format": "pr2-character-rig",
-  "version": 8,
+  "version": 9,
   "source": "MovieClips/Character",
   "parts": {
     "head": {
@@ -1109,9 +1109,19 @@
         {
           "id": 4,
           "name": "prop",
-          "fixed": "assets/svg/character/hat/004_prop/static.svg",
+          "fixed": "assets/svg/character/hat/004_prop/static_base.svg",
           "primary": "assets/svg/character/hat/004_prop/primary.svg",
-          "secondary": "assets/svg/character/hat/004_prop/secondary.svg"
+          "secondary": "assets/svg/character/hat/004_prop/secondary.svg",
+          "overlayAnimation": {
+            "frameRate": 27,
+            "endBehavior": "loop",
+            "frames": [
+              "assets/svg/character/hat/004_prop/overlay_frames/frame_001.svg",
+              "assets/svg/character/hat/004_prop/overlay_frames/frame_002.svg",
+              "assets/svg/character/hat/004_prop/overlay_frames/frame_003.svg",
+              "assets/svg/character/hat/004_prop/overlay_frames/frame_004.svg"
+            ]
+          }
         },
         {
           "id": 5,
@@ -1172,9 +1182,24 @@
         {
           "id": 13,
           "name": "jigg",
-          "fixed": "assets/svg/character/hat/013_jigg/static.svg",
+          "fixed": "assets/svg/character/hat/013_jigg/static_base.svg",
           "primary": "assets/svg/character/hat/013_jigg/primary.svg",
-          "secondary": "assets/svg/character/hat/013_jigg/secondary.svg"
+          "secondary": "assets/svg/character/hat/013_jigg/secondary.svg",
+          "overlayAnimation": {
+            "frameRate": 27,
+            "endBehavior": "loop",
+            "frames": [
+              "assets/svg/character/hat/013_jigg/overlay_frames/frame_001.svg",
+              "assets/svg/character/hat/013_jigg/overlay_frames/frame_002.svg",
+              "assets/svg/character/hat/013_jigg/overlay_frames/frame_003.svg",
+              "assets/svg/character/hat/013_jigg/overlay_frames/frame_004.svg",
+              "assets/svg/character/hat/013_jigg/overlay_frames/frame_005.svg",
+              "assets/svg/character/hat/013_jigg/overlay_frames/frame_006.svg",
+              "assets/svg/character/hat/013_jigg/overlay_frames/frame_007.svg",
+              "assets/svg/character/hat/013_jigg/overlay_frames/frame_008.svg",
+              "assets/svg/character/hat/013_jigg/overlay_frames/frame_009.svg"
+            ]
+          }
         },
         {
           "id": 14,

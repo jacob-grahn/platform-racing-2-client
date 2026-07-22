@@ -82,6 +82,7 @@ python3 tools/check_no_compat_runtime.py --source-only
 python3 tools/generate_native_assets.py --check
 python3 tools/generate_svg_packs.py --check
 python3 tools/validate_character_lottie.py --xfl-parity
+python3 tools/generate_character_hat_overlays.py --check
 python3 tools/generate_effect_lottie.py --check
 python3 tools/compose_static_xfl_symbol_svg.py --symbol Parts/Hats/Jellyfish/jellyfishSting --out art/svg/effects/sting_ray.svg --check
 python3 tools/compose_static_xfl_symbol_svg.py --symbol MovieClips/lightningStrike --out art/svg/effects/lightning_strike.svg --check

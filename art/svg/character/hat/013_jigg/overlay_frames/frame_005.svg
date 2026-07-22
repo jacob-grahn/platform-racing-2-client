@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="550px" height="400px" viewBox="0 0 550 400" preserveAspectRatio="none" data-xfl-root="Parts/Hats/Jigg/bubbleSpin">
+  <g transform="matrix(1 0 0 1 14.1 -42.75)">
+    <g data-xfl-symbol="Parts/Hats/Jigg/bubbleSpin">
+      <g transform="matrix(1 0 0 1 -12 -16.05)">
+        <g data-xfl-symbol="MovieClips/Symbol 710">
+          <g data-svg-leaf="movieclips_symbol_710_df414d1522/t00_l000_f0000_r00.svg">
+            <defs>
+              <linearGradient id="xfl1_Gradient_1" gradientUnits="userSpaceOnUse" x1="172.4875" y1="-59.8375" x2="181.6125" y2="-34.762499999999996" spreadMethod="pad">
+                <stop offset="0%" stop-color="#B0D077" />
+                <stop offset="100%" stop-color="#429D04" />
+              </linearGradient>
+              <g id="xfl1_Layer0_0_FILL">
+                <path fill="url(#xfl1_Gradient_1)" stroke="none" d=" M 21.2 3.7 L 20.9 3.5 Q 17.3 0 12.4 0 7.25 0 3.6 3.7 2 5.25 1.1 7.25 0 9.6 0 12.4 0 15.15 1.1 17.55 1.9 19.35 3.4 20.9 L 3.6 21.25 Q 7.25 24.75 12.4 24.75 16.3 24.75 19.35 22.7 24.05 18.9 24.5 13.1 24.85 7.25 21.2 3.7 M 17.3 7.6 L 17.3 7.65 Q 19.35 9.6 19.35 12.4 L 19.35 12.65 Q 19.2 15.4 17.3 17.35 15.3 19.25 12.4 19.25 9.55 19.25 7.55 17.35 L 7.35 17.2 Q 5.5 15.15 5.5 12.4 5.5 9.5 7.45 7.6 L 7.55 7.55 Q 9.55 5.45 12.4 5.45 15.1 5.45 17.05 7.3 L 17.3 7.6 Z" />
+              </g>
+            </defs>
+            <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+              <use xlink:href="#xfl1_Layer0_0_FILL" />
+            </g>
+          </g>
+        </g>
+      </g>
+      <g transform="matrix(1 0 0 1 0.95 -32.85)">
+        <g data-xfl-symbol="MovieClips/Symbol 710">
+          <g data-svg-leaf="movieclips_symbol_710_df414d1522/t00_l000_f0000_r00.svg">
+            <defs>
+              <linearGradient id="xfl2_Gradient_1" gradientUnits="userSpaceOnUse" x1="172.4875" y1="-59.8375" x2="181.6125" y2="-34.762499999999996" spreadMethod="pad">
+                <stop offset="0%" stop-color="#B0D077" />
+                <stop offset="100%" stop-color="#429D04" />
+              </linearGradient>
+              <g id="xfl2_Layer0_0_FILL">
+                <path fill="url(#xfl2_Gradient_1)" stroke="none" d=" M 21.2 3.7 L 20.9 3.5 Q 17.3 0 12.4 0 7.25 0 3.6 3.7 2 5.25 1.1 7.25 0 9.6 0 12.4 0 15.15 1.1 17.55 1.9 19.35 3.4 20.9 L 3.6 21.25 Q 7.25 24.75 12.4 24.75 16.3 24.75 19.35 22.7 24.05 18.9 24.5 13.1 24.85 7.25 21.2 3.7 M 17.3 7.6 L 17.3 7.65 Q 19.35 9.6 19.35 12.4 L 19.35 12.65 Q 19.2 15.4 17.3 17.35 15.3 19.25 12.4 19.25 9.55 19.25 7.55 17.35 L 7.35 17.2 Q 5.5 15.15 5.5 12.4 5.5 9.5 7.45 7.6 L 7.55 7.55 Q 9.55 5.45 12.4 5.45 15.1 5.45 17.05 7.3 L 17.3 7.6 Z" />
+              </g>
+            </defs>
+            <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+              <use xlink:href="#xfl2_Layer0_0_FILL" />
+            </g>
+          </g>
+        </g>
+      </g>
+      <g transform="matrix(1 0 0 1 8 -11.8)">
+        <g data-xfl-symbol="MovieClips/Symbol 710">
+          <g data-svg-leaf="movieclips_symbol_710_df414d1522/t00_l000_f0000_r00.svg">
+            <defs>
+              <linearGradient id="xfl3_Gradient_1" gradientUnits="userSpaceOnUse" x1="172.4875" y1="-59.8375" x2="181.6125" y2="-34.762499999999996" spreadMethod="pad">
+                <stop offset="0%" stop-color="#B0D077" />
+                <stop offset="100%" stop-color="#429D04" />
+              </linearGradient>
+              <g id="xfl3_Layer0_0_FILL">
+                <path fill="url(#xfl3_Gradient_1)" stroke="none" d=" M 21.2 3.7 L 20.9 3.5 Q 17.3 0 12.4 0 7.25 0 3.6 3.7 2 5.25 1.1 7.25 0 9.6 0 12.4 0 15.15 1.1 17.55 1.9 19.35 3.4 20.9 L 3.6 21.25 Q 7.25 24.75 12.4 24.75 16.3 24.75 19.35 22.7 24.05 18.9 24.5 13.1 24.85 7.25 21.2 3.7 M 17.3 7.6 L 17.3 7.65 Q 19.35 9.6 19.35 12.4 L 19.35 12.65 Q 19.2 15.4 17.3 17.35 15.3 19.25 12.4 19.25 9.55 19.25 7.55 17.35 L 7.35 17.2 Q 5.5 15.15 5.5 12.4 5.5 9.5 7.45 7.6 L 7.55 7.55 Q 9.55 5.45 12.4 5.45 15.1 5.45 17.05 7.3 L 17.3 7.6 Z" />
+              </g>
+            </defs>
+            <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+              <use xlink:href="#xfl3_Layer0_0_FILL" />
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

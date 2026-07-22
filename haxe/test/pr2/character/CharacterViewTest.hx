@@ -17,6 +17,7 @@ class CharacterViewTest {
 		testLegacyRootRegistration();
 		testAppearanceSelectionAndPerPartColors();
 		testBubbleBodyNestedLoops();
+		testAnimatedHatOverlays();
 		testStandardHatStack();
 		testExhaustiveHatAttachmentMatrix();
 		testHatPositionParityAcrossEveryAnimationFrame();
@@ -65,10 +66,37 @@ class CharacterViewTest {
 		assertEquals(1, view.bodyChannelAnimationFrame, "authored empty body frames remain valid after nested-animation support");
 	}
 
+	private static function testAnimatedHatOverlays():Void {
+		var rig = CharacterRig.loadClassic();
+		var propeller = [for (variant in rig.parts.hat.variants) if (variant.id == 4) variant][0];
+		var jigg = [for (variant in rig.parts.hat.variants) if (variant.id == 13) variant][0];
+		assertEquals("assets/svg/character/hat/004_prop/static_base.svg", propeller.fixed, "Propeller uses a rotor-free cached base");
+		assertEquals(4, propeller.overlayAnimation.frames.length, "Propeller keeps all four authored rotor frames");
+		assertEquals("assets/svg/character/hat/013_jigg/static_base.svg", jigg.fixed, "Jigg uses a bubble-free cached base");
+		assertEquals(9, jigg.overlayAnimation.frames.length, "Jigg keeps all nine authored bubble frames");
+
+		var view = new CharacterView(0x123456, 0xABCDEF, null, "stand", null, [4, 13, 1, 1]);
+		var propOverlay = cast(view.hatSlot(0).getChildByName("animatedOverlay"), openfl.display.Sprite);
+		var jiggOverlay = cast(view.hatSlot(1).getChildByName("animatedOverlay"), openfl.display.Sprite);
+		var firstPropFrame = propOverlay.getChildByName("vectorFrame");
+		var firstJiggFrame = jiggOverlay.getChildByName("vectorFrame");
+		assertEquals(1, view.hatAnimationFrames[0], "Propeller starts on authored frame one");
+		assertEquals(1, view.hatAnimationFrames[1], "Jigg starts on authored frame one");
+		view.advanceOneFrame();
+		assertTrue(firstPropFrame != propOverlay.getChildByName("vectorFrame"), "Propeller overlay advances independently above its base");
+		assertTrue(firstJiggFrame != jiggOverlay.getChildByName("vectorFrame"), "Jigg overlay advances independently above its base");
+		assertEquals(2, view.hatAnimationFrames[0], "Propeller advances one frame per deterministic tick");
+		assertEquals(2, view.hatAnimationFrames[1], "Jigg advances one frame per deterministic tick");
+		for (_ in 0...3) view.advanceOneFrame();
+		assertEquals(1, view.hatAnimationFrames[0], "Propeller overlay completes a four-frame loop");
+		for (_ in 0...5) view.advanceOneFrame();
+		assertEquals(1, view.hatAnimationFrames[1], "Jigg overlay completes a nine-frame loop");
+	}
+
 	private static function testGeneratedRigContract():Void {
 		var rig = CharacterRig.loadClassic();
 		assertEquals("pr2-character-rig", rig.format, "neutral rig format marker");
-		assertEquals(8, rig.version, "neutral rig version");
+		assertEquals(9, rig.version, "neutral rig version");
 		assertEquals("MovieClips/Character", rig.source, "rig records its archival root source");
 		assertEquals(50, rig.parts.head.variants.length, "rig includes every standard head export");
 		assertEquals(47, rig.parts.body.variants.length, "rig includes standard bodies plus Fred");
