@@ -10,6 +10,8 @@ import pr2.lobby.LobbySession;
 import pr2.lobby.Memory;
 import pr2.lobby.dialogs.MessagePopup;
 import pr2.lobby.messages.UnreadNotif;
+import pr2.page.LoginPage;
+import pr2.page.PageHolder;
 
 /**
 	The single persistent game socket, mirroring Flash `Main.socket`: it is opened
@@ -232,7 +234,13 @@ class LobbySocket {
 		if (onConnectionClose != null) {
 			onConnectionClose();
 		} else {
-			new MessagePopup("Disconnected.");
+			var rootHolder = PageHolder.getRootHolder();
+			if (rootHolder == null) {
+				new MessagePopup("Disconnected.");
+			} else if (!(rootHolder.getCurrentPage() is LoginPage)) {
+				new MessagePopup("Disconnected.");
+				rootHolder.changePage(new LoginPage());
+			}
 		}
 	}
 

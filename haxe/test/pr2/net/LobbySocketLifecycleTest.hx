@@ -5,6 +5,9 @@ import pr2.lobby.Memory;
 import pr2.lobby.dialogs.MessagePopup;
 import pr2.lobby.dialogs.Popup;
 import pr2.lobby.messages.UnreadNotif;
+import pr2.page.LoginPage;
+import pr2.page.Page;
+import pr2.page.PageHolder;
 
 class LobbySocketLifecycleTest {
 	private static var assertions:Int = 0;
@@ -82,9 +85,11 @@ class LobbySocketLifecycleTest {
 	private static function testTransportCloseAndErrorPopups():Void {
 		resetSocket();
 		closeAll();
+		var holder = new PageHolder(new ConnectedPage(), true);
 		LobbySocket.simulateOpenForTests();
 		LobbySocket.simulateConnectionCloseForTests();
 		assertMessageContains("Disconnected.", "transport close opens Flash disconnected popup");
+		assertEquals(true, holder.getCurrentPage() is LoginPage, "transport close returns the root holder to login");
 		assertEquals(false, LobbySocket.pingIsActiveForTests(), "transport close stops ping interval");
 
 		resetSocket();
@@ -137,3 +142,5 @@ class LobbySocketLifecycleTest {
 		if (value == null) throw '$message: value was null';
 	}
 }
+
+private class ConnectedPage extends Page {}

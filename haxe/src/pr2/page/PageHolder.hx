@@ -14,11 +14,13 @@ import openfl.display.Sprite;
 	over the stage. Pass `root = true` only for the holder Main adds to the stage.
 **/
 class PageHolder extends Sprite {
+	private static var rootHolder:Null<PageHolder>;
 	private var currentPage:Null<Page>;
 
 	public function new(?page:Page, root:Bool = false) {
 		super();
 		if (root) {
+			rootHolder = this;
 			pr2.lobby.level.LevelLaunch.install(this);
 		}
 		if (page != null) {
@@ -44,5 +46,10 @@ class PageHolder extends Sprite {
 
 	public function getCurrentPage():Null<Page> {
 		return currentPage;
+	}
+
+	/** The stage-root holder, equivalent to Flash's `Main.pageHolder`. */
+	public static function getRootHolder():Null<PageHolder> {
+		return rootHolder;
 	}
 }
