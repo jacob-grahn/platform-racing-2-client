@@ -1387,6 +1387,9 @@ class LocalPlayerController implements ItemRuntimeOwner {
 			return;
 		}
 		hurtFramesRemaining = HURT_FRAMES;
+		if (onBumpRecovery != null) {
+			onBumpRecovery(BUMP_RECOVERY_FRAMES);
+		}
 		if (gameMode == "deathmatch" || gameMode == "roguelike") {
 			setLife(lives - 1);
 			if (lives <= 0) {

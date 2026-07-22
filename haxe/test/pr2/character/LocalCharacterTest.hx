@@ -1,5 +1,6 @@
 package pr2.character;
 
+import openfl.events.Event;
 import pr2.gameplay.player.LocalPlayerController;
 import pr2.gameplay.player.LocalPlayerInput;
 import pr2.level.BlockType;
@@ -455,6 +456,12 @@ class LocalCharacterTest {
 		}
 
 		assertEquals("hurt", local.stateSnapshot().mode, "normal-race mine hit hurts the local character");
+		@:privateAccess assertClose(65, local.recoveryFrames, "normal-race mine hit starts Flash's alpha recovery");
+		local.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertClose(0.75, local.alpha, "mine recovery starts the Flash blink phase");
+		local.dispatchEvent(new Event(Event.ENTER_FRAME));
+		local.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertClose(0.5, local.alpha, "mine recovery alternates the character alpha");
 		assertEquals("loose_hat`75`40`0", LobbySocket.lastSent(), "normal-race mine hit emits Flash loose-hat drop");
 		assertEquals(1, local.hat1, "normal-race mine hit clears the highest occupied hat");
 	}
