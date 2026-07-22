@@ -2,6 +2,7 @@ package pr2.gameplay;
 
 import openfl.events.Event;
 import openfl.display.DisplayObject;
+import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.ui.Keyboard;
 import pr2.character.Character;
@@ -1065,9 +1066,13 @@ class CharacterLifecycleTest {
 		var hat = course.addLooseHat(15, course.level.maxY + 501, 0, 5, 0x123456, -1, 1);
 		assertEquals(1, countLooseHats(course), "loose hat is registered");
 		assertTrue(handler.hasCommand("removeHat1"), "loose hat registers remote remove command");
-		assertTrue(hat.display.parent == course.characterLayer, "loose hat display mounts to character layer");
+		assertTrue(hat.display.parent == course.effectBackground, "loose hat display mounts to the Flash effect layer");
 		assertEquals("assets/svg/character/hat/005_cowboy/primary.svg", hat.display.colorMC.getChildAt(0).name,
 			"loose cowboy hat uses its exact authored primary channel");
+		var primaryArt = Std.downcast(hat.display.colorMC.getChildAt(0), Shape);
+		assertTrue(primaryArt != null, "loose cowboy hat primary channel contains tintable shape artwork");
+		assertEquals(0x123456, primaryArt.transform.colorTransform.color,
+			"loose cowboy hat applies its primary color to the artwork shape");
 		assertEquals("assets/svg/character/hat/005_cowboy/static.svg", hat.display.fixedArt.getChildAt(0).name,
 			"loose cowboy hat preserves its exact authored untinted channel");
 
@@ -1082,7 +1087,7 @@ class CharacterLifecycleTest {
 		assertEquals(0x123456, returned.color, "returned hat preserves primary color");
 		assertEquals(-1, returned.color2, "returned hat preserves secondary color sentinel");
 		assertTrue(hat.display.parent == null, "old loose hat display is removed");
-		assertTrue(returned.display.parent == course.characterLayer, "returned loose hat display mounts");
+		assertTrue(returned.display.parent == course.effectBackground, "returned loose hat display mounts to the Flash effect layer");
 		assertTrue(handler.hasCommand("removeHat1"), "returned hat keeps remote remove command registered");
 
 		handler.dispatch("removeHat1", []);
@@ -1207,6 +1212,19 @@ class CharacterLifecycleTest {
 		handler.dispatch("setHats4", [""]);
 		assertEquals(1, course.localCharacter.hat1, "blank server hat stack restores the empty hat frame locally");
 		assertTrue(!course.localCharacter.hasHatFlag(Character.CROWN), "blank server hat stack clears local hat powers");
+
+		var raceCourse = buildCourse(handler, "race", "m3`ffffff`0;0;11,0;1;0");
+		raceCourse.createLocalCharacter(localInit(4));
+		finishDrawing(raceCourse);
+		raceCourse.beginRace();
+		finishCountdown(raceCourse);
+		var raceHat = raceCourse.addLooseHat(Math.round(raceCourse.localCharacter.x), Math.round(raceCourse.localCharacter.y), 0, 6, 0x123456, -1, 4);
+		LobbySocket.resetSent();
+		raceCourse.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertEquals(0, countLooseHats(raceCourse), "race frame loop removes a loose hat touched by the local player");
+		assertTrue(raceHat.display.parent == null, "race frame loop detaches a collected loose hat display");
+		assertTrue(LobbySocket.sentCommands.indexOf("get_hat`4") != -1, "race frame loop emits get_hat outside Hat Attack");
+		raceCourse.remove();
 
 		var finishedPickup = course.addLooseHat(15, 0, 0, 6, 0x123456, -1, 3);
 		LobbySocket.resetSent();

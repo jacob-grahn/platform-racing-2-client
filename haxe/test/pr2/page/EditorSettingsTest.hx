@@ -22,6 +22,7 @@ import pr2.level.ObjectCodes;
 import pr2.level.LevelDecoder;
 import pr2.net.ServerConfig;
 import pr2.net.ServerLevelData;
+import pr2.net.LobbySocket;
 import pr2.levelEditor.LevelEditor;
 import pr2.levelEditor.LevelEditorMenuView;
 import pr2.levelEditor.GetLevelsPopup;
@@ -98,6 +99,7 @@ class EditorSettingsTest {
 		testEditorToolCursorLifecycle();
 		testCustomCursorRuntimeHooks();
 		testStatSliderHoldAccelerationAndSavePaths();
+		testEditorTestCourseHitsKeepSelectedHat();
 		testRoguelikeTestCourseStartsWithZeroStats();
 		trace('EditorSettingsTest passed $assertions assertions');
 	}
@@ -1044,6 +1046,27 @@ class EditorSettingsTest {
 		assertEquals(0, selectedStats.jumping, "roguelike test course starts jumping slider at zero");
 		var savedStats:Dynamic = Settings.getValue(Settings.LE_TEST_STATS);
 		assertEquals(61, Reflect.field(savedStats, "speed"), "roguelike start preserves saved test stats for other modes");
+		testCourse.remove();
+		editor.remove();
+		Settings.disablePersistenceForTests();
+	}
+
+	private static function testEditorTestCourseHitsKeepSelectedHat():Void {
+		Settings.useMemoryStoreForTests();
+		Settings.init("Tester");
+		var editor = new LevelEditor();
+		editor.initialize();
+		var testCourse = new TestCoursePage(editor.getLevelVars());
+		testCourse.initialize();
+		var local = testCourse.course.localCharacter;
+		local.setHats([9, 0x123456, -1]);
+		LobbySocket.resetSent();
+
+		local.receiveHit();
+
+		assertEquals("hurt", local.stateSnapshot().mode, "editor test-course hit still applies the hurt state");
+		assertEquals(9, local.hat1, "editor test-course hit keeps the selected test hat equipped");
+		assertEquals(0, LobbySocket.sentCommands.length, "editor test-course hit emits no loose-hat command");
 		testCourse.remove();
 		editor.remove();
 		Settings.disablePersistenceForTests();

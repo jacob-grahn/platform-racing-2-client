@@ -1,6 +1,7 @@
 package pr2.gameplay;
 
 import openfl.display.DisplayObject;
+import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.geom.ColorTransform;
 import pr2.level.Level;
@@ -18,7 +19,7 @@ typedef HatEffectInfo = {
 }
 
 /**
-	Loose hat state/display ported from `effects.Hat` for hat-attack side effects.
+	Loose hat state/display ported from `effects.Hat`.
 	Physics movement is owned by `Course`; this class covers the lifecycle,
 	authored hat graphic, color channels, and remote remove command.
 **/
@@ -138,13 +139,16 @@ class HatEffect {
 	}
 
 	private function setupColorChannel(name:String, tint:Int, visible:Bool):Void {
-		var child = findByName(display, name);
-		if (child == null) {
+		var holder = Std.downcast(findByName(display, name), Sprite);
+		if (holder == null) {
 			return;
 		}
-		child.visible = visible;
-		if (visible) {
-			child.transform.colorTransform = colorTransformFor(tint);
+		holder.visible = visible;
+		if (visible && holder.numChildren > 0) {
+			var artwork = Std.downcast(holder.getChildAt(0), Shape);
+			if (artwork != null) {
+				artwork.transform.colorTransform = colorTransformFor(tint);
+			}
 		}
 	}
 

@@ -84,7 +84,7 @@ class Course extends Sprite {
 	private final config:LevelConfig;
 	private final onChatLine:Null<String->Bool>;
 	private final onFrame:Null<LocalPlayerState->Void>;
-	private final commandHandler:Null<CommandHandler>;
+	private final commandHandler:CommandHandler;
 
 	private final input:LocalPlayerInput = new LocalPlayerInput();
 
@@ -184,7 +184,7 @@ class Course extends Sprite {
 		this.config = config;
 		this.onChatLine = onChatLine;
 		this.onFrame = onFrame;
-		this.commandHandler = commandHandler;
+		this.commandHandler = commandHandler != null ? commandHandler : CommandHandler.commandHandler;
 		roster = new CourseRosterController(this);
 		blockVisuals = new CourseBlockVisualController(this);
 		particleEffects = new CourseParticleEffects(function() {
@@ -256,9 +256,9 @@ class Course extends Sprite {
 		buildMusicSelection();
 		buildRaceChat();
 		buildDrawingInfo();
-		effectBackground = new EffectBackground(this, commandHandler != null ? commandHandler : CommandHandler.commandHandler);
+		effectBackground = new EffectBackground(this, commandHandler);
 		levelRenderer.attachEffectLayer(effectBackground);
-		eggRound = new EggRound(commandHandler != null ? commandHandler : CommandHandler.commandHandler, collectEgg, effectBackground,
+		eggRound = new EggRound(commandHandler, collectEgg, effectBackground,
 			levelRenderer.cameraOffset, null, null, function(shooterId:Int):Void {
 				if (localCharacter != null && shooterId != localCharacter.tempID && !localCharacter.isFrozen()) {
 					localCharacter.freeze();
@@ -273,7 +273,7 @@ class Course extends Sprite {
 	}
 
 	private function activeCommandHandler():CommandHandler {
-		return commandHandler != null ? commandHandler : CommandHandler.commandHandler;
+		return commandHandler;
 	}
 
 	private function buildMiniMap():Void {
@@ -446,7 +446,9 @@ class Course extends Sprite {
 			if (hat != null) {
 				hat.step(level, Math.round(levelRenderer.rotation), localCharacter.x, localCharacter.y, localCharacter.crouching,
 					localCharacter.removed, isDonePlaying());
-				maybeEmitHatToStart(hat);
+				if (config.gameMode == "hat") {
+					maybeEmitHatToStart(hat);
+				}
 			}
 		}
 	}
@@ -581,7 +583,7 @@ class Course extends Sprite {
 
 	public function addLooseHat(x:Int, y:Int, rot:Int, num:Int, color:Int, color2:Int, id:Int):HatEffect {
 		removeLooseHat(id);
-		return new HatEffect(this, x, y, rot, num, color, color2, id, characterLayer, commandHandler);
+		return new HatEffect(this, x, y, rot, num, color, color2, id, effectBackground, commandHandler);
 	}
 
 	public function removeLooseHat(id:Int):Bool {
@@ -846,7 +848,7 @@ class Course extends Sprite {
 			eggRound.step(level, Math.round(levelRenderer.rotation), localCharacter.x, localCharacter.y, localCharacter.crouching,
 				localCharacter.removed, config.gameMode == "egg");
 		}
-		if (raceStarted && config.gameMode == "hat") {
+		if (raceStarted) {
 			stepLooseHats();
 		}
 		syncBlockVisuals();

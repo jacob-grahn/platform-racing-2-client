@@ -4,6 +4,7 @@ import haxe.crypto.Md5;
 import openfl.events.Event;
 import openfl.geom.Point;
 import pr2.character.CharacterState;
+import pr2.gameplay.GameCommandShell.LocalCharacterInit;
 import pr2.gameplay.GameCommandShell.RemoteCharacterInit;
 import pr2.gameplay.player.LocalPlayerController;
 import pr2.gameplay.player.LocalPlayerInput;
@@ -16,6 +17,7 @@ import pr2.level.ObjectCodes;
 import pr2.level.Level;
 import pr2.level.Level.LevelBlock;
 import pr2.level.LevelDecoder;
+import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
 import pr2.net.ServerLevelData;
 import pr2.net.ServerConfig;
@@ -117,6 +119,7 @@ class GameShellMountTest {
 		testTournamentStartForcesFirstStartPosition();
 		testTimerBeginRaceAndTimeoutBoundary();
 		testLiveRaceEmitsMultiplayerUpdates();
+		testSharedCommandHandlerCompletesLooseHatPickup();
 		testLocalCharacterAnimationAdvancesDuringRace();
 
 		trace('GameShellMountTest passed $assertions assertions');
@@ -133,6 +136,21 @@ class GameShellMountTest {
 		assertEquals(firstFrame + 1, course.localCharacter.display.currentFrame,
 			"stable race motion advances instead of restarting the character animation");
 		course.remove();
+	}
+
+	private static function testSharedCommandHandlerCompletesLooseHatPickup():Void {
+		var handler = new CommandHandler();
+		var course = buildCourse();
+		course.createLocalCharacter(localInit(4));
+		assertEquals(true, handler.hasCommand("setHats4"), "implicit shared command handler registers the local hat-stack reply");
+		var hat = course.addLooseHat(Math.round(course.localCharacter.x), Math.round(course.localCharacter.y), 0, 6, 0x123456, -1, 2);
+		LobbySocket.resetSent();
+		hat.step(course.level, 0, course.localCharacter.x, course.localCharacter.y);
+		assertEquals("get_hat`2", LobbySocket.lastSent(), "touching a loose hat requests it from the server");
+		assertEquals(true, handler.dispatch("setHats4", ["6", "1193046", "-1"]), "server pickup reply reaches the local character");
+		assertEquals(6, course.localCharacter.hat1, "server pickup reply equips the collected hat");
+		course.remove();
+		assertEquals(false, handler.hasCommand("setHats4"), "course teardown unregisters the shared local hat-stack command");
 	}
 
 	private static function testDeathmatchHeartsShowInitialLives():Void {
@@ -290,6 +308,28 @@ class GameShellMountTest {
 			bodyColor2: 6,
 			feetColor: 7,
 			feetColor2: 8
+		};
+	}
+
+	private static function localInit(tempId:Int):LocalCharacterInit {
+		return {
+			tempId: tempId,
+			speed: 50,
+			accel: 50,
+			jump: 50,
+			hatColor: 1,
+			headColor: 2,
+			bodyColor: 3,
+			feetColor: 4,
+			hatId: 1,
+			headId: 1,
+			bodyId: 1,
+			feetId: 1,
+			hatColor2: -1,
+			headColor2: -1,
+			bodyColor2: -1,
+			feetColor2: -1,
+			group: ""
 		};
 	}
 

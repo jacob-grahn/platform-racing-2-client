@@ -48,9 +48,6 @@ class CourseRosterController {
 	}
 
 	public function registerLocalCommands(tempId:Int):Void {
-		if (owner.commandHandler == null) {
-			return;
-		}
 		owner.localCommandNames = ["zap", "setHats" + tempId, "squash" + tempId, "sting" + tempId];
 		owner.commandHandler.defineCommand("zap", zapCommand);
 		owner.commandHandler.defineCommand("setHats" + tempId, setLocalHatsCommand);
@@ -59,10 +56,8 @@ class CourseRosterController {
 	}
 
 	public function unregisterLocalCommands():Void {
-		if (owner.commandHandler != null) {
-			for (name in owner.localCommandNames) {
-				owner.commandHandler.defineCommand(name, null);
-			}
+		for (name in owner.localCommandNames) {
+			owner.commandHandler.defineCommand(name, null);
 		}
 		owner.localCommandNames = [];
 	}

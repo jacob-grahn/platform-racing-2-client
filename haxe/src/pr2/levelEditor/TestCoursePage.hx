@@ -90,6 +90,7 @@ class TestCoursePage extends Page {
 		course = new Course(level, data, config);
 		course.removeRaceChat();
 		course.offlineMode = true;
+		course.localCharacter.testMode = true;
 		course.onFinish = function(_):Void clickRestart();
 		addChildAt(course, 0);
 		course.musicSelection.x = HOLDER_X + TEST_MUSIC_X;

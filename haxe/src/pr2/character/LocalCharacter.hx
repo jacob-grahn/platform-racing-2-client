@@ -29,6 +29,8 @@ class LocalCharacter extends Character {
 	public var artifactControlsReversed(default, null):Bool = false;
 	public var onArtifactHatActivated:Null<Void->Void> = null;
 	public var levelEditorStatsEnabled:Bool = false;
+	/** Flash `LocalCharacter.testMode`: editor hits animate but do not shed hats. */
+	public var testMode:Bool = false;
 
 	private var lastNetScaleX:Null<Float>;
 	private var exactX:Int = 0;
@@ -469,6 +471,9 @@ class LocalCharacter extends Character {
 	}
 
 	private function dropHighestHatFromHit():Void {
+		if (testMode) {
+			return;
+		}
 		var hat = getHighestHat();
 		if (hat.hatNum != 1 && hat.hatNum != 0) {
 			var hitState = controller.stateSnapshot();
