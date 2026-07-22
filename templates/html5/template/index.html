@@ -25,8 +25,14 @@
 	</script>
 	
 	<style>
-		html,body { margin: 0; padding: 0; height: 100%; overflow: hidden; }
+		html,body { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #000000; }
 		#openfl-content { ::if (WIN_BACKGROUND)::background: #000000; ::end::width: ::if (WIN_RESIZABLE)::100%::elseif (WIN_WIDTH > 0)::::WIN_WIDTH::px::else::100%::end::; height: ::if (WIN_RESIZABLE)::100%::elseif (WIN_WIDTH > 0)::::WIN_HEIGHT::px::else::100%::end::; }
+		body.pr2-fixed-stage { display: flex; align-items: center; justify-content: center; }
+		body.pr2-fixed-stage #openfl-content {
+			flex: none;
+			width: min(100vw, 137.5vh);
+			height: min(100vh, 72.7272727vw);
+		}
 		@font-face {
 			font-family: 'DejaVu Sans Bold Italic';
 			src: url('assets/fonts/DejaVuSans-BoldOblique.ttf') format('truetype');
@@ -86,10 +92,13 @@
 	
 	<script type="text/javascript">
 		var pr2MobileLobby = /(?:^|[?&])mobile=(?:1|true|lobby)(?:&|$)/i.test(window.location.search);
-		lime.embed ("::APP_FILE::", "openfl-content",
-			pr2MobileLobby ? window.innerWidth : ::WIN_WIDTH::,
-			pr2MobileLobby ? window.innerHeight : ::WIN_HEIGHT::,
-			{ parameters: {} });
+		if (!pr2MobileLobby) document.body.classList.add("pr2-fixed-stage");
+
+		// A zero-sized embed tells Lime to follow the host element and resize the
+		// canvas backing store, rather than CSS-scaling a fixed 550x400 canvas. The
+		// desktop host is aspect-fitted above, so its black surroundings also clip
+		// display objects that extend outside Flash's authored stage rectangle.
+		lime.embed ("::APP_FILE::", "openfl-content", 0, 0, { parameters: {} });
 	</script>
 	
 </body>

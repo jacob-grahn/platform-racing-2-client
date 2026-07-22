@@ -48,6 +48,7 @@ import pr2.util.AsyncRemovalGuard.AsyncRemovable;
 	query flag (default `intro`), which lets development and the OpenFL test
 	harness jump straight to any screen.
 **/
+@:access(openfl.display.Stage)
 class Main extends Sprite {
 	private static inline var OFFLINE_LIST_DELAY_MS:Int = 20;
 
@@ -67,8 +68,8 @@ class Main extends Sprite {
 		removeEventListener(Event.ADDED_TO_STAGE, init);
 
 		stage.frameRate = Constants.FRAME_RATE;
-		stage.align = StageAlign.TOP_LEFT;
-		stage.scaleMode = StageScaleMode.NO_SCALE;
+		var query = currentQuery();
+		configureStage(query);
 		pr2.app.AppStage.stage = stage;
 		swfStats = new SWFStats();
 		FatalErrorReporter.installGlobalHandlers();
@@ -77,7 +78,6 @@ class Main extends Sprite {
 		AudioManager.install(this);
 
 		try {
-			var query = currentQuery();
 			installClickProbe(query);
 			// pr2hub.com sends no CORS headers; `?apiHost=/api` points level
 			// fetches at a same-origin dev proxy (tools/dev_proxy.py). On
@@ -97,6 +97,30 @@ class Main extends Sprite {
 		} catch (error:Dynamic) {
 			reportFatalError(error);
 		}
+	}
+
+	private function configureStage(query:Null<String>):Void {
+		#if (js && html5)
+		if (mobileLobbyRequested(query)) {
+			// The mobile lobby lays itself out in browser pixels and consumes resize
+			// events, so it keeps the full-window stage coordinate system.
+			stage.align = StageAlign.TOP_LEFT;
+			stage.scaleMode = StageScaleMode.NO_SCALE;
+			return;
+		}
+
+		// lime.embed(0, 0) gives the renderer a full-window, high-DPI backing
+		// surface, but also initializes OpenFL without a logical stage size.
+		// Restore Flash's authored coordinate system before SHOW_ALL computes its
+		// display matrix. Shapes and text are then rendered at the output scale
+		// instead of the browser enlarging a completed 550x400 canvas bitmap.
+		stage.__setLogicalSize(Constants.STAGE_WIDTH, Constants.STAGE_HEIGHT);
+		stage.align = null; // OpenFL's centered StageAlign value.
+		stage.scaleMode = StageScaleMode.SHOW_ALL;
+		#else
+		stage.align = StageAlign.TOP_LEFT;
+		stage.scaleMode = StageScaleMode.NO_SCALE;
+		#end
 	}
 
 	private function installClickProbe(query:Null<String>):Void {
