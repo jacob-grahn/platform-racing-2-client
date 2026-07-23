@@ -29,7 +29,6 @@ import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
 import pr2.net.ServerLevelData;
 import pr2.lobby.account.Settings;
-import pr2.runtime.PR2MovieClip;
 import pr2.util.TestDisplayUtil as DisplayUtil;
 
 @:access(pr2.gameplay.Course)

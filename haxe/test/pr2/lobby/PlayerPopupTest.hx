@@ -13,8 +13,6 @@ import pr2.lobby.dialogs.ModerationMenuView;
 import pr2.net.LobbySocket;
 import pr2.net.ServerConfig;
 import pr2.ui.controls.GameSelect;
-import pr2.runtime.FlComponents;
-import pr2.runtime.PR2MovieClip;
 import pr2.ui.controls.GameButton;
 import pr2.ui.GuildName;
 import pr2.util.TestDisplayUtil as DisplayUtil;
@@ -273,7 +271,7 @@ class PlayerPopupTest {
 			hat: 1, head: 1, body: 1, feet: 1
 		});
 		menu = banMenu(popup);
-		FlComponents.asTextField(DisplayUtil.findByName(menu, "reason")).text = "spam";
+		LobbyArt.text(menu, "reason").text = "spam";
 		var duration = combo(menu, "duration");
 		duration.selectedIndex = 2;
 		click(menu, "banButton");
@@ -298,7 +296,7 @@ class PlayerPopupTest {
 		Memory.set("chatRoom", "mod");
 		uploads = [];
 		var direct = directBanMenu("Bad <Name>");
-		FlComponents.asTextField(DisplayUtil.findByName(direct.art, "reason")).text = "mod room";
+		LobbyArt.text(direct.art, "reason").text = "mod room";
 		combo(direct.art, "duration").selectedIndex = 2;
 		click(direct.art, "banButton");
 		confirm = lastPopup(ConfirmPopup);
@@ -328,7 +326,7 @@ class PlayerPopupTest {
 			return null;
 		};
 		direct = directBanMenu("Target");
-		FlComponents.asTextField(DisplayUtil.findByName(direct.art, "reason")).text = "late";
+		LobbyArt.text(direct.art, "reason").text = "late";
 		combo(direct.art, "duration").selectedIndex = 2;
 		click(direct.art, "banButton");
 		confirm = lastPopup(ConfirmPopup);
@@ -501,30 +499,6 @@ class PlayerPopupTest {
 		for (i in 0...scope.length) {
 			assertEquals(false, Reflect.field(scope.itemAt(i), "data") == "game", "trial moderators do not get game bans");
 		}
-	}
-
-	private static function findSymbol(container:Dynamic, symbolName:String):PR2MovieClip {
-		var found = findSymbolOrNull(container, symbolName);
-		if (found != null) return found;
-		throw 'missing $symbolName';
-	}
-
-	private static function findSymbolOrNull(container:Dynamic, symbolName:String):Null<PR2MovieClip> {
-		var display = Std.downcast(container, DisplayObjectContainer);
-		if (display == null) return null;
-		for (i in 0...display.numChildren) {
-			var child = display.getChildAt(i);
-			var clip = Std.downcast(child, PR2MovieClip);
-			if (clip != null && clip.symbol.linkageClassName == symbolName) {
-				return clip;
-			}
-			var childContainer = Std.downcast(child, DisplayObjectContainer);
-			if (childContainer != null) {
-				var found = findSymbolOrNull(childContainer, symbolName);
-				if (found != null) return found;
-			}
-		}
-		return null;
 	}
 
 	private static function findGuildName(container:Dynamic):Null<GuildName> {

@@ -34,31 +34,11 @@ def source_failures() -> list[str]:
     failures: list[str] = []
     for path in sorted(SOURCE_ROOT.rglob("*.hx")):
         relative = path.relative_to(SOURCE_ROOT)
-        content = production_content(path.read_text(encoding="utf-8"))
+        content = path.read_text(encoding="utf-8")
         for token in SOURCE_TOKENS:
             if token in content:
                 failures.append(f"{relative}: {token}")
     return failures
-
-
-def production_content(content: str) -> str:
-    output: list[str] = []
-    legacy_depth = 0
-    for line in content.splitlines():
-        stripped = line.strip()
-        if stripped == "#if pr2_legacy_preview":
-            legacy_depth = 1
-            continue
-        if legacy_depth > 0:
-            if stripped.startswith("#if "):
-                legacy_depth += 1
-            elif stripped == "#end":
-                legacy_depth -= 1
-            continue
-        output.append(line)
-    return "\n".join(output)
-
-
 def output_failures(bundle: Path) -> list[str]:
     if not bundle.exists():
         return [f"missing HTML5 bundle: {bundle.relative_to(ROOT)}"]

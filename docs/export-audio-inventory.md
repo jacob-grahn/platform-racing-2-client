@@ -8,14 +8,14 @@ as use.
 
 | Exported file | Flash identity / authored role | Runtime use |
 | --- | --- | --- |
-| `intro_timeline_sound_01.mp3` | Intro timeline sound (`sound57.mp3`) | `PR2MovieClip` + `TimelineSound`, intro symbol 69 frames 2 and 77 |
-| `intro_timeline_sound_02.mp3` | Intro timeline sound (`sound58.mp3`) | `PR2MovieClip` + `TimelineSound`, intro symbol 69 frame 2 |
-| `intro_timeline_sound_03.mp3` | Intro timeline sound (`sound62.mp3`) | `PR2MovieClip` + `TimelineSound`, intro symbol 69 frame 8 |
-| `intro_timeline_sound_04.mp3` | Intro timeline sound (`sound63.mp3`) | `PR2MovieClip` + `TimelineSound`, intro symbol 69 frame 32 |
-| `intro_timeline_sound_05.mp3` | Intro timeline sound (`sound64.mp3`) | `PR2MovieClip` + `TimelineSound`, intro symbol 69 frame 37 |
-| `intro_timeline_sound_06.mp3` | Intro timeline sound (`sound67.mp3`) | `PR2MovieClip` + `TimelineSound`, intro symbol 69 frame 85 |
-| `intro_timeline_sound_07.mp3` | Intro timeline sound (`sound68.mp3`) | `PR2MovieClip` + `TimelineSound`, intro symbol 69 frame 85 |
-| `logo_theme.mp3` | Logo animation timeline sound (`sound81.mp3`) | `PR2MovieClip` + `TimelineSound`, logo symbol 80 frame 1 |
+| `intro_timeline_sound_01.mp3` | Intro timeline sound (`sound57.mp3`) | Archival-only reference (intro symbol 69 frames 2 and 77) |
+| `intro_timeline_sound_02.mp3` | Intro timeline sound (`sound58.mp3`) | Archival-only reference (intro symbol 69 frame 2) |
+| `intro_timeline_sound_03.mp3` | Intro timeline sound (`sound62.mp3`) | Archival-only reference (intro symbol 69 frame 8) |
+| `intro_timeline_sound_04.mp3` | Intro timeline sound (`sound63.mp3`) | Archival-only reference (intro symbol 69 frame 32) |
+| `intro_timeline_sound_05.mp3` | Intro timeline sound (`sound64.mp3`) | Archival-only reference (intro symbol 69 frame 37) |
+| `intro_timeline_sound_06.mp3` | Intro timeline sound (`sound67.mp3`) | Archival-only reference (intro symbol 69 frame 85) |
+| `intro_timeline_sound_07.mp3` | Intro timeline sound (`sound68.mp3`) | Archival-only reference (intro symbol 69 frame 85) |
+| `logo_theme.mp3` | Logo animation timeline sound (`sound81.mp3`) | Archival-only reference (logo symbol 80 frame 1) |
 | `menu_noodle_town_3.mp3` | `NoodleTown3` | `MenuMusic` channel 2 |
 | `menu_noodle_town_2.mp3` | `NoodleTown2` | `MenuMusic` channel 1 |
 | `countdown_go.mp3` | `GoSound` | `Countdown` finish cue |
@@ -44,6 +44,5 @@ as use.
 | `sting.wav` | `StingSound` | `StingEffect` |
 | `artifact_yeah.wav` | `YeahSound` | `RaceSounds.playCharacterSound` (`artifactYeah`) |
 
-The intro/logo entries are real playback uses: their sound names are authored
-in generated timeline frame data, and `PR2MovieClip` passes those frames to
-`TimelineSound` when the animation enters each keyframe.
+The intro/logo entries are retained as archival Flash/XFL references only; the
+native runtime does not play them.

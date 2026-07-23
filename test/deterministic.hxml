@@ -2,7 +2,6 @@
 --library openfl
 --library svg
 -cp haxe/src
--cp haxe/legacy
 -cp haxe/test
 -D pr2_flatten_cache
 -D pr2_test

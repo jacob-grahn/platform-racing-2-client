@@ -9,7 +9,6 @@ import pr2.level.ObjectCodes;
 import pr2.level.Level.LevelArtObject;
 import pr2.level.LevelRenderer;
 import pr2.runtime.FontResolver;
-import pr2.runtime.PR2MovieClip;
 
 class ObjectsCompatTest {
 	private static var assertions:Int = 0;
@@ -29,12 +28,12 @@ class ObjectsCompatTest {
 		assertNamedDisplay("Tree2", ObjectCodes.STAMP_TREE2, "tree2 stamp");
 		assertNamedDisplay("Tree3", ObjectCodes.STAMP_TREE3, "tree3 stamp");
 		assertNamedDisplay("PetrifiedTree", ObjectCodes.STAMP_PETRIFIED_TREE, "petrified tree stamp");
-		assertNativeMatchesArchival("Cactus", ObjectCodes.STAMP_CACTUS, "cactus stamp");
+		assertNativeStamp("Cactus", ObjectCodes.STAMP_CACTUS, "cactus stamp");
 		assertNamedDisplay("Rock", ObjectCodes.STAMP_ROCK, "rock stamp");
 		assertNamedDisplay("Rock2", ObjectCodes.STAMP_ROCK2, "rock2 stamp");
 		assertNamedDisplay("Spire", ObjectCodes.STAMP_SPIRE, "spire stamp");
 		assertNamedDisplay("Spire2", ObjectCodes.STAMP_SPIRE2, "spire2 stamp");
-		assertNativeMatchesArchival("Building1", ObjectCodes.STAMP_BUILDING1, "building stamp");
+		assertNativeStamp("Building1", ObjectCodes.STAMP_BUILDING1, "building stamp");
 
 		var exactCompositions = [
 			ObjectCodes.STAMP_TREE,
@@ -158,17 +157,12 @@ class ObjectsCompatTest {
 		assertTrue(display.width > 0 && display.height > 0, '$message has visible native art');
 	}
 
-	private static function assertNativeMatchesArchival(linkage:String, code:Int, message:String):Void {
+	private static function assertNativeStamp(linkage:String, code:Int, message:String):Void {
 		var holder = Std.downcast(Objects.getFromCode(code), Sprite);
 		assertNotNull(holder, message);
 		assertEquals(linkage, holder.name, '$message holder name');
 		assertTrue(holder.numChildren > 0, '$message has composed SVG child');
-		assertEquals(null, Std.downcast(holder.getChildAt(0), PR2MovieClip), '$message no longer uses a timeline root');
-		var archival = PR2MovieClip.fromLinkage(linkage);
-		var bounds = archival.getBounds(archival);
-		assertNear(bounds.width, holder.width, '$message preserves archival width');
-		assertNear(bounds.height, holder.height, '$message preserves archival height');
-		archival.dispose();
+		assertTrue(holder.width > 0 && holder.height > 0, '$message has visible composed art');
 	}
 
 	private static function assertNear(expected:Float, actual:Float, message:String):Void {

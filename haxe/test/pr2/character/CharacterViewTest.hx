@@ -4,7 +4,6 @@ import openfl.events.Event;
 import openfl.filters.BlurFilter;
 import pr2.character.CharacterRig.RigSlot;
 import pr2.page.CustomizeCharacterScreen;
-import pr2.runtime.PR2MovieClip;
 
 class CharacterViewTest {
 	private static var assertions:Int = 0;
@@ -14,13 +13,11 @@ class CharacterViewTest {
 		if (pr2.DeterministicTestMode.finishSmokeSuite("CharacterViewTest")) return;
 		testExplicitHierarchyAndColors();
 		testPartRegistrationFollowsSlotRotation();
-		testLegacyRootRegistration();
 		testAppearanceSelectionAndPerPartColors();
 		testBubbleBodyNestedLoops();
 		testAnimatedHatOverlays();
 		testStandardHatStack();
 		testExhaustiveHatAttachmentMatrix();
-		testHatPositionParityAcrossEveryAnimationFrame();
 		testFredBodyHierarchy();
 		testHeldItemsAndWeaponActions();
 		testStableEffectTargetsAndJetState();
@@ -428,50 +425,6 @@ class CharacterViewTest {
 		}
 	}
 
-	private static function testHatPositionParityAcrossEveryAnimationFrame():Void {
-		var hats = [6, 5, 13, 16];
-		var ids = {hat: hats[0], hats: hats, head: 23, body: 28, feet: 40};
-		var legacy = new CharacterDisplay(ids, null, false);
-		var native = new CharacterView(0x2E8BFF, 0xFFD24A, null, "stand", {head: 23, body: 28, feet: 40}, hats);
-		for (state in CharacterView.STATE_NAMES) {
-			var legacyStateName = switch (state) {
-				case "stand": "standAnim";
-				case "run": "runAnim";
-				case "jump": "jumpAnim";
-				case "superJump": "superJumpAnim";
-				case "bumped": "bumpedAnim";
-				case "crouch": "crouchAnim";
-				case "crouchWalk": "crouchWalkAnim";
-				case "swim": "swimAnim";
-				case "frozen": "frozenSolidAnim";
-				default: throw 'Unknown character state $state';
-			}
-			legacy.setState(legacyStateName);
-			native.setState(state);
-			var legacyHead = Std.downcast(legacy.getStateClip(legacyStateName).getChildByTimelineName("head"), PR2MovieClip);
-			for (frame in 1...native.frameCount + 1) {
-				var legacyHatSlots = [for (index in 0...4) legacyHead.getChildByTimelineName('hat${index + 1}')];
-				var legacyHatIndices = [for (slot in legacyHatSlots) legacyHead.getChildIndex(slot)];
-				for (slot in legacyHatSlots) legacyHead.removeChild(slot);
-				var legacyHeadBounds = legacyHead.getBounds(legacy);
-				var nativeHeadBounds = native.slot("head").getChildByName("artwork").getBounds(native);
-				for (index in 0...legacyHatSlots.length) legacyHead.addChildAt(legacyHatSlots[index], legacyHatIndices[index]);
-				assertClose(legacyHeadBounds.x, nativeHeadBounds.x, '$state frame $frame head matches original x', 0.01);
-				assertClose(legacyHeadBounds.y, nativeHeadBounds.y, '$state frame $frame head matches original y', 0.01);
-				for (index in 0...4) {
-					var legacyBounds = legacyHatSlots[index].getBounds(legacy);
-					var nativeBounds = native.hatSlot(index).getBounds(native);
-					assertClose(legacyBounds.x, nativeBounds.x, '$state frame $frame hat ${index + 1} matches original x', 0.001);
-					assertClose(legacyBounds.y, nativeBounds.y, '$state frame $frame hat ${index + 1} matches original y', 0.001);
-				}
-				if (frame < native.frameCount) {
-					legacy.advanceOneFrame();
-					native.advanceOneFrame();
-				}
-			}
-		}
-	}
-
 	private static function hatChannel(view:CharacterView, index:Int, channelName:String):openfl.display.DisplayObject {
 		var artwork = cast(view.hatSlot(index).getChildByName("artwork"), openfl.display.Sprite);
 		return artwork.getChildByName(channelName);
@@ -544,49 +497,10 @@ class CharacterViewTest {
 		assertEquals(false, bodyArtwork.getChildByName("secondary").visible, "negative epic color hides the secondary channel");
 	}
 
-	private static function testLegacyRootRegistration():Void {
-		var legacy = new CharacterDisplay(null, null, false);
-		legacy.setState("standAnim");
-		var legacyState = legacy.getStateClip("standAnim");
-		var nativeView = new CharacterView(0x2E8BFF, 0xFFD24A, null, "stand");
-		for (pair in [
-			{legacy: "head", nativeSlot: "head"},
-			{legacy: "body", nativeSlot: "body"},
-			{legacy: "foot1", nativeSlot: "frontFoot"},
-			{legacy: "foot2", nativeSlot: "backFoot"}
-		]) {
-			var legacyX = legacyState.getChildByTimelineName(pair.legacy).getBounds(legacy).x;
-			var nativeX = nativeView.slot(pair.nativeSlot).getBounds(nativeView).x;
-			// The asymmetric classic-head silhouette is not the character's physical
-			// axis; body and both feet establish the shared registration point.
-			if (pair.nativeSlot != "head") {
-				assertTrue(Math.abs(legacyX - nativeX) < 0.02, '${pair.nativeSlot} matches the legacy shared-root horizontal registration');
-			}
-			var legacyY = legacyState.getChildByTimelineName(pair.legacy).getBounds(legacy).y;
-			var nativeY = nativeView.slot(pair.nativeSlot).getBounds(nativeView).y;
-			assertClose(legacyY, nativeY, '${pair.nativeSlot} matches the legacy shared-root vertical registration', 0.02);
-		}
-		var hats = [6, 5, 13, 16];
-		var legacyWithHats = new CharacterDisplay({hat: hats[0], hats: hats, head: 1, body: 1, feet: 1}, null, false);
-		legacyWithHats.setState("standAnim");
-		var legacyHead = Std.downcast(legacyWithHats.getStateClip("standAnim").getChildByTimelineName("head"), PR2MovieClip);
-		var nativeWithHats = new CharacterView(0x2E8BFF, 0xFFD24A, null, "stand", {head: 1, body: 1, feet: 1}, hats);
-		for (index in 0...4) {
-			var legacyHat = legacyHead.getChildByTimelineName('hat${index + 1}');
-			var legacyBounds = legacyHat.getBounds(legacyWithHats);
-			var nativeBounds = nativeWithHats.hatSlot(index).getBounds(nativeWithHats);
-			assertClose(legacyBounds.x, nativeBounds.x, 'hat slot ${index + 1} matches the original game horizontal position');
-			assertClose(legacyBounds.y, nativeBounds.y, 'hat slot ${index + 1} matches the original game vertical position');
-		}
-	}
-
 	private static function testPartRegistrationFollowsSlotRotation():Void {
 		var rig = CharacterRig.loadClassic();
 		var view = new CharacterView();
 		for (state in ["run", "jump"]) {
-			var legacyStateName = state + "Anim";
-			var legacy = new CharacterDisplay(null, null, false);
-			legacy.setState(legacyStateName);
 			view.setState(state);
 			var animation = CharacterRig.animation(rig, state);
 			var slot = [for (candidate in animation.slots) if (candidate.name == "frontFoot") candidate][0];
@@ -598,19 +512,7 @@ class CharacterViewTest {
 					'$state frame $frame composes the foot registration through its rotated x basis');
 				assertClose(source.ty + source.b * registration.x + source.d * registration.y, actual.ty,
 					'$state frame $frame composes the foot registration through its rotated y basis');
-				var legacyState = legacy.getStateClip(legacyStateName);
-				for (pair in [
-					{legacy: "body", nativeSlot: "body"},
-					{legacy: "foot1", nativeSlot: "frontFoot"},
-					{legacy: "foot2", nativeSlot: "backFoot"}
-				]) {
-					var legacyBounds = legacyState.getChildByTimelineName(pair.legacy).getBounds(legacy);
-					var nativeBounds = view.slot(pair.nativeSlot).getBounds(view);
-					assertClose(legacyBounds.x, nativeBounds.x, '$state frame $frame ${pair.nativeSlot} keeps the Flash pivot x', 0.02);
-					assertClose(legacyBounds.y, nativeBounds.y, '$state frame $frame ${pair.nativeSlot} keeps the Flash pivot y', 0.02);
-				}
 				if (frame < animation.frameCount) {
-					legacy.advanceOneFrame();
 					view.advanceOneFrame();
 				}
 			}

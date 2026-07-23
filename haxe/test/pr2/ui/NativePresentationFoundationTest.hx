@@ -15,9 +15,6 @@ import pr2.assets.NativeAssetIds.BitmapAsset;
 import pr2.assets.NativeAssetIds.FontAsset;
 import pr2.assets.NativeAssetIds.SoundAsset;
 import pr2.assets.NativeAssetIds.StaticSvg;
-import pr2.runtime.FlButton;
-import pr2.runtime.FlCheckBox;
-import pr2.runtime.FlSlider;
 import pr2.lobby.dialogs.ConfirmDialogView;
 import pr2.lobby.dialogs.MessageDialogView;
 import pr2.lobby.dialogs.MessagePopup;
@@ -108,7 +105,6 @@ class NativePresentationFoundationTest {
 
 	private static function testControlParityContracts():Void {
 		var nativeButton = new GameButton("Follow");
-		var flashButton = new FlButton("Follow");
 		assertEquals(cast StaticSvg.ButtonUp, cast @:privateAccess nativeButton.authoredAsset(), "default button starts on exact authored up skin");
 		nativeButton.dispatchEvent(new MouseEvent(MouseEvent.ROLL_OVER));
 		assertEquals(cast StaticSvg.ButtonOver, cast @:privateAccess nativeButton.authoredAsset(), "button hover selects exact authored over skin");
@@ -116,14 +112,11 @@ class NativePresentationFoundationTest {
 		assertEquals(cast StaticSvg.ButtonDown, cast @:privateAccess nativeButton.authoredAsset(), "button press selects exact authored down skin");
 		nativeButton.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_UP));
 		nativeButton.toggle = true;
-		flashButton.toggle = true;
 		nativeButton.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
-		flashButton.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
-		assertEquals(flashButton.selected, nativeButton.selected, "button toggle matches FlButton");
+		assertEquals(true, nativeButton.selected, "button toggle selects the control");
 		assertEquals(cast StaticSvg.ButtonSelectedOver, cast @:privateAccess nativeButton.authoredAsset(), "selected hovered button uses authored combined state");
 		nativeButton.enabled = false;
-		flashButton.enabled = false;
-		assertEquals(flashButton.mouseEnabled, nativeButton.mouseEnabled, "button disabled mouse behavior matches FlButton");
+		assertEquals(false, nativeButton.mouseEnabled, "disabled button ignores pointer input");
 		assertEquals(cast StaticSvg.ButtonSelectedDisabled, cast @:privateAccess nativeButton.authoredAsset(), "selected disabled button uses authored combined state");
 		assertEquals(0x555555, nativeButton.labelField.textColor, "disabled button uses the authored component label color");
 		assertEquals(5.0, nativeButton.labelField.x, "button reserves the authored five-pixel label gutter");
@@ -136,38 +129,27 @@ class NativePresentationFoundationTest {
 		assertEquals(cast StaticSvg.ButtonEmphasized, cast @:privateAccess emphasized.authoredAsset(), "emphasized button uses exact authored emphasized skin");
 
 		var nativeBox = new GameCheckBox("Mute");
-		var flashBox = new FlCheckBox("Mute");
 		assertEquals(true, nativeBox.getBounds(nativeBox).right >= 100, "checkbox keeps a stable full-width HTML5 hit area");
 		assertEquals(cast StaticSvg.CheckBoxUp, cast @:privateAccess nativeBox.authoredAsset(), "checkbox starts on exact authored up icon");
 		nativeBox.dispatchEvent(new MouseEvent(MouseEvent.ROLL_OVER));
 		assertEquals(cast StaticSvg.CheckBoxOver, cast @:privateAccess nativeBox.authoredAsset(), "checkbox hover uses exact authored over icon");
 		nativeBox.dispatchEvent(new MouseEvent(MouseEvent.ROLL_OUT));
 		var nativeChanges = 0;
-		var flashChanges = 0;
 		nativeBox.addEventListener(Event.CHANGE, function(_) nativeChanges++);
-		flashBox.addEventListener(Event.CHANGE, function(_) flashChanges++);
 		nativeBox.selected = true;
-		flashBox.selected = true;
 		assertEquals(cast StaticSvg.CheckBoxSelectedUp, cast @:privateAccess nativeBox.authoredAsset(), "programmatic selection uses authored selected-up icon");
-		assertEquals(flashChanges, nativeChanges, "programmatic checkbox changes are silent like FlCheckBox");
+		assertEquals(0, nativeChanges, "programmatic checkbox changes are silent");
 		nativeBox.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
-		flashBox.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
-		assertEquals(flashBox.selected, nativeBox.selected, "checkbox click state matches FlCheckBox");
-		assertEquals(flashChanges, nativeChanges, "checkbox click event matches FlCheckBox");
+		assertEquals(false, nativeBox.selected, "checkbox click toggles its selected state");
+		assertEquals(1, nativeChanges, "checkbox click dispatches one change event");
 		nativeBox.enabled = false;
-		flashBox.enabled = false;
-		assertEquals(flashBox.mouseEnabled, nativeBox.mouseEnabled, "checkbox disabled mouse behavior matches FlCheckBox");
+		assertEquals(false, nativeBox.mouseEnabled, "disabled checkbox ignores pointer input");
 		assertEquals(cast StaticSvg.CheckBoxDisabled, cast @:privateAccess nativeBox.authoredAsset(), "disabled unchecked box uses authored disabled icon");
 		assertEquals(18.0, nativeBox.labelField.x, "checkbox label keeps the authored icon-plus-four-pixel gap");
 
 		var nativeSlider = new GameSlider(0, 10, 3, 1);
-		var flashSlider = new FlSlider();
-		flashSlider.minimum = 0;
-		flashSlider.maximum = 10;
-		flashSlider.value = 3;
 		nativeSlider.value = 20;
-		flashSlider.value = 20;
-		assertEquals(flashSlider.value, nativeSlider.value, "slider clamps like FlSlider");
+		assertEquals(10.0, nativeSlider.value, "slider clamps to its maximum");
 		nativeSlider.value = 5;
 		@:privateAccess nativeSlider.thumb.dispatchEvent(new MouseEvent(MouseEvent.CLICK, true, false, 0, 0));
 		assertEquals(5.0, nativeSlider.value, "thumb release click uses slider coordinates instead of resetting from thumb-local zero");

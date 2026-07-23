@@ -246,18 +246,6 @@ Extract XFL metadata summary:
 python3 tools/xfl_metadata.py --summary
 ```
 
-Regenerate the archival Haxe asset catalog for parity investigations:
-
-```sh
-python3 tools/generate_haxe_assets.py
-```
-
-Compile-check the generated package:
-
-```sh
-haxe -cp haxe/src -cp haxe/legacy --macro 'include("pr2.generated.assets")' --no-output
-```
-
 ## Vector Art Inventory
 
 Regenerate the vector-art inventory:
@@ -364,8 +352,7 @@ python3 tools/compare_screenshots.py test/output/dmjv-flash/10-complete.png test
 ```
 
 For a single XFL symbol, use `tools/compare_symbol_render.py`; for a native-only
-flow, use the OpenFL sequences below. Generated legacy catalogs live under
-`haxe/legacy` and are excluded from `project.xml` and production boundary scans.
+flow, use the OpenFL sequences below.
 
 Capture an OpenFL screenshot after launching the app:
 

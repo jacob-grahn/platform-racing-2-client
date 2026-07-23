@@ -5,7 +5,6 @@
 	<app main="Main" path="export" file="PlatformRacing2" />
 
 	<source path="haxe/src" />
-	<source path="haxe/legacy" if="pr2_legacy_preview" />
 	<assets path="assets" rename="assets" exclude="fonts|blocks|login" if="html5" />
 	<assets path="assets" rename="assets" exclude="fonts|blocks|login" unless="html5" />
 
@@ -38,11 +37,10 @@
 	<postbuild command="python3 tools/check_no_compat_runtime.py" if="html5" />
 	<postbuild command="python3 tools/cache_bust_html5_js.py" if="html5" />
 
-	<!-- Flatten static, render-safe display subtrees into one cached GPU quad
-	     (pr2.runtime.FlattenPolicy gate + PR2MovieClip.maybeFlattenSubtree).
+	<!-- Flatten static, render-safe display subtrees into one cached GPU quad.
 	     On by default: measured the lobby 18.7fps -> 60fps (vsync cap) with a
-	     sub-perceptual (<=2/255) anti-alias delta. Both gates still run at
-	     runtime, so only static+safe subtrees are ever cached. Remove this
+	     sub-perceptual (<=2/255) anti-alias delta. Runtime gates ensure only
+	     static and safe subtrees are cached. Remove this
 	     define to A/B against the un-flattened render. -->
 	<haxedef name="pr2_flatten_cache" />
 
