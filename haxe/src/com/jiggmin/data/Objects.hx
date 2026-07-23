@@ -10,7 +10,7 @@ import openfl.utils.AssetType;
 import openfl.utils.Assets;
 import pr2.level.ObjectCodes;
 import pr2.level.ArrowBlockView;
-import pr2.level.LevelRenderer;
+import pr2.level.LevelAssetCatalog;
 import pr2.runtime.FontResolver;
 import pr2.runtime.SvgAsset;
 
@@ -104,7 +104,7 @@ class Objects {
 	}
 
 	private static function stampDisplay(code:Int, linkage:String):DisplayObject {
-		var assetPath = LevelRenderer.stampAssetPath(code);
+		var assetPath = LevelAssetCatalog.stampAssetPath(code);
 		if (assetPath != "") {
 			var vector = if (code == ObjectCodes.STAMP_CACTUS || code == ObjectCodes.STAMP_BUILDING1) {
 				// These standalone SVGs compose the exact timeline SVG leaves, so
@@ -124,7 +124,7 @@ class Objects {
 	}
 
 	private static function backgroundDisplay(code:Int):DisplayObject {
-		var path = LevelRenderer.artBackgroundAssetPath(code);
+		var path = LevelAssetCatalog.artBackgroundAssetPath(code);
 		var background = SvgAsset.create(path);
 		background.name = switch (code) {
 			case ObjectCodes.BG1Code: "BG1";
@@ -173,7 +173,7 @@ class Objects {
 	}
 
 	private static function addBlockBitmap(holder:Sprite, code:Int):Void {
-		var data = LevelRenderer.blockBitmapData(code);
+		var data = LevelAssetCatalog.blockBitmapData(code);
 		if (data != null) {
 			var bitmap = new Bitmap(data);
 			bitmap.name = blockBitmapName(code);
@@ -187,7 +187,7 @@ class Objects {
 	}
 
 	private static function addArrowGraphic(holder:Sprite, code:Int):Void {
-		var rotation = LevelRenderer.arrowOverlayRotation(code);
+		var rotation = LevelAssetCatalog.arrowOverlayRotation(code);
 		if (rotation == null) {
 			return;
 		}

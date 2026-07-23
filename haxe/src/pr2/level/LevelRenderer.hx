@@ -5,7 +5,6 @@ import pr2.level.LevelArtRasterizer.ArtRasterBudget;
 import pr2.level.LevelArtRasterizer.ArtRasterTiles;
 import pr2.level.LevelArtCursor.ArtStrokeState;
 
-import com.jiggmin.data.Objects;
 import haxe.Timer;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
@@ -18,16 +17,8 @@ import openfl.geom.ColorTransform;
 import openfl.geom.Matrix;
 import openfl.geom.Point;
 import openfl.geom.Rectangle;
-import openfl.text.TextField;
-import openfl.text.TextFieldAutoSize;
-import openfl.text.TextFormat;
-import openfl.utils.Assets;
 import pr2.Constants;
-import pr2.gameplay.PrizePopup;
 import pr2.lobby.account.Settings;
-import pr2.lobby.dialogs.MessagePopup;
-import pr2.lobby.dialogs.Popup;
-import pr2.level.Level.LevelArtLayer;
 import pr2.level.Level.LevelArtObject;
 import pr2.level.Level.LevelDrawAction;
 import pr2.level.Level.LevelTextObject;
@@ -36,7 +27,6 @@ import pr2.effects.BlockPiece;
 import pr2.effects.MineAppear;
 import pr2.effects.MineExplosion;
 import pr2.effects.TeleportPop;
-import pr2.runtime.FontResolver;
 
 typedef ArtRenderOptions = {
 	@:optional var onArtWarning:String->Void;
@@ -150,6 +140,9 @@ class LevelRenderer extends Sprite {
 	private final artOptions:Null<ArtRenderOptions>;
 	private final artRasterBudget:ArtRasterBudget;
 	private final blockFactory:BlockViewFactory;
+	private var backgroundRenderer:LevelBackgroundRenderer;
+	private var artRenderer:LevelArtRenderCoordinator;
+	private var blockCulling:BlockDisplayCulling;
 	private var attemptedArtItems:Int = 0;
 	private var artLoadWarningShown:Bool = false;
 	private var rasterStopNotified:Bool = false;
@@ -183,6 +176,9 @@ class LevelRenderer extends Sprite {
 	public function new(level:Level, ?focusBlock:LevelBlock, focusScreenX:Float = DEFAULT_FOCUS_X, focusScreenY:Float = DEFAULT_FOCUS_Y,
 			incrementalBlocks:Bool = false, blocksPerFrame:Int = DEFAULT_BLOCKS_PER_FRAME, ?artOptions:ArtRenderOptions) {
 		super();
+		backgroundRenderer = new LevelBackgroundRenderer(this);
+		artRenderer = new LevelArtRenderCoordinator(this);
+		blockCulling = new BlockDisplayCulling(this);
 		this.level = level;
 		blockFactory = new BlockViewFactory(this);
 		this.incrementalBlocks = incrementalBlocks;
@@ -190,7 +186,7 @@ class LevelRenderer extends Sprite {
 		this.drawArtEnabled = Settings.getValue(Settings.DRAW_ART, true) != false;
 		this.artOptions = artOptions;
 		this.artRasterBudget = new ArtRasterBudget(artOptions != null && artOptions.rasterTileLimit != null ? artOptions.rasterTileLimit
-			: DEFAULT_ART_RASTER_TILE_LIMIT, notifyRasterStopped);
+			: DEFAULT_ART_RASTER_TILE_LIMIT, artRenderer.notifyRasterStopped);
 		this.currentBackgroundColor = level.bgColor;
 
 		var focus = focusBlock == null ? firstRenderableBlock(level) : focusBlock;
@@ -819,116 +815,24 @@ class LevelRenderer extends Sprite {
 	}
 
 	public static inline function isStartBlockCode(code:Int):Bool {
-		return code >= ObjectCodes.BLOCK_START1 && code <= ObjectCodes.BLOCK_START4;
+		return LevelAssetCatalog.isStartBlockCode(code);
 	}
 
 	public static inline function isSpawnMarkerBlockCode(code:Int):Bool {
-		return isStartBlockCode(code) || code == ObjectCodes.BLOCK_MINION_EGG;
+		return LevelAssetCatalog.isSpawnMarkerBlockCode(code);
 	}
 
-	public static function blockAssetPath(code:Int):String {
-		return switch (code) {
-			case ObjectCodes.BLOCK_BASIC1: "assets/blocks/basic1.png";
-			case ObjectCodes.BLOCK_BASIC2: "assets/blocks/basic2.png";
-			case ObjectCodes.BLOCK_BASIC3: "assets/blocks/basic3.png";
-			case ObjectCodes.BLOCK_BASIC4: "assets/blocks/basic4.png";
-			case ObjectCodes.BLOCK_BRICK: "assets/blocks/brick.png";
-			case ObjectCodes.BLOCK_MINE: "assets/blocks/mine_block.png";
-			case ObjectCodes.BLOCK_ITEM: "assets/blocks/item.png";
-			case ObjectCodes.BLOCK_START1 | ObjectCodes.BLOCK_START2 | ObjectCodes.BLOCK_START3 | ObjectCodes.BLOCK_START4: "assets/blocks/start.png";
-			case ObjectCodes.BLOCK_ICE: "assets/blocks/ice.png";
-			case ObjectCodes.BLOCK_FINISH: "assets/blocks/finish.png";
-			case ObjectCodes.BLOCK_CRUMBLE: "assets/blocks/crumble.png";
-			case ObjectCodes.BLOCK_VANISH: "assets/blocks/vanish.png";
-			case ObjectCodes.BLOCK_MOVE: "assets/blocks/move.png";
-			case ObjectCodes.BLOCK_WATER: "assets/blocks/water.png";
-			case ObjectCodes.BLOCK_ROTATE_RIGHT: "assets/blocks/rotate_right.png";
-			case ObjectCodes.BLOCK_ROTATE_LEFT: "assets/blocks/rotate_left.png";
-			case ObjectCodes.BLOCK_PUSH: "assets/blocks/push.png";
-			case ObjectCodes.BLOCK_SAFETY: "assets/blocks/safety_net.png";
-			case ObjectCodes.BLOCK_ITEM_INF: "assets/blocks/infinite_item.png";
-			case ObjectCodes.BLOCK_HAPPY: "assets/blocks/happy.png";
-			case ObjectCodes.BLOCK_SAD: "assets/blocks/sad.png";
-			case ObjectCodes.BLOCK_HEART: "assets/blocks/heart.png";
-			case ObjectCodes.BLOCK_TIME: "assets/blocks/time.png";
-			case ObjectCodes.BLOCK_CUSTOM_STATS: "assets/blocks/custom_stats.png";
-			case ObjectCodes.BLOCK_TELEPORT: "assets/blocks/teleport_block.png";
-			// ArrowBlock uses a basic2 tile as its base (Blocks.getBlock) and adds
-			// the rotated arrow overlay on top; see arrowOverlayAssetPath.
-			case ObjectCodes.BLOCK_ARROW_DOWN | ObjectCodes.BLOCK_ARROW_UP | ObjectCodes.BLOCK_ARROW_LEFT | ObjectCodes.BLOCK_ARROW_RIGHT:
-				"assets/blocks/basic2.png";
-			default: "";
-		}
-	}
-
-	/** Loads an authored block bitmap; eval uses transparent bounds because it cannot decode PNG bytes. */
-	public static function blockBitmapData(code:Int):Null<BitmapData> {
-		var path = blockAssetPath(code);
-		if (path == "") return null;
-		var data = Assets.getBitmapData(path);
-		#if eval
-		if (data == null) data = new BitmapData(TILE_SIZE, TILE_SIZE, true, 0);
-		#elseif sys
-		if (data == null && sys.FileSystem.exists(path)) {
-			var image = lime.graphics.Image.fromBytes(sys.io.File.getBytes(path));
-			if (image != null) data = BitmapData.fromImage(image);
-		}
-		#end
-		return data;
-	}
-
-	/** Animate-exported vector used by the editor preview. */
-	public static inline function arrowOverlayAssetPath():String {
-		return "assets/svg/blocks/arrow_overlay.svg";
-	}
-
-	/**
-		Arrow overlay rotation in degrees, matching ArrowUp/Down/Left/RightBlock's
-		`rot` argument to ArrowBlock. Null for non-arrow blocks.
-	**/
-	public static function arrowOverlayRotation(code:Int):Null<Float> {
-		return switch (code) {
-			case ObjectCodes.BLOCK_ARROW_UP: 0;
-			case ObjectCodes.BLOCK_ARROW_DOWN: 180;
-			case ObjectCodes.BLOCK_ARROW_LEFT: -90;
-			case ObjectCodes.BLOCK_ARROW_RIGHT: 90;
-			default: null;
-		}
-	}
-
-	public static function artBackgroundAssetPath(code:Int):String {
-		return switch (code) {
-			case 201: "assets/svg/backgrounds/bg1.svg";
-			case 202: "assets/svg/backgrounds/bg2.svg";
-			case 203: "assets/svg/backgrounds/bg3.svg";
-			case 204: "assets/svg/backgrounds/bg4.svg";
-			case 205: "assets/svg/backgrounds/bg5.svg";
-			case 206: "assets/svg/backgrounds/bg6.svg";
-			case 207: "assets/svg/backgrounds/bg7.svg";
-			default: "";
-		}
-	}
-
-	public static function stampAssetPath(code:Int):String {
-		return switch (code) {
-			case 0: "assets/svg/stamps/tree1.svg";
-			case 1: "assets/svg/stamps/tree2.svg";
-			case 2: "assets/svg/stamps/tree3.svg";
-			case 3: "assets/svg/stamps/petrified_tree.svg";
-			case 4: "assets/svg/stamps/cactus.svg";
-			case 5: "assets/svg/stamps/rock1.svg";
-			case 6: "assets/svg/stamps/rock2.svg";
-			case 7: "assets/svg/stamps/spire1.svg";
-			case 8: "assets/svg/stamps/spire2.svg";
-			case 9: "assets/svg/stamps/building1.svg";
-			default: "";
-		}
-	}
+	// Compatibility façade: existing gameplay/editor callers can migrate to
+	// LevelAssetCatalog independently of this renderer split.
+	public static inline function blockAssetPath(code:Int):String return LevelAssetCatalog.blockAssetPath(code);
+	public static inline function blockBitmapData(code:Int):Null<BitmapData> return LevelAssetCatalog.blockBitmapData(code);
+	public static inline function arrowOverlayAssetPath():String return LevelAssetCatalog.arrowOverlayAssetPath();
+	public static inline function arrowOverlayRotation(code:Int):Null<Float> return LevelAssetCatalog.arrowOverlayRotation(code);
+	public static inline function artBackgroundAssetPath(code:Int):String return LevelAssetCatalog.artBackgroundAssetPath(code);
+	public static inline function stampAssetPath(code:Int):String return LevelAssetCatalog.stampAssetPath(code);
 
 	private function drawBackground():Void {
-		solidBackground = new Shape();
-		redrawSolidBackground();
-		addChild(solidBackground);
+		backgroundRenderer.drawSolidBackground();
 	}
 
 	private function drawBlocks():Void {
@@ -954,36 +858,7 @@ class LevelRenderer extends Sprite {
 	}
 
 	private function drawArtBatch(event:Event):Void {
-		var deadline = Timer.stamp() + RENDER_FRAME_ESCAPE_SECONDS;
-		try {
-			drawNextArtItemsForFrame(deadline);
-			if (Timer.stamp() < deadline) {
-				attachArtRasterTiles(ART_RASTER_ATTACH_TILES_PER_FRAME, deadline);
-			}
-		} catch (error:Dynamic) {
-			handleArtDrawFailure(error);
-		}
-		if (drawnArtItems >= totalArtItems) {
-			removeEventListener(Event.ENTER_FRAME, drawArtBatch);
-			finishArtRasterAttaching();
-		}
-	}
-
-	private function drawNextArtItemsForFrame(escapeDeadline:Float):Void {
-		var deadline = blocksPerFrame == DEFAULT_BLOCKS_PER_FRAME
-			? Math.min(Timer.stamp() + ART_DRAW_FRAME_BUDGET_SECONDS, escapeDeadline)
-			: escapeDeadline;
-		var drawnThisFrame = 0;
-		var actionBatchLimit = blocksPerFrame == DEFAULT_BLOCKS_PER_FRAME ? ART_DRAW_ACTION_BATCH_LIMIT : 1;
-		var maxItemsThisFrame = blocksPerFrame == DEFAULT_BLOCKS_PER_FRAME ? 1000000 : blocksPerFrame;
-		while (drawnArtItems < totalArtItems && drawnThisFrame < maxItemsThisFrame && (drawnThisFrame == 0 || Timer.stamp() < deadline)) {
-			var before = drawnArtItems;
-			drawNextArtItems(actionBatchLimit, deadline);
-			if (drawnArtItems == before) {
-				return;
-			}
-			drawnThisFrame += drawnArtItems - before;
-		}
+		artRenderer.drawBatch(event);
 	}
 
 	private function onWaterRippleFrame(event:Event):Void {
@@ -1031,85 +906,27 @@ class LevelRenderer extends Sprite {
 	}
 
 	private function drawNextBlocks(limit:Int, ?deadline:Null<Float>):Void {
-		var end = Std.int(Math.min(level.blocks.length, nextBlockToDraw + limit));
-		var drawn = 0;
-		while (nextBlockToDraw < end) {
-			if (deadline != null && drawn > 0 && Timer.stamp() >= deadline) {
-				break;
-			}
-			var block = level.blocks[nextBlockToDraw++];
-			addBlockDisplay(block);
-			drawn++;
-		}
+		blockCulling.drawNext(limit, deadline);
 	}
 
 	private function addBlockDisplay(block:LevelBlock):Void {
-		// Start and minion-egg blocks are spawn markers, not scenery. Flash's
-		// gameplay Map records their positions and never adds them to the block
-		// display list.
-		if (isSpawnMarkerBlockCode(block.code)) {
-			return;
-		}
-		if (blockDisplays.exists(blockKey(block.worldX, block.worldY))) {
-			return;
-		}
-		var display = createBlockDisplay(block);
-		blockDisplays.set(blockKey(block.worldX, block.worldY), display);
-		addToBlockGrid(block.worldX, block.worldY, display);
-		var segX = segmentOf(block.worldX);
-		var segY = segmentOf(block.worldY);
-		// Attach only if the block currently falls inside the view window; otherwise
-		// it stays in the grid and is attached later when the camera scrolls to it.
-		if (isInView(segX, segY)) {
-			blockLayer.addChild(display);
-		}
+		blockCulling.add(block);
 	}
 
 	private function addToBlockGrid(worldX:Int, worldY:Int, display:Sprite):Void {
-		var segX = segmentOf(worldX);
-		var segY = segmentOf(worldY);
-		var col = blockGrid.get(segX);
-		if (col == null) {
-			col = new Map();
-			blockGrid.set(segX, col);
-		}
-		col.set(segY, display);
+		blockCulling.addToGrid(worldX, worldY, display);
 	}
 
 	private function removeFromBlockGrid(worldX:Int, worldY:Int):Void {
-		var segX = segmentOf(worldX);
-		var segY = segmentOf(worldY);
-		var col = blockGrid.get(segX);
-		if (col == null) {
-			return;
-		}
-		col.remove(segY);
+		blockCulling.removeFromGrid(worldX, worldY);
 	}
 
 	private static inline function segmentOf(coord:Int):Int {
-		return Math.round(coord / TILE_SIZE);
+		return BlockDisplayCulling.segmentOf(coord);
 	}
 
 	private inline function isInView(segX:Int, segY:Int):Bool {
-		return viewInitialized && segX >= viewColMin && segX <= viewColMax && segY >= viewRowMin && segY <= viewRowMax;
-	}
-
-	private function setBlockAttached(segX:Int, segY:Int, attach:Bool):Void {
-		var col = blockGrid.get(segX);
-		if (col == null) {
-			return;
-		}
-		var display = col.get(segY);
-		if (display == null) {
-			return;
-		}
-		if (attach) {
-			if (display.parent != blockLayer) {
-				blockLayer.addChild(display);
-			}
-		} else if (display.parent == blockLayer) {
-			blockLayer.removeChild(display);
-		}
+		return blockCulling.isInView(segX, segY);
 	}
 
 	/**
@@ -1118,124 +935,21 @@ class LevelRenderer extends Sprite {
 		walked (a few hundred segment cells), never the full block list.
 	**/
 	private function updateViewWindow(force:Bool):Void {
-		// Map the visible stage rectangle into the block layer's local (original,
-		// pre-rotation) frame so culling stays correct when a rotate block spins the
-		// course. Mirrors Flash background.Background.updateViewWindow, which rotates
-		// the camera window into the block layer's frame before picking the column/
-		// row range. The combined matrix folds in both the committed block rotation
-		// and the in-progress tween, so the bounding box covers the rotated window.
-		var toLocal = blockLayer.transform.matrix.clone();
-		toLocal.concat(worldContainer.transform.matrix);
-		toLocal.invert();
-		var minX = Math.POSITIVE_INFINITY;
-		var minY = Math.POSITIVE_INFINITY;
-		var maxX = Math.NEGATIVE_INFINITY;
-		var maxY = Math.NEGATIVE_INFINITY;
-		for (corner in [new Point(0, 0), new Point(Constants.STAGE_WIDTH, 0), new Point(0, Constants.STAGE_HEIGHT),
-			new Point(Constants.STAGE_WIDTH, Constants.STAGE_HEIGHT)]) {
-			var local = toLocal.transformPoint(corner);
-			if (local.x < minX) minX = local.x;
-			if (local.x > maxX) maxX = local.x;
-			if (local.y < minY) minY = local.y;
-			if (local.y > maxY) maxY = local.y;
-		}
-		var colMin = Math.floor(minX / TILE_SIZE) - VIEW_MARGIN_SEGMENTS;
-		var colMax = Math.ceil(maxX / TILE_SIZE) + VIEW_MARGIN_SEGMENTS;
-		var rowMin = Math.floor(minY / TILE_SIZE) - VIEW_MARGIN_SEGMENTS;
-		var rowMax = Math.ceil(maxY / TILE_SIZE) + VIEW_MARGIN_SEGMENTS;
-		if (!force
-			&& viewInitialized
-			&& intAbs(colMin - viewColMin) <= VIEW_REBUILD_THRESHOLD
-			&& intAbs(colMax - viewColMax) <= VIEW_REBUILD_THRESHOLD
-			&& intAbs(rowMin - viewRowMin) <= VIEW_REBUILD_THRESHOLD
-			&& intAbs(rowMax - viewRowMax) <= VIEW_REBUILD_THRESHOLD) {
-			return;
-		}
-		// Detach cells leaving the window.
-		if (viewInitialized) {
-			for (segX in viewColMin...viewColMax + 1) {
-				for (segY in viewRowMin...viewRowMax + 1) {
-					if (segX < colMin || segX > colMax || segY < rowMin || segY > rowMax) {
-						setBlockAttached(segX, segY, false);
-					}
-				}
-			}
-		}
-		// Attach cells entering the window (skip those already inside the old one).
-		for (segX in colMin...colMax + 1) {
-			for (segY in rowMin...rowMax + 1) {
-				if (!viewInitialized || segX < viewColMin || segX > viewColMax || segY < viewRowMin || segY > viewRowMax) {
-					setBlockAttached(segX, segY, true);
-				}
-			}
-		}
-		viewColMin = colMin;
-		viewColMax = colMax;
-		viewRowMin = rowMin;
-		viewRowMax = rowMax;
-		viewInitialized = true;
+		blockCulling.updateViewWindow(force);
 	}
 
 	private function updateArtViewWindows(force:Bool):Void {
-		for (tiles in artRasterTileLayers) {
-			if (tiles != null) {
-				updateArtViewWindow(tiles, force);
-			}
-		}
-		if (drawnArtItems >= totalArtItems) {
-			finishArtRasterAttaching();
-		}
-	}
-
-	private function updateArtViewWindow(tiles:ArtRasterTiles, force:Bool):Void {
-		var rasterCanvas = tiles.rasterCanvas;
-		if (rasterCanvas.parent == null) {
-			return;
-		}
-		var toLocal = rasterCanvas.transform.matrix.clone();
-		toLocal.concat(rasterCanvas.parent.transform.matrix);
-		toLocal.concat(worldContainer.transform.matrix);
-		toLocal.invert();
-		var minX = Math.POSITIVE_INFINITY;
-		var minY = Math.POSITIVE_INFINITY;
-		var maxX = Math.NEGATIVE_INFINITY;
-		var maxY = Math.NEGATIVE_INFINITY;
-		for (corner in [new Point(0, 0), new Point(Constants.STAGE_WIDTH, 0), new Point(0, Constants.STAGE_HEIGHT),
-			new Point(Constants.STAGE_WIDTH, Constants.STAGE_HEIGHT)]) {
-			var local = toLocal.transformPoint(corner);
-			if (local.x < minX) minX = local.x;
-			if (local.x > maxX) maxX = local.x;
-			if (local.y < minY) minY = local.y;
-			if (local.y > maxY) maxY = local.y;
-		}
-		var tile = ART_RASTER_TILE_SIZE;
-		var margin = ART_RASTER_VIEW_MARGIN_TILES * tile;
-		tiles.setVisibleTileWindow(
-			artTileOrigin(Std.int(Math.floor(minX))) - margin,
-			artTileOrigin(Std.int(Math.floor(maxX))) + margin,
-			artTileOrigin(Std.int(Math.floor(minY))) - margin,
-			artTileOrigin(Std.int(Math.floor(maxY))) + margin,
-			force
-		);
-	}
-
-	private static inline function intAbs(value:Int):Int {
-		return value < 0 ? -value : value;
+		artRenderer.updateViewWindows(force);
 	}
 
 	private static inline function round1(value:Float):Float {
 		return Math.round(value * 10) / 10;
 	}
 
-	private static inline function artTileOrigin(pixel:Int):Int {
-		var tile = ART_RASTER_TILE_SIZE;
-		return Std.int(Math.floor(pixel / tile)) * tile;
-	}
-
 	public function remove():Void {
 		removeEventListener(Event.ENTER_FRAME, drawBlockBatch);
 		removeEventListener(Event.ENTER_FRAME, drawArtBatch);
-		removeEventListener(Event.ENTER_FRAME, onArtRasterAttachFrame);
+		artRenderer.dispose();
 		removeEventListener(Event.ENTER_FRAME, onWaterRippleFrame);
 		removeEventListener(Event.ENTER_FRAME, onBlockBounceFrame);
 		artRasterAttachActive = false;
@@ -1317,282 +1031,23 @@ class LevelRenderer extends Sprite {
 	}
 
 	private function drawArtBackground():Void {
-		if (!drawArtEnabled) {
-			return;
-		}
-		if (level.artBackgroundCode == null) {
-			return;
-		}
-		var backgroundCode = level.artBackgroundCode;
-		artBackgroundContainer = new Sprite();
-		addChild(artBackgroundContainer);
-		artBackgroundTintScale = backgroundCode == 204 || backgroundCode == BG5_CODE ? 0 : 1;
-		var assetPath = artBackgroundAssetPath(level.artBackgroundCode);
-		if (assetPath != "") {
-			// SVGs are virtual entries inside assets/svg-packs/*.json in HTML5
-			// builds, so OpenFL's registry cannot see the individual asset path.
-			// SvgAsset owns that packed lookup and reports a genuinely missing
-			// background if the generated pack is incomplete.
-			// These SVGs are strict XFL compositions in the original 550x400
-			// coordinate space. BitmapData.draw(bg) in Flash preserved that space
-			// and clipped it to the stage; fitting visible bounds changes both the
-			// registration and scale of backgrounds whose art does not fill it.
-			addArtBackgroundChild(pr2.runtime.SvgAsset.create(assetPath), 0);
-		}
-		if (backgroundCode == BG5_CODE) {
-			var grid = createBg5CircleGrid();
-			addArtBackgroundChild(grid);
-		}
-	}
-
-	private function addArtBackgroundChild(child:DisplayObject, ?index:Int):Void {
-		if (artBackgroundContainer == null) {
-			return;
-		}
-		if (index != null && index >= 0 && index < artBackgroundContainer.numChildren) {
-			artBackgroundContainer.addChildAt(child, index);
-		} else {
-			artBackgroundContainer.addChild(child);
-		}
-		child.transform.colorTransform = backgroundColorTransform(artBackgroundTintScale);
-		artBackgroundChildren.push(child);
+		backgroundRenderer.drawArtBackground();
 	}
 
 	private function drawArtLayer(index:Int):Void {
-		if (!drawArtEnabled) return;
-		if (index >= level.artLayers.length) return;
-		var layer = level.artLayers[index];
-		var container = new Sprite();
-		container.name = 'artLayer${index + 1}';
-		// Background.setPos rounds camera movement after applying the plane's
-		// parallax scale. DrawableBackground applies that scale to placed objects
-		// and text individually rather than scaling its stroke canvas.
-		container.x = parallaxOffset(offsetX, layer.scale);
-		container.y = parallaxOffset(offsetY, layer.scale);
-		artLayerContainers[index] = container;
-		// Brush strokes are rasterized onto this canvas, which sits beneath the
-		// placed objects and text — the rasterCanvas/objCanvas split from
-		// DrawableBackground. Drawing the strokes straight into the container's
-		// vector graphics instead would make OpenFL's HTML5 backend rasterize the
-		// whole (potentially level-spanning) layer into one offscreen texture.
-		var rasterCanvas = new Sprite();
-		rasterCanvas.name = ART_RASTER_CANVAS_NAME;
-		container.addChild(rasterCanvas);
-		var strokeTiles = new ArtRasterTiles(rasterCanvas, artRasterBudget);
-		artRasterTileLayers[index] = strokeTiles;
-		if (incrementalBlocks) {
-			totalArtItems += layer.drawActions.length + layer.objects.length + layer.texts.length;
-			artDrawCursors[index] = new ArtDrawCursor(container, strokeTiles, layer);
-		} else {
-			try {
-				strokeTiles.applyAll(layer.drawActions);
-				drawLayerObjects(container, layer.objects, layer.scale);
-				drawLayerTexts(container, layer.texts, layer.scale);
-			} catch (error:Dynamic) {
-				handleArtDrawFailure(error);
-			}
-		}
-		worldContainer.addChild(container);
-		updateArtViewWindow(strokeTiles, true);
-		if (!incrementalBlocks) {
-			strokeTiles.attachQueuedTiles(1000000);
-		}
+		artRenderer.drawLayer(index);
 	}
 
 	private function redrawSolidBackground():Void {
-		if (solidBackground == null) {
-			return;
-		}
-		solidBackground.graphics.clear();
-		solidBackground.graphics.beginFill(currentBackgroundColor);
-		solidBackground.graphics.drawRect(0, 0, Constants.STAGE_WIDTH, Constants.STAGE_HEIGHT);
-		solidBackground.graphics.endFill();
+		backgroundRenderer.redrawSolidBackground();
 	}
 
 	private function applyBackgroundColorTransforms():Void {
-		for (child in artBackgroundChildren) {
-			child.transform.colorTransform = backgroundColorTransform(artBackgroundTintScale);
-		}
-		blockLayer.transform.colorTransform = backgroundColorTransform(1);
-		for (i in 0...artLayerContainers.length) {
-			var container = artLayerContainers[i];
-			if (container != null && i < level.artLayers.length) {
-				container.transform.colorTransform = backgroundColorTransform(level.artLayers[i].scale);
-			}
-		}
-	}
-
-	private function backgroundColorTransform(layerScale:Float):ColorTransform {
-		var amount = ((1 - layerScale) * 0.4) + 0.1;
-		var red = (currentBackgroundColor >> 16) & 0xFF;
-		var green = (currentBackgroundColor >> 8) & 0xFF;
-		var blue = currentBackgroundColor & 0xFF;
-		return new ColorTransform(1 - amount, 1 - amount, 1 - amount, 1, red * amount, green * amount, blue * amount, 0);
+		backgroundRenderer.applyColorTransforms();
 	}
 
 	public static function createBg5CircleGrid(?random:Void->Float):Sprite {
-		var nextRandom = random == null ? Math.random : random;
-		var grid = new Sprite();
-		grid.name = "bg5CircleGrid";
-		grid.mouseEnabled = false;
-		grid.mouseChildren = false;
-		var tileSize = 50;
-		var cols = Std.int(Constants.STAGE_WIDTH / tileSize);
-		var rows = Std.int(Constants.STAGE_HEIGHT / tileSize);
-		for (col in 0...cols) {
-			for (row in 0...rows) {
-				var circle = new Shape();
-				circle.graphics.beginFill(Std.int(nextRandom() * 0xFFFFFF));
-				circle.graphics.drawCircle(0, 0, 12.5);
-				circle.graphics.endFill();
-				circle.x = col * tileSize + 20;
-				circle.y = row * tileSize + 20;
-				grid.addChild(circle);
-			}
-		}
-		return grid;
-	}
-
-	private function drawNextArtItems(limit:Int, ?deadline:Null<Float>):Void {
-		var remaining = limit;
-		while (remaining > 0 && drawnArtItems < totalArtItems) {
-			while (nextArtLayerToDraw < artDrawCursors.length && artDrawCursors[nextArtLayerToDraw] == null) {
-				nextArtLayerToDraw++;
-			}
-			if (nextArtLayerToDraw >= artDrawCursors.length) {
-				return;
-			}
-			var cursor = artDrawCursors[nextArtLayerToDraw];
-			if (artOptions != null && artOptions.artDrawFaultInjector != null) {
-				artOptions.artDrawFaultInjector(attemptedArtItems);
-			}
-			var started = Timer.stamp();
-			var drawn = cursor.drawNext(artOptions != null && artOptions.artDrawFaultInjector != null ? 1 : remaining, deadline);
-			recordArtDrawProfile(cursor, nextArtLayerToDraw, drawn, (Timer.stamp() - started) * 1000);
-			if (drawn > 0) {
-				attemptedArtItems += drawn;
-				drawnArtItems += drawn;
-				remaining -= drawn;
-			}
-			if (cursor.isComplete()) {
-				nextArtLayerToDraw++;
-			}
-			if (deadline != null && Timer.stamp() >= deadline) {
-				return;
-			}
-		}
-	}
-
-	private function recordArtDrawProfile(cursor:ArtDrawCursor, layerIndex:Int, drawn:Int, elapsedMs:Float):Void {
-		artProfileLastMs = cursor.lastProfileMs > 0 ? cursor.lastProfileMs : elapsedMs;
-		artProfileLastLayer = layerIndex;
-		artProfileLastAction = cursor.lastProfileActionIndex;
-		artProfileLastKind = cursor.lastProfileKind;
-		artProfileLastPath = cursor.lastProfilePath;
-		artProfileLastMode = cursor.lastProfileMode;
-		artProfileLastItems = drawn;
-		artProfileLastValues = cursor.lastProfileValueCount;
-		artProfileLastTiles = cursor.lastProfileTileCount;
-		artProfileLastSpanX = cursor.lastProfileTileSpanX;
-		artProfileLastSpanY = cursor.lastProfileTileSpanY;
-		if (elapsedMs >= ART_DRAW_SLOW_PROFILE_MS) {
-			artProfileSlowCount++;
-		}
-		if (elapsedMs > artProfileMaxMs) {
-			artProfileMaxMs = elapsedMs;
-			artProfileMaxLayer = artProfileLastLayer;
-			artProfileMaxAction = artProfileLastAction;
-			artProfileMaxKind = artProfileLastKind;
-			artProfileMaxPath = artProfileLastPath;
-			artProfileMaxMode = artProfileLastMode;
-			artProfileMaxItems = artProfileLastItems;
-			artProfileMaxValues = artProfileLastValues;
-			artProfileMaxTiles = artProfileLastTiles;
-			artProfileMaxSpanX = artProfileLastSpanX;
-			artProfileMaxSpanY = artProfileLastSpanY;
-		}
-	}
-
-	private function handleArtDrawFailure(error:Dynamic):Void {
-		if (!artLoadWarningShown) {
-			artLoadWarningShown = true;
-			emitArtWarning(artOptions != null && artOptions.editorWarning == true ? ART_LOAD_WARNING_EDITOR : ART_LOAD_WARNING_GAME, true);
-		}
-		finishArtDrawingAfterFailure();
-	}
-
-	private function finishArtDrawingAfterFailure():Void {
-		drawnArtItems = totalArtItems;
-		nextArtLayerToDraw = artDrawCursors.length;
-		removeEventListener(Event.ENTER_FRAME, drawArtBatch);
-		finishArtRasterAttaching();
-	}
-
-	private function finishArtRasterAttaching():Void {
-		if (hasQueuedVisibleArtRasterTiles() && !artRasterAttachActive) {
-			artRasterAttachActive = true;
-			addEventListener(Event.ENTER_FRAME, onArtRasterAttachFrame);
-		}
-	}
-
-	private function onArtRasterAttachFrame(event:Event):Void {
-		attachArtRasterTiles(ART_RASTER_ATTACH_TILES_PER_FRAME, Timer.stamp() + RENDER_FRAME_ESCAPE_SECONDS);
-		if (!hasQueuedVisibleArtRasterTiles()) {
-			artRasterAttachActive = false;
-			removeEventListener(Event.ENTER_FRAME, onArtRasterAttachFrame);
-		}
-	}
-
-	private function attachArtRasterTiles(limit:Int, ?deadline:Null<Float>):Int {
-		var remaining = limit;
-		for (tiles in artRasterTileLayers) {
-			if (remaining <= 0) {
-				break;
-			}
-			if (deadline != null && remaining < limit && Timer.stamp() >= deadline) {
-				break;
-			}
-			if (tiles != null) {
-				remaining -= tiles.attachQueuedTiles(remaining);
-			}
-		}
-		return limit - remaining;
-	}
-
-	private function hasQueuedVisibleArtRasterTiles():Bool {
-		for (tiles in artRasterTileLayers) {
-			if (tiles != null && tiles.hasQueuedVisibleTiles()) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	private function notifyRasterStopped():Void {
-		stoppedRasterizing = true;
-		if (!rasterStopNotified) {
-			rasterStopNotified = true;
-			emitArtWarning(ART_RASTER_STOP_WARNING, false);
-		}
-	}
-
-	private function emitArtWarning(message:String, gatePopup:Bool):Void {
-		artWarningMessage = message;
-		if (artOptions != null && artOptions.onArtWarning != null) {
-			artOptions.onArtWarning(message);
-			return;
-		}
-		if (artOptions != null && artOptions.suppressArtWarningPopup == true) {
-			return;
-		}
-		if (!gatePopup || canOpenArtWarningPopup()) {
-			new MessagePopup(message);
-		}
-	}
-
-	private static function canOpenArtWarningPopup():Bool {
-		var open = Popup.getOpen();
-		return open.length == 0 || (open.length == 1 && Std.isOfType(open[0], PrizePopup));
+		return LevelBackgroundRenderer.createBg5CircleGrid(random);
 	}
 
 	public static function drawLayerStrokes(brushCanvas:Sprite, actions:Array<LevelDrawAction>):Void
