@@ -1750,7 +1750,7 @@ class LocalPlayerControllerTest {
 
 		assertEquals(true, player.isFrozen(), "freeze marks player frozen");
 		assertEquals("frozenSolid", player.stateSnapshot().mode, "freeze enters frozen-solid mode");
-		assertEquals("freeze", player.stateSnapshot().animation, "frozen-solid mode uses frozen animation");
+		assertEquals("frozenSolid", player.stateSnapshot().animation, "frozen-solid mode uses the ice-blast animation");
 
 		for (_ in 0...53) {
 			player.step(new LocalPlayerInput(false, true));

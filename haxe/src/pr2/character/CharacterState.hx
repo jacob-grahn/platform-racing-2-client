@@ -9,12 +9,13 @@ enum abstract CharacterState(String) from String to String {
 	public var Crouch = "crouch";
 	public var CrouchWalk = "crouchWalk";
 	public var Swim = "swim";
-	public var Freeze = "freeze";
+	/** The ice-wave visual state. This is distinct from the physics pause mode. */
+	public var FrozenSolid = "frozenSolid";
 	public var Bumped = "bumped";
 
 	public static function fromMotion(mode:String, grounded:Bool, crouching:Bool, crouchCharge:Float, left:Bool, right:Bool):CharacterState {
-		if (mode == "freeze" || mode == "frozenSolid") {
-			return Freeze;
+		if (mode == "frozenSolid") {
+			return FrozenSolid;
 		}
 		if (mode == "hurt") {
 			return Bumped;
@@ -43,7 +44,7 @@ enum abstract CharacterState(String) from String to String {
 			case "crouch": "crouchAnim";
 			case "crouchWalk": "crouchWalkAnim";
 			case "swim": "swimAnim";
-			case "freeze": "frozenSolidAnim";
+			case "frozenSolid": "frozenSolidAnim";
 			case "bumped": "bumpedAnim";
 			default: "standAnim";
 		}

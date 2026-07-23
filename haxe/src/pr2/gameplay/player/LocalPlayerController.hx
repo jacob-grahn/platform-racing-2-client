@@ -102,7 +102,11 @@ class LocalPlayerController implements ItemRuntimeOwner {
 
 	public static inline var MODE_LAND:String = "land";
 	public static inline var MODE_WATER:String = "water";
-	public static inline var MODE_FREEZE:String = "freeze";
+	/**
+		Flash calls this internal physics-pause mode "freeze".  It must not be
+		confused with MODE_FROZEN_SOLID, the ice-wave effect and its animation.
+	*/
+	public static inline var MODE_PHYSICS_PAUSE:String = "freeze";
 	public static inline var MODE_JUMP:String = "jump";
 	public static inline var MODE_FROZEN_SOLID:String = "frozenSolid";
 	public static inline var MODE_HURT:String = "hurt";
@@ -283,7 +287,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 			setMode(MODE_WATER);
 			waterTicks = 2;
 		}
-		if (mode == MODE_FREEZE || mode == MODE_JUMP) {
+		if (mode == MODE_PHYSICS_PAUSE || mode == MODE_JUMP) {
 			updateRotation();
 		} else if (mode == MODE_FROZEN_SOLID) {
 			frozenSolidStep(input);
@@ -401,6 +405,11 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		}
 		frozenSolidFramesRemaining = FROZEN_SOLID_FRAMES;
 		setMode(MODE_FROZEN_SOLID);
+	}
+
+	/** Pause movement for removal/rotation without selecting the ice-blast art. */
+	public function pausePhysics():Void {
+		setMode(MODE_PHYSICS_PAUSE);
 	}
 
 	public function isFrozen():Bool {
@@ -591,7 +600,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 			// while Course rotates. The freeze-ray visual belongs exclusively to the
 			// separate frozenSolid mode.
 			if (mode == MODE_FROZEN_SOLID) {
-				animationState = CharacterState.Freeze;
+				animationState = CharacterState.FrozenSolid;
 			}
 			if (mode == MODE_JUMP) {
 				animationState = CharacterState.Jump;
@@ -874,7 +883,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 			case BlockType.Mine:
 				hitMine(block);
 			case BlockType.Water:
-				if (!grounded && mode != MODE_FREEZE && mode != MODE_HURT) {
+				if (!grounded && mode != MODE_PHYSICS_PAUSE && mode != MODE_HURT) {
 					setMode(MODE_WATER);
 					waterTicks = 2;
 				} else {
@@ -1238,7 +1247,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		// Flash pauses character physics in `freezeGo` while Course owns the
 		// rotation tween. This also prevents adjacent water from replacing the
 		// rotate mode in the bump frame (level 6507177 relies on that layout).
-		setMode(MODE_FREEZE);
+		setMode(MODE_PHYSICS_PAUSE);
 		vx = 0;
 		vy = 0;
 		targetVelX = 0;
@@ -1376,7 +1385,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 			}
 		}
 		activateBlock(block, "", true);
-		if (!crownProtected && !crownHatActive && mode != MODE_FREEZE) {
+		if (!crownProtected && !crownHatActive && mode != MODE_PHYSICS_PAUSE) {
 			setMode(MODE_HURT);
 			beginHurtRecovery();
 		}

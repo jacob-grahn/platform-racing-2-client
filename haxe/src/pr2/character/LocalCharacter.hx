@@ -309,7 +309,11 @@ class LocalCharacter extends Character {
 	}
 
 	override public function beginRemove():Void {
-		changeState("freeze");
+		// Flash uses its ambiguously named "freeze" *mode* here to pause
+		// physics. It deliberately preserves the current animation; changing
+		// state to "freeze" would incorrectly show frozenSolidAnim.
+		controller.pausePhysics();
+		syncFromController();
 		LobbySocket.write("set_var`beginRemove`1");
 		super.beginRemove();
 	}

@@ -11,8 +11,8 @@ class CharacterStateTest {
 	}
 
 	private static function testFromMotionPriorities():Void {
-		assertEquals(CharacterState.Freeze, CharacterState.fromMotion("freeze", true, false, 0, false, false), "freeze mode owns state");
-		assertEquals(CharacterState.Freeze, CharacterState.fromMotion("frozenSolid", true, false, 0, false, false), "frozen-solid mode owns state");
+		assertEquals(CharacterState.Stand, CharacterState.fromMotion("freeze", true, false, 0, false, false), "physics pause does not select the ice-blast animation");
+		assertEquals(CharacterState.FrozenSolid, CharacterState.fromMotion("frozenSolid", true, false, 0, false, false), "frozen-solid mode owns state");
 		assertEquals(CharacterState.Bumped, CharacterState.fromMotion("hurt", true, false, 0, false, false), "hurt mode owns state");
 		assertEquals(CharacterState.Swim, CharacterState.fromMotion("water", true, false, 0, false, false), "water mode owns state");
 		assertEquals(CharacterState.SuperJump, CharacterState.fromMotion("land", true, false, 26, false, false), "charged crouch uses super jump");
@@ -32,7 +32,7 @@ class CharacterStateTest {
 		assertEquals("crouchAnim", CharacterState.Crouch.toClipName(), "crouch clip");
 		assertEquals("crouchWalkAnim", CharacterState.CrouchWalk.toClipName(), "crouch walk clip");
 		assertEquals("swimAnim", CharacterState.Swim.toClipName(), "swim clip");
-		assertEquals("frozenSolidAnim", CharacterState.Freeze.toClipName(), "freeze clip");
+		assertEquals("frozenSolidAnim", CharacterState.FrozenSolid.toClipName(), "frozen-solid clip");
 		assertEquals("bumpedAnim", CharacterState.Bumped.toClipName(), "bumped clip");
 	}
 

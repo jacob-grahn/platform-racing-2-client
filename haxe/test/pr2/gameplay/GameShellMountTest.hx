@@ -466,6 +466,8 @@ class GameShellMountTest {
 			"race finish reports world coordinates and starts local removal");
 		assertEquals(true, course.timer.debugPaused(), "race finish freezes the HUD timer");
 		assertEquals(false, course.localCharacter.removed, "finish starts fade-out instead of immediate removal");
+		assertEquals(CharacterState.Stand, course.localCharacter.state, "finish preserves the character animation instead of showing the ice-blast pose");
+		assertEquals("freeze", course.localCharacter.stateSnapshot().mode, "finish pauses character physics with Flash's freeze mode");
 		assertEquals(true, course.debugKeyScrollActive(), "finish switches camera to free-move mode");
 		var x = course.localCharacter.stateSnapshot().x;
 		var y = course.localCharacter.stateSnapshot().y;
