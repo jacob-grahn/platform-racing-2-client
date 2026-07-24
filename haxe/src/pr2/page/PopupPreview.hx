@@ -4,6 +4,7 @@ import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.text.TextField;
 import pr2.gameplay.FinishedPage;
+import pr2.gameplay.PrizePopup;
 import pr2.lobby.account.LoadoutsPopup;
 import pr2.lobby.dialogs.ConfirmPopup;
 import pr2.lobby.dialogs.CreditsPopup;
@@ -43,6 +44,7 @@ class PopupPreview extends Sprite {
 				var finished = new FinishedPage(6497936);
 				finished.award("Level Completed", "+ 26");
 				finished.setExpGain(520, 546, 546);
+			case "prize": new PrizePopup("hat", 4, "Propeller Hat", "Hold up while wearing this hat to float!", true, false);
 			case "send-message": new SendMessagePopup("Jiggmin", "Hello from Platform Racing 2!");
 			case "codes": new PMRFCodesPopup();
 			case "credits": new CreditsPopup();
