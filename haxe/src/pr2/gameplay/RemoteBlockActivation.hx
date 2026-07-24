@@ -25,7 +25,15 @@ class RemoteBlockActivation {
 		}
 		var worldX = block.worldX;
 		var worldY = block.worldY;
-		activateBlock(block.type, worldX, worldY);
+		switch (block.type) {
+			case BlockType.ArrowDown | BlockType.ArrowUp | BlockType.ArrowLeft | BlockType.ArrowRight:
+				renderer.animateArrow(worldX, worldY);
+			case BlockType.Vanish:
+				renderer.activateVanish(worldX, worldY);
+			case BlockType.Water:
+				renderer.triggerWaterRipple(worldX, worldY);
+			default:
+		}
 	}
 
 	public function activateSegment(segX:Int, segY:Int, payload:String = ""):Void {

@@ -138,7 +138,10 @@ class RemoteCharacterConsumeTest {
 		var arrow = LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_ARROW_RIGHT, 0, 0);
 		var vanish = LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_VANISH, 30, 0);
 		var water = LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_WATER, 60, 0);
-		var fixture = Level.fromDecoded(0xFFFFFF, [arrow, vanish, water]);
+		var brick = LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_BRICK, 90, 0);
+		var crumble = LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_CRUMBLE, 120, 0);
+		var mine = LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_MINE, 150, 0);
+		var fixture = Level.fromDecoded(0xFFFFFF, [arrow, vanish, water, brick, crumble, mine]);
 		fixture.configureRuntime("fixture", "Fixture", 0.7);
 		var renderer = new LevelRenderer(fixture, arrow);
 		var activation = new RemoteBlockActivation(fixture, renderer);
@@ -166,6 +169,19 @@ class RemoteCharacterConsumeTest {
 		remote.setPos(75, -1);
 		remote.stepFrame();
 		assertClose(0.9, renderer.blockAlphaAt(water.worldX, water.worldY), "remote touch triggers water ripple");
+
+		var effectsBeforeBreakableTouches = renderer.worldEffectLayer().numChildren;
+		for (breakable in [brick, crumble, mine]) {
+			remote.setPos(breakable.worldX + 15, -1);
+			for (_ in 0...30) {
+				remote.stepFrame();
+			}
+		}
+		assertEquals(effectsBeforeBreakableTouches, renderer.worldEffectLayer().numChildren,
+			"remote touches do not spawn breakable-block particles");
+		assertEquals(1.0, renderer.blockAlphaAt(brick.worldX, brick.worldY), "remote touch leaves brick display intact");
+		assertEquals(1.0, renderer.blockAlphaAt(crumble.worldX, crumble.worldY), "remote touch leaves crumble display intact");
+		assertEquals(1.0, renderer.blockAlphaAt(mine.worldX, mine.worldY), "remote touch leaves mine display intact");
 	}
 
 	private static function testRemoteAnimationAdvancesEachStageFrame():Void {
