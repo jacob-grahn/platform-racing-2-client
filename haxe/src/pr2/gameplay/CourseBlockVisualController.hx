@@ -142,7 +142,9 @@ class CourseBlockVisualController {
 	}
 
 	public function playBlockBumpSound(event:BlockVisualEvent):Void {
-		owner.raceSounds.playBlockBumpSound(worldXOf(event), worldYOf(event));
+		var position = BlockCollision.rotatedWorldBlockPos(worldXOf(event), worldYOf(event), owner.player.stateSnapshot().courseRotation,
+			owner.level.tileSize);
+		owner.raceSounds.playBlockBumpSound(position.x, position.y);
 	}
 
 	public function playItemBlockSound():Void {

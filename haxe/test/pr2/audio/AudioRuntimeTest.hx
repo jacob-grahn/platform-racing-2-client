@@ -16,6 +16,9 @@ class AudioRuntimeTest {
 		var outside = SoundEffects.spatialMix(900, 0, 0, 0);
 		assertNear(0, outside.volume, "effects past 700 pixels are silent"); assertions++;
 		assertNear(1, outside.pan, "pan is clamped to the SoundTransform range"); assertions++;
+		var rotatedBlock = pr2.gameplay.BlockCollision.rotatedWorldBlockPos(600, 480, 90, 30);
+		assert(rotatedBlock.x == -510 && rotatedBlock.y == 600,
+			"rotated block thumps use Flash's rotated block origin for spatial audio"); assertions++;
 		assert(pr2.effects.ZapEffect.SOUND_PATH == "assets/audio/sfx/zap.mp3", "ZapEffect uses the named exported Flash ZapSound"); assertions++;
 		assert(pr2.gameplay.RaceSounds.SQUASH_SOUND == "assets/audio/sfx/squash.mp3", "squash uses the named exported Flash SquashSound"); assertions++;
 		assert(pr2.gameplay.RaceSounds.VICTORY_SOUND == "assets/audio/sfx/victory.mp3", "finishing uses the named exported Flash VictorySound"); assertions++;

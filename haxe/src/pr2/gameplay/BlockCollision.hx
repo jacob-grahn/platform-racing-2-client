@@ -30,17 +30,26 @@ class BlockCollision {
 	}
 
 	public static function rotatedBlockPos(block:LevelBlock, rotation:Int):RotatedPoint {
+		return rotatedWorldBlockPos(block.worldX, block.worldY, rotation, 30);
+	}
+
+	/**
+		Returns the screen/world-frame top-left of a tile after a committed course
+		rotation. This is the same position Flash Block.getRotatedPos uses for
+		collision responses and spatial effects.
+	**/
+	public static function rotatedWorldBlockPos(worldX:Int, worldY:Int, rotation:Int, tileSize:Int):RotatedPoint {
 		var offsetX = 0;
 		var offsetY = 0;
 		if (rotation == 90) {
-			offsetY = 30;
+			offsetY = tileSize;
 		} else if (Math.abs(rotation) == 180) {
-			offsetX = 30;
-			offsetY = 30;
+			offsetX = tileSize;
+			offsetY = tileSize;
 		} else if (rotation == -90) {
-			offsetX = 30;
+			offsetX = tileSize;
 		}
-		return RotationMath.rotatePoint(block.worldX + offsetX, block.worldY + offsetY, -rotation);
+		return RotationMath.rotatePoint(worldX + offsetX, worldY + offsetY, -rotation);
 	}
 
 	public static function movementLimits(level:Level, rotation:Int):MovementLimits {
