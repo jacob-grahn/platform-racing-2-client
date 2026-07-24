@@ -38,7 +38,7 @@ class LocalCharacterEmitTest {
 			"p`0`0",
 			"p`80`100",
 			"exact_pos`80`100",
-			"set_var`scaleX`0.9",
+			"set_var`scaleX`1",
 			"set_var`state`stand",
 			"set_var`parent`backBackground"
 		], "fifth-frame position and vars");
@@ -77,7 +77,7 @@ class LocalCharacterEmitTest {
 		character.step(new LocalPlayerInput(true));
 		character.setItem(4);
 		character.emitNetworkUpdate("frontBackground");
-		assertContains("set_var`scaleX`-0.9", "left-facing scale var");
+		assertContains("set_var`scaleX`-1", "left-facing scale var");
 		assertContains("set_var`state`jump", "jump state var");
 		assertContains("set_var`parent`frontBackground", "parent var");
 		assertContains("set_var`item`4", "item var");

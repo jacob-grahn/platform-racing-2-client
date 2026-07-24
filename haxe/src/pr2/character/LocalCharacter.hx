@@ -32,7 +32,7 @@ class LocalCharacter extends Character {
 	/** Flash `LocalCharacter.testMode`: editor hits animate but do not shed hats. */
 	public var testMode:Bool = false;
 
-	private var lastNetScaleX:Null<Float>;
+	private var lastNetScaleX:Null<Int>;
 	private var exactX:Int = 0;
 	private var exactY:Int = 0;
 	private var lastNetState:Null<String>;
@@ -486,9 +486,13 @@ class LocalCharacter extends Character {
 	}
 
 	private function emitChangedVars(?parentLayer:Null<String>):Void {
-		if (lastNetScaleX == null || lastNetScaleX != display.scaleX) {
-			lastNetScaleX = display.scaleX;
-			LobbySocket.write("set_var`scaleX`" + display.scaleX);
+		// Flash sends the Character container's facing scale (+1/-1), while its
+		// authored display is scaled to 0.9 internally. Sending that inner 0.9
+		// makes Flash RemoteCharacter truncate it to int(0.9) == 0 and disappear.
+		var networkScaleX = controller.facingScaleX;
+		if (lastNetScaleX == null || lastNetScaleX != networkScaleX) {
+			lastNetScaleX = networkScaleX;
+			LobbySocket.write("set_var`scaleX`" + networkScaleX);
 		}
 		if (lastNetState != state) {
 			lastNetState = state;
