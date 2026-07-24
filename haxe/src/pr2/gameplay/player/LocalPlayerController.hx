@@ -1127,10 +1127,10 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		var id = 0;
 		for (candidate in level.blocks) {
 			if (candidate.type == BlockType.Finish) {
-				id++;
 				if (candidate == block) {
 					break;
 				}
+				id++;
 			}
 		}
 		finishBlockId = id;

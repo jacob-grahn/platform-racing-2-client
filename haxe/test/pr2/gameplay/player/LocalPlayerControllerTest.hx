@@ -263,7 +263,7 @@ class LocalPlayerControllerTest {
 
 		var state = player.stateSnapshot();
 		assertEquals(true, state.finished, "bumping finish block completes race");
-		assertEquals(1, state.finishBlockId, "finish reports Flash-style one-based block id");
+		assertEquals(0, state.finishBlockId, "finish reports Flash-style zero-based block id");
 		assertEquals(105, state.finishX, "finish reports block center x");
 		assertEquals(45, state.finishY, "finish reports block center y");
 		assertClose(0.5, player.blockColorMultiplierAt(3, 1), "depleted finish block uses SupplyBlock grey transform");
@@ -271,7 +271,7 @@ class LocalPlayerControllerTest {
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput(false, false, true));
 		}
-		assertEquals(1, player.stateSnapshot().finishBlockId, "finish supply remains latched after first use");
+		assertEquals(0, player.stateSnapshot().finishBlockId, "finish supply remains latched after first use");
 	}
 
 	private static function testObjectiveModeCanBumpSubsequentFinishBlocks():Void {
@@ -295,11 +295,11 @@ class LocalPlayerControllerTest {
 		player.setGameMode("objective");
 
 		@:privateAccess player.controller.finish(level.blocks[0]);
-		assertEquals(1, player.stateSnapshot().finishBlockId, "objective mode reports the first finish block");
+		assertEquals(0, player.stateSnapshot().finishBlockId, "objective mode reports the first finish block");
 		@:privateAccess player.controller.finish(level.blocks[1]);
-		assertEquals(2, player.stateSnapshot().finishBlockId, "objective mode reports a subsequent finish block");
+		assertEquals(1, player.stateSnapshot().finishBlockId, "objective mode reports a subsequent finish block");
 		@:privateAccess player.controller.finish(level.blocks[0]);
-		assertEquals(2, player.stateSnapshot().finishBlockId, "an objective finish supply still fires only once");
+		assertEquals(1, player.stateSnapshot().finishBlockId, "an objective finish supply still fires only once");
 	}
 
 	private static function testJumpAndLandOnFlatFixture():Void {

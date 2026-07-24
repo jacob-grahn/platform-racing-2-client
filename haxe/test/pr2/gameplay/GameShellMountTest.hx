@@ -446,7 +446,7 @@ class GameShellMountTest {
 
 		var hash = Md5.encode(saveString + "42" + "7" + ServerConfig.LEVEL_HASH_SALT);
 		assertEquals(
-			'finish_drawing`$hash`race`[{"id":1,"x":45,"y":15}]`1`25`4,6',
+			'finish_drawing`$hash`race`[{"id":0,"x":45,"y":15}]`1`25`4,6',
 			LobbySocket.sentCommands.join("|"),
 			"finish_drawing emitted after all drawing completes"
 		);

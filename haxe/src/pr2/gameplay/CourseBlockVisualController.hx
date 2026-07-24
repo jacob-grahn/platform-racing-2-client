@@ -199,7 +199,7 @@ class CourseBlockVisualController {
 		var parts:Array<String> = [];
 		for (i in 0...finishes.length) {
 			var block = finishes[i];
-			parts.push('{"id":${i + 1},"x":${block.worldX + 15},"y":${block.worldY + 15}}');
+			parts.push('{"id":$i,"x":${block.worldX + 15},"y":${block.worldY + 15}}');
 		}
 		return "[" + parts.join(",") + "]";
 	}
