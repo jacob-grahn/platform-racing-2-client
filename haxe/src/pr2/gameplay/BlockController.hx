@@ -264,9 +264,7 @@ class BlockController {
 		if (index < 0) {
 			return false;
 		}
-		var state = stateFor(block);
-		state.removed = true;
-		state.evicted = true;
+		blockStates.remove(owner.blockKey(block.x, block.y));
 		level.blocks.splice(index, 1);
 		if (onBlockRemoved != null) {
 			onBlockRemoved(block, index);
@@ -287,6 +285,11 @@ class BlockController {
 		return true;
 	}
 
+	/** Moves object-owned runtime state and discards state left by a removed destination block. */
+	public function moveBlockState(fromX:Int, fromY:Int, toX:Int, toY:Int):Void {
+		blockStates.move(owner.blockKey(fromX, fromY), owner.blockKey(toX, toY));
+	}
+
 	public function stateAt(key:String):Null<LocalPlayerBlockState> {
 		return blockStates.get(key);
 	}
@@ -304,7 +307,7 @@ class BlockController {
 		for (key => state in blockStates) {
 			if (state.vanishFadeFrames != null
 				|| state.vanishFadeInFrames != null
-				|| (state.removed && !state.evicted)
+				|| state.removed
 				|| state.depletedItem
 				|| state.depletedVisualSupply
 				|| state.frozenIceAlpha != null) {
@@ -315,6 +318,9 @@ class BlockController {
 	}
 
 	public function blockAlphaAt(tileX:Int, tileY:Int):Float {
+		if (level.blockAt(tileX, tileY) == null) {
+			return 0;
+		}
 		var state = stateAt(owner.blockKey(tileX, tileY));
 		if (state == null) {
 			return 1;

@@ -1335,6 +1335,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		}
 		var fromX = block.x;
 		var fromY = block.y;
+		blockController.moveBlockState(fromX, fromY, destX, destY);
 		block.x = destX;
 		block.y = destY;
 		blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.PushBlockMove, fromX, fromY, 1, destX, destY));

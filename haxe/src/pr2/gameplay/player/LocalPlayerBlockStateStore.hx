@@ -18,6 +18,18 @@ class LocalPlayerBlockStateStore {
 		return states.remove(key);
 	}
 
+	public function move(fromKey:String, toKey:String):Void {
+		if (fromKey == toKey) {
+			return;
+		}
+		var state = states.get(fromKey);
+		states.remove(fromKey);
+		states.remove(toKey);
+		if (state != null) {
+			states.set(toKey, state);
+		}
+	}
+
 	public function getOrCreate(key:String):LocalPlayerBlockState {
 		var state = states.get(key);
 		if (state == null) {
@@ -40,7 +52,6 @@ class LocalPlayerBlockStateStore {
 class LocalPlayerBlockState {
 	public var crumbleLife:Null<Int> = null;
 	public var removed:Bool = false;
-	public var evicted:Bool = false;
 	public var vanishFadeFrames:Null<Int> = null;
 	public var vanishReappearFrames:Null<Int> = null;
 	public var vanishFadeInFrames:Null<Int> = null;

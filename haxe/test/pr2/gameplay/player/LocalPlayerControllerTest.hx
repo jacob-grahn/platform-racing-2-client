@@ -110,6 +110,7 @@ class LocalPlayerControllerTest {
 		testPreRacePositionResetClearsConstructorTeleportCooldown();
 		testStandingOnPushBlockMovesItDown();
 		testPushBlockMovesIntoDestroyedBrickTile();
+		testPushBlockRetainsCollisionInDestroyedCrumbleTile();
 		testPushBlockRecursivelyMovesDestinationPushBlock();
 		testUnconfiguredMoveBlocksUseFlashRandomDirections();
 		testTimedMoveBlockPreviewDirections();
@@ -2020,6 +2021,26 @@ class LocalPlayerControllerTest {
 
 		assertEquals(null, level.blockAt(2, 3), "push block leaves its source after destruction opens the destination");
 		assertEquals(BlockType.Push, level.blockAt(3, 3).type, "push block enters the physically vacated tile");
+	}
+
+	private static function testPushBlockRetainsCollisionInDestroyedCrumbleTile():Void {
+		var level = emptyLevel(1);
+		var player = new LocalCharacter(level);
+		var push = new LevelBlock(2, 3, BlockType.Push);
+		level.blocks.push(push);
+		level.blocks.push(new LevelBlock(3, 3, BlockType.Crumble));
+		assertEquals(true, player.applyRemoteBlockActivation(3, 3, "50"), "crumble in front of push block can be destroyed");
+		assertEquals(null, player.controller.blockController.stateAt("3,3"),
+			"permanently destroyed crumble leaves no runtime state tombstone");
+
+		@:privateAccess player.controller.pushBlock(push, 1, 0);
+
+		assertEquals(push, @:privateAccess player.controller.getBlockAtTile(3, 3),
+			"push block remains in solid collision lookup after entering destroyed crumble tile");
+		assertClose(1, player.blockAlphaAt(3, 3), "push block does not inherit destroyed crumble visibility");
+
+		@:privateAccess player.controller.pushBlock(push, 1, 0);
+		assertEquals(BlockType.Push, level.blockAt(4, 3).type, "push block can be pushed again from destroyed crumble tile");
 	}
 
 	private static function testPushBlockRecursivelyMovesDestinationPushBlock():Void {
