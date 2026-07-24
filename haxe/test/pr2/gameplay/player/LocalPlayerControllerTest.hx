@@ -66,6 +66,7 @@ class LocalPlayerControllerTest {
 		testItemBlockRandomnessDoesNotAffectMoveBlocks();
 		testRegularItemBlockDepletesAfterFirstUse();
 		testNewlyCollectedItemRequiresReleaseBeforeUse();
+		testDamageStunPreventsItemUse();
 		testSuperJumpItemLaunchesPlayerAndConsumesItem();
 		testSuperJumpItemClipsThroughBlockAboveWater();
 		testSuperJumpItemDoesNothingWhileCrouching();
@@ -1171,6 +1172,25 @@ class LocalPlayerControllerTest {
 		player.step(new LocalPlayerInput(false, false, false, false, true));
 		assertEquals(null, player.stateSnapshot().itemId, "item fires after the key has been released");
 		assertEquals("zap`", player.stateSnapshot().lastItemEffect, "released lightning emits the Flash payload");
+	}
+
+	private static function testDamageStunPreventsItemUse():Void {
+		var player = newPlayer();
+		player.grantItemForDebug(3);
+		makeItemAvailable(player);
+		player.receiveHit();
+
+		assertEquals("hurt", player.stateSnapshot().mode, "damage puts the player into Flash's hurt mode");
+		for (_ in 0...60) {
+			player.step(new LocalPlayerInput(false, false, false, false, true));
+			assertEquals(3, player.stateSnapshot().itemId, "held item cannot activate during damage stun");
+			assertEquals(null, player.stateSnapshot().lastItemEffect, "damage stun emits no item effect");
+		}
+
+		assertEquals("land", player.stateSnapshot().mode, "player returns to normal movement after damage stun");
+		player.step(new LocalPlayerInput(false, false, false, false, true));
+		assertEquals(null, player.stateSnapshot().itemId, "held item activates once damage stun ends");
+		assertEquals("zap`", player.stateSnapshot().lastItemEffect, "post-stun item use emits its normal effect");
 	}
 
 	private static function testSuperJumpItemLaunchesPlayerAndConsumesItem():Void {

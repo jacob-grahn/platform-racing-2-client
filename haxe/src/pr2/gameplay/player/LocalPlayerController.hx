@@ -282,7 +282,12 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		if (input.left) {
 			facingDirection = -1;
 		}
-		useHeldItem(input);
+		// Flash's hurtGo loop does not call updateKeys, which is where held items
+		// receive the item-button state. Damage stun must therefore leave the
+		// item's input state untouched until normal movement resumes.
+		if (mode != MODE_HURT) {
+			useHeldItem(input);
+		}
 		if (cowboyHatActive && !grounded && mode == MODE_LAND) {
 			setMode(MODE_WATER);
 			waterTicks = 2;
