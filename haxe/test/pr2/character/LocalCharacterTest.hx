@@ -508,7 +508,7 @@ class LocalCharacterTest {
 		assertEquals(expected.grounded, character.grounded, '$label grounded');
 		assertEquals(expected.crouching, character.crouching, '$label crouching');
 		assertEquals(expected.animation, character.state, '$label animation state');
-		assertClose(0.9 * controller.facingScaleX, character.display.scaleX, '$label facing scale');
+		assertClose(controller.facingScaleX, character.display.scaleX, '$label facing scale');
 	}
 
 	private static function flatLevel():Level {

@@ -450,8 +450,8 @@ class LocalCharacter extends Character {
 		velY = state.vy;
 		setItem(state.itemId == null ? 0 : state.itemId);
 		changeState(state.animation);
-		display.scaleX = 0.9 * controller.facingScaleX;
-		display.scaleY = 0.9;
+		display.scaleX = controller.facingScaleX;
+		display.scaleY = 1;
 		syncMovementItemSideEffects(state);
 	}
 
@@ -486,9 +486,7 @@ class LocalCharacter extends Character {
 	}
 
 	private function emitChangedVars(?parentLayer:Null<String>):Void {
-		// Flash sends the Character container's facing scale (+1/-1), while its
-		// authored display is scaled to 0.9 internally. Sending that inner 0.9
-		// makes Flash RemoteCharacter truncate it to int(0.9) == 0 and disappear.
+		// Flash sends the Character container's facing scale (+1/-1).
 		var networkScaleX = controller.facingScaleX;
 		if (lastNetScaleX == null || lastNetScaleX != networkScaleX) {
 			lastNetScaleX = networkScaleX;
