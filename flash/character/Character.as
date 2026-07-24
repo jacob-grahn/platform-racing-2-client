@@ -485,6 +485,14 @@ package character
 
         private function superJumpWobbleTick(_arg_1:Event)
         {
+            // Removing an event listener during ENTER_FRAME does not prevent an
+            // already-queued callback from running once more in the same dispatch.
+            // RemoteCharacter changes state from its own ENTER_FRAME listener, so
+            // without this guard that final callback overwrites the scaleY = 1
+            // applied by endSuperJumpWobble() and leaves a random scale permanently.
+            if (this.state != "superJump") {
+                return;
+            }
             var _local_2:Number = this.m.superJumpAnim.currentFrame / 2;
             scaleY = ((Math.random() * _local_2) + (100 - (_local_2 / 2))) / 100;
         }
@@ -615,4 +623,3 @@ package character
 
     }
 }//package character
-
