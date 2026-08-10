@@ -8,8 +8,10 @@ import openfl.geom.Rectangle;
 import pr2.level.Level.LevelArtLayer;
 import pr2.level.Level.LevelArtObject;
 import pr2.level.Level.LevelTextObject;
+import pr2.lobby.dialogs.MessagePopup;
 
 class EditorObjectLayer extends Sprite {
+	private static inline var OBJECT_LIMIT:Int = 50000;
 	public final layerNum:Int;
 	public final placedObjects:Array<EditorPlacedObject> = [];
 	public final textObjects:Array<EditorTextObject> = [];
@@ -20,16 +22,23 @@ class EditorObjectLayer extends Sprite {
 	private final initialTextActions:Array<String> = [];
 	private var selectedStamp:Null<EditorStampDisplay>;
 	private var selectedText:Null<EditorTextObject>;
+	private var onObjectLimit:Null<Void->Void>;
 
-	public function new(layerNum:Int, layerScale:Float) {
+	public function new(layerNum:Int, layerScale:Float, ?onObjectLimit:Void->Void) {
 		super();
 		this.layerNum = layerNum;
+		this.onObjectLimit = onObjectLimit;
 		name = 'editorObjectLayer$layerNum';
 		scaleX = layerScale;
 		scaleY = layerScale;
 	}
 
-	public function addStamp(code:Int, stageX:Float, stageY:Float):EditorPlacedObject {
+	public function addStamp(code:Int, stageX:Float, stageY:Float):Null<EditorPlacedObject> {
+		if (placedObjects.length + textObjects.length >= OBJECT_LIMIT) {
+			if (onObjectLimit != null) onObjectLimit();
+			new MessagePopup("Error: Object limit reached.");
+			return null;
+		}
 		var size = stampDisplaySize(code);
 		var point = globalToLocal(new Point(stageX, stageY));
 		var placed = addPlacedStamp(code, Math.round(point.x - size.width / 2), Math.round(point.y - size.height / 2));

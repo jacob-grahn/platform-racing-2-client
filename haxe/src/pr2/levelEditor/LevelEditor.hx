@@ -894,7 +894,9 @@ class LevelEditor extends Page {
 		for (scale in [1.0, 0.5, 0.25, 1.0, 2.0]) {
 			var drawLayer = new EditorDrawableLayer(drawLayers.length + 1, scale);
 			drawLayers.push(drawLayer);
-			var layer = new EditorObjectLayer(objectLayers.length + 1, scale);
+			var layer = new EditorObjectLayer(objectLayers.length + 1, scale, function():Void {
+				if (menu != null) menu.reset();
+			});
 			objectLayers.push(layer);
 		}
 		if (blockGrid != null && blockGrid.parent == layerContainer) {

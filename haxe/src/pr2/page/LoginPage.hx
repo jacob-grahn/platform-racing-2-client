@@ -30,7 +30,7 @@ import pr2.ui.controls.GameSelect;
 import pr2.audio.AudioManager;
 import pr2.lobby.LobbySession;
 import pr2.lobby.dialogs.ConfirmDialogView;
-import pr2.lobby.dialogs.MessageDialogView;
+import pr2.lobby.dialogs.MessagePopup;
 import pr2.lobby.account.Settings;
 import pr2.lobby.account.Presets;
 import pr2.lobby.messages.UnreadNotif;
@@ -71,8 +71,6 @@ class LoginPage extends Page {
 	private var loggingOverlay:Null<Shape>;
 	private var activeProgress:Null<ProgressPopupView>;
 	private var progressOverlay:Null<Shape>;
-	private var activeMessage:Null<MessageDialogView>;
-	private var messageOverlay:Null<Shape>;
 	private var activeForgot:Null<ForgotPasswordView>;
 	private var forgotOverlay:Null<Shape>;
 	private var activeCreateAccount:Null<CreateAccountView>;
@@ -247,7 +245,8 @@ class LoginPage extends Page {
 	}
 
 	private function openLoginMessage(message:String, ?afterClose:Void->Void):Void {
-		openMessageDialog(message, afterClose);
+		closePopup();
+		new MessagePopup(message, afterClose);
 	}
 
 	private function openGuestDialog():Void {
@@ -355,7 +354,10 @@ class LoginPage extends Page {
 			var token = selectedToken;
 			openConfirm('Are you sure you want to delete "$name" from your saved accounts?', function():Void openServerSelectPopup(false, false), function():Void {
 				FormPostClient.post(pr2.net.ServerConfig.logoutUrl(), ["token" => token], function(_):Void {}, function(_):Void {});
-				SavedAccounts.deleteAccount(name);
+				if (!SavedAccounts.deleteAccount(name)) {
+					new MessagePopup("Error: Invalid account specified.");
+					return;
+				}
 				if (SavedAccounts.getAll().length == 0) openCredentialDialog(); else openServerSelectPopup(false, false);
 			});
 		});
@@ -481,25 +483,6 @@ class LoginPage extends Page {
 		return view;
 	}
 
-	private function openMessageDialog(message:String, afterClose:Null<Void->Void>):MessageDialogView {
-		closePopup();
-		messageOverlay = new Shape();
-		messageOverlay.graphics.beginFill(0x000000, 0.55);
-		messageOverlay.graphics.drawRect(0, 0, Constants.STAGE_WIDTH, Constants.STAGE_HEIGHT);
-		messageOverlay.graphics.endFill();
-		addChild(messageOverlay);
-		var view = new MessageDialogView(message);
-		view.x = Constants.STAGE_WIDTH / 2;
-		view.y = Constants.STAGE_HEIGHT / 2;
-		view.onClose = function():Void {
-			closePopup();
-			if (afterClose != null) afterClose();
-		};
-		activeMessage = view;
-		addChild(view);
-		return view;
-	}
-
 	private function mountForgotPasswordView(prefilledName:String):ForgotPasswordView {
 		closePopup();
 		var view = new ForgotPasswordView(prefilledName);
@@ -550,14 +533,6 @@ class LoginPage extends Page {
 		if (progressOverlay != null) {
 			if (progressOverlay.parent != null) progressOverlay.parent.removeChild(progressOverlay);
 			progressOverlay = null;
-		}
-		if (activeMessage != null) {
-			activeMessage.dispose();
-			activeMessage = null;
-		}
-		if (messageOverlay != null) {
-			if (messageOverlay.parent != null) messageOverlay.parent.removeChild(messageOverlay);
-			messageOverlay = null;
 		}
 		if (activeForgot != null) {
 			var forgot = activeForgot;

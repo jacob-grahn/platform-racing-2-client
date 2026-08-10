@@ -31,6 +31,7 @@ import pr2.gameplay.QuitButton;
 import pr2.gameplay.SpecialEvent;
 import pr2.gameplay.player.LocalPlayerState;
 import pr2.lobby.LobbySession;
+import pr2.lobby.dialogs.MessagePopup;
 import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
 import pr2.net.LevelDataClient;
@@ -801,6 +802,7 @@ class GamePage extends Page implements GameCommandDelegate {
 		} else {
 			loadingText.text = message;
 		}
+		new MessagePopup(message);
 	}
 
 	private function clearLoadingText():Void {

@@ -360,11 +360,21 @@ class NativePresentationFoundationTest {
 
 	private static function testConfirmDialogAuthoredContract():Void {
 		var view = new ConfirmDialogView("<b>Are you sure?</b>");
-		assertClose(-155, view.message.x, "confirm text area X matches XFL");
-		assertClose(-65, view.message.y, "confirm text area Y matches XFL");
-		assertClose(309.109497070313, view.message.width, "confirm text area width matches XFL component scale");
-		assertClose(147.65, view.message.height, "confirm text area height matches XFL component scale");
+		assertClose(-155, view.messageArea.x, "confirm TextArea X matches XFL");
+		assertClose(-65, view.messageArea.y, "confirm TextArea Y matches XFL");
+		assertClose(309.109497070313, view.messageArea.controlWidth, "confirm TextArea consumes its XFL X scale as component width");
+		assertClose(99.966796875, view.messageArea.controlHeight, "confirm TextArea consumes its XFL Y scale over the 44px component avatar");
+		assertClose(1, view.messageArea.scaleX, "confirm TextArea does not magnify its component text horizontally");
+		assertClose(1, view.messageArea.scaleY, "confirm TextArea does not magnify its component text vertically");
+		assertClose(11, view.message.defaultTextFormat.size, "confirm TextArea keeps the original component font size");
+		assertEquals(false, view.messageArea.editable, "confirm TextArea is non-editable as authored");
 		assertEquals("Are you sure?", view.message.text, "confirm text area accepts the authored HTML content path");
+		view.messageArea.text = [
+			"one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
+			"eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty"
+		].join("\n");
+		assertEquals(true, view.messageArea.verticalScrollBar.visible, "long confirmation text reveals the authored scrollbar");
+		assertEquals(true, view.message.maxScrollV > 1, "long confirmation text exposes a scrollable native text range");
 		assertClose(-124, view.confirmButton.x, "confirm OK button X matches XFL");
 		assertClose(43, view.confirmButton.y, "confirm OK button Y matches XFL");
 		assertClose(22, view.cancelButton.x, "confirm Cancel button X matches XFL");
@@ -517,6 +527,12 @@ class NativePresentationFoundationTest {
 		view.okButton.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 		assertEquals(1, closes, "message popup dismisses from its authored OK button");
 		view.dispose();
+
+		var afterClose = 0;
+		var popup = new MessagePopup("Retry message", function():Void afterClose++);
+		@:privateAccess popup.art.okButton.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		popup.remove();
+		assertEquals(1, afterClose, "MessagePopup runs its optional continuation after an OK dismissal");
 	}
 
 	private static function assertEquals(expected:Dynamic, actual:Dynamic, message:String):Void {

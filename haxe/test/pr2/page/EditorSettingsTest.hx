@@ -96,9 +96,23 @@ class EditorSettingsTest {
 		pr2.DeterministicTestMode.runTest("EditorSettingsTest.testTextObjectEditSemantics", testTextObjectEditSemantics);
 		pr2.DeterministicTestMode.runTest("EditorSettingsTest.testStampDrawObjectActions", testStampDrawObjectActions);
 		pr2.DeterministicTestMode.runTest("EditorSettingsTest.testAuthoredStampDimensions", testAuthoredStampDimensions);
+		pr2.DeterministicTestMode.runTest("EditorSettingsTest.testStampObjectLimitUsesMessagePopup", testStampObjectLimitUsesMessagePopup);
 		pr2.DeterministicTestMode.runTest("EditorSettingsTest.testEditorToolCursorLifecycle", testEditorToolCursorLifecycle);
 		pr2.DeterministicTestMode.runTest("EditorSettingsTest.testCustomCursorRuntimeHooks", testCustomCursorRuntimeHooks);
 		trace('EditorSettingsTest passed $assertions assertions');
+	}
+
+	private static function testStampObjectLimitUsesMessagePopup():Void {
+		var resets = 0;
+		var layer = new EditorObjectLayer(1, 1, function():Void resets++);
+		layer.placedObjects.resize(50000);
+		assertEquals(null, layer.addStamp(0, 100, 100), "stamp placement stops at Flash's per-layer object limit");
+		assertEquals(1, resets, "object-limit flow resets the selected editor tool");
+		var open = Popup.getOpen();
+		var message = Std.downcast(open[open.length - 1], pr2.lobby.dialogs.MessagePopup);
+		assertNotNull(message, "object-limit flow opens Flash MessagePopup");
+		message.remove();
+		layer.remove();
 	}
 
 	private static function testLevelEditorMenuAuthoredLayout():Void {

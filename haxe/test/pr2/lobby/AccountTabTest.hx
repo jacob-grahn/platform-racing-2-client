@@ -20,6 +20,7 @@ import pr2.lobby.dialogs.ConfirmPopup;
 import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
 import pr2.lobby.dialogs.HoverDelayPopup;
+import pr2.lobby.dialogs.MessagePopup;
 import pr2.lobby.dialogs.Popup;
 import pr2.lobby.level.CourseMenu;
 import pr2.lobby.tabs.AccountTab;
@@ -39,6 +40,7 @@ class AccountTabTest {
 		pr2.DeterministicTestMode.runTest("AccountTabTest.testHotkeys", testHotkeys);
 		pr2.DeterministicTestMode.runTest("AccountTabTest.testHoverDelayPopupCleanup", testHoverDelayPopupCleanup);
 		pr2.DeterministicTestMode.runTest("AccountTabTest.testRandomizeStyleButtonUsesDelayedHover", testRandomizeStyleButtonUsesDelayedHover);
+		pr2.DeterministicTestMode.runTest("AccountTabTest.testLoggedOutLoadoutUsesMessagePopup", testLoggedOutLoadoutUsesMessagePopup);
 		trace('AccountTabTest passed $assertions assertions');
 	}
 
@@ -127,6 +129,15 @@ class AccountTabTest {
 		assertEquals(10, AccountTab.keyToSlot(48), "number zero");
 		assertEquals(5, AccountTab.keyToSlot(101), "numpad five");
 		assertEquals(-1, AccountTab.keyToSlot(65), "non-number");
+	}
+
+	private static function testLoggedOutLoadoutUsesMessagePopup():Void {
+		Settings.clear();
+		assertEquals(false, @:privateAccess LoadoutsPopup.canLoadSelected(), "logged-out loadout selection is rejected");
+		var open = Popup.getOpen();
+		var message = Std.downcast(open[open.length - 1], MessagePopup);
+		assertNotNull(message, "logged-out loadout selection opens Flash MessagePopup");
+		message.remove();
 	}
 
 	private static function testHoverDelayPopupCleanup():Void {

@@ -8,6 +8,7 @@ import openfl.text.TextFormat;
 import pr2.assets.NativeAssetIds.FontAsset;
 import pr2.assets.NativeAssets;
 import pr2.lobby.LobbyArt;
+import pr2.lobby.dialogs.MessagePopup;
 import pr2.lobby.dialogs.Popup;
 import pr2.levelEditor.GetLevelsView;
 import pr2.ui.controls.GameButton;
@@ -85,8 +86,18 @@ class LoadoutsPopup extends Popup {
 
 	private function applySelected():Void {
 		if (selected == null) return;
+		if (!canLoadSelected()) {
+			startFadeOut();
+			return;
+		}
 		if (character != null && stats != null && display != null) Presets.apply(selected.preset, character, stats, display);
 		startFadeOut();
+	}
+
+	private static function canLoadSelected():Bool {
+		if (Settings.isNameSet()) return true;
+		new MessagePopup("Error: You are not logged in.");
+		return false;
 	}
 
 	private function saveSelected():Void {

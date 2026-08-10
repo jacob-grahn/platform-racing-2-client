@@ -139,6 +139,7 @@ class LobbyServicesTest {
 		pr2.DeterministicTestMode.runTest("LobbyServicesTest.testCheckServersComboPrompts", testCheckServersComboPrompts);
 		pr2.DeterministicTestMode.runTest("LobbyServicesTest.testCheckServersGuildSelectionRules", testCheckServersGuildSelectionRules);
 		pr2.DeterministicTestMode.runTest("LobbyServicesTest.testLoggingInPayloadAndResetTokenFlow", testLoggingInPayloadAndResetTokenFlow);
+		pr2.DeterministicTestMode.runTest("LobbyServicesTest.testLoginMessagesUseMessagePopup", testLoginMessagesUseMessagePopup);
 		pr2.DeterministicTestMode.runTest("LobbyServicesTest.testLoginPageAppliesPostLoginState", testLoginPageAppliesPostLoginState);
 		var levelEditorWarmup = new LevelEditor(null, false, false);
 		levelEditorWarmup.initialize();
@@ -2190,6 +2191,16 @@ class LobbyServicesTest {
 		UnreadNotif.reset();
 		Settings.clear();
 		Presets.resetForTests();
+	}
+
+	private static function testLoginMessagesUseMessagePopup():Void {
+		var page = new LoginPage();
+		Reflect.callMethod(page, Reflect.field(page, "openLoginMessage"), ["Login failed."]);
+		var open = Popup.getOpen();
+		var message = Std.downcast(open[open.length - 1], pr2.lobby.dialogs.MessagePopup);
+		assertNotNull(message, "login/account messages use the shared MessagePopup wrapper");
+		message.remove();
+		page.remove();
 	}
 
 	private static function closeAllPopups():Void {

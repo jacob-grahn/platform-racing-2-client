@@ -18,6 +18,8 @@ import pr2.gameplay.player.LocalPlayerState;
 import pr2.gameplay.presentation.CharacterPresentationLayer;
 import pr2.lobby.LobbySession;
 import pr2.lobby.dialogs.LevelInfoPopup;
+import pr2.lobby.dialogs.MessagePopup;
+import pr2.lobby.dialogs.Popup;
 import pr2.level.BlockType;
 import pr2.level.Level.LevelBlock;
 import pr2.level.ObjectCodes;
@@ -52,8 +54,19 @@ class GameShellMountTest {
 		});
 		course.remove();
 		if (pr2.DeterministicTestMode.finishSmokeSuite("GameShellMountTest")) return;
+		pr2.DeterministicTestMode.runTest("GameShellMountTest.testLevelLoadErrorUsesMessagePopup", testLevelLoadErrorUsesMessagePopup);
 
 		trace('GameShellMountTest passed $assertions assertions');
+	}
+
+	private static function testLevelLoadErrorUsesMessagePopup():Void {
+		var page = new pr2.page.GamePage(123, 1);
+		@:privateAccess page.showError("Error: The course did not load.");
+		var open = Popup.getOpen();
+		var message = Std.downcast(open[open.length - 1], MessagePopup);
+		assertEquals(true, message != null, "gameplay level-load failure opens Flash MessagePopup");
+		message.remove();
+		page.remove();
 	}
 
 	private static function runItemFinishLifecycle(smooth:Bool):{
