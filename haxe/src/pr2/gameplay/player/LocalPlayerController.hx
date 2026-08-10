@@ -96,6 +96,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	public var jellyfishHatActive:Bool = false;
 	public var topHatActive:Bool = false;
 	public var crownHatActive:Bool = false;
+	public var invincible:Bool = false;
 	public var cheeseHatActive:Bool = false;
 	public var onHeartGain:Null<Void->Void> = null;
 	/** Flash samples the current authored `curWeapon` registration when placing a mine. */
@@ -479,7 +480,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 
 	public function receiveHit(impulseX:Float = 0, impulseY:Float = 0):Void {
 		var crownProtected = crownHatActive && gameMode != "deathmatch" && gameMode != "dm" && gameMode != "hat";
-		if (crownProtected) {
+		if (crownProtected || invincible) {
 			return;
 		}
 		vx += impulseX;
@@ -1589,7 +1590,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		// uses that field directly when calculating the blast angle.
 		var angle = Math.atan2((y - STANDING_HEIGHT / 2) - mineCenterY, x - mineCenterX);
 		var crownProtected = crownHatActive && gameMode != "deathmatch" && gameMode != "dm" && gameMode != "hat";
-		if (!crownProtected) {
+		if (!crownProtected && !invincible) {
 			vx += Math.cos(angle) * MINE_HIT_SPEED;
 			vy += Math.sin(angle) * MINE_HIT_SPEED;
 			if (onHitAccepted != null) {
@@ -1597,7 +1598,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 			}
 		}
 		activateBlock(block, "", true);
-		if (!crownProtected && !crownHatActive && mode != MODE_PHYSICS_PAUSE) {
+		if (!crownProtected && !crownHatActive && mode != MODE_PHYSICS_PAUSE && !invincible) {
 			setMode(MODE_HURT);
 			beginHurtRecovery();
 		}

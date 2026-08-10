@@ -319,6 +319,16 @@ class LocalCharacter extends Character {
 		LobbySocket.write("heart`");
 	}
 
+	override public function becomeInvincible(frames:Int):Void {
+		super.becomeInvincible(frames);
+		controller.invincible = true;
+	}
+
+	override public function endRecovery():Void {
+		super.endRecovery();
+		controller.invincible = false;
+	}
+
 	public function emitLooseHat(hatId:Int, hatColor:Int = 0, hatColor2:Int = -1):Void {
 		LobbySocket.write('loose_hat`$hatId`$hatColor`$hatColor2`' + Math.round(x) + "`" + Math.round(y));
 	}

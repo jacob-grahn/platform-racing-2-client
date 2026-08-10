@@ -577,7 +577,7 @@ class Character extends Sprite {
 		}
 	}
 
-	private function endRecovery():Void {
+	public function endRecovery():Void {
 		alpha = 1;
 		removeEventListener(Event.ENTER_FRAME, recoveryTick);
 	}
