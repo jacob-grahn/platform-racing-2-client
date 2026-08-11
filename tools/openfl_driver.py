@@ -1376,6 +1376,14 @@ def run_sequence_step(devtools, step, context=None):
         key = require_key(step)
         dispatch_key(devtools, "keyDown", key)
         dispatch_key(devtools, "keyUp", key)
+    elif action == "repeatTap":
+        repeat_tap(
+            devtools,
+            require_key(step),
+            float(step.get("duration", 0)),
+            float(step.get("interval", 0.2)),
+            step.get("refreshKeys", []),
+        )
     elif action == "click":
         dispatch_click(devtools, require_coordinate(step, "x"), require_coordinate(step, "y"))
     elif action == "click-display-object":
@@ -1671,6 +1679,88 @@ def dispatch_key(devtools, event_type, key_name):
     print(f"{event_type}: {key_name}")
 
 
+def repeat_tap(devtools, key_name, duration, interval, refresh_keys=None):
+    if duration < 0 or interval <= 0:
+        raise SystemExit("repeatTap duration must be non-negative and interval must be positive.")
+    definition = KEY_DEFINITIONS.get(key_name.lower())
+    if definition is None:
+        raise SystemExit(f"Unknown key '{key_name}'. Valid: {', '.join(sorted(KEY_DEFINITIONS))}")
+    key_code = definition["windowsVirtualKeyCode"]
+    key_value = json.dumps(definition["key"])
+    code_value = json.dumps(definition["code"])
+    refresh_definitions = []
+    for refresh_key in refresh_keys or []:
+        refresh_definition = KEY_DEFINITIONS.get(str(refresh_key).lower())
+        if refresh_definition is None:
+            raise SystemExit(f"Unknown refresh key '{refresh_key}'. Valid: {', '.join(sorted(KEY_DEFINITIONS))}")
+        refresh_definitions.append(refresh_definition)
+    refresh_json = json.dumps(refresh_definitions)
+    interval_ms = interval * 1000.0
+    hold_ms = min(40.0, interval_ms / 2.0)
+    installed = devtools.evaluate(
+        """
+(() => {
+  if (window.__pr2RepeatTapTimer) clearInterval(window.__pr2RepeatTapTimer);
+  const refreshKeys = %s;
+  const setPressed = (keyCode, key, code, pressed) => {
+    if (typeof window.__pr2HarnessSetKeyCode === "function") {
+      window.__pr2HarnessSetKeyCode(keyCode, pressed);
+      return;
+    }
+    const type = pressed ? "keydown" : "keyup";
+    const event = new KeyboardEvent(type, {
+      key,
+      code,
+      bubbles: true,
+      cancelable: true
+    });
+    Object.defineProperty(event, "keyCode", {get: () => keyCode});
+    Object.defineProperty(event, "which", {get: () => keyCode});
+    const targets = [window, document, document.body, document.activeElement];
+    for (const canvas of document.querySelectorAll("canvas")) targets.push(canvas);
+    for (const target of targets) if (target) target.dispatchEvent(event);
+  };
+  const fire = () => {
+    for (const definition of refreshKeys) {
+      setPressed(definition.windowsVirtualKeyCode, definition.key, definition.code, true);
+    }
+    setPressed(%d, %s, %s, true);
+    setTimeout(() => setPressed(%d, %s, %s, false), %f);
+  };
+  fire();
+  window.__pr2RepeatTapTimer = setInterval(fire, %f);
+  return true;
+})()
+""" % (refresh_json, key_code, key_value, code_value, key_code, key_value, code_value, hold_ms, interval_ms)
+    )
+    if installed is not True:
+        raise SystemExit("repeatTap could not install its OpenFL input timer.")
+    time.sleep(duration)
+    devtools.evaluate(
+        """
+(() => {
+  if (window.__pr2RepeatTapTimer) clearInterval(window.__pr2RepeatTapTimer);
+  window.__pr2RepeatTapTimer = null;
+  if (typeof window.__pr2HarnessSetKeyCode === "function") {
+    window.__pr2HarnessSetKeyCode(%d, false);
+  } else {
+    const event = new KeyboardEvent("keyup", {
+      key: %s,
+      code: %s,
+      bubbles: true,
+      cancelable: true
+    });
+    Object.defineProperty(event, "keyCode", {get: () => %d});
+    Object.defineProperty(event, "which", {get: () => %d});
+    window.dispatchEvent(event);
+  }
+})()
+""" % (key_code, key_value, code_value, key_code, key_code)
+    )
+    count = int(duration / interval) + 1
+    print(f"Repeated {key_name} {count} times over {duration:.3f}s")
+
+
 def dispatch_harness_key(devtools, event_type, definition):
     pressed = event_type == "keyDown"
     expression = """
@@ -1915,7 +2005,9 @@ def require_points(step):
 def append_query(url, query):
     if not query:
         return url
-    return f"{url}?{query[1:] if query.startswith('?') else query}"
+    normalized = query[1:] if query.startswith("?") else query
+    separator = "&" if "?" in url else "?"
+    return f"{url}{separator}{normalized}"
 
 
 def analyze_png(path):

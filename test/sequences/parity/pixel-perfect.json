@@ -1,5 +1,5 @@
 {
-  "_comment": "End-to-end feature/physics-parity test, run against BOTH the original Flash projector (tools/pr2driver.py) and the OpenFL HTML5 port (tools/openfl_driver.py) from this one file. Identical inputs for both clients (no per-client branching). Flow: preloader/intro skip -> open Login -> clear any saved session via the '-' button so both clients land on the same name/pass form -> type haxe-port-test/haxe-port-test -> Log In -> Search -> select Level ID -> search 6497936 -> 'Don't Move JV' -> Play -> idle while the level's blocks push the character through the course on their own -> Race Complete! popup. The '-' (delete saved user) + confirm-OK clicks are no-ops on the fresh name/pass form, so the sequence works whether or not a session is saved. Times are seconds from app start (Flash window-ready after launch / OpenFL data-pr2-app-ready). 'launch'/'quit' are no-ops on the OpenFL driver. The port must be served through tools/dev_proxy.py (apiHost=/api) so the server list and login reach pr2hub.com. Assert the final shot with tools/check_race_complete.py.",
+  "_comment": "End-to-end pixel-perfect physics parity test, modeled on dont-move-jv.json through the complete shared preloader -> intro -> login -> Search -> Level ID 6520046 -> pixel-perfect -> Play flow. Immediately after Play, hold Up+Right continuously and pulse Space every 0.2 seconds across level loading, countdown, and the opening gameplay window. Putting input directly after Play keeps physics frame zero aligned even though Flash uses timed coordinate fallbacks and OpenFL resolves live display objects. The saveConsoleTrace action enables the Flash physics-trace.flag for the whole sequence and physicsTrace=1 for OpenFL, then writes the target log near the end of the run.",
   "steps": [
     { "time": 0.0,   "action": "launch" },
 
@@ -22,13 +22,19 @@
     { "time": 14.5,  "action": "click-display-object", "name": "mode_cb", "x": 390, "y": 42, "timeout": 2, "fallbackDelay": 1, "_note": "open Search By selector" },
     { "time": 14.5,  "action": "click", "x": 390, "y": 110, "_note": "choose Level ID, the third selector option" },
     { "time": 14.5,  "action": "click-display-object", "name": "searchInput", "x": 320, "y": 103, "timeout": 2, "fallbackDelay": 1, "_note": "focus search input" },
-    { "time": 14.5,  "action": "typeText", "text": "6497936" },
+    { "time": 14.5,  "action": "typeText", "text": "6520046" },
     { "time": 14.5,  "action": "click-display-object", "name": "search_bt", "x": 440, "y": 103, "timeout": 2, "fallbackDelay": 1, "_note": "submit level-ID search" },
     { "time": 14.5,  "action": "click-display-object", "name": "levelSlot", "index": 0, "x": 257.5, "y": 163, "timeout": 5, "fallbackDelay": 5, "_note": "open the single ID-search result" },
     { "time": 14.5,  "action": "click-display-object", "name": "play_bt", "x": 161, "y": 172, "timeout": 3, "fallbackDelay": 2, "_note": "Play button is lower because the Search form shifts its result grid down" },
 
-    { "time": 37.0,  "action": "shot", "out": "test/output/dmjv-{target}/09-racing.png", "_note": "race underway after countdown" },
-    { "time": 140.0, "action": "shot", "out": "test/output/dmjv-{target}/10-complete.png", "_note": "Race Complete! popup should be visible; includes timing headroom for slower machines" },
-    { "time": 141.0, "action": "quit" }
+    { "time": 14.5,  "action": "keyDown", "key": "up", "_note": "ordered immediately after Play; hold jump through loading, countdown, and race" },
+    { "time": 14.5,  "action": "keyDown", "key": "right", "_note": "ordered immediately after Play; hold right through loading, countdown, and race" },
+    { "time": 14.5,  "action": "repeatTap", "key": "space", "duration": 13.0, "interval": 0.2, "refreshKeys": ["up", "right"], "_note": "render time fluctuates, so pulse item input across loading plus the first ten seconds of gameplay; refresh held keys so listeners created during loading observe them" },
+    { "time": 43.0,  "action": "shot", "out": "test/output/pixel-perfect-{target}/09-racing.png" },
+    { "time": 55.0,  "action": "saveConsoleTrace", "out": "test/output/pixel-perfect-{target}/physics.log" },
+    { "time": 56.0,  "action": "shot", "out": "test/output/pixel-perfect-{target}/10-complete.png" },
+    { "time": 57.0,  "action": "keyUp", "key": "up" },
+    { "time": 57.0,  "action": "keyUp", "key": "right" },
+    { "time": 58.0,  "action": "quit" }
   ]
 }

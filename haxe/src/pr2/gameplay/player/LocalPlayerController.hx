@@ -38,6 +38,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	private static inline var CRUMBLE_INITIAL_LIFE:Int = 10;
 	private static inline var MINE_HIT_SPEED:Float = 50;
 	private static inline var FLASH_TWIPS_PER_PIXEL:Float = 20;
+	private static inline var VELOCITY_ZERO_EPSILON:Float = 1e-9;
 	private static inline var TELEPORT_DEFAULT_COLOR:String = "16744272";
 	private static inline var ROTATE_FRAMES:Int = 30;
 	private static inline var HURT_FRAMES:Int = 60;
@@ -842,6 +843,11 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	private function position(input:LocalPlayerInput):Void {
 		var gravityBefore = gravity;
 		vy += gravityBefore;
+		// JS can retain a tiny negative residue where Flash's Number arithmetic
+		// reaches zero. Do not turn that residue into an upward block collision.
+		if (Math.abs(vy) < VELOCITY_ZERO_EPSILON) {
+			vy = 0;
+		}
 		traceGravityChange("position", gravityBefore, gravity, gravityBefore);
 		if (input.jump && propellerHatActive && vy > 0) {
 			vy *= 0.85;

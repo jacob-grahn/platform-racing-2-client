@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # End-to-end feature/physics-parity test: drive the SAME sequence
 # (test/sequences/parity/dont-move-jv.json) through the full flow
-# (preloader -> intro -> login -> favorites -> "Don't Move JV" -> Play ->
+# (preloader -> intro -> login -> Search by level ID -> "Don't Move JV" -> Play ->
 # idle with timing headroom -> Race Complete!) and assert the popup opened with EXP gain.
 #
 # Usage:

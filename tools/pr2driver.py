@@ -8,6 +8,7 @@ Commands:
   shot <out.jpg>                window-only screenshot (auto-crops to game rect)
   click <x> <y>                 click at stage coords (focus-click + action-click)
   tap <key>                     single keypress (key name: left right up down space)
+  repeatTap <key>               repeated keypresses for a timed sequence step
   type <text>                   type a unicode string into the focused field
   hold <key> <seconds>          key held for N seconds
   quit                          kill the Flash projector
@@ -201,6 +202,28 @@ _SWIFT_KEYUP = textwrap.dedent("""\
     CGEvent(keyboardEventSource: src, virtualKey: kc, keyDown: false)?.post(tap: .cghidEventTap)
 """)
 
+_SWIFT_REPEAT_TAP = textwrap.dedent("""\
+    import CoreGraphics
+    import Foundation
+    let kc = CGKeyCode(CommandLine.arguments[1])!
+    let duration = Double(CommandLine.arguments[2])!
+    let interval = Double(CommandLine.arguments[3])!
+    let hold = min(0.04, interval / 2.0)
+    let source = CGEventSource(stateID: .hidSystemState)
+    let started = ProcessInfo.processInfo.systemUptime
+    var due = started
+    repeat {
+        let now = ProcessInfo.processInfo.systemUptime
+        if due > now {
+            usleep(useconds_t((due - now) * 1_000_000.0))
+        }
+        CGEvent(keyboardEventSource: source, virtualKey: kc, keyDown: true)?.post(tap: .cghidEventTap)
+        usleep(useconds_t(hold * 1_000_000.0))
+        CGEvent(keyboardEventSource: source, virtualKey: kc, keyDown: false)?.post(tap: .cghidEventTap)
+        due += interval
+    } while due <= started + duration + 0.000_001
+""")
+
 _SWIFT_FOCUS = textwrap.dedent("""\
     import AppKit
     let apps = NSRunningApplication.runningApplications(withBundleIdentifier: "com.macromedia.Flash Player.app")
@@ -352,6 +375,15 @@ def cmd_tap(key):
     cmd_key_up(key)
     print(f"Tapped {key}")
 
+def cmd_repeat_tap(key, duration, interval):
+    if duration < 0 or interval <= 0:
+        print("repeatTap duration must be non-negative and interval must be positive.", file=sys.stderr)
+        sys.exit(1)
+    kc = _resolve_key(key)
+    _ensure_flash_focus()
+    _run_swift(_SWIFT_REPEAT_TAP, kc, duration, interval)
+    print(f"Repeated {key} every {interval:.3f}s for {duration:.3f}s")
+
 def cmd_hold(key, seconds):
     if seconds < 0:
         print("Hold duration must be non-negative.", file=sys.stderr)
@@ -410,6 +442,12 @@ def cmd_sequence(script_path):
                 cmd_key_up(step["key"])
             elif action == "tap":
                 cmd_tap(step["key"])
+            elif action == "repeatTap":
+                cmd_repeat_tap(
+                    step["key"],
+                    _parse_seconds(step.get("duration", 0)),
+                    _parse_seconds(step.get("interval", 0.2)),
+                )
             elif action == "typeText":
                 cmd_type(step["text"])
             elif action == "hold":

@@ -37,6 +37,7 @@ class LobbyRight extends LobbySide {
 		var wbTab = new LobbyTab(clickBestWeek, "Week's Best");
 		var newTab = new LobbyTab(clickNew, "Newest");
 		searchTab = new LobbyTab(clickSearch, "Search");
+		searchTab.name = "searchTab";
 		var favsTab = new LobbyTab(clickFavs, "♥");
 		favsTab.name = "favoritesTab";
 

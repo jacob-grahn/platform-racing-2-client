@@ -24,6 +24,7 @@ class LocalPlayerControllerTest {
 		pr2.DeterministicTestMode.runTest("LocalPlayerControllerTest.testJumpAndLandOnFlatFixture", testJumpAndLandOnFlatFixture);
 		pr2.DeterministicTestMode.runTest("LocalPlayerControllerTest.testGravityUsesFlashMultiplierAndSupportsRuntimeChanges", testGravityUsesFlashMultiplierAndSupportsRuntimeChanges);
 		pr2.DeterministicTestMode.runTest("LocalPlayerControllerTest.testVelocityIntegrationOrderAndTerminalClamp", testVelocityIntegrationOrderAndTerminalClamp);
+		pr2.DeterministicTestMode.runTest("LocalPlayerControllerTest.testGravityCancelsTinyNegativeVelocityResidue", testGravityCancelsTinyNegativeVelocityResidue);
 		pr2.DeterministicTestMode.runTest("LocalPlayerControllerTest.testFacingFollowsPressedDirection", testFacingFollowsPressedDirection);
 		pr2.DeterministicTestMode.runTest("LocalPlayerControllerTest.testSnakeTrailAndDiggingInteractions", testSnakeTrailAndDiggingInteractions);
 		pr2.DeterministicTestMode.runTest("LocalPlayerControllerTest.testAnimationFollowsDirectionalInput", testAnimationFollowsDirectionalInput);
@@ -360,6 +361,14 @@ class LocalPlayerControllerTest {
 		state = player.stateSnapshot();
 		assertClose(-28, state.vy, "negative velocity is clamped to Flash's terminal speed");
 		assertClose(90, state.y, "negative terminal velocity is clamped before position integration");
+	}
+
+	private static function testGravityCancelsTinyNegativeVelocityResidue():Void {
+		var player = new LocalCharacter(emptyLevel(1));
+		@:privateAccess player.controller.vy = -0.7000000000000001;
+		@:privateAccess player.controller.position(new LocalPlayerInput());
+		assertClose(0, player.stateSnapshot().vy,
+			"gravity normalizes JS floating-point residue before block collision direction checks");
 	}
 
 	// LocalCharacter.processBlocks forces crouch only when a solid block sits above
