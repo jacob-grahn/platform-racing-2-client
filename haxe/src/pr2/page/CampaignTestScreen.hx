@@ -138,7 +138,8 @@ class CampaignTestScreen extends Sprite {
 	// can be exercised and screenshotted in the real `Course`/`LevelRenderer`
 	// path without a server. This is the replacement for the old standalone
 	// gameplay harness: pick a layout with `?screen=campaign&debug=1&localLevel=<name>`.
-	// Supported names: `rotate` (default), `flat`, `arrow`, and `safety`.
+	// Supported names: `rotate` (default), `flat`, `arrow`, `safety`, and
+	// `teleport`.
 	private function buildLocalLevel():Void {
 		var name = localLevel == null ? "rotate" : localLevel.toLowerCase();
 		var blocks:Array<LevelBlock> = [];
@@ -197,6 +198,20 @@ class CampaignTestScreen extends Sprite {
 				}
 				add(ObjectCodes.BLOCK_SAFETY, 24, 19);
 				add(ObjectCodes.BLOCK_SAFETY, 24, 18);
+				add(ObjectCodes.BLOCK_START1, 16, 19);
+
+			case "teleport":
+				// Teleport sandbox: a same-color teleport pair standing on the brick
+				// floor with the player spawning to their left. Walk right to side-hit
+				// the first block and teleport to the second; every block of that color
+				// then holds SupplyBlock's depleted grey for the 3s color cooldown,
+				// which is the visual state this layout exists to screenshot.
+				title = "Local Teleport Test";
+				for (col in 6...34) {
+					add(ObjectCodes.BLOCK_BRICK, col, 20);
+				}
+				blocks.push(LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_TELEPORT, 19 * 30, 19 * 30, "255"));
+				blocks.push(LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_TELEPORT, 22 * 30, 19 * 30, "255"));
 				add(ObjectCodes.BLOCK_START1, 16, 19);
 
 			case "arrow":
