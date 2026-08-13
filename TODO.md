@@ -192,7 +192,7 @@ available from their source threads.
 - [x] [Alternate Movement Controls don't work in Level Editor](https://jiggmin2.com/forums/showthread.php?tid=5421):
   edit mode accepts only arrow keys; configured alternate movement keys such as
   WASD do nothing.
-- [!] [Campaign Tab Bug](https://jiggmin2.com/forums/showthread.php?tid=5420):
+- [x] [Campaign Tab Bug](https://jiggmin2.com/forums/showthread.php?tid=5420):
   reloading the in-game Campaign tab resets it to the server's daily campaign
   instead of preserving the user's most recent campaign selection.
 - [x] [Item Uses Display Bug](https://jiggmin2.com/forums/showthread.php?tid=5419):

@@ -1422,6 +1422,31 @@ class LobbyServicesTest {
 		var campaign = new pr2.lobby.tabs.ListingTab("campaign");
 		assertEquals(2, campaign.getPageNum(), "campaign initial page uses session server id and auth day");
 		assertEquals(2, LobbySocket.campaignPage, "campaign socket cache tracks selected campaign page");
+
+		// Flash `LevelListing.initialize` restores `coursePageNum<mode>` over the page
+		// the constructor seeded, so a campaign page the player picked survives tab
+		// swaps and level exits instead of snapping back to the server's daily page.
+		var rememberedPages:Array<Int> = [];
+		pr2.lobby.tabs.ListingTab.fetchFactory = function(mode:String, page:Int, onResult:pr2.net.LevelListClient.LevelListResult->Void,
+				onError:String->Void) {
+			rememberedPages.push(page);
+			return new FakeAsyncListResource();
+		};
+		Memory.clear();
+		var picked = new pr2.lobby.tabs.ListingTab("campaign");
+		picked.initialize();
+		assertEquals(2, picked.getPageNum(), "campaign opens on the daily page when nothing is remembered");
+		picked.setPageNum(1);
+		assertEquals(1, Memory.getInt("coursePageNumcampaign"), "picking a campaign page remembers it");
+		picked.remove();
+		var reopened = new pr2.lobby.tabs.ListingTab("campaign");
+		reopened.initialize();
+		assertEquals(1, reopened.getPageNum(), "reopening campaign restores the remembered page");
+		assertEquals(2, LobbySocket.campaignPage, "daily campaign page still seeds the campaign info cache key");
+		assertEquals("2,1,1", rememberedPages.join(","), "restored campaign page drives the course request");
+		reopened.remove();
+		pr2.lobby.tabs.ListingTab.resetHooksForTests();
+		Memory.clear();
 		LobbySession.clear();
 
 		var freshLevels = [new CampaignLevelInfo(11, 1, "Fresh Campaign", "Tester", 0, 4, 10)];
