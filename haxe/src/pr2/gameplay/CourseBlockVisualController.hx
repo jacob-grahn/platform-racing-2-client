@@ -55,6 +55,8 @@ class CourseBlockVisualController {
 					owner.levelRenderer.triggerWaterRipple(worldXOf(event), worldYOf(event));
 				case TeleportBlockPop:
 					emitLocalTeleportPop(event);
+				case BlockBump:
+					owner.levelRenderer.animateBlockBump(worldXOf(event), worldYOf(event), event.hitX, event.hitY);
 				case BlockBumpSound:
 					owner.levelRenderer.animateBlockBump(worldXOf(event), worldYOf(event), event.hitX, event.hitY);
 					playBlockBumpSound(event);

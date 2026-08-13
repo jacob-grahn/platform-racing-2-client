@@ -30,6 +30,7 @@ class LocalPlayerControllerTest {
 		pr2.DeterministicTestMode.runTest("LocalPlayerControllerTest.testAnimationFollowsDirectionalInput", testAnimationFollowsDirectionalInput);
 		pr2.DeterministicTestMode.runTest("LocalPlayerControllerTest.testLowCeilingForcesCrouchAndBlocksJump", testLowCeilingForcesCrouchAndBlocksJump);
 		pr2.DeterministicTestMode.runTest("LocalPlayerControllerTest.testPressingUpUnderBlockBumpsIt", testPressingUpUnderBlockBumpsIt);
+		pr2.DeterministicTestMode.runTest("LocalPlayerControllerTest.testRapidRepeatedBlockBumpOnlyThumpsOnce", testRapidRepeatedBlockBumpOnlyThumpsOnce);
 		pr2.DeterministicTestMode.runTest("LocalPlayerControllerTest.testHoldingDownChargesAndLaunchesSuperJump", testHoldingDownChargesAndLaunchesSuperJump);
 		pr2.DeterministicTestMode.runTest("LocalPlayerControllerTest.testIceBlockReducesNextFrameAcceleration", testIceBlockReducesNextFrameAcceleration);
 		pr2.DeterministicTestMode.runTest("LocalPlayerControllerTest.testSantaHatFreezesSafeStandBlock", testSantaHatFreezesSafeStandBlock);
@@ -406,6 +407,23 @@ class LocalPlayerControllerTest {
 		assertEquals(true, bumpState.crouching, "the block still forces crouch after the bump");
 		assertEquals(4, bumpState.itemId, "pressing up under the block routes through onBump");
 		assertEquals("item", bumpState.touchedBlockType, "debug state reports the bumped ceiling block");
+	}
+
+	private static function testRapidRepeatedBlockBumpOnlyThumpsOnce():Void {
+		var player = new LocalCharacter(lowItemCeilingLevel());
+		for (_ in 0...20) {
+			player.step(new LocalPlayerInput());
+		}
+		player.consumeBlockVisualEvents();
+
+		player.step(new LocalPlayerInput(false, false, true));
+		var firstEvents = player.consumeBlockVisualEvents();
+		assertEquals("BlockBumpSound", Std.string(firstEvents[0].kind), "first bump at rest emits the thump");
+
+		player.step(new LocalPlayerInput(false, false, true));
+		var repeatedEvents = player.consumeBlockVisualEvents();
+		assertEquals(1, repeatedEvents.length, "rapid repeated bump still restarts the block animation");
+		assertEquals("BlockBump", Std.string(repeatedEvents[0].kind), "rapid repeated bump suppresses the thump while the block is displaced");
 	}
 
 	// LocalCharacter.landGo charges crouchCharge while down is held on the ground and
@@ -1077,8 +1095,8 @@ class LocalPlayerControllerTest {
 
 		player.step(new LocalPlayerInput(false, false, true));
 		var depletedEvents = player.consumeBlockVisualEvents();
-		assertEquals(1, depletedEvents.length, "depleted item block still emits base thump");
-		assertEquals("BlockBumpSound", Std.string(depletedEvents[0].kind), "depleted item block does not replay StarSound");
+		assertEquals(1, depletedEvents.length, "depleted item block still restarts its bump animation");
+		assertEquals("BlockBump", Std.string(depletedEvents[0].kind), "rapid depleted-item bump replays neither ThumpSound nor StarSound");
 	}
 
 	// An item block with empty options means "any of the level's allowed items"

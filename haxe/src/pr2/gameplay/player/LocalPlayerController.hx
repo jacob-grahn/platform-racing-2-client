@@ -1156,17 +1156,17 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		vy *= -0.25;
 		presentationCeilingContact.capture(block);
 		jumpVelBoost = 0;
-		if (bumpPlaysThump(block)) {
+		if (blockBouncesOnBump(block)) {
 			var visualImpulse = RotationMath.rotatePoint(0, -15, courseRotation);
-			blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.BlockBumpSound, block.x, block.y, 1, null, null, visualImpulse.x,
+			var eventKind = blockController.startBlockBounce(block, 0, -15) ? BlockVisualEventKind.BlockBumpSound : BlockVisualEventKind.BlockBump;
+			blockVisualEvents.push(new BlockVisualEvent(eventKind, block.x, block.y, 1, null, null, visualImpulse.x,
 				visualImpulse.y));
-			blockController.startBlockBounce(block, 0, -15);
 		}
 		applyBumpEffect(block, input, bumpForce, preBumpY);
 		endBlockTrace(trace);
 	}
 
-	private function bumpPlaysThump(block:LevelBlock):Bool {
+	private function blockBouncesOnBump(block:LevelBlock):Bool {
 		return switch (block.type) {
 			case BlockType.ArrowDown | BlockType.ArrowUp | BlockType.ArrowLeft | BlockType.ArrowRight:
 				false;

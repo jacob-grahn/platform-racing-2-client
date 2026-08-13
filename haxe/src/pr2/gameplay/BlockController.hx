@@ -74,12 +74,14 @@ class BlockController {
 		updateBlockBounces();
 	}
 
-	/** Mirrors Block.hitRotated; collision snapping reads this live displacement in Flash. */
-	public function startBlockBounce(block:LevelBlock, hitX:Float, hitY:Float):Void {
+	/** Mirrors Block.hitRotated, restarting the live displacement and reporting whether Block.hit would play ThumpSound. */
+	public function startBlockBounce(block:LevelBlock, hitX:Float, hitY:Float):Bool {
 		var velocity = RotationMath.rotatePoint(hitX, hitY, owner.courseRotation);
 		var state = stateFor(block);
+		var playThump = Math.abs(state.bounceOffsetX) < 1 && Math.abs(state.bounceOffsetY) < 1;
 		state.bounceVelocityX = velocity.x;
 		state.bounceVelocityY = velocity.y;
+		return playThump;
 	}
 
 	public function blockBounceOffset(block:LevelBlock):{x:Float, y:Float} {
