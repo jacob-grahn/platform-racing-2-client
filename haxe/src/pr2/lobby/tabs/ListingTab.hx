@@ -40,14 +40,19 @@ class ListingTab extends LevelListingPage {
 	}
 
 	private static function initialPageFor(mode:String):Int {
+		var fallback = 1;
 		if (mode == "campaign") {
+			// Flash `Campaign` seeds today's page from the formula and stashes it in
+			// the static `Campaign.campaignPage` (used as the campaign cache key).
 			var serverId = LobbySession.server != null ? LobbySession.server.serverId : 0;
-			var page = campaignPage(serverId, currentServerDay());
-			LobbySocket.campaignPage = page;
-			return page;
+			fallback = campaignPage(serverId, currentServerDay());
+			LobbySocket.campaignPage = fallback;
 		}
+		// Flash `LevelListing.initialize` then restores `coursePageNum<mode>` over the
+		// seeded page, so a campaign page the player picked survives tab swaps and
+		// level exits for the rest of the session (cleared on disconnect).
 		var remembered = Memory.getInt("coursePageNum" + mode, 0);
-		return remembered != 0 ? remembered : 1;
+		return remembered != 0 ? remembered : fallback;
 	}
 
 	override private function requestCourses():Void {
