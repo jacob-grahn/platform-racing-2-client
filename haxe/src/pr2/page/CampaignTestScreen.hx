@@ -57,6 +57,7 @@ class CampaignTestScreen extends Sprite {
 	private var statusText:TextField;
 	private var course:Course;
 	private var lastStatusText:String = "";
+	private var teleportVisualApplied:Bool = false;
 
 	public function new(?page:String, ?levelId:String, ?version:Int, ?localLevel:String, ?debugItem:Int) {
 		super();
@@ -143,12 +144,22 @@ class CampaignTestScreen extends Sprite {
 		var name = localLevel == null ? "rotate" : localLevel.toLowerCase();
 		var blocks:Array<LevelBlock> = [];
 		var artLayers:Array<LevelArtLayer> = [];
-		function add(code:Int, col:Int, row:Int):Void {
-			blocks.push(LevelBlock.fromWorldPixels(code, col * 30, row * 30));
+		function add(code:Int, col:Int, row:Int, options:String = ""):Void {
+			blocks.push(LevelBlock.fromWorldPixels(code, col * 30, row * 30, options));
 		}
 
 		var title;
 		switch (name) {
+			case "teleport-visual":
+				// Side-by-side samples for checking depleted teleport compositing.
+				// The right group is darkened after mounting, without requiring a
+				// gameplay collision, so browser backends can be compared reliably.
+				title = "Local Teleport Visual Test";
+				for (col in 6...34) add(ObjectCodes.BLOCK_BRICK, col, 20);
+				add(ObjectCodes.BLOCK_START1, 20, 19);
+				for (col in 16...19) add(ObjectCodes.BLOCK_TELEPORT, col, 16, "16744272");
+				for (col in 22...25) add(ObjectCodes.BLOCK_TELEPORT, col, 16, "16744272");
+
 			case "large":
 				title = "Local Large Benchmark";
 				for (col in 0...220) {
@@ -509,6 +520,12 @@ class CampaignTestScreen extends Sprite {
 			Browser.document.body.setAttribute("data-pr2-debug-state",
 				'phase=drawing;blocks=${course.levelRenderer.drawnBlockCount()};art=${course.levelRenderer.drawnArtItemCount()}'
 					+ course.levelRenderer.artProfileDebugState());
+			#end
+		} else if (localLevel != null && localLevel.toLowerCase() == "teleport-visual" && !teleportVisualApplied) {
+			for (col in 22...25) course.levelRenderer.setBlockColorMultiplier(col * 30, 16 * 30, 0.5);
+			teleportVisualApplied = true;
+			#if js
+			Browser.document.body.setAttribute("data-pr2-teleport-visual", "applied");
 			#end
 		}
 	}

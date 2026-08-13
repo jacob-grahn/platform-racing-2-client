@@ -1,6 +1,7 @@
 package pr2.level;
 
 import openfl.display.Bitmap;
+import openfl.display.BitmapData;
 import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.utils.AssetType;
@@ -22,10 +23,11 @@ class BlockViewFactory {
 		container.y = block.worldY;
 
 		if (block.code == ObjectCodes.BLOCK_TELEPORT) {
-			var background = new Shape();
-			background.graphics.beginFill(teleportBlockColor(block.options));
-			background.graphics.drawRect(0, 0, LevelRenderer.TILE_SIZE, LevelRenderer.TILE_SIZE);
-			background.graphics.endFill();
+			// Flash TeleportBlock uses `new BitmapData(30, 30, false, color)` as
+			// its backing. Keeping this a Bitmap is also important on OpenFL WebGL,
+			// where the parent cooldown ColorTransform does not affect a Shape child.
+			var background = new Bitmap(new BitmapData(LevelRenderer.TILE_SIZE, LevelRenderer.TILE_SIZE, false, teleportBlockColor(block.options)));
+			background.smoothing = false;
 			container.addChild(background);
 		}
 

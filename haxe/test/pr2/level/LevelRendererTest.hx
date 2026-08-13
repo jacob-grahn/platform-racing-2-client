@@ -787,7 +787,7 @@ class LevelRendererTest {
 		var blockLayer = worldLayer(renderer, 1);
 		var blockDisplay = Std.downcast(blockLayer.getChildAt(0), Sprite);
 		assertEquals(2, blockDisplay.numChildren, "teleport block renders option-color background behind bitmap");
-		assertTrue(Std.isOfType(blockDisplay.getChildAt(0), Shape), "teleport background is the bottom child");
+		assertTrue(Std.isOfType(blockDisplay.getChildAt(0), Bitmap), "teleport Flash-parity bitmap background is the bottom child");
 	}
 
 	private static function testArrowOverlay():Void {
