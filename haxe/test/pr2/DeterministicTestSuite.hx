@@ -128,7 +128,6 @@ import pr2.page.IntroPageTest;
 import pr2.runtime.EpicFlashTest;
 import pr2.runtime.ExplicitBitmapCacheTest;
 import pr2.runtime.FrameClockTest;
-import pr2.runtime.FrameRateDebugSignalsTest;
 import pr2.runtime.FrameRateDiagnosticsTest;
 import pr2.runtime.FrameRateSettingsTest;
 import pr2.runtime.SvgAssetTest;
@@ -150,7 +149,6 @@ class DeterministicTestSuite {
 		DeterministicTestMode.runSuite("EpicFlashTest", ["runtime"], EpicFlashTest.main);
 		DeterministicTestMode.runSuite("ExplicitBitmapCacheTest", ["runtime", "character"], ExplicitBitmapCacheTest.main);
 		DeterministicTestMode.runSuite("FrameClockTest", ["runtime"], FrameClockTest.main);
-		DeterministicTestMode.runSuite("FrameRateDebugSignalsTest", ["runtime"], FrameRateDebugSignalsTest.main);
 		DeterministicTestMode.runSuite("FrameRateDiagnosticsTest", ["runtime"], FrameRateDiagnosticsTest.main);
 		DeterministicTestMode.runSuite("FrameRateSettingsTest", ["runtime"], FrameRateSettingsTest.main);
 		DeterministicTestMode.runSuite("SvgAssetTest", ["runtime", "ui", "character", "level-rendering"], SvgAssetTest.main);

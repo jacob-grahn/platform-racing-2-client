@@ -39,8 +39,6 @@ import pr2.page.PageHolder;
 import pr2.page.SymbolPreview;
 import pr2.page.PopupPreview;
 import pr2.runtime.FrameClock;
-import pr2.runtime.FrameRateDebugSignals;
-import pr2.runtime.FrameRateDiagnostics;
 import pr2.runtime.FrameRateSettings;
 import pr2.runtime.Html5PresentationPacer;
 import pr2.ui.GpNotification;
@@ -59,7 +57,6 @@ class Main extends Sprite {
 	private static inline var OFFLINE_LIST_DELAY_MS:Int = 20;
 
 	private var swfStats:Null<SWFStats>;
-	private final frameRateDebugSignals:FrameRateDebugSignals = new FrameRateDebugSignals();
 	public var frameRateSettings(default, null):FrameRateSettings;
 	public var frameClock(default, null):FrameClock;
 
@@ -81,11 +78,9 @@ class Main extends Sprite {
 		frameRateSettings = FrameRateSettings.fromQuery(query, frameStrategiesSupportedOnCurrentTarget());
 		configureStage(query);
 		applyPresentationFrameRate();
-		frameRateDebugSignals.publish(frameRateSettings, FrameRateDiagnostics.shared);
 		pr2.app.AppStage.stage = stage;
 		KeyboardFocusManager.install(stage);
 		frameClock = new FrameClock(frameRateSettings);
-		frameClock.onFrame = publishFrameRateDiagnostics;
 		frameClock.install(stage);
 		swfStats = new SWFStats(frameRateSettings.presentationFrameRate, true, null, null, applyStageFrameRate);
 		FatalErrorReporter.installGlobalHandlers();
@@ -113,10 +108,6 @@ class Main extends Sprite {
 		} catch (error:Dynamic) {
 			reportFatalError(error);
 		}
-	}
-
-	private function publishFrameRateDiagnostics(_:FrameClock):Void {
-		frameRateDebugSignals.publish(frameRateSettings, FrameRateDiagnostics.shared);
 	}
 
 	private function applyPresentationFrameRate():Void {
