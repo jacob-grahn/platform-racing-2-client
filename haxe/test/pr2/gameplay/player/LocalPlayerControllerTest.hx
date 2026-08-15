@@ -2232,6 +2232,10 @@ class LocalPlayerControllerTest {
 		var level = rotateBlockLevel(BlockType.RotateRight);
 		var player = bumpRotateBlockInLevel(level);
 		var frozen = player.stateSnapshot();
+		var committedRotations:Array<Int> = [];
+		var tweenRotations:Array<Int> = [];
+		player.controller.onCourseRotationCommitted = committedRotations.push;
+		player.controller.onRotationTweenFrame = tweenRotations.push;
 		level.blocks.splice(1, 1); // isolate the coordinate transform from fixture collisions
 
 		for (_ in 0...29) {
@@ -2243,6 +2247,11 @@ class LocalPlayerControllerTest {
 		var state = player.stateSnapshot();
 		assertEquals("land", state.mode, "right rotation returns player to land mode");
 		assertEquals(90, state.courseRotation, "right rotation advances course rotation");
+		assertEquals("90", committedRotations.join(","), "right rotation emits one committed course-rotation signal");
+		assertEquals(30, tweenRotations.length, "right rotation emits one rotMod signal per Flash tween frame");
+		assertEquals(-3, tweenRotations[0], "right rotation begins with Flash's first -3 degree rotMod");
+		assertEquals(-87, tweenRotations[28], "right rotation sends the last intermediate rotMod");
+		assertEquals(0, tweenRotations[29], "right rotation clears rotMod after committing the quarter-turn");
 		assertClose(-frozen.y, state.x, "right rotation maps x from frozen y");
 		assertClose(frozen.x + 0.7, state.y, "right rotation resumes gravity on its completion frame");
 	}

@@ -249,6 +249,8 @@ class Course extends Sprite {
 		player.setAllowedItems(config.allowedItems);
 		player.setCourseTime(maxCourseTimeSeconds());
 		localCharacter = player;
+		player.controller.onCourseRotationCommitted = player.commitNetworkCourseRotation;
+		player.controller.onRotationTweenFrame = player.setNetworkRotation;
 		playerArray[player.tempID] = player;
 		remoteBlockActivation = new RemoteBlockActivation(level, levelRenderer);
 		activeCommandHandler().defineCommand("activate", activateCommand);

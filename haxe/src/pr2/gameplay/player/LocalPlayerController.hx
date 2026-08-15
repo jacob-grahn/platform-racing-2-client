@@ -106,6 +106,10 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	public var onHitAccepted:Null<Void->Void> = null;
 	/** Starts the character-alpha recovery used by Flash `bumpPlayer`. */
 	public var onBumpRecovery:Null<Int->Void> = null;
+	/** Fired after a rotate-block transition commits its authoritative quarter-turn. */
+	public var onCourseRotationCommitted:Null<Int->Void> = null;
+	/** Fired with Flash's per-frame local-character `rotMod` during a course rotation. */
+	public var onRotationTweenFrame:Null<Int->Void> = null;
 	public var detailedTraceEnabled(default, null):Bool = false;
 
 	public static inline var MODE_LAND:String = "land";
@@ -1485,6 +1489,9 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		if (rotateFramesRemaining == 0) {
 			finishRotation();
 		}
+		if (onRotationTweenFrame != null) {
+			onRotationTweenFrame(characterRotation);
+		}
 	}
 
 	private function finishRotation():Void {
@@ -1504,6 +1511,9 @@ class LocalPlayerController implements ItemRuntimeOwner {
 			lastSafeY = -lastSafeX;
 			lastSafeX = safeX;
 			courseRotation = RotationMath.normalizeDisplayRotation(courseRotation - 90);
+		}
+		if (onCourseRotationCommitted != null) {
+			onCourseRotationCommitted(courseRotation);
 		}
 		rotateDirection = 0;
 		courseTweenRotation = 0;

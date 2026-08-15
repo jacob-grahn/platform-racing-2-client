@@ -110,6 +110,7 @@ class LocalCharacterEmitTest {
 		LobbySocket.resetSent();
 		character.setControllerPosition(70, 100);
 		character.setNetworkRotation(90);
+		character.commitNetworkCourseRotation(90);
 		character.beginSparklesNetwork();
 		character.endSparklesNetwork();
 		character.beginJetNetwork();
@@ -130,6 +131,7 @@ class LocalCharacterEmitTest {
 		character.beginRemove();
 		assertCommands([
 			"set_var`rotMod`90",
+			"set_var`rot`-90",
 			"set_var`sparkle`1",
 			"set_var`sparkle`0",
 			"set_var`jet`1",

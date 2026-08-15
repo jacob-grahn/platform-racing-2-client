@@ -477,21 +477,6 @@ class Character extends Sprite {
 		y = py;
 	}
 
-	/** Faithful port of `Character.rotate` (rotates the local position vector). */
-	public function rotate(direction:String):Void {
-		var nx:Float;
-		var ny:Float;
-		if (direction == "right") {
-			nx = -y;
-			ny = x;
-		} else {
-			nx = y;
-			ny = -x;
-		}
-		x = nx;
-		y = ny;
-	}
-
 	/**
 		Recompute `seg1`/`seg2`, the two grid segments the character occupies under
 		the current map `rotation`. Faithful port of `Character.updateSegs`.

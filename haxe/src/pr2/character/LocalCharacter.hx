@@ -285,6 +285,8 @@ class LocalCharacter extends Character {
 
 	override public function remove():Void {
 		stopExactPositionResyncTimer();
+		controller.onCourseRotationCommitted = null;
+		controller.onRotationTweenFrame = null;
 		super.remove();
 	}
 
@@ -293,11 +295,8 @@ class LocalCharacter extends Character {
 		LobbySocket.write("set_var`rotMod`" + this.rotation);
 	}
 
-	override public function rotate(direction:String):Void {
-		super.rotate(direction);
-		// Safe-coordinate rotation is owned by the delegated controller during
-		// live physics; keep the network side-effect here for the multiplayer port.
-		LobbySocket.write("set_var`rot`" + -controller.courseRotation);
+	public function commitNetworkCourseRotation(courseRotation:Int):Void {
+		LobbySocket.write("set_var`rot`" + -courseRotation);
 		exactPosNextUpdate = true;
 	}
 
