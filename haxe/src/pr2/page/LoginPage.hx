@@ -84,6 +84,7 @@ class LoginPage extends Page {
 	private var loginGate:Null<LoginSessionGate>;
 	private var loginServer:Null<ServerInfo>;
 	private var loginRemember:Bool = false;
+	private var loginServerMessage:String = "";
 	private var loginToken:String = "";
 	private var serverRefreshTimer:Null<Timer>;
 	private var reloadCooldownTimer:Null<Timer>;
@@ -684,6 +685,7 @@ class LoginPage extends Page {
 			return;
 		}
 		closeSocketProbe();
+		loginServerMessage = "";
 		popup.setMessage('Connecting to ${server.label()}...');
 		socketProbe = new LoginSocketProbe(server, function(status:LoginProbeStatus):Void {
 			switch (status) {
@@ -694,15 +696,20 @@ class LoginPage extends Page {
 				case LoginSuccessful(group, socketUserName):
 					if (loginGate != null) loginGate.acceptSocket(group, socketUserName == "" ? userName : socketUserName);
 				case ServerMessageReceived(message):
-					// Flash displays CommandHandler's exact server message before the
-					// duplicate-login socket closes. Closing the probe here also prevents
-					// the later close event from replacing it with a generic disconnect.
-					failLogin(message == "" ? "Login failed." : message);
-				case LoginFailed(message), ConnectionClosed(message):
+					receiveLoginServerMessage(message);
+				case LoginFailed(message):
 					failLogin(message);
+				case ConnectionClosed(message):
+					failLogin(loginServerMessage == "" ? message : loginServerMessage);
 			}
 		});
 		socketProbe.connect();
+	}
+
+	private function receiveLoginServerMessage(message:String):Void {
+		if (message == "") return;
+		loginServerMessage = message;
+		new MessagePopup(message);
 	}
 
 	private function enterLobby(session:LoginSessionResult):Void {
@@ -717,6 +724,7 @@ class LoginPage extends Page {
 		var server = loginServer;
 		LoginSessionInstaller.install(session, server, loginRemember);
 		loginToken = "";
+		loginServerMessage = "";
 		if (pageHolder != null) {
 			pageHolder.changePage(new LobbyPage(session.userName, server));
 		}
@@ -725,6 +733,7 @@ class LoginPage extends Page {
 	private function failLogin(message:String):Void {
 		loginGate = null;
 		loginServer = null;
+		loginServerMessage = "";
 		closeSocketProbe();
 		pr2.lobby.LobbySession.clear();
 		Settings.clear();

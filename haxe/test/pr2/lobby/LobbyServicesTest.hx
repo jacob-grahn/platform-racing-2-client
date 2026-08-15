@@ -138,6 +138,7 @@ class LobbyServicesTest {
 		ServerStatusClient.fetchFactory = loginPageWarmupFetchFactory;
 		pr2.DeterministicTestMode.runTest("LobbyServicesTest.testCheckServersComboPrompts", testCheckServersComboPrompts);
 		pr2.DeterministicTestMode.runTest("LobbyServicesTest.testCheckServersGuildSelectionRules", testCheckServersGuildSelectionRules);
+		pr2.DeterministicTestMode.runTest("LobbyServicesTest.testLoginServerMessageDoesNotAbortHandshake", testLoginServerMessageDoesNotAbortHandshake);
 		pr2.DeterministicTestMode.runTest("LobbyServicesTest.testLoggingInPayloadAndResetTokenFlow", testLoggingInPayloadAndResetTokenFlow);
 		pr2.DeterministicTestMode.runTest("LobbyServicesTest.testLoginMessagesUseMessagePopup", testLoginMessagesUseMessagePopup);
 		pr2.DeterministicTestMode.runTest("LobbyServicesTest.testLoginPageAppliesPostLoginState", testLoginPageAppliesPostLoginState);
@@ -2138,6 +2139,18 @@ class LobbyServicesTest {
 		page.remove();
 		LobbySession.clear();
 		ServerStatusClient.fetchFactory = previousFetchFactory;
+	}
+
+	private static function testLoginServerMessageDoesNotAbortHandshake():Void {
+		var page = new LoginPage();
+		var gate = new pr2.net.LoginSessionGate(function(_):Void {});
+		Reflect.setField(page, "loginGate", gate);
+		Reflect.callMethod(page, Reflect.field(page, "receiveLoginServerMessage"), ["Welcome, guest!"]);
+		assertEquals(gate, Reflect.field(page, "loginGate"), "informational login message keeps handshake gate alive");
+		assertEquals("Welcome, guest!", Reflect.field(page, "loginServerMessage"), "login message is retained for a later disconnect");
+		var open = Popup.getOpen();
+		assertNotNull(lastMessagePopup(), "informational login message opens the shared message popup");
+		open[open.length - 1].remove();
 	}
 
 	private static function testLoggingInPayloadAndResetTokenFlow():Void {

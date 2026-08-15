@@ -186,12 +186,6 @@ available from their source threads.
 - [x] [Teleport blocks teleport rotated players to random position](https://jiggmin2.com/forums/showthread.php?tid=5424):
   Teleport Blocks send rotated players to apparently random positions while
   unrotated players work normally.
-- [x] [Hitting a finish block while testing in LE crashes](https://jiggmin2.com/forums/showthread.php?tid=5422):
-  touching a Finish Block during a Level Editor test plays the finish sound and
-  then crashes the client.
-- [x] [Alternate Movement Controls don't work in Level Editor](https://jiggmin2.com/forums/showthread.php?tid=5421):
-  edit mode accepts only arrow keys; configured alternate movement keys such as
-  WASD do nothing.
 - [x] [Campaign Tab Bug](https://jiggmin2.com/forums/showthread.php?tid=5420):
   reloading the in-game Campaign tab resets it to the server's daily campaign
   instead of preserving the user's most recent campaign selection.
@@ -220,19 +214,3 @@ available from their source threads.
   Evidence: [brick contact](docs/bug-reports/html-pr2/tid-5375-01.png),
   [invisible brick](docs/bug-reports/html-pr2/tid-5375-02.png), and
   [removed Mine position](docs/bug-reports/html-pr2/tid-5375-03.png).
-- [!] [Stamps not aligned properly](https://jiggmin2.com/forums/showthread.php?tid=5413):
-  stamps and art layers 00, 2, and 3 are offset relative to Blocks and lines.
-  Evidence: [stamp](docs/bug-reports/html-pr2/tid-5413-01.png),
-  [layer example 1](docs/bug-reports/html-pr2/tid-5413-02.png), and
-  [layer example 2](docs/bug-reports/html-pr2/tid-5413-03.png).
-- [!] [A couple of Level Editor problems](https://jiggmin2.com/forums/showthread.php?tid=5412):
-  fix the reported editor parity gaps: initial camera/Block positions and Start
-  numbers, hover icons, option-popup positions, Custom Stats/sliders, Text
-  bounding-box resizing, cross-layer selection, dragging placement, and hard-to-
-  click selection controls.
-  Evidence: [1](docs/bug-reports/html-pr2/tid-5412-01.png),
-  [2](docs/bug-reports/html-pr2/tid-5412-02.png),
-  [3](docs/bug-reports/html-pr2/tid-5412-03.png),
-  [4](docs/bug-reports/html-pr2/tid-5412-04.png),
-  [5](docs/bug-reports/html-pr2/tid-5412-05.png), and
-  [6](docs/bug-reports/html-pr2/tid-5412-06.png).
