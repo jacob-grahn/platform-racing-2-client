@@ -48,6 +48,7 @@ class RemoteCharacter extends Character {
 	private var presentationLayer:CharacterPresentationLayer = CharacterPresentationLayer.Front;
 	private var presentationDiscontinuityPending:Bool = true;
 	private var externalPresentationSnapPending:Bool = false;
+	private var mapRotationSource:Null<Void->Float> = null;
 
 	public function new(tempId:Int, ?dot:MiniMapDot, userName:String = "", hatId:Int = 1, headId:Int = 1, bodyId:Int = 1, feetId:Int = 1,
 			groupStr:String = "0", ?handler:CommandHandler) {
@@ -67,6 +68,16 @@ class RemoteCharacter extends Character {
 
 	public function stepFrame():Void {
 		stepSimulationFrame(null);
+	}
+
+	/**
+		Flash reads `map.rotation` on every remote-character frame. Live courses bind
+		that value here so players remain in the same world position when the viewer
+		and sender have committed different rotate-block orientations.
+	**/
+	public function bindMapRotation(source:Void->Float):Void {
+		mapRotationSource = source;
+		mapRotation = source();
 	}
 
 	public function pos(args:Array<String>):Void {
@@ -152,6 +163,7 @@ class RemoteCharacter extends Character {
 		removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 		unregisterCommands();
 		commandHandler = null;
+		mapRotationSource = null;
 		updateQueue = [];
 		presentationPose.clear();
 		if (mapDot != null) {
@@ -236,6 +248,9 @@ class RemoteCharacter extends Character {
 	}
 
 	private function go(_:Event, advanceAnimation:Bool):Void {
+		if (mapRotationSource != null) {
+			mapRotation = mapRotationSource();
+		}
 		if (updateQueue.length > 0) {
 			catchupRate -= 0.01;
 			var i = 0;

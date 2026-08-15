@@ -144,6 +144,7 @@ class CourseRosterController {
 		}
 		var remote = new RemoteCharacter(init.tempId, dot, init.userName, Std.int(init.hatId), Std.int(init.headId), Std.int(init.bodyId),
 			Std.int(init.feetId), init.group, owner.commandHandler);
+		remote.bindMapRotation(function():Float return owner.localCharacter == null ? 0 : owner.localCharacter.controller.courseRotation);
 		remote.setHatsAllowed(owner.config.gameMode != Modes.roguelike);
 		remote.setColors(Std.int(init.hatColor), Std.int(init.hatColor2), Std.int(init.headColor), Std.int(init.headColor2),
 			Std.int(init.bodyColor), Std.int(init.bodyColor2), Std.int(init.feetColor), Std.int(init.feetColor2));

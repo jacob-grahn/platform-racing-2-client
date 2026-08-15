@@ -21,6 +21,7 @@ class RemoteCharacterConsumeTest {
 		if (pr2.DeterministicTestMode.finishSmokeSuite("RemoteCharacterConsumeTest")) return;
 		pr2.DeterministicTestMode.runTest("RemoteCharacterConsumeTest.testConsumesPositionVarsAndExactPosition", testConsumesPositionVarsAndExactPosition);
 		pr2.DeterministicTestMode.runTest("RemoteCharacterConsumeTest.testCatchupClampAndBlockTouches", testCatchupClampAndBlockTouches);
+		pr2.DeterministicTestMode.runTest("RemoteCharacterConsumeTest.testDifferentViewerAndSenderRotations", testDifferentViewerAndSenderRotations);
 		pr2.DeterministicTestMode.runTest("RemoteCharacterConsumeTest.testRemoteBlockTouchesActivateRealMapEffects", testRemoteBlockTouchesActivateRealMapEffects);
 		pr2.DeterministicTestMode.runTest("RemoteCharacterConsumeTest.testRemoteAnimationAdvancesEachStageFrame", testRemoteAnimationAdvancesEachStageFrame);
 		pr2.DeterministicTestMode.runTest("RemoteCharacterConsumeTest.testRemoteQueueConsumesOnlySimulationFrames", testRemoteQueueConsumesOnlySimulationFrames);
@@ -202,6 +203,27 @@ class RemoteCharacterConsumeTest {
 		assertClose(30, remote.posX, "empty first delta x leaves position unchanged");
 		assertClose(60, remote.posY, "empty first delta y leaves position unchanged");
 		assertTrue(remote.catchupRate < 10, "consuming an update lowers catchup");
+	}
+
+	private static function testDifferentViewerAndSenderRotations():Void {
+		var viewerRotation = 90.0;
+		var remote = new RemoteCharacter(13, null, "Rotated", 1, 1, 1, 1, "0", new CommandHandler());
+		remote.bindMapRotation(function():Float return viewerRotation);
+		remote.setPos(30, 60);
+		remote.setVar(["rot", "-90"]);
+		remote.stepFrame();
+
+		remote.pos(["0", "0"]);
+		remote.stepFrame();
+		assertClose(30, remote.x, "equal viewer and sender course rotations preserve world x");
+		assertClose(60, remote.y, "equal viewer and sender course rotations preserve world y");
+		assertClose(0, remote.rotation, "equal viewer and sender course rotations keep the remote upright");
+
+		viewerRotation = 180;
+		remote.stepFrame();
+		assertClose(-60, remote.x, "viewer rotation changes are read on every remote frame");
+		assertClose(30, remote.y, "receiver applies Flash's viewer-plus-sender rotation transform");
+		remote.remove();
 	}
 
 	private static function testHeartStingAndHatCommands():Void {
