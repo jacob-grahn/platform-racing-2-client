@@ -17,6 +17,7 @@ class CharacterViewTest {
 		pr2.DeterministicTestMode.runTest("CharacterViewTest.testStandardHatStack", testStandardHatStack);
 		pr2.DeterministicTestMode.runTest("CharacterViewTest.testFredBodyHierarchy", testFredBodyHierarchy);
 		pr2.DeterministicTestMode.runTest("CharacterViewTest.testStableEffectTargetsAndJetState", testStableEffectTargetsAndJetState);
+		pr2.DeterministicTestMode.runTest("CharacterViewTest.testLaserUseAnimationStopsAfterOnePass", testLaserUseAnimationStopsAfterOnePass);
 		pr2.DeterministicTestMode.runTest("CharacterViewTest.testDeterministicStandingLoop", testDeterministicStandingLoop);
 		pr2.DeterministicTestMode.runTest("CharacterViewTest.testAllStateTimingAndEndBehavior", testAllStateTimingAndEndBehavior);
 		pr2.DeterministicTestMode.runTest("CharacterViewTest.testSuperJumpChargeGlow", testSuperJumpChargeGlow);
@@ -51,7 +52,9 @@ class CharacterViewTest {
 		assertEquals(4, rig.fred.hatAttachments.length, "rig records Fred's body-mounted hat slots");
 		assertEquals(9, rig.items.length, "rig includes every authored held-item choice");
 		assertEquals(16, CharacterRig.item(rig, "Laser").frames.length, "rig includes every gun recoil frame");
+		assertEquals("hold", CharacterRig.item(rig, "Laser").actionEndBehavior, "laser recoil stops after one pass");
 		assertEquals(14, CharacterRig.item(rig, "Sword").frames.length, "rig includes every sword swing frame");
+		assertEquals("hold", CharacterRig.item(rig, "Sword").actionEndBehavior, "sword swing stops after one pass");
 		assertEquals(2, CharacterRig.item(rig, "Jet Pack").frames.length, "rig includes jet-off and jet-on art");
 		for (attachment in rig.hatAttachments) assertEquals(4, attachment.slots.length, 'head ${attachment.headId} has four authored hat slots');
 		assertEquals(9, rig.animations.length, "rig includes every CharacterGraphic state");
@@ -96,6 +99,18 @@ class CharacterViewTest {
 		assertClose(0.875, jetArtwork.getChildByName("fire2").alpha, "jet fire-two flicker updates the rendered thrust alpha");
 		view.setJetActive(false);
 		assertEquals(1, view.itemActionFrame, "jet-off restores the generated XFL off frame");
+	}
+
+	private static function testLaserUseAnimationStopsAfterOnePass():Void {
+		var view = new CharacterView();
+		view.setItemFrameName("Laser");
+		assertEquals(true, view.playItemUseAnimation("Laser"), "laser starts its authored recoil");
+		@:privateAccess view.itemActionFrame = 16;
+		view.advanceOneFrame();
+		assertEquals(16, view.itemActionFrame, "laser recoil finishes on its authored idle frame");
+		assertEquals(false, view.itemActionPlaying, "laser recoil stops after one pass");
+		view.advanceOneFrame();
+		assertEquals(16, view.itemActionFrame, "stopped laser recoil does not loop back to its start");
 	}
 
 	private static function testFredBodyHierarchy():Void {

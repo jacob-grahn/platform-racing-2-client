@@ -521,7 +521,10 @@ class LocalCharacter extends Character {
 		y = state.y;
 		velX = state.vx;
 		velY = state.vy;
-		setItem(state.itemId == null ? 0 : state.itemId);
+		var nextItem = state.itemId == null ? 0 : state.itemId;
+		if (item != nextItem) {
+			setItem(nextItem);
+		}
 		changeState(state.animation);
 		display.scaleX = controller.facingScaleX;
 		display.scaleY = 1;

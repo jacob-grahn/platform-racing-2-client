@@ -3985,7 +3985,7 @@
         "assets/svg/character/item/laser/frame_016.svg"
       ],
       "actionStartFrame": 2,
-      "actionEndBehavior": "loop"
+      "actionEndBehavior": "hold"
     },
     {
       "name": "Mine",
@@ -4118,7 +4118,7 @@
         "assets/svg/character/item/sword/frame_014.svg"
       ],
       "actionStartFrame": 2,
-      "actionEndBehavior": "loop"
+      "actionEndBehavior": "hold"
     },
     {
       "name": "Ice Wave",

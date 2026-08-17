@@ -19,6 +19,7 @@ class LocalCharacterTest {
 	public static function main():Void {
 		pr2.DeterministicTestMode.runTest("LocalCharacterTest.testDelegatesPhysicsAndMirrorsCharacterState", testDelegatesPhysicsAndMirrorsCharacterState);
 		if (pr2.DeterministicTestMode.finishSmokeSuite("LocalCharacterTest")) return;
+		pr2.DeterministicTestMode.runTest("LocalCharacterTest.testUnchangedHeldItemDoesNotResetUseAnimation", testUnchangedHeldItemDoesNotResetUseAnimation);
 		pr2.DeterministicTestMode.runTest("LocalCharacterTest.testCowboyHatBoostsStatsAndForcesAirborneWaterModeUntilRemoved", testCowboyHatBoostsStatsAndForcesAirborneWaterModeUntilRemoved);
 		pr2.DeterministicTestMode.runTest("LocalCharacterTest.testCowboyHatFlightDoesNotRepeatWaterExitBoost", testCowboyHatFlightDoesNotRepeatWaterExitBoost);
 		pr2.DeterministicTestMode.runTest("LocalCharacterTest.testTopHatPassesThroughVanishBlocks", testTopHatPassesThroughVanishBlocks);
@@ -57,6 +58,29 @@ class LocalCharacterTest {
 		controller.step(new LocalPlayerInput());
 		character.step(new LocalPlayerInput());
 		assertSameState(controller, character, "runtime gravity sync");
+	}
+
+	private static function testUnchangedHeldItemDoesNotResetUseAnimation():Void {
+		var character = new LocalCharacter(heldSwordLevel());
+		for (_ in 0...40) {
+			character.step(new LocalPlayerInput(false, false, true));
+			if (character.stateSnapshot().itemId == 8) break;
+		}
+		assertEquals(8, character.stateSnapshot().itemId, "sword is collected for the presentation regression");
+		assertEquals(true, character.playItemUseAnimation("Sword"), "held sword starts its authored swing");
+		character.display.advanceOneFrame();
+		var swingFrame = character.display.itemActionFrame;
+
+		character.step(new LocalPlayerInput());
+
+		assertEquals(swingFrame, character.display.itemActionFrame, "unchanged controller sync preserves the sword swing frame");
+		assertEquals(true, character.display.itemActionPlaying, "unchanged controller sync keeps the sword swing playing");
+		@:privateAccess character.display.itemActionFrame = 14;
+		character.display.advanceOneFrame();
+		assertEquals(14, character.display.itemActionFrame, "sword swing finishes on its authored idle frame");
+		assertEquals(false, character.display.itemActionPlaying, "sword swing stops after one pass");
+		character.display.advanceOneFrame();
+		assertEquals(14, character.display.itemActionFrame, "stopped sword swing does not loop back to its start");
 	}
 
 	private static function testCowboyHatBoostsStatsAndForcesAirborneWaterModeUntilRemoved():Void {
@@ -212,6 +236,26 @@ class LocalCharacterTest {
 				new LevelBlock(2, 4, BlockType.Basic),
 				new LevelBlock(3, 4, BlockType.Basic),
 				new LevelBlock(4, 4, BlockType.Basic)
+			]
+		);
+	}
+
+	private static function heldSwordLevel():Level {
+		return new Level(
+			"local-character-held-sword",
+			"Local Character Held Sword",
+			8,
+			8,
+			30,
+			1,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(2, 5),
+			new TilePosition(7, 6),
+			[
+				new LevelBlock(2, 3, BlockType.Item, "8"),
+				new LevelBlock(2, 6, BlockType.Solid),
+				new LevelBlock(3, 6, BlockType.Solid),
+				new LevelBlock(4, 6, BlockType.Solid)
 			]
 		);
 	}
