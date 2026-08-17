@@ -452,7 +452,7 @@ class Course extends Sprite {
 	}
 
 	private function buildRaceChat():Void {
-		raceChat = new RaceChat(handleRaceChatLine);
+		raceChat = new RaceChat(handleRaceChatLine, commandHandler);
 		raceChat.x = CHAT_X;
 		raceChat.y = CHAT_Y;
 		addChild(raceChat);

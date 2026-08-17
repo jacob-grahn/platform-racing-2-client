@@ -13,10 +13,12 @@ import pr2.assets.NativeAssets;
 import openfl.ui.Keyboard;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyPopups;
+import pr2.lobby.account.Settings;
 import pr2.lobby.chat.ArtifactHintClient;
 import pr2.lobby.chat.ChatLog;
 import pr2.lobby.chat.ChatText;
 import pr2.lobby.chat.HtmlNameMaker;
+import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
 
 /**
@@ -35,14 +37,18 @@ class RaceChat extends Sprite {
 	private var messages:Int = 0;
 	private var htmlNameMaker:HtmlNameMaker = new HtmlNameMaker();
 	private var sendHandler:Null<String->Bool>;
+	private final commandHandler:CommandHandler;
 	private var stageListenersActive:Bool = false;
 	private var ownerStage:Null<Stage>;
 	private var artifactHintGeneration:Int = 0;
 	private var removed:Bool = false;
 
-	public function new(?sendHandler:String->Bool) {
+	public function new(?sendHandler:String->Bool, ?commandHandler:CommandHandler) {
 		super();
 		this.sendHandler = sendHandler;
+		this.commandHandler = commandHandler != null ? commandHandler : CommandHandler.commandHandler;
+		this.commandHandler.defineCommand("systemChat", handleSystemChatCommand);
+		this.commandHandler.defineCommand("chat", handleChatCommand);
 		art = new RaceChatView();
 		addChild(art);
 
@@ -153,6 +159,8 @@ class RaceChat extends Sprite {
 
 	public function remove():Void {
 		removed = true;
+		commandHandler.defineCommand("systemChat", null);
+		commandHandler.defineCommand("chat", null);
 		artifactHintGeneration++;
 		removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		removeEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
@@ -240,6 +248,20 @@ class RaceChat extends Sprite {
 				loadArtifactHint();
 			case Ignore:
 		}
+	}
+
+	private function handleSystemChatCommand(args:Array<String>):Void {
+		receiveSystemMessage(args.length > 0 ? args[0] : "");
+	}
+
+	private function handleChatCommand(args:Array<String>):Void {
+		receiveChatMessage(
+			args.length > 0 ? args[0] : "",
+			args.length > 1 ? args[1] : "",
+			args.length > 2 ? args[2] : "",
+			false,
+			Settings.getValue(Settings.FILTER_SWEARS, true)
+		);
 	}
 
 	private function loadArtifactHint():Void {

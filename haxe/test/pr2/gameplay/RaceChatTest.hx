@@ -2,6 +2,8 @@ package pr2.gameplay;
 
 import openfl.text.TextField;
 import openfl.text.TextFieldType;
+import pr2.lobby.account.Settings;
+import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
 import pr2.page.CampaignTestScreen;
 
@@ -12,6 +14,7 @@ class RaceChatTest {
 		pr2.DeterministicTestMode.runTest("RaceChatTest.testAuthoredInputAndSubmitCallback", testAuthoredInputAndSubmitCallback);
 		if (pr2.DeterministicTestMode.finishSmokeSuite("RaceChatTest")) return;
 		pr2.DeterministicTestMode.runTest("RaceChatTest.testIncomingChatFormatting", testIncomingChatFormatting);
+		pr2.DeterministicTestMode.runTest("RaceChatTest.testIncomingCommandsRender", testIncomingCommandsRender);
 		pr2.DeterministicTestMode.runTest("RaceChatTest.testMessageWindow", testMessageWindow);
 		pr2.DeterministicTestMode.runTest("RaceChatTest.testPopupTextAreaEnterGuard", testPopupTextAreaEnterGuard);
 		trace('RaceChatTest passed $assertions assertions');
@@ -95,6 +98,23 @@ class RaceChatTest {
 		assertEquals(scroll[1], scroll[0], "top transcript remains locked to its bottom line");
 		assertEquals(scroll[3], scroll[2], "shadow transcript remains locked to its bottom line");
 		chat.remove();
+	}
+
+	private static function testIncomingCommandsRender():Void {
+		var commands = new CommandHandler();
+		Settings.setValue(Settings.FILTER_SWEARS, false);
+		var chat = new RaceChat(null, commands);
+		assertEquals(true, commands.dispatch("chat", ["LivePlayer", "0", "hello from server"]),
+			"race chat registers the incoming chat command");
+		assertEquals(true, chat.outputHtml().indexOf("LivePlayer") >= 0, "incoming command renders the player name");
+		assertEquals(true, chat.outputHtml().indexOf("hello from server") >= 0, "incoming command renders the message body");
+		assertEquals(true, commands.dispatch("systemChat", ["Race announcement"]),
+			"race chat registers the incoming system command");
+		assertEquals(true, chat.outputHtml().indexOf("Race announcement") >= 0, "incoming system command renders its message");
+		chat.remove();
+		assertEquals(false, commands.hasCommand("chat"), "removing race chat unregisters the chat command");
+		assertEquals(false, commands.hasCommand("systemChat"), "removing race chat unregisters the system command");
+		Settings.setValue(Settings.FILTER_SWEARS, true);
 	}
 
 	private static function testPopupTextAreaEnterGuard():Void {
