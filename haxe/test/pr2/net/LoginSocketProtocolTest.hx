@@ -1,6 +1,9 @@
 package pr2.net;
 
+import pr2.lobby.SecureData;
 import pr2.net.LoginSocketProtocol.LoginSocketMessage;
+import pr2.page.LoginSocketProbe;
+import pr2.page.LoginSocketProbe.LoginProbeStatus;
 
 class LoginSocketProtocolTest {
 	private static var assertions = 0;
@@ -12,6 +15,7 @@ class LoginSocketProtocolTest {
 		pr2.DeterministicTestMode.runTest("LoginSocketProtocolTest.testSkipsSendNumberTwelve", testSkipsSendNumberTwelve);
 		pr2.DeterministicTestMode.runTest("LoginSocketProtocolTest.testParsesBufferedLoginId", testParsesBufferedLoginId);
 		pr2.DeterministicTestMode.runTest("LoginSocketProtocolTest.testParsesLoginResponses", testParsesLoginResponses);
+		pr2.DeterministicTestMode.runTest("LoginSocketProtocolTest.testRoutesCommandsDuringLogin", testRoutesCommandsDuringLogin);
 		trace('LoginSocketProtocolTest passed $assertions assertions');
 	}
 
@@ -50,6 +54,42 @@ class LoginSocketProtocolTest {
 			LoginSocketProtocol.parseFrame("abc`2`message`Your account was already running on this server. It has been logged out to save your data. Please log in again."),
 			"duplicate-login warning keeps the exact Flash server message");
 		assertEquals(null, LoginSocketProtocol.parseFrame("too-short"), "short frame ignored");
+	}
+
+	private static function testRoutesCommandsDuringLogin():Void {
+		SecureData.clear();
+		SecureData.setNumber("userRank", -1);
+		var handler = new CommandHandler();
+		var statuses:Array<LoginProbeStatus> = [];
+		var server = new ServerInfo("localhost", 0, 2, "Test", "open", 0, 0, false);
+		var probe = new LoginSocketProbe(server, statuses.push);
+		probe.connect();
+
+		assertEquals(true, handler.handleServerFrame(CommandHandler.buildServerFrame(1, "setLoginID", ["90210"], 2)), "login id uses global handler");
+		assertEquals(true, handler.handleServerFrame(CommandHandler.buildServerFrame(2, "setRank", ["4"], 2)), "setRank handled before lobby entry");
+		assertEquals(4.0, SecureData.getNumber("userRank"), "login-phase setRank replaces unknown rank");
+		assertEquals(true, handler.handleServerFrame(CommandHandler.buildServerFrame(3, "loginSuccessful", ["1", "Player"], 2)), "login success uses global handler");
+		assertLoginIdStatus("90210", statuses[1], "probe receives login id");
+		assertLoginSuccessfulStatus(1, "Player", statuses[2], "probe receives login success");
+		probe.release();
+	}
+
+	private static function assertLoginIdStatus(expected:String, actual:LoginProbeStatus, message:String):Void {
+		assertions++;
+		switch (actual) {
+			case LoginId(value) if (value == expected):
+			case _:
+				throw '$message: expected LoginId($expected), got $actual';
+		}
+	}
+
+	private static function assertLoginSuccessfulStatus(expectedGroup:Int, expectedName:String, actual:LoginProbeStatus, message:String):Void {
+		assertions++;
+		switch (actual) {
+			case LoginSuccessful(group, name) if (group == expectedGroup && name == expectedName):
+			case _:
+				throw '$message: expected LoginSuccessful($expectedGroup, $expectedName), got $actual';
+		}
 	}
 
 	private static function assertLoginId(expected:String, actual:LoginSocketMessage, message:String):Void {

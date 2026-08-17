@@ -84,7 +84,6 @@ class LobbySocketLifecycleTest {
 	private static function resetSocket():Void {
 		closeAll();
 		LobbySocket.onOpen = null;
-		LobbySocket.onFrame = null;
 		LobbySocket.onConnectionClose = null;
 		LobbySocket.onConnectionError = null;
 		LobbySocket.resetSent();

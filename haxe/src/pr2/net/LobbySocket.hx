@@ -19,10 +19,9 @@ import pr2.page.PageHolder;
 	session — the login handshake and every lobby/gameplay command share it. There
 	is no per-page socket and no handing a connection from one owner to another.
 
-	Incoming frames (END_CHAR terminated) are routed to `CommandHandler` by
-	default. The login phase sets `onFrame` to intercept frames while it runs the
-	`request_login_id` / `loginSuccessful` handshake, then clears it so the lobby
-	resumes the normal `CommandHandler` routing on the very same connection.
+	Incoming frames (END_CHAR terminated) are always routed to `CommandHandler`,
+	including during login. LoginSocketProbe temporarily registers handlers for
+	the handshake commands, matching Flash's single global command dispatcher.
 
 	With no transport attached — headless tests and the OpenFL harness — writes are
 	simply recorded into `sentCommands`, which lets parity tests assert exactly
@@ -35,9 +34,6 @@ class LobbySocket {
 	public static var closeCount:Int = 0;
 	public static var campaignPage:Int = 0;
 	public static var nowMs:Void->Float = defaultNowMs;
-
-	/** Login-phase frame interceptor; when null, frames go to `CommandHandler`. */
-	public static var onFrame:Null<String->Void>;
 
 	/** Connection lifecycle hooks for the login UI; the lobby ignores these. */
 	public static var onOpen:Null<Void->Void>;
@@ -60,6 +56,7 @@ class LobbySocket {
 	public static function connect(server:ServerInfo, secure:Bool = false):Void {
 		#if js
 		close();
+		CommandHandler.commandHandler.serverId = server.serverId;
 		protocol = new LoginSocketProtocol(server.serverId);
 		buffer = "";
 		socket = new WebSocket(server.websocketUrl(secure));
@@ -72,12 +69,7 @@ class LobbySocket {
 		};
 		socket.onmessage = function(event):Void {
 			for (frame in splitFrames(Std.string(event.data))) {
-				var handler = onFrame;
-				if (handler != null) {
-					handler(frame);
-				} else {
-					CommandHandler.commandHandler.handleServerFrame(frame);
-				}
+				CommandHandler.commandHandler.handleServerFrame(frame);
 			}
 		};
 		socket.onerror = function(_):Void {
@@ -202,7 +194,6 @@ class LobbySocket {
 
 	public static function remove():Void {
 		onOpen = null;
-		onFrame = null;
 		onConnectionError = null;
 		onConnectionClose = null;
 		close();
