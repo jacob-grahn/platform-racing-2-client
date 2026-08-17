@@ -559,7 +559,10 @@ class EggRound {
 					visual.hitPlayer = true;
 					onIcePlayerHit(visual.shooterId);
 				}
-				var block = PhysicsEffect.blockFromPos(level, Std.int(visual.posX), Std.int(visual.posY), courseRotation);
+				// `posX`/`posY` stay in the sender's gravity frame. Flash first
+				// reprojects the shot into the receiver's display frame, then asks the
+				// receiver's rotated block map for the tile at that point.
+				var block = PhysicsEffect.blockFromPos(level, Std.int(visual.display.x), Std.int(visual.display.y), courseRotation);
 				if (block != null && block.code != ObjectCodes.BLOCK_ICE) {
 					onIceBlockHit(block);
 					if (activeIceCount < 10 && visual.life > 10) {
@@ -574,7 +577,7 @@ class EggRound {
 				}
 			} else if (visual.effectType == "Laser" && !visual.hitBlock) {
 				var laserHit = false;
-				var block = PhysicsEffect.blockFromPos(level, Std.int(visual.posX), Std.int(visual.posY), courseRotation);
+				var block = PhysicsEffect.blockFromPos(level, Std.int(visual.display.x), Std.int(visual.display.y), courseRotation);
 				if (block != null && PhysicsEffect.isActiveBlock(block)) {
 					onAttackBlockHit(visual.shooterId, block, visual.velX);
 					laserHit = true;

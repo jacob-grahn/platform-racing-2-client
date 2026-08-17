@@ -1340,7 +1340,8 @@ class Course extends Sprite {
 				var worldY = Std.int(weaponPosition.y);
 				var direction = parts.length > 1 ? parts[1] : "right";
 				var payload = 'Slash`$worldX`$worldY`$direction`' + localCharacter.tempID;
-				mountSlashEffect(worldX, worldY, direction, localCharacter.tempID);
+				mountSlashEffect(worldX, worldY, direction, localCharacter.tempID,
+					levelRenderer == null ? 0 : levelRenderer.courseRotationDegrees);
 				LobbySocket.write('add_effect`$payload');
 			case "ice_wave":
 				var direction = parts.length > 1 ? parts[1] : "right";
@@ -1408,10 +1409,16 @@ class Course extends Sprite {
 		LobbySocket.write('add_effect`Teleport`$worldX`$worldY');
 	}
 
-	public function mountSlashEffect(worldX:Int, worldY:Int, direction:String, shooterID:Int):Slash {
+	public function mountSlashEffect(worldX:Int, worldY:Int, direction:String, shooterID:Int, ?senderRotation:Int):Slash {
+		var receiverRotation = levelRenderer == null ? 0 : levelRenderer.courseRotationDegrees;
+		if (senderRotation == null) {
+			var remote = getRemoteCharacter(shooterID);
+			senderRotation = remote == null ? receiverRotation : -remote.remoteRotation;
+		}
 		var effect = new Slash(worldX, worldY, direction, shooterID, {
 			level: level,
-			courseRotation: levelRenderer == null ? 0 : levelRenderer.courseRotationDegrees,
+			courseRotation: receiverRotation,
+			senderRotation: senderRotation,
 			player: localCharacter == null ? null : {
 				tempId: localCharacter.tempID,
 				x: localCharacter.stateSnapshot().x,

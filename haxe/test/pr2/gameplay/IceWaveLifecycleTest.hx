@@ -17,6 +17,7 @@ class IceWaveLifecycleTest {
 		pr2.DeterministicTestMode.runTest("IceWaveLifecycleTest.testBranchingAndLifetimeInheritance", testBranchingAndLifetimeInheritance);
 		pr2.DeterministicTestMode.runTest("IceWaveLifecycleTest.testBranchBoundsAndActiveGuard", testBranchBoundsAndActiveGuard);
 		pr2.DeterministicTestMode.runTest("IceWaveLifecycleTest.testIceBlocksAndTeardown", testIceBlocksAndTeardown);
+		pr2.DeterministicTestMode.runTest("IceWaveLifecycleTest.testRotatedRemoteWaveHitsCanonicalBlock", testRotatedRemoteWaveHitsCanonicalBlock);
 		trace('IceWaveLifecycleTest passed $assertions assertions');
 	}
 
@@ -94,6 +95,16 @@ class IceWaveLifecycleTest {
 		assertEquals(0, round.activeAttackVisualCount(), "life exhaustion removes the wave from active tracking");
 		assertEquals(null, visual.display.parent, "life exhaustion detaches the authored art");
 		assertEquals(0, layer.numChildren, "IceWave teardown leaves no display children");
+	}
+
+	private static function testRotatedRemoteWaveHitsCanonicalBlock():Void {
+		var layer = new Sprite();
+		var frozen:Array<String> = [];
+		var round = createRound(layer, function(block):Void frozen.push('${block.worldX},${block.worldY}'));
+		round.mountAttackVisual("IceWave`15`0`0`90`7", 0);
+		round.step(Level.fromDecoded(0xffffff, [LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_BASIC1, 0, -60)]), 0);
+		assertEquals("0,-60", frozen[0], "90-degree sender ice wave probes the receiver's canonical block position");
+		round.clear();
 	}
 
 	private static function createRound(layer:Sprite, ?onFreeze:LevelBlock->Void):EggRound {

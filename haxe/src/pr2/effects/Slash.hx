@@ -9,6 +9,8 @@ import pr2.level.Level.LevelBlock;
 typedef SlashContext = {
 	final level:Level;
 	final courseRotation:Int;
+	/** Gravity frame in which the sender serialized the slash coordinates. */
+	@:optional final senderRotation:Int;
 	@:optional final player:SlashPlayer;
 	@:optional final onBlockDamage:LevelBlock->Float->Void;
 	@:optional final playSound:Float->Float->Void;
@@ -45,12 +47,18 @@ class Slash extends Effect {
 			reach = -RIGHT_REACH;
 			scaleX = -1;
 		}
-		hitAt(Std.int(x), Std.int(y - 14));
-		hitAt(Std.int(x), Std.int(y + 14));
-		hitAt(Std.int(x + reach), Std.int(y - 14));
-		hitAt(Std.int(x + reach), Std.int(y + 14));
-		hitAt(Std.int(x + reach * 2), Std.int(y - 14));
-		hitAt(Std.int(x + reach * 2), Std.int(y + 14));
+		var senderRotation = context == null || context.senderRotation == null ? (context == null ? 0 : context.courseRotation) : context.senderRotation;
+		var receiverRotation = context == null ? senderRotation : context.courseRotation;
+		var displayPosition = CoordinateFrames.displayFromGravityValues(startX, startY, senderRotation, receiverRotation);
+		x = displayPosition.x;
+		y = displayPosition.y;
+		rotation = receiverRotation - senderRotation;
+		hitAt(startX, startY - 14);
+		hitAt(startX, startY + 14);
+		hitAt(startX + reach, startY - 14);
+		hitAt(startX + reach, startY + 14);
+		hitAt(startX + reach * 2, startY - 14);
+		hitAt(startX + reach * 2, startY + 14);
 		playSwish(startX, startY);
 	}
 
@@ -58,14 +66,16 @@ class Slash extends Effect {
 		if (context == null) {
 			return;
 		}
-		var rotated = CoordinateFrames.canonicalFromGravityValues(px, py, context.courseRotation);
+		var senderRotation = context.senderRotation == null ? context.courseRotation : context.senderRotation;
+		var rotated = CoordinateFrames.canonicalFromGravityValues(px, py, senderRotation);
 		var block = PhysicsEffect.blockFromPos(context.level, rotated.x, rotated.y, 0);
 		if (block != null && PhysicsEffect.isActiveBlock(block) && context.onBlockDamage != null) {
 			context.onBlockDamage(block, reach);
 		}
 		var player = context.player;
-		if (player != null && player.tempId != shooterID && !player.removed && player.y > py - 14 && player.y < py + 74) {
-			if (player.x > px - 14 && player.x < px + 14) {
+		var displayProbe = CoordinateFrames.displayFromGravityValues(px, py, senderRotation, context.courseRotation);
+		if (player != null && player.tempId != shooterID && !player.removed && player.y > displayProbe.y - 14 && player.y < displayProbe.y + 74) {
+			if (player.x > displayProbe.x - 14 && player.x < displayProbe.x + 14) {
 				player.hit(reach, HIT_VEL_Y);
 			}
 		}

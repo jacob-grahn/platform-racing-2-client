@@ -16,6 +16,7 @@ class SlashTest {
 		pr2.DeterministicTestMode.runTest("SlashTest.testExactBlockPieceFrames", testExactBlockPieceFrames);
 		if (pr2.DeterministicTestMode.finishSmokeSuite("SlashTest")) return;
 		pr2.DeterministicTestMode.runTest("SlashTest.testLeftSlashShooterFilteringAndScale", testLeftSlashShooterFilteringAndScale);
+		pr2.DeterministicTestMode.runTest("SlashTest.testRotatedRemoteSlashUsesSenderFrame", testRotatedRemoteSlashUsesSenderFrame);
 		trace('SlashTest passed $assertions assertions');
 	}
 
@@ -111,6 +112,22 @@ class SlashTest {
 		assertEquals(-1.0, slash.scaleX, "left slash mirrors the authored animation");
 		assertEquals(-29, slash.reach, "left slash reverses reach");
 		assertEquals(0, playerHits, "slash ignores the shooter");
+		slash.remove();
+	}
+
+	private static function testRotatedRemoteSlashUsesSenderFrame():Void {
+		var hits:Array<String> = [];
+		var slash = new Slash(15, 0, "right", 7, {
+			level: Level.fromDecoded(0xffffff, [LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_BASIC1, 0, -60)]),
+			courseRotation: 0,
+			senderRotation: 90,
+			onBlockDamage: function(block, _):Void hits.push('${block.worldX},${block.worldY}'),
+			playSound: function(_, _):Void {}
+		});
+		assertEquals(0.0, slash.x, "remote slash origin is reprojected into the receiver frame");
+		assertEquals(-15.0, slash.y, "remote slash keeps the sender's canonical origin");
+		assertEquals(-90.0, slash.rotation, "remote slash artwork follows the sender-to-receiver rotation");
+		assertEquals("0,-60", hits[0], "remote slash probes blocks in the sender's gravity frame");
 		slash.remove();
 	}
 

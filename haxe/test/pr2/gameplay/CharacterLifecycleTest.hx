@@ -42,6 +42,8 @@ class CharacterLifecycleTest {
 		if (pr2.DeterministicTestMode.finishSmokeSuite("CharacterLifecycleTest")) return;
 		pr2.DeterministicTestMode.runTest("CharacterLifecycleTest.testProjectileUsesSenderAndReceiverRotations",
 			testProjectileUsesSenderAndReceiverRotations);
+		pr2.DeterministicTestMode.runTest("CharacterLifecycleTest.testRotatedRemoteLaserHitsCanonicalBlock",
+			testRotatedRemoteLaserHitsCanonicalBlock);
 		trace('CharacterLifecycleTest passed $assertions assertions');
 	}
 
@@ -95,6 +97,20 @@ class CharacterLifecycleTest {
 		round.step(level);
 		assertEquals(0, round.activeAttackVisualCount(), "laser impact is removed after Flash's 18-frame timeout");
 		assertTrue(laser.parent == null, "removed laser impact leaves the effect layer");
+	}
+
+	private static function testRotatedRemoteLaserHitsCanonicalBlock():Void {
+		var layer = new Sprite();
+		var hitTiles:Array<String> = [];
+		var round = new EggRound(new CommandHandler(), function(_):Void {}, layer, null, null, null, null, null, null, null,
+			function(_, block, _):Void hitTiles.push('${block.worldX},${block.worldY}'));
+		var level = Level.fromDecoded(0xffffff, [LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_BASIC1, 0, -60)]);
+		round.mountAttackVisual("Laser`15`0`right`90`7", 0);
+		round.step(level, 0);
+		assertEquals("0,-60", hitTiles[0], "90-degree sender laser probes the receiver's canonical block position");
+		assertTrue(Std.downcast(layer.getChildAt(0), LaserShotView).currentFrame > 2,
+			"cross-rotation laser enters its impact animation instead of passing through");
+		round.clear();
 	}
 
 	private static function assertEggAttackVisual(seed:Int, expectedType:String, expectedCount:Int, message:String):Void {
