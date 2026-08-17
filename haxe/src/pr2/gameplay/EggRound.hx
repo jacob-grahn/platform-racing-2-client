@@ -87,7 +87,7 @@ class EggRound {
 	private final onIceBlockHit:LevelBlock->Void;
 	private final playLaserHitSound:Int->Int->Void;
 	private final onAttackPlayerHit:Int->Float->Float->Void;
-	private final onAttackBlockHit:Int->LevelBlock->Float->Void;
+	private final onAttackBlockHit:Int->LevelBlock->Float->Int->Void;
 	private final localPlayerId:Void->Int;
 	private final dispatchAttackEffect:Null<String->Void>;
 	private var eggs:Map<Int, EggState> = new Map();
@@ -97,7 +97,7 @@ class EggRound {
 	public function new(commandHandler:CommandHandler, onCollect:Int->Void, ?displayLayer:Sprite, ?cameraOffset:Void->Point,
 			?playCollectSound:Int->Int->Void, ?visualRandom:Void->Float, ?onIcePlayerHit:Int->Void, ?onIceBlockHit:LevelBlock->Void,
 			?playLaserHitSound:Int->Int->Void, ?onAttackPlayerHit:Int->Float->Float->Void,
-			?onAttackBlockHit:Int->LevelBlock->Float->Void, ?localPlayerId:Void->Int, ?dispatchAttackEffect:String->Void) {
+			?onAttackBlockHit:Int->LevelBlock->Float->Int->Void, ?localPlayerId:Void->Int, ?dispatchAttackEffect:String->Void) {
 		this.commandHandler = commandHandler;
 		this.onCollect = onCollect;
 		this.displayLayer = displayLayer;
@@ -108,7 +108,7 @@ class EggRound {
 		this.onIceBlockHit = onIceBlockHit != null ? onIceBlockHit : function(_:LevelBlock):Void {};
 		this.playLaserHitSound = playLaserHitSound != null ? playLaserHitSound : playDefaultLaserHitSound;
 		this.onAttackPlayerHit = onAttackPlayerHit != null ? onAttackPlayerHit : function(_, _, _):Void {};
-		this.onAttackBlockHit = onAttackBlockHit != null ? onAttackBlockHit : function(_, _, _):Void {};
+		this.onAttackBlockHit = onAttackBlockHit != null ? onAttackBlockHit : function(_, _, _, _):Void {};
 		this.localPlayerId = localPlayerId != null ? localPlayerId : function():Int return -0x3fffffff;
 		this.dispatchAttackEffect = dispatchAttackEffect;
 	}
@@ -579,7 +579,7 @@ class EggRound {
 				var laserHit = false;
 				var block = PhysicsEffect.blockFromPos(level, Std.int(visual.display.x), Std.int(visual.display.y), courseRotation);
 				if (block != null && PhysicsEffect.isActiveBlock(block)) {
-					onAttackBlockHit(visual.shooterId, block, visual.velX);
+					onAttackBlockHit(visual.shooterId, block, visual.velX, visual.rot);
 					laserHit = true;
 				}
 				if (!visual.hitPlayer && visual.shooterId != localPlayerId() && playerX != null && playerY != null && !playerRemoved

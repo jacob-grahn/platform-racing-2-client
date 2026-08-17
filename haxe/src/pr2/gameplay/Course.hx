@@ -291,10 +291,8 @@ class Course extends Sprite {
 				if (localCharacter != null && shooterId != localCharacter.tempID && !localCharacter.removed) {
 					localCharacter.receiveHit(impulseX, impulseY);
 				}
-			}, function(shooterId:Int, block:LevelBlock, damageForce:Float):Void {
-				if (localCharacter != null && shooterId == -1) {
-					localCharacter.controller.damageBlockFromEffect(block, damageForce);
-				}
+			}, function(shooterId:Int, block:LevelBlock, damageForce:Float, senderRotation:Int):Void {
+				handleLaserBlockHit(shooterId, block, damageForce, senderRotation);
 			}, function():Int {
 				return localCharacter == null ? -0x3fffffff : localCharacter.tempID;
 			}, function(payload:String):Void {
@@ -303,6 +301,34 @@ class Course extends Sprite {
 				}
 			});
 		updatePlayerDisplay();
+	}
+
+	private function handleLaserBlockHit(shooterId:Int, block:LevelBlock, damageForce:Float, senderRotation:Int):Void {
+		if (localCharacter != null && shooterId == -1) {
+			// Egg attacks are locally authoritative and retain the full block
+			// damage path, including destructible-block activation.
+			localCharacter.controller.damageBlockFromEffect(block, damageForce);
+			return;
+		}
+		if (!isRemoteLaserShooter(shooterId, localCharacter == null ? null : localCharacter.tempID)) {
+			// The local ItemController already applies this collision. Ignore the
+			// echoed visual projectile so it cannot bump or activate the block twice.
+			return;
+		}
+		animateEffectBlockBump(block, damageForce, senderRotation);
+	}
+
+	private static function isRemoteLaserShooter(shooterId:Int, localPlayerId:Null<Int>):Bool {
+		return localPlayerId == null || shooterId != localPlayerId;
+	}
+
+	private function animateEffectBlockBump(block:LevelBlock, damageForce:Float, impulseRotation:Int):Void {
+		if (levelRenderer == null) {
+			return;
+		}
+		var clampedForce = Math.max(-20, Math.min(20, damageForce));
+		var visualImpulse = RotationMath.rotatePoint(clampedForce, 0, impulseRotation);
+		levelRenderer.animateBlockBump(block.worldX, block.worldY, visualImpulse.x, visualImpulse.y);
 	}
 
 	private function activeCommandHandler():CommandHandler {
@@ -1428,9 +1454,9 @@ class Course extends Sprite {
 			},
 			onBlockDamage: function(block, reach):Void {
 				if (localCharacter != null) {
-					localCharacter.controller.damageBlockFromEffect(block, reach);
-				} else if (levelRenderer != null) {
-					levelRenderer.animateBlockBump(block.worldX, block.worldY, reach, 0);
+					localCharacter.controller.damageBlockFromEffect(block, reach, senderRotation);
+				} else {
+					animateEffectBlockBump(block, reach, senderRotation);
 				}
 			},
 			playSound: playSlashSound

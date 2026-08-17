@@ -355,10 +355,15 @@ class ItemController {
 		}
 	}
 
-	public function damageBlockFromItem(block:LevelBlock, damageForce:Float):Void {
+	public function damageBlockFromItem(block:LevelBlock, damageForce:Float, ?impulseRotation:Int):Void {
 		var clampedHitX = LocalPlayerController.clamp(damageForce, -20, 20);
-		owner.blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.BlockBumpSound, block.x, block.y, 1, null, null, clampedHitX, 0));
-			switch (block.type) {
+		// Bounce velocity lives in the rotated block layer's local coordinates.
+		// Local hits use the current course frame; reprojected remote attacks pass
+		// their sender frame so the block follows the visible attack direction.
+		var visualImpulse = RotationMath.rotatePoint(clampedHitX, 0, impulseRotation == null ? owner.courseRotation : impulseRotation);
+		owner.blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.BlockBumpSound, block.x, block.y, 1, null, null,
+			visualImpulse.x, visualImpulse.y));
+		switch (block.type) {
 			case BlockType.Brick:
 				owner.activateBlock(block, "", true);
 			case BlockType.Crumble:

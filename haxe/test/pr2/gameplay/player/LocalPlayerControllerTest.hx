@@ -2,6 +2,7 @@ package pr2.gameplay.player;
 
 import com.jiggmin.data.SecureData;
 import pr2.character.LocalCharacter;
+import pr2.effects.Slash;
 import pr2.gameplay.BlockController;
 import pr2.level.LevelParser;
 import pr2.level.BlockType;
@@ -89,6 +90,7 @@ class LocalPlayerControllerTest {
 		pr2.DeterministicTestMode.runTest("LocalPlayerControllerTest.testLightningEmitsZapAndConsumesItem", testLightningEmitsZapAndConsumesItem);
 		pr2.DeterministicTestMode.runTest("LocalPlayerControllerTest.testReloadableItemReleaseGateThenHeldRefire", testReloadableItemReleaseGateThenHeldRefire);
 		pr2.DeterministicTestMode.runTest("LocalPlayerControllerTest.testSwordReloadTiming", testSwordReloadTiming);
+		pr2.DeterministicTestMode.runTest("LocalPlayerControllerTest.testRotatedSwordDamageCounterRotatesBlockBump", testRotatedSwordDamageCounterRotatesBlockBump);
 		pr2.DeterministicTestMode.runTest("LocalPlayerControllerTest.testIceWaveReloadTiming", testIceWaveReloadTiming);
 		pr2.DeterministicTestMode.runTest("LocalPlayerControllerTest.testIceWaveShotAnimatesBlockFromSide", testIceWaveShotAnimatesBlockFromSide);
 		pr2.DeterministicTestMode.runTest("LocalPlayerControllerTest.testIceWaveDamageExplodesMineBlock", testIceWaveDamageExplodesMineBlock);
@@ -1667,6 +1669,25 @@ class LocalPlayerControllerTest {
 			player.step(new LocalPlayerInput(false, false, false, false, true));
 		}
 		assertEquals(null, player.stateSnapshot().itemId, "sword is consumed after three swings");
+	}
+
+	private static function testRotatedSwordDamageCounterRotatesBlockBump():Void {
+		var level = singleBlockLevel(BlockType.Solid);
+		var player = new LocalPlayerController(level);
+		player.consumeBlockVisualEvents();
+		@:privateAccess player.courseRotation = 90;
+
+		player.damageBlockFromEffect(level.blockAt(2, 3), Slash.RIGHT_REACH);
+		var events = player.consumeBlockVisualEvents();
+		assertEquals(1, events.length, "rotated sword damage emits one block bump");
+		assertEquals(0, events[0].hitX, "90-degree sword damage does not bump horizontally in block-local space");
+		assertEquals(-20, events[0].hitY, "90-degree sword damage counter-rotates its clamped rightward force");
+
+		@:privateAccess player.courseRotation = 0;
+		player.damageBlockFromEffect(level.blockAt(2, 3), Slash.RIGHT_REACH, 90);
+		events = player.consumeBlockVisualEvents();
+		assertEquals(0, events[0].hitX, "remote rotated sword uses the sender frame instead of the receiver frame");
+		assertEquals(-20, events[0].hitY, "remote rotated sword bumps along its displayed swoosh direction");
 	}
 
 	private static function testIceWaveReloadTiming():Void {

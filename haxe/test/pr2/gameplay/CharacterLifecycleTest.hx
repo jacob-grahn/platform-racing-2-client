@@ -44,6 +44,7 @@ class CharacterLifecycleTest {
 			testProjectileUsesSenderAndReceiverRotations);
 		pr2.DeterministicTestMode.runTest("CharacterLifecycleTest.testRotatedRemoteLaserHitsCanonicalBlock",
 			testRotatedRemoteLaserHitsCanonicalBlock);
+		pr2.DeterministicTestMode.runTest("CharacterLifecycleTest.testRemoteLaserBumpPolicy", testRemoteLaserBumpPolicy);
 		trace('CharacterLifecycleTest passed $assertions assertions');
 	}
 
@@ -102,15 +103,26 @@ class CharacterLifecycleTest {
 	private static function testRotatedRemoteLaserHitsCanonicalBlock():Void {
 		var layer = new Sprite();
 		var hitTiles:Array<String> = [];
+		var hitRotations:Array<Int> = [];
 		var round = new EggRound(new CommandHandler(), function(_):Void {}, layer, null, null, null, null, null, null, null,
-			function(_, block, _):Void hitTiles.push('${block.worldX},${block.worldY}'));
+			function(_, block, _, senderRotation):Void {
+				hitTiles.push('${block.worldX},${block.worldY}');
+				hitRotations.push(senderRotation);
+			});
 		var level = Level.fromDecoded(0xffffff, [LevelBlock.fromWorldPixels(ObjectCodes.BLOCK_BASIC1, 0, -60)]);
 		round.mountAttackVisual("Laser`15`0`right`90`7", 0);
 		round.step(level, 0);
 		assertEquals("0,-60", hitTiles[0], "90-degree sender laser probes the receiver's canonical block position");
+		assertEquals(90, hitRotations[0], "remote laser forwards its sender gravity frame to the block bump");
 		assertTrue(Std.downcast(layer.getChildAt(0), LaserShotView).currentFrame > 2,
 			"cross-rotation laser enters its impact animation instead of passing through");
 		round.clear();
+	}
+
+	private static function testRemoteLaserBumpPolicy():Void {
+		assertEquals(true, Course.isRemoteLaserShooter(7, 3), "remote laser receives Flash's block bump path");
+		assertEquals(false, Course.isRemoteLaserShooter(3, 3), "echoed local laser does not duplicate ItemController block damage");
+		assertEquals(true, Course.isRemoteLaserShooter(7, null), "spectators still render remote laser block bumps");
 	}
 
 	private static function assertEggAttackVisual(seed:Int, expectedType:String, expectedCount:Int, message:String):Void {
