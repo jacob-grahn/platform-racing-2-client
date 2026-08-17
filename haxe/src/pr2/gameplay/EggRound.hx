@@ -256,7 +256,7 @@ class EggRound {
 		var rawX = rand.nextMinMax(minX, maxX);
 		var rawY = rand.nextMinMax(minY, maxY);
 		var rot = rand.nextMinMax(-1, 3) * 90;
-		var rotated = RotationMath.rotatePoint(rawX, rawY, -rot);
+		var rotated = CoordinateFrames.gravityFromCanonicalValues(rawX, rawY, rot);
 		var velX = rand.nextMinMax(0, 2) == 1 ? 1 : -1;
 		createEgg(id, rotated.x, rotated.y, rot, velX);
 	}
@@ -335,9 +335,9 @@ class EggRound {
 		egg.posY += egg.velY;
 		egg.posX += egg.velX;
 		var displayRotation = RotationMath.normalizeDisplayRotation(courseRotation - egg.rot);
-		var rotatedPos = RotationMath.rotatePoint(egg.posX, egg.posY, -displayRotation);
+		var rotatedPos = CoordinateFrames.displayFromGravityValues(egg.posX, egg.posY, egg.rot, courseRotation);
 		if (egg.velX != 0) {
-			var wallProbe = RotationMath.rotatePoint(egg.posX + egg.velX, egg.posY - 10, -displayRotation);
+			var wallProbe = CoordinateFrames.displayFromGravityValues(egg.posX + egg.velX, egg.posY - 10, egg.rot, courseRotation);
 			var wallBlock = BlockCollision.blockFromPos(level, wallProbe.x, wallProbe.y, courseRotation);
 			if (BlockCollision.isActiveBlock(wallBlock)) {
 				var blockPos = BlockCollision.rotatedBlockPos(wallBlock, egg.rot);
@@ -375,7 +375,7 @@ class EggRound {
 		if (wrapAroundLevel) {
 			wrapPosition(egg, level);
 		}
-		rotatedPos = RotationMath.rotatePoint(egg.posX, egg.posY, -displayRotation);
+		rotatedPos = CoordinateFrames.displayFromGravityValues(egg.posX, egg.posY, egg.rot, courseRotation);
 		egg.x = rotatedPos.x;
 		egg.y = rotatedPos.y;
 		egg.display.x = egg.x;
@@ -411,7 +411,8 @@ class EggRound {
 	private function stepAttack(egg:EggState, displayRotation:Int, ?playerX:Float, ?playerY:Float, playerCrouching:Bool = false,
 			playerRemoved:Bool = false):Void {
 		var probeX = egg.posX + (egg.velX * (Math.random() * 100)) + 50;
-		var probe = RotationMath.rotatePoint(probeX, egg.posY, -displayRotation);
+		var probe = CoordinateFrames.displayFromGravityValues(probeX, egg.posY, egg.rot,
+			RotationMath.normalizeDisplayRotation(egg.rot + displayRotation));
 		var nearLocalPlayer = playerX != null && playerY != null
 			&& BlockCollision.isNearLocalPlayer(probe.x, probe.y, playerX, playerY, playerCrouching, playerRemoved);
 		if (egg.attackCooldown <= 0 && nearLocalPlayer) {
@@ -429,7 +430,7 @@ class EggRound {
 				if (dispatchAttackEffect != null) {
 					dispatchAttackEffect(payload);
 				} else {
-					mountAttackVisual(payload);
+					mountAttackVisual(payload, RotationMath.normalizeDisplayRotation(egg.rot + displayRotation));
 				}
 				LobbySocket.write('add_effect`$payload');
 			}
@@ -455,7 +456,7 @@ class EggRound {
 		return "";
 	}
 
-	public function mountAttackVisual(payload:String):Void {
+	public function mountAttackVisual(payload:String, receiverCourseRotation:Int = 0):Void {
 		if (displayLayer == null) {
 			return;
 		}
@@ -468,22 +469,28 @@ class EggRound {
 				var dir = parts.length > 3 ? parts[3] : "right";
 				addAttackVisual("SlashAnimation", x, y, dir == "left" ? -1 : 1, 1, 0, 0, 6, false);
 			case "Laser":
-				var dir = parts.length > 3 ? parts[3] : "right";
-				var angle = dir == "left" ? 180 : 0;
-				var rot = parsePartInt(parts, 4);
-				var shooterId = parsePartInt(parts, 5);
-				var laser = addAttackVisual("LaserShotGraphic", x, y, 1, 1, Math.cos(angle * Math.PI / 180) * 29,
-					Math.sin(angle * Math.PI / 180) * 29, 100, false, "Laser", shooterId);
-				laser.display.rotation = angle - rot;
-				laser.rotation = laser.display.rotation;
+				mountLaserPacket(EffectPackets.laser(parts), receiverCourseRotation);
 			case "IceWave":
-				var base = parsePartInt(parts, 3);
-				var rot = parsePartInt(parts, 4);
-				var shooterId = parsePartInt(parts, 5);
-				for (angle in [base, base + 30, base - 30]) {
-					addIceWaveVisual(x, y, angle, rot, shooterId, base, 75);
-				}
+				mountIceWavePacket(EffectPackets.iceWave(parts), receiverCourseRotation);
 			default:
+		}
+	}
+
+	public function mountLaserPacket(packet:EffectPackets.LaserEffectPacket, receiverCourseRotation:Int):Void {
+		if (displayLayer == null) return;
+		var angle = packet.direction == "left" ? 180 : 0;
+		var laser = addAttackVisual("LaserShotGraphic", packet.position.x, packet.position.y, 1, 1,
+			Math.cos(angle * Math.PI / 180) * 29, Math.sin(angle * Math.PI / 180) * 29, 100, false, "Laser", packet.shooterId);
+		laser.angle = angle;
+		laser.rot = packet.senderRotation;
+		positionAttackVisual(laser, receiverCourseRotation);
+	}
+
+	public function mountIceWavePacket(packet:EffectPackets.IceWaveEffectPacket, receiverCourseRotation:Int):Void {
+		if (displayLayer == null) return;
+		for (angle in [packet.angle, packet.angle + 30, packet.angle - 30]) {
+			addIceWaveVisual(packet.position.x, packet.position.y, angle, packet.senderRotation, packet.shooterId, packet.angle, 75,
+				receiverCourseRotation);
 		}
 	}
 
@@ -532,16 +539,17 @@ class EggRound {
 			var previousVelY = visual.velY;
 			var previousHitBlock = visual.hitBlock;
 			visual.presentationPose.beginSimulationTick(
-				visual.posX,
-				visual.posY,
+				visual.display.x,
+				visual.display.y,
 				visual.rotation,
 				visual.velX < 0 ? -1 : 1,
 				CharacterPresentationLayer.Front
 			);
-			visual.posX += visual.velX;
-			visual.posY += visual.velY;
-			visual.display.x = visual.posX;
-			visual.display.y = visual.posY;
+			if (!(visual.effectType == "Laser" && visual.hitBlock)) {
+				visual.posX += visual.velX;
+				visual.posY += visual.velY;
+				positionAttackVisual(visual, courseRotation);
+			}
 			if (visual.alphaJitter) {
 				visual.display.alpha = (Math.random() * visual.life / 100) + 0.25;
 			}
@@ -557,7 +565,7 @@ class EggRound {
 					if (activeIceCount < 10 && visual.life > 10) {
 						for (childAngle in iceBranchAngles(visual.angle, visual.baseAngle)) {
 							spawned.push(createIceWaveVisual(visual.display.x, visual.display.y, childAngle, visual.rot,
-								visual.shooterId, visual.baseAngle, Std.int(visual.life / 2)));
+								visual.shooterId, visual.baseAngle, Std.int(visual.life / 2), courseRotation));
 							activeIceCount++;
 						}
 						visual.life -= 5;
@@ -572,12 +580,11 @@ class EggRound {
 					laserHit = true;
 				}
 				if (!visual.hitPlayer && visual.shooterId != localPlayerId() && playerX != null && playerY != null && !playerRemoved
-					&& playerY > visual.posY && playerY < visual.posY + 60
-					&& playerX > visual.posX - 60 && playerX < visual.posX) {
+					&& playerY > visual.display.y && playerY < visual.display.y + 60
+					&& playerX > visual.display.x - 60 && playerX < visual.display.x) {
 					visual.hitPlayer = true;
 					onAttackPlayerHit(visual.shooterId, visual.velX, visual.velY);
-					visual.posX = playerX - visual.velX;
-					visual.display.x = visual.posX;
+					visual.display.x = playerX - visual.velX;
 					laserHit = true;
 				}
 				if (laserHit) {
@@ -589,13 +596,13 @@ class EggRound {
 				|| PresentationPose.velocityReversed(previousVelX, visual.velX)
 				|| PresentationPose.velocityReversed(previousVelY, visual.velY)
 				|| PresentationPose.movementTooLarge(
-					visual.posX - visual.presentationPose.previousX,
-					visual.posY - visual.presentationPose.previousY,
+					visual.display.x - visual.presentationPose.previousX,
+					visual.display.y - visual.presentationPose.previousY,
 					30
 				);
 			visual.presentationPose.finishSimulationTick(
-				visual.posX,
-				visual.posY,
+				visual.display.x,
+				visual.display.y,
 				visual.rotation,
 				visual.velX < 0 ? -1 : 1,
 				CharacterPresentationLayer.Front,
@@ -618,20 +625,21 @@ class EggRound {
 		visual.velY = 0;
 		visual.life = 18;
 		Std.downcast(visual.display, LaserShotView).playHit();
-		playLaserHitSound(Std.int(visual.posX), Std.int(visual.posY));
+		playLaserHitSound(Std.int(visual.display.x), Std.int(visual.display.y));
 	}
 
-	private function addIceWaveVisual(x:Float, y:Float, angle:Float, rot:Int, shooterId:Int, baseAngle:Float, life:Int):EggAttackVisual {
-		var visual = createIceWaveVisual(x, y, angle, rot, shooterId, baseAngle, life);
+	private function addIceWaveVisual(x:Float, y:Float, angle:Float, rot:Int, shooterId:Int, baseAngle:Float, life:Int,
+			receiverCourseRotation:Int = 0):EggAttackVisual {
+		var visual = createIceWaveVisual(x, y, angle, rot, shooterId, baseAngle, life, receiverCourseRotation);
 		attackVisuals.push(visual);
 		return visual;
 	}
 
-	private function createIceWaveVisual(x:Float, y:Float, angle:Float, rot:Int, shooterId:Int, baseAngle:Float, life:Int):EggAttackVisual {
+	private function createIceWaveVisual(x:Float, y:Float, angle:Float, rot:Int, shooterId:Int, baseAngle:Float, life:Int,
+			receiverCourseRotation:Int):EggAttackVisual {
 		var display = new Sprite();
 		display.x = x;
 		display.y = y;
-		display.rotation = angle - rot;
 		addIceWaveCore(display);
 		if (displayLayer != null) displayLayer.addChild(display);
 		var radians = angle * Math.PI / 180;
@@ -654,8 +662,24 @@ class EggRound {
 			presentationDiscontinuityPending: true,
 			display: display
 		};
+		positionAttackVisual(visual, receiverCourseRotation);
 		skipIcePastSpawn(visual);
 		return visual;
+	}
+
+	private static function positionAttackVisual(visual:EggAttackVisual, receiverCourseRotation:Int):Void {
+		if (visual.effectType != "Laser" && visual.effectType != "IceWave") {
+			visual.display.x = visual.posX;
+			visual.display.y = visual.posY;
+			return;
+		}
+		// Flash ShotEffect retains motion in the sender's frame (`rot`) and
+		// reprojects it every frame when the observing course has another rotation.
+		var position = CoordinateFrames.displayFromGravityValues(visual.posX, visual.posY, visual.rot, receiverCourseRotation);
+		visual.display.x = position.x;
+		visual.display.y = position.y;
+		visual.rotation = visual.angle + receiverCourseRotation - visual.rot;
+		visual.display.rotation = visual.rotation;
 	}
 
 	private static function skipIcePastSpawn(visual:EggAttackVisual):Void {

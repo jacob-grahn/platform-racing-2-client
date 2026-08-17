@@ -2,6 +2,7 @@ package pr2.effects;
 
 import openfl.events.Event;
 import pr2.gameplay.BlockCollision;
+import pr2.gameplay.CoordinateFrames;
 import pr2.gameplay.RotationMath;
 import pr2.gameplay.RotationMath.RotatedPoint;
 import pr2.level.Level;
@@ -71,9 +72,9 @@ class PhysicsEffect extends Effect {
 		posX += velX;
 		rotation = RotationMath.normalizeDisplayRotation(courseRotation - rot);
 
-		var rotatedPos = RotationMath.rotatePoint(posX, posY, -rotation);
+		var rotatedPos = CoordinateFrames.displayFromGravityValues(posX, posY, rot, courseRotation);
 		if (velX != 0) {
-			var wallProbe = RotationMath.rotatePoint(posX + velX, posY - 10, -rotation);
+			var wallProbe = CoordinateFrames.displayFromGravityValues(posX + velX, posY - 10, rot, courseRotation);
 			var wallBlock = blockFromPos(level, wallProbe.x, wallProbe.y, courseRotation);
 			if (canHitBlock(wallBlock)) {
 				var blockPos = rotatedBlockPos(wallBlock, rot);
@@ -101,7 +102,7 @@ class PhysicsEffect extends Effect {
 			onTouchLocalPlayer();
 		}
 
-		rotatedPos = RotationMath.rotatePoint(posX, posY, -rotation);
+		rotatedPos = CoordinateFrames.displayFromGravityValues(posX, posY, rot, courseRotation);
 		x = rotatedPos.x;
 		y = rotatedPos.y;
 	}

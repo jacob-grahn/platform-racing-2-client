@@ -40,7 +40,32 @@ class CharacterLifecycleTest {
 		Settings.disablePersistenceForTests();
 		pr2.DeterministicTestMode.runTest("CharacterLifecycleTest.testLaserStopsOnBlockAndPlaysHitSound", testLaserStopsOnBlockAndPlaysHitSound);
 		if (pr2.DeterministicTestMode.finishSmokeSuite("CharacterLifecycleTest")) return;
+		pr2.DeterministicTestMode.runTest("CharacterLifecycleTest.testProjectileUsesSenderAndReceiverRotations",
+			testProjectileUsesSenderAndReceiverRotations);
 		trace('CharacterLifecycleTest passed $assertions assertions');
+	}
+
+	private static function testProjectileUsesSenderAndReceiverRotations():Void {
+		var unrotatedLayer = new Sprite();
+		var unrotatedRound = new EggRound(new CommandHandler(), function(_):Void {}, unrotatedLayer);
+		unrotatedRound.mountAttackVisual("Laser`-165`75`right`90`7", 0);
+		var unrotatedLaser = unrotatedLayer.getChildAt(0);
+		assertEquals(75.0, unrotatedLaser.x, "unrotated receiver restores projectile canonical x from a 90-degree sender");
+		assertEquals(165.0, unrotatedLaser.y, "unrotated receiver restores projectile canonical y from a 90-degree sender");
+		assertEquals(-90.0, unrotatedLaser.rotation, "projectile artwork accounts for sender and receiver rotations");
+		unrotatedRound.step(Level.fromDecoded(0xFFFFFF, []), 0);
+		assertEquals(75.0, unrotatedLaser.x, "cross-rotation projectile keeps transformed x while moving");
+		assertEquals(136.0, unrotatedLaser.y, "cross-rotation projectile advances in the transformed direction");
+
+		var rotatedLayer = new Sprite();
+		var rotatedRound = new EggRound(new CommandHandler(), function(_):Void {}, rotatedLayer);
+		rotatedRound.mountAttackVisual("Laser`-165`75`right`90`7", 90);
+		var rotatedLaser = rotatedLayer.getChildAt(0);
+		assertEquals(-165.0, rotatedLaser.x, "equally rotated receiver keeps projectile packet x");
+		assertEquals(75.0, rotatedLaser.y, "equally rotated receiver keeps projectile packet y");
+		assertEquals(0.0, rotatedLaser.rotation, "equally rotated receiver keeps projectile artwork upright");
+		unrotatedRound.clear();
+		rotatedRound.clear();
 	}
 
 	private static function testLaserStopsOnBlockAndPlaysHitSound():Void {

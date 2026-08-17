@@ -499,7 +499,7 @@ class Course extends Sprite {
 		for (id in [for (id in looseHats.keys()) id]) {
 			var hat = looseHats.get(id);
 			if (hat != null) {
-				hat.step(level, Math.round(levelRenderer.rotation), localCharacter.x, localCharacter.y, localCharacter.crouching,
+				hat.step(level, levelRenderer.courseRotationDegrees, localCharacter.x, localCharacter.y, localCharacter.crouching,
 					localCharacter.removed, isDonePlaying());
 				if (config.gameMode == "hat") {
 					maybeEmitHatToStart(hat);
@@ -675,7 +675,7 @@ class Course extends Sprite {
 	// (the edge depends on the level's rotation). Both the local return and the
 	// remote emit paths trip on the same boundary.
 	private function hatPastReturnBoundary(hat:HatEffect):Bool {
-		var hatPos = RotationMath.rotatePoint(hat.posX, hat.posY, hat.rot);
+		var hatPos = CoordinateFrames.canonicalFromGravityValues(hat.posX, hat.posY, hat.rot);
 		return (hatPos.y > level.maxY + 500 && hat.rot == 0)
 			|| (hatPos.y < level.minY - 500 && Math.abs(hat.rot) == 180)
 			|| (hatPos.x > level.maxX + 500 && hat.rot == 90)
@@ -825,7 +825,7 @@ class Course extends Sprite {
 			levelId: Std.int(config.levelId),
 			x: Math.round(point.x),
 			y: Math.round(point.y),
-			rot: Math.round(levelRenderer.rotation)
+			rot: levelRenderer.courseRotationDegrees
 		};
 	}
 
@@ -944,7 +944,7 @@ class Course extends Sprite {
 			snakeManager.step();
 		}
 		if (raceStarted && eggRound != null) {
-			eggRound.step(level, Math.round(levelRenderer.rotation), localCharacter.x, localCharacter.y, localCharacter.crouching,
+			eggRound.step(level, levelRenderer.courseRotationDegrees, localCharacter.x, localCharacter.y, localCharacter.crouching,
 				localCharacter.removed, config.gameMode == "egg");
 		}
 		if (raceStarted) {
@@ -1327,7 +1327,7 @@ class Course extends Sprite {
 				var offset = direction == "left" ? -20 : 20;
 				var worldX = Std.int(state.x + offset);
 				var worldY = Std.int(state.y - 25);
-				var rotation = Std.int(levelRenderer == null ? 0 : levelRenderer.rotation);
+				var rotation = levelRenderer == null ? 0 : levelRenderer.courseRotationDegrees;
 				if (effectBackground != null) {
 					effectBackground.addEffect(["Laser", Std.string(worldX), Std.string(worldY), direction, Std.string(rotation),
 						Std.string(localCharacter.tempID)]);
@@ -1348,7 +1348,7 @@ class Course extends Sprite {
 				var angle = direction == "left" ? 180 : 0;
 				var worldX = Std.int(state.x + offset);
 				var worldY = Std.int(state.y - 25);
-				var rotation = Std.int(levelRenderer == null ? 0 : levelRenderer.rotation);
+				var rotation = levelRenderer == null ? 0 : levelRenderer.courseRotationDegrees;
 				if (effectBackground != null) {
 					effectBackground.addEffect(["IceWave", Std.string(worldX), Std.string(worldY), Std.string(angle), Std.string(rotation),
 						Std.string(localCharacter.tempID)]);
@@ -1368,9 +1368,15 @@ class Course extends Sprite {
 				if (Math.isNaN(effectX) || Math.isNaN(effectY) || Math.isNaN(rotation)) {
 					return;
 				}
-				var tileWorldX = Std.int(Math.round((effectX - 15) / LevelRenderer.TILE_SIZE)) * LevelRenderer.TILE_SIZE;
-				var tileWorldY = Std.int(Math.round((effectY - 15) / LevelRenderer.TILE_SIZE)) * LevelRenderer.TILE_SIZE;
-				levelRenderer.showMineAppear(effectX, effectY, tileWorldX, tileWorldY, rotation, true,
+				var canonicalCenter = CoordinateFrames.canonicalFromMinePacket(
+					new CoordinateFrames.EffectPacketPoint(Std.int(effectX), Std.int(effectY)),
+					Std.int(rotation)
+				);
+				var tileWorldX = Std.int(Math.round((canonicalCenter.x - 15) / LevelRenderer.TILE_SIZE)) * LevelRenderer.TILE_SIZE;
+				var tileWorldY = Std.int(Math.round((canonicalCenter.y - 15) / LevelRenderer.TILE_SIZE)) * LevelRenderer.TILE_SIZE;
+				var receiverRotation = levelRenderer.courseRotationDegrees;
+				var displayCenter = CoordinateFrames.displayFromCanonical(canonicalCenter, receiverRotation);
+				levelRenderer.showMineAppear(displayCenter.x, displayCenter.y, tileWorldX, tileWorldY, receiverRotation, true,
 					function():Void placeRuntimeMine(tileWorldX, tileWorldY));
 				LobbySocket.write('add_effect`Mine`$effectX`$effectY`$rotation');
 			case "teleport":
@@ -1405,7 +1411,7 @@ class Course extends Sprite {
 	public function mountSlashEffect(worldX:Int, worldY:Int, direction:String, shooterID:Int):Slash {
 		var effect = new Slash(worldX, worldY, direction, shooterID, {
 			level: level,
-			courseRotation: Std.int(levelRenderer == null ? 0 : levelRenderer.rotation),
+			courseRotation: levelRenderer == null ? 0 : levelRenderer.courseRotationDegrees,
 			player: localCharacter == null ? null : {
 				tempId: localCharacter.tempID,
 				x: localCharacter.stateSnapshot().x,

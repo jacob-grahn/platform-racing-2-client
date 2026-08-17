@@ -59,6 +59,8 @@ private typedef StackedBlockDisplay = {
 	focus point, usually the first start block, appears at a stable stage point.
 **/
 class LevelRenderer extends Sprite {
+	/** Committed Flash blockBackground rotation; unrelated to inherited Sprite.rotation. */
+	public var courseRotationDegrees(get, never):Int;
 	public static inline var TILE_SIZE:Int = 30;
 	private static inline var TELEPORT_DEFAULT_COLOR:Int = 0xFF7F50;
 	// Edge length of the transparent square that stroke art is rasterized onto,
@@ -447,6 +449,10 @@ class LevelRenderer extends Sprite {
 
 	public function courseTweenRotation():Float {
 		return tweenRotation;
+	}
+
+	private function get_courseRotationDegrees():Int {
+		return courseRotation;
 	}
 
 	public function presentationCourseTweenRotation():Float {
@@ -963,12 +969,10 @@ class LevelRenderer extends Sprite {
 
 	public function showMineAppear(worldX:Float, worldY:Float, tileWorldX:Int, tileWorldY:Int, rotationDegrees:Float = 0, playSound:Bool = true,
 			?placeRuntimeMine:Void->Void):MineAppear {
-		// Flash's MineAppear lives on the unrotated EffectBackground. The item
-		// payload is in the rotated map frame, so undo that rotation before
-		// mounting the animation; its own rotation keeps the authored artwork
-		// aligned with the course.
-		var effectPosition = RotationMath.rotatePoint(worldX, worldY, -rotationDegrees);
-		var effect = new MineAppear(effectPosition.x, effectPosition.y, rotationDegrees, offsetX, offsetY, function():Void {
+		// EffectBackground is not course-rotated, so callers supply coordinates in
+		// this client's displayed world frame. The sprite rotation keeps the
+		// authored mine artwork aligned with the rotated block layer.
+		var effect = new MineAppear(worldX, worldY, rotationDegrees, offsetX, offsetY, function():Void {
 			if (placeRuntimeMine != null) {
 				placeRuntimeMine();
 			} else if (!blockDisplays.exists(blockKey(tileWorldX, tileWorldY))) {
@@ -981,7 +985,10 @@ class LevelRenderer extends Sprite {
 
 	public function showTeleportPop(worldX:Float, worldY:Float, playSound:Bool = true):TeleportPop {
 		var effect = new TeleportPop(worldX, worldY, offsetX, offsetY, playSound);
-		blockLayer.addChild(effect);
+		// Flash TeleportPop is an EffectBackground child. Its coordinates already
+		// use the player's displayed world frame, so the rotated block layer would
+		// apply the committed course rotation a second time.
+		(effectLayer == null ? blockLayer : effectLayer).addChild(effect);
 		return effect;
 	}
 

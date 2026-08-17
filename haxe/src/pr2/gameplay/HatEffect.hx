@@ -98,9 +98,9 @@ class HatEffect {
 		posY += velY;
 		posX += velX;
 		var displayRotation = RotationMath.normalizeDisplayRotation(courseRotation - rot);
-		var rotatedPos = RotationMath.rotatePoint(posX, posY, -displayRotation);
+		var rotatedPos = CoordinateFrames.displayFromGravityValues(posX, posY, rot, courseRotation);
 		if (velX != 0) {
-			var wallProbe = RotationMath.rotatePoint(posX + velX, posY - 10, -displayRotation);
+			var wallProbe = CoordinateFrames.displayFromGravityValues(posX + velX, posY - 10, rot, courseRotation);
 			var wallBlock = BlockCollision.blockFromPos(level, wallProbe.x, wallProbe.y, courseRotation);
 			if (BlockCollision.isActiveBlock(wallBlock)) {
 				wallContact = true;
@@ -122,7 +122,7 @@ class HatEffect {
 		} else {
 			grounded = false;
 		}
-		rotatedPos = RotationMath.rotatePoint(posX, posY, -displayRotation);
+		rotatedPos = CoordinateFrames.displayFromGravityValues(posX, posY, rot, courseRotation);
 		display.x = rotatedPos.x;
 		display.y = rotatedPos.y;
 		display.rotation = displayRotation;

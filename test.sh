@@ -86,6 +86,7 @@ python3 tools/audit_deflash_boundaries.py --check
 python3 tools/check_no_compat_runtime.py --source-only
 python3 tools/check_enter_frame_clock.py
 python3 tools/check_presentation_allocations.py
+python3 tools/check_rotation_coordinate_boundaries.py
 python3 tools/generate_native_assets.py --check
 python3 tools/generate_svg_packs.py --check
 python3 tools/validate_character_lottie.py

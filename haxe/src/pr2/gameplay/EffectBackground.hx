@@ -42,27 +42,32 @@ class EffectBackground extends Sprite {
 		var originY = parseIntArg(args, 2);
 		switch (type) {
 			case "Laser":
-				mountAttackVisual('Laser`$originX`$originY`' + stringArg(args, 3, "right") + '`' + parseIntArg(args, 4) + '`'
-					+ parseIntArg(args, 5));
-				playLaser(originX, originY);
+				var packet = EffectPackets.laser(args);
+				mountLaser(packet);
+				playLaser(packet.position.x, packet.position.y);
 			case "Slash":
 				course.mountSlashEffect(originX, originY, stringArg(args, 3, "right"), parseIntArg(args, 4));
 			case "Mine":
-				var rotation = parseIntArg(args, 3);
-				var tileWorldX = mineTileWorld(originX);
-				var tileWorldY = mineTileWorld(originY);
+				var packet = EffectPackets.mine(args);
+				// Mine packets use the sender's rotated map frame. Resolve the
+				// canonical tile first, then project its centre into this client's
+				// independently rotated display frame.
+				var canonicalCenter = CoordinateFrames.canonicalFromMinePacket(packet.position, packet.senderRotation);
+				var tileWorldX = mineTileWorld(canonicalCenter.x);
+				var tileWorldY = mineTileWorld(canonicalCenter.y);
 				if (course.levelRenderer != null) {
-					course.levelRenderer.showMineAppear(originX, originY, tileWorldX, tileWorldY, rotation, true,
+					var receiverRotation = course.levelRenderer.courseRotationDegrees;
+					var displayCenter = CoordinateFrames.displayFromCanonical(canonicalCenter, receiverRotation);
+					course.levelRenderer.showMineAppear(displayCenter.x, displayCenter.y, tileWorldX, tileWorldY, receiverRotation, true,
 						function():Void course.placeRuntimeMine(tileWorldX, tileWorldY));
 				}
 			case "Hat":
 				course.addLooseHat(originX, originY, parseIntArg(args, 3), parseIntArg(args, 4), parseIntArg(args, 5), parseIntArg(args, 6),
 					parseIntArg(args, 7));
 			case "IceWave":
-				var angle = parseIntArg(args, 3);
-				var rot = parseIntArg(args, 4);
-				mountAttackVisual('IceWave`$originX`$originY`$angle`$rot`' + parseIntArg(args, 5));
-				playIceWave(originX, originY);
+				var packet = EffectPackets.iceWave(args);
+				mountIceWave(packet);
+				playIceWave(packet.position.x, packet.position.y);
 			case "Teleport":
 				if (course.levelRenderer != null) {
 					course.levelRenderer.showTeleportPop(originX, originY);
@@ -110,9 +115,17 @@ class EffectBackground extends Sprite {
 		}
 	}
 
-	private function mountAttackVisual(payload:String):Void {
+	private function mountLaser(packet:EffectPackets.LaserEffectPacket):Void {
 		if (course.eggRound != null) {
-			course.eggRound.mountAttackVisual(payload);
+			var receiverRotation = course.levelRenderer == null ? 0 : course.levelRenderer.courseRotationDegrees;
+			course.eggRound.mountLaserPacket(packet, receiverRotation);
+		}
+	}
+
+	private function mountIceWave(packet:EffectPackets.IceWaveEffectPacket):Void {
+		if (course.eggRound != null) {
+			var receiverRotation = course.levelRenderer == null ? 0 : course.levelRenderer.courseRotationDegrees;
+			course.eggRound.mountIceWavePacket(packet, receiverRotation);
 		}
 	}
 
@@ -136,7 +149,7 @@ class EffectBackground extends Sprite {
 		SoundEffects.playGameSound(Assets.getSound(LASER_SOUND_PATH), worldX, worldY, offset.x, offset.y, 1.5);
 	}
 
-	private static function mineTileWorld(world:Int):Int {
+	private static function mineTileWorld(world:Float):Int {
 		return Std.int(Math.round((world - LevelRenderer.TILE_SIZE / 2) / LevelRenderer.TILE_SIZE)) * LevelRenderer.TILE_SIZE;
 	}
 

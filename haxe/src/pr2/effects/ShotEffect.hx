@@ -1,7 +1,7 @@
 package pr2.effects;
 
 import openfl.events.Event;
-import pr2.gameplay.RotationMath;
+import pr2.gameplay.CoordinateFrames;
 import pr2.level.Level;
 import pr2.level.Level.LevelBlock;
 import pr2.runtime.FrameClock;
@@ -129,7 +129,7 @@ class ShotEffect extends Effect {
 	}
 
 	function position(courseRotation:Int):Void {
-		var pos = RotationMath.rotatePoint(posX, posY, -(courseRotation - rot));
+		var pos = CoordinateFrames.displayFromGravityValues(posX, posY, rot, courseRotation);
 		x = pos.x;
 		y = pos.y;
 		rotation = angle + courseRotation - rot;

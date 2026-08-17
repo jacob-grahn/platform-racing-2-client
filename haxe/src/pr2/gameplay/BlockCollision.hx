@@ -17,7 +17,7 @@ class BlockCollision {
 		var probeX = posX;
 		var probeY = posY;
 		if (rotation != 0) {
-			var pos = RotationMath.rotatePoint(posX, posY, rotation);
+			var pos = CoordinateFrames.canonicalFromGravityValues(posX, posY, rotation);
 			probeX = pos.x;
 			probeY = pos.y;
 		}
@@ -49,12 +49,13 @@ class BlockCollision {
 		} else if (rotation == -90) {
 			offsetX = tileSize;
 		}
-		return RotationMath.rotatePoint(worldX + offsetX, worldY + offsetY, -rotation);
+		var point = CoordinateFrames.gravityFromCanonicalValues(worldX + offsetX, worldY + offsetY, rotation);
+		return {x: point.x, y: point.y};
 	}
 
 	public static function movementLimits(level:Level, rotation:Int):MovementLimits {
-		var minPoint = RotationMath.rotatePoint(level.minX - 300, level.minY - 300, -rotation);
-		var maxPoint = RotationMath.rotatePoint(level.maxX + 300, level.maxY + 300, -rotation);
+		var minPoint = CoordinateFrames.gravityFromCanonicalValues(level.minX - 300, level.minY - 300, rotation);
+		var maxPoint = CoordinateFrames.gravityFromCanonicalValues(level.maxX + 300, level.maxY + 300, rotation);
 		return {
 			minX: Std.int(Math.min(minPoint.x, maxPoint.x)),
 			maxX: Std.int(Math.max(minPoint.x, maxPoint.x)),

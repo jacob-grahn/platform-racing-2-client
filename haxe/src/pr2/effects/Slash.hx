@@ -2,7 +2,7 @@ package pr2.effects;
 
 import openfl.utils.Assets;
 import pr2.audio.SoundEffects;
-import pr2.gameplay.RotationMath;
+import pr2.gameplay.CoordinateFrames;
 import pr2.level.Level;
 import pr2.level.Level.LevelBlock;
 
@@ -58,7 +58,7 @@ class Slash extends Effect {
 		if (context == null) {
 			return;
 		}
-		var rotated = RotationMath.rotatePoint(px, py, context.courseRotation);
+		var rotated = CoordinateFrames.canonicalFromGravityValues(px, py, context.courseRotation);
 		var block = PhysicsEffect.blockFromPos(context.level, rotated.x, rotated.y, 0);
 		if (block != null && PhysicsEffect.isActiveBlock(block) && context.onBlockDamage != null) {
 			context.onBlockDamage(block, reach);

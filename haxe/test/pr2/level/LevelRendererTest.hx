@@ -71,6 +71,8 @@ class LevelRendererTest {
 		pr2.DeterministicTestMode.runTest("LevelRendererTest.testSpawnMarkerBlocksNotRendered", testSpawnMarkerBlocksNotRendered);
 		pr2.DeterministicTestMode.runTest("LevelRendererTest.testRemoteVisibleBlockActivation", testRemoteVisibleBlockActivation);
 		pr2.DeterministicTestMode.runTest("LevelRendererTest.testMineExplosion", testMineExplosion);
+		pr2.DeterministicTestMode.runTest("LevelRendererTest.testRotatedMineAppearUsesDisplayedWorldFrame", testRotatedMineAppearUsesDisplayedWorldFrame);
+		pr2.DeterministicTestMode.runTest("LevelRendererTest.testRotatedTeleportPopUsesEffectFrame", testRotatedTeleportPopUsesEffectFrame);
 		pr2.DeterministicTestMode.runTest("LevelRendererTest.testBlockPieces", testBlockPieces);
 		pr2.DeterministicTestMode.runTest("LevelRendererTest.testArtLayerDepthAndParallax", testArtLayerDepthAndParallax);
 		pr2.DeterministicTestMode.runTest("LevelRendererTest.testRemoveDisposesAnimatedChildren", testRemoveDisposesAnimatedChildren);
@@ -99,6 +101,35 @@ class LevelRendererTest {
 		renderer.setCourseRotation(90, 0);
 		assertClose(0, renderer.courseTweenRotation(), "rotation commit clears authoritative tween");
 		assertClose(0, renderer.presentationCourseTweenRotation(), "rotation commit snaps presented tween");
+		renderer.remove();
+	}
+
+	private static function testRotatedMineAppearUsesDisplayedWorldFrame():Void {
+		var renderer = new LevelRenderer(new TestLevel(0xFFFFFF, []));
+		renderer.setCourseRotation(90, 0);
+		var displayed = renderer.blockWorldToRotatedWorld(75, 165);
+		var effect = renderer.showMineAppear(displayed.x, displayed.y, 60, 150, renderer.courseRotationDegrees, false);
+
+		assertClose(-165, displayed.x, "90-degree receiver projects canonical mine x into its display frame");
+		assertClose(75, displayed.y, "90-degree receiver projects canonical mine y into its display frame");
+		assertClose(displayed.x, effect.x, "rotated mine animation uses the block layer's displayed x");
+		assertClose(displayed.y, effect.y, "rotated mine animation uses the block layer's displayed y");
+		assertClose(90, effect.rotation, "rotated mine artwork aligns with the committed course rotation");
+		effect.remove();
+		renderer.remove();
+	}
+
+	private static function testRotatedTeleportPopUsesEffectFrame():Void {
+		var renderer = new LevelRenderer(new TestLevel(0xFFFFFF, []));
+		var effects = new Sprite();
+		renderer.attachEffectLayer(effects);
+		renderer.setCourseRotation(90, 0);
+		var effect = renderer.showTeleportPop(-165, 75, false);
+
+		assertEquals(effects, effect.parent, "teleport pop mounts on Flash's unrotated effect plane");
+		assertClose(-165, effect.x, "rotated teleport pop keeps the player's displayed x");
+		assertClose(75, effect.y, "rotated teleport pop keeps the player's displayed y");
+		effect.remove();
 		renderer.remove();
 	}
 
