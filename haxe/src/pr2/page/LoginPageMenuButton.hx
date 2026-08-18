@@ -36,7 +36,7 @@ class LoginPageMenuButton extends Sprite {
 		shadowText.y = TEXT_Y;
 		addChild(shadowText);
 
-		frontText = buildTextField(0x333333);
+		frontText = buildTextField(0x000000);
 		frontText.x = -HIT_WIDTH / 2 + 1;
 		frontText.y = TEXT_Y + 1;
 		addChild(frontText);

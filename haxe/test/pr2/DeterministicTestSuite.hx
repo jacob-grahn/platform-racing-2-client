@@ -126,6 +126,7 @@ import pr2.page.EditorSettingsTest;
 import pr2.page.CampaignTestScreenTest;
 import pr2.page.IntroPageTest;
 import pr2.page.LoginPageFadeTest;
+import pr2.page.LoginPageMenuButtonTest;
 import pr2.runtime.EpicFlashTest;
 import pr2.runtime.ExplicitBitmapCacheTest;
 import pr2.runtime.FrameClockTest;
@@ -161,6 +162,7 @@ class DeterministicTestSuite {
 		DeterministicTestMode.runSuite("SelectableButtonTest", ["ui"], SelectableButtonTest.main);
 		DeterministicTestMode.runSuite("PageNavigationFocusTest", ["ui"], PageNavigationFocusTest.main);
 		DeterministicTestMode.runSuite("LoginPageFadeTest", ["ui"], LoginPageFadeTest.main);
+		DeterministicTestMode.runSuite("LoginPageMenuButtonTest", ["ui"], LoginPageMenuButtonTest.main);
 		DeterministicTestMode.runSuite("AsyncRemovalGuardTest", ["runtime"], AsyncRemovalGuardTest.main);
 		DeterministicTestMode.runSuite("RemovableTest", ["runtime"], RemovableTest.main);
 		DeterministicTestMode.runSuite("PixelEffect1Test", ["effects"], PixelEffect1Test.main);
