@@ -62,6 +62,7 @@ class LoginPage extends Page {
 
 	private var background:Null<LoginBackground>;
 	private var pageArt:Null<Shape>;
+	private var timelineFade:Null<LoginPageFade>;
 	private var titleText:Null<TextField>;
 	private var buttons:Array<LoginPageMenuButton> = [];
 	private var activePopup:Null<LoginFlashPopup>;
@@ -115,6 +116,11 @@ class LoginPage extends Page {
 		addMenuButton("Instructions", openInstructions);
 		addMenuButton("Credits", openCreditsDialog);
 
+		// LoginPageGraphic's first timeline layer is a full-stage black square
+		// fading through 19 authored frames. The static SVG does not retain it.
+		timelineFade = new LoginPageFade();
+		addChild(timelineFade);
+
 		loadServers();
 		serverRefreshTimer = new Timer(60000);
 		serverRefreshTimer.addEventListener(TimerEvent.TIMER, onServerRefreshTimer);
@@ -126,6 +132,10 @@ class LoginPage extends Page {
 		closePopup(true);
 		closeSocketProbe();
 		stopServerTimers();
+		if (timelineFade != null) {
+			timelineFade.dispose();
+			timelineFade = null;
+		}
 
 		for (button in buttons) {
 			button.remove();
