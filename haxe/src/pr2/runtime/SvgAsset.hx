@@ -18,7 +18,7 @@ import openfl.utils.Assets;
 class SvgAsset {
 	private static inline var SVG_PREFIX = "assets/svg/";
 	private static inline var SVG_PACK_PREFIX = "assets/svg-packs/";
-	private static final parsed:Map<String, SVG> = new Map();
+	private static final parsed:Map<String, SvgDocument> = new Map();
 	private static final packEntries:Map<String, Dynamic> = new Map();
 
 	public static function create(assetPath:String):Shape {
@@ -38,7 +38,7 @@ class SvgAsset {
 		var svg = new SVG(content);
 		var container = new Sprite();
 		var shape = new Shape();
-		svg.render(shape.graphics);
+		new SvgGradientStrokeRenderer(svg.data, content).render(shape.graphics);
 		container.addChild(shape);
 
 		var descriptors:Array<Text> = [];
@@ -106,7 +106,9 @@ class SvgAsset {
 
 	public static function createFromText(content:String):Shape {
 		var shape = new Shape();
-		new SVG(prepare(content)).render(shape.graphics);
+		var prepared = prepare(content);
+		var svg = new SVG(prepared);
+		new SvgGradientStrokeRenderer(svg.data, prepared).render(shape.graphics);
 		return shape;
 	}
 
@@ -117,7 +119,9 @@ class SvgAsset {
 		if (root == null) throw 'Invalid SVG asset $assetPath';
 		applyNamedTints(root, tints, hidden, null);
 		var shape = new Shape();
-		new SVG(document.toString()).render(shape.graphics);
+		var content = document.toString();
+		var svg = new SVG(content);
+		new SvgGradientStrokeRenderer(svg.data, content).render(shape.graphics);
 		return shape;
 	}
 
@@ -165,10 +169,11 @@ class SvgAsset {
 		return shape.getBounds(shape);
 	}
 
-	private static function get(assetPath:String):SVG {
+	private static function get(assetPath:String):SvgDocument {
 		var svg = parsed.get(assetPath);
 		if (svg == null) {
-			svg = new SVG(prepare(loadText(assetPath)));
+			var content = prepare(loadText(assetPath));
+			svg = new SvgDocument(content);
 			parsed.set(assetPath, svg);
 		}
 		return svg;
@@ -257,7 +262,8 @@ class SvgAsset {
 		var combined = inherited * local;
 		if (isPaintedElement(localName(node.nodeName))) {
 			multiplyOpacity(node, "fill-opacity", combined);
-			multiplyGradientOpacity(node, combined, definitions, gradientFactors);
+			multiplyGradientOpacity(node, "fill", combined, definitions, gradientFactors);
+			multiplyGradientOpacity(node, "stroke", combined, definitions, gradientFactors);
 			multiplyOpacity(node, "stroke-opacity", combined);
 			combined = 1;
 		}
@@ -265,11 +271,12 @@ class SvgAsset {
 	}
 
 	/** `format.svg` applies path alpha to solid fills but not gradient fills. */
-	private static function multiplyGradientOpacity(node:Xml, inherited:Float, definitions:Map<String, Xml>, gradientFactors:Map<String, Float>):Void {
+	private static function multiplyGradientOpacity(node:Xml, paintAttribute:String, inherited:Float, definitions:Map<String, Xml>,
+		gradientFactors:Map<String, Float>):Void {
 		if (inherited == 1) return;
-		var fill = node.get("fill");
-		if (fill == null || !StringTools.startsWith(fill, "url(#") || !StringTools.endsWith(fill, ")")) return;
-		var id = fill.substr(5, fill.length - 6);
+		var paint = node.get(paintAttribute);
+		if (paint == null || !StringTools.startsWith(paint, "url(#") || !StringTools.endsWith(paint, ")")) return;
+		var id = paint.substr(5, paint.length - 6);
 		var gradient = definitions.get(id);
 		if (gradient == null) return;
 		var previous = gradientFactors.get(id);
@@ -387,5 +394,19 @@ class SvgAsset {
 		var children = [for (child in node) child];
 		for (child in children) if (!applyNamedTints(child, tints, hidden, color)) node.removeChild(child);
 		return true;
+	}
+}
+
+private class SvgDocument {
+	private var svg:SVG;
+	private var content:String;
+
+	public function new(content:String) {
+		this.content = content;
+		svg = new SVG(content);
+	}
+
+	public function render(graphics:openfl.display.Graphics):Void {
+		new SvgGradientStrokeRenderer(svg.data, content).render(graphics);
 	}
 }

@@ -1,5 +1,6 @@
 package pr2.runtime;
 
+import openfl.display._internal.DrawCommandType;
 import pr2.animation.TimelineClip;
 #if sys
 import sys.io.File;
@@ -25,6 +26,10 @@ class SvgAssetTest {
 			"group alpha multiplies an authored gradient stop fade");
 		var shape = SvgAsset.createFromText(source);
 		assertTrue(shape.graphics != null, "expanded SVG renders into OpenFL graphics");
+		var gradientStrokeSource = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><defs><linearGradient id="outline"><stop offset="0%" stop-color="#333333"/><stop offset="100%" stop-color="#999999"/></linearGradient></defs><path id="hairline" fill="none" stroke="url(#outline)" stroke-width="0" d="M 1 1 L 19 1 L 19 19 Z"/></svg>';
+		var gradientStrokeShape = SvgAsset.createFromText(gradientStrokeSource);
+		@:privateAccess var hasGradientStroke = gradientStrokeShape.graphics.__commands.types.indexOf(DrawCommandType.LINE_GRADIENT_STYLE) >= 0;
+		assertTrue(hasGradientStroke, "Flash hairlines retain their authored gradient stroke when rendered by OpenFL");
 		@:privateAccess assertEquals("effects", SvgAsset.packGroup("assets/svg/effects/mine_piece_01.svg"),
 			"top-level SVG assets select their category pack");
 		@:privateAccess assertEquals("character_hat", SvgAsset.packGroup("assets/svg/character/hat/001_classic/primary.svg"),
@@ -34,6 +39,10 @@ class SvgAssetTest {
 		assertTrue(packedShape.graphics != null, "production SVG renders through the stable asset-path API");
 		@:privateAccess assertTrue(SvgAsset.parsed.exists(packedPath), "parsed production SVG is cached by asset path");
 		#if sys
+		assertTrue(hasLineGradient(SvgAsset.create("assets/svg/native/square_panel.svg")),
+			"production panel retains its Flash gradient hairline outline");
+		assertTrue(hasLineGradient(SvgAsset.create("assets/svg/ui/reload_button_up.svg")),
+			"production refresh icon button retains its Flash gradient hairline outline");
 		var muteBase = File.getContent("art/svg/login/mute_button_base.svg");
 		var muteWaves = File.getContent("art/svg/login/mute_button_waves.svg");
 		var fadedSlash = new TimelineClip("assets/effects/slash.lottie.json");
@@ -51,6 +60,10 @@ class SvgAssetTest {
 		assertFalse(muteWaves.indexOf('stroke-width="0.05"') >= 0, "mute waves use normalized hairline widths");
 		#end
 		trace('SvgAssetTest passed $assertions assertions');
+	}
+
+	private static function hasLineGradient(shape:openfl.display.Shape):Bool {
+		@:privateAccess return shape.graphics.__commands.types.indexOf(DrawCommandType.LINE_GRADIENT_STYLE) >= 0;
 	}
 
 	private static function minVisibleAlpha(timeline:TimelineClip):Float {
