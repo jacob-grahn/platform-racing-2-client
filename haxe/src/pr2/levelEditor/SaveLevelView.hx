@@ -57,7 +57,7 @@ class SaveLevelView extends NativeView {
 		newestLabel.text = "To Newest?";
 		check("publish_chk", -107.45, 25, 0.850082397460938, true);
 		check("newest_chk", 8, 25, 1.05000305175781, false);
-		var warning = field("warning", -105.45, 54, 213, 26.3, 10, false, TextFormatAlign.CENTER, 0x222222, true);
+		var warning = field("warning", -105.45, 54, 213, 26.3, 10, false, TextFormatAlign.CENTER, 0x000000, true);
 		warning.multiline = true;
 		warning.wordWrap = true;
 		warning.text = "If you publish a level, it must not contain\nprofanity or obscene content.";
@@ -85,7 +85,7 @@ class SaveLevelView extends NativeView {
 	}
 
 	private function field(name:String, x:Float, y:Float, width:Float, height:Float, size:Int, bold:Bool, align:TextFormatAlign,
-		color:Int = 0x222222, italic:Bool = false):TextField {
+		color:Int = 0x000000, italic:Bool = false):TextField {
 		var text = new TextField();
 		text.name = name;
 		text.x = x;

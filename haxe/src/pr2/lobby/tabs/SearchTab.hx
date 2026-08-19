@@ -291,7 +291,7 @@ class SearchView extends NativeView {
 		field.width = width;
 		field.height = 18;
 		field.selectable = false;
-		field.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 10, 0x222222, false, null, null, null, null,
+		field.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 10, 0x000000, false, null, null, null, null,
 			TextFormatAlign.LEFT);
 		field.text = value;
 		addChild(field);

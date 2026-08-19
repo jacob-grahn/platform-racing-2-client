@@ -54,8 +54,8 @@ class SendMessageView extends NativeView {
 		messageInput.wordWrap = true;
 		addChild(messageInput);
 
-		warning = addLabel("NEVER give your password to ANYONE.", -152.25, 39, 197.2, 12.15, 10, false, TextFormatAlign.LEFT);
-		charsRemaining = addLabel("1000 / 1000", 85.55, 39.5, 65.5, 12.75, 10, false, TextFormatAlign.RIGHT);
+		warning = addLabel("NEVER give your password to ANYONE.", -152.25, 39, 197.2, 12.15, 10, false, TextFormatAlign.LEFT, 0x666666);
+		charsRemaining = addLabel("1000 / 1000", 85.55, 39.5, 65.5, 12.75, 8, false, TextFormatAlign.RIGHT, 0xAAAAAA);
 		charsRemaining.name = "messageCharsRemaining";
 		codesButton = ownControl(new SendMessageInfoButton());
 		codesButton.name = "codes_bt";

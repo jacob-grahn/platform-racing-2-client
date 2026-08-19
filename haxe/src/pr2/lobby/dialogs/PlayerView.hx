@@ -25,7 +25,7 @@ class PlayerView extends NativeView {
 		panel.scaleX = 0.900802612304688;
 		panel.scaleY = 1.49203491210938;
 		addChild(panel);
-		field(this, "nameBox", -92.5, -133.2, 188.1, 17.05, 14, false, TextFormatAlign.CENTER);
+		field(this, "nameBox", -92.5, -133.2, 188.1, 17.05, 14, false, TextFormatAlign.CENTER, 0x000000);
 		button(this, "close_bt", "Close", -50, 101.8, 100);
 
 		playerInfo = new Sprite();
@@ -122,7 +122,7 @@ class PlayerView extends NativeView {
 	}
 
 	private function field(parent:Sprite, name:Null<String>, x:Float, y:Float, width:Float, height:Float, size:Int, bold:Bool,
-		align:TextFormatAlign, color:Int = 0x222222):TextField {
+		align:TextFormatAlign, color:Int = 0x151515):TextField {
 		var text = new TextField();
 		if (name != null) text.name = name;
 		text.x = x;

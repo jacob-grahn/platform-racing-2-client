@@ -23,6 +23,7 @@ class BanMenuViewTest {
 		assertNear(1.884765625, panel.scaleY, "ban ShadowBG keeps XFL vertical scale");
 		assertEquals("-- Mod --", text(menu, "modTitle").text, "ban menu keeps exact moderator heading");
 		assertEquals("-- Ban --", text(menu, "banTitle").text, "ban menu keeps exact ban heading");
+		assertEquals(0x000000, text(menu, "modTitle").textColor, "ban headings use authored black");
 		if (pr2.DeterministicTestMode.finishSmokeSuite("BanMenuViewTest")) return;
 		assertButton(menu, "warning1Button", "Warning 1", -50, -147);
 		assertButton(menu, "warning2Button", "Warning 2", -50, -121);
@@ -36,6 +37,7 @@ class BanMenuViewTest {
 		assertNear(100, reason.width, "reason input keeps component width");
 		assertEquals(100, reason.maxChars, "reason input keeps authored maximum length");
 		assertEquals("^`", reason.restrict, "reason input excludes the protocol delimiter");
+		assertEquals(0x000000, reason.textColor, "reason input uses authored black");
 		var duration = select(menu, "duration");
 		assertNear(-24, duration.x, "duration keeps XFL X");
 		assertNear(105.5, duration.y, "duration keeps XFL Y");

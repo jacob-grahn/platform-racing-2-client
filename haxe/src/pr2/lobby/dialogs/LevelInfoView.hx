@@ -34,8 +34,8 @@ class LevelInfoView extends NativeView {
 		levelInfo.y = -2.75;
 		addChild(levelInfo);
 		field(levelInfo, "title", -152.05, -118.8, 307.95, 14.55, 12, true, TextFormatAlign.CENTER);
-		field(levelInfo, "author", -157.05, -100.25, 318.95, 14.5, 10, false, TextFormatAlign.CENTER);
-		field(levelInfo, "note", 22.55, -72.4, 140, 120.65, 8, false, TextFormatAlign.CENTER, true);
+		field(levelInfo, "author", -157.05, -100.25, 318.95, 14.5, 10, false, TextFormatAlign.CENTER, false, 0x666666);
+		field(levelInfo, "note", 22.55, -72.4, 140, 120.65, 8, false, TextFormatAlign.CENTER, true, 0x666666);
 
 		label(levelInfo, "Version:", -162.55, -59.8, 91);
 		field(levelInfo, "version", -64.1, -59.8, 31, 13.35, 11, false, TextFormatAlign.LEFT);
@@ -160,11 +160,11 @@ class LevelInfoView extends NativeView {
 	}
 
 	private function label(parent:Sprite, value:String, x:Float, y:Float, width:Float):Void {
-		field(parent, null, x, y, width, 18, 10, true, TextFormatAlign.RIGHT).text = value;
+		field(parent, null, x, y, width, 18, 11, true, TextFormatAlign.RIGHT).text = value;
 	}
 
 	private function field(parent:Sprite, name:Null<String>, x:Float, y:Float, width:Float, height:Float, size:Int, bold:Bool,
-		align:TextFormatAlign, multiline:Bool = false):TextField {
+		align:TextFormatAlign, multiline:Bool = false, color:Int = 0x000000):TextField {
 		var text = new TextField();
 		if (name != null) text.name = name;
 		text.x = x;
@@ -174,7 +174,7 @@ class LevelInfoView extends NativeView {
 		text.multiline = multiline;
 		text.wordWrap = multiline;
 		text.selectable = false;
-		text.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), size, 0x222222, bold, null, null, null, null, align);
+		text.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), size, color, bold, null, null, null, null, align);
 		parent.addChild(text);
 		return text;
 	}

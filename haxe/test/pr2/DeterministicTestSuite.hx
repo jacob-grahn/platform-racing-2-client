@@ -140,6 +140,7 @@ import pr2.ui.GpNotificationTest;
 import pr2.ui.NativePresentationFoundationTest;
 import pr2.ui.PageNavigationFocusTest;
 import pr2.ui.SelectableButtonTest;
+import pr2.ui.TextFieldParityTest;
 import pr2.util.AsyncRemovalGuardTest;
 
 class DeterministicTestSuite {
@@ -163,6 +164,7 @@ class DeterministicTestSuite {
 		DeterministicTestMode.runSuite("PageNavigationFocusTest", ["ui"], PageNavigationFocusTest.main);
 		DeterministicTestMode.runSuite("LoginPageFadeTest", ["ui"], LoginPageFadeTest.main);
 		DeterministicTestMode.runSuite("LoginPageMenuButtonTest", ["ui"], LoginPageMenuButtonTest.main);
+		DeterministicTestMode.runSuite("TextFieldParityTest", ["ui", "lobby", "level-editor"], TextFieldParityTest.main);
 		DeterministicTestMode.runSuite("AsyncRemovalGuardTest", ["runtime"], AsyncRemovalGuardTest.main);
 		DeterministicTestMode.runSuite("RemovableTest", ["runtime"], RemovableTest.main);
 		DeterministicTestMode.runSuite("PixelEffect1Test", ["effects"], PixelEffect1Test.main);

@@ -141,7 +141,7 @@ class OptionsView extends NativeView {
 		field.width = width;
 		field.height = height;
 		field.selectable = false;
-		field.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), size, 0x222222, bold, null, null, null, null, align);
+		field.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), size, 0x000000, bold, null, null, null, null, align);
 		field.text = value;
 		addChild(field);
 		return field;

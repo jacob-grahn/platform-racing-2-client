@@ -293,7 +293,7 @@ private class BanMenuView extends NativeView {
 		reason.backgroundColor = 0xFFFFFF;
 		reason.border = true;
 		reason.borderColor = 0x777777;
-		reason.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 10, 0x222222);
+		reason.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), 10, 0x000000);
 		addChild(reason);
 		button("banButton", "Ban", -50, 140, 100);
 	}
@@ -326,7 +326,7 @@ private class BanMenuView extends NativeView {
 		field.width = width;
 		field.height = height;
 		field.selectable = false;
-		field.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), size, 0x222222, bold, null, null, null, null, align);
+		field.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), size, 0x000000, bold, null, null, null, null, align);
 		field.text = value;
 		addChild(field);
 	}

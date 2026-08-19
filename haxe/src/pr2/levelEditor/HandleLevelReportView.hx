@@ -99,7 +99,7 @@ class HandleLevelReportView extends NativeView {
 		text.width = width;
 		text.height = height;
 		text.selectable = false;
-		text.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), size, 0x222222, bold, italic, null, null, null, align);
+		text.defaultTextFormat = new TextFormat(NativeAssets.font(FontAsset.Interface), size, 0x000000, bold, italic, null, null, null, align);
 		addChild(text);
 		return text;
 	}
