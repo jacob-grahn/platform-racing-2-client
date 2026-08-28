@@ -398,15 +398,15 @@ class SvgAsset {
 }
 
 private class SvgDocument {
-	private var svg:SVG;
-	private var content:String;
+	private var rendered:Shape;
 
 	public function new(content:String) {
-		this.content = content;
-		svg = new SVG(content);
+		var svg = new SVG(content);
+		rendered = new Shape();
+		new SvgGradientStrokeRenderer(svg.data, content).render(rendered.graphics);
 	}
 
 	public function render(graphics:openfl.display.Graphics):Void {
-		new SvgGradientStrokeRenderer(svg.data, content).render(graphics);
+		graphics.copyFrom(rendered.graphics);
 	}
 }

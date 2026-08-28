@@ -257,7 +257,7 @@ class LevelEditor extends Page {
 
 	private function updateSettingValue(itemId:String, value:String):Void {
 		if (menu != null) {
-			menu.settings.setEntryValue(itemId, value);
+			menu.setSettingValue(itemId, value);
 		}
 	}
 

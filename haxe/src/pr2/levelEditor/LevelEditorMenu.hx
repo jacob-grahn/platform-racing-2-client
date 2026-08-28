@@ -14,12 +14,18 @@ import pr2.util.DisplayUtil;
 class LevelEditorMenu extends Sprite {
 	public final editor:LevelEditor;
 	public final art:LevelEditorMenuView;
-	public final blocks:EditorSideBar;
-	public final settings:EditorSideBar;
-	public final stamps:EditorSideBar;
-	public final tools:EditorSideBar;
-	public final bg:EditorSideBar;
+	public var blocks(get, never):EditorSideBar;
+	public var settings(get, never):EditorSideBar;
+	public var stamps(get, never):EditorSideBar;
+	public var tools(get, never):EditorSideBar;
+	public var bg(get, never):EditorSideBar;
 	public var sideBar(default, null):Null<EditorSideBar>;
+	private var blocksSideBar:Null<EditorSideBar>;
+	private var settingsSideBar:Null<EditorSideBar>;
+	private var stampsSideBar:Null<EditorSideBar>;
+	private var toolsSideBar:Null<EditorSideBar>;
+	private var backgroundSideBar:Null<EditorSideBar>;
+	private var pendingSettingValues:Map<String, String> = new Map();
 	private var bindings:Array<Binding> = [];
 
 	public function new(editor:LevelEditor) {
@@ -27,14 +33,47 @@ class LevelEditorMenu extends Sprite {
 		this.editor = editor;
 		art = new LevelEditorMenuView();
 		addChild(art);
-		blocks = new EditorSideBar("blocks", ["delete", "basic1", "basic2", "basic3", "basic4", "brick", "finish", "ice", "item", "infItem", "left",
-			"right", "up", "down", "teleport", "mine", "crumble", "vanish", "move", "water", "rotateR", "rotateL", "push", "happy", "sad",
-			"custom", "safety", "heart", "time", "egg"]);
-		settings = new EditorSideBar("settings", ["music", "items", "hats", "rank", "gravity", "time", "mode", "sfcm", "pass"]);
-		stamps = new EditorSideBar("stamps", ["brush", "delete", "text", "stamp0", "stamp1", "stamp2", "stamp3", "stamp4", "stamp5", "stamp6",
-			"stamp7", "stamp8", "stamp9"]);
-		tools = new EditorSideBar("tools", ["landscape", "brush", "eraser", "size", "color"]);
-		bg = new EditorSideBar("backgrounds", ["color", "bg1", "bg2", "bg3", "bg4", "bg5", "bg6", "bg7"]);
+	}
+
+	private function get_blocks():EditorSideBar {
+		if (blocksSideBar == null) {
+			blocksSideBar = new EditorSideBar("blocks", ["delete", "basic1", "basic2", "basic3", "basic4", "brick", "finish", "ice", "item", "infItem", "left",
+				"right", "up", "down", "teleport", "mine", "crumble", "vanish", "move", "water", "rotateR", "rotateL", "push", "happy", "sad",
+				"custom", "safety", "heart", "time", "egg"]);
+		}
+		return blocksSideBar;
+	}
+
+	private function get_settings():EditorSideBar {
+		if (settingsSideBar == null) {
+			settingsSideBar = new EditorSideBar("settings", ["music", "items", "hats", "rank", "gravity", "time", "mode", "sfcm", "pass"]);
+			for (itemId in pendingSettingValues.keys()) {
+				settingsSideBar.setEntryValue(itemId, pendingSettingValues.get(itemId));
+			}
+		}
+		return settingsSideBar;
+	}
+
+	private function get_stamps():EditorSideBar {
+		if (stampsSideBar == null) {
+			stampsSideBar = new EditorSideBar("stamps", ["brush", "delete", "text", "stamp0", "stamp1", "stamp2", "stamp3", "stamp4", "stamp5", "stamp6",
+				"stamp7", "stamp8", "stamp9"]);
+		}
+		return stampsSideBar;
+	}
+
+	private function get_tools():EditorSideBar {
+		if (toolsSideBar == null) {
+			toolsSideBar = new EditorSideBar("tools", ["landscape", "brush", "eraser", "size", "color"]);
+		}
+		return toolsSideBar;
+	}
+
+	private function get_bg():EditorSideBar {
+		if (backgroundSideBar == null) {
+			backgroundSideBar = new EditorSideBar("backgrounds", ["color", "bg1", "bg2", "bg3", "bg4", "bg5", "bg6", "bg7"]);
+		}
+		return backgroundSideBar;
 	}
 
 	public function init():Void {
@@ -87,7 +126,7 @@ class LevelEditorMenu extends Sprite {
 
 	public function reset():Void {
 		clickBlocks();
-		tools.exit();
+		if (toolsSideBar != null) toolsSideBar.exit();
 	}
 
 	public function remove():Void {
@@ -97,9 +136,16 @@ class LevelEditorMenu extends Sprite {
 		}
 		for (binding in bindings) LobbyArt.unbind(binding);
 		bindings = [];
-		for (side in [blocks, settings, stamps, tools, bg]) {
-			side.remove();
-		}
+		if (blocksSideBar != null) blocksSideBar.remove();
+		if (settingsSideBar != null) settingsSideBar.remove();
+		if (stampsSideBar != null) stampsSideBar.remove();
+		if (toolsSideBar != null) toolsSideBar.remove();
+		if (backgroundSideBar != null) backgroundSideBar.remove();
+		blocksSideBar = null;
+		settingsSideBar = null;
+		stampsSideBar = null;
+		toolsSideBar = null;
+		backgroundSideBar = null;
 		sideBar = null;
 		art.dispose();
 	}
@@ -235,7 +281,12 @@ class LevelEditorMenu extends Sprite {
 	}
 
 	public function updateBackgroundColor():Void {
-		bg.updateColor();
+		if (backgroundSideBar != null) backgroundSideBar.updateColor();
+	}
+
+	public function setSettingValue(itemId:String, value:String):Void {
+		pendingSettingValues.set(itemId, value);
+		if (settingsSideBar != null) settingsSideBar.setEntryValue(itemId, value);
 	}
 
 	private function setLayer(layerNum:Int):Void {

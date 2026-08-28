@@ -38,6 +38,12 @@ class SvgAssetTest {
 		var packedShape = SvgAsset.create(packedPath);
 		assertTrue(packedShape.graphics != null, "production SVG renders through the stable asset-path API");
 		@:privateAccess assertTrue(SvgAsset.parsed.exists(packedPath), "parsed production SVG is cached by asset path");
+		var cachedCopy = SvgAsset.create(packedPath);
+		assertTrue(cachedCopy != packedShape, "cached SVG rendering returns an independent display object");
+		@:privateAccess var cachedCommandCount = cachedCopy.graphics.__commands.types.length;
+		packedShape.graphics.clear();
+		@:privateAccess assertTrue(cachedCommandCount > 0 && cachedCopy.graphics.__commands.types.length == cachedCommandCount,
+			"mutating one cached SVG shape does not alter another shape's drawing commands");
 		#if sys
 		assertTrue(hasLineGradient(SvgAsset.create("assets/svg/native/square_panel.svg")),
 			"production panel retains its Flash gradient hairline outline");
