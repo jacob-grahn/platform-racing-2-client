@@ -97,6 +97,8 @@ class CreateGuildPopupTest {
 		var confirm = DisplayUtil.findByName(popup, "confirm_bt");
 		var cancel = DisplayUtil.findByName(popup, "cancel_bt");
 		assertClose(-135.2, panel.x, "main ShadowBG keeps XFL X");
+		assertEquals(true, panel.scale9Grid != null, "main guild panel preserves the ShadowBG scale grid");
+		assertEquals(true, transferPanel.scale9Grid != null, "transfer guild panel preserves the ShadowBG scale grid");
 		assertClose(-108.8, panel.y, "main ShadowBG keeps XFL Y");
 		assertClose(0.994140625, panel.scaleX, "main ShadowBG keeps XFL horizontal scale");
 		assertClose(1.26116943359375, panel.scaleY, "main ShadowBG keeps XFL vertical scale");
@@ -227,6 +229,7 @@ class CreateGuildPopupTest {
 			onResult({guild: {guild_name: "Racers", note: "", emblem: "default-emblem.jpg"}});
 		};
 		var guild = new GuildPopup(9, "", false);
+		@:privateAccess assertEquals(true, guild.art.shadow.scale9Grid != null, "guild popup preserves the ShadowBG scale grid");
 		guild.applyReturnData({
 			guild: {guild_id: 9, owner_id: 5, guild_name: "Racers", gp_today: 0, gp_total: 0, member_count: 0, active_count: 0, note: ""},
 			members: []

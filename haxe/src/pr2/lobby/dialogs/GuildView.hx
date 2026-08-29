@@ -1,33 +1,29 @@
 package pr2.lobby.dialogs;
 
+import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.MouseEvent;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
 import pr2.assets.NativeAssetIds.FontAsset;
-import pr2.assets.NativeAssetIds.StaticSvg;
 import pr2.assets.NativeAssets;
+import pr2.ui.AuthoredScale9;
 import pr2.ui.controls.GameButton;
 import pr2.ui.view.LoadingView;
 import pr2.ui.view.NativeView;
 
 /** Exact native composition of the authored GuildPopupGraphic states. */
 class GuildView extends NativeView {
-	public final shadow:Sprite;
+	public final shadow:Shape;
 	public final loadingGraphic:LoadingView;
 	public final messageButton:GameButton;
 	public final closeButton:GameButton;
 
 	public function new() {
 		super();
-		shadow = new Sprite();
+		shadow = AuthoredScale9.shadowPanel({x: -150, y: -155, scaleX: 1.10287475585938, scaleY: 1.62298583984375});
 		shadow.name = "shadow";
-		shadow.x = -150;
-		shadow.y = -155;
-		shadow.scaleX = 1.10287475585938;
-		shadow.scaleY = 1.62298583984375;
-		shadow.addChild(NativeAssets.svg(StaticSvg.QuantityPanel));
 		addChild(shadow);
 
 		field("titleBox", -147.95, -140, 296.95, 14.55, 12, false, TextFormatAlign.CENTER);

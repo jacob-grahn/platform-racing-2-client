@@ -28,6 +28,7 @@ class StorePopupTest {
 
 		pr2.DeterministicTestMode.runTest("StorePopupTest.testPurchaseUploadCallbacks", testPurchaseUploadCallbacks);
 		pr2.DeterministicTestMode.runTest("StorePopupTest.testNativeQuantityPopupFlow", testNativeQuantityPopupFlow);
+		pr2.DeterministicTestMode.runTest("StorePopupTest.testPanelScaleGrids", testPanelScaleGrids);
 
 		pr2.DeterministicTestMode.runTest("StorePopupTest.testLobbyVaultRoute", function():Void {
 		var opened = 0;
@@ -47,6 +48,16 @@ class StorePopupTest {
 	}
 
 	private static function listing(overrides:Dynamic):StoreListingData return new StoreListingData(raw(overrides));
+	private static function testPanelScaleGrids():Void {
+		var popup = new StorePopup({
+			info: {user: {coins: 0}, title: {title: "Vault", flashing: false}},
+			listings: []
+		});
+		assertEquals(true, popup.art.panel.scale9Grid != null, "store panel preserves the ShadowBG scale grid");
+		assertEquals(true, popup.art.coinsPanel.scale9Grid != null, "store coins panel preserves the ShadowBG scale grid");
+		popup.remove();
+	}
+
 	private static function raw(overrides:Dynamic):Dynamic {
 		var value:Dynamic = {slug: "", title: "Item", description: "Description", faq: "FAQ", img_url: "", price: 0, available: true, max_quantity: 1, rented_tokens: 0, sale: {active: false, value: 0, expires: 0}};
 		for (field in Reflect.fields(overrides)) Reflect.setField(value, field, Reflect.field(overrides, field));

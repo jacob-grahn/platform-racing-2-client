@@ -1,13 +1,14 @@
 package pr2.lobby.dialogs;
 
+import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.MouseEvent;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
 import pr2.assets.NativeAssetIds.FontAsset;
-import pr2.assets.NativeAssetIds.StaticSvg;
 import pr2.assets.NativeAssets;
+import pr2.ui.AuthoredScale9;
 import pr2.ui.controls.GameButton;
 import pr2.ui.controls.GameTextArea;
 import pr2.ui.controls.GameTextInput;
@@ -15,8 +16,8 @@ import pr2.ui.view.NativeView;
 
 /** Exact native composition of the authored CreateGuildPopupGraphic. */
 class CreateGuildView extends NativeView {
-	public final panel:Sprite;
-	public final transferPanel:Sprite;
+	public final panel:Shape;
+	public final transferPanel:Shape;
 	public final nameInput:GameTextInput;
 	public final proseInput:GameTextArea;
 
@@ -64,16 +65,11 @@ class CreateGuildView extends NativeView {
 		button("cancel_bt", "Cancel", 15, 95);
 	}
 
-	private function panelAt(name:String, x:Float, y:Float, scaleX:Float, scaleY:Float):Sprite {
-		var holder = new Sprite();
-		holder.name = name;
-		holder.x = x;
-		holder.y = y;
-		holder.scaleX = scaleX;
-		holder.scaleY = scaleY;
-		holder.addChild(NativeAssets.svg(StaticSvg.QuantityPanel));
-		addChild(holder);
-		return holder;
+	private function panelAt(name:String, x:Float, y:Float, scaleX:Float, scaleY:Float):Shape {
+		var panel = AuthoredScale9.shadowPanel({x: x, y: y, scaleX: scaleX, scaleY: scaleY});
+		panel.name = name;
+		addChild(panel);
+		return panel;
 	}
 
 	private function button(name:String, value:String, x:Float, y:Float):Void {

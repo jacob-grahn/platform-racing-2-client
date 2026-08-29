@@ -78,6 +78,11 @@ class QuitButtonTest {
 			"quit glow uses the exact authored XFL shape");
 		assertEquals("assets/ui/quit-glow.json", QuitButton.GLOW_DATA_ASSET,
 			"quit glow uses generated neutral XFL frame/filter data");
+		var art = cast(quit.getChildAt(0), openfl.display.Sprite);
+		var background = art.getChildAt(0);
+		assertEquals(true, background.scale9Grid != null, "quit background preserves the SquareBG scale grid");
+		assertNear(66.02, background.width, 0.1, "quit background preserves its authored width");
+		assertNear(35, background.height, 0.1, "quit background preserves its authored height");
 		assertEquals(false, quit.glowActive, "glow starts off");
 		assertEquals(2, quit.glowFrameForTests(), "off label resolves to Flash frame two");
 		quit.startGlow();
@@ -206,6 +211,8 @@ class QuitButtonTest {
 		assertEquals(pr2.net.ServerConfig.getHost() + "/img/luna.jpg", popup.imageUrl, "LuxPopup uses the Flash luna portrait URL");
 		var exactBackground = DisplayUtil.findByName(popup, "exactBackground");
 		assertEquals(true, exactBackground != null, "LuxPopup renders the authored background and shadow");
+		var backgroundPanel = DisplayUtil.findByName(popup, "backgroundPanel");
+		assertEquals(true, backgroundPanel.scale9Grid != null, "LuxPopup preserves the ShadowBG scale grid");
 		var heading = Std.downcast(DisplayUtil.findByName(popup, "textBox"), openfl.text.TextField);
 		assertNear(100, heading.x, 0.001, "Lux label preserves authored x");
 		assertNear(7.95, heading.y, 0.001, "Lux label preserves authored y");

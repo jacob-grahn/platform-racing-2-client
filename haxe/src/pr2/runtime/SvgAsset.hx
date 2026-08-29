@@ -22,6 +22,7 @@ class SvgAsset {
 	private static inline var SVG_PACK_PREFIX = "assets/svg-packs/";
 	private static final parsed:Map<String, SvgDocument> = new Map();
 	private static final packEntries:Map<String, Dynamic> = new Map();
+	private static final symbolExcludedContent:Map<String, String> = new Map();
 
 	public static function create(assetPath:String):Shape {
 		return get(assetPath).createShape();
@@ -110,11 +111,16 @@ class SvgAsset {
 
 	/** Renders an authored composition without instances of one nested XFL symbol. */
 	public static function createWithoutSymbol(assetPath:String, symbolName:String):Shape {
+		var cacheKey = assetPath + "\n" + symbolName;
+		var content = symbolExcludedContent.get(cacheKey);
+		if (content != null) return shapeFromPrepared(content);
 		var document = Xml.parse(prepare(loadText(assetPath)));
 		var root = document.firstElement();
 		if (root == null) throw 'Invalid SVG asset $assetPath';
 		removeSymbol(root, symbolName);
-		return createFromText(document.toString());
+		content = prepare(document.toString());
+		symbolExcludedContent.set(cacheKey, content);
+		return shapeFromPrepared(content);
 	}
 
 	/** Applies Flash-style solid color channels to named XFL instance groups before rendering. */

@@ -14,6 +14,7 @@ import pr2.ui.controls.GameButton;
 import pr2.ui.view.NativeView;
 import pr2.util.DisplayUtil;
 import pr2.runtime.SvgAsset;
+import pr2.ui.AuthoredScale9;
 
 /** Port of Flash `gameplay.LuxPopup`, shown by the in-race `setLuxGain` command. */
 class LuxPopup extends Popup {
@@ -71,10 +72,14 @@ class LuxPopup extends Popup {
 
 private class LuxPopupView extends NativeView {
 	public final exactBackground:Shape;
+	public final backgroundPanel:Shape;
 
 	public function new() {
 		super();
-		exactBackground = SvgAsset.create(LuxPopup.BACKGROUND_ASSET);
+		backgroundPanel = AuthoredScale9.shadowPanel({x: 95, y: -74.15, scaleX: 0.632369995117188, scaleY: 0.768997192382812});
+		backgroundPanel.name = "backgroundPanel";
+		addChild(backgroundPanel);
+		exactBackground = SvgAsset.createWithoutSymbol(LuxPopup.BACKGROUND_ASSET, AuthoredScale9.SHADOW_SYMBOL);
 		exactBackground.name = "exactBackground";
 		addChild(exactBackground);
 		var heading = new TextField();

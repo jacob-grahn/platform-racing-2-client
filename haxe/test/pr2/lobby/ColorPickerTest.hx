@@ -227,6 +227,7 @@ class ColorPickerTest {
 		var popup = new ColorPickerPopup(0x123456);
 		var art = @:privateAccess popup.art;
 		assertClose(0, art.panel.x, "color picker ShadowBG keeps XFL X");
+		assertEquals(true, art.panel.scale9Grid != null, "color picker preserves the ShadowBG scale grid");
 		assertClose(0, art.panel.y, "color picker ShadowBG keeps XFL Y");
 		assertClose(0.919113159179688, art.panel.scaleX, "color picker ShadowBG keeps XFL horizontal scale");
 		assertClose(1.36125183105469, art.panel.scaleY, "color picker ShadowBG keeps XFL vertical scale");

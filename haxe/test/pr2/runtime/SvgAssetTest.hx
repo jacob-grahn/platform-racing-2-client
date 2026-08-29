@@ -65,8 +65,15 @@ class SvgAssetTest {
 			"mutating one cached SVG shape does not alter another shape's drawing commands");
 		#if sys
 		var squarePanel = SvgAsset.create("assets/svg/native/square_panel.svg");
+		var squarePanelSource = File.getContent("art/svg/native/square_panel.svg");
 		assertTrue(hasLineGradient(squarePanel),
 			"production panel retains its Flash gradient hairline outline");
+		assertTrue(hasVerticalFillGradient(squarePanel),
+			"production panel renders its fill gradient vertically after SVG parsing");
+		assertTrue(squarePanelSource.indexOf('x1="50.15" y1="100.775" x2="50.15"') >= 0,
+			"production panel expresses the rotated XFL gradient vertically");
+		assertFalse(squarePanelSource.indexOf("0, -0.9876556396484375") >= 0,
+			"production panel bakes the authored rotation instead of leaving a group transform");
 		assertTrue(hasHairlineCommand(squarePanel), "production panel retains its authored hairline command");
 		assertTrue(hasHairlineCommand(SvgAsset.create("assets/svg/native/half_square_panel.svg")),
 			"lobby side-panel retains its authored hairline command");
@@ -83,6 +90,8 @@ class SvgAssetTest {
 		fadedSlash.dispose();
 		fadedLaser.dispose();
 		assertFalse(muteBase.indexOf("MovieClips_Symbol_109") >= 0, "mute base excludes the authored wave paths");
+		assertFalse(muteBase.indexOf('<use xlink:href="#UI_Popups__outside_levels__BG_0_Layer0_0_FILL"/>') >= 0,
+			"mute base excludes the flattened SquareBG instance");
 		assertTrue(muteWaves.indexOf('<use xlink:href="#MovieClips_Symbol_109_0_Layer0_0_1_STROKES"/>') >= 0,
 			"mute waves export retains the authored wave layer");
 		assertFalse(muteWaves.indexOf('<use xlink:href="#Graphics_Symbol_107') >= 0, "mute waves export excludes the speaker layer");
@@ -93,6 +102,19 @@ class SvgAssetTest {
 
 	private static function hasLineGradient(shape:openfl.display.Shape):Bool {
 		@:privateAccess return shape.graphics.__commands.types.indexOf(DrawCommandType.LINE_GRADIENT_STYLE) >= 0;
+	}
+
+	private static function hasVerticalFillGradient(shape:openfl.display.Shape):Bool {
+		@:privateAccess var reader = new DrawCommandReader(shape.graphics.__commands);
+		@:privateAccess var types = shape.graphics.__commands.types;
+		for (type in types) {
+			if (type == DrawCommandType.BEGIN_GRADIENT_FILL) {
+				var fill = reader.readBeginGradientFill();
+				return Math.abs(fill.matrix.b) > Math.abs(fill.matrix.a);
+			}
+			reader.skip(type);
+		}
+		return false;
 	}
 
 	private static function hasHairlineCommand(shape:openfl.display.Shape):Bool {

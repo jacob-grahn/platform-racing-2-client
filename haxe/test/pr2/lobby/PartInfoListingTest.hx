@@ -63,6 +63,7 @@ class PartInfoListingTest {
 		var equip = DisplayUtil.findByName(popup, "equip_bt");
 		var close = DisplayUtil.findByName(popup, "close_bt");
 		assertClose(-198.95, panel.x, "part popup ShadowBG keeps XFL X");
+		assertEquals(true, panel.scale9Grid != null, "part popup preserves the ShadowBG scale grid");
 		assertClose(-98.65, panel.y, "part popup ShadowBG keeps XFL Y");
 		assertClose(1.47056579589844, panel.scaleX, "part popup ShadowBG keeps XFL horizontal scale");
 		assertClose(1.04719543457031, panel.scaleY, "part popup ShadowBG keeps XFL vertical scale");

@@ -9,6 +9,7 @@ import openfl.text.TextFormatAlign;
 import pr2.display.Removable;
 import pr2.lobby.dialogs.HoverPopup;
 import pr2.runtime.SvgAsset;
+import pr2.ui.AuthoredScale9;
 
 /**
 	Port of Flash `gameplay.StatsDisplay`.
@@ -29,11 +30,15 @@ class StatsDisplay extends Removable {
 	private var pop:Null<HoverPopup>;
 	private var hoverTimer:Null<haxe.Timer>;
 	public final exactBackground:Shape;
+	public final backgroundPanel:Shape;
 
 	public function new() {
 		super();
 		art = new Sprite();
-		exactBackground = SvgAsset.create(BACKGROUND_ASSET);
+		backgroundPanel = AuthoredScale9.squarePanel({scaleX: 0.56982421875, scaleY: 0.179977416992188});
+		backgroundPanel.name = "backgroundPanel";
+		art.addChild(backgroundPanel);
+		exactBackground = SvgAsset.createWithoutSymbol(BACKGROUND_ASSET, AuthoredScale9.SQUARE_SYMBOL);
 		exactBackground.name = "exactBackground";
 		art.addChild(exactBackground);
 		speedBox = createStatBox("speedBox", 2.4, 15.5);

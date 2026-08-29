@@ -14,6 +14,7 @@ import pr2.ui.controls.GameSelect;
 import pr2.ui.controls.GameTextInput;
 import pr2.ui.view.NativeView;
 import pr2.runtime.SvgAsset;
+import pr2.ui.AuthoredScale9;
 
 private typedef UploadFactory = String->Map<String, String>->String->(Dynamic->Void)->UploadingPopup;
 
@@ -293,6 +294,7 @@ class PlaceArtifact extends Popup {
 
 private class PlaceArtifactView extends NativeView {
 	public final exactBackground:Shape;
+	public final backgroundPanel:Shape;
 	public final monthSelect:GameSelect<Dynamic>;
 	public final daySelect:GameSelect<Dynamic>;
 	public final yearSelect:GameSelect<Dynamic>;
@@ -305,7 +307,10 @@ private class PlaceArtifactView extends NativeView {
 
 	public function new() {
 		super();
-		exactBackground = SvgAsset.create(PlaceArtifact.BACKGROUND_ASSET);
+		backgroundPanel = AuthoredScale9.shadowPanel({x: -125, y: -114, scaleX: 0.919097900390625, scaleY: 1.19357299804688});
+		backgroundPanel.name = "backgroundPanel";
+		addChild(backgroundPanel);
+		exactBackground = SvgAsset.createWithoutSymbol(PlaceArtifact.BACKGROUND_ASSET, AuthoredScale9.SHADOW_SYMBOL);
 		exactBackground.name = "exactBackground";
 		addChild(exactBackground);
 		monthSelect = combo("monthSel", -37.5, -79.75, 70);

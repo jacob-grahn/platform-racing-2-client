@@ -1,28 +1,24 @@
 package pr2.lobby.account;
 
+import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
 import pr2.assets.NativeAssetIds.FontAsset;
-import pr2.assets.NativeAssetIds.StaticSvg;
 import pr2.assets.NativeAssets;
+import pr2.ui.AuthoredScale9;
 import pr2.ui.controls.GameButton;
 import pr2.ui.view.NativeView;
 
 /** Exact native composition of the authored PartPopupGraphic shell. */
 class PartPopupView extends NativeView {
-	public final panel:Sprite;
+	public final panel:Shape;
 
 	public function new() {
 		super();
-		panel = new Sprite();
+		panel = AuthoredScale9.shadowPanel({x: -198.95, y: -98.65, scaleX: 1.47056579589844, scaleY: 1.04719543457031});
 		panel.name = "panel";
-		panel.x = -198.95;
-		panel.y = -98.65;
-		panel.scaleX = 1.47056579589844;
-		panel.scaleY = 1.04719543457031;
-		panel.addChild(NativeAssets.svg(StaticSvg.QuantityPanel));
 		addChild(panel);
 		field("titleBox", -175.95, -85, 354.95, 14.55, 12, true, TextFormatAlign.CENTER, 0x000000);
 		field("descBox", -180.95, -66.45, 364.95, 14.5, 10, false, TextFormatAlign.CENTER, 0x666666);

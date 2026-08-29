@@ -15,6 +15,8 @@ class StatsDisplayTest {
 			"stats display uses the exact authored XFL background and dividers");
 		assertEquals(true, display.exactBackground.width > 0,
 			"authored stats display art renders");
+		assertEquals(true, display.backgroundPanel.scale9Grid != null,
+			"stats background preserves the SquareBG scale grid");
 		assertNear(2.4, field(display, "speedBox").x, 0.001, "speed field preserves authored x");
 		assertNear(15.5, field(display, "speedBox").width, 0.001, "speed field preserves authored width");
 		assertNear(15.7, field(display, "accelBox").width, 0.001, "acceleration field preserves authored width");

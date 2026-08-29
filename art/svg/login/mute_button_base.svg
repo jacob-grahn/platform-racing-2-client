@@ -85,14 +85,6 @@ L 12 -6 12 6 6.6 3 0 3 0 -3 6.6 -3 6.6 3"/>
 </defs>
 
 <g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<g transform="matrix( 0.56982421875, 0, 0, 0.3499755859375, -14,-18) ">
-<g transform="matrix( 0, -0.9876556396484375, 0.9876556396484375, 0, 0.45,99.55) ">
-<use xlink:href="#UI_Popups__outside_levels__BG_0_Layer0_0_FILL"/>
-
-<use xlink:href="#UI_Popups__outside_levels__BG_0_Layer0_0_1_STROKES" transform="matrix( 0, 1.0124969482421875, -1.0124969482421875, 0, 100.75,-0.45) "/>
-</g>
-</g>
-
 <g id="button" transform="matrix( 1, 0, 0, 1, -1.5,0.05) ">
 <g transform="matrix( 1, 0, 0, 1, 0,0) ">
 <g transform="matrix( 1, 0, 0, 1, 0,0) ">

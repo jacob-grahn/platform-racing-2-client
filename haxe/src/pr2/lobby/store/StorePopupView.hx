@@ -1,19 +1,20 @@
 package pr2.lobby.store;
 
+import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
 import pr2.assets.NativeAssetIds.FontAsset;
-import pr2.assets.NativeAssetIds.StaticSvg;
 import pr2.assets.NativeAssets;
+import pr2.ui.AuthoredScale9;
 import pr2.ui.controls.GameButton;
 import pr2.ui.view.NativeView;
 
 /** Exact native composition of the authored StorePopupGraphic shell. */
 class StorePopupView extends NativeView {
-	public final panel:Sprite;
-	public final coinsPanel:Sprite;
+	public final panel:Shape;
+	public final coinsPanel:Shape;
 
 	public function new() {
 		super();
@@ -43,16 +44,11 @@ class StorePopupView extends NativeView {
 		addChild(close);
 	}
 
-	private function panelAt(name:String, x:Float, y:Float, scaleX:Float, scaleY:Float):Sprite {
-		var holder = new Sprite();
-		holder.name = name;
-		holder.x = x;
-		holder.y = y;
-		holder.scaleX = scaleX;
-		holder.scaleY = scaleY;
-		holder.addChild(NativeAssets.svg(StaticSvg.QuantityPanel));
-		addChild(holder);
-		return holder;
+	private function panelAt(name:String, x:Float, y:Float, scaleX:Float, scaleY:Float):Shape {
+		var panel = AuthoredScale9.shadowPanel({x: x, y: y, scaleX: scaleX, scaleY: scaleY});
+		panel.name = name;
+		addChild(panel);
+		return panel;
 	}
 
 	private function field(name:String, x:Float, y:Float, width:Float, height:Float, size:Int, bold:Bool, align:TextFormatAlign,

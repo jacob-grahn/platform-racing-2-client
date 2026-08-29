@@ -28,8 +28,8 @@ class PlaceArtifactTest {
 		var popup = popupAt(new Date(2026, 5, 7, 0, 4, 0));
 		assertEquals("assets/svg/effects/place_artifact_01.svg", PlaceArtifact.BACKGROUND_ASSET,
 			"artifact popup uses exact authored XFL background and copy");
-		@:privateAccess assertEquals(true, popup.art.exactBackground.width > 200,
-			"authored artifact popup art renders");
+		@:privateAccess assertEquals(true, popup.art.backgroundPanel.scale9Grid != null,
+			"artifact popup preserves the ShadowBG scale grid");
 		assertNear(-37.5, popup.monthSel.x, 0.001, "month selector preserves authored x");
 		assertNear(-109.5, popup.daySel.x, 0.001, "day selector preserves authored x");
 		assertNear(44.5, popup.yearSel.x, 0.001, "year selector preserves authored x");

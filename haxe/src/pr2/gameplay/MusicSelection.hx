@@ -8,9 +8,9 @@ import pr2.audio.MusicCatalog;
 import pr2.audio.MusicCatalog.MusicTrack;
 import pr2.display.Removable;
 import pr2.lobby.account.Settings;
+import pr2.ui.AuthoredScale9;
 import pr2.ui.StageFocus;
 import pr2.ui.controls.GameSelect;
-import pr2.runtime.SvgAsset;
 
 /**
 	Port of Flash `gameplay.MusicSelection` and its `ui.GameSound` dropdown.
@@ -28,7 +28,7 @@ class MusicSelection extends Removable {
 	public function new(?music:GameMusic) {
 		super();
 		art = new Sprite();
-		exactBackground = SvgAsset.create(BACKGROUND_ASSET);
+		exactBackground = AuthoredScale9.squarePanel({scaleX: 2.14022827148438, scaleY: 0.349990844726562});
 		art.addChild(exactBackground);
 		addChild(art);
 

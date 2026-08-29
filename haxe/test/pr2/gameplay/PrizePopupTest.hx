@@ -107,6 +107,7 @@ class PrizePopupTest {
 		assertNear(10, flavor.defaultTextFormat.size, 0.001, "flavor text keeps the Flash 10px type size");
 		assertNear(95.4, flavorBg.x, 0.001, "flavor panel keeps its XFL x");
 		assertNear(49.95, flavorBg.y, 0.001, "flavor panel keeps its XFL y");
+		assertEquals(true, flavorBg.scale9Grid != null, "flavor panel preserves the ShadowBG scale grid");
 		assertNear(flavor.height + 15, flavorBg.height, 0.001, "flavor panel follows the wrapped text height");
 		popup.remove();
 

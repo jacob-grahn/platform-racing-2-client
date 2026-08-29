@@ -29,10 +29,10 @@ class MusicSelectionTest {
 		var music = new RecordingGameMusic();
 		var selection = new MusicSelection(music);
 		assertEquals("assets/svg/effects/music_selection_01.svg", MusicSelection.BACKGROUND_ASSET,
-			"music selection uses the exact authored XFL background");
-		var bounds = selection.exactBackground.getBounds(selection.exactBackground);
-		assertNear(214.02, bounds.width, 0.1, "authored background preserves XFL horizontal scale");
-		assertNear(35.0, bounds.height, 0.1, "authored background preserves XFL vertical scale");
+			"music selection retains its authored XFL background source");
+		assertTrue(selection.exactBackground.scale9Grid != null, "music selection background preserves the SquareBG scale grid");
+		assertNear(214.02, selection.exactBackground.width, 0.1, "authored background preserves XFL width");
+		assertNear(35.0, selection.exactBackground.height, 0.1, "authored background preserves XFL height");
 		assertNear(7.0, selection.dropdown.x, 0.001, "dropdown preserves Flash x position");
 		assertNear(7.0, selection.dropdown.y, 0.001, "dropdown preserves Flash y position");
 		selection.setSong("3", 0);
@@ -103,6 +103,11 @@ class MusicSelectionTest {
 	private static function assertNear(expected:Float, actual:Float, tolerance:Float, message:String):Void {
 		assertions++;
 		if (Math.abs(expected - actual) > tolerance) throw '$message: expected $expected +/- $tolerance, got $actual';
+	}
+
+	private static function assertTrue(actual:Bool, message:String):Void {
+		assertions++;
+		if (!actual) throw '$message: expected true';
 	}
 }
 

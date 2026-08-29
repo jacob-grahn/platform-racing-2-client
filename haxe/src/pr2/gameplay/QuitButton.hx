@@ -10,6 +10,7 @@ import openfl.filters.GlowFilter;
 import openfl.ui.Keyboard;
 import openfl.utils.Assets;
 import pr2.lobby.dialogs.ConfirmPopup;
+import pr2.ui.AuthoredScale9;
 import pr2.ui.controls.GameButton;
 import pr2.runtime.SvgAsset;
 
@@ -41,7 +42,7 @@ class QuitButton extends openfl.display.Sprite {
 
 		art = new openfl.display.Sprite();
 		addChild(art);
-		var background = SvgAsset.create(BACKGROUND_ASSET);
+		var background = AuthoredScale9.squarePanel({x: 146, y: 162, scaleX: 0.66021728515625, scaleY: 0.349990844726562});
 		art.addChild(background);
 		glow = SvgAsset.create(GLOW_ASSET);
 		glow.name = "glow";

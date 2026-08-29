@@ -29,8 +29,8 @@ class CatCaptchaTest {
 		var popup = new CatCaptcha();
 		assertEquals("assets/svg/effects/cat_captcha_01.svg", CatCaptcha.PANEL_ASSET,
 			"captcha uses the exact authored XFL panel and title");
-		@:privateAccess assertEquals(true, popup.art.getChildByName("exactPanel").width > 440,
-			"authored captcha panel renders at source width");
+		@:privateAccess assertEquals(true, popup.art.getChildByName("backgroundPanel").scale9Grid != null,
+			"captcha preserves the ShadowBG scale grid");
 		assertEquals(2, countAnswers(popup), "challenge creates two answer images");
 		var first = answerAt(popup, 0);
 		var second = answerAt(popup, 1);

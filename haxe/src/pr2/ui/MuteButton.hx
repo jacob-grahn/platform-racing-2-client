@@ -22,15 +22,23 @@ class MuteButton extends Sprite {
 	private static inline var MUTE_BUTTON_WAVES_ASSET = "assets/svg/login/mute_button_waves.svg";
 	public static var muted(default, null):Bool = false;
 
+	public final backgroundPanel:Shape;
+	private var buttonArtwork:Sprite;
 	private var artworkBase:Shape;
 	private var artworkWaves:Shape;
 
 	public function new() {
 		super();
+		backgroundPanel = AuthoredScale9.squarePanel({x: -14, y: -18, scaleX: 0.56982421875, scaleY: 0.349990844726562});
+		backgroundPanel.name = "backgroundPanel";
+		addChild(backgroundPanel);
+		buttonArtwork = new Sprite();
+		buttonArtwork.name = "button";
 		artworkBase = SvgAsset.create(MUTE_BUTTON_BASE_ASSET);
 		artworkWaves = SvgAsset.create(MUTE_BUTTON_WAVES_ASSET);
-		addChild(artworkBase);
-		addChild(artworkWaves);
+		buttonArtwork.addChild(artworkBase);
+		buttonArtwork.addChild(artworkWaves);
+		addChild(buttonArtwork);
 
 		buttonMode = true;
 		useHandCursor = true;
@@ -53,11 +61,11 @@ class MuteButton extends Sprite {
 	}
 
 	private function onOver(_:MouseEvent):Void {
-		transform.colorTransform = new ColorTransform(0.5, 0.5, 0.5, 1, 127, 127, 127, 0);
+		buttonArtwork.transform.colorTransform = new ColorTransform(0.5, 0.5, 0.5, 1, 127, 127, 127, 0);
 	}
 
 	private function onOut(_:MouseEvent):Void {
-		transform.colorTransform = new ColorTransform();
+		buttonArtwork.transform.colorTransform = new ColorTransform();
 	}
 
 	private function applyMutedState():Void {

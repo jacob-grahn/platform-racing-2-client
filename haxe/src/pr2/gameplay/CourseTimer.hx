@@ -10,10 +10,10 @@ import openfl.text.TextFieldAutoSize;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
 import pr2.assets.NativeAssetIds.FontAsset;
-import pr2.assets.NativeAssetIds.StaticSvg;
 import pr2.assets.NativeAssets;
 import pr2.display.Removable;
 import pr2.net.LobbySocket;
+import pr2.ui.AuthoredScale9;
 
 typedef CourseTimerOptions = {
 	@:optional var now:Void->Float;
@@ -36,9 +36,7 @@ class CourseTimer extends Removable {
 		super();
 		now = options != null && options.now != null ? options.now : LobbySocket.getMS;
 		onOutOfTime = options != null ? options.onOutOfTime : null;
-		var panel = NativeAssets.svg(StaticSvg.TimerPanel);
-		panel.scaleX = 0.56982421875;
-		panel.scaleY = 0.299972534179688;
+		var panel = AuthoredScale9.squarePanel({scaleX: 0.56982421875, scaleY: 0.299972534179688});
 		addChild(panel);
 
 		// TimerGraphic's `holder` lives at (41, 5.75). Its one text field is

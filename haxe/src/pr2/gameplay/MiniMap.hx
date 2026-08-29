@@ -7,10 +7,9 @@ import openfl.display.LineScaleMode;
 import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.geom.Rectangle;
-import pr2.assets.NativeAssetIds.StaticSvg;
-import pr2.assets.NativeAssets;
 import pr2.display.Removable;
 import pr2.level.ObjectCodes;
+import pr2.ui.AuthoredScale9;
 
 /**
 	Port of `gameplay/MiniMap.as`.
@@ -42,9 +41,7 @@ class MiniMap extends Removable {
 
 	public function new() {
 		super();
-		var background = NativeAssets.svg(StaticSvg.TimerPanel);
-		background.scaleX = 4.07011413574219;
-		background.scaleY = 0.5;
+		var background = AuthoredScale9.squarePanel({scaleX: 4.07011413574219, scaleY: 0.5});
 		addChild(background);
 		blockSprite.graphics.beginFill(0);
 	}

@@ -43,6 +43,7 @@ class NativePresentationFoundationTest {
 	public static function main():Void {
 		pr2.DeterministicTestMode.runTest("NativePresentationFoundationTest.testTypedAssetIds", testTypedAssetIds);
 		if (pr2.DeterministicTestMode.finishSmokeSuite("NativePresentationFoundationTest")) return;
+		pr2.DeterministicTestMode.runTest("NativePresentationFoundationTest.testMuteButtonPanel", testMuteButtonPanel);
 		pr2.DeterministicTestMode.runTest("NativePresentationFoundationTest.testAnimationPlayback", testAnimationPlayback);
 		pr2.DeterministicTestMode.runTest("NativePresentationFoundationTest.testAnimationCompositionAndOwnership", testAnimationCompositionAndOwnership);
 		pr2.DeterministicTestMode.runTest("NativePresentationFoundationTest.testControlParityContracts", testControlParityContracts);
@@ -61,6 +62,20 @@ class NativePresentationFoundationTest {
 		assertEquals("assets/blocks/basic1.png", cast BitmapAsset.BasicBlock, "bitmap has a typed semantic id");
 		assertEquals("Arial", cast FontAsset.Body, "font has a typed semantic id");
 		assertEquals("assets/audio/sfx/jump.mp3", cast SoundAsset.Jump, "sound has a typed semantic id");
+	}
+
+	private static function testMuteButtonPanel():Void {
+		var mute = new MuteButton();
+		assertEquals(true, mute.backgroundPanel.scale9Grid != null, "mute background preserves the SquareBG scale grid");
+		assertClose(-14, mute.backgroundPanel.x, "mute background keeps its XFL x");
+		assertClose(-18, mute.backgroundPanel.y, "mute background keeps its XFL y");
+		mute.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_OVER));
+		assertClose(1, mute.backgroundPanel.transform.colorTransform.redMultiplier,
+			"mute hover leaves the panel color unchanged");
+		assertClose(0.5, mute.getChildByName("button").transform.colorTransform.redMultiplier,
+			"mute hover tints only the authored button symbol");
+		mute.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_OUT));
+		mute.remove();
 	}
 
 	private static function testAnimationPlayback():Void {

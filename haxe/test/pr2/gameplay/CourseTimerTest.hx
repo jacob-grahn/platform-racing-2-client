@@ -66,6 +66,7 @@ class CourseTimerTest {
 	private static function testCountdownModeUsesServerClockAndAddTime():Void {
 		nowMs = 100000;
 		var timer = new CourseTimer({now: now, onOutOfTime: function():Void {}});
+		assertEquals(true, timer.getChildAt(0).scale9Grid != null, "timer background preserves the SquareBG scale grid");
 		timer.setTime(120);
 		assertEquals(120, timer.getMS(), "getMS exposes configured countdown seconds");
 		timer.init();

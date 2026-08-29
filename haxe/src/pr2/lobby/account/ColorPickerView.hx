@@ -1,26 +1,22 @@
 package pr2.lobby.account;
 
-import openfl.display.Sprite;
-import pr2.assets.NativeAssetIds.StaticSvg;
-import pr2.assets.NativeAssets;
+import openfl.display.Shape;
+import pr2.ui.AuthoredScale9;
 import pr2.ui.controls.GameButton;
 import pr2.ui.controls.GameTextInput;
 import pr2.ui.view.NativeView;
 
 /** Exact native composition of the authored ColorPickerPopupGraphic shell. */
 class ColorPickerView extends NativeView {
-	public final panel:Sprite;
+	public final panel:Shape;
 	public final okButton:GameButton;
 	public final cancelButton:GameButton;
 	public final textInput:GameTextInput;
 
 	public function new() {
 		super();
-		panel = new Sprite();
+		panel = AuthoredScale9.shadowPanel({scaleX: 0.919113159179688, scaleY: 1.36125183105469});
 		panel.name = "panel";
-		panel.scaleX = 0.919113159179688;
-		panel.scaleY = 1.36125183105469;
-		panel.addChild(NativeAssets.svg(StaticSvg.QuantityPanel));
 		addChild(panel);
 
 		textInput = ownControl(new GameTextInput());

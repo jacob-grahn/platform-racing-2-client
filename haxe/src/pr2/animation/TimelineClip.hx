@@ -41,7 +41,7 @@ class TimelineClip extends Sprite {
 	private final markersByFrame:Map<Int, Array<String>> = new Map();
 	private var completed:Bool = false;
 
-	public function new(sourcePath:String) {
+	public function new(sourcePath:String, ?excludedLayerNames:Array<String>) {
 		super();
 		this.sourcePath = sourcePath;
 		var document:Dynamic = Json.parse(loadText(sourcePath));
@@ -73,8 +73,10 @@ class TimelineClip extends Sprite {
 		while (index > 0) {
 			index--;
 			var data = definitions[index];
+			var layerName = Std.string(data.nm);
+			if (excludedLayerNames != null && excludedLayerNames.indexOf(layerName) >= 0) continue;
 			var view = new Sprite();
-			view.name = Std.string(data.nm);
+			view.name = layerName;
 			var layerType = Std.int(data.ty);
 			if (layerType == 2) {
 				var path = assets.get(Std.string(data.refId));

@@ -35,6 +35,10 @@ class ItemDisplayTest {
 		@:privateAccess assertEquals("assets/effects/item_display.lottie.json", display.art.timeline.sourcePath,
 			"empty display uses semantic Lottie data");
 		@:privateAccess assertEquals(1, display.art.timeline.currentFrame, "empty display uses authored frame one");
+		@:privateAccess assertEquals(true, display.art.backgroundPanel.scale9Grid != null,
+			"item display background preserves the SquareBG scale grid");
+		@:privateAccess assertEquals(null, display.art.timeline.getChildByName("ui_popups_outside_levels_bg_d14a954e12/t00_l000_f0000_r00.svg"),
+			"item timeline omits its flattened background layer");
 		assertEquals("None", display.itemName, "display starts empty");
 		assertEquals("None", display.labelText("holder1"), "dark label starts empty");
 		assertEquals("None", display.labelText("holder2"), "light label starts empty");

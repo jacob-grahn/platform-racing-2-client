@@ -13,6 +13,7 @@ import pr2.net.FormPostClient;
 import pr2.net.ServerConfig;
 import pr2.net.TextLoader;
 import pr2.runtime.SvgAsset;
+import pr2.ui.AuthoredScale9;
 
 typedef CaptchaLoad = (onReady:Void->Void, onError:Void->Void) -> Void;
 typedef CaptchaSubmit = (answer:Int, onDone:Void->Void, onError:Void->Void) -> Void;
@@ -41,7 +42,10 @@ class CatCaptcha extends Popup {
 
 	private static function createNativePanel():Sprite {
 		var panel = new Sprite();
-		var authored = SvgAsset.create(PANEL_ASSET);
+		var background = AuthoredScale9.shadowPanel({x: -222, y: -128, scaleX: 1.63226318359375, scaleY: 1.33517456054688});
+		background.name = "backgroundPanel";
+		panel.addChild(background);
+		var authored = SvgAsset.createWithoutSymbol(PANEL_ASSET, AuthoredScale9.SHADOW_SYMBOL);
 		authored.name = "exactPanel";
 		panel.addChild(authored);
 		return panel;

@@ -31,8 +31,8 @@ class FinishedPageTest {
 		var page = new FinishedPage(12345, null, null, 1842);
 		assertEquals("assets/svg/effects/finished_page_01.svg", FinishedPageView.SHELL_ASSET,
 			"finished page uses the exact authored XFL shell and static copy");
-		assertEquals(true, DisplayUtil.findByName(page, "exactShell").width > 280,
-			"authored finished-page shell renders");
+		assertEquals(true, DisplayUtil.findByName(page, "backgroundPanel").scale9Grid != null,
+			"finished-page shell preserves the ShadowBG scale grid");
 		assertNear(-127.95, LobbyArt.text(page, "bonus1").x, 0.001, "award column preserves authored x");
 		assertNear(-100.5, LobbyArt.text(page, "bonus1").y, 0.001, "first award preserves authored y");
 		assertNear(50.25, LobbyArt.text(page, "exp1").x, 0.001, "experience column preserves authored x");

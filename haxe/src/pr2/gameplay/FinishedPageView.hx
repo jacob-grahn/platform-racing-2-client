@@ -1,19 +1,25 @@
 package pr2.gameplay;
 
+import openfl.display.Shape;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
 import pr2.runtime.SvgAsset;
+import pr2.ui.AuthoredScale9;
 import pr2.ui.controls.GameButton;
 import pr2.ui.view.NativeView;
 
 /** Exact XFL end-of-race shell with native dynamic award fields and buttons. */
 class FinishedPageView extends NativeView {
 	public static inline final SHELL_ASSET = "assets/svg/effects/finished_page_01.svg";
+	public final backgroundPanel:Shape;
 
 	public function new() {
 		super();
-		var shell = SvgAsset.create(SHELL_ASSET);
+		backgroundPanel = AuthoredScale9.shadowPanel({x: -145.6, y: -141, scaleX: 1.072021484375, scaleY: 1.54437255859375});
+		backgroundPanel.name = "backgroundPanel";
+		addChild(backgroundPanel);
+		var shell = SvgAsset.createWithoutSymbol(SHELL_ASSET, AuthoredScale9.SHADOW_SYMBOL);
 		shell.name = "exactShell";
 		addChild(shell);
 		for (index in 1...6) {
