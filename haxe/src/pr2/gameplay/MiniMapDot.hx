@@ -1,6 +1,7 @@
 package pr2.gameplay;
 
 import openfl.display.Sprite;
+import openfl.display.LineScaleMode;
 import openfl.events.MouseEvent;
 import pr2.lobby.dialogs.HoverPopup;
 
@@ -106,7 +107,7 @@ class MiniMapDot extends Sprite {
 	**/
 	private function drawMarker():Void {
 		graphics.clear();
-		graphics.lineStyle(0.05, 0x000000);
+		graphics.lineStyle(0, 0x000000, 1, false, LineScaleMode.NONE);
 		graphics.beginFill(selectedColor);
 		graphics.drawRect(-2, -4, 4, 4);
 		graphics.endFill();

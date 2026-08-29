@@ -13,9 +13,9 @@ class ProgressBarTest {
 		assertEquals(2, bar.numChildren, "XFL layer order keeps border below fill");
 		var border = bar.getChildAt(0);
 		var fill = bar.getChildAt(1);
-		// OpenFL expands Flash's 0.05 hairline by one pixel on each edge.
-		assertEquals(202.0, border.width, "XFL 200px border keeps its rendered hairline bounds");
-		assertEquals(11.0, border.height, "XFL 9px border keeps its rendered hairline bounds");
+		// A true Flash hairline does not enlarge or scale the authored geometry.
+		assertEquals(200.0, border.width, "XFL 200px border keeps its authored hairline bounds");
+		assertEquals(9.0, border.height, "XFL 9px border keeps its authored hairline bounds");
 		assertEquals(2.0, fill.x, "XFL fill registration keeps its 2px left inset");
 		assertEquals(2.0, fill.y, "XFL fill registration keeps its 2px top inset");
 		assertEquals(1, bar.filters.length, "progress graphic keeps its single authored shadow");

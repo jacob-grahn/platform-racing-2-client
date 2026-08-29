@@ -17,15 +17,19 @@ import openfl.geom.Rectangle;
 @:access(format.gfx.GfxGraphics)
 class SvgGradientStrokeRenderer extends SVGRenderer {
 	private var strokeGradients:Map<String, String>;
+	private final hairlineThickness:Float;
 
-	public function new(svg:SVGData, content:String) {
+	public function new(svg:SVGData, content:String, hairlineThickness:Float = 0) {
 		super(svg);
 		strokeGradients = collectStrokeGradients(Xml.parse(content).firstElement());
+		this.hairlineThickness = hairlineThickness;
 	}
 
 	override public function iteratePath(path:Path):Void {
 		var gradientId = strokeGradients.get(path.name);
-		if (gradientId == null || !mSvg.mGrads.exists(gradientId) || !Std.isOfType(mGfx, GfxGraphics)) {
+		var hasGradientStroke = gradientId != null && mSvg.mGrads.exists(gradientId);
+		var hairline = path.stroke_width == 0 && (path.stroke_colour != null || hasGradientStroke);
+		if ((!hasGradientStroke && !hairline) || !Std.isOfType(mGfx, GfxGraphics)) {
 			super.iteratePath(path);
 			return;
 		}
@@ -47,13 +51,16 @@ class SvgGradientStrokeRenderer extends SVGRenderer {
 
 			var scale = Math.sqrt(matrix.a * matrix.a + matrix.d * matrix.d) / SVGRenderer.SQRT2;
 			var graphics = (cast mGfx:GfxGraphics).graphics;
-			graphics.lineStyle(path.stroke_width * scale, 0, 1, false, LineScaleMode.NORMAL, path.stroke_caps, path.joint_style, path.miter_limit);
-			var gradient = mSvg.mGrads.get(gradientId);
-			gradient.updateMatrix(matrix);
 			var alpha = path.stroke_alpha * path.alpha;
-			var alphas = [for (value in gradient.alphas) value * alpha];
-			graphics.lineGradientStyle(gradient.type, gradient.colors, alphas, gradient.ratios, gradient.matrix, gradient.spread, gradient.interp,
-				gradient.focus);
+			graphics.lineStyle(hairline ? hairlineThickness : path.stroke_width * scale, path.stroke_colour == null ? 0 : path.stroke_colour, alpha, false,
+				hairline ? LineScaleMode.NONE : LineScaleMode.NORMAL, path.stroke_caps, path.joint_style, path.miter_limit);
+			if (hasGradientStroke) {
+				var gradient = mSvg.mGrads.get(gradientId);
+				gradient.updateMatrix(matrix);
+				var alphas = [for (value in gradient.alphas) value * alpha];
+				graphics.lineGradientStyle(gradient.type, gradient.colors, alphas, gradient.ratios, gradient.matrix, gradient.spread, gradient.interp,
+					gradient.focus);
+			}
 		}
 
 		for (segment in path.segments) segment.toGfx(mGfx, context);

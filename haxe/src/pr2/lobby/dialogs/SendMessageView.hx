@@ -3,6 +3,7 @@ package pr2.lobby.dialogs;
 import openfl.text.TextField;
 import openfl.display.DisplayObject;
 import openfl.display.Graphics;
+import openfl.display.LineScaleMode;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
 import pr2.assets.NativeAssetIds.FontAsset;
@@ -125,7 +126,7 @@ private class SendMessageInfoSkin implements ControlSkin {
 	public function new() {}
 	public function draw(graphics:Graphics, width:Float, height:Float, state:ControlState):Void {
 		graphics.clear();
-		graphics.lineStyle(0, 0x666666);
+		graphics.lineStyle(0, 0x666666, 1, false, LineScaleMode.NONE);
 		graphics.beginFill(state == Hovered || state == Pressed ? 0x43A398 : 0xAFAC94);
 		graphics.drawCircle(5, 5, 5);
 		graphics.endFill();

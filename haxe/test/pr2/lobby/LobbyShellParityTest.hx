@@ -9,10 +9,14 @@ class LobbyShellParityTest {
 
 	public static function main():Void {
 		var background = new LobbyBackgroundView();
-		assertEquals(1, background.numChildren, "lobby background is one exact source composition");
+		assertEquals(2, background.numChildren, "lobby background separates the scale-grid footer panel from the static composition");
 		assertNear(0, background.getChildAt(0).x, "lobby background keeps authored registration x");
 		assertNear(0, background.getChildAt(0).y, "lobby background keeps authored registration y");
 		assertNear(1, background.getChildAt(0).scaleX, "lobby background is not resized away from XFL coordinates");
+		assertEquals("footerPanel", background.footerPanel.name, "lobby footer panel remains independently addressable");
+		assertTrue(background.footerPanel.scale9Grid != null, "lobby footer panel preserves the SquareBG scale grid");
+		assertNear(200, background.footerPanel.x, "lobby footer panel keeps authored x");
+		assertNear(362, background.footerPanel.y, "lobby footer panel keeps authored y");
 
 		var footer = new LobbyBottomButtonsView(false);
 		assertEquals(6, footer.numChildren, "footer retains all six authored instances");

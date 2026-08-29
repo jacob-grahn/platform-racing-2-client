@@ -25,6 +25,7 @@ import pr2.ui.AuthoredScale9;
 **/
 class LobbySide extends PageHolder {
 	private var bg:Null<DisplayObject>;
+	private var bgArt:Null<DisplayObject>;
 	private var bgExtraW:Float = 0;
 	private var bgExtraH:Float = 0;
 	private var tabsHolder:Null<TabsHolder>;
@@ -47,9 +48,9 @@ class LobbySide extends PageHolder {
 
 	private function makeBackground():Sprite {
 		var panel = new Sprite();
-		var art = AuthoredScale9.halfSquarePanel();
-		art.name = "panelArt";
-		panel.addChild(art);
+		bgArt = AuthoredScale9.halfSquarePanel();
+		bgArt.name = "panelArt";
+		panel.addChild(bgArt);
 		return panel;
 	}
 
@@ -73,11 +74,14 @@ class LobbySide extends PageHolder {
 	}
 
 	public function setSize(w:Float, h:Float):Void {
-		if (bg != null) {
+		if (bgArt != null) {
 			var bgW = w + bgExtraW;
 			var bgH = h - 15 + bgExtraH;
-			bg.height = bgH;
-			bg.width = bgW;
+			// The authored scale grid belongs to the SVG Shape. Resizing its
+			// wrapper bypasses scale9Grid on OpenFL/HTML5 and stretches the whole
+			// panel, including its border and rounded corners.
+			bgArt.width = bgW;
+			bgArt.height = bgH;
 		}
 		if (tabsHolder != null) {
 			tabsHolder.populateTabs(w);
@@ -106,6 +110,7 @@ class LobbySide extends PageHolder {
 				bg.parent.removeChild(bg);
 			}
 			bg = null;
+			bgArt = null;
 		}
 		if (parent != null) {
 			parent.removeChild(this);

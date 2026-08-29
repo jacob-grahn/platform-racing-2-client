@@ -1,6 +1,8 @@
 package pr2.runtime;
 
 import openfl.display._internal.DrawCommandType;
+import openfl.display._internal.DrawCommandReader;
+import openfl.display.LineScaleMode;
 import pr2.animation.TimelineClip;
 #if sys
 import sys.io.File;
@@ -26,10 +28,27 @@ class SvgAssetTest {
 			"group alpha multiplies an authored gradient stop fade");
 		var shape = SvgAsset.createFromText(source);
 		assertTrue(shape.graphics != null, "expanded SVG renders into OpenFL graphics");
+		var nestedSymbolSource = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><g data-xfl-symbol="keep"><path fill="#ff0000" d="M 0 0 L 10 0 L 10 10 Z"/></g><g data-xfl-symbol="remove"><path fill="#00ff00" d="M 10 10 L 20 10 L 20 20 Z"/></g></svg>';
+		var nestedDocument = Xml.parse(nestedSymbolSource);
+		@:privateAccess SvgAsset.removeSymbol(nestedDocument.firstElement(), "remove");
+		assertTrue(nestedDocument.toString().indexOf('data-xfl-symbol="keep"') >= 0, "symbol filtering preserves unrelated composition art");
+		assertFalse(nestedDocument.toString().indexOf('data-xfl-symbol="remove"') >= 0, "symbol filtering removes the selected nested symbol");
 		var gradientStrokeSource = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><defs><linearGradient id="outline"><stop offset="0%" stop-color="#333333"/><stop offset="100%" stop-color="#999999"/></linearGradient></defs><path id="hairline" fill="none" stroke="url(#outline)" stroke-width="0" d="M 1 1 L 19 1 L 19 19 Z"/></svg>';
 		var gradientStrokeShape = SvgAsset.createFromText(gradientStrokeSource);
 		@:privateAccess var hasGradientStroke = gradientStrokeShape.graphics.__commands.types.indexOf(DrawCommandType.LINE_GRADIENT_STYLE) >= 0;
 		assertTrue(hasGradientStroke, "Flash hairlines retain their authored gradient stroke when rendered by OpenFL");
+		assertTrue(hasHairlineCommand(gradientStrokeShape), "Flash gradient hairlines retain zero-width semantics on native targets");
+		var solidHairlineSource = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path fill="none" stroke="#333333" stroke-width="0" d="M 1 1 L 19 1 L 19 19 Z"/></svg>';
+		assertTrue(hasHairlineCommand(SvgAsset.createFromText(solidHairlineSource)),
+			"Flash solid-color hairlines retain zero-width semantics on native targets");
+		var authoredHairline = SvgAsset.createFromText(solidHairlineSource);
+		@:privateAccess var compensatedHairline = SvgAsset.shapeFromPreparedAtHairlineThickness(SvgAsset.prepare(solidHairlineSource), 0.2);
+		assertNear(authoredHairline.width, compensatedHairline.width, 0.000001,
+			"HTML5 hairline compensation does not enlarge authored layout width");
+		assertNear(authoredHairline.height, compensatedHairline.height, 0.000001,
+			"HTML5 hairline compensation does not enlarge authored layout height");
+		assertNear(0.2, HairlineScale.thicknessForScale(5), 0.000001,
+			"HTML5 compensates a five-times stage scale with a one-fifth local stroke");
 		@:privateAccess assertEquals("effects", SvgAsset.packGroup("assets/svg/effects/mine_piece_01.svg"),
 			"top-level SVG assets select their category pack");
 		@:privateAccess assertEquals("character_hat", SvgAsset.packGroup("assets/svg/character/hat/001_classic/primary.svg"),
@@ -45,8 +64,12 @@ class SvgAssetTest {
 		@:privateAccess assertTrue(cachedCommandCount > 0 && cachedCopy.graphics.__commands.types.length == cachedCommandCount,
 			"mutating one cached SVG shape does not alter another shape's drawing commands");
 		#if sys
-		assertTrue(hasLineGradient(SvgAsset.create("assets/svg/native/square_panel.svg")),
+		var squarePanel = SvgAsset.create("assets/svg/native/square_panel.svg");
+		assertTrue(hasLineGradient(squarePanel),
 			"production panel retains its Flash gradient hairline outline");
+		assertTrue(hasHairlineCommand(squarePanel), "production panel retains its authored hairline command");
+		assertTrue(hasHairlineCommand(SvgAsset.create("assets/svg/native/half_square_panel.svg")),
+			"lobby side-panel retains its authored hairline command");
 		assertTrue(hasLineGradient(SvgAsset.create("assets/svg/ui/reload_button_up.svg")),
 			"production refresh icon button retains its Flash gradient hairline outline");
 		var muteBase = File.getContent("art/svg/login/mute_button_base.svg");
@@ -72,6 +95,29 @@ class SvgAssetTest {
 		@:privateAccess return shape.graphics.__commands.types.indexOf(DrawCommandType.LINE_GRADIENT_STYLE) >= 0;
 	}
 
+	private static function hasHairlineCommand(shape:openfl.display.Shape):Bool {
+		@:privateAccess var reader = new DrawCommandReader(shape.graphics.__commands);
+		@:privateAccess var types = shape.graphics.__commands.types;
+		for (type in types) {
+			switch (type) {
+				case DrawCommandType.LINE_STYLE:
+					var line = reader.readLineStyle();
+					if (line.thickness == 0 && line.scaleMode == LineScaleMode.NONE) return true;
+				case DrawCommandType.BEGIN_BITMAP_FILL: reader.readBeginBitmapFill();
+				case DrawCommandType.BEGIN_FILL: reader.readBeginFill();
+				case DrawCommandType.BEGIN_GRADIENT_FILL: reader.readBeginGradientFill();
+				case DrawCommandType.CUBIC_CURVE_TO: reader.readCubicCurveTo();
+				case DrawCommandType.CURVE_TO: reader.readCurveTo();
+				case DrawCommandType.END_FILL: reader.readEndFill();
+				case DrawCommandType.LINE_GRADIENT_STYLE: reader.readLineGradientStyle();
+				case DrawCommandType.LINE_TO: reader.readLineTo();
+				case DrawCommandType.MOVE_TO: reader.readMoveTo();
+				default: throw 'Unhandled SVG draw command $type';
+			}
+		}
+		return false;
+	}
+
 	private static function minVisibleAlpha(timeline:TimelineClip):Float {
 		var result = 1.0;
 		for (index in 0...timeline.numChildren) {
@@ -93,5 +139,10 @@ class SvgAssetTest {
 	private static function assertEquals(expected:String, actual:String, message:String):Void {
 		assertions++;
 		if (expected != actual) throw '$message: expected $expected, got $actual';
+	}
+
+	private static function assertNear(expected:Float, actual:Float, tolerance:Float, message:String):Void {
+		assertions++;
+		if (Math.abs(expected - actual) > tolerance) throw '$message: expected $expected, got $actual';
 	}
 }

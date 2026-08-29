@@ -2077,7 +2077,12 @@ class LobbyServicesTest {
 		assertEquals(379, Math.round(leftBg.height), "left lobby panel renders background height");
 		var leftPanel = Std.downcast(leftBg, DisplayObjectContainer);
 		assertEquals(null, leftBg.scale9Grid, "left lobby panel wrapper is not scaled as one stretched surface");
-		assertNotNull(leftPanel.getChildAt(0).scale9Grid, "left lobby panel nine-slices the authored vector");
+		var leftArt = leftPanel.getChildAt(0);
+		assertNotNull(leftArt.scale9Grid, "left lobby panel nine-slices the authored vector");
+		assertEquals(1, leftBg.scaleX, "left lobby panel wrapper remains at unit scale");
+		assertEquals(1, leftBg.scaleY, "left lobby panel wrapper remains at unit scale");
+		assertEquals(194, Math.round(leftArt.width), "left lobby panel resizes the nine-sliced vector width");
+		assertEquals(379, Math.round(leftArt.height), "left lobby panel resizes the nine-sliced vector height");
 		left.remove();
 
 		var right = new LobbyRight();
@@ -2086,7 +2091,12 @@ class LobbyServicesTest {
 		assertEquals(341, Math.round(rightBg.height), "right lobby panel renders background height");
 		var rightPanel = Std.downcast(rightBg, DisplayObjectContainer);
 		assertEquals(null, rightBg.scale9Grid, "right lobby panel wrapper is not scaled as one stretched surface");
-		assertNotNull(rightPanel.getChildAt(0).scale9Grid, "right lobby panel nine-slices the authored vector");
+		var rightArt = rightPanel.getChildAt(0);
+		assertNotNull(rightArt.scale9Grid, "right lobby panel nine-slices the authored vector");
+		assertEquals(1, rightBg.scaleX, "right lobby panel wrapper remains at unit scale");
+		assertEquals(1, rightBg.scaleY, "right lobby panel wrapper remains at unit scale");
+		assertEquals(347, Math.round(rightArt.width), "right lobby panel resizes the nine-sliced vector width");
+		assertEquals(341, Math.round(rightArt.height), "right lobby panel resizes the nine-sliced vector height");
 		right.remove();
 		LobbySession.clear();
 	}

@@ -90,6 +90,7 @@ python3 tools/check_rotation_coordinate_boundaries.py
 python3 tools/generate_native_assets.py --check
 python3 tools/generate_svg_packs.py --check
 python3 tools/validate_character_lottie.py
+python3 tools/audit_hairlines.py
 
 if [[ -n "$groups" ]]; then
 	full_suite=true

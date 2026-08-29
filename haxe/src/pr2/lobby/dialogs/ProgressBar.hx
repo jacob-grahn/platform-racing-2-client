@@ -1,6 +1,7 @@
 package pr2.lobby.dialogs;
 
 import openfl.display.Shape;
+import openfl.display.LineScaleMode;
 import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.filters.DropShadowFilter;
@@ -55,7 +56,7 @@ class ProgressBar extends Sprite {
 
 	private static function createBorder(width:Float):Shape {
 		var border = new Shape();
-		border.graphics.lineStyle(0.05, 0xFFFFFF);
+		border.graphics.lineStyle(0, 0xFFFFFF, 1, true, LineScaleMode.NONE);
 		border.graphics.drawRoundRect(0, 0, width, 9, 6, 6);
 		return border;
 	}

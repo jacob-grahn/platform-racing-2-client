@@ -8,6 +8,8 @@ import format.svg.Text;
 import haxe.Json;
 import openfl.display.Shape;
 import openfl.display.Sprite;
+import openfl.events.Event;
+import openfl.display.Graphics;
 import openfl.geom.Rectangle;
 import openfl.text.TextField;
 import openfl.text.TextFieldAutoSize;
@@ -22,9 +24,7 @@ class SvgAsset {
 	private static final packEntries:Map<String, Dynamic> = new Map();
 
 	public static function create(assetPath:String):Shape {
-		var shape = new Shape();
-		get(assetPath).render(shape.graphics);
-		return shape;
+		return get(assetPath).createShape();
 	}
 
 	/**
@@ -37,8 +37,7 @@ class SvgAsset {
 		var content = prepare(loadText(assetPath));
 		var svg = new SVG(content);
 		var container = new Sprite();
-		var shape = new Shape();
-		new SvgGradientStrokeRenderer(svg.data, content).render(shape.graphics);
+		var shape = shapeFromPrepared(content);
 		container.addChild(shape);
 
 		var descriptors:Array<Text> = [];
@@ -105,11 +104,17 @@ class SvgAsset {
 	}
 
 	public static function createFromText(content:String):Shape {
-		var shape = new Shape();
 		var prepared = prepare(content);
-		var svg = new SVG(prepared);
-		new SvgGradientStrokeRenderer(svg.data, prepared).render(shape.graphics);
-		return shape;
+		return shapeFromPrepared(prepared);
+	}
+
+	/** Renders an authored composition without instances of one nested XFL symbol. */
+	public static function createWithoutSymbol(assetPath:String, symbolName:String):Shape {
+		var document = Xml.parse(prepare(loadText(assetPath)));
+		var root = document.firstElement();
+		if (root == null) throw 'Invalid SVG asset $assetPath';
+		removeSymbol(root, symbolName);
+		return createFromText(document.toString());
 	}
 
 	/** Applies Flash-style solid color channels to named XFL instance groups before rendering. */
@@ -118,11 +123,8 @@ class SvgAsset {
 		var root = document.firstElement();
 		if (root == null) throw 'Invalid SVG asset $assetPath';
 		applyNamedTints(root, tints, hidden, null);
-		var shape = new Shape();
 		var content = document.toString();
-		var svg = new SVG(content);
-		new SvgGradientStrokeRenderer(svg.data, content).render(shape.graphics);
-		return shape;
+		return shapeFromPrepared(content);
 	}
 
 	/** Renders the local contents of one named XFL instance without its attachment matrix. */
@@ -177,6 +179,15 @@ class SvgAsset {
 			parsed.set(assetPath, svg);
 		}
 		return svg;
+	}
+
+	private static function shapeFromPrepared(content:String):Shape {
+		return new SvgDocument(content).createShape();
+	}
+
+	/** Test seam for HTML5's positive local hairline compensation. */
+	private static function shapeFromPreparedAtHairlineThickness(content:String, thickness:Float):Shape {
+		return new SvgDocument(content).createShapeAtHairlineThickness(thickness);
 	}
 
 	private static function loadText(assetPath:String):String {
@@ -378,6 +389,17 @@ class SvgAsset {
 		return null;
 	}
 
+	private static function removeSymbol(node:Xml, symbolName:String):Void {
+		var children = [for (child in node.elements()) child];
+		for (child in children) {
+			if (child.get("data-xfl-symbol") == symbolName) {
+				node.removeChild(child);
+			} else {
+				removeSymbol(child, symbolName);
+			}
+		}
+	}
+
 	private static function applyNamedTints(node:Xml, tints:Map<String, Int>, hidden:Array<String>, inherited:Null<Int>):Bool {
 		if (node.nodeType != Xml.Element) return true;
 		var instance = node.get("data-xfl-instance");
@@ -398,15 +420,82 @@ class SvgAsset {
 }
 
 private class SvgDocument {
-	private var rendered:Shape;
+	private final content:String;
+	private final rendered:Shape;
+	private final hasHairlines:Bool;
+	private final authoredBounds:Rectangle;
 
 	public function new(content:String) {
+		this.content = content;
+		hasHairlines = content.indexOf('stroke-width="0"') >= 0;
 		var svg = new SVG(content);
 		rendered = new Shape();
 		new SvgGradientStrokeRenderer(svg.data, content).render(rendered.graphics);
+		authoredBounds = rendered.getBounds(rendered);
 	}
 
-	public function render(graphics:openfl.display.Graphics):Void {
-		graphics.copyFrom(rendered.graphics);
+	public function createShape():Shape {
+		if (hasHairlines) {
+			return new HairlineSvgShape(renderHairlines, authoredBounds);
+		}
+		var shape = new Shape();
+		shape.graphics.copyFrom(rendered.graphics);
+		return shape;
+	}
+
+	public function createShapeAtHairlineThickness(thickness:Float):Shape {
+		var shape = new HairlineSvgShape(renderHairlines, authoredBounds);
+		shape.refreshAt(thickness);
+		return shape;
+	}
+
+	private function renderHairlines(graphics:Graphics, thickness:Float):Void {
+		graphics.clear();
+		var svg = new SVG(content);
+		new SvgGradientStrokeRenderer(svg.data, content, thickness).render(graphics);
+	}
+}
+
+/** Re-renders hairline SVGs when SHOW_ALL changes its device scale. */
+@:access(openfl.display.Graphics)
+private class HairlineSvgShape extends Shape {
+	private final renderHairlines:(Graphics, Float) -> Void;
+	private final authoredBounds:Rectangle;
+	private var lastThickness:Float = Math.NaN;
+
+	public function new(renderHairlines:(Graphics, Float) -> Void, authoredBounds:Rectangle) {
+		super();
+		this.renderHairlines = renderHairlines;
+		this.authoredBounds = authoredBounds.clone();
+		addEventListener(Event.ADDED_TO_STAGE, addedToStage);
+		addEventListener(Event.REMOVED_FROM_STAGE, removedFromStage);
+		refresh();
+	}
+
+	private function addedToStage(_event:Event):Void {
+		addEventListener(Event.ENTER_FRAME, enteredFrame);
+		refresh();
+	}
+
+	private function removedFromStage(_event:Event):Void {
+		removeEventListener(Event.ENTER_FRAME, enteredFrame);
+	}
+
+	private function enteredFrame(_event:Event):Void {
+		refresh();
+	}
+
+	private function refresh():Void {
+		refreshAt(HairlineScale.current(stage));
+	}
+
+	public function refreshAt(thickness:Float):Void {
+		if (!Math.isNaN(lastThickness) && Math.abs(lastThickness - thickness) < 0.000001) return;
+		lastThickness = thickness;
+		renderHairlines(graphics, thickness);
+		// HTML5 needs a positive local width to rasterize a one-device-pixel
+		// hairline, but that width must not enlarge Flash's zero-width bounds.
+		// Layout and scale9 sizing therefore continue to use the authored bounds.
+		graphics.__bounds = authoredBounds.clone();
 	}
 }

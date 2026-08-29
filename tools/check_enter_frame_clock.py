@@ -36,6 +36,8 @@ PRESENTATION_ONLY_CALLBACKS = {
         "presents one cold asset group to the renderer per display frame",
     ("haxe/src/pr2/runtime/FrameClock.hx", "onStageFrame"):
         "classifies the presentation frame before simulation owners run",
+    ("haxe/src/pr2/runtime/SvgAsset.hx", "enteredFrame"):
+        "keeps Flash hairlines at one device pixel when the stage display scale changes",
 }
 
 

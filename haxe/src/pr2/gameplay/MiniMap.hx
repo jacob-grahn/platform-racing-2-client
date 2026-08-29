@@ -3,6 +3,7 @@ package pr2.gameplay;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.display.DisplayObject;
+import openfl.display.LineScaleMode;
 import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.geom.Rectangle;
@@ -66,7 +67,7 @@ class MiniMap extends Removable {
 	**/
 	public static function createFinishMarker():Shape {
 		var marker = new Shape();
-		marker.graphics.lineStyle(0.05, 0xFFFFFF);
+		marker.graphics.lineStyle(0, 0xFFFFFF, 1, false, LineScaleMode.NONE);
 		marker.graphics.beginFill(0x00CC00);
 		marker.graphics.drawRect(-2, -2, 4, 4);
 		marker.graphics.endFill();
