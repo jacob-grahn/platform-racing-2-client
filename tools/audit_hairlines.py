@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate Flash hairline normalization and native non-scaling replacements."""
+"""Validate committed SVG hairlines and native non-scaling replacements."""
 
 from pathlib import Path
 import re
@@ -7,16 +7,11 @@ import sys
 
 
 ROOT = Path(__file__).resolve().parents[1]
-XFL_ROOT = ROOT / "flash" / "platform-racing-2-xfl" / "LIBRARY"
 SVG_ROOT = ROOT / "art" / "svg"
 HAXE_ROOT = ROOT / "haxe" / "src"
 
 
 def main() -> int:
-    xfl_count = 0
-    for path in XFL_ROOT.rglob("*.xml"):
-        xfl_count += path.read_text(encoding="utf-8").count('solidStyle="hairline"')
-
     svg_count = 0
     legacy_svg_widths: list[str] = []
     for path in SVG_ROOT.rglob("*.svg"):
@@ -38,8 +33,6 @@ def main() -> int:
                 break
 
     errors: list[str] = []
-    if xfl_count == 0:
-        errors.append("no XFL hairlines found")
     if svg_count == 0:
         errors.append("no normalized SVG hairlines found")
     if legacy_svg_widths:
@@ -54,7 +47,7 @@ def main() -> int:
             print(f"Hairline audit failed: {error}", file=sys.stderr)
         return 1
 
-    print(f"Hairline audit passed: {xfl_count} XFL definitions, {svg_count} normalized SVG strokes")
+    print(f"Hairline audit passed: {svg_count} normalized SVG strokes")
     return 0
 
 
