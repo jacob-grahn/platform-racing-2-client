@@ -5,6 +5,7 @@ import openfl.display.Stage;
 import openfl.events.Event;
 import openfl.events.KeyboardEvent;
 import openfl.events.MouseEvent;
+import openfl.geom.ColorTransform;
 import openfl.text.TextField;
 import openfl.text.TextFieldType;
 import openfl.text.TextFormat;
@@ -154,6 +155,25 @@ class RaceChat extends Sprite {
 			art.getChildIndex(art.chatInput),
 			art.getChildIndex(art.bgText.parent),
 			art.getChildIndex(art.topText.parent)
+		];
+	}
+
+	/** Exact XFL color transforms for the overlapping transcript layers. */
+	public function authoredTranscriptColors():Array<Float> {
+		if (art == null) return [];
+		var top = art.topText.parent.transform.colorTransform;
+		var bg = art.bgText.parent.transform.colorTransform;
+		return [
+			top.redMultiplier,
+			top.greenMultiplier,
+			top.blueMultiplier,
+			top.redOffset,
+			bg.redMultiplier,
+			bg.greenMultiplier,
+			bg.blueMultiplier,
+			bg.redOffset,
+			bg.greenOffset,
+			bg.blueOffset
 		];
 	}
 
@@ -317,10 +337,12 @@ private class RaceChatView extends Sprite {
 		bg.x = 1;
 		bg.y = 1;
 		bg.scaleY = 1.00079345703125;
+		bg.transform.colorTransform = new ColorTransform(0.5, 0.5, 0.5, 1, 128, 128, 128);
 		bg.addChild(bgText);
 		topText = makeOutput("textBox1", OUTPUT_X, OUTPUT_Y, OUTPUT_WIDTH, OUTPUT_HEIGHT, 0x000000);
 		var top = new Sprite();
 		top.name = "top";
+		top.transform.colorTransform = new ColorTransform(0.5, 0.5, 0.5);
 		top.addChild(topText);
 
 		var whiteLabel = makeLabel(5, 130.9, 0xFFFFFF);

@@ -47,6 +47,17 @@ class RaceChatTest {
 		assertEquals(1.0, geometry[14], "input preserves authored layer order above white label");
 		assertEquals(3.0, geometry[15], "shadow transcript preserves authored layer below top transcript");
 		assertEquals(4.0, geometry[16], "top transcript remains the topmost authored layer");
+		var colors = chat.authoredTranscriptColors();
+		assertEquals(0.5, colors[0], "top transcript halves the authored red channel");
+		assertEquals(0.5, colors[1], "top transcript halves the authored green channel");
+		assertEquals(0.5, colors[2], "top transcript halves the authored blue channel");
+		assertEquals(0.0, colors[3], "top transcript adds no color offset");
+		assertEquals(0.5, colors[4], "offset transcript halves the authored red channel");
+		assertEquals(0.5, colors[5], "offset transcript halves the authored green channel");
+		assertEquals(0.5, colors[6], "offset transcript halves the authored blue channel");
+		assertEquals(128.0, colors[7], "offset transcript restores the authored red offset");
+		assertEquals(128.0, colors[8], "offset transcript restores the authored green offset");
+		assertEquals(128.0, colors[9], "offset transcript restores the authored blue offset");
 		RaceChat.textBox.text = " /debug` ";
 		assertEquals(true, chat.submitText(RaceChat.textBox.text), "debug command handled by callback");
 		assertEquals(" /debug ", sent[0], "submit strips the Flash socket delimiter");
