@@ -130,12 +130,6 @@ class LobbyServicesTest {
 		pr2.DeterministicTestMode.runTest("LobbyServicesTest.testMemoryAndSecureData", testMemoryAndSecureData);
 		pr2.DeterministicTestMode.runTest("LobbyServicesTest.testPmNotificationLifecycle", testPmNotificationLifecycle);
 		pr2.DeterministicTestMode.runTest("LobbyServicesTest.testLobbySidePanelDimensions", testLobbySidePanelDimensions);
-		var loginPageWarmupFetchFactory = ServerStatusClient.fetchFactory;
-		ServerStatusClient.fetchFactory = function(_onResult, _onError):Void {};
-		var loginPageWarmup = new LoginPage();
-		loginPageWarmup.initialize();
-		loginPageWarmup.remove();
-		ServerStatusClient.fetchFactory = loginPageWarmupFetchFactory;
 		pr2.DeterministicTestMode.runTest("LobbyServicesTest.testCheckServersComboPrompts", testCheckServersComboPrompts);
 		pr2.DeterministicTestMode.runTest("LobbyServicesTest.testCheckServersGuildSelectionRules", testCheckServersGuildSelectionRules);
 		pr2.DeterministicTestMode.runTest("LobbyServicesTest.testLoginServerMessageDoesNotAbortHandshake", testLoginServerMessageDoesNotAbortHandshake);
@@ -227,12 +221,18 @@ class LobbyServicesTest {
 
 	private static function testLevelEditorRoute():Void {
 		var previousFactory = LobbyPage.createLevelEditorPage;
+		var previousLoginFactory = LobbyPage.createLoginPage;
 		var previousLogoutPostFactory = LobbyPage.logoutPostFactory;
 		var launchedAsMod:Null<Bool> = null;
+		var loginRoutes = 0;
 		var logoutPosts:Array<{url:String, fields:Map<String, String>}> = [];
 		LobbyPage.createLevelEditorPage = function(isMod:Bool):Page {
 			launchedAsMod = isMod;
 			return new TestPage("level-editor");
+		};
+		LobbyPage.createLoginPage = function():Page {
+			loginRoutes++;
+			return new TestPage("login");
 		};
 		LobbyPage.logoutPostFactory = function(url:String, fields:Map<String, String>):Void {
 			logoutPosts.push({url: url, fields: fields});
@@ -304,6 +304,7 @@ class LobbyServicesTest {
 		assertEquals(0, LobbySession.group, "confirmed temporary moderator logout clears session");
 		assertEquals(2, logoutPosts.length, "confirmed non-remembered temporary moderator logout posts logout");
 		assertNotNull(lastMessagePopup(), "confirmed temporary moderator logout shows logged-out message");
+		assertEquals(1, loginRoutes, "confirmed temporary moderator logout routes to login");
 
 		LobbySession.group = 1;
 		LobbySession.isTempMod = false;
@@ -316,6 +317,7 @@ class LobbyServicesTest {
 		assertEquals(3, logoutPosts.length, "non-remembered regular logout posts logout");
 		assertEquals(ServerConfig.logoutUrl(), logoutPosts[2].url, "regular logout endpoint");
 		assertEquals(0, mapSize(logoutPosts[2].fields), "regular logout posts empty fields");
+		assertEquals(2, loginRoutes, "regular logout routes to login");
 
 		LobbySession.group = 1;
 		LobbySession.isTempMod = false;
@@ -326,8 +328,10 @@ class LobbyServicesTest {
 		page.pageHolder = holder;
 		Reflect.callMethod(page, Reflect.field(page, "clickLogout"), []);
 		assertEquals(3, logoutPosts.length, "remembered regular logout skips logout post");
+		assertEquals(3, loginRoutes, "remembered regular logout routes to login");
 
 		LobbyPage.createLevelEditorPage = previousFactory;
+		LobbyPage.createLoginPage = previousLoginFactory;
 		LobbyPage.logoutPostFactory = previousLogoutPostFactory;
 		LobbySession.clear();
 		closeAllPopups();
@@ -2108,7 +2112,6 @@ class LobbyServicesTest {
 			fetches.push({onResult: onResult, onError: onError});
 		};
 		var page = new LoginPage();
-		page.initialize();
 		Reflect.callMethod(page, Reflect.field(page, "openCredentialDialog"), []);
 		var popup:Dynamic = Reflect.field(page, "activePopup");
 		var combo = Std.downcast(DisplayUtil.findByName(popup, "dropdown"), GameSelect);
@@ -2132,8 +2135,8 @@ class LobbyServicesTest {
 		LobbySession.clear();
 		LobbySession.guildId = 42;
 		var page = new LoginPage();
-		page.initialize();
 		Reflect.callMethod(page, Reflect.field(page, "openCredentialDialog"), []);
+		Reflect.callMethod(page, Reflect.field(page, "loadServers"), []);
 		fetches[0].onResult(new ServerStatusResult([
 			server(2, 9002, 0, 25, "open", "Public"),
 			server(7, 9007, 9, 80, "open", "Other Guild"),

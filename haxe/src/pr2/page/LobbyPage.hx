@@ -49,6 +49,9 @@ class LobbyPage extends Page {
 	public static var createLevelEditorPage:Bool->Page = function(isMod:Bool):Page {
 		return new LevelEditor(null, isMod);
 	};
+	public static var createLoginPage:Void->Page = function():Page {
+		return new LoginPage();
+	};
 	public static var logoutPostFactory:LobbyLogoutPostFactory = defaultLogoutPost;
 
 	private var background:Null<LobbyBackgroundView>;
@@ -160,7 +163,7 @@ class LobbyPage extends Page {
 		}
 		logOutSession(needsTempModDemotionWarning());
 		if (pageHolder != null) {
-			pageHolder.changePage(new LoginPage());
+			pageHolder.changePage(createLoginPage());
 		}
 	}
 
