@@ -12,8 +12,22 @@ class IntroPageTest {
 		pr2.DeterministicTestMode.runTest("IntroPageTest.testStandardLottieTransform", testStandardLottieTransform);
 		if (pr2.DeterministicTestMode.finishSmokeSuite("IntroPageTest")) return;
 		pr2.DeterministicTestMode.runTest("IntroPageTest.testSiteQueues", testSiteQueues);
+		pr2.DeterministicTestMode.runTest("IntroPageTest.testAuthoredSoundMarker", testAuthoredSoundMarker);
+		pr2.DeterministicTestMode.runTest("IntroPageTest.testMissingSoundFails", testMissingSoundFails);
 		pr2.DeterministicTestMode.runTest("IntroPageTest.testSkipIsIdempotent", testSkipIsIdempotent);
 		trace('IntroPageTest passed $assertions assertions');
+	}
+
+	private static function testMissingSoundFails():Void {
+		var path = "assets/audio/missing-intro-test.wav";
+		var error:Null<String> = null;
+		try {
+			@:privateAccess IntroAnimationView.playAssetSound(path, 1);
+		} catch (value:Dynamic) {
+			error = Std.string(value);
+		}
+		assertEquals('Missing intro sound asset $path', error, "missing intro sound fails with the asset path");
+		@:privateAccess assertEquals(null, IntroAnimationView.playAssetSound(path, 0), "muted intro does not attempt audio loading");
 	}
 
 	private static function testStandardLottieTransform():Void {
@@ -107,7 +121,11 @@ class IntroPageTest {
 			volumes.push(volume);
 			return null;
 		});
+		#if ios
+		assertEquals("assets/audio/ios/logo_theme.wav", paths.join(","), "iOS plays the PCM intro from its authored frame-one marker");
+		#else
 		assertEquals("assets/audio/sfx/logo_theme.mp3", paths.join(","), "Jiggmin sound starts from its authored frame-one marker");
+		#end
 		assertEquals(pr2.lobby.account.Settings.soundLevel / 100, volumes[0], "Jiggmin sound honors the saved sound level");
 		animation.timeline.gotoAndStop(1);
 		assertEquals(2, paths.length, "re-entering the authored sound keyframe retriggers its event sound");

@@ -17,7 +17,11 @@ class IntroAnimationView extends Sprite {
 	public final logoHolder:Sprite;
 	public final timeline:TimelineClip;
 	private var soundChannel:Null<SoundChannel>;
+	#if ios
+	private static inline var JIGGMIN_SOUND = "assets/audio/ios/logo_theme.wav";
+	#else
 	private static inline var JIGGMIN_SOUND = "assets/audio/sfx/logo_theme.mp3";
+	#end
 	private final playSound:IntroSoundPlayer;
 
 	public function new(kind:String, ?playSound:IntroSoundPlayer) {
@@ -61,8 +65,11 @@ class IntroAnimationView extends Sprite {
 	}
 
 	private static function playAssetSound(path:String, volume:Float):Null<SoundChannel> {
-		if (!Assets.exists(path) || volume <= 0) return null;
-		return Assets.getSound(path).play(0, 0, new SoundTransform(volume));
+		if (volume <= 0) return null;
+		if (!Assets.exists(path)) throw 'Missing intro sound asset $path';
+		var sound = Assets.getSound(path);
+		if (sound == null) throw 'Unable to decode intro sound asset $path';
+		return sound.play(0, 0, new SoundTransform(volume));
 	}
 
 	private inline function get_currentFrame():Int return timeline.currentFrame;

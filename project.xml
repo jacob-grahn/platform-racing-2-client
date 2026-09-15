@@ -22,6 +22,9 @@
 	<assets path="art/svg-packs" rename="assets/svg-packs" include="*.json" />
 	<assets path="art/rigs/character-rig.json" rename="character-rig.json" />
 	<assets path="art/intro" rename="assets/intro" include="*.json" />
+	<!-- Lime's native decoder needs PCM for the authored MP3 intro cue.
+	     Regenerate with python3 tools/prepare_ios_intro_audio.py on macOS. -->
+	<assets path="art/audio-ios" rename="assets/audio/ios" include="*.wav" if="ios" />
 	<assets path="art/effects" rename="assets/effects" include="*.json" />
 	<assets path="art/ui" rename="assets/ui" include="*.json" />
 	<asset path="assets/bitmaps/mine.jpg" />

@@ -200,7 +200,10 @@ class SvgAsset {
 		var content:Null<String> = null;
 		#if sys
 		if (StringTools.startsWith(assetPath, SVG_PREFIX)) {
-			content = sys.io.File.getContent("art/svg/" + assetPath.substr(SVG_PREFIX.length));
+			// Repository tools can read source SVGs directly. Installed native apps
+			// have only the packaged assets, so continue to the pack lookup there.
+			var localPath = "art/svg/" + assetPath.substr(SVG_PREFIX.length);
+			if (sys.FileSystem.exists(localPath)) content = sys.io.File.getContent(localPath);
 		}
 		#end
 		if (content == null && StringTools.startsWith(assetPath, SVG_PREFIX)) {

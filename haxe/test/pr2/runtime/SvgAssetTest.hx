@@ -12,6 +12,27 @@ class SvgAssetTest {
 	private static var assertions:Int = 0;
 
 	public static function main():Void {
+		#if sys
+		// Reproduce an installed app's working directory with no repository art.
+		var introPath = "assets/svg/intro/jiggmin/symbol_75.svg";
+		var introPack:Dynamic = haxe.Json.parse(File.getContent("art/svg-packs/intro.json"));
+		@:privateAccess var previousIntroEntries = SvgAsset.packEntries.get("intro");
+		@:privateAccess SvgAsset.packEntries.set("intro", Reflect.field(introPack, "entries"));
+		var originalDirectory = Sys.getCwd();
+		var loadedIntro:Null<String> = null;
+		try {
+			Sys.setCwd("test");
+			@:privateAccess loadedIntro = SvgAsset.loadText(introPath);
+		} catch (error:Dynamic) {
+			Sys.setCwd(originalDirectory);
+			@:privateAccess SvgAsset.packEntries.set("intro", previousIntroEntries);
+			throw error;
+		}
+		Sys.setCwd(originalDirectory);
+		@:privateAccess SvgAsset.packEntries.set("intro", previousIntroEntries);
+		assertTrue(loadedIntro != null && loadedIntro.indexOf("<svg") >= 0,
+			"native intro SVG loads from its pack without repository source files");
+		#end
 		var source = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20" viewBox="0 0 20 20"><defs><path id="mark" fill="#ff0000" d="M 0 0 L 10 0 L 10 10 Z"/></defs><g transform="matrix( 1, 0, 0, 1, 3,4) "><use xlink:href="#mark"/></g></svg>';
 		var prepared = SvgAsset.prepare(source);
 		assertFalse(prepared.indexOf("matrix( ") >= 0, "Animate matrix leading whitespace is normalized");
