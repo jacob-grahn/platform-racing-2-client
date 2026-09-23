@@ -28,6 +28,10 @@
 	</script>
 	
 	<style>
+		::if SET_MODERN_UI_FONTS::
+		@font-face { font-family: 'Lilita One'; src: url('assets/mobile/fonts/LilitaOne-Regular.ttf') format('truetype'); }
+		@font-face { font-family: 'Nunito Bold'; src: url('assets/mobile/fonts/Nunito-Bold.ttf') format('truetype'); }
+		::end::
 		html,body { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #000000; }
 		#openfl-content { ::if (WIN_BACKGROUND)::background: #000000; ::end::width: ::if (WIN_RESIZABLE)::100%::elseif (WIN_WIDTH > 0)::::WIN_WIDTH::px::else::100%::end::; height: ::if (WIN_RESIZABLE)::100%::elseif (WIN_WIDTH > 0)::::WIN_HEIGHT::px::else::100%::end::; }
 		body.pr2-fixed-stage { display: flex; align-items: center; justify-content: center; }
@@ -94,8 +98,7 @@
 	<div id="openfl-content"></div>
 	
 	<script type="text/javascript">
-		var pr2MobileLobby = /(?:^|[?&])mobile=(?:1|true|lobby)(?:&|$)/i.test(window.location.search);
-		if (!pr2MobileLobby) document.body.classList.add("pr2-fixed-stage");
+		// ScreenFactory and PageViewport select the host sizing at startup and on navigation.
 
 		// A zero-sized embed tells Lime to follow the host element and resize the
 		// canvas backing store, rather than CSS-scaling a fixed 550x400 canvas. The

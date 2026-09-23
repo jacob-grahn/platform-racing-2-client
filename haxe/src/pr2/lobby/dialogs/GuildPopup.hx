@@ -1,6 +1,5 @@
 package pr2.lobby.dialogs;
 
-import haxe.Json;
 import openfl.display.DisplayObject;
 import openfl.display.DisplayObjectContainer;
 import openfl.events.KeyboardEvent;
@@ -9,10 +8,12 @@ import pr2.app.AppStage;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbySession;
 import pr2.lobby.NumberFormat;
+import pr2.lobby.players.GuildData;
+import pr2.lobby.players.GuildSource;
+import pr2.lobby.players.ProfileActions;
 import pr2.net.FormPostClient;
 import pr2.net.ServerConfig;
 import pr2.net.SuperLoader;
-import pr2.net.TextLoader;
 import pr2.ui.CustomScrollBar;
 import pr2.ui.EmblemLoader;
 import pr2.ui.StageFocus;
@@ -43,6 +44,7 @@ class GuildPopup extends Popup {
 	private var ownerId:Int = 0;
 	private var guildIdShown:Bool = false;
 	private var asyncGuard:AsyncRemovalGuard = new AsyncRemovalGuard();
+	private var source:GuildSource;
 	private var emblemLoader:Null<EmblemLoader>;
 
 	public function new(id:Int = 0, name:String = "", autoLoad:Bool = true) {
@@ -51,6 +53,7 @@ class GuildPopup extends Popup {
 		}
 		super();
 		GuildPopup.instance = this;
+		ProfileActions.guildOpened(this);
 		guildId = id;
 
 		art = new GuildView();
@@ -58,37 +61,30 @@ class GuildPopup extends Popup {
 		addChild(art);
 
 		if (autoLoad) {
-			asyncGuard.watch(TextLoader.load(ServerConfig.guildInfoUrl(id, name), asyncGuard.wrap(function(body:String):Void {
-				if (fadeOutStarted) return;
-				try {
-					applyReturnData(Json.parse(body));
-				} catch (_:Dynamic) {
-					startFadeOut();
-				}
-			}), asyncGuard.wrap(function(_:String):Void startFadeOut())));
+			source = new GuildSource();
+			source.load(id, name, function(data:GuildData):Void { if (!fadeOutStarted) applyGuildData(data); }, function(_:String):Void startFadeOut());
 		}
 	}
 
 	public function applyReturnData(parsed:Dynamic):Void {
-		if (art == null) return;
-		var ret:Dynamic = Reflect.field(parsed, "guild");
-		if (ret == null) ret = parsed;
-		var members:Array<Dynamic> = cast Reflect.field(parsed, "members");
-		if (members == null) members = [];
+		applyGuildData(new GuildData(parsed));
+	}
 
-		guildId = intAny(ret, ["guild_id", "guildId"]);
-		ownerId = intAny(ret, ["owner_id", "ownerId"]);
-		guildName = strAny(ret, ["guild_name", "guildName"]);
+	private function applyGuildData(data:GuildData):Void {
+		if (art == null) return;
+		guildId = data.id;
+		ownerId = data.ownerId;
+		guildName = data.name;
 
 		var isMember = LobbySession.guildId != 0 && LobbySession.guildId == guildId;
 		art.setMember(isMember);
 		titleBox = LobbyArt.directText(art, "titleBox");
 		setText("titleBox", "-- " + guildName + " --");
-		setText("gpTodayBox", "GP Today: " + NumberFormat.withCommas(intAny(ret, ["gp_today", "gpToday"])));
-		setText("gpTotalBox", "GP Total: " + NumberFormat.withCommas(intAny(ret, ["gp_total", "gpTotal"])));
-		setText("membersCount", "Members: " + intAny(ret, ["member_count", "memberCount"]) + " (" + intAny(ret, ["active_count", "activeCount"]) + " active)");
-		setText("guildProse", strField(ret, "note"));
-		addEmblem(strField(ret, "emblem"));
+		setText("gpTodayBox", "GP Today: " + NumberFormat.withCommas(data.gpToday));
+		setText("gpTotalBox", "GP Total: " + NumberFormat.withCommas(data.gpTotal));
+		setText("membersCount", "Members: " + data.memberCount + " (" + data.activeCount + " active)");
+		setText("guildProse", data.note);
+		addEmblem(data.emblem);
 
 		var loading = DisplayUtil.directChildByName(art, "loadingGraphic");
 		if (loading != null) loading.visible = false;
@@ -103,8 +99,8 @@ class GuildPopup extends Popup {
 
 		var holder = Std.downcast(DisplayUtil.directChildByName(art, "membersHolder"), DisplayObjectContainer);
 		if (holder != null) {
-			for (member in members) {
-				var row = new GuildMemberName(member, ownerId != 0 && ownerId == intAny(member, ["user_id", "userId"]));
+			for (member in data.members) {
+				var row = new GuildMemberName(member.raw, member.owner);
 				row.y = guildMembers.length * 16;
 				holder.addChild(row);
 				guildMembers.push(row);
@@ -131,7 +127,7 @@ class GuildPopup extends Popup {
 	}
 
 	private function clickMessage():Void {
-		new SendMessagePopup("guild", "", true);
+		pr2.app.ScreenFactory.composeMessage("guild", "", true);
 	}
 
 	private function clickEdit():Void {
@@ -208,10 +204,12 @@ class GuildPopup extends Popup {
 	}
 
 	override public function remove():Void {
+		if (source != null) { source.remove(); source = null; }
 		asyncGuard.remove();
 		if (GuildPopup.instance == this) {
 			GuildPopup.instance = null;
 		}
+		ProfileActions.guildRemoved(this);
 		if (AppStage.stage != null) {
 			AppStage.stage.removeEventListener(KeyboardEvent.KEY_DOWN, toggleGuildIdShown);
 		}

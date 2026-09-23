@@ -33,8 +33,7 @@ import pr2.page.CampaignTestScreen;
 import pr2.page.CustomizeCharacterScreen;
 import pr2.page.CharacterPartCachePreview;
 import pr2.page.IntroPage;
-import pr2.page.LoginPage;
-import pr2.page.MobileLobbyPage;
+import pr2.app.ScreenFactory;
 import pr2.page.PageHolder;
 import pr2.page.SymbolPreview;
 import pr2.page.PopupPreview;
@@ -75,6 +74,7 @@ class Main extends Sprite {
 
 		stage.frameRate = Constants.DEFAULT_PRESENTATION_FRAME_RATE;
 		var query = currentQuery();
+		ScreenFactory.configure(query, resolveSiteMode(query));
 		frameRateSettings = FrameRateSettings.fromQuery(query, frameStrategiesSupportedOnCurrentTarget());
 		configureStage(query);
 		applyPresentationFrameRate();
@@ -101,6 +101,7 @@ class Main extends Sprite {
 			var screen = Screen.fromQuery(query);
 			addChild(buildScreen(screen, query, siteMode));
 			addGlobalChrome(screen, query);
+			ScreenFactory.installPreviewSelector();
 			signalAppReady(screen);
 			#if pr2_leak_probe
 			installLeakProbe();
@@ -130,13 +131,9 @@ class Main extends Sprite {
 
 	private function configureStage(query:Null<String>):Void {
 		#if (js && html5)
-		if (mobileLobbyRequested(query)) {
-			// The mobile lobby lays itself out in browser pixels and consumes resize
-			// events, so it keeps the full-window stage coordinate system.
-			stage.align = StageAlign.TOP_LEFT;
-			stage.scaleMode = StageScaleMode.NO_SCALE;
-			return;
-		}
+		// Tooling/shared screens start in authored coordinates. Root pages select
+		// their own viewport through PageHolder before they initialize.
+		Browser.document.body.classList.add("pr2-fixed-stage");
 
 		// lime.embed(0, 0) gives the renderer a full-window, high-DPI backing
 		// surface, but also initializes OpenFL without a logical stage size.
@@ -255,7 +252,7 @@ class Main extends Sprite {
 		if (QueryParams.get(query, "chrome") == "0") {
 			return;
 		}
-		if (screen == Lobby && mobileLobbyRequested(query)) {
+		if (ScreenFactory.isMobile) {
 			return;
 		}
 		switch (screen) {
@@ -301,7 +298,7 @@ class Main extends Sprite {
 				QueryParams.get(query, "localLevel"),
 				Std.parseInt(QueryParams.get(query, "debugItem"))
 			);
-			case Login: new PageHolder(new LoginPage(siteMode), true);
+			case Login: new PageHolder(ScreenFactory.login(siteMode), true);
 			case Lobby: buildLobby(query);
 			case Intro: new PageHolder(new IntroPage(
 				siteMode,
@@ -333,25 +330,15 @@ class Main extends Sprite {
 			installOfflineLobbyListFixtures();
 		}
 		pr2.lobby.LobbySession.begin(userName, guest ? 0 : 1);
-		var mobile = mobileLobbyRequested(query);
-		var holder = new PageHolder(mobile ? new MobileLobbyPage(userName) : new pr2.page.LobbyPage(userName), true);
+		var holder = new PageHolder(ScreenFactory.lobby(userName), true);
 		#if js
 		// Runtime parity sequences rebuild the lobby in-place to verify that the
 		// static TabsHolder selection memory survives a real page teardown.
 		untyped Browser.window.__pr2RebuildLobby = function():Void {
-			holder.changePage(mobile ? new MobileLobbyPage(userName) : new pr2.page.LobbyPage(userName));
+			holder.changePage(ScreenFactory.lobby(userName));
 		};
 		#end
 		return holder;
-	}
-
-	private static function mobileLobbyRequested(query:Null<String>):Bool {
-		var value = QueryParams.get(query, "mobile");
-		return value == "1" || value == "true" || value == "lobby"
-			#if pr2_mobile_ui
-				|| true
-			#end
-		;
 	}
 
 	private function installOfflineLobbyListFixtures():Void {

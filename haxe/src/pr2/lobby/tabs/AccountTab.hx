@@ -16,6 +16,9 @@ import pr2.lobby.SecureData;
 import pr2.lobby.account.AccountCharacter;
 import pr2.lobby.account.AccountCustomizeData;
 import pr2.lobby.account.AccountState;
+import pr2.lobby.account.CustomizationSession;
+import pr2.lobby.account.CustomizationRules;
+import pr2.lobby.account.ManualPart;
 import pr2.lobby.account.LoadoutsPopup;
 import pr2.lobby.account.PlayerDisplay;
 import pr2.lobby.account.Presets;
@@ -35,9 +38,12 @@ import pr2.util.DisplayUtil;
 /** Flash-compatible Account customization tab. */
 class AccountTab extends Page {
 	public static inline var SET_MANUAL_PART:String = "manualPart";
-	public static var partToSet:Array<Dynamic> = [];
+	public static var partToSet(get, set):Array<Dynamic>;
+	private static function get_partToSet():Array<Dynamic> return ManualPart.selection;
+	private static function set_partToSet(value:Array<Dynamic>):Array<Dynamic> return ManualPart.selection = value;
 
-	private static final manualPartDispatcher:EventDispatcher = new EventDispatcher();
+	private static final manualPartDispatcher:EventDispatcher = ManualPart.dispatcher;
+	private final session = new CustomizationSession();
 
 	private var art:Null<AccountInfoView>;
 	private var character:Null<AccountCharacter>;
@@ -48,7 +54,6 @@ class AccountTab extends Page {
 	private var rank:Int = 0;
 	private var rankTokensUsed:Int = 0;
 	private var rankTokensAvailable:Int = 0;
-	private var customizeInfo:String = "";
 	private var rankUp:Null<DisplayObject>;
 	private var rankDown:Null<DisplayObject>;
 	private var loadouts:Null<DisplayObject>;
@@ -104,7 +109,7 @@ class AccountTab extends Page {
 		rank = data.rank;
 		rankTokensUsed = data.rankTokensUsed;
 		rankTokensAvailable = data.rankTokensAvailable;
-		SecureData.setNumber("userRank", rank);
+		session.accept(data);
 		setHtml("nameBox", "Welcome, " + StringTools.htmlEscape(LobbySession.userName));
 		setHtml("hatBox", "Hats: " + Std.int(Math.max(0, data.hats.length - 1)));
 		renderGuild();
@@ -120,7 +125,7 @@ class AccountTab extends Page {
 		characterHolder.scaleX = characterHolder.scaleY = 1.5;
 		addChild(characterHolder);
 
-		var availableStats = data.happyHour ? 300 : 150 + rank;
+		var availableStats = CustomizationRules.budget(data);
 		stats = new StatsSelect(availableStats, data.speed, data.acceleration, data.jumping);
 		stats.x = 20;
 		stats.y = 207;
@@ -151,11 +156,7 @@ class AccountTab extends Page {
 	}
 
 	private function writeCustomizeInfo(partInfo:String):Void {
-		var command = "set_customize_info`" + partInfo + "`" + stats.getInfoStr();
-		if (command != customizeInfo) {
-			customizeInfo = command;
-			LobbySocket.write(command);
-		}
+		session.save(partInfo, stats.getInfoStr());
 	}
 
 	private function partInfoWithManualOverride():String {
@@ -194,24 +195,18 @@ class AccountTab extends Page {
 	}
 
 	private function useRankToken():Void {
-		if (rankTokensUsed < rankTokensAvailable) {
-			rankTokensUsed++;
-			rank++;
-			SecureData.setNumber("userRank", rank);
-			LobbySocket.write("use_rank_token`");
-			LobbySocket.write("get_customize_info`");
+		if (session.token(true)) {
+			rankTokensUsed = session.used;
+			rank = session.rank;
 			updateRankControls();
 			retestLevelAccess();
 		}
 	}
 
 	private function unuseRankToken():Void {
-		if (rankTokensUsed > 0) {
-			rankTokensUsed--;
-			rank--;
-			SecureData.setNumber("userRank", rank);
-			LobbySocket.write("unuse_rank_token`");
-			LobbySocket.write("get_customize_info`");
+		if (session.token(false)) {
+			rankTokensUsed = session.used;
+			rank = session.rank;
 			updateRankControls();
 			retestLevelAccess();
 		}
@@ -289,9 +284,7 @@ class AccountTab extends Page {
 	}
 
 	public static function keyToSlot(keyCode:Int):Int {
-		if (keyCode >= 48 && keyCode <= 57) return keyCode == 48 ? 10 : keyCode - 48;
-		if (keyCode >= 96 && keyCode <= 105) return keyCode == 96 ? 10 : keyCode - 96;
-		return -1;
+		return CustomizationRules.keyToSlot(keyCode);
 	}
 
 	private function refresh():Void {

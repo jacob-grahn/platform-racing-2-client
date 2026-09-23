@@ -6,7 +6,7 @@ import openfl.text.TextFormat;
 import pr2.assets.NativeAssetIds.FontAsset;
 import pr2.assets.NativeAssets;
 import pr2.display.Removable;
-import pr2.lobby.dialogs.GuildPopup;
+import pr2.app.ScreenFactory;
 
 class GuildName extends Removable {
 	public static var popupFactory:Int->Void = defaultPopupFactory;
@@ -75,6 +75,6 @@ class GuildName extends Removable {
 	}
 
 	private static function defaultPopupFactory(guildId:Int):Void {
-		new GuildPopup(guildId);
+		ScreenFactory.guild(guildId);
 	}
 }

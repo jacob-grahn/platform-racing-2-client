@@ -11,7 +11,6 @@ import pr2.assets.NativeAssets;
 import pr2.gameplay.MiniMap;
 import pr2.lobby.dialogs.ConfirmPopup;
 import pr2.lobby.dialogs.UploadingPopup;
-import pr2.net.ServerConfig;
 import pr2.runtime.SvgAsset;
 
 /**
@@ -26,11 +25,11 @@ class RatingSelect extends Sprite {
 	private var star:Null<Shape>;
 	private var rating:Float = 3;
 	private var starWidth:Float;
-	private var courseID:Int;
+	private var submission:pr2.gameplay.LevelRating;
 
 	public function new(id:Int) {
 		super();
-		this.courseID = id;
+		submission = new pr2.gameplay.LevelRating(id);
 		meter = new RatingStarMeter();
 		starWidth = RatingStarMeter.WIDTH / 5;
 		star = NativeAssets.svg(StaticSvg.RatingStarHighlight);
@@ -51,12 +50,14 @@ class RatingSelect extends Sprite {
 
 	private function clickHandler(e:MouseEvent):Void {
 		rating = ratingFromX(e.stageX);
-		new ConfirmPopup(rateLevel, "Are you sure you want to rate this level " + Std.int(rating) + "?");
+		var selected = Std.int(rating);
+		new ConfirmPopup(function() rateLevel(selected), "Are you sure you want to rate this level " + selected + "?");
 	}
 
-	private function rateLevel():Void {
-		var fields = ["level_id" => Std.string(courseID), "rating" => Std.string(Std.int(rating))];
-		new UploadingPopup(ServerConfig.submitRatingUrl(), fields, "Submitting rating...");
+	private function rateLevel(selected:Int):Void {
+		submission.submit(selected, function(url, fields, success, failure) {
+			return new UploadingPopup(url, fields, "Submitting rating...", function(_:Dynamic) success(""), failure);
+		});
 	}
 
 	private function outHandler(e:MouseEvent):Void {
@@ -99,6 +100,7 @@ class RatingSelect extends Sprite {
 	}
 
 	public function remove():Void {
+		submission.remove();
 		removeEventListener(MouseEvent.MOUSE_MOVE, moveHandler);
 		removeEventListener(MouseEvent.CLICK, clickHandler);
 		removeEventListener(MouseEvent.MOUSE_OUT, outHandler);

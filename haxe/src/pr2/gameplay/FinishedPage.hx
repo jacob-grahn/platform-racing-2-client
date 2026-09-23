@@ -18,8 +18,11 @@ import pr2.util.DisplayUtil;
 	`onReturn` for the "Return to Lobby" button (Flash wrote `set_game_room`none`
 	and changed the page to the lobby there).
 **/
-class FinishedPage extends Popup {
-	public static var kongStatSubmit:Null<String->Int->Void> = null;
+class FinishedPage extends Popup implements RaceResults {
+	public static var kongStatSubmit(get, set):Null<String->Int->Void>;
+	private static function get_kongStatSubmit():Null<String->Int->Void> return ResultsState.kongStatSubmit;
+	private static function set_kongStatSubmit(value:Null<String->Int->Void>):Null<String->Int->Void> return ResultsState.kongStatSubmit = value;
+	private final state = new ResultsState();
 
 	private var art:Null<FinishedPageView>;
 	private var stars:Null<RatingSelect>;
@@ -61,7 +64,7 @@ class FinishedPage extends Popup {
 
 	/** Add a bonus/exp award line, matching `FinishedPage.award`. */
 	public function award(bonus:String, exp:String):Void {
-		if (art == null || curAwardLine > 5) {
+		if (art == null || !state.award(bonus, exp)) {
 			return;
 		}
 		var bonusField = LobbyArt.directText(art, "bonus" + curAwardLine);
@@ -77,17 +80,15 @@ class FinishedPage extends Popup {
 
 	/** Fill the total and animate the exp bar, matching `FinishedPage.setExpGain`. */
 	public function setExpGain(expOld:Int, expNew:Int, expToRank:Int):Void {
+		state.setExpGain(expOld, expNew, expToRank);
 		if (art != null) {
 			var total = LobbyArt.directText(art, "expTotal");
 			if (total != null) {
-				total.text = "+ " + (expNew - expOld);
+				total.text = "+ " + state.gained;
 			}
 		}
 		if (expGain != null) {
 			expGain.start(expOld, expNew, expToRank);
-		}
-		if (kongStatSubmit != null) {
-			kongStatSubmit("Exp Gained at Once", expNew - expOld);
 		}
 	}
 

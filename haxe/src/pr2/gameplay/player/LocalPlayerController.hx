@@ -137,6 +137,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	private var targetVelX:Float = 0;
 	private var accelFactor:Float = BASE_ACCEL_FACTOR;
 	private var jumpHeld:Bool = false;
+	private var presentationJumpHold:Bool = false;
 	private var jumpVelBoost:Float = 0;
 	private var crouchCharge:Float = 0;
 	private var waterTicks:Float = 0;
@@ -259,6 +260,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		presentationInputLeft = false;
 		presentationInputRight = false;
 		presentationInputJump = false;
+		presentationJumpHold = false;
 		presentationInputDown = false;
 		accelFactor = BASE_ACCEL_FACTOR;
 		jumpHeld = false;
@@ -294,6 +296,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		presentationInputLeft = input.left;
 		presentationInputRight = input.right;
 		presentationInputJump = input.jump;
+		presentationJumpHold = input.jumpHold;
 		presentationInputDown = input.down;
 		setPlayerPos(Math.round(x), Math.round(y));
 		// Flash owns the rotate tween in Course, independently of whichever
@@ -541,12 +544,15 @@ class LocalPlayerController implements ItemRuntimeOwner {
 			targetVelX = 0;
 		}
 
-		if (input.jump) {
-			if (grounded && !crouching) {
+		if (input.jump || input.jumpHold) {
+			if (input.jump && grounded && !crouching) {
 				jumpHeld = true;
 				vy -= jumpVelocity;
 				jumpVelBoost = -jumpVelocity;
-			} else if (jumpHeld) {
+			} else if (!input.jump && grounded) {
+				// A sustain-only source must not carry a prior boost off a ledge.
+				jumpHeld = false;
+			} else if (jumpHeld && (input.jump || !grounded)) {
 				vy += jumpVelBoost;
 				jumpVelBoost *= 0.75;
 			}
@@ -594,7 +600,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		if (input.down) {
 			vy += accel * 0.65;
 		}
-		if (input.jump) {
+		if (input.jump || input.jumpHold) {
 			vy -= accel * 0.65;
 		}
 		var waterGravity = DEFAULT_GRAVITY * 0.25;
@@ -853,7 +859,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 			vy = 0;
 		}
 		traceGravityChange("position", gravityBefore, gravity, gravityBefore);
-		if (input.jump && propellerHatActive && vy > 0) {
+		if ((input.jump || input.jumpHold) && propellerHatActive && vy > 0) {
 			vy *= 0.85;
 		}
 		targetVelX = targetVelocityForPosition(targetVelX, crouching);
@@ -922,7 +928,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 			if (presentationInputDown) {
 				waterVy += accel * 0.65;
 			}
-			if (presentationInputJump) {
+			if (presentationInputJump || presentationJumpHold) {
 				waterVy -= accel * 0.65;
 			}
 			waterVy += DEFAULT_GRAVITY * 0.25;
@@ -931,10 +937,10 @@ class LocalPlayerController implements ItemRuntimeOwner {
 
 		var predictedVy = vy;
 		if (previewMode != MODE_FROZEN_SOLID && previewMode != MODE_HURT) {
-			if (presentationInputJump) {
-				if (grounded && !crouching) {
+			if (presentationInputJump || presentationJumpHold) {
+				if (presentationInputJump && grounded && !crouching) {
 					predictedVy -= jumpVelocity;
-				} else if (jumpHeld) {
+				} else if (jumpHeld && (presentationInputJump || !grounded)) {
 					predictedVy += jumpVelBoost;
 				}
 			}
@@ -945,7 +951,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 			}
 		}
 		predictedVy += gravity;
-		if (presentationInputJump && propellerHatActive && predictedVy > 0) {
+		if ((presentationInputJump || presentationJumpHold) && propellerHatActive && predictedVy > 0) {
 			predictedVy *= 0.85;
 		}
 		return clamp(predictedVy, -MAX_SPEED, MAX_SPEED);

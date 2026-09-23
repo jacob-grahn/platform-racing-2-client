@@ -93,6 +93,8 @@ class Course extends Sprite {
 	private var suppliedMusicSelection:Null<MusicSelection>;
 
 	private final input:LocalPlayerInput = new LocalPlayerInput();
+	public final touchInput:LocalPlayerInput = new LocalPlayerInput();
+	public var inputBlocked:Bool = false;
 
 	public var levelRenderer(default, null):LevelRenderer;
 	public var backCharacterLayer(default, null):Sprite;
@@ -555,7 +557,7 @@ class Course extends Sprite {
 	/** Lets a wrapper (the debug harness) intercept chat lines before display. **/
 	public function handleRaceChatLine(message:String):Bool {
 		if (ChatText.trimWhitespace(message).toLowerCase() == "/level" && config.levelId > 0) {
-			new LevelInfoPopup(Std.int(config.levelId));
+			pr2.app.ScreenFactory.levelInfo(Std.int(config.levelId));
 			return true;
 		}
 		return onChatLine != null && onChatLine(message);
@@ -947,11 +949,25 @@ class Course extends Sprite {
 				player.controller.stopDetailedTrace();
 			}
 			var playerInput = input.copy();
+			playerInput.left = playerInput.left || touchInput.left;
+			playerInput.right = playerInput.right || touchInput.right;
+			playerInput.jump = playerInput.jump || touchInput.jump;
+			playerInput.down = playerInput.down || touchInput.down;
+			playerInput.item = playerInput.item || touchInput.item;
+			playerInput.jumpHold = touchInput.jumpHold;
+			if (inputBlocked) playerInput.clear();
 			var beforeStep = player.stateSnapshot();
-			if ((snakeManager != null && snakeManager.localActive()) || (input.item && beforeStep.itemId == Items.SNAKE)) {
+			if ((snakeManager != null && snakeManager.localActive()) || (playerInput.item && beforeStep.itemId == Items.SNAKE)) {
+				if (!inputBlocked && snakeManager != null) {
+					if (touchInput.left) snakeManager.setLocalDirection(-1, 0);
+					if (touchInput.right) snakeManager.setLocalDirection(1, 0);
+					if (touchInput.jumpHold) snakeManager.setLocalDirection(0, -1);
+					if (touchInput.down) snakeManager.setLocalDirection(0, 1);
+				}
 				playerInput.left = false;
 				playerInput.right = false;
 				playerInput.jump = false;
+				playerInput.jumpHold = false;
 				playerInput.down = false;
 			}
 			player.step(playerInput);
@@ -1674,17 +1690,18 @@ class Course extends Sprite {
 	}
 
 	private function applyKeyScroll():Void {
+		if (inputBlocked) return;
 		var accel = scrollShift ? 20 : 10;
-		if (scrollDown) {
+		if (scrollDown || touchInput.down) {
 			scrollVelY -= accel;
 		}
-		if (scrollUp) {
+		if (scrollUp || touchInput.jumpHold) {
 			scrollVelY += accel;
 		}
-		if (scrollLeft) {
+		if (scrollLeft || touchInput.left) {
 			scrollVelX += accel;
 		}
-		if (scrollRight) {
+		if (scrollRight || touchInput.right) {
 			scrollVelX -= accel;
 		}
 		scrollVelX *= 0.6;
@@ -1708,6 +1725,7 @@ class Course extends Sprite {
 	}
 
 	private function setKey(keyCode:UInt, pressed:Bool):Void {
+		if (inputBlocked && pressed) return;
 		if (raceChat != null && raceChat.inputHasFocus()) {
 			return;
 		}
@@ -1740,6 +1758,7 @@ class Course extends Sprite {
 
 	private function resetInput(_:Event):Void {
 		input.clear();
+		touchInput.clear();
 		scrollLeft = false;
 		scrollRight = false;
 		scrollUp = false;
@@ -1748,6 +1767,8 @@ class Course extends Sprite {
 		scrollVelX = 0;
 		scrollVelY = 0;
 	}
+
+	public function releaseControls():Void resetInput(null);
 
 	public function remove():Void {
 		FrameClock.resetCurrentPresentationPhase();

@@ -15,23 +15,24 @@ class MobileLobbyLayoutTest {
 
 	private static function testNarrowPhone():Void {
 		var layout = MobileLobbyPage.layoutMetricsForTests(550, 400, true);
-		assertAtLeast(44, layout.primaryButtonHeight, "primary navigation touch height");
-		assertAtLeast(44, layout.secondaryButtonHeight, "secondary navigation touch height");
-		assertAtLeast(100, layout.primaryButtonWidth, "narrow primary navigation width");
+		assertAtLeast(44, layout.headerButtonHeight, "header navigation touch height");
+		assertEquals(16, layout.inset, "narrow screens keep usable side margins");
+		assertEquals(518, layout.contentWidth, "narrow content fits within viewport");
 		assertAtLeast(100, layout.contentHeight, "narrow play content remains reachable");
 	}
 
 	private static function testWidePhone():Void {
 		var layout = MobileLobbyPage.layoutMetricsForTests(844, 390, true);
-		assertEquals(211, layout.primaryButtonWidth, "wide phone divides primary navigation evenly");
-		assertEquals(112, layout.contentY, "play content clears both navigation levels");
+		assertEquals(756, layout.contentWidth, "wide phone respects landscape side margins");
+		assertEquals(76, layout.contentY, "content clears the game header");
+		assertEquals(284, layout.contentHeight, "approved landscape panel height");
 		assertAtLeast(140, layout.contentHeight, "wide phone retains useful listing height");
 	}
 
 	private static function testTablet():Void {
 		var layout = MobileLobbyPage.layoutMetricsForTests(1024, 768, false);
-		assertEquals(256, layout.primaryButtonWidth, "tablet primary navigation width");
-		assertEquals(58, layout.contentY, "non-play pane starts below header");
+		assertEquals(936, layout.contentWidth, "tablet expands content without scaling controls");
+		assertEquals(76, layout.contentY, "non-play pane starts below header");
 		assertAtLeast(600, layout.contentHeight, "tablet single-pane content uses the screen");
 	}
 

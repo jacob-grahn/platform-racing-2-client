@@ -4,10 +4,7 @@ package pr2.lobby;
 import js.Browser;
 #end
 import pr2.lobby.messages.UnreadNotif;
-import pr2.lobby.tabs.AccountTab;
 import pr2.lobby.tabs.ChatTab;
-import pr2.lobby.tabs.MessagesTab;
-import pr2.lobby.tabs.PlayersTab;
 import pr2.net.CommandHandler;
 import pr2.ui.LobbyTab;
 
@@ -70,17 +67,17 @@ class LobbyLeft extends LobbySide {
 
 	private function changeTabPMs():Void {
 		reportSelected("pms");
-		changePage(new MessagesTab());
+		changePage(pr2.app.ScreenFactory.messages());
 	}
 
 	private function changeTabPlayers():Void {
 		reportSelected("players");
-		changePage(new PlayersTab());
+		changePage(pr2.app.ScreenFactory.players());
 	}
 
 	private function changeTabAccount():Void {
 		reportSelected("account");
-		changePage(new AccountTab());
+		changePage(pr2.app.ScreenFactory.racer());
 	}
 
 	private function reportSelected(tab:String):Void {

@@ -63,23 +63,15 @@ class Presets {
 	}
 
 	public static function apply(preset:Preset, c:AccountCharacter, ss:StatsSelect, disp:PlayerDisplay):Void {
-		if (ss != null) {
-			ss.setStats(1, 1, 1);
-			ss.setStats(preset.speed, preset.acceleration, preset.jumping);
-		}
+		applyValues(preset, ss == null ? null : ss.setStats, disp == null ? null : function(part, id, primary, secondary) {
+			var selector:PartSelector = Reflect.field(disp, part + "Select");
+			selector.setValue(id); selector.setColors(primary, secondary);
+		});
 		var hatColor2 = preset.hatColor2;
 		var headColor2 = preset.headColor2;
 		var bodyColor2 = preset.bodyColor2;
 		var feetColor2 = preset.feetColor2;
 		if (disp != null) {
-			disp.hatSelect.setValue(preset.hat);
-			disp.headSelect.setValue(preset.head);
-			disp.bodySelect.setValue(preset.body);
-			disp.feetSelect.setValue(preset.feet);
-			disp.hatSelect.setColors(preset.hatColor, preset.hatColor2);
-			disp.headSelect.setColors(preset.headColor, preset.headColor2);
-			disp.bodySelect.setColors(preset.bodyColor, preset.bodyColor2);
-			disp.feetSelect.setColors(preset.feetColor, preset.feetColor2);
 			hatColor2 = disp.hatSelect.getColor2();
 			headColor2 = disp.headSelect.getColor2();
 			bodyColor2 = disp.bodySelect.getColor2();
@@ -95,5 +87,12 @@ class Presets {
 		if (disp != null) {
 			disp.refreshFromCharacter();
 		}
+	}
+
+	/** Same reset/order for both presentations; adapters own their views. */
+	public static function applyValues(preset:Preset, stats:Int->Int->Int->Void, part:String->Int->Int->Int->Void):Void {
+		if (stats != null) { stats(1, 1, 1); stats(preset.speed, preset.acceleration, preset.jumping); }
+		if (part != null) for (name in ["hat", "head", "body", "feet"])
+			part(name, Reflect.field(preset, name), Reflect.field(preset, name + "Color"), Reflect.field(preset, name + "Color2"));
 	}
 }

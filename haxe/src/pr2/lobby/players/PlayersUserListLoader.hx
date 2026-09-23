@@ -1,74 +1,22 @@
 package pr2.lobby.players;
 
-import haxe.Json;
-import pr2.net.ServerConfig;
-import pr2.net.TextLoader;
-import pr2.util.AsyncRemovalGuard;
+typedef PlayersUserListFetchResource = pr2.util.AsyncRemovalGuard.AsyncRemovable;
+typedef PlayersUserListFetchFactory = pr2.lobby.players.DirectorySource.DirectoryFetch;
 
-typedef PlayersUserListFetchResource = {
-	function remove():Void;
-}
-
-typedef PlayersUserListFetchFactory = String->(String->Void)->(String->Void)->PlayersUserListFetchResource;
-
-/**
-	Port of Flash `social.PlayersTabUserListDataLoader`: loads a player list from
-	`user_list_get.php?mode=...` and adds each returned user as a row. Friends,
-	Following, and Ignored are thin subclasses that pass their mode.
-**/
+/** Classic relationship lists share transport, parsing, and cancellation with mobile. */
 class PlayersUserListLoader extends PlayersTabList {
-	public static var fetchFactory:PlayersUserListFetchFactory = defaultFetch;
-
+	public static var fetchFactory(get, set):PlayersUserListFetchFactory;
+	private static function get_fetchFactory():PlayersUserListFetchFactory return DirectorySource.userFetch;
+	private static function set_fetchFactory(value:PlayersUserListFetchFactory):PlayersUserListFetchFactory return DirectorySource.userFetch = value;
 	private var mode:String;
-	private var asyncGuard:AsyncRemovalGuard = new AsyncRemovalGuard();
-
-	public function new(mode:String) {
-		super();
-		this.mode = mode;
-	}
-
+	private var source:DirectorySource;
+	public function new(mode:String) { super(); this.mode = mode; }
 	override public function initialize():Void {
-		super.initialize();
-		asyncGuard.watch(fetchFactory(ServerConfig.userListUrl(mode), asyncGuard.wrap(onData), asyncGuard.wrap(onError)));
+		super.initialize(); source = new DirectorySource();
+		source.start(mode, function(entry) addUserEntry(entry.name, entry.group, entry.rank, entry.hats, entry.status), hideLoadingGraphic, function(_) hideLoadingGraphic());
 	}
-
-	private static function defaultFetch(url:String, onData:String->Void, onError:String->Void):PlayersUserListFetchResource {
-		return TextLoader.load(url, onData, onError);
-	}
-
-	private function onData(body:String):Void {
-		try {
-			var parsed:Dynamic = Json.parse(body);
-			var users:Array<Dynamic> = parsed.users;
-			if (users != null) {
-				for (user in users) {
-					var status:String = user.status != null ? Std.string(user.status) : "";
-					addUserEntry(Std.string(user.name), Std.string(user.group), intOf(user.rank), intOf(user.hats), status);
-				}
-			}
-		} catch (error:Dynamic) {
-			// Malformed payload — leave the list empty, like the original on a bad parse.
-		}
-		hideLoadingGraphic();
-	}
-
-	private function onError(message:String):Void {
-		hideLoadingGraphic();
-	}
-
-	private static function intOf(value:Dynamic):Int {
-		if (value == null) {
-			return 0;
-		}
-		if (Std.isOfType(value, Int) || Std.isOfType(value, Float)) {
-			return Std.int(value);
-		}
-		var parsed = Std.parseInt(Std.string(value));
-		return parsed == null ? 0 : parsed;
-	}
-
 	override public function remove():Void {
-		asyncGuard.remove();
+		if (source != null) source.remove(); source = null;
 		super.remove();
 	}
 }

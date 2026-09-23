@@ -59,6 +59,20 @@ private typedef StackedBlockDisplay = {
 	focus point, usually the first start block, appears at a stable stage point.
 **/
 class LevelRenderer extends Sprite {
+	public var viewport(default, null):openfl.geom.Rectangle = new openfl.geom.Rectangle(0, 0, Constants.STAGE_WIDTH, Constants.STAGE_HEIGHT);
+	/** Presentation-only bounds; camera/physics coordinates remain unchanged. */
+	public function setViewport(rect:openfl.geom.Rectangle):Void {
+		viewport = rect.clone();
+		backgroundRenderer.redrawSolidBackground();
+		if (artBackgroundContainer != null) {
+			artBackgroundContainer.x = rect.x;
+			artBackgroundContainer.y = rect.y;
+			artBackgroundContainer.scaleX = rect.width / Constants.STAGE_WIDTH;
+			artBackgroundContainer.scaleY = rect.height / Constants.STAGE_HEIGHT;
+		}
+		updateViewWindow(true);
+		updateArtViewWindows(true);
+	}
 	/** Committed Flash blockBackground rotation; unrelated to inherited Sprite.rotation. */
 	public var courseRotationDegrees(get, never):Int;
 	public static inline var TILE_SIZE:Int = 30;

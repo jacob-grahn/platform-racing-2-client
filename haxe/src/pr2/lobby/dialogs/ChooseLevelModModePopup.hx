@@ -1,6 +1,7 @@
 package pr2.lobby.dialogs;
 
 import pr2.net.ServerConfig;
+import pr2.lobby.level.LevelInfoActions;
 
 typedef LevelModerateUploadFactory = String->Map<String, String>->String->(Dynamic->Void)->(String->Void)->Null<UploadingPopup>;
 
@@ -37,10 +38,8 @@ class ChooseLevelModModePopup extends Popup {
 	}
 
 	private function confirmAction(action:String):Void {
-		uploading = uploadFactory(ServerConfig.levelModerateUrl(), [
-			"level_id" => Std.string(levelId),
-			"action" => action
-		], action == "restrict" ? "Restricting level..." : "Unpublishing level...", returnAction, handleUploadError);
+		uploading = uploadFactory(ServerConfig.levelModerateUrl(), LevelInfoActions.moderationFields(levelId, action),
+			action == "restrict" ? "Restricting level..." : "Unpublishing level...", returnAction, handleUploadError);
 	}
 
 	private function returnAction(parsedData:Dynamic):Void {

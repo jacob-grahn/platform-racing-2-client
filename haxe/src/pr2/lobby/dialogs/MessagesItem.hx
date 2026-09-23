@@ -13,7 +13,6 @@ import pr2.assets.NativeAssetIds.StaticSvg;
 import pr2.assets.NativeAssetIds.FontAsset;
 import pr2.assets.NativeAssets;
 import pr2.lobby.LobbyArt;
-import pr2.lobby.account.Settings;
 import pr2.lobby.chat.ChatText;
 import pr2.lobby.chat.HtmlNameMaker;
 import pr2.util.DisplayUtil;
@@ -59,9 +58,7 @@ class MessagesItem extends Sprite {
 		this.userName = name;
 		this.time = time;
 		this.group = Std.parseInt(group.split(",")[0]) != null ? Std.parseInt(group.split(",")[0]) : 0;
-		if (Settings.getValue(Settings.FILTER_SWEARS, true)) {
-			body = ChatText.filterSwears(body);
-		}
+		body = pr2.lobby.messages.MessageData.filtered(body);
 		this.messageText = body;
 
 		art = new MessagesItemView();
@@ -75,9 +72,7 @@ class MessagesItem extends Sprite {
 			htmlNameMaker.listenForLink(nameBox);
 		}
 
-		var html = this.group < 3 ? ChatText.escapeString(body, true) : body;
-		html = ChatText.parseLinks(html);
-		html = StringTools.replace(html, "\r", "<br>");
+		var html = pr2.lobby.messages.MessageData.html(body, group);
 		renderedBodyHtml = html;
 		if (textBox != null) {
 			prepareBodyTextField(textBox);
@@ -154,11 +149,8 @@ class MessagesItem extends Sprite {
 	}
 
 	private function clickReply():Void {
-		var reply = "\n--- \n" + messageText;
-		if (reply.length > 200) {
-			reply = reply.substr(0, 200) + "...";
-		}
-		new SendMessagePopup(userName, reply);
+		var reply = pr2.lobby.messages.MessageData.quote(messageText);
+		pr2.app.ScreenFactory.composeMessage(userName, reply);
 	}
 
 	private function hoverTime(_:MouseEvent):Void {

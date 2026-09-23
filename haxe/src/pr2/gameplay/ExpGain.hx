@@ -9,7 +9,6 @@ import openfl.text.TextField;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
 import pr2.display.Removable;
-import pr2.lobby.NumberFormat;
 import pr2.runtime.SvgAsset;
 
 /**
@@ -25,17 +24,13 @@ import pr2.runtime.SvgAsset;
 class ExpGain extends Removable {
 	public static inline final TRACK_ASSET = "assets/svg/effects/exp_progress_track_01.svg";
 	public static inline final FILL_ASSET = "assets/svg/effects/exp_progress_fill_01.svg";
-	private static inline var STEPS:Float = 45;
 	private static inline var BAR_WIDTH:Float = 200;
 
 	private var art:Null<ExpGainView>;
 	private var fill:Null<DisplayObject>;
 	private var textBox:Null<openfl.text.TextField>;
 
-	private var expStart:Float = 0;
-	private var expEnd:Float = 0;
-	private var expToRank:Float = 0;
-	private var expStep:Float = 0;
+	private var progress = new ExperienceProgress();
 
 	public function new() {
 		super();
@@ -49,17 +44,9 @@ class ExpGain extends Removable {
 	}
 
 	public function start(s:Float, e:Float, r:Float):Void {
-		expStart = s;
-		expEnd = e;
-		expToRank = r;
-		if (expEnd > expToRank) {
-			expEnd = expToRank;
-		}
-		if (expStart > expToRank) {
-			expStart = expToRank;
-		}
-		if (expStart <= expEnd) {
-			expStep = (expEnd - expStart) / STEPS;
+		progress.start(s, e, r);
+		removeEventListener(Event.ENTER_FRAME, go);
+		if (progress.active) {
 			addEventListener(Event.ENTER_FRAME, go);
 		}
 	}
@@ -69,16 +56,15 @@ class ExpGain extends Removable {
 
 	private function go(_:Event):Void {
 		if (!pr2.runtime.FrameClock.shouldRunSimulationFrame()) return;
-		expStart += expStep;
-		if (expStart >= expEnd) {
+		progress.tick();
+		if (!progress.active) {
 			removeEventListener(Event.ENTER_FRAME, go);
-			expStart = expEnd;
 		}
 		if (textBox != null) {
-			textBox.text = NumberFormat.withCommas(Std.int(Math.floor(expStart))) + " / " + NumberFormat.withCommas(Std.int(expToRank));
+			textBox.text = progress.text();
 		}
 		if (fill != null) {
-			fill.width = expToRank == 0 ? 0 : BAR_WIDTH * (expStart / expToRank);
+			fill.width = BAR_WIDTH * progress.ratio();
 		}
 	}
 

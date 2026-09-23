@@ -20,3 +20,51 @@
 - A task is complete only when the real user flow works. Rendering the art or
   recording the requested action is not completion.
 - Run only the related test cases for your change, the full suite is a bit slow
+
+## Mobile UI migration gaps
+- The mobile title, authentication, landscape Play/browser/search, race-entry,
+  My Racer (style/colors, stats/tokens, and loadouts), and game-menu shell are
+  implemented, along with the player lists, top-guild directory, Messages inbox,
+  reader/composer, profiles, guild detail, account options, and credits. The Vault
+  of Magics is slated for removal; do not add a mobile store UI. Detailed level
+  information now has a mobile screen sharing its parser and request fields. Prize
+  and Lux announcements, My Racer part details, and guild authoring are also mobile.
+  Remaining authored destinations include the Level Editor and the advanced
+  HSV/eyedropper picker.
+- Player lists and the top-guild directory share roster/HTTP loading, parsing,
+  duplicate suppression, and cancellation with classic. Profiles share socket/HTTP
+  lookup, role/date rules, avatars, navigation, social requests, and guild action fields.
+  Guild details and roster use a mobile landscape panel with shared detail
+  parsing/loading, member profile links, messaging, join/leave, and role-based
+  edit/delete/transfer entry points. Mobile create/edit and transfer forms share
+  request construction with classic. Join/leave/delete use mobile confirmations
+  and show request status in the guild panel. Staff tools have mobile moderation,
+  ban, and admin layouts using the same request and socket command formats.
+- Mobile options cover audio, gameplay preferences, music selection, keyboard
+  bindings, and account/guild actions. Credential validation and encrypted request
+  payloads are shared. Guild create/edit and transfer use mobile forms.
+- Messages shares paging/loading/cancellation, filtering/formatting, reply quoting,
+  validation, and request fields with classic. Compose outside Messages now reuses
+  the mobile editor (profiles/chat/guild management/level sharing). Authenticated
+  live inbox/send/report/delete validation remains outstanding; deterministic tests
+  and isolated browser fixtures cover these actions, not a real member account.
+- Profile relationship changes and guild invite/kick requests have deterministic
+  coverage but need live member/guild-owner validation. Live guest profile browsing
+  verifies loading/navigation, not privileged mutations.
+- My Racer shares customization saves, rank-token commands, stat/epic rules, and
+  loadout application/storage with classic. Part details use the mobile card and
+  shared character preview. The optional advanced HSV/eyedropper color picker retains
+  its original presentation. The main mobile color editor provides RGB controls,
+  hex entry, and the shared palette.
+- The landscape gameplay HUD, independent touch controls, race results, and prize/Lux
+  announcements are implemented through ScreenFactory. Results share awards, XP interpolation, and
+  confirmed rating submission with classic; race menu/chat/music, held-item action,
+  and spectator controls use shared course behavior. The editor retains its original UI.
+- Multi-touch, cancellation, orientation changes, safe areas, and software keyboards
+  still require physical-device validation; browser and deterministic checks are not
+  a substitute for a phone test.
+- Browser landscape uses a fitted title canvas and portrait rotation hint; native
+  orientation, safe areas, and real-device interaction still need validation.
+- Native instructions handoff is not implemented. See `docs/ui-implementation.md`
+  for the configuration commands and remaining presentation gaps.
+- Native login socket probing is unsupported; authentication transport targets HTML5.

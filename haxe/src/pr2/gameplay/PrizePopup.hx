@@ -31,6 +31,7 @@ class PrizePopup extends Popup {
 	private var target:Null<DisplayObjectContainer>;
 	private var epicFlash:EpicFlash = new EpicFlash();
 	private var closeBinding:Null<Binding>;
+	private var contentData:Null<PrizeContent>;
 
 	// Resolved state, exposed for tests/parity assertions.
 	public var targetName(default, null):String = "";
@@ -47,6 +48,7 @@ class PrizePopup extends Popup {
 		}
 		super(false);
 		art = new PrizePopupView();
+		contentData = new PrizeContent(type,id,prizeName,desc,universal,finished);
 
 		setVisible("exp", false);
 		setVisible("hat", false);
@@ -56,39 +58,28 @@ class PrizePopup extends Popup {
 		setVisible("flavorBg", false);
 		setVisible("flavor", false);
 
-		if (desc != "" && type != "exp" && type != "cancel") {
-			showFlavor(desc, false);
-		} else if ((type == "eHat" || type == "eHead" || type == "eBody" || type == "eFeet") && desc == "" && finished) {
-			showFlavor('This is an epic upgrade, not a part. For more information, please see <a href="https://jiggmin2.com/forums/showthread.php?tid=123" target="_blank"><font color="#0000FF">this guide</font></a>.',
-				true);
-		}
+		if (contentData.flavorVisible) showFlavor(contentData.flavorText,contentData.flavorHtml);
 
 		if (type == "hat" || type == "eHat") {
 			target = container("hat");
-			targetName = "hat";
+			targetName = contentData.targetName;
 		} else if (type == "head" || type == "eHead") {
 			target = container("head");
-			targetName = "head";
+			targetName = contentData.targetName;
 		} else if (type == "body" || type == "eBody") {
 			target = container("body");
-			targetName = "body";
+			targetName = contentData.targetName;
 		} else if (type == "feet" || type == "eFeet") {
 			target = container("foot");
-			targetName = "foot";
+			targetName = contentData.targetName;
 		}
 
 		if (type == "exp") {
 			moveY("titleBox", -105);
 			target = container("exp");
 			targetName = "exp";
-			if (desc != "") {
-				if (target != null) {
-					target.y = -80;
-				}
-				detailText = desc;
-			} else {
-				detailText = "You already have this prize, so here are " + NumberFormat.withCommas(id) + " experience points instead!";
-			}
+			if (desc != "" && target != null) target.y = -80;
+			detailText = contentData.detailText;
 			setText(textField(target, "textBox"), detailText);
 		}
 
@@ -103,7 +94,7 @@ class PrizePopup extends Popup {
 			if (target != null) {
 				target.y = -80;
 			}
-			detailText = desc + " cancelled the prize for finishing this race.";
+			detailText = contentData.detailText;
 			setText(textField(target, "textBox"), detailText);
 		}
 
@@ -132,17 +123,10 @@ class PrizePopup extends Popup {
 			}
 		}
 
-		var aOrAn = type == "feet" ? "a pair of" : aOrAnFor(prizeName);
-		if (finished) {
-			bodyText = "You won " + aOrAn + ":";
-		} else if (universal) {
-			bodyText = "Anyone who finishes this race wins " + aOrAn + ":";
-		} else {
-			bodyText = "The winner of this race will earn " + aOrAn + ":";
-		}
+		bodyText = contentData.bodyText;
 		setText(textField(art, "textBox"), bodyText);
 
-		titleText = type == "cancel" ? "-- " + prizeName + " --" : "--- " + prizeName + "! ---";
+		titleText = contentData.titleText;
 		setText(textField(art, "titleBox"), titleText);
 
 		closeBinding = LobbyArt.bind(DisplayUtil.directChildByName(art, "close_bt"), function():Void startFadeOut());

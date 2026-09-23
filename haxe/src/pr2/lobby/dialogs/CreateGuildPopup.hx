@@ -7,6 +7,7 @@ import openfl.text.TextField;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
 import pr2.lobby.LobbySession;
+import pr2.lobby.players.GuildManagementActions;
 import pr2.net.FormPostClient;
 import pr2.net.ServerConfig;
 import pr2.net.TextLoader;
@@ -134,14 +135,7 @@ class CreateGuildPopup extends Popup {
 	}
 
 	private function doConfirm():Void {
-		var fields:Map<String, String> = [
-			"note" => textValue("proseBox"),
-			"name" => textValue("nameBox"),
-			"emblem" => emblem == null ? DEFAULT_EMBLEM : emblem.getFileName(),
-		];
-		if (guildId != 0) {
-			fields.set("guild_id", Std.string(guildId));
-		}
+		var fields=GuildManagementActions.saveFields(guildId,textValue("nameBox"),textValue("proseBox"),emblem==null?DEFAULT_EMBLEM:emblem.getFileName());
 		saveFactory(guildId == 0 ? ServerConfig.guildCreateUrl() : ServerConfig.guildEditUrl(), fields, asyncGuard.wrap(saveSuccess), asyncGuard.wrap(saveError));
 	}
 

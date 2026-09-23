@@ -14,6 +14,7 @@ class PlayerGuestPopup extends Popup {
 
 	public function new(name:String) {
 		super();
+		pr2.lobby.players.ProfileActions.opened(this);
 		art = new PlayerGuestView(name);
 		addChild(art);
 		art.onClose = startFadeOut;
@@ -28,6 +29,7 @@ class PlayerGuestPopup extends Popup {
 	}
 
 	override public function remove():Void {
+		pr2.lobby.players.ProfileActions.removed(this);
 		if (banMenu != null) {
 			banMenu.remove();
 			banMenu = null;

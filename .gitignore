@@ -6,6 +6,7 @@ test/output/
 .env
 .env.*
 *.local
+/.penpot/
 
 # Temporary de-Flash migration workspace. These files support comparison and
 # auditing on this branch, but are not part of the native client deliverable.

@@ -55,7 +55,7 @@ class Popup extends Removable {
 		layoutForSize(AppStage.stage.stageWidth, AppStage.stage.stageHeight);
 	}
 
-	private function layoutForSize(stageW:Float, stageH:Float):Void {
+	public function layoutForSize(stageW:Float, stageH:Float):Void {
 		var density = Math.max(1, Math.min(stageW / 550, stageH / 400));
 		scaleX = scaleY = density;
 		x = stageW / 2;

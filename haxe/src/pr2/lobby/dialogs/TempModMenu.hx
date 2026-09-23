@@ -2,6 +2,7 @@ package pr2.lobby.dialogs;
 
 import openfl.display.Sprite;
 import pr2.net.LobbySocket;
+import pr2.lobby.players.StaffActions;
 import pr2.lobby.dialogs.ModerationMenuView.ModerationMenuLayout;
 
 /**
@@ -27,7 +28,7 @@ class TempModMenu extends Sprite {
 	}
 
 	private function warnUser(warnLevel:Int):Void {
-		LobbySocket.write("warn`" + userName + "`" + warnLevel);
+		LobbySocket.write(StaffActions.warningCommand(userName,warnLevel));
 		target.startFadeOut();
 	}
 
@@ -37,7 +38,7 @@ class TempModMenu extends Sprite {
 	}
 
 	private function kickUser():Void {
-		LobbySocket.write("kick`" + userName);
+		LobbySocket.write(StaffActions.kickCommand(userName));
 		target.startFadeOut();
 	}
 

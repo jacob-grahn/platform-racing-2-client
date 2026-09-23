@@ -6,6 +6,7 @@ from pathlib import Path
 
 ROOTS = (
     Path("export/html5/bin/assets/fonts"),
+    Path("export/html5/bin/assets/mobile/fonts"),
     Path("export/html5/obj/webfont"),
 )
 LEGACY_SUFFIXES = {".eot", ".svg", ".woff"}

@@ -24,8 +24,12 @@ typedef FavoriteLevelListFetchFactory = Int->Int->String->(LevelListResult->Void
 	`((server_id + day) % 6) + 1`.
 **/
 class ListingTab extends LevelListingPage {
-	public static var fetchFactory:LevelListFetchFactory = defaultFetch;
-	public static var fetchFavoritesFactory:FavoriteLevelListFetchFactory = defaultFetchFavorites;
+	public static var fetchFactory(get, set):LevelListFetchFactory;
+	private static function get_fetchFactory():LevelListFetchFactory return pr2.lobby.level.LevelBrowserData.fetchFactory;
+	private static function set_fetchFactory(value:LevelListFetchFactory):LevelListFetchFactory return pr2.lobby.level.LevelBrowserData.fetchFactory = value;
+	public static var fetchFavoritesFactory(get, set):FavoriteLevelListFetchFactory;
+	private static function get_fetchFavoritesFactory():FavoriteLevelListFetchFactory return pr2.lobby.level.LevelBrowserData.favoritesFactory;
+	private static function set_fetchFavoritesFactory(value:FavoriteLevelListFetchFactory):FavoriteLevelListFetchFactory return pr2.lobby.level.LevelBrowserData.favoritesFactory = value;
 
 	private var campaignRenderTimer:Null<Timer>;
 	private var pendingCampaignLevels:Null<Array<CampaignLevelInfo>>;
@@ -39,21 +43,7 @@ class ListingTab extends LevelListingPage {
 		super(mode, ListingTab.initialPageFor(mode), mode == "campaign" ? 6 : 9);
 	}
 
-	private static function initialPageFor(mode:String):Int {
-		var fallback = 1;
-		if (mode == "campaign") {
-			// Flash `Campaign` seeds today's page from the formula and stashes it in
-			// the static `Campaign.campaignPage` (used as the campaign cache key).
-			var serverId = LobbySession.server != null ? LobbySession.server.serverId : 0;
-			fallback = campaignPage(serverId, currentServerDay());
-			LobbySocket.campaignPage = fallback;
-		}
-		// Flash `LevelListing.initialize` then restores `coursePageNum<mode>` over the
-		// seeded page, so a campaign page the player picked survives tab swaps and
-		// level exits for the rest of the session (cleared on disconnect).
-		var remembered = Memory.getInt("coursePageNum" + mode, 0);
-		return remembered != 0 ? remembered : fallback;
-	}
+	private static function initialPageFor(mode:String):Int return pr2.lobby.level.LevelBrowserData.initialPage(mode);
 
 	override private function requestCourses():Void {
 		cancelCampaignRender();

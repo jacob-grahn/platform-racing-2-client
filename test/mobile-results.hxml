@@ -1,0 +1,9 @@
+--library lime
+--library openfl
+--library svg
+-cp haxe/src
+-cp haxe/test
+-D pr2_test
+-D pr2_mobile_ui
+--main pr2.app.MobileResultsTest
+--interp

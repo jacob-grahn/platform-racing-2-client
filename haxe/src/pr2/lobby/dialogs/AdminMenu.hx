@@ -2,6 +2,7 @@ package pr2.lobby.dialogs;
 
 import openfl.display.Sprite;
 import pr2.net.LobbySocket;
+import pr2.lobby.players.StaffActions;
 import pr2.lobby.dialogs.ModerationMenuView.ModerationMenuLayout;
 
 class AdminMenu extends Sprite {
@@ -47,12 +48,12 @@ class AdminMenu extends Sprite {
 	}
 
 	private function promoteModerator():Void {
-		LobbySocket.write("promote_to_moderator`" + userName + "`" + mode);
+		LobbySocket.write(StaffActions.promoteCommand(userName,mode));
 		target.startFadeOut();
 	}
 
 	private function demoteModerator():Void {
-		LobbySocket.write("demote_moderator`" + userName);
+		LobbySocket.write(StaffActions.demoteCommand(userName));
 		target.startFadeOut();
 	}
 

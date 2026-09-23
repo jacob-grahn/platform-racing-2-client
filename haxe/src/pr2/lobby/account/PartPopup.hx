@@ -6,7 +6,6 @@ import pr2.character.Parts;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.chat.HtmlNameMaker;
 import pr2.lobby.dialogs.Popup;
-import pr2.lobby.tabs.AccountTab;
 import pr2.runtime.EpicFlash;
 import pr2.ui.controls.GameButton;
 import pr2.util.DisplayUtil;
@@ -120,65 +119,12 @@ class PartPopup extends Popup {
 	}
 
 	private function dynamicObtain():Void {
-		var obtain = partObtain;
-		var isHat = partType.toLowerCase() == "hat";
-		if (isHat) {
-			switch (partName) {
-				case "Propeller":
-					obtain = replaceLevel(obtain, "Hat Factory", 84156);
-					obtain = replaceUser(obtain, "Jiggmin", "3");
-					obtain = replaceLevel(obtain, "Volcanic Inferno", 4866546);
-					obtain = replaceUser(obtain, "Pounce", "1");
-				case "Top":
-					obtain = replaceLevel(obtain, "The Golden Compass", 3236908);
-					obtain = replaceUser(obtain, "-Shadowfax-", "1");
-				case "Moon":
-					obtain = replaceLevel(obtain, "Redemption", 5793214);
-					obtain = replaceUser(obtain, "cooldude90", "1");
-				case "Thief":
-					obtain = replaceLevel(obtain, "Apocalypse", 5877893);
-					obtain = replaceUser(obtain, "Divinity", "1");
-				case "Jigg":
-					obtain = replaceLevel(obtain, "Buto (EXACT)", 1738847);
-					obtain = replaceUser(obtain, "ZePHiR", "1");
-				case "Jellyfish":
-					obtain = replaceLevel(obtain, "Deeper", 6493337);
-					obtain = replaceUser(obtain, "Sothal", "1");
-				case "Cheese":
-					obtain = replaceLevel(obtain, "Moon is made w/ cheese", 6207945);
-					obtain = replaceUser(obtain, "ktosss450", "1");
-				default:
-			}
-		} else {
-			switch (partName) {
-				case "Slender":
-					obtain = replaceLevel(obtain, "-Deliverance-", 1896157);
-					obtain = replaceUser(obtain, "changelings", "1");
-				case "Sea":
-					obtain = replaceLevel(obtain, "~Under the sea~", 2255404);
-					obtain = replaceUser(obtain, "Rammjet", "1");
-				case "Blobfish":
-					obtain = replaceLevel(obtain, "Underwater World", 5985129);
-					obtain = replaceUser(obtain, "Odin0030", "1");
-				case "Gladiator":
-					obtain = replaceLevel(obtain, "Romªn Empire", 3385938);
-					obtain = replaceUser(obtain, "Overbeing", "1");
-				default:
-			}
-		}
+		var obtain = PartDetails.obtainText(partType,partName,partObtain,nameMaker);
 		var obtainBox = LobbyArt.directText(art, "obtainBox");
 		if (obtainBox != null) {
 			obtainBox.htmlText = "How to obtain: " + obtain;
 			nameMaker.listenForLink(obtainBox);
 		}
-	}
-
-	private function replaceLevel(obtain:String, levelName:String, id:Int):String {
-		return StringTools.replace(obtain, levelName, nameMaker.makeLevel(levelName, id));
-	}
-
-	private function replaceUser(obtain:String, userName:String, group:String):String {
-		return StringTools.replace(obtain, userName, nameMaker.makeName(userName, group));
 	}
 
 	private function showPart():Void {
@@ -223,7 +169,7 @@ class PartPopup extends Popup {
 	}
 
 	private function equipPart(_:MouseEvent):Void {
-		AccountTab.setManualPart(partType.toLowerCase(), partId);
+		ManualPart.set(partType.toLowerCase(), partId);
 		startFadeOut();
 		if (PartInfoPopup.instance != null) {
 			PartInfoPopup.instance.startFadeOut();

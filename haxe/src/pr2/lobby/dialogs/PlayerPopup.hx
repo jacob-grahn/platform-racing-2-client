@@ -3,7 +3,6 @@ package pr2.lobby.dialogs;
 #if js
 import js.Browser;
 #end
-import haxe.Json;
 import haxe.Timer;
 import openfl.display.DisplayObject;
 import openfl.display.DisplayObjectContainer;
@@ -15,18 +14,13 @@ import pr2.app.AppStage;
 import pr2.gameplay.ExpGain;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyPopups;
-import pr2.lobby.LobbyRight;
 import pr2.lobby.LobbySession;
 import pr2.lobby.account.AccountCharacter;
 import pr2.lobby.players.SocialAction;
 import pr2.lobby.players.SocialActions;
-import pr2.net.CommandHandler;
-import pr2.net.LobbySocket;
 import pr2.net.ServerConfig;
-import pr2.net.TextLoader;
 import pr2.ui.controls.GameButton;
 import pr2.ui.GuildName;
-import pr2.util.AsyncRemovalGuard;
 import pr2.util.DisplayUtil;
 import pr2.util.Dyn;
 
@@ -44,14 +38,12 @@ import pr2.util.Dyn;
 	moderator ban menu and temporary moderator warning/kick menu.
 **/
 class PlayerPopup extends Popup {
-	public static var lookupUserHandler:Null<String->Void> = null;
+	public static var lookupUserHandler(get, set):Null<String->Void>;
+	private static function get_lookupUserHandler():Null<String->Void> return pr2.lobby.players.ProfileActions.lookupUserHandler;
+	private static function set_lookupUserHandler(value:Null<String->Void>):Null<String->Void> return pr2.lobby.players.ProfileActions.lookupUserHandler = value;
 	public static var instance:Null<PlayerPopup>;
 	public static var hoverDelayFactory:(Void->Void, Int)->Null<Timer> = defaultHoverDelay;
 
-	private static final MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-	private static final MONTHS_LONG = [
-		"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
-	];
 
 	private var art:Null<PlayerView>;
 	private var playerInfo:Null<DisplayObjectContainer>;
@@ -59,7 +51,6 @@ class PlayerPopup extends Popup {
 	private var userName:String;
 	private var userId:Int = 0;
 	private var userIdShown:Bool = false;
-	private var dataMode:String = "http";
 
 	private var character:Null<AccountCharacter>;
 	private var guildNameClip:Null<GuildName>;
@@ -76,9 +67,8 @@ class PlayerPopup extends Popup {
 	private var adminMenu:Null<AdminMenu>;
 	private var tempModMenu:Null<TempModMenu>;
 
-	private var cm:CommandHandler = CommandHandler.commandHandler;
 	private var cleanups:Array<Void->Void> = [];
-	private var asyncGuard:AsyncRemovalGuard = new AsyncRemovalGuard();
+	private var source = new pr2.lobby.players.ProfileSource();
 
 	public function new(name:String, autoLoad:Bool = true) {
 		if (PlayerPopup.instance != null) {
@@ -89,6 +79,7 @@ class PlayerPopup extends Popup {
 		}
 		super();
 		PlayerPopup.instance = this;
+		pr2.lobby.players.ProfileActions.opened(this);
 
 		this.userName = name;
 		art = new PlayerView();
@@ -103,46 +94,7 @@ class PlayerPopup extends Popup {
 		bindClick(DisplayUtil.directChildByName(art, "close_bt"), clickClose);
 		addChild(art);
 
-		// `autoLoad` is only disabled by tests, which feed `applyReturnData` directly.
-		if (autoLoad) {
-			// Prefer the live socket, exactly like Flash; fall back to HTTP otherwise.
-			if (LobbySocket.isConnected()) {
-				cm.defineCommand("playerInfo", playerInfoFromSocket);
-				LobbySocket.write("get_player_info`" + name);
-			} else {
-				playerInfoFromHTTP();
-			}
-		}
-	}
-
-	private function playerInfoFromSocket(a:Array<String>):Void {
-		cm.defineCommand("playerInfo", null);
-		try {
-			var ret = a.length > 0 ? a[0] : "0";
-			if (ret == "0" || ret == "") {
-				throw "no socket data";
-			}
-			dataMode = "socket";
-			applyReturnData(Json.parse(ret));
-		} catch (_:Dynamic) {
-			playerInfoFromHTTP();
-		}
-	}
-
-	private function playerInfoFromHTTP():Void {
-		dataMode = "http";
-		asyncGuard.watch(TextLoader.load(ServerConfig.getPlayerInfoUrl(userName), asyncGuard.wrap(function(body:String):Void {
-			if (fadeOutStarted) {
-				return;
-			}
-			try {
-				applyReturnData(Json.parse(body));
-			} catch (_:Dynamic) {
-				startFadeOut();
-			}
-		}), asyncGuard.wrap(function(_:String):Void {
-			startFadeOut();
-		})));
+		if (autoLoad) source.load(name, function(data) { if (!fadeOutStarted) applyReturnData(data); }, function(_) startFadeOut());
 	}
 
 	/** Fill the popup from a parsed player-info object (socket or HTTP payload). */
@@ -153,28 +105,13 @@ class PlayerPopup extends Popup {
 		userId = Dyn.int(ret, "userId");
 		var group = Dyn.int(ret, "group");
 
-		var groupText:String;
-		if (group == 1) {
-			groupText = Dyn.bool(ret, "ca") ? "Community Ambassador" : "Member";
-		} else if (group == 2) {
-			if (Dyn.bool(ret, "temp_mod")) {
-				groupText = "Temporary Moderator";
-			} else if (Dyn.bool(ret, "trial_mod")) {
-				groupText = "Trial Moderator";
-			} else {
-				groupText = "Moderator";
-			}
-		} else if (group == 3) {
-			groupText = "Admin";
-		} else {
-			// Guests get the simpler guest popup, matching Flash.
+		var profile = new pr2.lobby.players.ProfileData(ret);
+		if (profile.isGuest()) {
 			startFadeOut();
-			new PlayerGuestPopup(userName);
+			pr2.lobby.LobbyPopups.showGuestPlayer(userName);
 			return;
 		}
-		if (LobbySession.serverOwner == userId) {
-			groupText = "Server Owner";
-		}
+		var groupText = profile.groupLabel();
 
 		setText("statusBox", Dyn.string(ret, "status", ""));
 		setText("groupBox", groupText);
@@ -296,11 +233,7 @@ class PlayerPopup extends Popup {
 
 	private function setupCharacter(ret:Dynamic):Void {
 		var body = Dyn.int(ret, "body");
-		character = new AccountCharacter(Dyn.int(ret, "hat"), Dyn.int(ret, "head"), body, Dyn.int(ret, "feet"));
-		character.setHatColors(Dyn.int(ret, "hatColor"), Dyn.int(ret, "hatColor2"));
-		character.setHeadColors(Dyn.int(ret, "headColor"), Dyn.int(ret, "headColor2"));
-		character.setBodyColors(Dyn.int(ret, "bodyColor"), Dyn.int(ret, "bodyColor2"));
-		character.setFeetColors(Dyn.int(ret, "feetColor"), Dyn.int(ret, "feetColor2"));
+		character = pr2.lobby.players.ProfileCharacter.create(new pr2.lobby.players.ProfileData(ret));
 		character.scaleX = character.scaleY = 2;
 		character.x = -75;
 		character.y = 135;
@@ -318,21 +251,21 @@ class PlayerPopup extends Popup {
 		bindClick(message, function():Void {
 			clearSendPmHover();
 			startFadeOut();
-			new SendMessagePopup(userName);
+			pr2.app.ScreenFactory.composeMessage(userName);
 		});
 		bindClick(DisplayUtil.directChildByName(playerInfo, "levelsButton"), clickViewLevels);
 
 		// Guild owners can invite guildless players or kick their own members.
-		var guildId = Dyn.int(ret, "guildId");
+		var profile = new pr2.lobby.players.ProfileData(ret);
 		setVisible("inviteButton", false);
 		setVisible("kickButton", false);
 		setVisible("kickBg", false);
 		if (LobbySession.guildOwner) {
-			if (guildId == 0) {
+			if (profile.canInvite()) {
 				setVisible("inviteButton", true);
 				bindClick(DisplayUtil.directChildByName(playerInfo, "inviteButton"), function():Void handleGuildUrl(ServerConfig.guildInviteUrl()));
 			}
-			if (guildId != 0 && guildId == LobbySession.guildId) {
+			if (profile.canKick()) {
 				setVisible("kickButton", true);
 				setVisible("kickBg", true);
 				bindClick(DisplayUtil.directChildByName(playerInfo, "kickButton"), function():Void handleGuildUrl(ServerConfig.guildKickUrl()));
@@ -384,22 +317,12 @@ class PlayerPopup extends Popup {
 	}
 
 	private function clickViewLevels():Void {
-		if (lookupUserHandler != null) {
-			lookupUserHandler(userName);
-		} else if (LobbyRight.instance != null) {
-			LobbyRight.instance.lookupUser(userName);
-		}
-		if (GuildPopup.instance != null) {
-			GuildPopup.instance.startFadeOut();
-		}
-		if (LevelInfoPopup.instance != null) {
-			LevelInfoPopup.instance.startFadeOut();
-		}
+		pr2.lobby.players.ProfileActions.levels(userName);
 		startFadeOut();
 	}
 
 	private function handleGuildUrl(url:String):Void {
-		var fields = ["target_name" => userName, "user_id" => Std.string(userId)];
+		var fields = pr2.lobby.players.ProfileActions.guildFields(userId, userName);
 		new UploadingPopup(url, fields, "Uploading...");
 		startFadeOut();
 	}
@@ -578,26 +501,12 @@ class PlayerPopup extends Popup {
 		});
 	}
 
-	private static function getShortDateStr(t:Float):String {
-		var d = Date.fromTime(t * 1000);
-		return d.getDate() + "/" + MONTHS[d.getMonth()] + "/" + d.getFullYear();
-	}
-
-	private static function getDateTimeStr(t:Float):String {
-		var d = Date.fromTime(t * 1000);
-		var hour = d.getHours();
-		var ampm = hour >= 12 ? "PM" : "AM";
-		var hour12 = hour % 12;
-		if (hour12 == 0) {
-			hour12 = 12;
-		}
-		var mins = StringTools.lpad(Std.string(d.getMinutes()), "0", 2);
-		var secs = StringTools.lpad(Std.string(d.getSeconds()), "0", 2);
-		return MONTHS_LONG[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear() + " " + hour12 + ":" + mins + ":" + secs + " " + ampm;
-	}
+	private static function getShortDateStr(t:Float):String return pr2.lobby.players.ProfileData.shortDate(t);
+	private static function getDateTimeStr(t:Float):String return pr2.lobby.players.ProfileData.longDate(t);
 
 	override public function remove():Void {
-		asyncGuard.remove();
+		source.remove();
+		pr2.lobby.players.ProfileActions.removed(this);
 		if (PlayerPopup.instance == this) {
 			PlayerPopup.instance = null;
 		}
@@ -619,7 +528,6 @@ class PlayerPopup extends Popup {
 			cleanup();
 		}
 		cleanups = [];
-		cm.defineCommand("playerInfo", null);
 		if (character != null) {
 			character.remove();
 			character = null;

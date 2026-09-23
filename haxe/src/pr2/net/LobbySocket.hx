@@ -10,7 +10,6 @@ import pr2.lobby.LobbySession;
 import pr2.lobby.Memory;
 import pr2.lobby.dialogs.MessagePopup;
 import pr2.lobby.messages.UnreadNotif;
-import pr2.page.LoginPage;
 import pr2.page.PageHolder;
 
 /**
@@ -228,9 +227,9 @@ class LobbySocket {
 			var rootHolder = PageHolder.getRootHolder();
 			if (rootHolder == null) {
 				new MessagePopup("Disconnected.");
-			} else if (!(rootHolder.getCurrentPage() is LoginPage)) {
+			} else if (rootHolder.getCurrentPage() == null || !rootHolder.getCurrentPage().isLoginScreen) {
 				new MessagePopup("Disconnected.");
-				rootHolder.changePage(new LoginPage());
+				rootHolder.changePage(pr2.app.ScreenFactory.login());
 			}
 		}
 	}

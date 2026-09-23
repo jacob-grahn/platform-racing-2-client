@@ -57,7 +57,7 @@ import pr2.lobby.dialogs.ConfirmPopup;
 import pr2.lobby.dialogs.Popup;
 import pr2.lobby.account.Presets;
 import pr2.page.EditorBlockOptions;
-import pr2.page.LoginPage;
+import pr2.page.LoginFlow;
 import pr2.page.LobbyPage;
 import pr2.levelEditor.LevelEditor;
 import pr2.levelEditor.ChooseLevelsModePopup;
@@ -2111,7 +2111,7 @@ class LobbyServicesTest {
 		ServerStatusClient.fetchFactory = function(onResult:ServerStatusResult->Void, onError:Null<String->Void>):Void {
 			fetches.push({onResult: onResult, onError: onError});
 		};
-		var page = new LoginPage();
+		var page = new LoginFlow();
 		Reflect.callMethod(page, Reflect.field(page, "openCredentialDialog"), []);
 		var popup:Dynamic = Reflect.field(page, "activePopup");
 		var combo = Std.downcast(DisplayUtil.findByName(popup, "dropdown"), GameSelect);
@@ -2134,7 +2134,7 @@ class LobbyServicesTest {
 		};
 		LobbySession.clear();
 		LobbySession.guildId = 42;
-		var page = new LoginPage();
+		var page = new LoginFlow();
 		Reflect.callMethod(page, Reflect.field(page, "openCredentialDialog"), []);
 		Reflect.callMethod(page, Reflect.field(page, "loadServers"), []);
 		fetches[0].onResult(new ServerStatusResult([
@@ -2155,7 +2155,7 @@ class LobbyServicesTest {
 	}
 
 	private static function testLoginServerMessageDoesNotAbortHandshake():Void {
-		var page = new LoginPage();
+		var page = new LoginFlow();
 		var gate = new pr2.net.LoginSessionGate(function(_):Void {});
 		Reflect.setField(page, "loginGate", gate);
 		Reflect.callMethod(page, Reflect.field(page, "receiveLoginServerMessage"), ["Welcome, guest!"]);
@@ -2183,7 +2183,7 @@ class LobbyServicesTest {
 		LobbySession.begin("Stale", 1, serverInfo(0));
 		UnreadNotif.setLastRead(0);
 		UnreadNotif.notifyUser(99);
-		var page = new LoginPage();
+		var page = new LoginFlow();
 		Reflect.setField(page, "loginToken", "expired-token");
 		Reflect.callMethod(page, Reflect.field(page, "openLoggingInPopup"), ["1234", "Alice", "", true, serverInfo(0)]);
 
@@ -2204,7 +2204,7 @@ class LobbyServicesTest {
 		UnreadNotif.reset();
 		Settings.clear();
 		Presets.resetForTests();
-		var page = new LoginPage();
+		var page = new LoginFlow();
 		Reflect.setField(page, "loginServer", serverInfo(42));
 		Reflect.setField(page, "loginRemember", true);
 		var session = new LoginSessionResult(2, "Player", {
@@ -2245,7 +2245,7 @@ class LobbyServicesTest {
 	}
 
 	private static function testLoginMessagesUseMessagePopup():Void {
-		var page = new LoginPage();
+		var page = new LoginFlow();
 		Reflect.callMethod(page, Reflect.field(page, "openLoginMessage"), ["Login failed."]);
 		var open = Popup.getOpen();
 		var message = Std.downcast(open[open.length - 1], pr2.lobby.dialogs.MessagePopup);

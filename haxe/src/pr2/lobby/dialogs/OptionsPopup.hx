@@ -4,13 +4,13 @@ import openfl.display.DisplayObject;
 import openfl.events.Event;
 import openfl.text.TextField;
 import openfl.utils.Assets;
-import pr2.audio.AudioManager;
 import pr2.audio.SoundEffects;
 import pr2.gameplay.RaceSounds;
 import pr2.lobby.LobbySession;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
 import pr2.lobby.account.Settings;
+import pr2.lobby.account.OptionsSettings;
 import pr2.net.ServerConfig;
 import pr2.ui.controls.GameSlider;
 import pr2.util.DisplayUtil;
@@ -144,15 +144,14 @@ class OptionsPopup extends Popup {
 	private function musicChanged(_:Event):Void {
 		var control = slider("musicSlider");
 		if (control == null) return;
-		Settings.setValue(Settings.MUSIC_VOLUME, Std.int(control.value));
+		OptionsSettings.setMusic(control.value);
 		setText("musicPercentBox", Settings.musicLevel + "%");
-		AudioManager.musicLevelChanged();
 	}
 
 	private function soundChanged(_:Event):Void {
 		var control = slider("soundSlider");
 		if (control == null) return;
-		Settings.setValue(Settings.SOUND_VOLUME, Std.int(control.value));
+		OptionsSettings.setSound(control.value);
 		setText("soundPercentBox", Settings.soundLevel + "%");
 	}
 
@@ -160,9 +159,10 @@ class OptionsPopup extends Popup {
 		playJumpSound(0.75 * (Settings.soundLevel / 100));
 	}
 
-	private function setFilter(value:Bool):Void { filterSwears = value; setHighlight("filterHighlight", value); }
+	private function setFilter(value:Bool):Void { filterSwears = value; OptionsSettings.setSwearFilter(value); setHighlight("filterHighlight", value); }
 	private function setDrawArt(value:Bool):Void {
 		drawArt = value;
+		OptionsSettings.setDrawArt(value);
 		setHighlight("artHighlight", value);
 	}
 	private function setHighlight(name:String, value:Bool):Void { var target = DisplayUtil.directChildByName(art, name); if (target != null) target.y = value ? TRUE_Y : FALSE_Y; }
@@ -196,15 +196,13 @@ class OptionsPopup extends Popup {
 	}
 
 	private function saveControls():Void {
-		var controls:Dynamic = {};
 		for (field in Reflect.fields(CONTROL_DEFAULTS)) {
 			var input = text(field);
 			var value = input == null ? "" : input.text.toUpperCase();
 			if (value == "") value = Reflect.field(CONTROL_DEFAULTS, field);
 			if (input != null) input.text = value;
-			Reflect.setField(controls, field.substr(4).toLowerCase(), value.charCodeAt(0));
+			OptionsSettings.setControl(field.substr(4).toLowerCase(), value.charCodeAt(0));
 		}
-		Settings.setValue(Settings.ALTERNATE_CONTROLS, controls);
 	}
 
 	private function toggleSongsMenu():Void {

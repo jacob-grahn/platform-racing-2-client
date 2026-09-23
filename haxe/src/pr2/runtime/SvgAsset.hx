@@ -199,6 +199,9 @@ class SvgAsset {
 	private static function loadText(assetPath:String):String {
 		var content:Null<String> = null;
 		#if sys
+		#if pr2_test
+		if (StringTools.startsWith(assetPath, "assets/mobile/") && sys.FileSystem.exists(assetPath)) content = sys.io.File.getContent(assetPath);
+		#end
 		if (StringTools.startsWith(assetPath, SVG_PREFIX)) {
 			// Repository tools can read source SVGs directly. Installed native apps
 			// have only the packaged assets, so continue to the pack lookup there.

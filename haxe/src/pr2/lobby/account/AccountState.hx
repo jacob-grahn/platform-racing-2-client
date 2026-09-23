@@ -10,5 +10,12 @@ class AccountState {
 	/** Equipped hat id (Flash `AccountInfo.currentHat`). -1 = none / unknown. */
 	public static var currentHat:Int = -1;
 
+	/** Keep access checks available even when the account editor is not visible. */
+	public static function applyCustomize(data:AccountCustomizeData):Void {
+		pr2.lobby.SecureData.setNumber("userRank", data.rank);
+		currentHat = data.hat;
+		pr2.net.CommandHandler.commandHandler.dispatch("testLevelAccess", []);
+	}
+
 	private function new() {}
 }

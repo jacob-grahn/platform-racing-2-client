@@ -4,7 +4,6 @@ import openfl.display.DisplayObject;
 import openfl.events.Event;
 import openfl.events.MouseEvent;
 import openfl.text.TextField;
-import pr2.net.ServerConfig;
 
 /**
 	Port of Flash `dialogs.SendMessagePopup`: compose and send a private (or guild)
@@ -75,14 +74,12 @@ class SendMessagePopup extends Popup {
 	private function clickSend():Void {
 		var to = nameBox != null ? nameBox.text : "";
 		var body = textBox != null ? textBox.text : "";
-		if (to == "") {
-			new MessagePopup("Please enter a name!");
-		} else if (body == "") {
-			new MessagePopup("You didn't write a message!");
+		var error = pr2.lobby.messages.MessageData.validate(to, body);
+		if (error != "") {
+			new MessagePopup(error);
 		} else {
-			var url = isGuildMessage ? ServerConfig.guildMessageUrl() : ServerConfig.messageSendUrl();
-			var fields = ["to_name" => to, "message" => body];
-			new UploadingPopup(url, fields, "Sending...", function(_:Dynamic):Void {
+			var request = new pr2.lobby.messages.MessageRequest("send", 0, to, body, isGuildMessage);
+			new UploadingPopup(request.url, request.fields, "Sending...", function(_:Dynamic):Void {
 				startFadeOut();
 			});
 		}

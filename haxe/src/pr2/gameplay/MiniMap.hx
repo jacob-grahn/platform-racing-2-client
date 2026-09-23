@@ -46,6 +46,9 @@ class MiniMap extends Removable {
 		blockSprite.graphics.beginFill(0);
 	}
 
+	/** Embeds the live map in an externally styled HUD panel. */
+	public function compact():Void getChildAt(0).visible = false;
+
 	/** Adds one block silhouette; finish blocks also get a finish box overlay. */
 	public function addBlock(blockCode:Int, blockX:Float, blockY:Float):Void {
 		if (blockCode == ObjectCodes.BLOCK_FINISH) {

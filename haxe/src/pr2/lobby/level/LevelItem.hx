@@ -53,12 +53,15 @@ typedef LevelPassPostFactory = String->Map<String, String>->(String->Void)->(Str
 class LevelItem extends Sprite {
 	public static var favoriteUploadFactory:FavoriteUploadFactory = defaultFavoriteUpload;
 	public static var favoriteHoverDelayFactory:FavoriteHoverDelayFactory = defaultFavoriteHoverDelay;
-	public static var passPostFactory:LevelPassPostFactory = defaultPassPost;
+	public static var passPostFactory(get, set):LevelPassPostFactory;
+	private static function get_passPostFactory():LevelPassPostFactory return LevelActions.passPostFactory;
+	private static function set_passPostFactory(value:LevelPassPostFactory):LevelPassPostFactory return LevelActions.passPostFactory = value;
 
 	public final courseID:Int;
 	public final version:Int;
 
 	private var info:CampaignLevelInfo;
+	private var room:LevelRoom;
 	private var art:LevelItemView;
 	private var htmlNameMaker:HtmlNameMaker;
 	private var slots:Array<Slot> = [];
@@ -130,10 +133,10 @@ class LevelItem extends Sprite {
 		addSlots();
 		testAccess();
 
-		var cm = pr2.net.CommandHandler.commandHandler;
-		cm.defineCommand("fillSlot" + courseID + "_" + version, onFillSlot);
-		cm.defineCommand("confirmSlot" + courseID + "_" + version, onConfirmSlot);
-		cm.defineCommand("clearSlot" + courseID + "_" + version, onClearSlot);
+		room = new LevelRoom(courseID, version);
+		room.onFill = onFillSlot;
+		room.onConfirm = onConfirmSlot;
+		room.onClear = onClearSlot;
 	}
 
 	private function setRatingBar(rating:Float):Void {
@@ -173,10 +176,7 @@ class LevelItem extends Sprite {
 	// ---- access cover ----------------------------------------------------
 
 	public function testAccess():Void {
-		var byMe = LobbySession.userName.toLowerCase() == info.userName.toLowerCase();
-		var myRank = Std.int(SecureData.getNumber("userRank"));
-		var state = LevelAccess.evaluate(info.pass, passOK, LobbySession.group, byMe, myRank, info.minLevel, AccountState.currentHat,
-			info.badHats);
+		var state = LevelActions.access(info, passOK);
 
 		if (coverText != null) {
 			coverText.text = LevelAccess.coverText(state);
@@ -243,8 +243,7 @@ class LevelItem extends Sprite {
 		var entered = passField.text;
 		setPassControlsEnabled(false);
 		passField.text = "checking...";
-		var hash = haxe.crypto.Md5.encode(entered + ServerConfig.LEVEL_PASS_SALT);
-		var fields = ["course_id" => Std.string(courseID), "hash" => hash];
+		var fields = LevelActions.passwordFields(courseID, entered);
 		asyncGuard.watch(passPostFactory(ServerConfig.levelPassCheckUrl(), fields, asyncGuard.wrap(onPassResponse), asyncGuard.wrap(onPassError)));
 	}
 
@@ -265,28 +264,7 @@ class LevelItem extends Sprite {
 		}
 	}
 
-	public static function parsePasswordResponse(body:String, courseID:Int):Bool {
-		var ret:Dynamic = Json.parse(body);
-		if (Reflect.field(ret, "success") != true) {
-			return false;
-		}
-		var encrypted = Std.string(Reflect.field(ret, "result"));
-		var decrypted = PR2Encryptor.decryptBase64(encrypted, ServerConfig.LEVEL_PASS_KEY, ServerConfig.LEVEL_PASS_IV);
-		decrypted = normalizePasswordJson(decrypted);
-		var obj:Dynamic = Json.parse(decrypted);
-		return Std.parseInt(Std.string(Reflect.field(obj, "level_id"))) == courseID
-			&& Std.parseInt(Std.string(Reflect.field(obj, "access"))) == 1;
-	}
-
-	private static function normalizePasswordJson(value:String):String {
-		var cleaned = StringTools.trim(value);
-		var start = cleaned.indexOf("{");
-		var end = cleaned.indexOf("}", start);
-		if (start >= 0 && end >= start) {
-			cleaned = cleaned.substring(start, end + 1);
-		}
-		return StringTools.trim(cleaned);
-	}
+	public static function parsePasswordResponse(body:String, courseID:Int):Bool return LevelActions.parsePasswordResponse(body, courseID);
 
 	private function onPassError(_:String):Void {
 		passPending = false;
@@ -312,16 +290,14 @@ class LevelItem extends Sprite {
 	private function onFavoriteResult(mode:String):Void {
 		clearFavoriteButtonBinding();
 		if (mode == "add") {
-			if (!LobbySession.isFavorite(courseID)) {
-				LobbySession.favoriteLevels.push(courseID);
-			}
+			LevelActions.favoriteResult(courseID, mode);
 			removeArtChild(plusButton);
 			if (minusButton != null && minusButton.parent != art) {
 				art.addChild(minusButton);
 			}
 			bindFavoriteButton(minusButton, "remove");
 		} else {
-			LobbySession.favoriteLevels.remove(courseID);
+			LevelActions.favoriteResult(courseID, mode);
 			removeArtChild(minusButton);
 			if (plusButton != null && plusButton.parent != art) {
 				art.addChild(plusButton);
@@ -416,15 +392,15 @@ class LevelItem extends Sprite {
 	}
 
 	public function sendFillSlot(slotNum:Int):Void {
-		LobbySocket.write("fill_slot`" + courseID + "_" + version + "`" + slotNum + "`" + LevelListingState.currentPageNum);
+		room.join(slotNum);
 	}
 
 	public function sendClearSlot():Void {
-		LobbySocket.write("clear_slot`");
+		room.leave();
 	}
 
 	public function sendConfirmSlot():Void {
-		LobbySocket.write("confirm_slot`");
+		room.play();
 	}
 
 	public function selectLevel():Void {
@@ -580,10 +556,7 @@ class LevelItem extends Sprite {
 			htmlNameMaker.remove();
 			htmlNameMaker = null;
 		}
-		var cm = pr2.net.CommandHandler.commandHandler;
-		cm.defineCommand("fillSlot" + courseID + "_" + version, null);
-		cm.defineCommand("confirmSlot" + courseID + "_" + version, null);
-		cm.defineCommand("clearSlot" + courseID + "_" + version, null);
+		room.remove();
 		if (art != null) {
 			art.dispose();
 			art = null;

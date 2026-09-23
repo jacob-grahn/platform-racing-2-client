@@ -16,13 +16,15 @@ class MobileButton extends Sprite {
 	private var accent:Int;
 	private var callback:Void->Void;
 	private var pressed:Bool = false;
+	private var gameStyle:Bool;
 
-	public function new(label:String, width:Float, height:Float, callback:Void->Void, accent:Int = 0x4D78B7) {
+	public function new(label:String, width:Float, height:Float, callback:Void->Void, accent:Int = 0x4D78B7, gameStyle:Bool = false, fontSize:Int = 20) {
 		super();
 		this.buttonWidth = width;
 		this.buttonHeight = height;
 		this.callback = callback;
 		this.accent = accent;
+		this.gameStyle = gameStyle;
 		buttonMode = true;
 		mouseChildren = false;
 
@@ -35,6 +37,12 @@ class MobileButton extends Sprite {
 		labelField.selectable = false;
 		labelField.mouseEnabled = false;
 		labelField.text = label;
+		if (gameStyle) {
+			labelField.defaultTextFormat = new TextFormat("Lilita One", fontSize, 0x18334B, false, false, false, null, null, TextFormatAlign.CENTER);
+			labelField.embedFonts = true;
+			labelField.setTextFormat(labelField.defaultTextFormat);
+			labelField.y = (height - labelField.textHeight) / 2 - 2;
+		}
 		addChild(labelField);
 
 		addEventListener(MouseEvent.MOUSE_DOWN, onDown);
@@ -75,6 +83,16 @@ class MobileButton extends Sprite {
 
 	private function draw():Void {
 		graphics.clear();
+		if (gameStyle) {
+			graphics.beginFill(0x0A1F33, 0.4);
+			graphics.drawRoundRect(0, 4, buttonWidth, buttonHeight, 20, 20);
+			graphics.endFill();
+			graphics.lineStyle(3, 0x18334B);
+			graphics.beginFill(pressed ? 0xE6F1F8 : accent);
+			graphics.drawRoundRect(1.5, pressed ? 3.5 : 1.5, buttonWidth - 3, buttonHeight - 3, 20, 20);
+			graphics.endFill();
+			return;
+		}
 		var fill = selected ? accent : 0x35445F;
 		if (pressed) fill = selected ? 0x365C91 : 0x29364D;
 		graphics.lineStyle(2, selected ? 0xBBD5FF : 0x8292AE, 1);

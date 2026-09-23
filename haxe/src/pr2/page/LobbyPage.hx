@@ -8,6 +8,7 @@ import openfl.display.DisplayObjectContainer;
 import openfl.display.StageQuality;
 import openfl.events.MouseEvent;
 import pr2.app.AppStage;
+import pr2.app.ScreenFactory;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyLeft;
 import pr2.lobby.LobbyBottomButtonsView;
@@ -39,20 +40,17 @@ typedef LobbyLogoutPostFactory = String->Map<String, String>->Void;
 	options, vault/store, and credits to their Flash-equivalent actions.
 **/
 class LobbyPage extends Page {
-	private static inline var TEMP_MOD_LOGOUT_CONFIRM:String = "You're currently a temporary moderator. Logging out will automatically demote you back to a member. Do you really want to proceed?";
-	private static inline var TEMP_MOD_EDITOR_CONFIRM:String = "You're currently a temporary moderator. Entering the level editor will log you out, which will automatically demote you back to a member. Do you really want to proceed?";
-	private static inline var TEMP_MOD_LOGGED_OUT_MESSAGE:String = "You are now logged out. If you haven't already done so, please notify a member of the staff team that you've ended your moderation session.";
-
-	public static var createStorePopup:Void->Void = function():Void {
-		new StorePopup();
-	};
-	public static var createLevelEditorPage:Bool->Page = function(isMod:Bool):Page {
-		return new LevelEditor(null, isMod);
-	};
-	public static var createLoginPage:Void->Page = function():Page {
-		return new LoginPage();
-	};
-	public static var logoutPostFactory:LobbyLogoutPostFactory = defaultLogoutPost;
+	public static var createStorePopup:Void->Void = function():Void { new StorePopup(); };
+	public static var createLevelEditorPage(get, set):Bool->Page;
+	private static function get_createLevelEditorPage():Bool->Page return pr2.lobby.LobbyActions.createLevelEditorPage;
+	private static function set_createLevelEditorPage(value:Bool->Page):Bool->Page return pr2.lobby.LobbyActions.createLevelEditorPage = value;
+	public static var createLoginPage(get, set):Void->Page;
+	private static function get_createLoginPage():Void->Page return pr2.lobby.LobbyActions.createLoginPage;
+	private static function set_createLoginPage(value:Void->Page):Void->Page return pr2.lobby.LobbyActions.createLoginPage = value;
+	public static var logoutPostFactory(get, set):LobbyLogoutPostFactory;
+	private static function get_logoutPostFactory():LobbyLogoutPostFactory return pr2.lobby.LobbyActions.logoutPostFactory;
+	private static function set_logoutPostFactory(value:LobbyLogoutPostFactory):LobbyLogoutPostFactory return pr2.lobby.LobbyActions.logoutPostFactory = value;
+	private var actions:pr2.lobby.LobbyActions;
 
 	private var background:Null<LobbyBackgroundView>;
 	private var left:Null<LobbyLeft>;
@@ -64,6 +62,8 @@ class LobbyPage extends Page {
 
 	public function new(?userName:String, ?server:ServerInfo) {
 		super();
+		actions = new pr2.lobby.LobbyActions(function(page) { if (pageHolder != null) pageHolder.changePage(page); },
+			function(message, proceed) { new ConfirmPopup(proceed, message); }, function(message) { new MessagePopup(message); });
 		// Allow direct construction (e.g. ?screen=lobby) to seed the session.
 		if (userName != null) {
 			LobbySession.userName = userName;
@@ -102,6 +102,7 @@ class LobbyPage extends Page {
 	}
 
 	override public function remove():Void {
+		actions.remove();
 		clearBrowserHarness();
 		AudioManager.leaveMenu();
 		hoverOutKong();
@@ -156,32 +157,8 @@ class LobbyPage extends Page {
 		return hover != null;
 	}
 
-	private function clickLogout(confirmed:Bool = false):Void {
-		if (needsTempModDemotionWarning() && !confirmed) {
-			new ConfirmPopup(function():Void clickLogout(true), TEMP_MOD_LOGOUT_CONFIRM);
-			return;
-		}
-		logOutSession(needsTempModDemotionWarning());
-		if (pageHolder != null) {
-			pageHolder.changePage(createLoginPage());
-		}
-	}
-
-	private function clickLevelEditor(confirmed:Bool = false):Void {
-		if (needsTempModDemotionWarning() && !confirmed) {
-			new ConfirmPopup(function():Void clickLevelEditor(true), TEMP_MOD_EDITOR_CONFIRM);
-			return;
-		}
-		var isMod = !LobbySession.isTempMod && !LobbySession.isTrialMod && LobbySession.group >= 2;
-		if (needsTempModDemotionWarning()) {
-			logOutSession(true);
-		} else {
-			LobbySocket.close();
-		}
-		if (pageHolder != null) {
-			pageHolder.changePage(createLevelEditorPage(isMod));
-		}
-	}
+	private function clickLogout(confirmed:Bool = false):Void actions.logout(confirmed);
+	private function clickLevelEditor(confirmed:Bool = false):Void actions.editor(confirmed);
 
 	private function installBrowserHarness():Void {
 		#if js
@@ -196,25 +173,6 @@ class LobbyPage extends Page {
 		#if js
 		untyped Browser.window.__pr2OpenLevelEditorForTests = null;
 		#end
-	}
-
-	private function needsTempModDemotionWarning():Bool {
-		return LobbySession.isTempMod && (LobbySession.server == null || LobbySession.server.guildId == 0);
-	}
-
-	private function logOutSession(showTempModMessage:Bool):Void {
-		if (showTempModMessage) {
-			new MessagePopup(TEMP_MOD_LOGGED_OUT_MESSAGE);
-		}
-		if (!LobbySession.remember) {
-			logoutPostFactory(ServerConfig.logoutUrl(), new Map<String, String>());
-		}
-		LobbySession.clear();
-		LobbySocket.close();
-	}
-
-	private static function defaultLogoutPost(url:String, fields:Map<String, String>):Void {
-		FormPostClient.post(url, fields, function(_:String):Void {}, function(_:String):Void {});
 	}
 
 	private function clickKong():Void {
@@ -248,7 +206,7 @@ class LobbyPage extends Page {
 
 	private function clickCredits():Void {
 		LobbyPopups.lastRequest = "credits";
-		new pr2.lobby.dialogs.CreditsPopup();
+		ScreenFactory.credits();
 		reportAction("credits");
 	}
 

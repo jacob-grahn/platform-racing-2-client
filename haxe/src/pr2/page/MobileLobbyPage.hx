@@ -1,327 +1,218 @@
 package pr2.page;
 
-#if js
-import js.Browser;
-#end
-import openfl.display.Sprite;
+import openfl.display.Shape;
 import openfl.events.Event;
-import openfl.text.TextField;
-import openfl.text.TextFormat;
-import openfl.text.TextFormatAlign;
 import pr2.app.AppStage;
+import pr2.app.ScreenFactory;
+import pr2.assets.NativeAssets;
+import pr2.assets.NativeAssetIds.StaticSvg;
 import pr2.audio.AudioManager;
-import pr2.lobby.LobbyPopups;
+import pr2.lobby.LobbyActions;
 import pr2.lobby.LobbySession;
-import pr2.lobby.Memory;
-import pr2.lobby.dialogs.OptionsPopup;
 import pr2.lobby.dialogs.LevelInfoPopup;
-import pr2.lobby.dialogs.PlayerPopup;
-import pr2.lobby.store.StorePopup;
-import pr2.lobby.tabs.AccountTab;
-import pr2.lobby.tabs.ChatTab;
-import pr2.lobby.tabs.MessagesTab;
-import pr2.lobby.tabs.PlayersTab;
-import pr2.mobile.MobileButton;
-import pr2.mobile.MobileChatPage;
+import pr2.lobby.players.ProfileActions;
+import pr2.lobby.messages.UnreadNotif;
+import pr2.mobile.LobbyView;
 import pr2.mobile.MobileLevelBrowser;
-import pr2.net.LobbySocket;
-import pr2.runtime.FontResolver;
+import pr2.mobile.MobileScrollPane;
+import pr2.mobile.MobileChatPage;
+import pr2.net.CommandHandler;
+import pr2.runtime.SvgAsset;
+import pr2.page.auth.AuthDialog;
 
-/**
-	Touch-first lobby presentation. It deliberately does not inherit or resize the
-	authored two-pane LobbyPage: only its existing session, socket, tab pages,
-	popups, and game-launch coordinator are reused.
-**/
+/** Landscape lobby shell; all session transitions live in LobbyActions. */
 class MobileLobbyPage extends Page {
 	public static var instance(default, null):Null<MobileLobbyPage>;
-	private static inline var HEADER_H:Float = 58;
-	private static inline var PRIMARY_NAV_H:Float = 66;
-	private static inline var PLAY_NAV_H:Float = 54;
-	private static inline var MIN_TOUCH:Float = 46;
+	private var sky:Shape;
+	private var ground:Shape;
+	private var header:LobbyView;
+	private var menu:LobbyView;
+	private var rotateHint:LobbyView;
+	private var menuScroll:MobileScrollPane;
+	private var content:MobileLevelBrowser;
+	private var hosted:Page;
+	private var hostedScroll:MobileScrollPane;
+	private var actions:LobbyActions;
+	private var modal:AuthDialog;
+	private var section:String = "play";
+	private var menuOpen:Bool = false;
+	private var w:Float = 844;
+	private var h:Float = 390;
+	private var inset:Float = 44;
 
-	private var background:Sprite;
-	private var header:Sprite;
-	private var content:Sprite;
-	private var primaryNav:Sprite;
-	private var playNav:Sprite;
-	private var primaryButtons:Array<MobileButton> = [];
-	private var playButtons:Array<MobileButton> = [];
-	private var utilityButtons:Array<MobileButton> = [];
-	private var mobileLevels:MobileLevelBrowser;
-	private var hostedPage:Null<Page>;
-	private var activePrimary:String = "play";
-	private var activePlay:String = "campaign";
-	private var title:TextField;
-
-	public static function layoutMetricsForTests(width:Float, height:Float, play:Bool):Dynamic {
-		var safeWidth = Math.max(320, width);
-		var safeHeight = Math.max(320, height);
-		var contentY = HEADER_H + (play ? PLAY_NAV_H : 0);
-		return {
-			primaryButtonWidth: safeWidth / 4,
-			primaryButtonHeight: PRIMARY_NAV_H - 10,
-			secondaryButtonHeight: MIN_TOUCH,
-			contentY: contentY,
-			contentHeight: safeHeight - contentY - PRIMARY_NAV_H
-		};
-	}
-
-	public function new(?userName:String) {
-		super();
+	public function new(?userName:String, ?server:pr2.net.ServerInfo) {
+		super(); fullViewport = true;
 		if (userName != null) LobbySession.userName = userName;
+		if (server != null) LobbySession.server = server;
+		actions = new LobbyActions(function(page) { if (pageHolder != null) pageHolder.changePage(page); }, confirm,
+			function(message) { new pr2.lobby.dialogs.MessagePopup(message); });
 	}
-
 	override public function initialize():Void {
 		instance = this;
-		LevelInfoPopup.lookupLevelHandler = lookupLevel;
-		PlayerPopup.lookupUserHandler = lookupUser;
+		LevelInfoPopup.lookupLevelHandler = lookupLevel; ProfileActions.lookupUserHandler = lookupUser;
 		AudioManager.enterLobby();
-		background = new Sprite();
-		addChild(background);
-		header = new Sprite();
-		addChild(header);
-		content = new Sprite();
-		addChild(content);
-		playNav = new Sprite();
-		addChild(playNav);
-		primaryNav = new Sprite();
-		addChild(primaryNav);
-
-		title = new TextField();
-		title.defaultTextFormat = new TextFormat(FontResolver.DEFAULT, 22, 0xFFFFFF, true);
-		title.selectable = false;
-		title.mouseEnabled = false;
-		header.addChild(title);
-
-		mobileLevels = new MobileLevelBrowser();
-		content.addChild(mobileLevels);
-		buildNavigation();
-		activePrimary = Memory.getString("mobileLobbyPrimary", "play");
-		if (["play", "chat", "players", "account"].indexOf(activePrimary) < 0) activePrimary = "play";
-		activePlay = Memory.getString("mobileLobbyPlay", "campaign");
-		if (!LobbySession.isMember() && activePlay == "favorites") activePlay = "campaign";
-		selectPrimary(activePrimary);
-		if (AppStage.stage != null) AppStage.stage.addEventListener(Event.RESIZE, onResize);
-		layout();
-		reportState();
+		sky = NativeAssets.svg(StaticSvg.LoginBackgroundSky); addChild(sky);
+		ground = SvgAsset.create("assets/mobile/lobby-ground.svg"); addChild(ground);
+		header = new LobbyView(); addChild(header);
+		menu = new LobbyView();
+		rotateHint = new LobbyView();
+		if (LobbySession.isMember()) CommandHandler.commandHandler.defineCommand("pmNotify", onPmNotify);
+		if (AppStage.stage != null) AppStage.stage.addEventListener(Event.RESIZE, layout);
+		openSection("play"); layout();
 	}
-
-	private function buildNavigation():Void {
-		var primary = ["Play", "Chat", "Players", "Account"];
-		var keys = ["play", "chat", "players", "account"];
-		for (i in 0...primary.length) {
-			var key = keys[i];
-			var button = new MobileButton(primary[i], 100, PRIMARY_NAV_H - 10, function():Void selectPrimary(key));
-			button.name = "mobilePrimary_" + key;
-			primaryButtons.push(button);
-			primaryNav.addChild(button);
-		}
-
-		var labels = ["Campaign", "All Time", "Week's Best", "Newest", "Search"];
-		var playKeys = ["campaign", "best", "best_week", "newest", "search"];
-		if (LobbySession.isMember()) {
-			labels.push("Favorites");
-			playKeys.push("favorites");
-		}
-		for (i in 0...labels.length) {
-			var key = playKeys[i];
-			var button = new MobileButton(labels[i], 90, MIN_TOUCH, function():Void selectPlay(key), 0x596E99);
-			button.name = "mobilePlay_" + key;
-			playButtons.push(button);
-			playNav.addChild(button);
-		}
-
-		if (LobbySession.isMember()) addUtility("PMs", showMessages);
-		addUtility("Store", function():Void new StorePopup());
-		addUtility("Options", function():Void new OptionsPopup());
-		addUtility("Logout", logout);
+	public static function layoutMetricsForTests(width:Float, height:Float, play:Bool):Dynamic {
+		var margin = width >= 760 ? 44 : 16;
+		return {inset:margin, contentWidth:width - margin * 2, contentY:76, contentHeight:Math.max(210, height - 106), headerButtonHeight:44};
 	}
-
-	private function addUtility(label:String, callback:Void->Void):Void {
-		var button = new MobileButton(label, 82, MIN_TOUCH, callback, 0x53627D);
-		utilityButtons.push(button);
-		header.addChild(button);
-	}
-
-	private function selectPrimary(key:String):Void {
-		activePrimary = key;
-		Memory.set("mobileLobbyPrimary", key);
-		for (i in 0...primaryButtons.length) primaryButtons[i].selected = ["play", "chat", "players", "account"][i] == key;
-		playNav.visible = key == "play";
-		clearHostedPage();
-		mobileLevels.visible = key == "play";
-		if (key == "play") {
-			selectPlay(activePlay);
+	private function openSection(value:String):Void {
+		closeModal(); menuOpen = false; clearHosted();
+		if (content != null) { content.remove(); content = null; }
+		section = value;
+		if (value == "play") {
+			content = new MobileLevelBrowser(); content.onState = function() {
+				if (menuOpen && content.racing) { menuOpen = false; layout(); } else updateHeader();
+			}; addChild(content);
 		} else {
-			var page:Page = switch (key) {
+			hosted = switch (value) {
 				case "chat": new MobileChatPage();
-				case "players": new PlayersTab();
-				default: new AccountTab();
+				case "players": ScreenFactory.players();
+				case "guilds": ScreenFactory.players(true);
+				case "messages": ScreenFactory.messages();
+				default: ScreenFactory.racer();
 			};
-			hostPage(page);
+			hostedScroll = new MobileScrollPane(); addChild(hostedScroll);
+			hosted.pageHolder = pageHolder; hosted.initialize(); hostedScroll.content.addChild(hosted);
 		}
-		layout();
-		reportState();
-	}
-
-	private function selectPlay(key:String):Void {
-		activePlay = key;
-		Memory.set("mobileLobbyPlay", key);
-		for (i in 0...playButtons.length) {
-			var keys = LobbySession.isMember() ? ["campaign", "best", "best_week", "newest", "search", "favorites"] : ["campaign", "best", "best_week", "newest", "search"];
-			playButtons[i].selected = keys[i] == key;
+		if (value != "account") {
+			CommandHandler.commandHandler.defineCommand("setCustomizeInfo", function(args) {
+				var data = pr2.lobby.account.AccountCustomizeData.parse(args);
+				if (data != null) pr2.lobby.account.AccountState.applyCustomize(data);
+			});
+			pr2.net.LobbySocket.write("get_customize_info`");
 		}
-		if (mobileLevels != null) mobileLevels.showMode(key);
-		reportState();
+		layout(); report();
 	}
-
-	private function showMessages():Void {
-		activePrimary = "account";
-		for (i in 0...primaryButtons.length) primaryButtons[i].selected = i == 3;
-		playNav.visible = false;
-		mobileLevels.visible = false;
-		clearHostedPage();
-		hostPage(new MessagesTab());
-		layout();
+	private function showMenu():Void { menuOpen = true; layout(); report(); }
+	private function hideMenu():Void { menuOpen = false; layout(); report(); }
+	private function onPmNotify(args:Array<String>):Void {
+		var time = args.length == 0 ? Math.NaN : Std.parseFloat(args[0]);
+		if (!Math.isNaN(time)) UnreadNotif.notifyUser(time);
+		if (menuOpen) renderMenu(); updateHeader();
 	}
-
-	public function lookupUser(userName:String):Void showSearch(userName, "user");
-	public function lookupLevel(levelId:String):Void showSearch(levelId, "id");
-
-	private function showSearch(query:String, mode:String):Void {
-		activePrimary = "play";
-		for (i in 0...primaryButtons.length) primaryButtons[i].selected = i == 0;
-		playNav.visible = true;
-		clearHostedPage();
-		mobileLevels.visible = true;
-		activePlay = "search";
-		Memory.set("mobileLobbyPrimary", "play");
-		Memory.set("mobileLobbyPlay", "search");
-		for (button in playButtons) button.selected = button.name == "mobilePlay_search";
-		mobileLevels.showSearch(query, mode);
-		layout();
-		reportState();
-	}
-
-	private function hostPage(page:Page):Void {
-		hostedPage = page;
-		page.pageHolder = pageHolder;
-		page.initialize();
-		content.addChild(page);
-	}
-
-	private function clearHostedPage():Void {
-		if (hostedPage != null) {
-			hostedPage.remove();
-			if (hostedPage.parent != null) hostedPage.parent.removeChild(hostedPage);
-			hostedPage = null;
+	private function updateHeader():Void {
+		if (header == null) return;
+		header.clear();
+		var title = menuOpen ? "GAME MENU" : section != "play" ? switch section { case "chat": "CHAT"; case "players": "PLAYERS"; case "guilds": "GUILDS"; case "messages": "MESSAGES"; default: "MY RACER"; } : content.racing ? "GET READY!" : content.browsing ? "FIND A LEVEL" : "LET’S RACE!";
+		var width = w - inset * 2;
+		header.label(title, inset, 12, Math.max(150, width - 306), 48, width < 660 ? 27 : 34, true, 0xFFFFFF);
+		if (menuOpen) header.button("Back to game", w - inset - 180, 12, 180, hideMenu);
+		else if (section == "play" && content.racing) header.button("Leave race", w - inset - 180, 12, 180, content.leaveRace);
+		else {
+			header.button(section == "play" && !content.browsing ? "My racer" : "Back to races", w - inset - 300, 12, 180, function() {
+				if (section != "play") openSection("play"); else if (content.browsing) content.back(); else openSection("account");
+			});
+			header.button(UnreadNotif.numUnread() > 0 ? "Menu •" : "Menu", w - inset - 104, 12, 104, showMenu);
 		}
+		var server = LobbySession.server == null ? "" : " • " + LobbySession.server.name;
+		header.label(LobbySession.userName + server, inset, h - 24, width, 22, 13, false, 0x18334B);
+		report();
 	}
-
-	private function layout():Void {
-		if (AppStage.stage == null || background == null) return;
-		var width = Math.max(320, AppStage.stage.stageWidth);
-		var height = Math.max(320, AppStage.stage.stageHeight);
-		drawBackground(width, height);
-		header.y = 0;
-		title.text = width < 720 ? "PR2" : "PLATFORM RACING 2";
-		title.x = 14;
-		title.y = 14;
-		title.width = Math.max(100, width - utilityButtons.length * 88 - 20);
-		title.height = 35;
-		for (i in 0...utilityButtons.length) {
-			utilityButtons[i].x = width - (utilityButtons.length - i) * 88;
-			utilityButtons[i].y = 6;
+	private function renderMenu():Void {
+		if (menuScroll != null) menuScroll.remove();
+		menu.clear();
+		var width = w - inset * 2; var height = Math.max(210, h - 106);
+		menuScroll = new MobileScrollPane(); menu.addChild(menuScroll);
+		var v = menuScroll.content;
+		var columns = width >= 550 ? 3 : 1; var columnW = (width - (columns - 1) * 16) / columns;
+		var labels = ["Play & create", "Hang out", "Game & account"];
+		for (i in 0...3) {
+			var x = columns == 1 ? 0 : i * (columnW + 16); var y = columns == 1 ? i * 300 : 0;
+			v.panel(x, y, columnW, 284); v.label(labels[i], x + 14, y + 14, columnW - 28, 38, width < 680 ? 22 : 25, true);
 		}
-
-		primaryNav.y = height - PRIMARY_NAV_H;
-		var primaryW = width / primaryButtons.length;
-		for (i in 0...primaryButtons.length) {
-			primaryButtons[i].scaleX = primaryW / 100;
-			primaryButtons[i].x = i * primaryW;
-			primaryButtons[i].y = 5;
+		function item(col:Int, row:Int, label:String, action:Void->Void, enabled:Bool = true, primary:Bool = false):Void {
+			var x = columns == 1 ? 0 : col * (columnW + 16); var y = columns == 1 ? col * 300 : 0;
+			v.button(label, x + 14, y + 58 + row * 56, columnW - 28, action, primary).enabled = enabled;
 		}
-
-		var playY = HEADER_H;
-		playNav.y = playY;
-		var playW = width / playButtons.length;
-		for (i in 0...playButtons.length) {
-			playButtons[i].scaleX = playW / 90;
-			playButtons[i].x = i * playW;
-			playButtons[i].y = 3;
-		}
-
-		var contentY = HEADER_H + (activePrimary == "play" ? PLAY_NAV_H : 0);
-		var contentH = height - contentY - PRIMARY_NAV_H;
-		content.x = 0;
-		content.y = contentY;
-		if (mobileLevels != null) mobileLevels.setLayout(width, contentH);
-		if (hostedPage != null) {
-			var mobileChat = Std.downcast(hostedPage, MobileChatPage);
-			if (mobileChat != null) {
-				mobileChat.scaleX = mobileChat.scaleY = 1;
-				mobileChat.x = mobileChat.y = 0;
-				mobileChat.setLayout(width, contentH);
-				return;
+		item(0, 0, "Race!", function() openSection("play"), true, true);
+		item(0, 1, "My racer", function() openSection("account"));
+		item(0, 2, "Level editor", function() actions.editor());
+		item(1, 0, "Chat", function() openSection("chat"));
+		item(1, 1, UnreadNotif.numUnread() > 0 ? 'Messages (${UnreadNotif.numUnread()})' : "Messages", function() openSection("messages"), LobbySession.isMember());
+		item(1, 2, "Players", function() openSection("players"));
+		item(1, 3, "Guilds", function() openSection("guilds"));
+		item(2, 0, "Options", function() { ScreenFactory.options(); });
+		item(2, 1, "Account", function() openSection("account"));
+		item(2, 2, "Credits", function() { ScreenFactory.credits(); });
+		item(2, 3, "Log out", function() actions.logout());
+		menuScroll.setSize(width, height + 6, columns == 1 ? 884 : 290);
+	}
+	public function lookupUser(name:String):Void showSearch(name, "user");
+	public function lookupLevel(id:String):Void showSearch(id, "id");
+	private function showSearch(value:String, mode:String):Void {
+		if (section != "play") openSection("play");
+		menuOpen = false; content.showSearch(value, mode); layout();
+	}
+	private function confirm(message:String, proceed:Void->Void):Void {
+		closeModal();
+		modal = ScreenFactory.authDialog("Confirm", message, ["heading" => "Leave the lobby?", "confirmLabel" => "Continue", "cancelLabel" => "Stay here"]);
+		modal.onCancel = closeModal; modal.onConfirm = function() { closeModal(); proceed(); };
+		addChild(modal); modal.resizeViewport(w, h);
+	}
+	private function closeModal():Void { if (modal != null) modal.dismiss(true); modal = null; }
+	private function layout(?_:Event):Void {
+		if (header == null) return;
+		w = AppStage.stage == null ? 844 : AppStage.stage.stageWidth; h = AppStage.stage == null ? 390 : AppStage.stage.stageHeight;
+		var metrics = layoutMetricsForTests(w, h, section == "play"); inset = metrics.inset;
+		graphics.clear(); graphics.beginFill(0x0B519E); graphics.drawRect(0, 0, w, h); graphics.endFill();
+		sky.width = w; sky.height = h * 1.57; ground.width = w; ground.height = h * .256; ground.y = h - ground.height;
+		if (content != null) { content.visible = !menuOpen; content.x = inset; content.y = 76; content.setLayout(metrics.contentWidth, metrics.contentHeight); }
+		if (hostedScroll != null) {
+			hostedScroll.visible = !menuOpen; hostedScroll.x = inset; hostedScroll.y = 76;
+			var chat = Std.downcast(hosted, MobileChatPage);
+			var racer = Std.downcast(hosted, pr2.mobile.MobileRacerPage);
+			var messages = Std.downcast(hosted, pr2.mobile.MobileMessagesPage);
+			var players = Std.downcast(hosted, pr2.mobile.MobilePlayersPage);
+			if (chat != null) { chat.setLayout(metrics.contentWidth, metrics.contentHeight); hostedScroll.setSize(metrics.contentWidth, metrics.contentHeight, metrics.contentHeight); }
+			else if (racer != null) { racer.setLayout(metrics.contentWidth, metrics.contentHeight); hostedScroll.setSize(metrics.contentWidth, metrics.contentHeight, metrics.contentHeight); }
+			else if (messages != null) { messages.setLayout(metrics.contentWidth, metrics.contentHeight); hostedScroll.setSize(metrics.contentWidth, metrics.contentHeight, metrics.contentHeight); }
+			else if (players != null) { players.setLayout(metrics.contentWidth, metrics.contentHeight); hostedScroll.setSize(metrics.contentWidth, metrics.contentHeight, metrics.contentHeight); }
+			else {
+				// Existing feature pages remain usable while their mobile flows migrate.
+				hosted.scaleX = hosted.scaleY = 1.5; hosted.x = (metrics.contentWidth - 194 * 1.5) / 2;
+				hostedScroll.setSize(metrics.contentWidth, metrics.contentHeight, 394 * 1.5);
 			}
-			// Authored single-pane pages are reused at a much larger density inside
-			// the mobile shell. Their 186x374 design bounds remain aspect-correct.
-			var scale = Math.min(width / 194, contentH / 374);
-			scale = Math.max(1, scale);
-			hostedPage.scaleX = hostedPage.scaleY = scale;
-			hostedPage.x = Math.max(0, (width - 194 * scale) * 0.5);
-			hostedPage.y = Math.max(0, (contentH - 374 * scale) * 0.5);
 		}
+		if (menuOpen) { addChild(menu); menu.x = inset; menu.y = 76; renderMenu(); } else if (menu.parent != null) removeChild(menu);
+		addChild(header); updateHeader();
+		rotateHint.clear();
+		if (h > w) {
+			rotateHint.graphics.beginFill(0x0B519E); rotateHint.graphics.drawRect(0, 0, w, h); rotateHint.graphics.endFill();
+			rotateHint.label("Turn your device sideways to race", 24, h / 2 - 70, w - 48, 140, 30, true, 0xFFFFFF);
+			addChild(rotateHint);
+		} else if (rotateHint.parent != null) removeChild(rotateHint);
+		if (modal != null) { addChild(modal); modal.resizeViewport(w, h); }
 	}
-
-	private function drawBackground(width:Float, height:Float):Void {
-		background.graphics.clear();
-		background.graphics.beginFill(0x242A3A);
-		background.graphics.drawRect(0, 0, width, height);
-		background.graphics.endFill();
-		background.graphics.beginFill(0x2F3A52);
-		background.graphics.drawRect(0, HEADER_H, width, height - HEADER_H - PRIMARY_NAV_H);
-		background.graphics.endFill();
-		background.graphics.lineStyle(2, 0x7588AA, 0.7);
-		background.graphics.moveTo(0, HEADER_H);
-		background.graphics.lineTo(width, HEADER_H);
-		background.graphics.moveTo(0, height - PRIMARY_NAV_H);
-		background.graphics.lineTo(width, height - PRIMARY_NAV_H);
+	private function clearHosted():Void {
+		if (hosted != null) hosted.remove(); hosted = null;
+		if (hostedScroll != null) hostedScroll.remove(); hostedScroll = null;
 	}
-
-	private function logout():Void {
-		LobbySession.clear();
-		LobbySocket.close();
-		if (pageHolder != null) pageHolder.changePage(new LoginPage());
-	}
-
-	private function onResize(_:Event):Void layout();
-
-	private function reportState():Void {
+	private function report():Void {
 		#if js
-		Browser.document.body.setAttribute("data-pr2-page", "mobile-lobby:" + LobbySession.userName);
-		Browser.document.body.setAttribute("data-pr2-mobile-pane", activePrimary);
-		Browser.document.body.setAttribute("data-pr2-mobile-play", activePlay);
+		js.Browser.document.body.setAttribute("data-pr2-page", "mobile-lobby:" + LobbySession.userName);
+		js.Browser.document.body.setAttribute("data-pr2-mobile-pane", menuOpen ? "menu" : section);
+		js.Browser.document.body.setAttribute("data-pr2-mobile-play", content == null ? "" : content.mode);
 		#end
 	}
-
 	override public function remove():Void {
 		if (instance == this) instance = null;
-		LevelInfoPopup.lookupLevelHandler = null;
-		PlayerPopup.lookupUserHandler = null;
-		if (AppStage.stage != null) AppStage.stage.removeEventListener(Event.RESIZE, onResize);
-		clearHostedPage();
-		if (mobileLevels != null) {
-			mobileLevels.remove();
-			mobileLevels = null;
-		}
-		for (button in primaryButtons) button.remove();
-		for (button in playButtons) button.remove();
-		for (button in utilityButtons) button.remove();
-		primaryButtons = [];
-		playButtons = [];
-		utilityButtons = [];
-		AudioManager.leaveMenu();
-		super.remove();
+		actions.remove(); closeModal(); clearHosted();
+		if (content != null) content.remove(); content = null;
+		if (header != null) header.remove(); if (menuScroll != null) menuScroll.remove(); if (menu != null) menu.remove();
+		if (rotateHint != null) rotateHint.remove();
+		if (AppStage.stage != null) AppStage.stage.removeEventListener(Event.RESIZE, layout);
+		CommandHandler.commandHandler.defineCommand("pmNotify", null);
+		CommandHandler.commandHandler.defineCommand("setCustomizeInfo", null);
+		LevelInfoPopup.lookupLevelHandler = null; ProfileActions.lookupUserHandler = null;
+		AudioManager.leaveMenu(); super.remove();
 	}
 }

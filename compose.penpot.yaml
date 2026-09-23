@@ -1,0 +1,97 @@
+# Local Penpot workspace. Run from this repository:
+# docker compose -f compose.penpot.yaml up -d
+# Based on https://github.com/penpot/penpot/blob/main/docker/images/docker-compose.yaml
+name: pr2-penpot
+
+x-penpot: &penpot
+  PENPOT_PUBLIC_URI: http://localhost:9001
+  PENPOT_FLAGS: enable-registration enable-login-with-password disable-email-verification disable-secure-session-cookies enable-smtp enable-mcp
+
+services:
+  penpot-frontend:
+    image: penpotapp/frontend:2.17
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:9001:8080"
+    volumes:
+      - ./.penpot/assets:/opt/data/assets
+    environment: *penpot
+    depends_on:
+      - penpot-backend
+      - penpot-exporter
+      - penpot-mcp
+
+  penpot-backend:
+    image: penpotapp/backend:2.17
+    restart: unless-stopped
+    env_file: ./.penpot/.env
+    volumes:
+      - ./.penpot/assets:/opt/data/assets
+    environment:
+      <<: *penpot
+      PENPOT_DATABASE_URI: postgresql://penpot-postgres/penpot
+      PENPOT_DATABASE_USERNAME: penpot
+      PENPOT_REDIS_URI: redis://penpot-valkey/0
+      PENPOT_OBJECTS_STORAGE_BACKEND: fs
+      PENPOT_OBJECTS_STORAGE_FS_DIRECTORY: /opt/data/assets
+      PENPOT_TELEMETRY_ENABLED: "false"
+      PENPOT_SMTP_DEFAULT_FROM: no-reply@localhost
+      PENPOT_SMTP_DEFAULT_REPLY_TO: no-reply@localhost
+      PENPOT_SMTP_HOST: penpot-mailcatch
+      PENPOT_SMTP_PORT: 1025
+      PENPOT_SMTP_TLS: "false"
+      PENPOT_SMTP_SSL: "false"
+    depends_on:
+      penpot-postgres:
+        condition: service_healthy
+      penpot-valkey:
+        condition: service_healthy
+
+  penpot-exporter:
+    image: penpotapp/exporter:2.17
+    restart: unless-stopped
+    env_file: ./.penpot/.env
+    environment:
+      PENPOT_PUBLIC_URI: http://localhost:9001
+      PENPOT_INTERNAL_URI: http://penpot-frontend:8080
+      PENPOT_REDIS_URI: redis://penpot-valkey/0
+    depends_on:
+      penpot-valkey:
+        condition: service_healthy
+
+  penpot-mcp:
+    image: penpotapp/mcp:2.17
+    restart: unless-stopped
+
+  penpot-postgres:
+    image: postgres:15
+    restart: unless-stopped
+    stop_signal: SIGINT
+    env_file: ./.penpot/.env
+    environment:
+      POSTGRES_DB: penpot
+      POSTGRES_USER: penpot
+      POSTGRES_INITDB_ARGS: --data-checksums
+    volumes:
+      - ./.penpot/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "penpot"]
+      interval: 2s
+      timeout: 10s
+      retries: 10
+      start_period: 10s
+
+  penpot-valkey:
+    image: valkey/valkey:8.1
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "valkey-cli", "ping"]
+      interval: 2s
+      timeout: 3s
+      retries: 10
+
+  penpot-mailcatch:
+    image: sj26/mailcatcher:latest
+    restart: unless-stopped
+    # Local registration does not require email verification.
+    # Mail is captured internally instead of being sent to real recipients.

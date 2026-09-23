@@ -114,8 +114,7 @@ class PartSelector extends Sprite {
 	}
 
 	public function isPartEpic(?val:Int):Bool {
-		var key = val != null ? Std.string(val) : Std.string(value);
-		return epicArray.indexOf(key) != -1 || epicArray.indexOf("*") != -1;
+		return CustomizationRules.epic(epicArray, val == null ? value : val);
 	}
 
 	private function onColorChange(_:Event):Void {

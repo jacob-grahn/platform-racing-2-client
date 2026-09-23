@@ -16,9 +16,12 @@ class SocialActions {
 	private function new() {}
 
 	public static function perform(action:SocialAction, targetId:Int, targetName:String):Void {
-		var req = SocialActionPlan.plan(action);
-		var fields = ["target_id" => Std.string(targetId), "list" => req.list, "mode" => req.mode];
-		new UploadingPopup(ServerConfig.userListModifyUrl(), fields, "Updating...");
-		LobbySocket.write(req.socketVerb + "`" + targetName);
+		new UploadingPopup(ServerConfig.userListModifyUrl(), fields(action, targetId), "Updating...");
+		notifyServer(action, targetName);
 	}
+	public static function fields(action:SocialAction, targetId:Int):Map<String,String> {
+		var req = SocialActionPlan.plan(action);
+		return ["target_id" => Std.string(targetId), "list" => req.list, "mode" => req.mode];
+	}
+	public static function notifyServer(action:SocialAction, name:String):Void LobbySocket.write(SocialActionPlan.plan(action).socketVerb + "`" + name);
 }

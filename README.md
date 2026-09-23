@@ -13,6 +13,9 @@ Code: MIT
 
 ## Quick Start
 
+For classic/mobile release builds and the dual-UI development preview, see
+[UI configurations and migration status](docs/ui-implementation.md).
+
 Run the browser build from the repository root:
 
 ```sh

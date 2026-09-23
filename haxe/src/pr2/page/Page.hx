@@ -13,6 +13,8 @@ import pr2.display.Removable;
 **/
 class Page extends Removable {
 	public var pageHolder:Null<PageHolder>;
+	public var fullViewport(default, null):Bool = false;
+	public var isLoginScreen(default, null):Bool = false;
 
 	public function new() {
 		super();

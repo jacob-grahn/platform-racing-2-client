@@ -26,6 +26,7 @@ import pr2.net.LobbySocket;
 	Port of Flash `gameplay.RaceChat` around the authored `RaceChatGraphic`.
 **/
 class RaceChat extends Sprite {
+	public var keyboardShortcutEnabled:Bool = true;
 	public static var textBox:Null<TextField>;
 
 	private static inline final MAX_MESSAGES:Int = 7;
@@ -234,6 +235,7 @@ class RaceChat extends Sprite {
 	}
 
 	private function focusOrSend(event:KeyboardEvent):Void {
+		if (!keyboardShortcutEnabled) return;
 		if (event.keyCode != Keyboard.ENTER || chatInput == null || stage == null || isMultilineInputTarget(event.target)) {
 			return;
 		}

@@ -3,19 +3,21 @@ package pr2.page;
 import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.text.TextField;
-import pr2.gameplay.FinishedPage;
 import pr2.gameplay.PrizePopup;
 import pr2.lobby.account.LoadoutsPopup;
 import pr2.lobby.dialogs.ConfirmPopup;
 import pr2.lobby.dialogs.CreditsPopup;
 import pr2.lobby.dialogs.MessagePopup;
 import pr2.lobby.dialogs.PMRFCodesPopup;
-import pr2.lobby.dialogs.SendMessagePopup;
 import pr2.lobby.dialogs.LevelInfoView;
+#if !pr2_mobile_ui
 import pr2.lobby.dialogs.PlayerView;
+#end
 import pr2.lobby.account.AccountCharacter;
+#if !pr2_mobile_ui
 import pr2.lobby.players.PlayerEntry;
 import pr2.lobby.players.PlayersTabListView;
+#end
 import pr2.lobby.level.LevelItem;
 import pr2.net.CampaignLevelInfo;
 import pr2.ui.view.StatusPopupView;
@@ -36,32 +38,38 @@ class PopupPreview extends Sprite {
 	private function show(_:Event):Void {
 		removeEventListener(Event.ADDED_TO_STAGE, show);
 		switch (variant) {
-			case "confirm": new ConfirmPopup(function() {}, "Are you sure you want to continue?");
+			case "confirm": pr2.app.ScreenFactory.confirm("Are you sure you want to continue?",function(){});
 			case "nested":
-				new ConfirmPopup(function() {}, "This parent must remain dimmed behind its child.");
-				new MessagePopup("Nested popup focus and stacking check.");
+				pr2.app.ScreenFactory.confirm("This parent must remain dimmed behind its child.",function(){});
+				pr2.app.ScreenFactory.message("Nested popup focus and stacking check.");
 			case "finished":
-				var finished = new FinishedPage(6497936, null, null, 1842);
+				pr2.app.PageViewport.apply(pr2.app.ScreenFactory.isMobile);
+				var finished = pr2.app.ScreenFactory.results(6497936, null, null, 1842, null, "Newbieland 2", "Race complete");
 				finished.award("Level Completed", "+ 26");
 				finished.setExpGain(520, 546, 546);
-			case "prize": new PrizePopup("hat", 4, "Propeller Hat", "Hold up while wearing this hat to float!", true, false);
-			case "send-message": new SendMessagePopup("Jiggmin", "Hello from Platform Racing 2!");
+			case "prize": pr2.app.ScreenFactory.prize("hat", 4, "Propeller Hat", "Hold up while wearing this hat to float!", true, false);
+			case "send-message": pr2.app.ScreenFactory.composeMessage("Jiggmin", "Hello from Platform Racing 2!");
 			case "codes": new PMRFCodesPopup();
-			case "credits": new CreditsPopup();
+			case "credits": pr2.app.ScreenFactory.credits();
 			case "loadouts": new LoadoutsPopup(null, null, null);
 			case "login": addChild(new LoginFlashPopup("LoginPopupGraphic"));
 			case "connecting": addChild(new LoginFlashPopup("ConnectingPopupGraphic"));
 			case "forgot-password": mountCentered(new ForgotPasswordView("Jiggmin"));
 			case "create-account": mountCentered(new CreateAccountView("Jiggmin", "", "", ""));
 			case "logging-in": mountCentered(new StatusPopupView("Logging In..."));
+			#if !pr2_mobile_ui
 			case "player-lists": showPlayerLists();
+			#end
 			case "level-items": showLevelItems();
-			case "level-info": showLevelInfo();
+			case "level-info": pr2.app.ScreenFactory.levelInfo(6497936);
+			#if !pr2_mobile_ui
 			case "player-info": showPlayerInfo();
-			default: new MessagePopup("This is a representative popup message.");
+			#end
+			default: pr2.app.ScreenFactory.message("This is a representative popup message.");
 		}
 	}
 
+	#if !pr2_mobile_ui
 	private function showPlayerInfo():Void {
 		var view = new PlayerView();
 		view.x = 275;
@@ -91,22 +99,7 @@ class PopupPreview extends Sprite {
 		addChild(view);
 	}
 
-	private function showLevelInfo():Void {
-		var view = new LevelInfoView();
-		view.x = 275;
-		view.y = 200;
-		view.loading.visible = false;
-		view.levelInfo.visible = true;
-		setDirectText(view.levelInfo, "title", "The Golden Compass");
-		setDirectText(view.levelInfo, "author", "by: Jiggmin");
-		setDirectText(view.levelInfo, "note", "A source-authored level information preview.");
-		setDirectText(view.levelInfo, "version", "21");
-		setDirectText(view.levelInfo, "updated", "17/Mar/2020");
-		setDirectText(view.levelInfo, "minRank", "0");
-		setDirectText(view.levelInfo, "plays", "999,999");
-		addChild(view);
-	}
-
+	#end
 	private function setDirectText(parent:openfl.display.DisplayObjectContainer, name:String, value:String):Void {
 		var field = Std.downcast(parent.getChildByName(name), TextField);
 		if (field != null) field.text = value;
@@ -124,6 +117,7 @@ class PopupPreview extends Sprite {
 		}
 	}
 
+	#if !pr2_mobile_ui
 	private function showPlayerLists():Void {
 		var players = new PlayersTabListView(false);
 		players.x = 80;
@@ -144,6 +138,7 @@ class PopupPreview extends Sprite {
 		guilds.y = 25;
 		addChild(guilds);
 	}
+	#end
 
 	private function mountCentered(view:openfl.display.DisplayObject):Void {
 		view.x = 275;

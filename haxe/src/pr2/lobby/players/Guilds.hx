@@ -1,13 +1,8 @@
 package pr2.lobby.players;
 
-import haxe.Json;
 import openfl.display.DisplayObjectContainer;
 import openfl.events.MouseEvent;
-import pr2.lobby.LobbyArt;
 import pr2.lobby.players.PlayerListSort.SortState;
-import pr2.net.ServerConfig;
-import pr2.net.TextLoader;
-import pr2.util.AsyncRemovalGuard;
 import pr2.util.DisplayUtil;
 
 typedef GuildsFetchResource = {
@@ -23,14 +18,16 @@ typedef GuildsFetchFactory = String->(String->Void)->(String->Void)->GuildsFetch
 **/
 class Guilds extends PlayersListHolder {
 	private static inline var NAME_MODE:String = "guildName";
-	public static var fetchFactory:GuildsFetchFactory = defaultFetch;
+	public static var fetchFactory(get, set):GuildsFetchFactory;
+	private static function get_fetchFactory():GuildsFetchFactory return DirectorySource.guildFetch;
+	private static function set_fetchFactory(value:GuildsFetchFactory):GuildsFetchFactory return DirectorySource.guildFetch = value;
 
 	private var graphic:Null<PlayersTabListView>;
 	private var nameButton:Null<DisplayObjectContainer>;
 	private var activeButton:Null<DisplayObjectContainer>;
 	private var gpButton:Null<DisplayObjectContainer>;
 	private var sortState:SortState = {mode: "gpToday", order: "desc"};
-	private var asyncGuard:AsyncRemovalGuard = new AsyncRemovalGuard();
+	private var source:DirectorySource;
 
 	override public function initialize():Void {
 		graphic = new PlayersTabListView(true);
@@ -51,29 +48,10 @@ class Guilds extends PlayersListHolder {
 		if (gpButton != null) {
 			gpButton.addEventListener(MouseEvent.CLICK, clickGP);
 		}
-		asyncGuard.watch(fetchFactory(ServerConfig.guildsTopUrl(), asyncGuard.wrap(onData), asyncGuard.wrap(onError)));
-	}
-
-	private static function defaultFetch(url:String, onData:String->Void, onError:String->Void):GuildsFetchResource {
-		return TextLoader.load(url, onData, onError);
-	}
-
-	private function onData(body:String):Void {
-		try {
-			var parsed:Dynamic = Json.parse(body);
-			var guilds:Array<Dynamic> = parsed.guilds;
-			if (guilds != null) {
-				for (guild in guilds) {
-					addListing(new GuildEntry(Std.string(guild.guild_name), intOf(guild.guild_id), intOf(guild.active_count), intOf(guild.gp_today)));
-				}
-			}
-		} catch (error:Dynamic) {}
-		applySort(sortState, NAME_MODE);
-		hideLoadingGraphic();
-	}
-
-	private function onError(message:String):Void {
-		hideLoadingGraphic();
+		source = new DirectorySource();
+		source.start("guilds", function(entry) addListing(new GuildEntry(entry.name, entry.guildId, entry.activeMembers, entry.gpToday)), function() {
+			applySort(sortState, NAME_MODE); hideLoadingGraphic();
+		}, function(_) hideLoadingGraphic());
 	}
 
 	private function clickName(_:MouseEvent):Void {
@@ -93,19 +71,8 @@ class Guilds extends PlayersListHolder {
 		applySort(sortState, NAME_MODE);
 	}
 
-	private static function intOf(value:Dynamic):Int {
-		if (value == null) {
-			return 0;
-		}
-		if (Std.isOfType(value, Int) || Std.isOfType(value, Float)) {
-			return Std.int(value);
-		}
-		var parsed = Std.parseInt(Std.string(value));
-		return parsed == null ? 0 : parsed;
-	}
-
 	override public function remove():Void {
-		asyncGuard.remove();
+		if (source != null) source.remove(); source = null;
 		if (nameButton != null) {
 			nameButton.removeEventListener(MouseEvent.CLICK, clickName);
 		}

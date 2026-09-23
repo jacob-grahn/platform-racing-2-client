@@ -1,6 +1,7 @@
 package pr2.lobby.dialogs;
 
 import pr2.net.ServerConfig;
+import pr2.lobby.level.LevelInfoActions;
 
 typedef LevelReportUploadFactory = String->Map<String, String>->String->Null<UploadingPopup>;
 
@@ -41,11 +42,7 @@ class LevelReportPopup extends Popup {
 		if (LevelInfoPopup.instance != null) {
 			LevelInfoPopup.instance.startFadeOut();
 		}
-		uploadFactory(ServerConfig.levelReportUrl(), [
-			"level_id" => Std.string(levelId),
-			"version" => Std.string(version),
-			"reason" => reasonText()
-		], "Reporting level...");
+		uploadFactory(ServerConfig.levelReportUrl(), LevelInfoActions.reportFields(levelId, version, reasonText()), "Reporting level...");
 		startFadeOut();
 	}
 

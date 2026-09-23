@@ -33,10 +33,9 @@ class CourseMenu extends AutoDismissPopup {
 	private var playBinding:Null<LobbyArt.Binding>;
 	private var cancelBinding:Null<LobbyArt.Binding>;
 
-	private var confirmed:Bool = false;
-	private var timer:Int = 0;
-	private var secondInterval:Null<haxe.Timer>;
-	private var waitTimeout:Null<haxe.Timer>;
+	private var flow:RaceEntryFlow;
+	private var confirmed(get, never):Bool;
+	private function get_confirmed():Bool return flow.confirmed;
 
 	public function new(s:Slot) {
 		super();
@@ -58,69 +57,22 @@ class CourseMenu extends AutoDismissPopup {
 		playBinding = LobbyArt.bind(playButton, clickPlay);
 		cancelBinding = LobbyArt.bind(cancelButton, closeMenu);
 
-		var cm = CommandHandler.commandHandler;
-		cm.defineCommand("forceTime", forceTime);
-		cm.defineCommand("closeCourseMenu", remoteRemove);
-		waitTimeout = haxe.Timer.delay(closeMenu, 30000);
+		flow = new RaceEntryFlow(function() { if (slot != null) slot.sendConfirmSlot(); }, closeMenu,
+			function() { if (textBox != null) textBox.text = flow.countdown; });
 
 		positionNear(s);
 	}
 
-	public function forceTime(a:Array<String>):Void {
-		var timeRemaining = a.length > 0 ? Std.parseInt(a[0]) : null;
-		if (timeRemaining == null) {
-			timeRemaining = 0;
-		}
-		stopInterval();
-		stopWait();
-		if (timeRemaining < 0) {
-			if (textBox != null) {
-				textBox.text = "--";
-			}
-			waitTimeout = haxe.Timer.delay(closeMenu, 30000);
-		} else {
-			timer = initialTimer(timeRemaining);
-			secondInterval = new haxe.Timer(1000);
-			secondInterval.run = decrementTimer;
-			decrementTimer();
-		}
-	}
-
-	/**
-		Internal countdown seed for a server `forceTime` of `timeRemaining`
-		seconds: the original sets `(15 - timeRemaining) + 1` and immediately ticks
-		once, so the first value shown is `15 - timeRemaining`. Pure for testing.
-	**/
-	public static inline function initialTimer(timeRemaining:Int):Int {
-		return (15 - timeRemaining) + 1;
-	}
-
-	private function decrementTimer():Void {
-		timer--;
-		if (timer < 0) {
-			timer = 0;
-			stopInterval();
-			LobbySocket.write("force_start`");
-		}
-		if (textBox != null) {
-			textBox.text = Std.string(timer);
-		}
-	}
-
-	private function clickPlay():Void {
-		confirmed = true;
-		stopWait();
-		if (slot != null) {
-			slot.sendConfirmSlot();
-		}
-	}
+	public function forceTime(a:Array<String>):Void flow.forceTime(a);
+	public static inline function initialTimer(timeRemaining:Int):Int return RaceEntryFlow.initialTimer(timeRemaining);
+	private function decrementTimer():Void flow.tick();
+	private function clickPlay():Void flow.play();
 
 	public function remoteRemove(_:Array<String>):Void {
 		remove();
 	}
 
 	private function closeMenu():Void {
-		confirmed = false;
 		remove();
 	}
 
@@ -136,15 +88,11 @@ class CourseMenu extends AutoDismissPopup {
 		if (CourseMenu.instance == this) {
 			CourseMenu.instance = null;
 		}
-		var cm = CommandHandler.commandHandler;
-		cm.defineCommand("forceTime", null);
-		cm.defineCommand("closeCourseMenu", null);
+		flow.remove();
 		LobbyArt.unbind(playBinding);
 		LobbyArt.unbind(cancelBinding);
 		playBinding = null;
 		cancelBinding = null;
-		stopInterval();
-		stopWait();
 		var s = slot;
 		slot = null;
 		s.sendClearSlot();
@@ -155,17 +103,4 @@ class CourseMenu extends AutoDismissPopup {
 		super.remove();
 	}
 
-	private inline function stopInterval():Void {
-		if (secondInterval != null) {
-			secondInterval.stop();
-			secondInterval = null;
-		}
-	}
-
-	private inline function stopWait():Void {
-		if (waitTimeout != null) {
-			waitTimeout.stop();
-			waitTimeout = null;
-		}
-	}
 }

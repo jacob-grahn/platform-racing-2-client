@@ -78,6 +78,12 @@ class ItemDisplay extends Removable {
 		}
 	}
 
+	/** Reuse the animated item and ammo inside a different control surface. */
+	public function compact():Void {
+		art.backgroundPanel.visible = false;
+		darkLabel.visible = lightLabel.visible = false;
+	}
+
 	private function createLabel(x:Float, y:Float, color:Int):TextField {
 		var field = new TextField();
 		field.defaultTextFormat = new TextFormat(FontResolver.resolve("Verdana"), 12, color);

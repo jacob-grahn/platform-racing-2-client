@@ -43,6 +43,7 @@ class PageHolder extends Sprite {
 		}
 
 		if (page != null) {
+			if (isRootHolder) pr2.app.PageViewport.apply(page.fullViewport);
 			page.pageHolder = this;
 			page.initialize();
 			addChild(page);

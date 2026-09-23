@@ -7,7 +7,6 @@ import pr2.net.LoginAuthClient;
 import pr2.net.LoginSessionGate;
 import pr2.net.LoginSessionGate.LoginSessionResult;
 import pr2.net.ServerInfo;
-import pr2.page.LobbyPage;
 import pr2.page.LoginSessionInstaller;
 import pr2.page.LoginSocketProbe;
 import pr2.page.LoginSocketProbe.LoginProbeStatus;
@@ -83,7 +82,7 @@ class LevelEditorConnectingPopup extends Popup {
 		var editor = LevelEditor.editor;
 		remove();
 		if (editor != null && editor.pageHolder != null) {
-			editor.pageHolder.changePage(new LobbyPage(session.userName, server));
+			editor.pageHolder.changePage(pr2.app.ScreenFactory.lobby(session.userName, server));
 		}
 	}
 

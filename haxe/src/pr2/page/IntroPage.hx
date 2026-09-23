@@ -228,7 +228,7 @@ class IntroPage extends Page {
 		clearCurrentIntro();
 		reportState("login");
 		if (pageHolder != null) {
-			pageHolder.changePage(new LoginPage(siteMode));
+			pageHolder.changePage(pr2.app.ScreenFactory.login(siteMode));
 		}
 	}
 

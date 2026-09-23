@@ -20,7 +20,8 @@ import pr2.runtime.SvgAsset;
 class MuteButton extends Sprite {
 	private static inline var MUTE_BUTTON_BASE_ASSET = "assets/svg/login/mute_button_base.svg";
 	private static inline var MUTE_BUTTON_WAVES_ASSET = "assets/svg/login/mute_button_waves.svg";
-	public static var muted(default, null):Bool = false;
+	public static var muted(get, never):Bool;
+	private static function get_muted():Bool return pr2.audio.AudioMute.muted;
 
 	public final backgroundPanel:Shape;
 	private var buttonArtwork:Sprite;
@@ -76,7 +77,7 @@ class MuteButton extends Sprite {
 	public function toggle():Void doToggle(!muted);
 
 	public function doToggle(value:Bool):Void {
-		muted = value;
+		pr2.audio.AudioMute.setMuted(value);
 		applyMutedState();
 	}
 

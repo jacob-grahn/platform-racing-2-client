@@ -143,16 +143,7 @@ class StatSlider extends Sprite {
 	}
 
 	public function setValue(v:Int):Void {
-		value = clamp(v, 0, 100);
-		if (target != null) {
-			var remaining = target.getPointsRemaining();
-			if (remaining < 0) {
-				value += remaining;
-			}
-			if (value < 0) {
-				value = 0;
-			}
-		}
+		value = CustomizationRules.stat(v, target == null ? 100 : value + target.getPointsRemaining());
 		if (textBox != null) {
 			textBox.text = Std.string(value);
 		}

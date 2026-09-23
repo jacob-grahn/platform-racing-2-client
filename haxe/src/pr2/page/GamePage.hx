@@ -14,8 +14,7 @@ import pr2.Constants;
 import pr2.gameplay.CatCaptcha;
 import pr2.gameplay.Course;
 import pr2.gameplay.CowboyMode;
-import pr2.gameplay.FinishedPage;
-import pr2.gameplay.FinishedPageAssets;
+import pr2.gameplay.ResultsAssets;
 import pr2.gameplay.GameCommandShell;
 import pr2.gameplay.GameCommandShell.GameCommandDelegate;
 import pr2.gameplay.GameCommandShell.LocalCharacterInit;
@@ -57,8 +56,11 @@ class GamePage extends Page implements GameCommandDelegate {
 	private var commandShell:Null<GameCommandShell>;
 	private var loadingText:Null<TextField>;
 	private var quitButton:Null<QuitButton>;
-	private var finishedPage:Null<FinishedPage>;
-	private var finishedPageAssets:Null<FinishedPageAssets>;
+	private var hud:pr2.gameplay.GameHud;
+	private var finishedPage:Null<pr2.gameplay.RaceResults>;
+	private var levelTitle:String = "";
+	private var resultOutcome:String = "Race complete";
+	private var finishedPageAssets:Null<ResultsAssets>;
 	private var warmupHost:Null<Sprite>;
 	private var warmupCover:Null<Shape>;
 	private var warmupStep:Int = -1;
@@ -87,13 +89,15 @@ class GamePage extends Page implements GameCommandDelegate {
 	private var hatCountdownTimer:Null<haxe.Timer>;
 	private var cowboyModes:Array<CowboyMode> = [];
 	private var happyHours:Array<HappyHour> = [];
-	private var luxPop:Null<LuxPopup>;
+	private var luxPop:Null<pr2.lobby.dialogs.Popup>;
 	public var prize(default, null):Dynamic;
 
 	public function new(levelId:Int, version:Int) {
 		super();
 		this.levelId = levelId;
 		this.version = version;
+		hud = pr2.app.ScreenFactory.gameHud(quitGame, function() return playerDone);
+		fullViewport = hud.fullViewport;
 		// We are constructed only after `LevelLaunch` accepted the server
 		// `startGame`, so the entry machine is already past selection and waiting
 		// on the level payload.
@@ -106,10 +110,8 @@ class GamePage extends Page implements GameCommandDelegate {
 		AudioManager.leaveMenu();
 		createLoadingText('Loading level $levelId...');
 
-		quitButton = new QuitButton(quitGame, function():Bool return playerDone);
-		quitButton.x = Constants.STAGE_WIDTH / 2;
-		quitButton.y = Constants.STAGE_HEIGHT / 2;
-		addChild(quitButton);
+		quitButton = hud.quitButton;
+		addChild(hud);
 
 		commandShell = new GameCommandShell(this);
 		commandShell.install();
@@ -124,6 +126,7 @@ class GamePage extends Page implements GameCommandDelegate {
 	}
 
 	private function onLevelData(data:ServerLevelData):Void {
+		levelTitle = data.title;
 		// Resolve the load through the entry machine so the player sees the same
 		// "did not download correctly" / "did not load" wording as Flash.
 		var dataEmpty = data.data == null || data.data == "";
@@ -183,7 +186,7 @@ class GamePage extends Page implements GameCommandDelegate {
 	**/
 	private function prepareGameplayAssets():Void {
 		if (course == null) return;
-		finishedPageAssets = new FinishedPageAssets(levelId);
+		finishedPageAssets = pr2.app.ScreenFactory.resultAssets(levelId);
 
 		// Headless deterministic tests do not have a renderer to warm. Keep their
 		// synchronous mount behavior and let FinishedPage finish lazy preparation.
@@ -226,7 +229,7 @@ class GamePage extends Page implements GameCommandDelegate {
 	}
 
 	private function advanceGameplayWarmup(_:Event):Void {
-		if (course == null || finishedPageAssets == null || warmupHost == null) {
+		if (course == null || warmupHost == null) {
 			cancelGameplayWarmup(false);
 			return;
 		}
@@ -242,6 +245,9 @@ class GamePage extends Page implements GameCommandDelegate {
 			}
 
 			clearWarmupHost();
+			if (warmupStep >= 20 && finishedPageAssets == null) {
+				restoreWarmupCharacterView(); finishGameplayWarmup(); return;
+			}
 			switch (warmupStep) {
 				case 10:
 					restoreWarmupItemDisplay();
@@ -345,6 +351,7 @@ class GamePage extends Page implements GameCommandDelegate {
 			addChildAt(course, 0);
 		}
 		clearLoadingText();
+		hud.mount(course);
 	}
 
 	private function onCourseFrame(state:LocalPlayerState):Void {
@@ -379,9 +386,7 @@ class GamePage extends Page implements GameCommandDelegate {
 			finishedPage = null;
 		}
 		prize = null;
-		if (PrizePopup.instance != null) {
-			PrizePopup.instance.startFadeOut();
-		}
+		pr2.app.ScreenFactory.closePrize();
 		if (PlaceArtifact.instance != null) {
 			PlaceArtifact.instance.startFadeOut();
 		}
@@ -389,10 +394,8 @@ class GamePage extends Page implements GameCommandDelegate {
 			luxPop.remove();
 			luxPop = null;
 		}
-		if (quitButton != null) {
-			quitButton.remove();
-			quitButton = null;
-		}
+		hud.remove();
+		quitButton = null;
 		if (course != null) {
 			course.remove();
 			course = null;
@@ -535,7 +538,7 @@ class GamePage extends Page implements GameCommandDelegate {
 		}
 	}
 	public function setLuxGain(amount:Int):Void {
-		luxPop = new LuxPopup(amount);
+		luxPop = pr2.app.ScreenFactory.lux(amount);
 	}
 	public function setPrize(prize:Dynamic):Void {
 		this.prize = prize;
@@ -544,7 +547,7 @@ class GamePage extends Page implements GameCommandDelegate {
 
 	public function cancelPrize(message:String):Void {
 		prize = null;
-		new PrizePopup("cancel", 0, "Prize Cancelled", message);
+		pr2.app.ScreenFactory.prize("cancel", 0, "Prize Cancelled", message);
 	}
 
 	public function winPrize(prize:Dynamic):Void {
@@ -554,15 +557,13 @@ class GamePage extends Page implements GameCommandDelegate {
 
 	public function cowboyMode():Void {
 		var mode = new CowboyMode();
-		mode.x = Constants.STAGE_WIDTH / 2;
-		mode.y = Constants.STAGE_HEIGHT / 2;
+		hud.placeEvent(mode);
 		cowboyModes.push(mode);
 		addChild(mode);
 	}
 	public function happyHour():Void {
 		var happy = new HappyHour(onHappyHourRemoved);
-		happy.x = Constants.STAGE_WIDTH / 2;
-		happy.y = Constants.STAGE_HEIGHT / 2;
+		hud.placeEvent(happy);
 		happyHours.push(happy);
 		addChild(happy);
 	}
@@ -631,7 +632,7 @@ class GamePage extends Page implements GameCommandDelegate {
 		if (prize == null) {
 			return;
 		}
-		new PrizePopup(
+		pr2.app.ScreenFactory.prize(
 			stringField(prize, "type"),
 			intField(prize, "id"),
 			stringField(prize, "name"),
@@ -642,9 +643,7 @@ class GamePage extends Page implements GameCommandDelegate {
 	}
 
 	private function closePrizePopup():Void {
-		if (PrizePopup.instance != null) {
-			PrizePopup.instance.startFadeOut();
-		}
+		pr2.app.ScreenFactory.closePrize();
 	}
 
 	private static function stringField(value:Dynamic, field:String):String {
@@ -672,6 +671,7 @@ class GamePage extends Page implements GameCommandDelegate {
 
 	private function quitGame():Void {
 		if (!playerDone) {
+			if (resultOutcome == "Race complete") resultOutcome = "Race ended";
 			LobbySocket.write("quit_race`");
 		}
 		captureFinishedPhysicsFrames();
@@ -705,6 +705,7 @@ class GamePage extends Page implements GameCommandDelegate {
 	}
 
 	private function onCourseOutOfTime():Void {
+		if (!playerDone) resultOutcome = "Time's up!";
 		cancelHatCountdown();
 		if (course != null && course.gameMode() == "egg") {
 			onLocalFinish(null);
@@ -716,6 +717,7 @@ class GamePage extends Page implements GameCommandDelegate {
 
 	private function markPlayerDone():Void {
 		playerDone = true;
+		hud.setDone();
 	}
 
 	private function maybeShowFinishedPage():Void {
@@ -728,7 +730,8 @@ class GamePage extends Page implements GameCommandDelegate {
 		}
 		captureFinishedPhysicsFrames();
 		var physicsFrames = finishedPhysicsFrames == null ? 0 : finishedPhysicsFrames;
-		finishedPage = new FinishedPage(levelId, returnToLobby, clearFinishedPage, physicsFrames, finishedPageAssets);
+		hud.setResultsOpen(true);
+		finishedPage = pr2.app.ScreenFactory.results(levelId, returnToLobby, clearFinishedPage, physicsFrames, finishedPageAssets, levelTitle, resultOutcome);
 		finishedPageAssets = null;
 		for (awardArgs in pendingAwards) {
 			applyAwardToFinishedPage(awardArgs);
@@ -745,9 +748,10 @@ class GamePage extends Page implements GameCommandDelegate {
 		finishedPage.award(arg(args, 0), arg(args, 1));
 	}
 
-	private function clearFinishedPage(page:FinishedPage):Void {
+	private function clearFinishedPage(page:pr2.gameplay.RaceResults):Void {
 		if (finishedPage == page) {
 			finishedPage = null;
+			hud.setResultsOpen(false);
 		}
 	}
 
@@ -776,7 +780,7 @@ class GamePage extends Page implements GameCommandDelegate {
 		}
 		LobbySocket.write("set_game_room`none");
 		if (pageHolder != null) {
-			pageHolder.changePage(new LobbyPage(LobbySession.userName, LobbySession.server));
+			pageHolder.changePage(pr2.app.ScreenFactory.lobby(LobbySession.userName, LobbySession.server));
 		}
 	}
 

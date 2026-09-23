@@ -18,15 +18,15 @@ class LobbyPopups {
 	private function new() {}
 
 	public static function showPlayer(userName:String):Void {
-		new pr2.lobby.dialogs.PlayerPopup(userName);
+		pr2.app.ScreenFactory.profile(userName);
 	}
 
 	public static function showGuestPlayer(userName:String):Void {
-		new pr2.lobby.dialogs.PlayerGuestPopup(userName);
+		pr2.app.ScreenFactory.profile(userName, true);
 	}
 
 	public static function showGuild(guildId:Int):Void {
-		new pr2.lobby.dialogs.GuildPopup(guildId);
+		pr2.app.ScreenFactory.guild(guildId);
 	}
 
 	public static function showGuildJoin(guildId:Int):Void {
@@ -35,16 +35,16 @@ class LobbyPopups {
 	}
 
 	public static function showGuildByName(name:String):Void {
-		new pr2.lobby.dialogs.GuildPopup(0, name);
+		pr2.app.ScreenFactory.guild(0, name);
 	}
 
 	public static function showLevel(levelId:String):Void {
 		var parsed = Std.parseInt(levelId);
-		new pr2.lobby.dialogs.LevelInfoPopup(parsed == null ? 0 : parsed);
+		pr2.app.ScreenFactory.levelInfo(parsed == null ? 0 : parsed);
 	}
 
 	public static function sendMessage(toUser:String):Void {
-		new pr2.lobby.dialogs.SendMessagePopup(toUser);
+		pr2.app.ScreenFactory.composeMessage(toUser);
 	}
 
 	public static function openUrl(url:String):Void {

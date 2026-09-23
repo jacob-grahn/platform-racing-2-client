@@ -36,7 +36,8 @@ class LevelBackgroundRenderer {
 		if (owner.solidBackground == null) return;
 		owner.solidBackground.graphics.clear();
 		owner.solidBackground.graphics.beginFill(owner.currentBackgroundColor);
-		owner.solidBackground.graphics.drawRect(0, 0, Constants.STAGE_WIDTH, Constants.STAGE_HEIGHT);
+		var view = owner.viewport;
+		owner.solidBackground.graphics.drawRect(view.x, view.y, view.width, view.height);
 		owner.solidBackground.graphics.endFill();
 	}
 

@@ -18,7 +18,7 @@ enum LoginProbeStatus {
 	opens the socket, requests a login id, and parses the login frames into
 	`LoginProbeStatus` updates for the menu UI. It owns no socket of its own — once
 	login succeeds the same connection is reused by the lobby (see
-	`LoginPage.enterLobby`), matching the Flash single `Main.socket`.
+	`LoginFlow.enterLobby`), matching the Flash single `Main.socket`.
 **/
 class LoginSocketProbe {
 	private var server:ServerInfo;

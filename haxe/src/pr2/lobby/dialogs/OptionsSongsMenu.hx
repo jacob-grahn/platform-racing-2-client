@@ -2,6 +2,7 @@ package pr2.lobby.dialogs;
 
 import openfl.display.DisplayObject;
 import pr2.lobby.account.Settings;
+import pr2.lobby.account.OptionsSettings;
 import pr2.ui.controls.GameCheckBox;
 
 class OptionsSongsMenu extends AutoDismissPopup {
@@ -50,7 +51,7 @@ class OptionsSongsMenu extends AutoDismissPopup {
 				disabled.push(i);
 			}
 		}
-		Settings.setValue(Settings.DISABLED_SONGS, disabled);
+		OptionsSettings.setDisabledSongs(disabled);
 		if (art != null) {
 			art.dispose();
 			art = null;

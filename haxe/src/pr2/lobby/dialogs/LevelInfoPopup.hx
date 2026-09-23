@@ -4,10 +4,7 @@ import haxe.Timer;
 import openfl.display.DisplayObject;
 import openfl.display.DisplayObjectContainer;
 import openfl.display.InteractiveObject;
-import openfl.events.Event;
 import openfl.events.MouseEvent;
-import openfl.net.URLRequest;
-import openfl.net.URLVariables;
 import openfl.text.TextField;
 import pr2.lobby.NumberFormat;
 import pr2.lobby.chat.HtmlNameMaker;
@@ -15,9 +12,9 @@ import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
 import pr2.lobby.LobbyRight;
 import pr2.lobby.LobbySession;
-import pr2.gameplay.Modes;
-import pr2.net.ServerConfig;
-import pr2.net.SuperLoader;
+import pr2.lobby.level.LevelInfoData;
+import pr2.lobby.level.LevelInfoSource;
+import pr2.lobby.level.LevelInfoActions;
 import pr2.lobby.dialogs.LevelInfoView.LevelModeSymbol;
 import pr2.lobby.dialogs.LevelInfoView.LevelInfoRatingSymbol;
 import pr2.ui.controls.GameButton;
@@ -50,7 +47,7 @@ class LevelInfoPopup extends Popup {
 	public var userGroup(default, null):String = "0";
 	public var gravity(default, null):Float = 1.0;
 	public var maxTime(default, null):Int = 120;
-	public var items(default, null):String = DEFAULT_ITEMS;
+	public var items(default, null):String = LevelInfoData.DEFAULT_ITEMS;
 	public var song(default, null):String = "";
 	public var gameMode(default, null):String = "Race";
 	public var cowboyChance(default, null):Int = 5;
@@ -59,7 +56,7 @@ class LevelInfoPopup extends Popup {
 	private var art:Null<LevelInfoView>;
 	private var levelInfo:Null<DisplayObjectContainer>;
 	private var htmlNameMaker:HtmlNameMaker = new HtmlNameMaker();
-	private var superLoader:Null<SuperLoader>;
+	private var source:Null<LevelInfoSource>;
 	private var closeBinding:Null<Binding>;
 	private var playBinding:Null<Binding>;
 	private var shareBinding:Null<Binding>;
@@ -84,8 +81,8 @@ class LevelInfoPopup extends Popup {
 		if (LevelInfoPopup.instance != null) {
 			LevelInfoPopup.instance.startFadeOut();
 		}
-		if (PlayerPopup.instance != null) {
-			PlayerPopup.instance.startFadeOut();
+		if (pr2.lobby.players.ProfileActions.active != null) {
+			pr2.lobby.players.ProfileActions.active.startFadeOut();
 		}
 		if (GuildPopup.instance != null) {
 			GuildPopup.instance.startFadeOut();
@@ -116,32 +113,23 @@ class LevelInfoPopup extends Popup {
 		if (art == null || levelInfo == null || ret == null) {
 			return;
 		}
-		live = boolField(ret, "live", false);
-		hasPass = boolField(ret, "has_pass", true);
-		userId = intField(ret, "user_id");
-		userName = stringField(ret, "user_name");
-		userGroup = stringField(ret, "user_group", "0");
-		rating = floatField(ret, "rating");
-		time = floatField(ret, "time");
-		gravity = floatField(ret, "gravity", 1.0);
-		maxTime = intField(ret, "max_time", 120);
-		items = stringField(ret, "items", DEFAULT_ITEMS);
-		song = determineSong(stringField(ret, "song"));
-		gameMode = determineMode(stringField(ret, "gameMode", "race"));
-		cowboyChance = intField(ret, "cowboyChance", 5);
-		badHats = stringField(ret, "badHats");
-		title = stringField(ret, "title");
-		note = stringField(ret, "note");
-		version = intField(ret, "version", 1);
-		plays = intField(ret, "play_count");
-		minRank = intField(ret, "min_rank");
+		applyData(new LevelInfoData(ret));
+	}
+
+	public function applyData(data:LevelInfoData):Void {
+		if (art == null || levelInfo == null || data == null) return;
+		live = data.live; hasPass = data.hasPass; userId = data.userId; userName = data.userName; userGroup = data.userGroup;
+		rating = data.rating; time = data.time; gravity = data.gravity; maxTime = data.maxTime; items = data.items; song = data.song;
+		gameMode = data.gameMode; cowboyChance = data.cowboyChance; badHats = data.badHats; title = data.title; note = data.note;
+		version = data.version; plays = data.plays; minRank = data.minRank;
+		setModeFrame(data.modeFrame);
 
 		setText("title", title);
 		setText("note", note);
 		setText("version", NumberFormat.withCommas(version));
 		setText("plays", NumberFormat.withCommas(plays));
 		setText("minRank", Std.string(minRank));
-		setText("updated", getShortDateStr(time));
+		setText("updated", LevelInfoData.shortDate(time));
 
 		var author = LobbyArt.directText(levelInfo, "author");
 		if (author != null) {
@@ -206,35 +194,13 @@ class LevelInfoPopup extends Popup {
 	}
 
 	private function loadLevelInfo():Void {
-		removeLoader();
-		superLoader = new SuperLoader(true, SuperLoader.j);
-		superLoader.addEventListener(SuperLoader.d, applyLoaderReturnData);
-		superLoader.addEventListener(SuperLoader.e, closeFromLoadError);
-		var vars = new URLVariables();
-		Reflect.setField(vars, "level_id", levelId);
-		var request = new URLRequest(ServerConfig.levelInfoUrl());
-		request.data = vars;
-		superLoader.load(request);
-	}
-
-	private function applyLoaderReturnData(_:Event):Void {
-		if (superLoader != null) {
-			applyReturnData(superLoader.parsedData);
-		}
-	}
-
-	private function closeFromLoadError(_:Event):Void {
-		startFadeOut();
+		removeLoader(); source = new LevelInfoSource();
+		source.load(levelId, function(data) { if (!fadeOutStarted) applyData(data); }, function(_) { if (!fadeOutStarted) startFadeOut(); });
 	}
 
 	private function removeLoader():Void {
-		if (superLoader == null) {
-			return;
-		}
-		superLoader.removeEventListener(SuperLoader.d, applyLoaderReturnData);
-		superLoader.removeEventListener(SuperLoader.e, closeFromLoadError);
-		superLoader.remove();
-		superLoader = null;
+		if (source != null) source.remove();
+		source = null;
 	}
 
 	private function setText(name:String, value:String):Void {
@@ -288,7 +254,7 @@ class LevelInfoPopup extends Popup {
 			return;
 		}
 		target.textColor = 0x666666;
-		hoverUpdated = new HoverPopup("Last Updated", "This level was last updated on " + getDateTimeStr(time) + ".", target);
+		hoverUpdated = new HoverPopup("Last Updated", "This level was last updated on " + LevelInfoData.dateTime(time) + ".", target);
 		hoverUpdated.x += (hoverUpdated.width * 1.5) + 10;
 	}
 
@@ -376,7 +342,7 @@ class LevelInfoPopup extends Popup {
 		outMaxTime(null);
 		var target = DisplayUtil.directChildByName(levelInfo, "maxTime");
 		if (target != null) {
-			var content = maxTime == 0 || (maxTime == 999 && time < 1358640000) ? "Infinite" : formatTime(maxTime) + " ("
+			var content = maxTime == 0 || (maxTime == 999 && time < 1358640000) ? "Infinite" : LevelInfoData.formatTime(maxTime) + " ("
 				+ NumberFormat.withCommas(maxTime) + " seconds)";
 			hoverMaxTime = new HoverPopup("Time Limit", content, target);
 		}
@@ -515,8 +481,8 @@ class LevelInfoPopup extends Popup {
 	private function clickPlay():Void {
 		closeHoverPopups();
 		clearActionHover();
-		if (PlayerPopup.instance != null) {
-			PlayerPopup.instance.startFadeOut();
+		if (pr2.lobby.players.ProfileActions.active != null) {
+			pr2.lobby.players.ProfileActions.active.startFadeOut();
 		}
 		if (GuildPopup.instance != null) {
 			GuildPopup.instance.startFadeOut();
@@ -531,7 +497,7 @@ class LevelInfoPopup extends Popup {
 	}
 
 	private function clickShare():Void {
-		new SendMessagePopup("", "Hey, check out this level! \n\n[level=" + levelId + "]" + title + "[/level] by [user]" + userName + "[/user]", false,
+		pr2.app.ScreenFactory.composeMessage("", LevelInfoActions.shareMessage(levelId, title, userName), false,
 			true);
 	}
 
@@ -613,145 +579,16 @@ class LevelInfoPopup extends Popup {
 		}
 	}
 
-	private function determineMode(mode:String):String {
-		var frame = 1;
-		if (mode == "deathmatch" || mode == "dm" || mode == "d") {
-			frame = 2;
-		} else if (mode == "egg" || mode == "eggs" || mode == "e") {
-			frame = 3;
-		} else if (mode == "objective" || mode == "obj" || mode == "o") {
-			frame = 4;
-		} else if (mode == "hat" || mode == "h") {
-			frame = 5;
-		} else if (mode == "roguelike" || mode == "rl" || mode == "l") {
-			// The legacy mode symbol has no roguelike frame yet; use the race icon
-			// while still showing the correct full mode name.
-			frame = 1;
-		}
+	private function setModeFrame(frame:Int):Void {
 		var modeSym = Std.downcast(DisplayUtil.directChildByName(Std.downcast(DisplayUtil.directChildByName(levelInfo, "gameMode"), DisplayObjectContainer), "modeSym"),
 			LevelModeSymbol);
 		if (modeSym != null) {
 			modeSym.setFrame(frame);
 		}
-		return Modes.getFullName(mode);
-	}
-
-	private static function determineSong(song:String):String {
-		if (song == "" || song == "random") {
-			return "Random";
-		}
-		if (song == "0" || song == "none") {
-			return "None";
-		}
-		var index = Std.parseInt(song);
-		if (index == null || index < 0 || index >= SONGS.length) {
-			return "";
-		}
-		return SONGS[index];
-	}
-
-	private static function getShortDateStr(t:Float):String {
-		var d = Date.fromTime(t * 1000);
-		return d.getDate() + "/" + MONTHS[d.getMonth()] + "/" + d.getFullYear();
-	}
-
-	private static function getDateTimeStr(t:Float):String {
-		var d = Date.fromTime(t * 1000);
-		var hour = d.getHours();
-		var ampm = hour >= 12 ? "PM" : "AM";
-		var hour12 = hour % 12;
-		if (hour12 == 0) {
-			hour12 = 12;
-		}
-		var mins = StringTools.lpad(Std.string(d.getMinutes()), "0", 2);
-		var secs = StringTools.lpad(Std.string(d.getSeconds()), "0", 2);
-		return MONTHS_LONG[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear() + " " + hour12 + ":" + mins + ":" + secs + " " + ampm;
-	}
-
-	private static function formatTime(timeInput:Float):String {
-		var mins = Math.floor(timeInput / 60);
-		var secs = Math.floor(timeInput % 60);
-		return mins + ":" + StringTools.lpad(Std.string(secs), "0", 2);
-	}
-
-	private static function stringField(ret:Dynamic, name:String, fallback:String = ""):String {
-		var value:Dynamic = Reflect.field(ret, name);
-		return value == null ? fallback : Std.string(value);
-	}
-
-	private static function intField(ret:Dynamic, name:String, fallback:Int = 0):Int {
-		var value:Dynamic = Reflect.field(ret, name);
-		if (value == null) {
-			return fallback;
-		}
-		if (Std.isOfType(value, Int) || Std.isOfType(value, Float)) {
-			return Std.int(value);
-		}
-		var parsed = Std.parseInt(Std.string(value));
-		return parsed == null ? fallback : parsed;
-	}
-
-	private static function floatField(ret:Dynamic, name:String, fallback:Float = 0):Float {
-		var value:Dynamic = Reflect.field(ret, name);
-		if (value == null) {
-			return fallback;
-		}
-		var parsed = Std.parseFloat(Std.string(value));
-		return Math.isNaN(parsed) ? fallback : parsed;
-	}
-
-	private static function boolField(ret:Dynamic, name:String, fallback:Bool):Bool {
-		var value:Dynamic = Reflect.field(ret, name);
-		if (value == null) {
-			return fallback;
-		}
-		if (Std.isOfType(value, Bool)) {
-			return value;
-		}
-		if (Std.isOfType(value, Int) || Std.isOfType(value, Float)) {
-			return value != 0;
-		}
-		var text = Std.string(value).toLowerCase();
-		if (text == "true" || text == "1") {
-			return true;
-		}
-		if (text == "false" || text == "0" || text == "") {
-			return false;
-		}
-		return fallback;
 	}
 
 	private static function defaultActionDelay(callback:Void->Void, delayMs:Int):Null<Timer> {
 		return Timer.delay(callback, delayMs);
 	}
 
-	private static inline var DEFAULT_ITEMS:String = "Laser Gun`Mine`Lightning`Teleport`Super Jump`Jet Pack`Speed Burst`Sword`Ice Wave`Snake";
-	private static final MONTHS:Array<String> = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-	private static final MONTHS_LONG:Array<String> = [
-		"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
-	];
-	private static final SONGS:Array<String> = [
-		"None",
-		"Orbital Trance - Space Planet",
-		"Code - Stefano Maccarelli",
-		"Paradise on E - API",
-		"Crying Soul (FL Mix) - Pyroific",
-		"My Vision - David Orr",
-		"Switchblade - Detective Jabsco",
-		"The Wires - Cheez-R-Us",
-		"Before Mydnite - F-777",
-		"",
-		"Broked It - SWiTCH",
-		"Hello? - TMM43",
-		"Pyrokinesis - Sean Tucker",
-		"Flowerz 'n' Herbz - Brunzolaitis",
-		"Instrumental #4 - Reasoner",
-		"Prismatic - Lunanova",
-		"We Are Loud - Dynamedion",
-		"Toodaloo - mustangman",
-		"Night Shade - Goliathe",
-		"Blizzard! - Majicke",
-		"Pasture (Instrumental) - Dangevin",
-		"Sunset Raiders - AVL"
-	];
 }

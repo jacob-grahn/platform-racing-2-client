@@ -165,7 +165,8 @@ class LevelArtRenderCoordinator {
 		var minY = Math.POSITIVE_INFINITY;
 		var maxX = Math.NEGATIVE_INFINITY;
 		var maxY = Math.NEGATIVE_INFINITY;
-		for (corner in [new Point(0, 0), new Point(Constants.STAGE_WIDTH, 0), new Point(0, Constants.STAGE_HEIGHT), new Point(Constants.STAGE_WIDTH, Constants.STAGE_HEIGHT)]) {
+		var view = owner.viewport;
+		for (corner in [view.topLeft, new Point(view.right, view.top), new Point(view.left, view.bottom), view.bottomRight]) {
 			var local = toLocal.transformPoint(corner);
 			if (local.x < minX) minX = local.x;
 			if (local.x > maxX) maxX = local.x;

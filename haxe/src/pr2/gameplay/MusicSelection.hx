@@ -67,6 +67,8 @@ class MusicSelection extends Removable {
 		return selected == null ? "" : selected.id;
 	}
 
+	public function availableSongs():Array<MusicTrack> return songs.copy();
+
 	private function changeSong(_:Event):Void {
 		var selected = dropdown.selectedItem;
 		if (selected != null) music.setSong(selected);

@@ -1,0 +1,8 @@
+--library lime
+--library openfl
+--library svg
+-cp haxe/src
+-cp haxe/test
+-D pr2_test
+--main pr2.app.ScreenFactoryTest
+--interp

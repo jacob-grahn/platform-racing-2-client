@@ -10,7 +10,7 @@ import pr2.ui.RatingSelect;
 	visible. FinishedPage then adopts the same already-rendered instances instead
 	of constructing a second, cold copy at the finish line.
 **/
-class FinishedPageAssets {
+class FinishedPageAssets implements ResultsAssets {
 	public var art(default, null):Null<FinishedPageView>;
 	public var stars(default, null):Null<RatingSelect>;
 	public var expGain(default, null):Null<ExpGain>;
