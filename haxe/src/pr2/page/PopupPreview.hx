@@ -38,6 +38,7 @@ class PopupPreview extends Sprite {
 	private function show(_:Event):Void {
 		removeEventListener(Event.ADDED_TO_STAGE, show);
 		switch (variant) {
+			case "html-message": pr2.app.ScreenFactory.message("Welcome to Platform Racing 2!<br><br><b>Your session is ready.</b><br>Have fun racing!");
 			case "confirm": pr2.app.ScreenFactory.confirm("Are you sure you want to continue?",function(){});
 			case "nested":
 				pr2.app.ScreenFactory.confirm("This parent must remain dimmed behind its child.",function(){});

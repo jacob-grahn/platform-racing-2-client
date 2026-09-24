@@ -42,6 +42,17 @@ class ScreenFactory {
 		#end
 	}
 
+	public static function instructions(?site:String):Page {
+		if (site != null) siteMode = site;
+		#if pr2_mobile_ui
+		return new pr2.page.MobileInstructionsPage(siteMode);
+		#elseif pr2_ui_preview
+		return isMobile ? new pr2.page.MobileInstructionsPage(siteMode) : new pr2.page.LoginPage(siteMode);
+		#else
+		return new pr2.page.LoginPage(siteMode);
+		#end
+	}
+
 	public static function installPreviewSelector():Void {
 		#if (pr2_ui_preview && js && html5)
 		var select = js.Browser.document.createSelectElement();
@@ -146,11 +157,11 @@ class ScreenFactory {
 		#end
 	}
 
-	public static function options():pr2.lobby.dialogs.Popup {
+	public static function options(initialPage:String = "audio"):pr2.lobby.dialogs.Popup {
 		#if pr2_mobile_ui
-		return new pr2.mobile.MobileOptionsPopup();
+		return new pr2.mobile.MobileOptionsPopup(initialPage);
 		#elseif pr2_ui_preview
-		return isMobile ? new pr2.mobile.MobileOptionsPopup() : new pr2.lobby.dialogs.OptionsPopup();
+		return isMobile ? new pr2.mobile.MobileOptionsPopup(initialPage) : new pr2.lobby.dialogs.OptionsPopup();
 		#else
 		return new pr2.lobby.dialogs.OptionsPopup();
 		#end
@@ -234,6 +245,48 @@ class ScreenFactory {
 		return isMobile ? new pr2.mobile.MobileRacerPage() : new pr2.lobby.tabs.AccountTab();
 		#else
 		return new pr2.lobby.tabs.AccountTab();
+		#end
+	}
+
+	public static function editor(?variables:Map<String, String>, isMod:Bool = false, reportsMode:Bool = false, ?draftSignature:String):Page {
+		#if pr2_mobile_ui
+		return new pr2.mobile.MobileLevelEditorPage(variables, isMod, reportsMode, draftSignature);
+		#elseif pr2_ui_preview
+		return isMobile ? new pr2.mobile.MobileLevelEditorPage(variables, isMod, reportsMode, draftSignature)
+			: new pr2.levelEditor.LevelEditor(variables, isMod, reportsMode);
+		#else
+		return new pr2.levelEditor.LevelEditor(variables, isMod, reportsMode);
+		#end
+	}
+
+	public static function testCourse(variables:Map<String, String>, isMod:Bool = false, reportsMode:Bool = false, ?draftSignature:String):Page {
+		#if pr2_mobile_ui
+		return new pr2.mobile.MobileTestCoursePage(variables, isMod, reportsMode, draftSignature);
+		#elseif pr2_ui_preview
+		return isMobile ? new pr2.mobile.MobileTestCoursePage(variables, isMod, reportsMode, draftSignature)
+			: new pr2.levelEditor.TestCoursePage(variables, isMod, reportsMode);
+		#else
+		return new pr2.levelEditor.TestCoursePage(variables, isMod, reportsMode);
+		#end
+	}
+
+	public static function editorConnection():pr2.lobby.dialogs.Popup {
+		#if pr2_mobile_ui
+		return new pr2.levelEditor.LevelEditorConnectingPopup(true);
+		#elseif pr2_ui_preview
+		return new pr2.levelEditor.LevelEditorConnectingPopup(isMobile);
+		#else
+		return new pr2.levelEditor.LevelEditorConnectingPopup();
+		#end
+	}
+
+	public static function advancedColor(initialColor:Int):pr2.lobby.account.ColorPickerSurface {
+		#if pr2_mobile_ui
+		return new pr2.mobile.MobileAdvancedColorPopup(initialColor);
+		#elseif pr2_ui_preview
+		return isMobile ? new pr2.mobile.MobileAdvancedColorPopup(initialColor) : new pr2.lobby.account.ColorPickerPopup(initialColor);
+		#else
+		return new pr2.lobby.account.ColorPickerPopup(initialColor);
 		#end
 	}
 

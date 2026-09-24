@@ -5,7 +5,6 @@ import pr2.gameplay.CatCaptcha;
 import pr2.lobby.LobbySession;
 import pr2.lobby.SecureData;
 import pr2.lobby.account.AccountState;
-import pr2.lobby.dialogs.MessagePopup;
 import pr2.lobby.level.LevelLaunch;
 import pr2.lobby.messages.UnreadNotif;
 
@@ -144,7 +143,7 @@ class CommandHandler {
 	}
 
 	private function message(args:Array<String>):Void {
-		new MessagePopup(args.length > 0 ? args[0] : "");
+		pr2.app.ScreenFactory.message(args.length > 0 ? args[0] : "");
 	}
 
 	private function setRank(args:Array<String>):Void {

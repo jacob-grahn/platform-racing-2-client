@@ -60,7 +60,9 @@ class MobileLoginPage extends Page {
 		button("LOG IN", "loginButton", 500, 88, 300, 64, flow.openLoginDialog, 0xD1ED62, 26);
 		button("Play as Guest", "guestButton", 500, 166, 300, 56, flow.openGuestDialog);
 		button("Create Account", "createAccountButton", 500, 236, 300, 56, function():Void flow.openCreateAccountDialog());
-		button("Instructions", "instructionsButton", 500, 328, 174, 44, flow.openInstructions);
+		button("Instructions", "instructionsButton", 500, 328, 174, 44, function():Void {
+			if (pageHolder != null) pageHolder.changePage(ScreenFactory.instructions(siteMode));
+		});
 		button("Credits", "creditsButton", 686, 328, 114, 44, flow.openCreditsDialog);
 		sound = button(soundLabel(), "soundButton", 668, 20, 132, 44, function():Void {
 			AudioMute.setMuted(!AudioMute.muted);

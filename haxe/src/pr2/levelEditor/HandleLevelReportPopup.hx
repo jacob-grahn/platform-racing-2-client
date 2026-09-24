@@ -154,22 +154,11 @@ class HandleLevelReportPopup extends Popup {
 	}
 
 	private function banFields():Map<String, String> {
-		return [
-			"level_id" => Std.string(levelId()),
-			"banned_name" => field("creator"),
-			"duration" => Std.string(selectedDataInt(durationCombo(), 0)),
-			"reason" => "Inappropriate Level -- " + reportReason(),
-			"scope" => "social",
-			"record" => "Level ID: " + levelId() + "\nTitle: " + ChatText.escapeString(field("title")) + "\nNote: "
-				+ ChatText.escapeString(field("note")) + "\nVersion: " + version()
-		];
+		return EditorReportService.banFields(level, reportReason(), selectedDataInt(durationCombo(), 0));
 	}
 
 	private function archiveFields():Map<String, String> {
-		return [
-			"level_id" => Std.string(levelId()),
-			"version" => Std.string(version())
-		];
+		return EditorReportService.archiveFields(level);
 	}
 
 	private function reportReason():String {

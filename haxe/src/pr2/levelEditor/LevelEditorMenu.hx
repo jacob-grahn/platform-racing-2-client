@@ -221,7 +221,7 @@ class LevelEditorMenu extends Sprite {
 
 	private function clickTest():Void {
 		if (!editor.isDrawing() && editor.pageHolder != null) {
-			editor.pageHolder.changePage(new TestCoursePage(editor.getLevelVars(), editor.canViewLevelReports(), editor.reportsMode));
+			editor.pageHolder.changePage(pr2.app.ScreenFactory.testCourse(editor.getLevelVars(), editor.canViewLevelReports(), editor.reportsMode));
 		}
 	}
 
@@ -239,7 +239,7 @@ class LevelEditorMenu extends Sprite {
 	}
 
 	public function exitEditor():Void {
-		new LevelEditorConnectingPopup();
+		pr2.app.ScreenFactory.editorConnection();
 	}
 
 	private function chooseZoom(_):Void {

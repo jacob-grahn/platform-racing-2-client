@@ -137,7 +137,7 @@ class ColorPickerTest {
 		picker.direction = ColorPicker.RIGHT;
 		var swatchWidth = picker.width;
 		@:privateAccess picker.openPopup();
-		var popup:ColorPickerPopup = @:privateAccess picker.popup;
+		var popup:ColorPickerPopup = cast @:privateAccess picker.popup;
 		assertEquals(22, @:privateAccess popup.colorChoices.length, "popup uses 22 palette columns");
 		assertEquals(12, @:privateAccess popup.colorChoices[0].length, "popup uses 12 palette rows");
 		assertEquals(15.0, @:privateAccess popup.palette.x, "authored palette x");
@@ -148,7 +148,7 @@ class ColorPickerTest {
 		picker.direction = ColorPicker.LEFT;
 		picker.x = 400;
 		@:privateAccess picker.openPopup();
-		popup = @:privateAccess picker.popup;
+		popup = cast @:privateAccess picker.popup;
 		assertEquals(Math.round(picker.x - popup.width - 5), popup.x, "left direction places popup to the left");
 		picker.remove();
 	}

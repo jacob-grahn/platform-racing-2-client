@@ -61,6 +61,10 @@ class MenuMusic extends Sprite {
 		var enableGaplessLoop = function():Void {
 			howl.off("end", backend.howl_onEnd, backend.id);
 			howl.loop(true, backend.id);
+			// A volume change queued before decoding finishes can make this
+			// Howler version recurse through its load queue on the first gesture.
+			// Apply the latest fade level only after this sound starts playing.
+			applyVolume(volume);
 		};
 		// Assets.getSound(...).play() can return while Howler is still decoding
 		// the WAV. Its load event precedes initialization of the queued sound's
@@ -125,7 +129,17 @@ class MenuMusic extends Sprite {
 
 	private function applyVolume(value:Float):Void {
 		volume = value;
-		if (channel1 != null) channel1.soundTransform = new SoundTransform(volume * percentage1);
-		if (channel2 != null) channel2.soundTransform = new SoundTransform(volume * percentage2);
+		if (channel1 != null && readyForVolume(channel1)) channel1.soundTransform = new SoundTransform(volume * percentage1);
+		if (channel2 != null && readyForVolume(channel2)) channel2.soundTransform = new SoundTransform(volume * percentage2);
+	}
+
+	private static function readyForVolume(channel:SoundChannel):Bool {
+		#if (js && html5)
+		var source = channel.__audioSource;
+		return source != null && source.buffer != null && source.buffer.__srcHowl != null
+			&& source.__backend != null && source.buffer.__srcHowl.playing(source.__backend.id);
+		#else
+		return true;
+		#end
 	}
 }

@@ -61,7 +61,6 @@ class MobileLevelInfoPopup extends MobilePanelPopup {
 		if(confirmModeration!="") { renderModerationConfirm(); return; }
 		addText(data.title==""?"Untitled level":data.title,26,true);
 		addText("By "+data.userName+(data.live?"  •  Live":"")+(data.hasPass?"":"  •  No pass required"),17);
-		view.button("View racer",cw-166,12,150,function(){startFadeOut();pr2.app.ScreenFactory.profile(data.userName);});
 		addText("Mode: "+data.gameMode+"     Updated: "+LevelInfoData.shortDate(data.time));
 		addText("Rating: "+Std.string(data.rating)+" / 5     Plays: "+data.plays+"     Version: "+data.version);
 		var timeLimit=data.maxTime==0||(data.maxTime==999&&data.time<1358640000)?"Infinite":LevelInfoData.formatTime(data.maxTime);
@@ -72,7 +71,10 @@ class MobileLevelInfoPopup extends MobilePanelPopup {
 		if(data.note!="") {addText("Author's note",20,true);addText(data.note);}
 		if(notice!="")addText(notice,17,true);
 		pane.x=10;pane.y=10;pane.setSize(cw-20,ch-82,contentHeight+12);
-		var buttonY=ch-60;var gap=8;var buttons:Array<{label:String,action:Void->Void,primary:Bool}>=[{label:"Play",action:play,primary:true}];
+		var buttonY=ch-60;var gap=8;var buttons:Array<{label:String,action:Void->Void,primary:Bool}>=[
+			{label:"Play",action:play,primary:true},
+			{label:"View racer",action:function(){startFadeOut();pr2.app.ScreenFactory.profile(data.userName);},primary:false}
+		];
 		if(LobbySession.group>=1)buttons.push({label:"Share",action:share,primary:false});
 		if(LobbySession.group==1)buttons.push({label:"Report",action:function(){reporting=true;render();},primary:false});
 		if(LobbySession.group>=2)buttons.push({label:"Moderate",action:function(){confirmModeration="choose";render();},primary:false});

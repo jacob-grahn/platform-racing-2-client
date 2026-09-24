@@ -44,6 +44,7 @@ class MobileChatPage extends Page {
 		transcript.multiline = true;
 		transcript.wordWrap = true;
 		transcript.selectable = true;
+		nameMaker.listenForLink(transcript);
 		addChild(transcript);
 
 		input = inputField(18);

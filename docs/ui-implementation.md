@@ -235,9 +235,9 @@ submission, failed-send draft retention, confirmation/cancellation, deletion ref
 malformed responses, teardown, and compact touch targets. Browser checks at 844×390
 and 667×375 cover menu routing, the unauthenticated error state, scrolling, populated
 inbox/reader, reply prefill, and failed-send feedback. Populated browser data and POST
-responses used an isolated localhost fixture with no upstream writes. Authenticated
-live inbox/send/report/delete and physical-phone keyboard/touch validation remain
-outstanding; these checks do not establish end-to-end member parity.
+responses used an isolated localhost fixture with no upstream writes. A later
+authenticated pass loaded the live inbox and sent a self-addressed test message.
+Live report/delete and physical-phone keyboard/touch validation remain outstanding.
 
 ## Player profiles and social actions
 
@@ -346,33 +346,81 @@ These are configuration boundaries, not a claim that the mobile release is ready
   mobile. The Vault of Magics is slated for removal.
   Chat retains its earlier mobile presentation. Detailed level information, guild
   management, part details, staff controls, and prize/Lux notices also have mobile
-  presentations. The menu's Level Editor opens the real editor directly;
-  the mockup's proposed My Levels destination has not been added.
+  presentations. The menu's Level Editor opens a mobile landscape editor with
+  a canvas, palettes, rules, save form, My Levels, and an offline test run.
 - Guild details and the roster have a mobile panel. Staff tools have mobile layouts
   for warnings, priors, kicks, account/IP/game/social bans, and moderator roles,
   using shared request fields and socket commands.
-- Authenticated live Messages/social/guild actions and physical-phone keyboard
-  behavior remain unverified.
+- Authenticated live inbox and self-message sending passed. Social and guild
+  mutations, message report/delete, and physical-phone keyboard behavior remain
+  unverified.
 - My Racer's detailed part information uses a mobile card with the shared character
   preview, acquisition links, ownership status, epic status, and equip action. Guild
   detail popups are mobile.
-  Its optional advanced color picker preserves the original HSV/eyedropper workflow;
-  RGB, hex, and palette selection have mobile controls.
-- The Level Editor and other remaining secondary screens retain their original
-  presentations. Temporary event announcements reuse original art at the viewport
-  center. Physical-device multi-touch, thumb reach, software keyboard behavior, and
-  safe areas remain to be validated.
+  Its optional advanced color picker has landscape HSV, hex, preview, and
+  eyedropper controls; RGB and palette selection remain in the main editor.
+- The mobile Level Editor shares editing, serialization, and request fields with
+  classic. Moderator report listing, course inspection, archive, and
+  ban/unpublish use landscape screens with shared request fields. Temporary event announcements reuse original art at the
+  viewport center. Physical-device multi-touch, thumb reach, software keyboard
+  behavior, and safe areas remain to be validated.
 - The mobile title fits a landscape canvas within the available viewport. Browser
   portrait mode shows a rotation hint; browser orientation is not forcibly locked.
   Native landscape configuration still needs device validation and safe-area work.
-- Instructions retain the existing browser handoff; no native instructions
-  destination has been implemented.
+- Mobile Instructions is an in-client landscape guide with a link to the original
+  hosted guide on HTML5. Classic keeps its existing browser handoff.
 - Native login socket probing remains unsupported; the working transport targets
   HTML5. Mobile software-keyboard behavior and safe areas need physical-device validation.
 
 ## Focused verification
 
-The September 22 results pass passed `./test.sh --gameplay --ui` (43 suites),
+On September 23, mobile Instructions and advanced HSV/eyedropper were checked in
+the browser at 844×390, with Instructions also checked at 667×375. The editor
+eyedropper sampled the visible canvas color without placing a block. Classic,
+mobile, and preview HTML5 builds and all three `test/ui-config.hxml` selections
+passed. `./test.sh --ui` and `./test.sh --lobby` passed. The editor tests passed
+their assertions, but `EditorSettingsTest.testAuthoredStampDimensions` took about
+280 ms and exceeded the suite's existing 250 ms per-test timing limit.
+
+A five-scenario live guest browser pass on September 23 covered title/auth form
+validation and information pages; level browsing/search, race entry, touch HUD,
+chat/music, results and rating cancellation; My Racer parts, colors, advanced
+eyedropper, stats and local loadouts; player/guild profiles, compose validation
+and lobby chat; and editor blocks, undo/redo, art, rules, offline test, and
+unsaved-exit confirmation. It found and fixed clipped part-acquisition text at
+844×390 and raw server HTML in the mobile welcome dialog. The part card was
+rechecked at 844×390 and 667×375; a formatted notice fixture was rechecked in
+the browser. The pass also fixed the obstructed level-detail creator link and
+missing lobby-chat link handler, then verified both against live profiles.
+Synthetic browser multi-touch moved and jumped simultaneously; joystick-up by
+itself left the grounded racer stationary. Mobile/preview/classic factory tests, the mobile HTML5 build, and
+the focused UI and lobby suites passed. A combined UI+lobby run passed its
+assertions but exceeded the existing 250 ms timing gate in
+`AccountTabTest.testHatPartPreviewAnimations` (258 ms). Member-only inbox,
+account forms, and persistent level saves were subsequently checked with the
+E2E test account. Guild mutations and staff actions remain unverified; actual
+multi-touch, software keyboard, and safe areas still need a physical phone.
+The development member preview displayed the Messages request-error state,
+account credential and guild-creation forms, and the editor save/publish form;
+blank-title validation stayed local. It does not authenticate to the live
+service or validate member mutations.
+
+The authenticated mobile pass signed in to the live E2E account. Messages
+loaded, a formatted welcome message opened, reply composition prefilled, and a
+self-addressed QA message was sent and appeared after inbox refresh. The
+password and email forms opened without submitting account changes. The editor
+saved an unpublished `Mobile UI QA draft Sep 23` course, listed it under My
+Levels, and reopened it. A top guild's detail and roster loaded; the join
+confirmation was canceled without changing membership. The test account has no
+guild or staff role, so create/edit/transfer and moderation requests were not
+submitted. The menu's Account entry now opens the account settings tab. A
+first-gesture Howler volume queue overflow was observed with sound enabled;
+menu volume updates now wait until each layer starts playing. The fix passed
+the audio suite and mobile HTML5 build, but browser retesting was interrupted
+by an automatic UI action review that misidentified a read-only guild profile
+click as another editor save.
+
+The September 22 results pass ran `./test.sh --gameplay --ui` (43 suites),
 `haxe test/mobile-results.hxml`, and all three `test/ui-config.hxml`
 configurations. The mobile results tests exercise buffered/late awards and XP,
 rating confirmation/cancellation/error/retry, duplicate request suppression,

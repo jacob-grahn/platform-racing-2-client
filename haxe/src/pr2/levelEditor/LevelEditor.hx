@@ -52,6 +52,11 @@ class LevelEditor extends Page {
 	public final isMod:Bool;
 	public var reportsMode(default, null):Bool;
 	public var overlayLayer(default, null):Null<Sprite>;
+	/** Mobile chrome and its stage-space canvas bounds are optional; classic keeps both null. */
+	public var mobileChrome:Null<DisplayObject>;
+	public var mobileCanvasBounds:Null<openfl.geom.Rectangle>;
+	public var mobileBlockOptions:Null<EditorBlockObject->Void>;
+	public var mobileGestureActive:Bool = false;
 	public var menu(default, null):Null<LevelEditorMenu>;
 	public var selectedToolSidebar(default, null):String = "";
 	public var selectedToolId(default, null):String = "";
@@ -564,7 +569,9 @@ class LevelEditor extends Page {
 		}
 	}
 
-	public function openBlockOptions(block:EditorBlockObject):Void popupController.openBlockOptions(block);
+	public function openBlockOptions(block:EditorBlockObject):Void {
+		if (mobileBlockOptions != null) mobileBlockOptions(block); else popupController.openBlockOptions(block);
+	}
 	public function closeBlockOptionsPopup():Void popupController.closeBlockOptionsPopup();
 	public function blockOptionsPopupRemoved(popup:EditorBlockOptionsPopup):Void popupController.blockOptionsPopupRemoved(popup);
 	public function openItemSettingsMenu(target:DisplayObject):Void popupController.openItemSettingsMenu(target);
@@ -610,7 +617,10 @@ class LevelEditor extends Page {
 	}
 
 	public function isPointOverMenu(stageX:Float, stageY:Float):Bool {
-		return (menu != null && displayShapeHitTest(menu, stageX, stageY))
+		return mobileGestureActive
+			|| (mobileCanvasBounds != null && !mobileCanvasBounds.contains(stageX, stageY))
+			|| (mobileChrome != null && displayShapeHitTest(mobileChrome, stageX, stageY))
+			|| (menu != null && displayShapeHitTest(menu, stageX, stageY))
 			|| (activeBrushSizeMenu != null && displayBoundsHitTest(activeBrushSizeMenu, stageX, stageY));
 	}
 
@@ -1366,7 +1376,7 @@ class LevelEditor extends Page {
 		}
 		var current:Null<DisplayObject> = target;
 		while (current != null) {
-			if (current == menu || current == activeBrushSizeMenu) {
+			if (current == menu || current == mobileChrome || current == activeBrushSizeMenu) {
 				return false;
 			}
 			if (current == activeDrawLayer || current == activeObjectLayer || current == blockGrid || current == this) {
@@ -1380,7 +1390,7 @@ class LevelEditor extends Page {
 	private function isTargetWithinEditorMenu(target:DisplayObject):Bool {
 		var current:Null<DisplayObject> = target;
 		while (current != null) {
-			if (current == menu || current == activeBrushSizeMenu) {
+			if (current == menu || current == mobileChrome || current == activeBrushSizeMenu) {
 				return true;
 			}
 			current = current.parent;

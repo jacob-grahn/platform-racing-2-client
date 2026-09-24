@@ -2,7 +2,10 @@ package pr2.levelEditor;
 
 import openfl.display.Bitmap;
 import openfl.display.Sprite;
+import openfl.display.Stage;
+import openfl.events.Event;
 import openfl.events.MouseEvent;
+import openfl.events.TouchEvent;
 import openfl.geom.Point;
 import openfl.text.TextField;
 import openfl.text.TextFieldType;
@@ -36,6 +39,11 @@ class EditorBlockObject extends Sprite {
 	private var dragStartX:Float = 0;
 	private var dragStartY:Float = 0;
 	private var teleportColor:Int = EditorBlockOptions.TELEPORT_DEFAULT_COLOR;
+	private var holdTimer:Null<haxe.Timer>;
+	private var holdTouchId:Null<Int>;
+	private var holdStage:Null<Stage>;
+	private var holdX:Float = 0;
+	private var holdY:Float = 0;
 
 	public function new(editor:LevelEditor, code:Int, type:Null<BlockType>, x:Int, y:Int, options:String = "") {
 		super();
@@ -54,6 +62,7 @@ class EditorBlockObject extends Sprite {
 		refreshTeleportBackground();
 		addChild(display);
 		addEventListener(MouseEvent.MOUSE_DOWN, blockPressed);
+		addEventListener(TouchEvent.TOUCH_BEGIN, blockTouchBegin);
 	}
 
 	public function hasOptions():Bool {
@@ -116,6 +125,8 @@ class EditorBlockObject extends Sprite {
 
 	public function remove():Void {
 		removeEventListener(MouseEvent.MOUSE_DOWN, blockPressed);
+		removeEventListener(TouchEvent.TOUCH_BEGIN, blockTouchBegin);
+		cancelHold();
 		removeStageDragListeners();
 		hideDeleteButton();
 		hideOptionsButton();
@@ -219,6 +230,47 @@ class EditorBlockObject extends Sprite {
 			stage.focus = stage;
 		}
 		event.stopImmediatePropagation();
+	}
+
+	private function blockTouchBegin(event:TouchEvent):Void {
+		if (editor.mobileBlockOptions == null || !hasOptions() || stage == null) return;
+		cancelHold();
+		holdTouchId = event.touchPointID;
+		holdStage = stage;
+		holdX = event.stageX; holdY = event.stageY;
+		holdStage.addEventListener(TouchEvent.TOUCH_BEGIN, otherTouchBegin);
+		holdStage.addEventListener(TouchEvent.TOUCH_MOVE, blockTouchMove);
+		holdStage.addEventListener(TouchEvent.TOUCH_END, blockTouchEnd);
+		holdStage.addEventListener(Event.DEACTIVATE, cancelHold);
+		holdTimer = haxe.Timer.delay(function() {
+			if (holdTouchId == null || editor.mobileBlockOptions == null) return;
+			cancelHold();
+			if (dragging) {
+				removeStageDragListeners();
+				dragging = false; x = dragStartX; y = dragStartY; alpha = 1;
+			}
+			editor.openBlockOptions(this);
+		}, 550);
+	}
+	private function otherTouchBegin(event:TouchEvent):Void {
+		if (holdTouchId != null && event.touchPointID != holdTouchId) cancelHold();
+	}
+	private function blockTouchMove(event:TouchEvent):Void {
+		if (holdTouchId == event.touchPointID && (Math.abs(event.stageX - holdX) > 10 || Math.abs(event.stageY - holdY) > 10)) cancelHold();
+	}
+	private function blockTouchEnd(event:TouchEvent):Void {
+		if (holdTouchId == event.touchPointID) cancelHold();
+	}
+	private function cancelHold(?_:Event):Void {
+		if (holdTimer != null) { holdTimer.stop(); holdTimer = null; }
+		holdTouchId = null;
+		if (holdStage != null) {
+			holdStage.removeEventListener(TouchEvent.TOUCH_BEGIN, otherTouchBegin);
+			holdStage.removeEventListener(TouchEvent.TOUCH_MOVE, blockTouchMove);
+			holdStage.removeEventListener(TouchEvent.TOUCH_END, blockTouchEnd);
+			holdStage.removeEventListener(Event.DEACTIVATE, cancelHold);
+			holdStage = null;
+		}
 	}
 
 	private function showHighlight():Void {

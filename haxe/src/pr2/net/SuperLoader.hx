@@ -13,7 +13,6 @@ import openfl.net.URLRequest;
 import openfl.net.URLVariables;
 import pr2.Constants;
 import pr2.lobby.LobbySession;
-import pr2.lobby.dialogs.MessagePopup;
 
 typedef SuperLoaderParsedResult = {
 	final success:Bool;
@@ -284,7 +283,7 @@ class SuperLoader extends EventDispatcher {
 	}
 
 	private static function defaultShowMessage(message:String):Void {
-		new MessagePopup(message);
+		pr2.app.ScreenFactory.message(message);
 	}
 
 	private static function defaultTransportFactory():Dynamic {

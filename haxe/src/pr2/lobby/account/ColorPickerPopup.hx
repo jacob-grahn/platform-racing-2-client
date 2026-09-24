@@ -24,7 +24,7 @@ import pr2.ui.CustomCursor;
 /**
 	HSV colour popup ported from `com.jiggmin.ColorPicker.ColorPickerPopup`.
 **/
-class ColorPickerPopup extends Sprite {
+class ColorPickerPopup extends ColorPickerSurface {
 	private static inline var PALETTE_CELL:Int = 10;
 	private static inline var SPECTRUM_SIZE:Int = 60;
 	private static inline var HUE_WIDTH:Int = 15;
@@ -116,7 +116,7 @@ class ColorPickerPopup extends Sprite {
 		palette.addEventListener(MouseEvent.MOUSE_OUT, hoverOutPalette);
 	}
 
-	public function init():Void {
+	override public function init():Void {
 		eyedropper = new CursorEyedropper();
 		eyedropper.addExclusion(this);
 		eyedropper.addEventListener(Event.CHANGE, onEyedropperMove);
@@ -145,7 +145,7 @@ class ColorPickerPopup extends Sprite {
 		}
 	}
 
-	public function setColor(c:Int):Void {
+	override public function setColor(c:Int):Void {
 		c &= 0xFFFFFF;
 		if (color != c) {
 			color = c;
@@ -161,17 +161,17 @@ class ColorPickerPopup extends Sprite {
 		}
 	}
 
-	public function getColor():Int {
+	override public function getColor():Int {
 		return previewColor != PREVIEW_NONE ? previewColor : color;
 	}
 
-	public function addExclusion(d:DisplayObject):Void {
+	override public function addExclusion(d:DisplayObject):Void {
 		if (eyedropper != null) {
 			eyedropper.addExclusion(d);
 		}
 	}
 
-	public function remove():Void {
+	override public function remove():Void {
 		if (removed) {
 			return;
 		}

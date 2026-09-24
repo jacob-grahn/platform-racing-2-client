@@ -57,6 +57,29 @@ The top HUD retains the held item/ammo, time remaining, minimap, Chat and Menu. 
 
 This is an illustrative course assembled from original `bg1.svg`, `basic1.png`, and classic racer artwork, not a captured or playable level. The minimap and Sword × 1 / 3:51 values are sample data. Jump, item use and joystick gestures are static. Implementation must preserve simultaneous movement/jump/item input, down/crouch/charge behavior, relevant vertical movement, touch cancellation, safe areas, and consistent behavior when swapping sides. Thumb reach, opacity, accidental swap taps, and smaller landscape devices still require device testing. The original HUD reference is `test/baselines/flash/07_gameplay_start.jpg`, with behavior checked in `flash/gameplay/{ItemDisplay,StatsDisplay,Hearts}.as` and the existing functionality inventory.
 
+## Level editor landscape plan — September 23, 2026
+
+The [mobile editor exploration in Figma](https://www.figma.com/design/vQnyWfJ7JbHs33WWULEdul?node-id=52-162) uses the same 844 × 390 landscape canvas and navy, sky-blue, lime, and white game palette. The editor is now implemented from these designs. It is canvas-first: Blocks, Art, and Background change the tool palette while the level stays in place. Rules, level management, and publishing use separate views because they need more room.
+
+| State | Figma node | Functionality planned |
+| --- | --- | --- |
+| [My Levels](https://www.figma.com/design/vQnyWfJ7JbHs33WWULEdul?node-id=52-127) | `52:127` | List saved and unpublished levels, select/edit, create, and confirm deletion. |
+| [Blocks workspace](https://www.figma.com/design/vQnyWfJ7JbHs33WWULEdul?node-id=52-162) | `52:162` | Place/delete blocks, open the full block catalog, pan/zoom, undo/redo, test, save, and enter rules. |
+| [Art workspace](https://www.figma.com/design/vQnyWfJ7JbHs33WWULEdul?node-id=52-265) | `52:265` | Draw/erase, stamp/text, choose brush size and color, and switch art layers. |
+| [Block options](https://www.figma.com/design/vQnyWfJ7JbHs33WWULEdul?node-id=53-127) | `53:127` | Contextual options for a selected item block, including allowed items and removal. Other special block types will use the same sheet pattern with their own fields. |
+| [Background workspace](https://www.figma.com/design/vQnyWfJ7JbHs33WWULEdul?node-id=53-222) | `53:222` | Pick an original background or custom color while previewing the course. |
+| [Level rules](https://www.figma.com/design/vQnyWfJ7JbHs33WWULEdul?node-id=53-329) | `53:329` | Edit mode, music, minimum rank, gravity, time, Cowboy chance, allowed items/hats, and unpublished-level password. |
+| [Allowed gear](https://www.figma.com/design/vQnyWfJ7JbHs33WWULEdul?node-id=53-373) | `53:373` | Multi-select items and hats; the depicted item list is one tab of this view. |
+| [Save and publish](https://www.figma.com/design/vQnyWfJ7JbHs33WWULEdul?node-id=53-407) | `53:407` | Title (50 characters), description (255), publish, and optional Newest submission. Upload progress/errors keep the draft available. |
+| [Test run](https://www.figma.com/design/vQnyWfJ7JbHs33WWULEdul?node-id=53-432) | `53:432` | Play/restart a draft without rewards and return to the same unsaved editor state. |
+| [Art layer chooser](https://www.figma.com/design/vQnyWfJ7JbHs33WWULEdul?node-id=54-127) | `54:127` | Select Art 00, 0, 1, 2, or 3 without leaving the canvas. |
+| [Unsaved changes](https://www.figma.com/design/vQnyWfJ7JbHs33WWULEdul?node-id=54-217) | `54:217` | Keep editing, save first, or discard when a navigation action would lose work. |
+| [Touch interaction plan](https://www.figma.com/design/vQnyWfJ7JbHs33WWULEdul?node-id=54-296) | `54:296` | Canvas gestures, camera navigation, per-layer history, upload failure, and safe exit behavior. |
+| [Block catalog](https://www.figma.com/design/vQnyWfJ7JbHs33WWULEdul?node-id=56-135) | `56:135` | Browse the complete set of block types by category and return to placement with a chosen block. |
+| [Game mode choice](https://www.figma.com/design/vQnyWfJ7JbHs33WWULEdul?node-id=56-189) | `56:189` | Select one of the six original game modes as an example of a detailed rule view. |
+
+One finger uses the active placement/paint tool, Pan mode moves the camera with one finger, and two fingers pan/pinch zoom. Existing blocks retain their shared block-options action. This interaction model still needs device testing, especially near blocks and when a second finger arrives mid-stroke. The art-layer names and editor setting fields follow `LevelEditorMenu`, `EditorSideBarCatalog`, and `SaveLevelPopup`; the mockups use sample level data. Moderator report mode, smaller phone layouts, keyboard behavior, and actual touch cancellation still need design and implementation checks.
+
 ## Earlier portrait exploration
 
 Seven 390 × 844 concepts remain on the same canvas: Welcome (`3:2`), Play (`3:3`), Level details (`3:4`), Race entry (`3:5`), Character (`3:6`), Stats (`13:57`), and Loadouts (`13:58`). Selected browse/customization navigation is connected. These are historical explorations, not additional approved portrait requirements.

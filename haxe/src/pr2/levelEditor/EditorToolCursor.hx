@@ -1,6 +1,7 @@
 package pr2.levelEditor;
 
 import openfl.events.KeyboardEvent;
+import openfl.events.MouseEvent;
 import openfl.ui.Keyboard;
 import pr2.ui.CustomCursor;
 
@@ -18,6 +19,11 @@ class EditorToolCursor extends CustomCursor {
 		this.sidebar = sidebar;
 		this.toolId = toolId;
 		this.ignoresTemporaryDelete = ignoresTemporaryDelete;
+	}
+
+	override function mouseMoveHandler(e:MouseEvent):Void {
+		super.mouseMoveHandler(e);
+		if (manager.hasMobileCanvas()) visible = !manager.isOverEditorMenu(x, y);
 	}
 
 	override function keyDownHandler(e:KeyboardEvent):Void {

@@ -1,6 +1,5 @@
 package pr2.lobby.players;
 
-import pr2.lobby.dialogs.UploadingPopup;
 import pr2.lobby.players.SocialAction;
 import pr2.net.LobbySocket;
 import pr2.net.ServerConfig;
@@ -16,7 +15,7 @@ class SocialActions {
 	private function new() {}
 
 	public static function perform(action:SocialAction, targetId:Int, targetName:String):Void {
-		new UploadingPopup(ServerConfig.userListModifyUrl(), fields(action, targetId), "Updating...");
+		pr2.app.ScreenFactory.upload(ServerConfig.userListModifyUrl(), fields(action, targetId), "Updating...", function(_:Dynamic) {});
 		notifyServer(action, targetName);
 	}
 	public static function fields(action:SocialAction, targetId:Int):Map<String,String> {

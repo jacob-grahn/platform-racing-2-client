@@ -58,6 +58,10 @@ class MobileLobbyPage extends Page {
 		rotateHint = new LobbyView();
 		if (LobbySession.isMember()) CommandHandler.commandHandler.defineCommand("pmNotify", onPmNotify);
 		if (AppStage.stage != null) AppStage.stage.addEventListener(Event.RESIZE, layout);
+		#if js
+		var self = this;
+		untyped js.Browser.window.__pr2OpenLevelEditorForTests = function():Void self.actions.editor();
+		#end
 		openSection("play"); layout();
 	}
 	public static function layoutMetricsForTests(width:Float, height:Float, play:Bool):Dynamic {
@@ -141,7 +145,7 @@ class MobileLobbyPage extends Page {
 		item(1, 2, "Players", function() openSection("players"));
 		item(1, 3, "Guilds", function() openSection("guilds"));
 		item(2, 0, "Options", function() { ScreenFactory.options(); });
-		item(2, 1, "Account", function() openSection("account"));
+		item(2, 1, "Account", function() { ScreenFactory.options("account"); });
 		item(2, 2, "Credits", function() { ScreenFactory.credits(); });
 		item(2, 3, "Log out", function() actions.logout());
 		menuScroll.setSize(width, height + 6, columns == 1 ? 884 : 290);
@@ -204,6 +208,9 @@ class MobileLobbyPage extends Page {
 		#end
 	}
 	override public function remove():Void {
+		#if js
+		untyped js.Browser.window.__pr2OpenLevelEditorForTests = null;
+		#end
 		if (instance == this) instance = null;
 		actions.remove(); closeModal(); clearHosted();
 		if (content != null) content.remove(); content = null;

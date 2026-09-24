@@ -9,7 +9,6 @@ import openfl.events.MouseEvent;
 import openfl.filters.GlowFilter;
 import openfl.ui.Keyboard;
 import openfl.utils.Assets;
-import pr2.lobby.dialogs.ConfirmPopup;
 import pr2.ui.AuthoredScale9;
 import pr2.ui.controls.GameButton;
 import pr2.runtime.SvgAsset;
@@ -135,7 +134,7 @@ class QuitButton extends openfl.display.Sprite {
 			return;
 		}
 		if (isDonePlaying != null && !isDonePlaying()) {
-			new ConfirmPopup(doQuit, "Do you really want to quit the game?");
+			pr2.app.ScreenFactory.confirm("Do you really want to quit the game?", doQuit);
 		} else {
 			doQuit();
 		}

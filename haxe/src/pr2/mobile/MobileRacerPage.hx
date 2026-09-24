@@ -33,7 +33,7 @@ class MobileRacerPage extends Page {
 	private var secondColor = false;
 	private var draftColor = 0;
 	private var draftHex = "000000";
-	private var advanced:pr2.lobby.account.ColorPickerPopup;
+	private var advanced:pr2.lobby.account.ColorPickerSurface;
 	private var message = "";
 	private var w:Float = 756;
 	private var h:Float = 284;
@@ -246,13 +246,13 @@ class MobileRacerPage extends Page {
 	}
 	private function openAdvanced():Void {
 		if (advanced != null) return;
-		advanced = new pr2.lobby.account.ColorPickerPopup(draftColor);
+		advanced = ScreenFactory.advancedColor(draftColor);
 		advanced.addEventListener(Event.CLOSE, advancedClosed);
 		if (ownerStage != null) ownerStage.addChild(advanced); else addChild(advanced);
 		advanced.init(); placeAdvanced();
 	}
 	private function placeAdvanced():Void {
-		if (advanced == null || ownerStage == null) return;
+		if (advanced == null || ownerStage == null || advanced.fullViewport) return;
 		advanced.x = Math.max(0, (ownerStage.stageWidth - advanced.width) / 2);
 		advanced.y = Math.max(0, (ownerStage.stageHeight - advanced.height) / 2);
 	}

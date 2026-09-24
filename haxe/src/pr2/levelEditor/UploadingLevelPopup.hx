@@ -1,11 +1,9 @@
 package pr2.levelEditor;
 
-import haxe.crypto.Md5;
 import haxe.Timer;
 import openfl.net.URLRequest;
 import openfl.net.URLRequestMethod;
 import openfl.net.URLVariables;
-import pr2.lobby.LobbySession;
 import pr2.lobby.chat.ChatText;
 import pr2.lobby.dialogs.ConfirmPopup;
 import pr2.lobby.dialogs.MessagePopup;
@@ -106,22 +104,7 @@ class UploadingLevelPopup extends Popup {
 	}
 
 	public static function buildFields(editor:LevelEditor, overrideBan:Bool = false, overwriteExisting:Bool = false):Map<String, String> {
-		var fields = LevelEditor.copyVars(editor.getLevelVars());
-		var data = fields.get("data");
-		if (data == null) {
-			data = "";
-		}
-		var title = fields.get("title");
-		if (title == null) {
-			title = "";
-		}
-		fields.set("hash", Md5.encode(title + LobbySession.userName.toLowerCase() + data + ServerConfig.LEVEL_SALT));
-		fields.set("to_newest", editor.toNewest ? "1" : "0");
-		fields.set("override_banned", overrideBan ? "1" : "0");
-		fields.set("overwrite_existing", overwriteExisting ? "1" : "0");
-		fields.set("rand", Std.string(Std.random(10000000)));
-		fields.set("token", LobbySession.token);
-		return fields;
+		return EditorLevelService.saveFields(editor, overrideBan, overwriteExisting);
 	}
 
 	public static function defaultPost(url:String, fields:Map<String, String>, label:String, onResult:Dynamic->Void,

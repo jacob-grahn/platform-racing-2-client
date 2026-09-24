@@ -44,6 +44,9 @@ class MobileGameHud extends GameHud {
 	private var chatLinks:pr2.lobby.chat.HtmlNameMaker;
 	private var eventViews:Array<DisplayObject> = [];
 	private var oldTouchMode:MultitouchInputMode;
+	private var editorTestRestart:Null<Void->Void>;
+	private var editorTestStats:Null<Void->Void>;
+	private var editorTestHats:Null<Void->Void>;
 
 	public function new(quit:Void->Void, isDone:Void->Bool) {
 		super(); fullViewport = true; this.quit = quit; this.isDone = isDone;
@@ -51,6 +54,9 @@ class MobileGameHud extends GameHud {
 		addChild(view); addChild(overlay);
 		addEventListener(Event.ADDED_TO_STAGE, added);
 		addEventListener(Event.ENTER_FRAME, refresh);
+	}
+	public function configureEditorTest(restart:Void->Void, stats:Void->Void, hats:Void->Void):Void {
+		editorTestRestart = restart; editorTestStats = stats; editorTestHats = hats;
 	}
 	private function added(_:Event):Void {
 		ownerStage = stage;
@@ -71,8 +77,10 @@ class MobileGameHud extends GameHud {
 	override public function mount(value:Course):Void {
 		course = value;
 		course.itemDisplay.compact();
-		course.raceChat.visible = false;
-		course.raceChat.keyboardShortcutEnabled = false;
+		if (course.raceChat != null) {
+			course.raceChat.visible = false;
+			course.raceChat.keyboardShortcutEnabled = false;
+		}
 		course.timer.visible = false;
 		course.statsDisplay.visible = false;
 		course.musicSelection.visible = false;
@@ -117,7 +125,7 @@ class MobileGameHud extends GameHud {
 				if (d != null && d.parent != null) d.parent.removeChild(d);
 		}
 		view.clear();
-		view.button("Chat", w - inset - 192, 16, 88, function() openPanel("chat"), false, 48);
+		if (editorTestRestart == null) view.button("Chat", w - inset - 192, 16, 88, function() openPanel("chat"), false, 48);
 		view.button("Menu", w - inset - 92, 16, 92, function() openPanel("menu"), false, 48);
 		view.panel(inset, 16, 100, 48);
 		clock = view.label("--:--", inset + 12, 22, 88, 36, 26, true);
@@ -180,7 +188,7 @@ class MobileGameHud extends GameHud {
 		overlay.graphics.beginFill(0x0A1F33, .6); overlay.graphics.drawRect(0, 0, w, h); overlay.graphics.endFill();
 		var pw = Math.min(600, w - 32); var px = (w - pw) / 2;
 		overlay.panel(px, 12, pw, h - 28);
-		overlay.label(panelKind == "chat" ? "Race chat" : panelKind == "music" ? "Choose music" : "Race menu", px + 20, 24, pw - 140, 38, 28, true);
+		overlay.label(panelKind == "chat" ? "Race chat" : panelKind == "music" ? "Choose music" : editorTestRestart != null ? "Test menu" : "Race menu", px + 20, 24, pw - 140, 38, 28, true);
 		overlay.button("Back", px + pw - 100, 22, 80, function() openPanel(panelKind == "music" ? "menu" : ""));
 		if (panelKind == "music" && course != null) {
 			songList = new MobileScrollPane(); overlay.addChild(songList); songList.x = px + 20; songList.y = 78;
@@ -190,7 +198,15 @@ class MobileGameHud extends GameHud {
 				songList.content.button(song.label, 0, i * 54, pw - 44, function() { course.musicSelection.setSong(song.id); openPanel("menu"); }, song.id == course.musicSelection.selectedSongId(), 46);
 			}
 			songList.setSize(pw - 40, h - 110, songs.length * 54);
-		} else if (panelKind == "chat" && course != null) {
+		} else if (panelKind == "menu" && editorTestRestart != null) {
+			overlay.label("Test your draft before saving it.", px + 20, 75, pw - 40, 28, 15);
+			var cell = (pw - 56) / 2;
+			overlay.button("Back to editor", px + 20, 115, cell, function() { openPanel(""); quit(); }, true, 50);
+			overlay.button("Restart", px + 36 + cell, 115, cell, function() { openPanel(""); editorTestRestart(); }, false, 50);
+			overlay.button("Stats", px + 20, 179, cell, function() { openPanel(""); editorTestStats(); }, false, 50);
+			overlay.button("Hats", px + 36 + cell, 179, cell, function() { openPanel(""); editorTestHats(); }, false, 50);
+			overlay.button("Music", px + 20, 243, pw - 40, function() openPanel("music"), false, 50);
+		} else if (panelKind == "chat" && course != null && course.raceChat != null) {
 			transcript = overlay.label("", px + 20, 72, pw - 40, h - 166, 16);
 			transcript.mouseEnabled = true; transcript.selectable = true;
 			transcript.htmlText = course.raceChat.outputHtml(); lastChat = course.raceChat.outputHtml();
@@ -235,7 +251,9 @@ class MobileGameHud extends GameHud {
 		item.visible = hasItem; jump.visible = !done;
 		stick.visible = !done || (course.canSpectate && course.playerSpectating == null);
 		status.text = done ? course.playerSpectating == null ? "Race finished" : "Watching " + course.playerSpectating.getName() : !course.raceStarted ? "Get ready…" : "";
-		if (transcript != null && lastChat != course.raceChat.outputHtml()) { lastChat = course.raceChat.outputHtml(); transcript.htmlText = lastChat; transcript.scrollV = transcript.maxScrollV; }
+		if (transcript != null && course.raceChat != null && lastChat != course.raceChat.outputHtml()) {
+			lastChat = course.raceChat.outputHtml(); transcript.htmlText = lastChat; transcript.scrollV = transcript.maxScrollV;
+		}
 	}
 	override public function setDone():Void { done = true; cancel(null); panelKind = ""; drawPanel(); refresh(null); }
 	override public function setResultsOpen(value:Bool):Void { resultsOpen = value; cancel(null); drawPanel(); }

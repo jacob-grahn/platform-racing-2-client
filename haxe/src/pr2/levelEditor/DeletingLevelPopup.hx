@@ -1,6 +1,5 @@
 package pr2.levelEditor;
 
-import pr2.lobby.LobbySession;
 import pr2.lobby.dialogs.MessagePopup;
 import pr2.lobby.dialogs.UploadingPopup;
 import pr2.net.ServerConfig;
@@ -27,11 +26,7 @@ class DeletingLevelPopup {
 	}
 
 	private static function requestFields(levelId:Int):Map<String, String> {
-		var fields = new Map<String, String>();
-		fields.set("level_id", Std.string(levelId));
-		fields.set("rand", Std.string(Std.random(10000000)));
-		fields.set("token", LobbySession.token);
-		return fields;
+		return EditorLevelService.deleteFields(levelId);
 	}
 
 	public static function defaultPost(url:String, fields:Map<String, String>, label:String, onResult:Dynamic->Void,

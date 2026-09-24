@@ -30,7 +30,7 @@ class ColorPicker extends Sprite {
 
 	private var color:Int = 0x0000FF;
 	private var swatch:Sprite;
-	private var popup:Null<ColorPickerPopup>;
+	private var popup:Null<ColorPickerSurface>;
 
 	public function new() {
 		super();
@@ -78,14 +78,15 @@ class ColorPicker extends Sprite {
 
 	private function openPopup():Void {
 		var popupParent:DisplayObjectContainer = AppStage.stage != null ? AppStage.stage : this;
-		popup = new ColorPickerPopup(color);
+		popup = pr2.app.ScreenFactory.advancedColor(color);
 		popup.addEventListener(Event.CHANGE, onPopupChange);
 		popup.addEventListener(Event.CLOSE, closePopup);
 		var origin = localToGlobal(new Point(0, 0));
-		var px = direction == RIGHT ? origin.x + this.width + 5 : origin.x - popup.width - 5;
-		var py = origin.y;
-		popup.x = Math.round(px);
-		popup.y = Math.round(py);
+		if (!popup.fullViewport) {
+			var px = direction == RIGHT ? origin.x + this.width + 5 : origin.x - popup.width - 5;
+			popup.x = Math.round(px);
+			popup.y = Math.round(origin.y);
+		}
 		popupParent.addChild(popup);
 		popup.init();
 		popup.addExclusion(this);

@@ -27,6 +27,7 @@ class EditorToolCursorManager {
 		current = next;
 		CustomCursor.change(next);
 		applyBrushState();
+		refreshMobileVisibility();
 	}
 
 	public function setBrushSize(_:Float):Void {
@@ -64,6 +65,12 @@ class EditorToolCursorManager {
 
 	public function isOverEditorMenu(stageX:Float, stageY:Float):Bool {
 		return editor.isPointOverMenu(stageX, stageY);
+	}
+
+	public function hasMobileCanvas():Bool return editor.mobileCanvasBounds != null;
+
+	public function refreshMobileVisibility():Void {
+		if (hasMobileCanvas() && current != null) current.visible = !isOverEditorMenu(current.x, current.y);
 	}
 
 	public function objectCursorScaleX():Float {

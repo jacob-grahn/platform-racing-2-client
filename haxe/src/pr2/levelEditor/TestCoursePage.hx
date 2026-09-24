@@ -30,17 +30,19 @@ class TestCoursePage extends Page {
 	public final variables:Map<String, String>;
 	public final isMod:Bool;
 	public final reportsMode:Bool;
+	public final draftSignature:Null<String>;
 	public var course(default, null):Null<Course>;
 	public var art(default, null):Null<TestCourseView>;
 	public var statsSelect(default, null):Null<StatsSelect>;
 	public var hatPicker(default, null):Null<TestCourseHatPicker>;
 	private var bindings:Array<Binding> = [];
 
-	public function new(variables:Map<String, String>, mod:Bool = false, report:Bool = false) {
+	public function new(variables:Map<String, String>, mod:Bool = false, report:Bool = false, ?draftSignature:String) {
 		super();
 		this.variables = LevelEditor.copyVars(variables);
 		isMod = mod;
 		reportsMode = report;
+		this.draftSignature = draftSignature;
 	}
 
 	override public function initialize():Void {
@@ -190,13 +192,13 @@ class TestCoursePage extends Page {
 		}
 	}
 
-	private function clickBack():Void {
+	public function clickBack():Void {
 		if (pageHolder != null) {
-			pageHolder.changePage(new LevelEditor(variables, isMod, reportsMode));
+			pageHolder.changePage(pr2.app.ScreenFactory.editor(variables, isMod, reportsMode, draftSignature));
 		}
 	}
 
-	private function clickRestart():Void {
+	public function clickRestart():Void {
 		focusStage();
 		if (course == null) {
 			return;

@@ -8,7 +8,6 @@ import js.html.WebSocket;
 #end
 import pr2.lobby.LobbySession;
 import pr2.lobby.Memory;
-import pr2.lobby.dialogs.MessagePopup;
 import pr2.lobby.messages.UnreadNotif;
 import pr2.page.PageHolder;
 
@@ -226,9 +225,9 @@ class LobbySocket {
 		} else {
 			var rootHolder = PageHolder.getRootHolder();
 			if (rootHolder == null) {
-				new MessagePopup("Disconnected.");
+				pr2.app.ScreenFactory.message("Disconnected.");
 			} else if (rootHolder.getCurrentPage() == null || !rootHolder.getCurrentPage().isLoginScreen) {
-				new MessagePopup("Disconnected.");
+				pr2.app.ScreenFactory.message("Disconnected.");
 				rootHolder.changePage(pr2.app.ScreenFactory.login());
 			}
 		}
@@ -241,7 +240,7 @@ class LobbySocket {
 		if (onConnectionError != null) {
 			onConnectionError();
 		} else {
-			new MessagePopup("Could not connect. This could be because: \n A: My server is broken. \n B: The internet is broken. \n C: Evil aliens.");
+			pr2.app.ScreenFactory.message("Could not connect. This could be because: \n A: My server is broken. \n B: The internet is broken. \n C: Evil aliens.");
 		}
 	}
 

@@ -8,7 +8,6 @@ import openfl.geom.Rectangle;
 import pr2.level.Level.LevelArtLayer;
 import pr2.level.Level.LevelArtObject;
 import pr2.level.Level.LevelTextObject;
-import pr2.lobby.dialogs.MessagePopup;
 
 class EditorObjectLayer extends Sprite {
 	private static inline var OBJECT_LIMIT:Int = 50000;
@@ -36,7 +35,7 @@ class EditorObjectLayer extends Sprite {
 	public function addStamp(code:Int, stageX:Float, stageY:Float):Null<EditorPlacedObject> {
 		if (placedObjects.length + textObjects.length >= OBJECT_LIMIT) {
 			if (onObjectLimit != null) onObjectLimit();
-			new MessagePopup("Error: Object limit reached.");
+			pr2.app.ScreenFactory.message("Error: Object limit reached.");
 			return null;
 		}
 		var size = stampDisplaySize(code);

@@ -29,8 +29,9 @@
   of Magics is slated for removal; do not add a mobile store UI. Detailed level
   information now has a mobile screen sharing its parser and request fields. Prize
   and Lux announcements, My Racer part details, and guild authoring are also mobile.
-  Remaining authored destinations include the Level Editor and the advanced
-  HSV/eyedropper picker.
+  The Level Editor now has a mobile canvas, tool palettes, rules, level management,
+  save form, and offline test run. Remaining authored destinations include the
+  advanced HSV/eyedropper picker and moderator report-list presentation.
 - Player lists and the top-guild directory share roster/HTTP loading, parsing,
   duplicate suppression, and cancellation with classic. Profiles share socket/HTTP
   lookup, role/date rules, avatars, navigation, social requests, and guild action fields.
@@ -46,25 +47,29 @@
 - Messages shares paging/loading/cancellation, filtering/formatting, reply quoting,
   validation, and request fields with classic. Compose outside Messages now reuses
   the mobile editor (profiles/chat/guild management/level sharing). Authenticated
-  live inbox/send/report/delete validation remains outstanding; deterministic tests
-  and isolated browser fixtures cover these actions, not a real member account.
+  live inbox and self-addressed send passed with the E2E test account. Live
+  report/delete remain outstanding; deterministic tests and isolated browser
+  fixtures cover those actions.
 - Profile relationship changes and guild invite/kick requests have deterministic
   coverage but need live member/guild-owner validation. Live guest profile browsing
   verifies loading/navigation, not privileged mutations.
 - My Racer shares customization saves, rank-token commands, stat/epic rules, and
   loadout application/storage with classic. Part details use the mobile card and
-  shared character preview. The optional advanced HSV/eyedropper color picker retains
-  its original presentation. The main mobile color editor provides RGB controls,
+  shared character preview. The optional advanced HSV/eyedropper color picker has
+  a landscape mobile presentation. The main mobile color editor provides RGB controls,
   hex entry, and the shared palette.
 - The landscape gameplay HUD, independent touch controls, race results, and prize/Lux
   announcements are implemented through ScreenFactory. Results share awards, XP interpolation, and
   confirmed rating submission with classic; race menu/chat/music, held-item action,
-  and spectator controls use shared course behavior. The editor retains its original UI.
+  and spectator controls use shared course behavior. The mobile editor shares
+  editing and persistence behavior with classic; moderator report handling has
+  a landscape presentation. Physical-device gesture validation remains outstanding.
 - Multi-touch, cancellation, orientation changes, safe areas, and software keyboards
   still require physical-device validation; browser and deterministic checks are not
   a substitute for a phone test.
 - Browser landscape uses a fitted title canvas and portrait rotation hint; native
   orientation, safe areas, and real-device interaction still need validation.
-- Native instructions handoff is not implemented. See `docs/ui-implementation.md`
-  for the configuration commands and remaining presentation gaps.
+- Mobile Instructions has an in-client landscape guide and an HTML5 link to the
+  original hosted guide. See `docs/ui-implementation.md` for the configuration
+  commands and remaining presentation gaps.
 - Native login socket probing is unsupported; authentication transport targets HTML5.

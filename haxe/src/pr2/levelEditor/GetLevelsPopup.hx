@@ -1,15 +1,12 @@
 package pr2.levelEditor;
 
-import haxe.Json;
 import openfl.display.DisplayObjectContainer;
-import pr2.lobby.LobbySession;
 import pr2.lobby.chat.ChatText;
 import pr2.lobby.dialogs.ConfirmPopup;
 import pr2.lobby.dialogs.MessagePopup;
 import pr2.lobby.dialogs.Popup;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
-import pr2.net.FormPostClient;
 import pr2.net.ServerConfig;
 import pr2.ui.CustomScrollBar;
 import pr2.util.DisplayUtil;
@@ -46,7 +43,7 @@ class GetLevelsPopup extends Popup {
 		bind("load_bt", clickLoad);
 		bind("delete_bt", clickDelete);
 		updateButtons();
-		postFactory(ServerConfig.levelsGetUrl(), requestFields(), handleResponse, handleError);
+		postFactory(ServerConfig.levelsGetUrl(), EditorLevelService.listFields(), handleResponse, handleError);
 	}
 
 	public function selectListing(listing:Null<GetLevelsPopupItem>):Void {
@@ -159,24 +156,8 @@ class GetLevelsPopup extends Popup {
 		super.remove();
 	}
 
-	private static function requestFields():Map<String, String> {
-		var fields = new Map<String, String>();
-		fields.set("token", LobbySession.token);
-		return fields;
-	}
-
 	private static function defaultPost(url:String, fields:Map<String, String>, onResult:Dynamic->Void, onError:String->Void):Void {
-		FormPostClient.post(url, fields, function(body:String):Void {
-			if (body == null || body == "") {
-				onResult({levels: []});
-				return;
-			}
-			try {
-				onResult(Json.parse(body));
-			} catch (_:Dynamic) {
-				onError("The loaded data was not in the expected format.");
-			}
-		}, onError);
+		EditorLevelService.postList(url, fields, onResult, onError);
 	}
 
 	private static function defaultLoad(levelId:Int, version:Int):Void {

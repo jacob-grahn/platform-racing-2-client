@@ -8,7 +8,7 @@ import pr2.net.FormPostClient;
 /** Session transitions shared by the classic strip and the mobile game menu. */
 class LobbyActions {
 	public static var createLoginPage:Void->Page = function() return pr2.app.ScreenFactory.login();
-	public static var createLevelEditorPage:Bool->Page = function(isMod) return new pr2.levelEditor.LevelEditor(null, isMod);
+	public static var createLevelEditorPage:Bool->Page = function(isMod) return pr2.app.ScreenFactory.editor(null, isMod);
 	public static var logoutPostFactory:String->Map<String, String>->Void = function(url, fields) {
 		FormPostClient.post(url, fields, function(_) {}, function(_) {});
 	};

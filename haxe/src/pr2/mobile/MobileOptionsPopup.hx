@@ -21,8 +21,9 @@ class MobileOptionsPopup extends MobilePanelPopup {
 	private var awaitingControl:String = "";
 	private var cw:Float = 796;
 	private var ch:Float = 306;
-	public function new() {
-		super("OPTIONS"); view = new LobbyView(); pane = new MobileScrollPane(); content.addChild(view); content.addChild(pane);
+	public function new(initialPage:String = "audio") {
+		super("OPTIONS"); page = initialPage == "account" ? "account" : "audio";
+		view = new LobbyView(); pane = new MobileScrollPane(); content.addChild(view); content.addChild(pane);
 		if (AppStage.stage != null) AppStage.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown, false, 1000);
 		layoutForSize(w,h);
 	}

@@ -542,7 +542,7 @@ class EditorSettingsTest {
 		assertEquals(ColorPicker.LEFT, @:privateAccess button.picker.direction, "draw color picker opens to the left like Flash");
 
 		@:privateAccess button.picker.openPopup();
-		var popup = @:privateAccess button.picker.popup;
+		var popup:pr2.lobby.account.ColorPickerPopup = cast @:privateAccess button.picker.popup;
 		var eyedropper = @:privateAccess popup.eyedropper;
 		var stage = AppStage.stage;
 		if (stage != null) {

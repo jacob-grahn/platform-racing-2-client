@@ -6,7 +6,6 @@ import openfl.events.Event;
 import openfl.geom.Point;
 import pr2.Constants;
 import pr2.gameplay.PrizePopup;
-import pr2.lobby.dialogs.MessagePopup;
 import pr2.lobby.dialogs.Popup;
 import pr2.level.Level.LevelArtLayer;
 import pr2.level.LevelArtCursor.ArtDrawCursor;
@@ -241,7 +240,7 @@ class LevelArtRenderCoordinator {
 		}
 		if (owner.artOptions != null && owner.artOptions.suppressArtWarningPopup == true) return;
 		var open = Popup.getOpen();
-		if (!gatePopup || open.length == 0 || (open.length == 1 && Std.isOfType(open[0], PrizePopup))) new MessagePopup(message);
+		if (!gatePopup || open.length == 0 || (open.length == 1 && Std.isOfType(open[0], PrizePopup))) pr2.app.ScreenFactory.message(message);
 	}
 
 	public function notifyRasterStopped():Void {
