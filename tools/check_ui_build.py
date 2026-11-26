@@ -10,7 +10,7 @@ def main():
     parser.add_argument("configuration", choices=["classic", "mobile", "preview"])
     args = parser.parse_args()
     root = Path("export/html5/bin")
-    source = (root / "PlatformRacing2.js").read_text()
+    source = (root / "PlatformRacing2.js").read_text(encoding="utf-8")
     expected = {
         "LoginPage": args.configuration != "mobile",
         "LobbyPage": args.configuration != "mobile",
@@ -66,7 +66,7 @@ def main():
             raise SystemExit(f"Presentation build boundary failed: {name}")
     if ("pr2-ui-preview" in source) != (args.configuration == "preview"):
         raise SystemExit("Preview selector leaked into a release or is missing from preview")
-    html = (root / "index.html").read_text()
+    html = (root / "index.html").read_text(encoding="utf-8")
     for font in ["LilitaOne-Regular.ttf", "Nunito-Bold.ttf"]:
         if (font in html) != (args.configuration != "classic"):
             raise SystemExit(f"UI font registration failed for {font}")

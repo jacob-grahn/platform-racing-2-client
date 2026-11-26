@@ -2,6 +2,7 @@
 """Minify the generated HTML5 JavaScript bundle with Lime's bundled Terser."""
 
 import platform
+import shutil
 import subprocess
 import tempfile
 from pathlib import Path
@@ -9,7 +10,23 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "export/html5/bin/PlatformRacing2.js"
-LIME_TEMPLATES = ROOT / ".haxelib/lime/8,3,2/templates"
+
+
+def lime_templates() -> Path:
+    """Ask haxelib where Lime is, since it may be installed outside .haxelib/."""
+    haxelib = shutil.which("haxelib")
+    if haxelib is not None:
+        try:
+            result = subprocess.run([haxelib, "libpath", "lime"], check=True, cwd=ROOT, capture_output=True, text=True)
+            for line in result.stdout.splitlines():
+                if line.strip() and (Path(line.strip()) / "templates").is_dir():
+                    return Path(line.strip()) / "templates"
+        except (OSError, subprocess.CalledProcessError):
+            pass
+    return ROOT / ".haxelib/lime/8,3,2/templates"
+
+
+LIME_TEMPLATES = lime_templates()
 TERSER = LIME_TEMPLATES / "bin/node/terser/bin/terser"
 
 
@@ -31,7 +48,11 @@ def main() -> None:
 
     node = bundled_node()
     if not node.exists():
-        raise SystemExit(f"Missing bundled Node executable: {node}")
+        system_node = shutil.which("node")
+        if system_node is None:
+            raise SystemExit(f"Missing bundled Node executable: {node}")
+        print(f"Bundled Node not found at {node}; using {system_node}.")
+        node = Path(system_node)
     if not TERSER.exists():
         raise SystemExit(f"Missing bundled Terser executable: {TERSER}")
 
