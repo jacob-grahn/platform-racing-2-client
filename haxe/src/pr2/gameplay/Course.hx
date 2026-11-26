@@ -1629,8 +1629,9 @@ class Course extends Sprite {
 			Constants.STAGE_HEIGHT / 2 + cameraPresentationPose.presentedY
 		);
 		if (playerDot != null) {
-			playerDot.x = worldX;
-			playerDot.y = worldY;
+			var dotPoint = RotationMath.rotatePoint(Math.round(worldX), Math.round(worldY), state.courseRotation);
+			playerDot.x = dotPoint.x;
+			playerDot.y = dotPoint.y;
 		}
 		moveCharacterToLayer(player, state.touchedBlockType == "water" ? "backBackground" : "frontBackground");
 		PlayerDisplayPlacement.place(player, player.display, worldX, worldY, player.facingScaleX, localCharacter.characterRotation);
@@ -1663,7 +1664,7 @@ class Course extends Sprite {
 	}
 
 	private function syncRotationLifecycle(tweenRotation:Int):Void {
-		var active = tweenRotation != 0;
+		var active = tweenRotation != 0 || localCharacter.rotateFramesRemaining > 0;
 		if (active == rotationTweenActive) {
 			return;
 		}

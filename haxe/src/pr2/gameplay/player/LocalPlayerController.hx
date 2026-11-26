@@ -155,7 +155,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	public var lastSafeY(default, null):Float;
 	private var standingTileX:Int;
 	private var standingTileY:Int;
-	private var rotateFramesRemaining:Int = 0;
+	public var rotateFramesRemaining(default, null):Int = 0;
 	private var rotateDirection:Int = 0;
 	private var hurtFramesRemaining:Int = 0;
 	private var frozenSolidFramesRemaining:Int = 0;
@@ -1468,7 +1468,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	}
 
 	private function startRotate(block:LevelBlock):Void {
-		if (rotateFramesRemaining > 0 || isBlockFrozen(block)) {
+			if (isBlockFrozen(block)) {
 			return;
 		}
 		// Flash normally pauses character physics in `freezeGo` while Course owns
@@ -1480,6 +1480,10 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		targetVelX = 0;
 		grounded = false;
 		rotateDirection = block.type == BlockType.RotateRight ? 1 : -1;
+		if (rotateFramesRemaining > 0){
+			rotateFramesRemaining = Std.int((90 - rotateDirection * courseTweenRotation) / 3);
+			return;
+		}
 		rotateFramesRemaining = ROTATE_FRAMES;
 		courseTweenRotation = 0;
 		characterRotation = 0;

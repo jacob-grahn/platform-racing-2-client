@@ -28,6 +28,7 @@ class LocalCharacter extends Character {
 	public var crouching(get, never):Bool;
 	public var facingScaleX(get, never):Int;
 	public var courseTweenRotation(get, never):Int;
+	public var rotateFramesRemaining(get, never):Int;
 	public var characterRotation(get, never):Int;
 	public var lastSafeX(get, never):Float;
 	public var lastSafeY(get, never):Float;
@@ -600,6 +601,10 @@ class LocalCharacter extends Character {
 
 	private function get_courseTweenRotation():Int {
 		return controller.courseTweenRotation;
+	}
+
+	private function get_rotateFramesRemaining():Int {
+		return controller.rotateFramesRemaining;
 	}
 
 	private function get_characterRotation():Int {
