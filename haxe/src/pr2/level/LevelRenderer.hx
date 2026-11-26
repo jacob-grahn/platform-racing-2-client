@@ -34,6 +34,7 @@ import pr2.level.Level.LevelBlock;
 import pr2.effects.BlockPiece;
 import pr2.effects.MineAppear;
 import pr2.effects.MineExplosion;
+import pr2.gameplay.BlockCollision;
 import pr2.gameplay.RotationMath;
 import pr2.effects.TeleportPop;
 
@@ -976,8 +977,9 @@ class LevelRenderer extends Sprite {
 	}
 
 	public function showMineExplosion(worldX:Float, worldY:Float, playSound:Bool = true):MineExplosion {
-		var effect = new MineExplosion(worldX, worldY, offsetX, offsetY, playSound);
-		blockLayer.addChild(effect);
+		var origin = blockPieceOrigin(worldX, worldY);
+		var effect = new MineExplosion(origin.x, origin.y, offsetX, offsetY, playSound);
+		blockPieceLayer().addChild(effect);
 		return effect;
 	}
 
@@ -1020,15 +1022,29 @@ class LevelRenderer extends Sprite {
 		return count;
 	}
 
+	public function blockPieceLayer():DisplayObjectContainer {
+		return effectLayer == null ? blockLayer : effectLayer;
+	}
+
+	private function blockPieceOrigin(worldX:Float, worldY:Float):Point {
+		if (effectLayer == null) {
+			return new Point(worldX, worldY);
+		}
+		var rotated = BlockCollision.rotatedWorldBlockPos(Std.int(worldX), Std.int(worldY), courseRotation, TILE_SIZE);
+		return new Point(rotated.x, rotated.y);
+	}
+
 	public function showBlockPieces(linkage:String, worldX:Float, worldY:Float, count:Int, spreadX:Float, spreadY:Float,
 			spreadRot:Float, gravity:Float = BlockPiece.GRAVITY, friction:Float = BlockPiece.FRICTION, fadeRate:Float = BlockPiece.FADE_RATE,
 			?random:Void->Float):Array<BlockPiece> {
 		var nextRandom = random == null ? Math.random : random;
 		var pieces:Array<BlockPiece> = [];
+		var origin = blockPieceOrigin(worldX, worldY);
+		var layer = blockPieceLayer();
 		for (_ in 0...count) {
-			var piece = new BlockPiece(linkage, gravity, friction, fadeRate, spreadX, spreadY, spreadRot, worldX + nextRandom() * TILE_SIZE,
-				worldY + nextRandom() * TILE_SIZE, nextRandom);
-			blockLayer.addChild(piece);
+			var piece = new BlockPiece(linkage, gravity, friction, fadeRate, spreadX, spreadY, spreadRot, origin.x + nextRandom() * TILE_SIZE,
+				origin.y + nextRandom() * TILE_SIZE, nextRandom);
+			layer.addChild(piece);
 			pieces.push(piece);
 		}
 		return pieces;
@@ -1057,6 +1073,8 @@ class LevelRenderer extends Sprite {
 		source.alpha = oldAlpha;
 		var nextRandom = random == null ? Math.random : random;
 		var pieces:Array<BlockPiece> = [];
+		var origin = blockPieceOrigin(worldX, worldY);
+		var layer = blockPieceLayer();
 		for (i in 0...count) {
 			var section = i % 6;
 			var column = section % 3;
@@ -1071,8 +1089,8 @@ class LevelRenderer extends Sprite {
 			fragment.width = TILE_SIZE / 3;
 			fragment.height = TILE_SIZE / 2;
 			var piece = new BlockPiece(null, 0.75, 0.95, 0.05, spreadX, spreadY, spreadRot,
-				worldX + nextRandom() * TILE_SIZE, worldY + nextRandom() * TILE_SIZE, nextRandom, fragment);
-			blockLayer.addChild(piece);
+				origin.x + nextRandom() * TILE_SIZE, origin.y + nextRandom() * TILE_SIZE, nextRandom, fragment);
+			layer.addChild(piece);
 			pieces.push(piece);
 		}
 		data.dispose();

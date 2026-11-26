@@ -1,4 +1,4 @@
-package pr2.gameplay;
+package pr2.gameplay;oldalpha
 
 import openfl.events.Event;
 import pr2.effects.BlockPiece;
@@ -129,7 +129,7 @@ class MultiplayerRaceStage {
 
 	private function advancePieces():Void {
 		for (client in clients) {
-			var layer = client.course.levelRenderer.worldEffectLayer();
+			var layer = client.course.levelRenderer.blockPieceLayer();
 			var pieces:Array<BlockPiece> = [];
 			for (i in 0...layer.numChildren) {
 				var piece = Std.downcast(layer.getChildAt(i), BlockPiece);
@@ -157,7 +157,7 @@ class MultiplayerStageClient {
 
 	public function activePieces():Int {
 		var count = 0;
-		var layer = course.levelRenderer.worldEffectLayer();
+		var layer = course.levelRenderer.blockPieceLayer();
 		for (i in 0...layer.numChildren) {
 			if (Std.isOfType(layer.getChildAt(i), BlockPiece)) {
 				count++;

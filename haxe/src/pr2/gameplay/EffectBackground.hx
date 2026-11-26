@@ -5,7 +5,9 @@ import openfl.display.Sprite;
 import openfl.utils.Assets;
 import pr2.display.Removable;
 import pr2.audio.SoundEffects;
+import pr2.effects.BlockPiece;
 import pr2.effects.MineAppear;
+import pr2.effects.MineExplosion;
 import pr2.level.LevelRenderer;
 import pr2.net.CommandHandler;
 import pr2.character.PhysicsParticle;
@@ -106,6 +108,19 @@ class EffectBackground extends Sprite {
 				mineAppear.remove();
 				continue;
 			}
+
+			var blockPiece = Std.downcast(child, BlockPiece);
+			if (blockPiece != null) {
+				blockPiece.remove();
+				continue;
+			}
+
+			var mineExplosion = Std.downcast(child, MineExplosion);
+			if (mineExplosion != null) {
+				mineExplosion.remove();
+				continue;
+			}
+
 			var removable = Std.downcast(child, Removable);
 			if (removable != null) {
 				removable.remove();

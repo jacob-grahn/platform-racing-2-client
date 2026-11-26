@@ -249,7 +249,7 @@ class CourseBlockVisualController {
 			return 0;
 		}
 		var count = 0;
-		var layer = owner.levelRenderer.worldEffectLayer();
+		var layer = owner.levelRenderer.blockPieceLayer();
 		for (i in 0...layer.numChildren) {
 			if (Std.isOfType(layer.getChildAt(i), BlockPiece)) {
 				count++;
